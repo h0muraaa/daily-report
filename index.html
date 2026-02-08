@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技日报 - 2026年2月8日</title>
+    <title>科技日报 - 多角色视角解读科技前沿</title>
     <style>
         * {
             margin: 0;
@@ -198,6 +198,59 @@
             color: white;
         }
 
+        /* 日期选择器样式 */
+        .date-selector {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .date-selector h3 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .date-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid transparent;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .date-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .date-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+            font-weight: 600;
+        }
+
+        .date-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -217,8 +270,15 @@
     <div class="container">
         <header class="header">
             <h1>科技日报</h1>
-            <p class="subtitle">2026年2月8日</p>
+            <p class="subtitle" id="currentDate">加载中...</p>
         </header>
+
+        <div class="date-selector">
+            <h3>📅 历史回看（保留7天）</h3>
+            <div class="date-list" id="dateList">
+                <button class="date-btn active" data-date="latest" onclick="switchDate('latest')">最新</button>
+            </div>
+        </div>
 
         <div class="cards-grid">
             <div class="card card-cto">
@@ -258,9 +318,111 @@
         </div>
 
         <footer class="footer">
-            <div class="time-range">数据时间范围：2026-02-07 09:16:44 至今</div>
-            <div class="stats">共317篇文章</div>
+            <div class="time-range" id="timeRange">数据时间范围：加载中...</div>
+            <div class="stats" id="articleCount">⏱️ 每日7:00更新 | 📁 保留7天 | 🤖 Claude AI生成</div>
         </footer>
     </div>
+
+    <script>
+        // 历史记录数据
+        let historyData = [];
+        let currentDateKey = 'latest';
+
+        // 从JSON文件加载历史
+        async function loadHistory() {
+            try {
+                const response = await fetch('archive/history.json?v=' + Date.now());
+                if (response.ok) {
+                    historyData = await response.json();
+                }
+            } catch (e) {
+                console.log('加载历史记录失败:', e);
+            }
+
+            // 如果没有数据，使用今天的日期
+            if (historyData.length === 0) {
+                const today = new Date();
+                const dateStr = today.toISOString().split('T')[0];
+                const dateKey = dateStr.replace(/-/g, '');
+                historyData = [{
+                    "date": dateStr,
+                    "date_key": dateKey,
+                    "display": `${today.getFullYear()}年${String(today.getMonth()+1).padStart(2,'0')}月${String(today.getDate()).padStart(2,'0')}日`,
+                    "count": 0
+                }];
+            }
+
+            renderDateButtons();
+            updateDisplay();
+        }
+
+        // 渲染日期按钮
+        function renderDateButtons() {
+            const container = document.getElementById('dateList');
+            let html = '<button class="date-btn active" data-date="latest" onclick="switchDate(\'latest\')">最新</button>';
+
+            historyData.forEach(item => {
+                html += `<button class="date-btn" data-date="${item.date_key}" onclick="switchDate('${item.date_key}')">${item.display}</button>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 更新显示
+        function updateDisplay() {
+            const dateEl = document.getElementById('currentDate');
+            const timeRangeEl = document.getElementById('timeRange');
+            const countEl = document.getElementById('articleCount');
+
+            if (currentDateKey === 'latest') {
+                const now = new Date();
+                const dateStr = `${now.getFullYear()}年${String(now.getMonth()+1).padStart(2,'0')}月${String(now.getDate()).padStart(2,'0')}日`;
+                dateEl.textContent = `${dateStr} | 多角色视角解读科技前沿`;
+                timeRangeEl.textContent = '数据时间范围：最近24小时';
+
+                // 获取最新文章数
+                const latestCount = historyData[0]?.count || '?';
+                countEl.textContent = `📊 ${latestCount}篇文章 | ⏱️ 每日7:00更新 | 📁 保留7天 | 🤖 Claude AI生成`;
+            } else {
+                const item = historyData.find(h => h.date_key === currentDateKey);
+                if (item) {
+                    dateEl.textContent = `${item.display} | 历史归档`;
+                    timeRangeEl.textContent = `数据时间范围：${item.date}`;
+                    countEl.textContent = `📊 ${item.count || '?'}篇文章 | 📁 历史归档 | 🤖 Claude AI生成`;
+                }
+            }
+        }
+
+        // 切换日期
+        function switchDate(dateKey) {
+            currentDateKey = dateKey;
+
+            // 更新按钮状态
+            document.querySelectorAll('.date-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.date === dateKey);
+            });
+
+            // 更新显示
+            updateDisplay();
+
+            // 更新链接
+            updateLinks(dateKey);
+        }
+
+        // 更新链接
+        function updateLinks(dateKey) {
+            const basePath = dateKey === 'latest' ? '' : `archive/${dateKey}/`;
+
+            document.querySelector('.card-cto .card-button').href = `${basePath}cto_insight.html`;
+            document.querySelector('.card-developer .card-button').href = `${basePath}developer_practice.html`;
+            document.querySelector('.card-enthusiast .card-button').href = `${basePath}tech_enthusiast.html`;
+            document.querySelector('.card-investment .card-button').href = `${basePath}investment_analysis.html`;
+            document.querySelector('.card-academic .card-button').href = `${basePath}academic_research.html`;
+        }
+
+        // 初始化
+        loadHistory();
+        updateLinks('latest');
+    </script>
 </body>
 </html>
