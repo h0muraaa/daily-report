@@ -1,128 +1,354 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📚 arXiv 论文推荐 - 2026年02月11日</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-               max-width: 1000px; margin: 0 auto; padding: 20px;
-               background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
-        .container { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { color: #1a1a2e; font-size: 36px; }
-        .header .subtitle { color: #64ffda; background: #1a1a2e; padding: 4px 12px; border-radius: 12px; font-size: 14px; }
-        .paper-card { background: #f8f9fa; border-radius: 16px; padding: 30px; margin-bottom: 24px;
-                      border-left: 5px solid #667eea; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-        .paper-title { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; }
-        .paper-score { background: #667eea; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; }
-        
-        /* NotebookLM 贡献点 */
-        .contributions-box { 
-            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-            border-radius: 12px; padding: 20px; margin: 16px 0;
-            border: 2px solid #667eea;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.7;
         }
-        .contributions-title { color: #1976d2; font-weight: 600; margin-bottom: 12px; font-size: 14px; }
-        .contribution-list { display: flex; flex-wrap: wrap; gap: 10px; }
+        .container { 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+            overflow: hidden;
+        }
+        .header { 
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 42px; margin-bottom: 16px; font-weight: 800; }
+        .header .badge { 
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4aa 0%, #00a8e8 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .header .date { color: #8892b0; font-size: 16px; }
+        
+        .content { padding: 50px 40px; }
+        
+        .section-title { 
+            font-size: 26px; 
+            color: #1a1a2e; 
+            margin-bottom: 35px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 论文卡片 */
+        .paper-card { 
+            background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            border-left: 6px solid #667eea;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .paper-card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+        }
+        
+        .paper-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        .paper-title { 
+            font-size: 22px; 
+            font-weight: 700; 
+            color: #1a1a2e;
+            line-height: 1.4;
+            flex: 1;
+        }
+        .paper-score { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        
+        /* 详细贡献点 */
+        .contribution-section { 
+            background: linear-gradient(135deg, #f0f7ff 0%, #f8f0ff 100%);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #e0e7ff;
+        }
+        .contribution-title { 
+            font-size: 16px;
+            font-weight: 700;
+            color: #5b21b6;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .contribution-grid { 
+            display: grid;
+            gap: 15px;
+        }
         .contribution-item { 
-            background: white; padding: 8px 16px; border-radius: 20px;
-            font-size: 13px; border: 2px solid #667eea; font-weight: 500;
+            background: white;
+            padding: 18px 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
         }
-        .contribution-item::before { content: '💡 '; }
-        
-        .notebooklm-summary { 
-            background: #fff8e1; border-left: 4px solid #ffc107;
-            padding: 16px; border-radius: 0 8px 8px 0; margin: 16px 0;
+        .contribution-label { 
+            font-size: 12px;
+            font-weight: 700;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
-        .summary-label { color: #f57c00; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
-        .summary-text { color: #333; line-height: 1.7; font-size: 14px; }
+        .contribution-text { 
+            color: #333;
+            font-size: 15px;
+            line-height: 1.8;
+        }
         
-        .paper-abstract { color: #555; line-height: 1.8; margin: 16px 0; padding: 15px; background: white; border-radius: 8px; }
-        .paper-actions { display: flex; gap: 12px; margin-top: 16px; }
-        .btn { padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; }
-        .btn-primary { background: #667eea; color: white; }
-        .btn-secondary { background: #e2e8f0; color: #475569; }
+        /* 完整摘要 */
+        .abstract-section { 
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .abstract-title { 
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .abstract-text { 
+            color: #444;
+            font-size: 15px;
+            line-height: 1.9;
+            text-align: justify;
+        }
         
-        .history-nav { margin-top: 30px; padding: 20px; background: #f1f5f9; border-radius: 12px; }
-        .history-link { padding: 8px 16px; background: white; border-radius: 16px; text-decoration: none; color: #475569; margin-right: 10px; display: inline-block; }
-        .footer { margin-top: 30px; text-align: center; color: #888; }
+        /* 操作按钮 */
+        .paper-actions { 
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .action-btn { 
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+        .btn-secondary { 
+            background: #f1f5f9;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+        }
+        
+        /* 影响评估 */
+        .impact-box { 
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 4px solid #f59e0b;
+        }
+        .impact-title { color: #92400e; font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+        .impact-text { color: #78350f; font-size: 14px; line-height: 1.7; }
+        
+        .footer { 
+            background: #0f0f23;
+            color: #8892b0;
+            padding: 40px;
+            text-align: center;
+        }
+        .footer a { color: #64ffda; text-decoration: none; }
+        
+        .history-nav { 
+            background: #f1f5f9;
+            padding: 25px 40px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .history-link { 
+            padding: 10px 20px;
+            background: white;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #475569;
+            margin-right: 12px;
+            display: inline-block;
+            font-weight: 500;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        .history-link:hover { 
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <span class="subtitle">📚 基于 NotebookLM 智能分析</span>
+            <span class="badge">📚 智能论文分析</span>
             <h1>arXiv 论文推荐</h1>
-            <p style="color: #666;">2026年02月11日 · 语音与多媒体领域 · 2 篇精选</p>
+            <p class="date">2026年02月11日 · 语音 · 多媒体 · 计算机视觉 · 共 2 篇精选</p>
         </div>
+        
+        <div class="content">
+            <h2 class="section-title">🌟 高价值论文深度解析</h2>
 
-        <div class="paper-card">
-            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-                <div class="paper-title">SemanticMoments: Training-Free Motion Similarity via Third Moment Features</div>
-                <span class="paper-score">⭐ 6.0</span>
-            </div>
-            
-            <div class="contributions-box">
-                <div class="contributions-title">🎯 NotebookLM 分析 - 核心贡献点</div>
-                <div class="contribution-list">
-                    <span class="contribution-item">构建新数据集</span>
+            <div class="paper-card">
+                <div class="paper-header">
+                    <div class="paper-title">SemanticMoments: Training-Free Motion Similarity via Third Moment Features</div>
+                    <span class="paper-score">⭐ 评分 6.0</span>
+                </div>
+                
+                <div class="contribution-section">
+                    <div class="contribution-title">🎯 核心贡献点解析</div>
+                    <div class="contribution-grid">
+                        <div class="contribution-item">
+                            <div class="contribution-label">🔍 解决的问题</div>
+                            <div class="contribution-text">未提取</div>
+                        </div>
+                        
+                        <div class="contribution-item">
+                            <div class="contribution-label">💡 提出的方法</div>
+                            <div class="contribution-text">未提取</div>
+                        </div>
+                        
+                        <div class="contribution-item">
+                            <div class="contribution-label">📊 取得的结果</div>
+                            <div class="contribution-text">未提取</div>
+                        </div>
+                    </div>                
+                    
+                    <div class="impact-box">
+                        <div class="impact-title">🚀 潜在影响与应用价值</div>
+                        <div class="impact-text">未提取</div>
+                    </div>
+                </div>
+                
+                <div class="abstract-section">
+                    <div class="abstract-title">📄 论文摘要（完整版）</div>
+                    <div class="abstract-text">arXiv:2602.09146v1 Announce Type: new 
+Abstract: Retrieving videos based on semantic motion is a fundamental, yet unsolved, problem. Existing video representation approaches overly rely on static appearance and scene context rather than motion dynamics, a bias inherited from their training data and objectives. Conversely, traditional motion-centric inputs like optical flow lack the semantic grounding needed to understand high-level motion. To demonstrate this inherent bias, we introduce the SimMotion benchmarks, combining controlled synthetic data with a new human-annotated real-world dataset.</div>
+                </div>
+                
+                <div class="paper-actions">
+                    <a href="https://arxiv.org/abs/2602.09146" class="action-btn btn-primary" target="_blank">
+                        📄 查看 arXiv 页面
+                    </a>
+                    <a href="https://arxiv.org/pdf/2602.09146.pdf" class="action-btn btn-secondary" target="_blank">
+                        📥 下载 PDF
+                    </a>
                 </div>
             </div>
-            
-            <div class="notebooklm-summary">
-                <div class="summary-label">📝 一句话总结</div>
-                <div class="summary-text">该论文构建新数据集。</div>
-            </div>
-            
-            <div class="paper-abstract"><strong>摘要：</strong> arXiv:2602.09146v1 Announce Type: new 
-Abstract: Retrieving videos based on semantic motion is a fundamental, yet unsolved, problem. Existing video representation approaches overly rely on static appearance and scene context rather than motion dynami...</div>
-            
-            <div class="paper-actions">
-                <a href="https://arxiv.org/abs/2602.09146" class="btn btn-primary" target="_blank">📄 arXiv 页面</a>
-                <a href="https://arxiv.org/pdf/2602.09146.pdf" class="btn btn-secondary" target="_blank">📥 PDF</a>
-                <a href="None" class="btn btn-secondary" target="_blank">🌐 HTML 版本</a>
-            </div>
-        </div>
 
-        <div class="paper-card">
-            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-                <div class="paper-title">Gencho: Room Impulse Response Generation from Reverberant Speech and Text via Diffusion Transformers</div>
-                <span class="paper-score">⭐ 4.0</span>
-            </div>
-            
-            <div class="contributions-box">
-                <div class="contributions-title">🎯 NotebookLM 分析 - 核心贡献点</div>
-                <div class="contribution-list">
-                    <span class="contribution-item">提出新的方法/架构</span><span class="contribution-item">生成/合成技术</span>
+            <div class="paper-card">
+                <div class="paper-header">
+                    <div class="paper-title">Gencho: Room Impulse Response Generation from Reverberant Speech and Text via Diffusion Transformers</div>
+                    <span class="paper-score">⭐ 评分 4.0</span>
+                </div>
+                
+                <div class="contribution-section">
+                    <div class="contribution-title">🎯 核心贡献点解析</div>
+                    <div class="contribution-grid">
+                        <div class="contribution-item">
+                            <div class="contribution-label">🔍 解决的问题</div>
+                            <div class="contribution-text">未提取</div>
+                        </div>
+                        
+                        <div class="contribution-item">
+                            <div class="contribution-label">💡 提出的方法</div>
+                            <div class="contribution-text">未提取</div>
+                        </div>
+                        
+                        <div class="contribution-item">
+                            <div class="contribution-label">📊 取得的结果</div>
+                            <div class="contribution-text">未提取</div>
+                        </div>
+                    </div>                
+                    
+                    <div class="impact-box">
+                        <div class="impact-title">🚀 潜在影响与应用价值</div>
+                        <div class="impact-text">未提取</div>
+                    </div>
+                </div>
+                
+                <div class="abstract-section">
+                    <div class="abstract-title">📄 论文摘要（完整版）</div>
+                    <div class="abstract-text">arXiv:2602.09233v1 Announce Type: new 
+Abstract: Blind room impulse response (RIR) estimation is a core task for capturing and transferring acoustic properties; yet existing methods often suffer from limited modeling capability and degraded performance under unseen conditions. Moreover, emerging generative audio applications call for more flexible impulse response generation methods. We propose Gencho, a diffusion-transformer-based model that predicts complex spectrogram RIRs from reverberant sp</div>
+                </div>
+                
+                <div class="paper-actions">
+                    <a href="https://arxiv.org/abs/2602.09233" class="action-btn btn-primary" target="_blank">
+                        📄 查看 arXiv 页面
+                    </a>
+                    <a href="https://arxiv.org/pdf/2602.09233.pdf" class="action-btn btn-secondary" target="_blank">
+                        📥 下载 PDF
+                    </a>
                 </div>
             </div>
-            
-            <div class="notebooklm-summary">
-                <div class="summary-label">📝 一句话总结</div>
-                <div class="summary-text">该论文提出新的方法/架构；生成/合成技术。</div>
-            </div>
-            
-            <div class="paper-abstract"><strong>摘要：</strong> arXiv:2602.09233v1 Announce Type: new 
-Abstract: Blind room impulse response (RIR) estimation is a core task for capturing and transferring acoustic properties; yet existing methods often suffer from limited modeling capability and degraded performan...</div>
-            
-            <div class="paper-actions">
-                <a href="https://arxiv.org/abs/2602.09233" class="btn btn-primary" target="_blank">📄 arXiv 页面</a>
-                <a href="https://arxiv.org/pdf/2602.09233.pdf" class="btn btn-secondary" target="_blank">📥 PDF</a>
-                <a href="None" class="btn btn-secondary" target="_blank">🌐 HTML 版本</a>
-            </div>
-        </div>
 
+        </div>
+        
         <div class="history-nav">
-            <strong>📅 历史推荐：</strong>
+            <strong style="color: #666; margin-right: 15px;">📅 历史推荐:</strong>
             <a href="./archive/20260210.html" class="history-link">2026-02-10</a>
             <a href="./archive/20260209.html" class="history-link">2026-02-09</a>
             <a href="https://h0muraaa.github.io/daily-report/" class="history-link">← 返回科技日报</a>
         </div>
         
         <div class="footer">
-            <p>📚 arXiv 论文推荐 · 初筛 + NotebookLM 智能分析</p>
-            <p><small>生成时间: 2026-02-11 18:51</small></p>
+            <p>📚 arXiv 论文深度分析系统 · 完整摘要 · 结构化贡献点 · 实用价值评估</p>
+            <p><a href="https://h0muraaa.github.io/daily-report/">科技日报</a> · <a href="https://arxiv.org/">arXiv.org</a></p>
+            <p><small>生成时间: 2026-02-11 19:04</small></p>
         </div>
     </div>
 </body>
