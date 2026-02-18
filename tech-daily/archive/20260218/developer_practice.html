@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践日报 - 2026年2月18日</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --code-bg: #1e1e1e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+        
+        .header .date {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        /* Section Styles */
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 24px;
+            background: var(--accent-blue);
+            border-radius: 3px;
+        }
+        
+        /* News Cards */
+        .news-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .news-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .news-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        
+        .news-card.hot {
+            border-left: 4px solid var(--accent-orange);
+        }
+        
+        .news-card.featured {
+            border-left: 4px solid var(--accent-purple);
+        }
+        
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .news-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+        
+        .news-badge {
+            font-size: 0.7em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-hot {
+            background: rgba(240, 136, 62, 0.15);
+            color: var(--accent-orange);
+        }
+        
+        .badge-new {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+        
+        .badge-tool {
+            background: rgba(163, 113, 247, 0.15);
+            color: var(--accent-purple);
+        }
+        
+        .news-summary {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        
+        .news-source {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .news-source::before {
+            content: '📰';
+        }
+        
+        .news-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .news-link:hover {
+            text-decoration: underline;
+        }
+        
+        .news-link::after {
+            content: '↗';
+            font-size: 0.8em;
+        }
+        
+        /* Deep Dive Section */
+        .deep-dive {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .dive-title {
+            font-size: 1.3em;
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .dive-content {
+            color: var(--text-secondary);
+            line-height: 2;
+        }
+        
+        .dive-content p {
+            margin-bottom: 15px;
+        }
+        
+        .dive-content strong {
+            color: var(--text-primary);
+        }
+        
+        .highlight-box {
+            background: var(--bg-primary);
+            border-left: 4px solid var(--accent-yellow);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+        
+        .code-block code {
+            color: #d4d4d4;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .function { color: #dcdcaa; }
+        .number { color: #b5cea8; }
+        
+        /* Tool Cards */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            border-color: var(--accent-green);
+        }
+        
+        .tool-icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        
+        .tool-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--accent-green);
+            margin-bottom: 10px;
+        }
+        
+        .tool-desc {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        
+        .tool-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+        }
+        
+        /* Practice Guide */
+        .guide-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .guide-item {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .guide-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .guide-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .guide-title {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .guide-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        .checklist {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+        }
+        
+        .checklist li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        /* Reference Links */
+        .ref-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 30px;
+        }
+        
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .ref-item {
+            padding: 12px 15px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .ref-item:hover {
+            background: var(--border-color);
+        }
+        
+        .ref-item a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.9em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .ref-item .domain {
+            color: var(--text-muted);
+            font-size: 0.8em;
+            flex-shrink: 0;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85em;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .news-header {
+                flex-direction: column;
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>&lt;Developer_Daily /&gt;</h1>
+            <p class="subtitle">开发者实践版 · 专注工具、框架与最佳实践</p>
+            <div class="date">2026年2月18日 星期三</div>
+        </header>
+
+        <!-- 今日技术热榜 -->
+        <section class="section">
+            <h2 class="section-title">今日技术热榜</h2>
+            <div class="news-grid">
+                <!-- Hot News 1 -->
+                <article class="news-card hot">
+                    <div class="news-header">
+                        <h3 class="news-title">Claude Sonnet 4.6 发布：接近 Opus 级别的编程能力</h3>
+                        <span class="news-badge badge-hot">重磅</span>
+                    </div>
+                    <p class="news-summary">
+                        Anthropic 发布迄今为止最强的 Sonnet 模型，在编程、计算机操作、长上下文推理等方面全面升级。70% 的 Claude Code 用户更偏好 Sonnet 4.6 而非上一代，59% 的用户甚至更喜欢它而非 Opus 4.5。模型在改代码前会先读取上下文，合并重复逻辑而非复制粘贴，过度工程化和偷懒情况明显减少。OSWorld 基准测试得分从 14.9% 提升到 72.5%，支持 100 万 token 上下文窗口（beta）。
+                    </p>
+                    <div class="news-meta">
+                        <span class="news-source">Anthropic / X</span>
+                        <a href="https://anthropic.com/news/claude-sonnet-4-6" class="news-link" target="_blank">查看详情</a>
+                    </div>
+                </article>
+
+                <!-- Hot News 2 -->
+                <article class="news-card">
+                    <div class="news-header">
+                        <h3 class="news-title">Cursor 2.5 发布：插件市场与长运行 Agent 正式上线</h3>
+                        <span class="news-badge badge-new">更新</span>
+                    </div>
+                    <p class="news-summary">
+                        Cursor 推出重大更新，正式开放插件市场，支持 AWS、Vercel、Datadog、Notion、Figma 等第三方服务集成。长运行 Agent 功能现已向 Ultra、Teams 和企业版用户开放，可完成更复杂的任务。有趣的是，来自长运行 Agent 的 PR 合并率更高，且任务规模提升了约一个数量级。
+                    </p>
+                    <div class="news-meta">
+                        <span class="news-source">Cursor / X</span>
+                        <a href="https://cursor.com/marketplace" class="news-link" target="_blank">查看详情</a>
+                    </div>
+                </article>
+
+                <!-- Hot News 3 -->
+                <article class="news-card">
+                    <div class="news-header">
+                        <h3 class="news-title">Firecrawl 推出 Browser Sandbox：安全的 Agent 浏览器环境</h3>
+                        <span class="news-badge badge-tool">工具</span>
+                    </div>
+                    <p class="news-summary">
+                        Firecrawl 发布 Browser Sandbox，为零配置、全托管的 Agent 浏览器交互环境。支持 Claude Code、Codex 等工具，一个 API 调用即可获得浏览器环境 + 工具包。内置 Agent Browser，可自动化处理复杂网页流程，适用于数据抓取、表单填写等场景。
+                    </p>
+                    <div class="news-meta">
+                        <span class="news-source">Firecrawl / X</span>
+                        <a href="https://firecrawl.dev/app/browser" class="news-link" target="_blank">查看详情</a>
+                    </div>
+                </article>
+
+                <!-- Hot News 4 -->
+                <article class="news-card">
+                    <div class="news-header">
+                        <h3 class="news-title">LangChain 深度解析：Harness Engineering 提升 Agent 性能</h3>
+                        <span class="news-badge badge-new">实践</span>
+                    </div>
+                    <p class="news-summary">
+                        LangChain 团队分享如何通过 Harness Engineering 将编码 Agent 从 Terminal Bench 2.0 的第 30 名提升到第 5 名，而无需更换模型。核心策略包括自验证机制和追踪分析，通过观察 Agent 在规模上的失败模式来优化系统提示、工具选择和执行流程。
+                    </p>
+                    <div class="news-meta">
+                        <span class="news-source">LangChain Blog</span>
+                        <a href="https://blog.langchain.com/improving-deep-agents-with-harness-engineering/" class="news-link" target="_blank">查看详情</a>
+                    </div>
+                </article>
+
+                <!-- Hot News 5 -->
+                <article class="news-card">
+                    <div class="news-header">
+                        <h3 class="news-title">LlamaExtract 页面级文档提取：高精度 PDF 结构化</h3>
+                        <span class="news-badge badge-tool">工具</span>
+                    </div>
+                    <p class="news-summary">
+                        LlamaIndex 推出 LlamaExtract，专注解决复杂 PDF 文档的高精度结构化提取问题。支持页码溯源、边界框标注、置信度评分和引用追踪，可将 200 页文档转换为可审计的结构化数据，特别适用于简历、发票、保险理赔等密集信息场景。
+                    </p>
+                    <div class="news-meta">
+                        <span class="news-source">LlamaIndex / X</span>
+                        <a href="https://cloud.llamaindex.ai" class="news-link" target="_blank">查看详情</a>
+                    </div>
+                </article>
+
+                <!-- Hot News 6 -->
+                <article class="news-card">
+                    <div class="news-header">
+                        <h3 class="news-title">GitHub Copilot 集成 Claude Sonnet 4.6</h3>
+                        <span class="news-badge badge-new">集成</span>
+                    </div>
+                    <p class="news-summary">
+                        GitHub 宣布 Claude Sonnet 4.6 正式上线 Copilot，早期测试显示在 Agentic Coding 和搜索操作方面表现卓越。VS Code 将于 2 月 19 日举办 Agent Sessions Day，展示 VS Code 如何作为开放、可扩展的社区驱动编辑器演进。
+                    </p>
+                    <div class="news-meta">
+                        <span class="news-source">GitHub / X</span>
+                        <a href="https://github.blog/changelog/2026-02-18-claude-sonnet-4-6-in-copilot/" class="news-link" target="_blank">查看详情</a>
+                    </div>
+                </article>
+
+                <!-- Hot News 7 -->
+                <article class="news-card">
+                    <div class="news-header">
+                        <h3 class="news-title">Google I/O 2026 定档 5 月 19-20 日</h3>
+                        <span class="news-badge badge-new">活动</span>
+                    </div>
+                    <p class="news-summary">
+                        Google 宣布 I/O 2026 开发者大会将于 5 月 19-20 日在加州山景城 Shoreline Amphitheatre 举行。大会将聚焦 Android、AI、Chrome 和 Cloud 的最新更新，现已开放注册。
+                    </p>
+                    <div class="news-meta">
+                        <span class="news-source">Google Developers Blog</span>
+                        <a href="https://io.google" class="news-link" target="_blank">查看详情</a>
+                    </div>
+                </article>
+
+                <!-- Hot News 8 -->
+                <article class="news-card">
+                    <div class="news-header">
+                        <h3 class="news-title">SkillNet：AI Agent 可组合技能网络基础设施</h3>
+                        <span class="news-badge badge-new">开源</span>
+                    </div>
+                    <p class="news-summary">
+                        SkillNet 是一个开放的 AI 技能基础设施，旨在解决 Agent 重复发现相同工作流的问题，让 Agent 能够积累可复用的技能。提供统一的技能本体论、相似性/组合/依赖关系网络，以及针对安全性、完整性、可执行性、可维护性和成本意识的明确评估体系。
+                    </p>
+                    <div class="news-meta">
+                        <span class="news-source">Zhaopeng Tu / X</span>
+                        <a href="https://x.com/tuzhaopeng/status/2023846225385320726" class="news-link" target="_blank">查看详情</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- 深度技术解读 -->
+        <section class="section">
+            <h2 class="section-title">深度技术解读</h2>
+            
+            <div class="deep-dive">
+                <h3 class="dive-title">🔍 主题一：Agent 工程化实践 —— 从 Demo 到生产系统</h3>
+                <div class="dive-content">
+                    <p>
+                        随着 Claude Sonnet 4.6 等模型在计算机操作能力上的突破（OSWorld 得分达 72.5%），AI Agent 正从实验阶段迈向生产环境。但构建可靠的 Agent 系统仍面临巨大挑战。
+                    </p>
+                    
+                    <div class="highlight-box">
+                        <strong>核心洞察：</strong>LangChain 的 Harness Engineering 方法论表明，模型能力只是基础，系统工程才是决定 Agent 性能的关键。他们的编码 Agent 仅通过优化 harness（系统提示、工具选择、执行流程）就从 Terminal Bench 2.0 的第 30 名跃升至第 5 名。
+                    </div>
+                    
+                    <p>
+                        <strong>关键工程实践：</strong>
+                    </p>
+                    <ul class="checklist">
+                        <li><strong>自验证机制：</strong>让 Agent 在返回结果前验证自己的工作，而非依赖用户后续指令</li>
+                        <li><strong>追踪驱动优化：</strong>通过 LangSmith 等工具观察 Agent 在规模上的失败模式，针对性优化</li>
+                        <li><strong>持久化执行层：</strong>Temporal 等工具为长运行 Agent 提供重试、状态管理、恢复能力</li>
+                        <li><strong>可观测性优先：</strong>Agent 的调试不同于传统软件——没有堆栈跟踪，需要追踪推理路径</li>
+                    </ul>
+
+                    <p>
+                        Cursor 的长运行 Agent 数据也印证了这一点：长运行任务的 PR 合并率反而更高，说明 Agent 在处理复杂、多步骤任务时，只要系统设计得当，其表现会超过简单任务。这提示开发者：与其让 Agent 做很多小任务，不如让它专注于完成一个完整的、有明确目标的大任务。
+                    </p>
+                </div>
+            </div>
+
+            <div style="height: 30px;"></div>
+
+            <div class="deep-dive">
+                <h3 class="dive-title">🛡️ 主题二：AI 软件供应链安全实践</h3>
+                <div class="dive-content">
+                    <p>
+                        GitHub 发布了一份针对 67 个开源项目的安全审计报告，揭示了 AI 时代软件供应链的脆弱性。现代软件系统几乎完全建立在开源组件之上——curl、Python、Node.js、LLVM、Jenkins 等基础设施支撑着从 LLM 研究到 CI/CD 的全部流程。
+                    </p>
+
+                    <div class="highlight-box">
+                        <strong>现实风险：</strong>Vercel 的 Skills.sh 生态系统已有 62,000+ 个技能，安全风险不容忽视。Vercel 已联合 Socket、Snyk 和 Gen Digital 提供持续安全审计，自动隐藏恶意技能并在搜索结果中标记风险等级。
+                    </div>
+
+                    <p>
+                        <strong>开发者行动清单：</strong>
+                    </p>
+                    <ul class="checklist">
+                        <li>启用 Dependabot 或 Snyk 等自动化安全扫描</li>
+                        <li>为 AI Agent 使用的第三方技能/工具建立允许清单</li>
+                        <li>定期审计项目依赖，特别关注间接依赖</li>
+                        <li>为 Agent 设置最小权限原则，限制文件系统和网络访问</li>
+                        <li>对 Agent 生成的代码进行人工审查，特别是涉及敏感操作的部分</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工具推荐 -->
+        <section class="section">
+            <h2 class="section-title">工具推荐</h2>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">🌐</div>
+                    <h3 class="tool-name">Firecrawl Browser Sandbox</h3>
+                    <p class="tool-desc">
+                        专为 AI Agent 设计的浏览器沙盒环境，零配置、全托管。支持 Claude Code、Codex 等工具集成，可用于数据抓取、表单自动化、网页测试等场景。
+                    </p>
+                    <div class="tool-tags">
+                        <span class="tag">Agent</span>
+                        <span class="tag">Browser</span>
+                        <span class="tag">API</span>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">📄</div>
+                    <h3 class="tool-name">LlamaExtract</h3>
+                    <p class="tool-desc">
+                        企业级文档提取服务，支持复杂 PDF 的页面级结构化提取。提供溯源引用、置信度评分、边界框标注，适用于发票、简历、保险理赔等场景。
+                    </p>
+                    <div class="tool-tags">
+                        <span class="tag">PDF</span>
+                        <span class="tag">NLP</span>
+                        <span class="tag">SaaS</span>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">🐛</div>
+                    <h3 class="tool-name">agent-debugger</h3>
+                    <p class="tool-desc">
+                        LangGraph/LangChain Agent 的终端调试器，结合 Agent 级可见性（状态、消息、工具调用）和 Python 级调试（断点、单步执行、堆栈）于一体。
+                    </p>
+                    <div class="tool-tags">
+                        <span class="tag">Debug</span>
+                        <span class="tag">LangChain</span>
+                        <span class="tag">CLI</span>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">🔗</div>
+                    <h3 class="tool-name">ACP (Agent Client Protocol)</h3>
+                    <p class="tool-desc">
+                        Zed 编辑器开源的 Agent 客户端协议，标准化 IDE 与编码 Agent 之间的上下文传递。可作为 Claude Code 的替代方案，支持自定义提示词、模型和工具。
+                    </p>
+                    <div class="tool-tags">
+                        <span class="tag">Protocol</span>
+                        <span class="tag">IDE</span>
+                        <span class="tag">Open Source</span>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">⚡</div>
+                    <h3 class="tool-name">Temporal</h3>
+                    <p class="tool-desc">
+                        代码执行层，为关键工作流提供持久化执行能力。自动处理重试、状态管理、编排和恢复，OpenAI、Replit、Lovable 等公司用于长运行 Agent 工作流。
+                    </p>
+                    <div class="tool-tags">
+                        <span class="tag">Workflow</span>
+                        <span class="tag">Backend</span>
+                        <span class="tag">Enterprise</span>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">🎯</div>
+                    <h3 class="tool-name">LangSmith Insights</h3>
+                    <p class="tool-desc">
+                        LangChain 的 Agent 可观测性工具，支持追踪分组和聚类分析，发现 Agent 的涌现使用模式。新增定时任务和重复作业功能，适合生产环境监控。
+                    </p>
+                    <div class="tool-tags">
+                        <span class="tag">Observability</span>
+                        <span class="tag">Analytics</span>
+                        <span class="tag">Agent</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实践指南 -->
+        <section class="section">
+            <h2 class="section-title">实践指南</h2>
+            <div class="guide-list">
+                <div class="guide-item">
+                    <div class="guide-header">
+                        <span class="guide-number">1</span>
+                        <h3 class="guide-title">Django REST API 性能优化实战</h3>
+                    </div>
+                    <div class="guide-content">
+                        <p>性能问题通常源于早期的小设计决策。随着流量增长，这些决策会逐渐拖慢系统。freeCodeCamp 的详细教程涵盖了查询优化、缓存策略、分页和扩展技术。</p>
+                        <ul class="checklist">
+                            <li>使用 Django Debug Toolbar 和 Silk 进行性能分析</li>
+                            <li>通过 select_related 和 prefetch_related 优化 N+1 查询</li>
+                            <li>实现数据库查询缓存和 Redis 缓存层</li>
+                            <li>使用 Cursor Pagination 处理大数据集</li>
+                            <li>添加数据库索引和查询优化</li>
+                        </ul>
+                        <p style="margin-top: 15px;">
+                            <a href="https://www.freecodecamp.org/news/how-to-optimize-django-rest-apis-for-performance/" class="news-link" target="_blank">完整教程</a>
+                            <span style="color: var(--text-muted);"> · freeCodeCamp</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="guide-item">
+                    <div class="guide-header">
+                        <span class="guide-number">2</span>
+                        <h3 class="guide-title">Cloudflare Workers 冷启动优化</h3>
+                    </div>
+                    <div class="guide-content">
+                        <p>Cloudflare 通过 Worker Sharding 技术将 Workers 平台的冷启动延迟降低了 10 倍。核心思路是在多个 Worker 实例之间智能分配请求，减少每个实例的启动负担。</p>
+                        <ul class="checklist">
+                            <li>了解 V8 Isolate 和 Worker 生命周期</li>
+                            <li>使用轻量级依赖减少启动时间</li>
+                            <li>合理设置 Worker 内存和 CPU 限制</li>
+                            <li>利用 Cloudflare 的自动分片机制</li>
+                        </ul>
+                        <p style="margin-top: 15px;">
+                            <a href="https://blog.bytebytego.com/p/how-cloudflare-eliminates-cold-starts" class="news-link" target="_blank">技术解析</a>
+                            <span style="color: var(--text-muted);"> · ByteByteGo</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="guide-item">
+                    <div class="guide-header">
+                        <span class="guide-number">3</span>
+                        <h3 class="guide-title">BigQuery 全球查询：跨地域数据分析</h3>
+                    </div>
+                    <div class="guide-content">
+                        <p>Google BigQuery 新增全球查询功能，允许用单个 SQL 语句查询分布在不同地域的数据，无需复杂的 ETL 管道和数据复制。</p>
+                        <ul class="checklist">
+                            <li>使用 GLOBAL 关键字声明跨地域查询</li>
+                            <li>理解数据主权和合规性要求</li>
+                            <li>优化跨区域数据传输成本</li>
+                            <li>结合 Materialized Views 加速查询</li>
+                        </ul>
+                        <p style="margin-top: 15px;">
+                            <a href="https://cloud.google.com/blog/products/data-analytics/new-global-queries-in-bigquery-span-data-from-multiple-regions/" class="news-link" target="_blank">官方文档</a>
+                            <span style="color: var(--text-muted);"> · Google Cloud Blog</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="guide-item">
+                    <div class="guide-header">
+                        <span class="guide-number">4</span>
+                        <h3 class="guide-title">AI 数据分析防"幻觉"提示技巧</h3>
+                    </div>
+                    <div class="guide-content">
+                        <p>Lenny Rachitsky 分享防止 AI 数据分析"编造"结论的提示技巧。AI 在客户研究数据分析中常产生虚构引用、编造证据和错误结论。</p>
+                        <ul class="checklist">
+                            <li>要求 AI 标注每个结论的数据来源</li>
+                            <li>使用结构化输出格式（JSON/YAML）限制自由发挥</li>
+                            <li>要求 AI 列出不确定的推断和假设</li>
+                            <li>交叉验证 AI 生成的统计数字</li>
+                            <li>使用特定提示词："如果你不确定，请明确说明"</li>
+                        </ul>
+                        <p style="margin-top: 15px;">
+                            <a href="https://x.com/lennysan/status/2023875839033827354" class="news-link" target="_blank">提示词示例</a>
+                            <span style="color: var(--text-muted);"> · X (Twitter)</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 参考链接汇总 -->
+        <section class="section">
+            <h2 class="section-title">参考链接汇总</h2>
+            <div class="ref-section">
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                    以下为本期日报引用的所有新闻来源，按主题分类：
+                </p>
+                
+                <h4 style="color: var(--accent-blue); margin: 20px 0 10px 0;">AI 模型与平台</h4>
+                <div class="ref-grid">
+                    <div class="ref-item">
+                        <span class="domain">anthropic.com</span>
+                        <a href="https://anthropic.com/news/claude-sonnet-4-6" target="_blank">Claude Sonnet 4.6 发布公告</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">cursor.com</span>
+                        <a href="https://cursor.com/marketplace" target="_blank">Cursor 插件市场</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">cursor.com</span>
+                        <a href="https://cursor.com/blog/long-running-agents" target="_blank">Cursor 长运行 Agent</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">github.com</span>
+                        <a href="https://github.com/runwayml/skills" target="_blank">Runway API Claude Code Skill</a>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--accent-blue); margin: 20px 0 10px 0;">开发工具与框架</h4>
+                <div class="ref-grid">
+                    <div class="ref-item">
+                        <span class="domain">firecrawl.dev</span>
+                        <a href="https://firecrawl.dev/app/browser" target="_blank">Firecrawl Browser Sandbox</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">langchain.com</span>
+                        <a href="https://blog.langchain.com/improving-deep-agents-with-harness-engineering/" target="_blank">Harness Engineering 实践</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">cloud.llamaindex.ai</span>
+                        <a href="https://cloud.llamaindex.ai" target="_blank">LlamaExtract 文档提取</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">github.com</span>
+                        <a href="https://github.com/dkondo/agent-debugger" target="_blank">agent-debugger 调试器</a>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--accent-blue); margin: 20px 0 10px 0;">技术教程与指南</h4>
+                <div class="ref-grid">
+                    <div class="ref-item">
+                        <span class="domain">freecodecamp.org</span>
+                        <a href="https://www.freecodecamp.org/news/how-to-optimize-django-rest-apis-for-performance/" target="_blank">Django REST API 性能优化</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">freecodecamp.org</span>
+                        <a href="https://www.freecodecamp.org/news/how-to-use-alphaearth-for-similarity-search-in-google-earth-engine/" target="_blank">AlphaEarth 相似性搜索教程</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">bytebytego.com</span>
+                        <a href="https://blog.bytebytego.com/p/how-cloudflare-eliminates-cold-starts" target="_blank">Cloudflare 冷启动优化</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">cloud.google.com</span>
+                        <a href="https://cloud.google.com/blog/products/data-analytics/new-global-queries-in-bigquery-span-data-from-multiple-regions/" target="_blank">BigQuery 全球查询</a>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--accent-blue); margin: 20px 0 10px 0;">安全与最佳实践</h4>
+                <div class="ref-grid">
+                    <div class="ref-item">
+                        <span class="domain">github.blog</span>
+                        <a href="https://github.blog/open-source/maintainers/securing-the-ai-software-supply-chain-security-results-across-67-open-source-projects/" target="_blank">AI 软件供应链安全报告</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">martinfowler.com</span>
+                        <a href="https://martinfowler.com/bliki/AgenticEmail.html" target="_blank">Agentic Email 安全分析</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">vercel.com</span>
+                        <a href="https://vercel.com/changelog/automated-security-audits-for-skills" target="_blank">Vercel Skills 安全审计</a>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--accent-blue); margin: 20px 0 10px 0;">社区与活动</h4>
+                <div class="ref-grid">
+                    <div class="ref-item">
+                        <span class="domain">io.google</span>
+                        <a href="https://io.google" target="_blank">Google I/O 2026</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">youtube.com</span>
+                        <a href="https://www.youtube.com/watch?v=Osvu53c0yYg" target="_blank">VS Code Agent Sessions Day</a>
+                    </div>
+                    <div class="ref-item">
+                        <span class="domain">cerebralvalley.ai</span>
+                        <a href="https://cerebralvalley.ai/e/anthropic-claude-code-birthday" target="_blank">Claude Code 一周年活动</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>开发者实践日报 · 每日精选技术动态与最佳实践</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">技术热榜</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">深度解读</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">工具推荐</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">实践指南</div>
+                </div>
+            </div>
+            <p style="margin-top: 30px; font-size: 0.85em;">
+                本期主要话题：Claude Sonnet 4.6 · Cursor Agent · Harness Engineering · AI 供应链安全 · 文档提取工具
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
