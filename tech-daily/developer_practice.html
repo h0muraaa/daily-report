@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践版科技日报 - 2026-02-21</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            color: #c9d1d9;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid #30363d;
+            margin-bottom: 40px;
+        }
+        
+        .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #58a6ff 0%, #a371f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #8b949e;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #21262d;
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1f6feb 0%, #8b5cf6 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        h2 {
+            color: #f0f6fc;
+            font-size: 1.5em;
+        }
+        
+        .news-item {
+            background: rgba(13, 17, 23, 0.6);
+            border: 1px solid #21262d;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .news-item:hover {
+            border-color: #58a6ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(88, 166, 255, 0.1);
+        }
+        
+        .news-title {
+            color: #58a6ff;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .news-tag {
+            display: inline-block;
+            background: rgba(88, 166, 255, 0.15);
+            color: #58a6ff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        .news-tag.tool {
+            background: rgba(35, 134, 54, 0.15);
+            color: #3fb950;
+        }
+        
+        .news-tag.ai {
+            background: rgba(139, 92, 246, 0.15);
+            color: #a371f7;
+        }
+        
+        .news-tag.framework {
+            background: rgba(247, 154, 99, 0.15);
+            color: #f7a35c;
+        }
+        
+        .news-content {
+            color: #c9d1d9;
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+        
+        .news-source {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+        
+        .news-source a {
+            color: #8b949e;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .news-source a:hover {
+            color: #58a6ff;
+        }
+        
+        .source-link {
+            color: #3fb950 !important;
+        }
+        
+        .deep-dive {
+            background: linear-gradient(135deg, rgba(31, 111, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+        }
+        
+        .deep-dive h3 {
+            color: #a371f7;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .code-block {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .code-block .comment {
+            color: #8b949e;
+        }
+        
+        .code-block .keyword {
+            color: #ff7b72;
+        }
+        
+        .code-block .string {
+            color: #a5d6ff;
+        }
+        
+        .code-block .function {
+            color: #d2a8ff;
+        }
+        
+        .highlight-box {
+            background: rgba(35, 134, 54, 0.1);
+            border-left: 4px solid #238636;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box {
+            background: rgba(187, 128, 9, 0.1);
+            border-left: 4px solid #d29922;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tool-card {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 15px;
+            align-items: start;
+        }
+        
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        
+        .tool-info h4 {
+            color: #f0f6fc;
+            margin-bottom: 8px;
+        }
+        
+        .sources-section {
+            background: rgba(13, 17, 23, 0.6);
+            border: 1px solid #21262d;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .sources-section h3 {
+            color: #8b949e;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        
+        .sources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+        }
+        
+        .source-item {
+            font-size: 13px;
+            padding: 8px 12px;
+            background: rgba(22, 27, 34, 0.8);
+            border-radius: 6px;
+        }
+        
+        .source-item a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        
+        .source-item a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #6e7681;
+            font-size: 13px;
+            border-top: 1px solid #30363d;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .section { padding: 20px; }
+            .tool-card { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="date-badge">📅 2026-02-21</div>
+            <h1>开发者实践版科技日报</h1>
+            <p class="subtitle">全栈技术专家视角 | 关注工具更新、最佳实践与技术深度解读</p>
+        </header>
+
+        <!-- 今日技术热榜 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🔥</div>
+                <h2>今日技术热榜</h2>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    Google Gemini 3.1 Pro 正式发布，推理性能翻倍
+                    <span class="news-tag ai">AI模型</span>
+                </div>
+                <div class="news-content">
+                    Google DeepMind 发布 Gemini 3.1 Pro，这是继 3.0 Pro 后的重大升级。在 ARC-AGI-2 基准测试中获得 77.1% 的高分，推理能力达到上一代的两倍。支持 1M 上下文窗口，在多模态理解、vibe coding、多语言性能和长上下文方面都有显著增强。已正式上线 Gemini 和 NotebookLM。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro" target="_blank" class="source-link">Google DeepMind Blog</a>
+                    <span>|</span>
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650450999&idx=1&sn=e2d502ee27a3462c2fe47c8fbe8684a2" target="_blank">AINLP</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    Claude Sonnet 4.6 发布，代码能力大幅提升
+                    <span class="news-tag ai">AI模型</span>
+                </div>
+                <div class="news-content">
+                    Anthropic 发布 Claude Sonnet 4.6，在 Code Arena 排名从 #22 跃升至 #3，提升 130 分，超越 Gemini-3.1 和 GPT-5.2 等顶级推理模型。在 WebDev 任务上提升 19 位，Math 排名 #4，Instruction Following 排名 #5。同时支持 1M token 上下文窗口（beta）。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" class="source-link">Anthropic Blog</a>
+                    <span>|</span>
+                    <a href="https://x.com/arena/status/2024883614249615394" target="_blank">Arena.ai</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    Claude Code Desktop 重大更新：PR监控、会话迁移、安全扫描
+                    <span class="news-tag tool">开发者工具</span>
+                </div>
+                <div class="news-content">
+                    Claude Code 桌面版发布多项新功能：Server previews（预览运行中的应用）、Local code review（本地代码审查）、PR monitoring（自动跟踪CI状态并尝试修复）、Session mobility（会话可在 CLI、桌面、Web 间迁移）、Claude Code Security（代码安全扫描，在开源代码中发现 500+ 漏洞）。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://claude.com/download" target="_blank" class="source-link">Claude Code</a>
+                    <span>|</span>
+                    <a href="https://anthropic.com/news/claude-code-security" target="_blank">Anthropic Security</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    llama.cpp 加入 Hugging Face，本地 AI 迎来新篇章
+                    <span class="news-tag ai">开源AI</span>
+                </div>
+                <div class="news-content">
+                    ggml.ai 正式加入 Hugging Face，这标志着本地 AI 发展的重要里程碑。Georgi Gerganov 的 llama.cpp 项目于 2023 年 3 月开创了在个人电脑上运行本地 LLM 的先河，使 4-bit 量化的 Llama 模型能在 MacBook 上运行。此次合作将使 llama.cpp 更易于访问，并进一步推动开源本地 AI 生态系统。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://simonwillison.net/2026/Feb/20/ggmlai-joins-hugging-face" target="_blank" class="source-link">Simon Willison's Weblog</a>
+                    <span>|</span>
+                    <a href="https://x.com/ggerganov/status/2024855027517702345" target="_blank">Georgi Gerganov</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    Taalas 硬件加速 Llama 3.1 8B，达 17,000 tokens/秒
+                    <span class="news-tag ai">AI硬件</span>
+                </div>
+                <div class="news-content">
+                    加拿大硬件创业公司 Taalas 发布首款产品——针对 Llama 3.1 8B 的定制硬件实现，运行速度高达 17,000 tokens/秒。采用"激进量化"技术，结合 3-bit 和 6-bit 参数。下一代将使用 4-bit，预览地址：chatjimmy.ai。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://simonwillison.net/2026/Feb/20/taalas" target="_blank" class="source-link">Simon Willison's Weblog</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    jQuery 4.0 正式发布，时隔近10年的重大版本
+                    <span class="news-tag framework">前端框架</span>
+                </div>
+                <div class="news-content">
+                    jQuery 4 正式发布，庆祝 20 周年创新历程。本次更新移除了遗留代码和过时浏览器支持，增强了与现代构建工具的兼容性，新增安全特性。通过删除已弃用的 API、简化内部逻辑，包大小减小约 20%。支持 IE11+，推荐现代浏览器使用。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://www.infoq.com/news/2026/02/jquery-4-release/" target="_blank" class="source-link">InfoQ</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    IntelliJ IDEA 2025.3.3 发布，修复 MCP Server 问题
+                    <span class="news-tag tool">IDE</span>
+                </div>
+                <div class="news-content">
+                    JetBrains 发布 IntelliJ IDEA 2025.3.3，主要更新包括：MCP server 输出模式正确处理默认值属性、修复 IDE 后端代理下载问题、解决代理认证失败问题、修复 JAR 依赖中的包注解 PSI 模型反射问题。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://blog.jetbrains.com/idea/2026/02/intellij-idea-2025-3-3/" target="_blank" class="source-link">JetBrains Blog</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    OpenAI 推出 Frontier：企业级 AI Agent 平台
+                    <span class="news-tag ai">AI平台</span>
+                </div>
+                <div class="news-content">
+                    OpenAI Frontier 是一个面向企业的 AI Agent 构建、部署和管理平台，旨在使 AI Agent 可靠、可扩展，并与真实的企业系统和工作流集成。支持团队协作、权限管理和审计日志，适用于金融、医疗、法律等合规要求严格的行业。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://www.infoq.com/news/2026/02/openai-frontier-agent-platform/" target="_blank" class="source-link">InfoQ</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    VS Code February 2026 Insiders (1.110) 预览
+                    <span class="news-tag tool">IDE</span>
+                </div>
+                <div class="news-content">
+                    Visual Studio Code 发布 2026 年 2 月 Insider 版本 (1.110)，带来多项新功能和改进。包括改进的 AI 辅助编码功能、性能优化和新的扩展 API。开发者可通过 Insiders 频道提前体验即将发布的正式版功能。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank" class="source-link">Microsoft DevBlog</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    Skills.sh 生态突破：69,000+ Skills 助力 AI Agent
+                    <span class="news-tag ai">AI生态</span>
+                </div>
+                <div class="news-content">
+                    Vercel 举办的 Skills Night 展示 skills.sh 生态系统最新进展。从 Shu Ding 一个人记录的 React 知识，发展到超过 69,000 个 skills、200 万次 CLI 安装。Skills 让 AI Agent 能够理解和使用各种开发工具、框架和最佳实践，是 AI 辅助开发的重要基础设施。
+                </div>
+                <div class="news-source">
+                    <span>📰</span>
+                    <a href="https://vercel.com/blog/skills-night-69000-ways-agents-are-getting-smarter" target="_blank" class="source-link">Vercel Blog</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 深度技术解读 -->
+        <section class="section deep-dive">
+            <div class="section-header">
+                <div class="section-icon">🔍</div>
+                <h2>深度技术解读</h2>
+            </div>
+
+            <h3>🧠 Prompt Caching：长时 AI Agent 的关键技术</h3>
+            <div class="news-content">
+                <p>随着 Claude Code 等长时间运行的 AI Agent 产品的普及，<strong>Prompt Caching（提示缓存）</strong>技术成为降低延迟和成本的核心优化手段。</p>
+                
+                <div class="highlight-box">
+                    <strong>核心原理：</strong>复用之前轮次的计算结果，避免重复处理相同的上下文。对于需要多轮交互的 Agent 系统，缓存命中率直接影响用户体验和运营成本。
+                </div>
+
+                <p>Anthropic 团队在 Claude Code 中围绕 Prompt Caching 构建了整个架构。高缓存命中率不仅能降低成本，还能帮助创建更慷慨的订阅计划速率限制。他们甚至在缓存命中率过低时触发 SEV（Site Event）警报。</p>
+
+                <div class="code-block">
+<span class="comment">// 伪代码：Prompt Caching 在 Agent 系统中的应用</span>
+<span class="keyword">class</span> <span class="function">AgentSession</span> {
+  <span class="keyword">constructor</span>() {
+    <span class="keyword">this</span>.cache = <span class="keyword">new</span> <span class="function">PromptCache</span>();
+    <span class="keyword">this</span>.contextWindow = []; <span class="comment">// 1M tokens</span>
+  }
+  
+  <span class="keyword">async</span> <span class="function">process</span>(userInput) {
+    <span class="comment">// 检查缓存中是否有相似提示</span>
+    <span class="keyword">const</span> cached = <span class="keyword">await</span> <span class="keyword">this</span>.cache.get(userInput);
+    <span class="keyword">if</span> (cached) {
+      <span class="keyword">return</span> cached.response; <span class="comment">// 直接返回，节省 API 调用</span>
+    }
+    
+    <span class="comment">// 新查询：调用 LLM 并缓存结果</span>
+    <span class="keyword">const</span> response = <span class="keyword">await</span> llm.generate({
+      context: <span class="keyword">this</span>.contextWindow,
+      input: userInput,
+      cache_key: <span class="keyword">this</span>.generateCacheKey()
+    });
+    
+    <span class="keyword">this</span>.cache.set(userInput, response);
+    <span class="keyword">return</span> response;
+  }
+}
+                </div>
+
+                <p><strong>实践建议：</strong></p>
+                <ul style="margin-left: 20px; color: #c9d1d9;">
+                    <li>对于多轮对话系统，优先设计可缓存的提示结构</li>
+                    <li>监控缓存命中率，低于 70% 时需要优化提示设计</li>
+                    <li>使用语义化缓存键，而不仅是字符串匹配</li>
+                    <li>结合模型 fine-tuning 减少需要缓存的上下文长度</li>
+                </ul>
+            </div>
+            <div class="news-source">
+                <span>📚 参考：</span>
+                <a href="https://simonwillison.net/2026/Feb/20/thariq-shihipar" target="_blank" class="source-link">Simon Willison - Prompt Caching Analysis</a>
+            </div>
+
+            <h3 style="margin-top: 30px;">🔗 MCP Protocol 实践：Code Mode 模式解析</h3>
+            <div class="news-content">
+                <p><strong>Model Context Protocol (MCP)</strong> 已成为 AI Agent 使用外部工具的标准方式，但工具增多会填满模型的上下文窗口。Cloudflare 提出的 <strong>Code Mode</strong> 模式是解决这一问题的创新方案。</p>
+
+                <div class="highlight-box">
+                    <strong>核心思想：</strong>让模型编写代码来调用工具，而不是为每个操作单独描述工具。代码作为紧凑的"计划"，可以探索、组合多个工具调用，只返回需要的数据。
+                </div>
+
+                <p>传统 MCP 的问题：</p>
+                <ul style="margin-left: 20px; color: #c9d1d9;">
+                    <li>每个工具需要完整的描述和参数说明</li>
+                    <li>N 个工具 = N 倍的上下文占用</li>
+                    <li>复杂操作需要多轮工具调用</li>
+                </ul>
+
+                <p>Code Mode 的优势：</p>
+                <ul style="margin-left: 20px; color: #c9d1d9;">
+                    <li>用代码代替自然语言描述工具调用</li>
+                    <li>一个 SDK 可以覆盖多个操作</li>
+                    <li>模型可以编写复杂的工具组合逻辑</li>
+                    <li>代码在 Dynamic Worker 中安全执行</li>
+                </ul>
+
+                <div class="code-block">
+<span class="comment">// 传统 MCP：每个工具单独描述</span>
+tools: [
+  { name: <span class="string">"search"</span>, params: { query: <span class="string">"string"</span>, top_k: <span class="string">"number"</span> } },
+  { name: <span class="string">"get_user"</span>, params: { id: <span class="string">"string"</span> } },
+  { name: <span class="string">"update_record"</span>, params: { ... } },
+  <span class="comment">// ... 更多工具</span>
+]
+
+<span class="comment">// Code Mode：使用类型化 SDK</span>
+<span class="keyword">const</span> sdk = <span class="keyword">await</span> <span class="function">loadSDK</span>(<span class="string">'my-api'</span>);
+
+<span class="comment">// Agent 生成代码而非多次工具调用</span>
+<span class="keyword">const</span> code = <span class="string">`
+  const user = await sdk.users.get({ id: "123" });
+  const related = await sdk.search.query({ 
+    query: user.interests[0],
+    top_k: 10 
+  });
+  return related.items.map(i => i.title);
+`</span>;
+
+<span class="comment">// 在隔离 Worker 中执行</span>
+<span class="keyword">const</span> result = <span class="keyword">await</span> <span class="function">executeInSandbox</span>(code, sdk);
+                </div>
+
+                <div class="warning-box">
+                    <strong>注意事项：</strong>Code Mode 需要类型安全的 SDK 和可靠的沙箱执行环境。对于简单场景，传统 MCP 仍然更直观。建议根据工具复杂度和调用频率选择合适模式。
+                </div>
+            </div>
+            <div class="news-source">
+                <span>📚 参考：</span>
+                <a href="https://blog.cloudflare.com/code-mode-mcp/" target="_blank" class="source-link">Cloudflare Blog - Code Mode MCP</a>
+                <span>|</span>
+                <a href="https://anthropic.com/blog/code-execution-mcp" target="_blank">Anthropic - Code Execution with MCP</a>
+            </div>
+
+            <h3 style="margin-top: 30px;">⚡ 2026 年的开发范式转变：AI 优先工作流</h3>
+            <div class="news-content">
+                <p>随着 AI 代码生成工具的普及，开发者工作流正在经历根本性转变。以下是基于近期行业动态的观察：</p>
+
+                <p><strong>1. 从"写代码"到"审代码"</strong></p>
+                <p>Anthropic 的 Boris 自 2024 年 11 月以来没有手写过一行代码，100% 由 Claude Code 生成。同时他每天能合并 10-30 个 PR。这不是个案——Anthropic 工程师整体生产力提升了 200%。</p>
+
+                <p><strong>2. Context 优先于 Control</strong></p>
+                <p>与 AI 协作的关键是给足上下文，让它自己找出解决方案，而不是微观管理每个步骤。开发者应该：</p>
+                <ul style="margin-left: 20px; color: #c9d1d9;">
+                    <li>清晰描述目标，而非具体实现步骤</li>
+                    <li>提供相关代码、文档、架构图作为上下文</li>
+                    <li>接受 AI 可能比你的具体指令更聪明</li>
+                </ul>
+
+                <p><strong>3. 代码库的 Agent 优化</strong></p>
+                <p>Thorsten Ball 提出"编码 Agent 已死"的观点——问题的瓶颈不再是 Agent 本身，而是代码库的组织方式和团队使用 Agent 的方式。建议：</p>
+                <ul style="margin-left: 20px; color: #c9d1d9;">
+                    <li>模块化设计，让 Agent 能独立理解和修改单元</li>
+                    <li>完善的测试覆盖，让 Agent 能验证修改</li>
+                    <li>清晰的文档和类型定义</li>
+                    <li>一致的代码风格（可用 AI 辅助标准化）</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>未来趋势：</strong>编程语言本身可能发生变化，从"如何做"(How) 转向"做什么"(What)。Cursor CEO Michael Truell 预测，未来的编程将更像高级编译器技术，而非人类助手的委托模式。
+                </div>
+            </div>
+            <div class="news-source">
+                <span>📚 参考：</span>
+                <a href="https://x.com/lennysan/status/2024896611818897438" target="_blank" class="source-link">Lenny Rachitsky - Anthropic 生产力提升</a>
+                <span>|</span>
+                <a href="https://x.com/a16z/status/2024958730740326467" target="_blank">a16z - Cursor CEO 访谈</a>
+                <span>|</span>
+                <a href="https://ampcode.com/news/the-coding-agent-is-dead" target="_blank">Amp - The Coding Agent is Dead</a>
+            </div>
+        </section>
+
+        <!-- 工具推荐 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🛠️</div>
+                <h2>工具推荐</h2>
+            </div>
+
+            <div class="news-item">
+                <div class="tool-card">
+                    <div class="tool-icon">🦀</div>
+                    <div class="tool-info">
+                        <h4>EvCxR - Rust Jupyter Kernel</h4>
+                        <p style="color: #8b949e; font-size: 14px; margin-bottom: 10px;">在 Jupyter Notebook 中交互式运行 Rust 代码</p>
+                        <p style="color: #c9d1d9; font-size: 13px;">厌倦了每次测试代码片段都要编译？EvCxR 让你可以在 Jupyter 中像 Python 一样交互式开发 Rust。支持变量持久化、错误恢复、Cargo 集成。适合学习 Rust、算法原型和数据探索。</p>
+                        <div class="news-source" style="margin-top: 10px;">
+                            <a href="https://www.freecodecamp.org/news/how-to-run-rust-on-jupyter-notebooks/" target="_blank" class="source-link">freeCodeCamp 教程</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #1f6feb 0%, #58a6ff 100%);">🔍</div>
+                    <div class="tool-info">
+                        <h4>Qdrant 1.17 - 向量数据库</h4>
+                        <p style="color: #8b949e; font-size: 14px; margin-bottom: 10px;">相关性反馈与搜索延迟优化</p>
+                        <p style="color: #c9d1d9; font-size: 13px;">最新版本带来 Relevance Feedback 查询（根据相关性信息改进搜索结果）、搜索延迟优化工具（更新队列、延迟扇出）、集群级遥测 API。适合 RAG 应用和大规模向量检索场景。</p>
+                        <div class="news-source" style="margin-top: 10px;">
+                            <a href="https://qdrant.tech/blog/qdrant-1.17.x/" target="_blank" class="source-link">Qdrant Blog</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #a371f7 0%, #bc8cff 100%);">📄</div>
+                    <div class="tool-info">
+                        <h4>LlamaAgent Builder - 文档智能提取</h4>
+                        <p style="color: #8b949e; font-size: 14px; margin-bottom: 10px;">自然语言描述即可从任意文档提取信息</p>
+                        <p style="color: #c9d1d9; font-size: 13px;">基于 LlamaParse 构建的 Agent 工具，支持 PDF、图片、扫描件等多种格式。示例场景：上传简历合集，用自然语言描述"提取每位候选人的姓名、邮箱、技能和工作经历"，即可批量处理。</p>
+                        <div class="news-source" style="margin-top: 10px;">
+                            <a href="https://cloud.llamaindex.ai" target="_blank" class="source-link">LlamaIndex Cloud</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实践指南 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">📋</div>
+                <h2>实践指南</h2>
+            </div>
+
+            <h3 style="color: #f0f6fc; margin-bottom: 15px;">🎯 与 AI 编码 Agent 高效协作的 7 条经验</h3>
+            
+            <div class="news-item">
+                <div class="news-title">01: Context, not Control（给上下文，而非控制）</div>
+                <div class="news-content">
+                    告诉 AI 你想要达成什么目标，让它自己找出实现方法。不要微观管理步骤，描述目的地即可。AI 通常比你的具体指令更聪明。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">02: Push until it breaks（测试到它崩溃）</div>
+                <div class="news-content">
+                    不要接受第一次结果。持续推动、要求更多、请求变体。推到它失败为止，只有那时你才真正理解它的极限。极限通常比你想象的更远。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">03: Put in the reps（重复练习）</div>
+                <div class="news-content">
+                    没有什么神奇的提示模板或捷径能让你突然成为专家。像其他事情一样，你需要不断重复。建得越多，直觉就越准。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">04: Try everything（尝试一切）</div>
+                <div class="news-content">
+                    浪费一些 token。这是学习成本。尝试疯狂的想法。最好的突破往往来自"如果……会怎样"的探索。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">05: Use it for real work（用于真实工作）</div>
+                <div class="news-content">
+                    不要只做玩具项目。用 AI 构建你真正需要的东西。现实约束是最好的老师。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">06: Trust your taste（相信你的品味）</div>
+                <div class="news-content">
+                    AI 可以生成无数选项，但你需要判断哪个是对的。培养你的品味——这是 AI 无法替代的能力。
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">07: Stay curious（保持好奇）</div>
+                <div class="news-content">
+                    技术变化快，今天的最佳实践明天可能就过时。保持对新工具、新方法的开放态度。
+                </div>
+            </div>
+
+            <div class="news-source" style="margin-top: 20px;">
+                <span>📚 来源：</span>
+                <a href="https://x.com/zarazhangrui/status/2024892806029082734" target="_blank" class="source-link">Zara Zhang 的 7 条经验</a>
+            </div>
+
+            <h3 style="color: #f0f6fc; margin: 30px 0 15px;">🔧 使用 Data API Builder 实现多数据源统一 API</h3>
+            <div class="news-content">
+                <p>Microsoft 的 Data API Builder (DAB) 现在支持多源配置，让你可以用单一 REST/GraphQL 端点连接多个数据库。</p>
+                
+                <div class="code-block">
+<span class="comment">// dab-config.json 示例：连接 SQL Server 和 PostgreSQL</span>
+{
+  <span class="string">"data-source"</span>: {
+    <span class="string">"database-type"</span>: <span class="string">"mssql"</span>,
+    <span class="string">"connection-string"</span>: <span class="string">"@env('MSSQL_CONN')"</span>
+  },
+  <span class="string">"data-sources"</span>: [
+    {
+      <span class="string">"name"</span>: <span class="string">"postgres"</span>,
+      <span class="string">"database-type"</span>: <span class="string">"postgresql"</span>,
+      <span class="string">"connection-string"</span>: <span class="string">"@env('PG_CONN')"</span>
+    },
+    {
+      <span class="string">"name"</span>: <span class="string">"cosmos"</span>,
+      <span class="string">"database-type"</span>: <span class="string">"cosmosdb_nosql"</span>,
+      <span class="string">"connection-string"</span>: <span class="string">"@env('COSMOS_CONN')"</span>
+    }
+  ],
+  <span class="string">"entities"</span>: {
+    <span class="string">"User"</span>: {
+      <span class="string">"source"</span>: <span class="string">"dbo.Users"</span>,
+      <span class="string">"data-source"</span>: <span class="string">"mssql"</span>
+    },
+    <span class="string">"Order"</span>: {
+      <span class="string">"source"</span>: <span class="string">"orders"</span>,
+      <span class="string">"data-source"</span>: <span class="string">"postgres"</span>
+    }
+  }
+}
+                </div>
+
+                <p><strong>使用场景：</strong></p>
+                <ul style="margin-left: 20px; color: #c9d1d9;">
+                    <li>微服务架构中的统一数据访问层</li>
+                    <li>遗留系统与新系统的数据整合</li>
+                    <li>AI Agent 的数据接口（支持 MCP 协议）</li>
+                    <li>快速原型开发，无需编写后端代码</li>
+                </ul>
+            </div>
+            <div class="news-source">
+                <span>📚 参考：</span>
+                <a href="https://devblogs.microsoft.com/azure-sql/multi-source-data-api-builder" target="_blank" class="source-link">Microsoft - Multi-source DAB</a>
+            </div>
+        </section>
+
+        <!-- 信息来源汇总 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">📚</div>
+                <h2>信息来源汇总</h2>
+            </div>
+            <div class="sources-section">
+                <h3>本日报道引用的所有来源链接</h3>
+                <div class="sources-list">
+                    <div class="source-item">
+                        <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank">VS Code 1.110 Insiders</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://simonwillison.net/2026/Feb/20/taalas" target="_blank">Taalas Hardware LLM</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://blog.jetbrains.com/idea/2026/02/intellij-idea-2025-3-3/" target="_blank">IntelliJ IDEA 2025.3.3</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://claude.com/download" target="_blank">Claude Code Desktop</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://anthropic.com/news/claude-code-security" target="_blank">Claude Code Security</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank">Claude Sonnet 4.6</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro" target="_blank">Gemini 3.1 Pro</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://simonwillison.net/2026/Feb/20/ggmlai-joins-hugging-face" target="_blank">ggml.ai joins HF</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.infoq.com/news/2026/02/openai-frontier-agent-platform/" target="_blank">OpenAI Frontier</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.infoq.com/news/2026/02/jquery-4-release/" target="_blank">jQuery 4 Release</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.infoq.com/news/2026/02/opentelemetry-observability/" target="_blank">OpenTelemetry Guide</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://devblogs.microsoft.com/azure-sql/multi-source-data-api-builder" target="_blank">DAB Multi-source</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://blog.cloudflare.com/code-mode-mcp/" target="_blank">Cloudflare Code Mode</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://blog.jetbrains.com/go/2026/02/20/write-modern-go-code-with-junie-and-claude-code/" target="_blank">Go Modern Guidelines</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://vercel.com/blog/skills-night-69000-ways-agents-are-getting-smarter" target="_blank">Vercel Skills Night</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://qdrant.tech/blog/qdrant-1.17.x/" target="_blank">Qdrant 1.17</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.freecodecamp.org/news/how-to-run-rust-on-jupyter-notebooks/" target="_blank">Rust Jupyter Tutorial</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.freecodecamp.org/news/how-to-build-and-deploy-a-production-ready-whatsapp-bot/" target="_blank">WhatsApp Bot Tutorial</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.youtube.com/watch?v=1fUBWAETmkk" target="_blank">TanStack Start</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.infoq.com/presentations/webassembly-extensions/" target="_blank">Wasm Components Talk</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>开发者实践版科技日报 | 数据来自 FreshRSS 24小时聚合 (2026-02-20 07:00 ~ 2026-02-21 07:00)</p>
+            <p style="margin-top: 10px;">生成时间: 2026-02-21 | 共筛选 20+ 条技术新闻 | 专注开发者实践视角</p>
+        </footer>
+    </div>
+</body>
+</html>
