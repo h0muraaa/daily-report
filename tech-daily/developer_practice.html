@@ -3,931 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>开发者实践版科技日报 - 2026年2月23日</title>
+    <title>开发者实践版 - 科技日报 2026-02-23</title>
     <style>
-        :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --text-muted: #6e7681;
-            --accent-primary: #58a6ff;
-            --accent-secondary: #79c0ff;
-            --accent-success: #3fb950;
-            --accent-warning: #d29922;
-            --accent-danger: #f85149;
-            --border-color: #30363d;
-            --code-bg: #1e1e1e;
-            --code-font: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+            background: #1a1a2e;
+            color: #eaeaea;
             line-height: 1.7;
-            font-size: 15px;
         }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
         header {
-            text-align: center;
-            padding: 40px 0;
-            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            padding: 40px;
+            border-radius: 12px;
             margin-bottom: 30px;
+            border: 1px solid #e94560;
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.2);
         }
-
-        .date-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: var(--bg-primary);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            letter-spacing: 0.5px;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--text-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        header h1 { 
+            font-size: 2.5em; 
             margin-bottom: 10px;
+            color: #e94560;
+            text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
         }
-
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 16px;
-        }
-
-        .edition-tag {
-            display: inline-block;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--accent-primary);
-            color: var(--accent-primary);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 15px;
-        }
-
-        /* Navigation */
-        .toc {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+        header .subtitle { color: #a0a0a0; font-size: 1.1em; }
+        header .date { color: #666; margin-top: 10px; }
+        
+        .section {
+            background: #16213e;
             border-radius: 12px;
-            padding: 20px 25px;
-            margin-bottom: 30px;
-        }
-
-        .toc h3 {
-            font-size: 14px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .toc ul {
-            list-style: none;
-        }
-
-        .toc li {
-            margin: 8px 0;
-        }
-
-        .toc a {
-            color: var(--accent-primary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        .toc a:hover {
-            color: var(--accent-secondary);
-            text-decoration: underline;
-        }
-
-        /* Sections */
-        section {
-            margin-bottom: 40px;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .section-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        h2 {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        /* News Cards */
-        .news-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .news-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent-primary);
-        }
-
-        .news-card.featured {
-            border-left: 4px solid var(--accent-primary);
-        }
-
-        .news-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .news-title {
-            font-size: 17px;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        .news-title a {
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-
-        .news-title a:hover {
-            color: var(--accent-primary);
-        }
-
-        .news-tag {
-            background: var(--bg-tertiary);
-            color: var(--accent-secondary);
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            white-space: nowrap;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .news-tag.hot {
-            background: rgba(248, 81, 73, 0.15);
-            color: var(--accent-danger);
-        }
-
-        .news-tag.tool {
-            background: rgba(63, 185, 80, 0.15);
-            color: var(--accent-success);
-        }
-
-        .news-tag.ai {
-            background: rgba(88, 166, 255, 0.15);
-            color: var(--accent-primary);
-        }
-
-        .news-source {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-bottom: 12px;
-        }
-
-        .news-source a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-
-        .news-source a:hover {
-            color: var(--accent-primary);
-        }
-
-        .news-summary {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.7;
-            padding: 12px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            border-left: 3px solid var(--accent-success);
-        }
-
-        .news-summary::before {
-            content: "💡 AI分析：";
-            color: var(--accent-success);
-            font-weight: 600;
-        }
-
-        /* Deep Dive Section */
-        .deep-dive {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
             padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid #2a2a4a;
         }
-
-        .deep-dive h3 {
-            font-size: 20px;
+        .section h2 {
+            color: #e94560;
+            font-size: 1.5em;
             margin-bottom: 20px;
-            color: var(--accent-secondary);
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e94560;
         }
-
-        .deep-dive h4 {
-            font-size: 16px;
-            margin: 25px 0 12px;
-            color: var(--text-primary);
+        
+        .hot-item {
+            background: #0f3460;
+            border-left: 4px solid #e94560;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: transform 0.2s;
         }
-
-        .deep-dive p {
-            color: var(--text-secondary);
+        .hot-item:hover { transform: translateX(5px); }
+        .hot-item h3 { color: #eaeaea; margin-bottom: 10px; }
+        .hot-item p { color: #a0a0a0; font-size: 0.95em; }
+        .hot-item .tag {
+            display: inline-block;
+            background: #e94560;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            margin-top: 10px;
+        }
+        
+        .tech-deep {
+            background: linear-gradient(135deg, #16213e 0%, #1a1a3e 100%);
+            border: 1px solid #e94560;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .tech-deep h3 {
+            color: #e94560;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .tech-deep .content {
+            color: #eaeaea;
+            line-height: 1.8;
             margin-bottom: 15px;
         }
-
-        .code-block {
-            background: var(--code-bg);
+        .tech-deep .code-block {
+            background: #0a0a1a;
+            border: 1px solid #2a2a4a;
             border-radius: 8px;
-            padding: 16px;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: #4ade80;
             overflow-x: auto;
             margin: 15px 0;
-            font-family: var(--code-font);
-            font-size: 13px;
-            line-height: 1.6;
         }
-
-        .code-block .comment {
-            color: #6a9955;
-        }
-
-        .code-block .keyword {
-            color: #569cd6;
-        }
-
-        .code-block .string {
-            color: #ce9178;
-        }
-
-        .code-block .function {
-            color: #dcdcaa;
-        }
-
-        /* Tool Grid */
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
+        
         .tool-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.2s;
-        }
-
-        .tool-card:hover {
-            border-color: var(--accent-success);
-            box-shadow: 0 4px 20px rgba(63, 185, 80, 0.1);
-        }
-
-        .tool-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .tool-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--bg-tertiary);
+            background: #0f3460;
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-
-        .tool-name {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .tool-name a {
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-
-        .tool-name a:hover {
-            color: var(--accent-success);
-        }
-
-        .tool-desc {
-            color: var(--text-secondary);
-            font-size: 13px;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-
-        .tool-meta {
-            display: flex;
-            gap: 12px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .tool-meta span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Practice Guide */
-        .practice-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-
-        .practice-card h4 {
-            font-size: 17px;
+            padding: 20px;
             margin-bottom: 15px;
-            color: var(--accent-warning);
             display: flex;
-            align-items: center;
-            gap: 8px;
+            align-items: flex-start;
         }
-
-        .practice-card ul {
-            list-style: none;
-            padding: 0;
+        .tool-card .icon {
+            font-size: 2em;
+            margin-right: 15px;
         }
-
-        .practice-card li {
-            padding: 8px 0 8px 24px;
-            position: relative;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .practice-card li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--accent-warning);
-        }
-
-        /* Sources Section */
-        .sources-section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-        }
-
-        .sources-section h3 {
-            font-size: 16px;
-            margin-bottom: 20px;
-            color: var(--text-muted);
-        }
-
-        .sources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-        }
-
-        .source-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-        }
-
-        .source-item a {
-            color: var(--text-secondary);
+        .tool-card h4 { color: #e94560; margin-bottom: 8px; }
+        .tool-card p { color: #a0a0a0; font-size: 0.9em; }
+        .tool-card a {
+            color: #4ade80;
             text-decoration: none;
-            transition: color 0.2s;
         }
-
-        .source-item a:hover {
-            color: var(--accent-primary);
+        .tool-card a:hover { text-decoration: underline; }
+        
+        .source-box {
+            background: #0a0a1a;
+            border: 1px solid #2a2a4a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
         }
-
-        .source-bullet {
-            width: 6px;
-            height: 6px;
-            background: var(--accent-primary);
-            border-radius: 50%;
+        .source-box h4 { color: #e94560; margin-bottom: 15px; }
+        .source-box a {
+            display: block;
+            color: #4ade80;
+            text-decoration: none;
+            padding: 5px 0;
+            font-size: 0.9em;
         }
-
-        /* Footer */
-        footer {
+        .source-box a:hover { color: #e94560; }
+        
+        .practice-tip {
+            background: linear-gradient(90deg, #e94560 0%, #ff6b6b 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .practice-tip h4 { margin-bottom: 10px; }
+        
+        .footer {
             text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid var(--border-color);
-            margin-top: 40px;
-            color: var(--text-muted);
-            font-size: 13px;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9em;
         }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 24px;
-            }
-
-            .news-header {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .tool-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .deep-dive {
-                padding: 20px;
-            }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .container { padding: 10px; }
+            .section { padding: 20px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header>
-            <div class="date-badge">2026年2月23日 · 星期一</div>
-            <h1>开发者实践版科技日报</h1>
-            <p class="subtitle">全栈技术视角 · 工具实践 · 代码实现</p>
-            <span class="edition-tag">Developer Practice Edition</span>
+            <h1>💻 开发者实践版</h1>
+            <div class="subtitle">技术细节、工具更新与最佳实践</div>
+            <div class="date">2026年2月23日 · 共筛选 32 条技术动态</div>
         </header>
 
-        <!-- Table of Contents -->
-        <div class="toc">
-            <h3>📋 目录导航</h3>
-            <ul>
-                <li><a href="#hot">🔥 今日技术热榜（8条）</a></li>
-                <li><a href="#deep">🧠 深度技术解读（2篇）</a></li>
-                <li><a href="#tools">🛠️ 工具推荐（4款）</a></li>
-                <li><a href="#practice">📖 实践指南</a></li>
-                <li><a href="#sources">📚 信息来源汇总</a></li>
-            </ul>
+        <div class="section">
+            <h2>🔥 今日技术热榜</h2>
+            
+            <div class="hot-item">
+                <h3>GitHub Copilot新增记忆功能</h3>
+                <p>Copilot现在可以跨repo学习，VS Code Insiders、Copilot CLI、Code Review均已支持。这是AI编程工具向"上下文感知"进化的重要一步。</p>
+                <span class="tag">AI编程</span>
+                <span class="tag">GitHub</span>
+            </div>
+            
+            <div class="hot-item">
+                <h3>Claude Code一周年：Boris分享12条定制技巧</h3>
+                <p>包括终端配置、MCP扩展、权限管理、三层记忆架构等实战技巧，系统化的工程化使用指南。</p>
+                <span class="tag">Claude</span>
+                <span class="tag">最佳实践</span>
+            </div>
+            
+            <div class="hot-item">
+                <h3>阶跃星辰Flash：被低估的国产模型</h3>
+                <p>200万Token仅需0.2美元，工具调用稳定，长程任务执行能力强，性价比极高。</p>
+                <span class="tag">国产模型</span>
+                <span class="tag">性价比</span>
+            </div>
+            
+            <div class="hot-item">
+                <h3>Mole 1.27发布：Mac清理工具</h3>
+                <p>新增Group Containers、Maven仓库、Chrome缓存等深度清理，GitHub 36K stars。</p>
+                <span class="tag">开源工具</span>
+                <span class="tag">Mac</span>
+            </div>
+            
+            <div class="hot-item">
+                <h3>VS Code 1.110 Insiders发布</h3>
+                <p>2026年2月预览版更新，包含多项编辑器优化和AI集成功能改进。</p>
+                <span class="tag">VS Code</span>
+                <span class="tag">编辑器</span>
+            </div>
+            
+            <div class="hot-item">
+                <h3>Ghostty终端主题库开源</h3>
+                <p>收录460+主题，支持预览后直接安装，为Ghostty终端打造的开源社区主题库。</p>
+                <span class="tag">终端</span>
+                <span class="tag">开源</span>
+            </div>
         </div>
 
-        <!-- 今日技术热榜 -->
-        <section id="hot">
-            <div class="section-header">
-                <div class="section-icon">🔥</div>
-                <h2>今日技术热榜</h2>
-            </div>
-
-            <div class="news-card featured">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485100&idx=1&sn=a8bd83006b731cbef47e62035c6e9e15" target="_blank">Claude Code 一周年：编程正在消失，但软件机会才刚刚开始</a>
-                    </div>
-                    <span class="news-tag hot">重磅</span>
+        <div class="section">
+            <h2>🔧 深度技术解读</h2>
+            
+            <div class="tech-deep">
+                <h3>Claude Code工程化实战：从入门到精通</h3>
+                <div class="content">
+                    <p>Cloudflare工程师分享的Claude Code工作流值得每个开发者参考：</p>
+                    <p><strong>1. Research阶段：</strong>深入阅读指定代码目录/模块，输出详细的research.md报告</p>
+                    <p><strong>2. Planning阶段：</strong>基于research生成详细的plan.md文件</p>
+                    <p><strong>3. Annotation Cycle：</strong>在plan.md中直接写评论，让CC更新直到满意</p>
+                    <p><strong>4. 生成Todo List：</strong>根据plan生成可执行的任务清单</p>
+                    <p><strong>5. Implement：</strong>完整执行实现</p>
+                    <p><strong>6. Feedback & Iterate：</strong>用简单指令反馈迭代</p>
                 </div>
-                <div class="news-source">
-                    <span>📰 晚点再听LaterCast</span>
-                    <span>·</span>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485100&idx=1&sn=a8bd83006b731cbef47e62035c6e9e15" target="_blank">查看原文 ↗</a>
-                </div>
-                <div class="news-summary">
-                    Boris Cherny 作为 Claude Code 创始人分享了一年来最关键的产品洞察：Claude Code 已占据 GitHub 公开提交量的 4%，月活在上个月翻倍。他认为"代码正在被解决，但该做什么反而更稀缺"。团队通过给开发者无限 Token 而非限制成本，倒逼创新工作流的设计。这揭示了 AI 编程工具的核心设计哲学——不是让 AI 做更多，而是让人类做更高维的决策。
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://x.com/github/status/2025638706393272358" target="_blank">GitHub Copilot 新增记忆功能：跨仓库学习你的编码习惯</a>
-                    </div>
-                    <span class="news-tag ai">AI工具</span>
-                </div>
-                <div class="news-source">
-                    <span>📰 GitHub 官方</span>
-                    <span>·</span>
-                    <a href="https://x.com/github/status/2025638706393272358" target="_blank">查看原文 ↗</a>
-                </div>
-                <div class="news-summary">
-                    Copilot 现在可以跨仓库学习你的编码模式了！这项记忆功能已在 VS Code Insiders、Copilot CLI、Coding Agent 和 Code Review 中上线。这意味着你在一个项目中的编码习惯可以被迁移到其他项目，AI 助手会越来越"懂"你的风格。对于大型组织和多项目开发者来说，这是提升一致性和效率的重要更新。
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://x.com/TheRundownAI/status/2025723963997876710" target="_blank">OpenAI Codex 负责人：未来10周的更新将让现有 Coding Agent 显得"原始可笑"</a>
-                    </div>
-                    <span class="news-tag hot">前瞻</span>
-                </div>
-                <div class="news-source">
-                    <span>📰 Tibo (@thsottiaux) via The Rundown AI</span>
-                    <span>·</span>
-                    <a href="https://x.com/TheRundownAI/status/2025723963997876710" target="_blank">查看原文 ↗</a>
-                </div>
-                <div class="news-summary">
-                    OpenAI Codex 负责人在内部 offsite 后透露，未来10周将带来革命性更新，当前 coding agents 与之相比会显得"原始可笑"。Greg Brockman 也呼应表示"周末项目用 Codex 变得更有趣了"。这暗示 OpenAI 可能在 agent 的自主性、上下文理解和长程任务执行上有重大突破，开发者应提前关注其架构设计。
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank">VS Code February 2026 Insiders 发布（版本 1.110）</a>
-                    </div>
-                    <span class="news-tag tool">IDE</span>
-                </div>
-                <div class="news-source">
-                    <span>📰 Microsoft for Developers</span>
-                    <span>·</span>
-                    <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank">查看原文 ↗</a>
-                </div>
-                <div class="news-summary">
-                    VS Code 发布 2026 年 2 月 Insiders 版本，带来一系列开发者体验改进。作为最主流的代码编辑器，VS Code 的每次更新都值得关注。建议开发者保持对 Insiders 渠道的关注，以便第一时间体验新功能并在团队中进行评估。具体更新内容可参考官方发布说明，通常涉及性能优化、语言支持和 AI 功能增强。
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://simonwillison.net/2026/Feb/22/ccc/" target="_blank">Claude C Compiler：Chris Lattner 点评 AI 编码的未来</a>
-                    </div>
-                    <span class="news-tag ai">深度</span>
-                </div>
-                <div class="news-source">
-                    <span>📰 Simon Willison's Weblog</span>
-                    <span>·</span>
-                    <a href="https://simonwillison.net/2026/Feb/22/ccc/" target="_blank">查看原文 ↗</a>
-                </div>
-                <div class="news-summary">
-                    Swift/LLVM/Clang 之父 Chris Lattner 深度点评了 Anthropic 用 Claude 并行构建的 C 编译器（CCC）。他指出：好的软件依赖判断力、沟通和清晰抽象——AI 放大了这一点。AI 编码是实现的自动化，因此设计和治理变得更加重要。手动重写和翻译工作正成为 AI 原生任务，自动化了大量工程工作。这对开发者意味着：架构设计和代码审查能力将比手写代码更重要。
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247493485&idx=1&sn=bc8337e1e3095c4a29f20dd46161a14a" target="_blank">GLM-5 技术报告发布：智谱推出下一代 Agentic 编程模型</a>
-                    </div>
-                    <span class="news-tag ai">国产模型</span>
-                </div>
-                <div class="news-source">
-                    <span>📰 智谱官方</span>
-                    <span>·</span>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247493485&idx=1&sn=bc8337e1e3095c4a29f20dd46161a14a" target="_blank">查看原文 ↗</a>
-                </div>
-                <div class="news-summary">
-                    智谱发布 GLM-5，旨在推动编程范式从"Vibe Coding"转向"Agentic Engineering"。模型采用稀疏注意力（DSA）大幅降低推理成本，同时保持长上下文能力。提出了新型异步 Agent 强化学习算法，使模型能从复杂、长程交互中更有效地学习。在真实世界编程任务中展现出前所未有的能力，在端到端软件工程挑战方面超越了此前所有开源基线。国产大模型在代码能力上正在快速追赶。
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://blog.langchain.com/how-we-built-agent-builders-memory-system/" target="_blank">LangChain 揭秘 Agent Builder 记忆系统的技术实现</a>
-                    </div>
-                    <span class="news-tag tool">架构</span>
-                </div>
-                <div class="news-source">
-                    <span>📰 LangChain Blog</span>
-                    <span>·</span>
-                    <a href="https://blog.langchain.com/how-we-built-agent-builders-memory-system/" target="_blank">查看原文 ↗</a>
-                </div>
-                <div class="news-summary">
-                    LangChain 详细拆解了 Agent Builder 记忆系统的设计理念和技术细节。记忆系统是 Agent 从"工具"进化为"助手"的关键——没有记忆的 Agent 每次对话都是重新开始，难以处理复杂工作流。文章介绍了他们如何平衡记忆的持久性、召回率和隐私性，对于构建自己的 Agent 系统的开发者具有很高的参考价值。
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://www.infoq.com/news/2026/02/databricks-lakebase-postgresql/" target="_blank">Databricks 发布 Lakebase：面向 AI 工作负载的 PostgreSQL 数据库</a>
-                    </div>
-                    <span class="news-tag tool">数据库</span>
-                </div>
-                <div class="news-source">
-                    <span>📰 InfoQ</span>
-                    <span>·</span>
-                    <a href="https://www.infoq.com/news/2026/02/databricks-lakebase-postgresql/" target="_blank">查看原文 ↗</a>
-                </div>
-                <div class="news-summary">
-                    Databricks 宣布 Lakebase 正式 GA，这是一款无服务器的 PostgreSQL 兼容 OLTP 数据库，计算和存储独立扩展。Lakebase 与 Databricks 平台深度集成，提供混合事务分析（HTAP）能力。对于数据密集型 AI 应用开发者来说，这意味着可以在统一平台上处理事务和分析工作负载，简化架构并降低成本。
-                </div>
-            </div>
-        </section>
-
-        <!-- 深度技术解读 -->
-        <section id="deep">
-            <div class="section-header">
-                <div class="section-icon">🧠</div>
-                <h2>深度技术解读</h2>
-            </div>
-
-            <div class="deep-dive">
-                <h3>解读一：Claude Code 的工程化最佳实践</h3>
-                <p>Cloudflare 工程师 Boris Tane 分享的 Claude Code 工作流值得每个开发者学习。他将使用 Claude Code 的过程分为六个阶段：</p>
-                
-                <h4>1. Research 阶段</h4>
-                <p>深入阅读指定代码目录/模块，输出详细的 research.md 报告。这不是简单的文件列表，而是对代码结构、依赖关系、潜在问题的系统性分析。</p>
-
-                <h4>2. Planning 阶段</h4>
-                <p>基于 research 生成详细的 plan.md 文件。这一步将需求转化为可执行的技术方案。</p>
-
-                <h4>3. Annotation Cycle（关键创新）</h4>
-                <p>在 plan.md 中直接写评论，让 Claude Code 根据评论更新 plan，直到满意。这种"评论驱动规划"避免了反复从头描述问题。</p>
-
                 <div class="code-block">
-<span class="comment"># plan.md 示例结构</span>
-<span class="keyword">##</span> 任务概述
-实现用户认证模块的 JWT Token 刷新机制
+# Claude Code记忆路径
+~/.claude/projects/        # Claude Code历史
+~/.codex/sessions/         # Codex历史记录
 
-<span class="keyword">##</span> 技术方案
-<span class="comment"><!-- CC: 考虑使用 redis 存储 refresh token，避免数据库压力 --></span>
-1. 新增 /auth/refresh 端点
-2. 验证 refresh token 有效性
-3. 生成新的 access token
-
-<span class="keyword">##</span> 依赖文件
-- src/auth/jwt.ts
-- src/middleware/auth.ts
+# 查看历史聊天记录
+codex --sessions
+claude --projects
                 </div>
-
-                <h4>4-6. Todo → Implement → Feedback</h4>
-                <p>根据 plan 生成任务清单，执行实现，然后迭代优化。这种结构化的工作流不仅适用于 Claude Code，也可以推广到其他 AI 编程工具。</p>
-
-                <p style="margin-top: 20px;"><strong>核心启示：</strong>AI 编程不是替代思考，而是放大思考。规划与执行的分离，让开发者专注于高价值决策，把实现细节交给 AI。</p>
+                <div class="source-box">
+                    <h4>📎 参考资源</h4>
+                    <a href="https://boristane.com/blog/how-i-use-claude-code/" target="_blank" rel="noopener">Boris Tane - How I use Claude Code</a>
+                    <a href="https://github.com/shanraisshan/ClaudeCode-Best-Practice" target="_blank" rel="noopener">Claude Code Best Practice GitHub</a>
+                </div>
             </div>
-
-            <div class="deep-dive" style="margin-top: 25px;">
-                <h3>解读二：AI Agent 的架构设计——"代码在 MCP 里"</h3>
-                <p>Armin Ronacher（Flask 作者）通过实验提出了一个重要观点：AI Agent 的最佳实践是提供少数强大、可编程的工具，而不是堆叠几十个特定函数。</p>
-
-                <h4>实验对比</h4>
-                <p><strong>方案 A：代码在 MCP 里（推荐）</strong></p>
-                <p>MCP Server 只暴露一个 <code>execute</code> 工具，Agent 传入 JS/TS 代码，在安全沙箱中直接调用完整的 Google Workspace API。Agent 像程序员一样思考和编写代码，MCP 只负责提供安全、已认证的运行时环境。</p>
-
+            
+            <div class="tech-deep">
+                <h3>MCP架构最佳实践：代码在MCP里 vs MCP在代码里</h3>
+                <div class="content">
+                    <p>Armin Ronacher（Sentry创始人、Flask作者）通过实验证明："代码在MCP里"比"MCP在代码里"更有效。</p>
+                    <p><strong>核心观点：</strong>AI Agent的最佳实践是提供少数强大、可编程的工具，而不是堆叠几十个特定函数。</p>
+                    <p><strong>Google Workspace MCP设计：</strong>只暴露一个execute工具，Agent传入JS/TS代码即可调用完整API。Pi的CodeMode则反向设计效果较差。</p>
+                    <p><strong>实践意义：</strong>MCP Server内置代码执行非常有效，让Agent像程序员一样思考和编写代码，MCP只负责提供安全、已认证的运行时环境。</p>
+                </div>
                 <div class="code-block">
-<span class="comment">// Agent 生成的代码示例</span>
-<span class="keyword">const</span> <span class="function">events</span> = <span class="keyword">await</span> workspace.<span class="function">call</span>(<span class="string">'calendar.events.list'</span>, {
-  calendarId: <span class="string">'primary'</span>,
-  timeMin: <span class="keyword">new</span> <span class="function">Date</span>().<span class="function">toISOString</span>(),
-  q: <span class="string">'personal trainer'</span>
-});
-
-<span class="keyword">return</span> events.items.<span class="function">map</span>(e => ({
-  summary: e.summary,
-  start: e.start.dateTime
-}));
+# Google Workspace MCP 工作流
+1. 首次运行 → OAuth登录
+2. 复用本地token
+3. Agent生成JS代码查询日历
+4. 返回结构化JSON
                 </div>
-
-                <p><strong>方案 B：MCP 在代码里（效果差）</strong></p>
-                <p>Agent 的代码调用现有的 MCP 工具。这种方式让 Agent 陷入"工具选择困境"，难以处理复杂的多步骤任务。</p>
-
-                <h4>架构启示</h4>
-                <p>这个实验揭示了 Agent 设计的核心原则：工具应该是通用的编程接口，而不是特定的功能封装。当 Agent 可以写代码时，它获得了图灵完备的表达力；而沙箱环境保证了安全性。这种"代码即工具"的架构可能是未来 Agent 系统的主流设计模式。</p>
-            </div>
-        </section>
-
-        <!-- 工具推荐 -->
-        <section id="tools">
-            <div class="section-header">
-                <div class="section-icon">🛠️</div>
-                <h2>工具推荐</h2>
-            </div>
-
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <div class="tool-icon">🧹</div>
-                        <div class="tool-name">
-                            <a href="https://github.com/tw93/Mole" target="_blank">Mole</a>
-                        </div>
-                    </div>
-                    <div class="tool-desc">
-                        Mac 清理工具，一次可释放数十 GB 空间。支持清理 Group Containers、Maven 本地仓库、Chrome 缓存、React Native 构建产物等。GitHub 36K+ stars，命令行操作，安全高效。
-                    </div>
-                    <div class="tool-meta">
-                        <span>🌟 36K stars</span>
-                        <span>💻 macOS</span>
-                    </div>
-                </div>
-
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <div class="tool-icon">🎨</div>
-                        <div class="tool-name">
-                            <a href="https://github.com/aryabyte21/ghostty-themes" target="_blank">Ghostty 主题库</a>
-                        </div>
-                    </div>
-                    <div class="tool-desc">
-                        为 Ghostty 终端打造的社区主题库，收录 460+ 个主题，支持预览后直接安装。Ghostty 是 Mitchell Hashimoto 开发的新终端，以性能和易用性著称，这个主题库让你轻松打造个性化终端。
-                    </div>
-                    <div class="tool-meta">
-                        <span>🎨 460+ 主题</span>
-                        <span>🖥️ 终端</span>
-                    </div>
-                </div>
-
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <div class="tool-icon">📊</div>
-                        <div class="tool-name">
-                            <a href="https://github.com/andyhuo520/aether-viz" target="_blank">AetherViz Master</a>
-                        </div>
-                    </div>
-                    <div class="tool-desc">
-                        开源的 3D 教学可视化工具，基于 Three.js 和 D3.js。输入任意教学主题，AI 一键生成沉浸式、可交互的 3D 网页。支持物理模拟、粒子系统、公式渲染，适合教育和演示场景。
-                    </div>
-                    <div class="tool-meta">
-                        <span>🔧 Three.js</span>
-                        <span>📚 教育</span>
-                    </div>
-                </div>
-
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <div class="tool-icon">🔗</div>
-                        <div class="tool-name">
-                            <a href="https://github.com/abhigyanpatwar/GitNexus" target="_blank">GitNexus</a>
-                        </div>
-                    </div>
-                    <div class="tool-desc">
-                        将代码库索引成知识图谱，记录依赖关系、调用链、功能聚类和执行流程。AI 智能体可通过工具查询这些数据，一次调用即可拿到相关上下文，无需反复搜索。提升大型代码库的理解效率。
-                    </div>
-                    <div class="tool-meta">
-                        <span>🧠 知识图谱</span>
-                        <span>🔍 代码检索</span>
-                    </div>
+                <div class="source-box">
+                    <h4>📎 参考资源</h4>
+                    <a href="https://github.com/mitsuhiko/google-workspace-mcp" target="_blank" rel="noopener">Google Workspace MCP</a>
+                    <a href="https://github.com/mitsuhiko/pi-code-mode" target="_blank" rel="noopener">Pi Code Mode MCP</a>
                 </div>
             </div>
-        </section>
-
-        <!-- 实践指南 -->
-        <section id="practice">
-            <div class="section-header">
-                <div class="section-icon">📖</div>
-                <h2>实践指南</h2>
-            </div>
-
-            <div class="practice-card">
-                <h4>🎯 AI 时代的开发者核心能力</h4>
-                <ul>
-                    <li><strong>扎实的 CS 基础：</strong>编程语言、系统设计、底层原理的理解仍然有价值，因为 AGI 还没到，还需要人给 AI 兜底</li>
-                    <li><strong>产品直觉和系统思维：</strong>瓶颈不在于代码本身，而在于想象"产品应该长什么样"</li>
-                    <li><strong>代码架构和工程判断力：</strong>团队花大量精力设计整体架构和代码审查，不是把一切都扔给 AI</li>
-                    <li><strong>调试和诊断能力：</strong>未来工程师会更像医生，靠症状定位问题，理解系统行为、快速定位异常是核心</li>
-                </ul>
-            </div>
-
-            <div class="practice-card">
-                <h4>⚡ 独立开发者的"穷鬼套餐"</h4>
-                <ul>
-                    <li><strong>Cloudflare：</strong>Worker、R2、KV、D1，几乎涵盖所有基础服务</li>
-                    <li><strong>Tailscale：</strong>内网穿透和组网，免费版足够个人使用</li>
-                    <li><strong>Grafana：</strong>监控和可观测性， generous free tier</li>
-                    <li><strong>PostHog：</strong>产品分析， generous free tier</li>
-                    <li><strong>CodeRabbit：</strong>AI Code Review， generous free tier</li>
-                    <li><strong>Cloudinary：</strong>图片/视频处理、云存储 CDN</li>
-                </ul>
-            </div>
-
-            <div class="practice-card">
-                <h4>🔧 Claude Code 高效配置技巧</h4>
-                <ul>
-                    <li><strong>历史记录查找：</strong>Claude Code 保存在 <code>~/.claude/projects</code>，Codex 在 <code>~/.codex/sessions</code></li>
-                    <li><strong>自定义状态栏：</strong>在 settings.json 中配置显示模型、目录、上下文、费用信息</li>
-                    <li><strong>权限管理：</strong>使用通配符语法预批准安全命令 + Sandbox 隔离</li>
-                    <li><strong>输出风格：</strong>Explanatory 适合新项目，Learning 适合学习指导</li>
-                    <li><strong>团队协作：</strong>将 settings.json 纳入版本控制，团队共享配置</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- 信息来源汇总 -->
-        <section id="sources">
-            <div class="section-header">
-                <div class="section-icon">📚</div>
-                <h2>信息来源汇总</h2>
-            </div>
-
-            <div class="sources-section">
-                <h3>本日引用来源（15个）</h3>
-                <div class="sources-grid">
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485100&idx=1&sn=a8bd83006b731cbef47e62035c6e9e15" target="_blank">晚点再听LaterCast</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://x.com/github/status/2025638706393272358" target="_blank">GitHub 官方</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://x.com/TheRundownAI/status/2025723963997876710" target="_blank">The Rundown AI</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank">Microsoft DevBlogs</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://simonwillison.net/2026/Feb/22/ccc/" target="_blank">Simon Willison's Weblog</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247493485&idx=1&sn=bc8337e1e3095c4a29f20dd46161a14a" target="_blank">智谱官方</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://blog.langchain.com/how-we-built-agent-builders-memory-system/" target="_blank">LangChain Blog</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://www.infoq.com/news/2026/02/databricks-lakebase-postgresql/" target="_blank">InfoQ</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://github.com/tw93/Mole" target="_blank">Mole GitHub</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://github.com/aryabyte21/ghostty-themes" target="_blank">Ghostty Themes</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://github.com/andyhuo520/aether-viz" target="_blank">AetherViz GitHub</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://github.com/abhigyanpatwar/GitNexus" target="_blank">GitNexus GitHub</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://x.com/vikingmute/status/2025527784706289746" target="_blank">Viking (@vikingmute)</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://x.com/shao__meng/status/2025577139454816309" target="_blank">meng shao (@shao__meng)</a>
-                    </div>
-                    <div class="source-item">
-                        <div class="source-bullet"></div>
-                        <a href="https://x.com/vikingmute/status/2025418966941008085" target="_blank">独立开发者工具集</a>
-                    </div>
+            
+            <div class="tech-deep">
+                <h3>文件系统即数据库：AI Agent个人OS架构</h3>
+                <div class="content">
+                    <p>@koylanai分享了一种极简的AI Agent持久记忆架构，核心思想：用文件系统本身充当数据库，无需传统数据库的复杂性。</p>
+                    <p><strong>关键设计：</strong></p>
+                    <p>• <strong>文件原生记忆：</strong>Markdown知识库 + JSON结构化数据，文件夹层级即本体论组织</p>
+                    <p>• <strong>追加式JSONL日志：</strong>事件溯源设计，仅追加不修改，支持流式处理</p>
+                    <p>• <strong>游标即数据库：</strong>用文件指针标记已读位置，"cursor本身就是数据库"</p>
+                    <p>• <strong>渐进式披露：</strong>按token预算动态加载相关文件</p>
+                </div>
+                <div class="code-block">
+个人OS架构示例：
+~/agent-os/
+├── knowledge/           # Markdown知识库
+├── contacts.json        # 联系人网络
+├── projects/            # 项目资料
+├── logs/
+│   └── events.jsonl     # 追加式事件日志
+└── profile.json         # 个人档案
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Footer -->
-        <footer>
-            <p>开发者实践版科技日报 · 由 AI 生成于 2026年2月23日</p>
-            <p style="margin-top: 8px;">数据来源：FreshRSS 24小时聚合 · 共筛选 15 条技术新闻</p>
-        </footer>
+        <div class="section">
+            <h2>🛠️ 工具推荐</h2>
+            
+            <div class="tool-card">
+                <div class="icon">🔧</div>
+                <div>
+                    <h4>Mole - Mac深度清理工具</h4>
+                    <p>一次可清理几十个G的Mac清理工具，GitHub 36K stars。支持Group Containers、Maven本地仓库、Chrome缓存等深度清理。</p>
+                    <a href="https://github.com/tw93/Mole" target="_blank" rel="noopener">github.com/tw93/Mole</a>
+                </div>
+            </div>
+            
+            <div class="tool-card">
+                <div class="icon">🎨</div>
+                <div>
+                    <h4>Ghostty主题库</h4>
+                    <p>460+终端主题，支持预览后直接安装，为Ghostty终端打造的开源社区主题库。</p>
+                    <a href="https://github.com/aryabyte21/ghostty-themes" target="_blank" rel="noopener">github.com/aryabyte21/ghostty-themes</a>
+                </div>
+            </div>
+            
+            <div class="tool-card">
+                <div class="icon">📝</div>
+                <div>
+                    <h4>GitNexus - 代码知识图谱</h4>
+                    <p>将代码库索引成知识图谱，记录依赖关系、调用链、功能聚类。AI Agent可通过工具查询预计算的代码结构。</p>
+                    <a href="https://github.com/abhigyanpatwar/GitNexus" target="_blank" rel="noopener">github.com/abhigyanpatwar/GitNexus</a>
+                </div>
+            </div>
+            
+            <div class="tool-card">
+                <div class="icon">🎓</div>
+                <div>
+                    <h4>AetherViz - 互动教育可视化</h4>
+                    <p>输入教学主题自动生成3D交互网页，支持物理模拟、粒子系统、矢量箭头。适合教师快速制作沉浸式课件。</p>
+                    <a href="https://github.com/andyhuo520/aether-viz" target="_blank" rel="noopener">github.com/andyhuo520/aether-viz</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📋 实践指南</h2>
+            
+            <div class="practice-tip">
+                <h4>💡 独立开发者"穷鬼套餐"推荐</h4>
+                <p>Cloudflare（全栈服务）+ Tailscale（内网穿透）+ Grafana（监控）+ PostHog（分析）+ CodeRabbit（Code Review）+ Cloudinary（CDN）</p>
+            </div>
+            
+            <div class="practice-tip">
+                <h4>💡 模型选择决策树</h4>
+                <p>前端/UI → Gemini 3.1 Pro + KingMode | 后端/架构 → GLM-5 + KingMode | 通用编程 → Claude Opus 4.6 | 快速迭代 → GPT-5.3 Codex</p>
+            </div>
+            
+            <div class="practice-tip">
+                <h4>💡 AI编程防坑指南</h4>
+                <p>• 让AI先看再写：先用research模式理解代码库<br>• 规划先行：要求输出详细plan.md<br>• 迭代反馈：不要一次要求太多功能<br>• 代码审查：AI代码仍需人工review</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📎 参考链接汇总</h2>
+            <div class="source-box">
+                <a href="https://github.blog/ai-and-ml/github-copilot/" target="_blank" rel="noopener">GitHub Copilot Blog</a>
+                <a href="https://github.com/tw93/Mole" target="_blank" rel="noopener">Mole - Mac清理工具</a>
+                <a href="https://github.com/shanraisshan/ClaudeCode-Best-Practice" target="_blank" rel="noopener">Claude Code Best Practice</a>
+                <a href="https://boristane.com/blog/how-i-use-claude-code/" target="_blank" rel="noopener">How I use Claude Code</a>
+                <a href="https://github.com/mitsuhiko/google-workspace-mcp" target="_blank" rel="noopener">Google Workspace MCP</a>
+                <a href="https://github.com/andyhuo520/aether-viz" target="_blank" rel="noopener">AetherViz 教育可视化</a>
+                <a href="https://github.com/abhigyanpatwar/GitNexus" target="_blank" rel="noopener">GitNexus 代码知识图谱</a>
+                <a href="https://github.com/aryabyte21/ghostty-themes" target="_blank" rel="noopener">Ghostty主题库</a>
+                <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank" rel="noopener">VS Code 1.110 Insiders</a>
+                <a href="https://blog.langchain.com/how-we-built-agent-builders-memory-system/" target="_blank" rel="noopener">LangChain Agent Memory</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>科技日报 · 开发者实践版 | 由AI生成，仅供参考</p>
+            <p>访问 <a href="./index.html" style="color: #e94560;">日报导航</a> 查看其他版本</p>
+        </div>
     </div>
 </body>
 </html>
