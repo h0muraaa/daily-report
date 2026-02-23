@@ -3,351 +3,931 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技日报 - 开发者实践版 | 2026年2月23日</title>
+    <title>开发者实践版科技日报 - 2026年2月23日</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: "Fira Code", "JetBrains Mono", "SF Mono", Consolas, Monaco, monospace;
-            background: #0d1117;
-            color: #c9d1d9;
-            line-height: 1.6;
-            min-height: 100vh;
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-primary: #58a6ff;
+            --accent-secondary: #79c0ff;
+            --accent-success: #3fb950;
+            --accent-warning: #d29922;
+            --accent-danger: #f85149;
+            --border-color: #30363d;
+            --code-bg: #1e1e1e;
+            --code-font: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
         }
-        .container { max-width: 950px; margin: 0 auto; padding: 40px 20px; }
-        .header {
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
             text-align: center;
             padding: 40px 0;
-            border-bottom: 2px solid #30363d;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .edition-tag {
+            display: inline-block;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* Navigation */
+        .toc {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+        }
+
+        .toc h3 {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin: 8px 0;
+        }
+
+        .toc a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--accent-secondary);
+            text-decoration: underline;
+        }
+
+        /* Sections */
+        section {
             margin-bottom: 40px;
         }
-        .header h1 {
-            font-size: 2.2em;
-            color: #7ee787;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        .date { color: #8b949e; font-size: 1em; }
-        .role-badge {
-            display: inline-block;
-            background: rgba(126, 231, 135, 0.1);
-            color: #7ee787;
-            padding: 8px 20px;
-            border-radius: 6px;
-            font-size: 0.9em;
-            margin-top: 15px;
-            border: 1px solid rgba(126, 231, 135, 0.3);
-        }
-        .section {
-            background: #161b22;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid #30363d;
-        }
-        .section h2 {
-            color: #79c0ff;
-            font-size: 1.3em;
-            margin-bottom: 20px;
+
+        .section-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 600;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
         }
-        .news-item {
-            background: #0d1117;
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-tertiary);
             border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid #21262d;
-            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
         }
-        .news-item:hover {
-            border-color: #58a6ff;
-            transform: translateX(3px);
-        }
-        .news-title {
-            color: #e6edf3;
-            font-size: 1.1em;
+
+        h2 {
+            font-size: 22px;
             font-weight: 600;
-            margin-bottom: 10px;
+            color: var(--text-primary);
         }
-        .news-analysis {
-            color: #8b949e;
-            line-height: 1.8;
+
+        /* News Cards */
+        .news-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-primary);
+        }
+
+        .news-card.featured {
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
             margin-bottom: 12px;
         }
-        .news-source {
-            font-size: 0.85em;
+
+        .news-title {
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.4;
         }
-        .news-source a {
-            color: #58a6ff;
+
+        .news-title a {
+            color: var(--text-primary);
             text-decoration: none;
         }
-        .news-source a:hover { text-decoration: underline; }
-        .tech-deep-dive {
-            background: #1c2128;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 4px solid #a371f7;
+
+        .news-title a:hover {
+            color: var(--accent-primary);
         }
-        .tech-deep-dive h3 { color: #d2a8ff; margin-bottom: 15px; font-size: 1.15em; }
-        .tech-deep-dive p { color: #b4b8c0; line-height: 1.9; margin-bottom: 15px; }
-        .code-block {
-            background: #0d1117;
-            border-radius: 6px;
-            padding: 16px;
-            font-family: "Fira Code", monospace;
-            font-size: 0.9em;
-            overflow-x: auto;
-            border: 1px solid #30363d;
-            margin: 15px 0;
-        }
-        .code-comment { color: #8b949e; }
-        .code-keyword { color: #ff7b72; }
-        .code-string { color: #a5d6ff; }
-        .code-func { color: #d2a8ff; }
-        .tool-card {
-            background: #0d1117;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid #30363d;
-        }
-        .tool-card h4 { color: #7ee787; margin-bottom: 8px; }
-        .tool-card p { color: #8b949e; margin-bottom: 10px; }
-        .tool-card .tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .tool-card .tag {
-            background: rgba(88, 166, 255, 0.1);
-            color: #58a6ff;
-            padding: 4px 10px;
+
+        .news-tag {
+            background: var(--bg-tertiary);
+            color: var(--accent-secondary);
+            padding: 3px 10px;
             border-radius: 4px;
-            font-size: 0.8em;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .practice-tip {
-            background: rgba(126, 231, 135, 0.05);
-            border: 1px solid rgba(126, 231, 135, 0.2);
+
+        .news-tag.hot {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--accent-danger);
+        }
+
+        .news-tag.tool {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-success);
+        }
+
+        .news-tag.ai {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-primary);
+        }
+
+        .news-source {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .news-source a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .news-source a:hover {
+            color: var(--accent-primary);
+        }
+
+        .news-summary {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+            padding: 12px;
+            background: var(--bg-tertiary);
             border-radius: 8px;
-            padding: 20px;
+            border-left: 3px solid var(--accent-success);
+        }
+
+        .news-summary::before {
+            content: "💡 AI分析：";
+            color: var(--accent-success);
+            font-weight: 600;
+        }
+
+        /* Deep Dive Section */
+        .deep-dive {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .deep-dive h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--accent-secondary);
+        }
+
+        .deep-dive h4 {
+            font-size: 16px;
+            margin: 25px 0 12px;
+            color: var(--text-primary);
+        }
+
+        .deep-dive p {
+            color: var(--text-secondary);
             margin-bottom: 15px;
         }
-        .practice-tip h4 { color: #7ee787; margin-bottom: 10px; }
-        .practice-tip ul { list-style: none; padding-left: 0; }
-        .practice-tip li {
-            padding: 6px 0;
-            padding-left: 20px;
-            position: relative;
-            color: #b4b8c0;
+
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: var(--code-font);
+            font-size: 13px;
+            line-height: 1.6;
         }
-        .practice-tip li::before {
-            content: "$";
-            position: absolute;
-            left: 0;
-            color: #7ee787;
+
+        .code-block .comment {
+            color: #6a9955;
         }
-        .sources-section {
-            background: #161b22;
-            border-radius: 10px;
-            padding: 25px;
-            margin-top: 30px;
-            border: 1px solid #30363d;
+
+        .code-block .keyword {
+            color: #569cd6;
         }
-        .sources-section h3 { color: #79c0ff; margin-bottom: 15px; }
-        .source-list { list-style: none; padding: 0; }
-        .source-list li { margin-bottom: 10px; }
-        .source-list a {
-            color: #58a6ff;
-            text-decoration: none;
-            font-size: 0.95em;
+
+        .code-block .string {
+            color: #ce9178;
         }
-        .source-list a:hover { text-decoration: underline; }
-        .nav { text-align: center; margin-top: 40px; }
-        .nav a {
-            color: #58a6ff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border: 1px solid #30363d;
-            border-radius: 6px;
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        /* Tool Grid */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
             transition: all 0.2s;
         }
-        .nav a:hover { background: rgba(88, 166, 255, 0.1); border-color: #58a6ff; }
+
+        .tool-card:hover {
+            border-color: var(--accent-success);
+            box-shadow: 0 4px 20px rgba(63, 185, 80, 0.1);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tool-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .tool-name a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .tool-name a:hover {
+            color: var(--accent-success);
+        }
+
+        .tool-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .tool-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .tool-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Practice Guide */
+        .practice-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .practice-card h4 {
+            font-size: 17px;
+            margin-bottom: 15px;
+            color: var(--accent-warning);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .practice-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .practice-card li {
+            padding: 8px 0 8px 24px;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .practice-card li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-warning);
+        }
+
+        /* Sources Section */
+        .sources-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .sources-section h3 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .source-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .source-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .source-item a:hover {
+            color: var(--accent-primary);
+        }
+
+        .source-bullet {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .news-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .deep-dive {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1></tech> 科技日报</h1>
-            <div class="date">2026年2月23日 · 星期一</div>
-            <div class="role-badge"></> 开发者实践版</div>
-        </div>
+        <!-- Header -->
+        <header>
+            <div class="date-badge">2026年2月23日 · 星期一</div>
+            <h1>开发者实践版科技日报</h1>
+            <p class="subtitle">全栈技术视角 · 工具实践 · 代码实现</p>
+            <span class="edition-tag">Developer Practice Edition</span>
+        </header>
 
-        <div class="section">
-            <h2>🔥 今日技术热榜</h2>
-            
-            <div class="news-item">
-                <div class="news-title">GitHub Copilot 新增记忆功能</div>
-                <div class="news-analysis">Copilot现在可以跨会话学习你的代码库，支持VS Code Insiders、Copilot CLI和Code Review。这意味着AI终于可以"记住"你的项目结构、编码规范和常用模式，不再需要每轮对话重复上下文。</div>
-                <div class="news-source">→ <a href="https://x.com/github/status/2025638706393272358" target="_blank" rel="noopener">GitHub (@github)</a></div>
-            </div>
-
-            <div class="news-item">
-                <div class="news-title">VS Code February 2026 (v1.110) 发布</div>
-                <div class="news-analysis">最新的Insiders版本带来多项改进。作为日常主力编辑器，建议关注官方更新日志中的性能优化和新的AI集成功能，可能会影响你的工作流配置。</div>
-                <div class="news-source">→ <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank" rel="noopener">Microsoft for Developers</a></div>
-            </div>
-
-            <div class="news-item">
-                <div class="news-title">Claude Code: 编程正在消失，但软件机会才刚刚开始</div>
-                <div class="news-analysis">Claude Code负责人Boris Cherny分享产品哲学：无限Token策略倒逼团队思考"如果AI可以无限制调用，工作流应该是什么样"。这种思维方式值得每个开发者借鉴。</div>
-                <div class="news-source">→ <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485100" target="_blank" rel="noopener">晚点再听LaterCast</a></div>
-            </div>
-
-            <div class="news-item">
-                <div class="news-title">LangSmith Insights Agent 支持定时任务</div>
-                <div class="news-analysis">现在可以用Insights Agent自动分析LLM应用的使用模式，还能设置定时任务持续追踪。对于生产环境的LLM应用，这是提升可观测性的实用工具。</div>
-                <div class="news-source">→ <a href="https://x.com/LangChain/status/2025612841819025834" target="_blank" rel="noopener">LangChain (@LangChainAI)</a></div>
-            </div>
-
-            <div class="news-item">
-                <div class="news-title">MCP最佳实践：代码在MCP里比MCP在代码里更有效</div>
-                <div class="news-analysis">Armin Ronacher（Flask作者）通过实验验证：给AI Agent一个可执行代码的沙箱环境，比提供几十个特定函数接口效果更好。这为MCP Server设计提供了重要参考。</div>
-                <div class="news-source">→ <a href="https://x.com/shao__meng/status/2025577139454816309" target="_blank" rel="noopener">meng shao (@shao__meng)</a></div>
-            </div>
-
-            <div class="news-item">
-                <div class="news-title">如何写出好的Skill？拆解skill-creator背后的设计</div>
-                <div class="news-analysis">Datawhale发布的Skill编写指南详细解析了从SKILL.md frontmatter到完整技能结构的设计思路。如果你正在开发AI Agent的技能系统，这是一份很好的参考文档。</div>
-                <div class="news-source">→ <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247719753" target="_blank" rel="noopener">Datawhale</a></div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>🔬 深度技术解读</h2>
-            
-            <div class="tech-deep-dive">
-                <h3>理解 MCP "代码在工具里" vs "工具在代码里"</h3>
-                <p>Armin Ronacher的实验揭示了一个反直觉的结论：当构建AI Agent的工具系统时，提供一个通用的代码执行环境（让Agent自己写代码调用API）往往比封装几十个特定函数接口效果更好。</p>
-                
-                <p><strong>实验1 - Google Workspace MCP（推荐模式）：</strong></p>
-                <div class="code-block">
-<span class="code-comment"># 只暴露一个 execute 工具</span>
-{
-  <span class="code-string">"name"</span>: <span class="code-string">"execute"</span>,
-  <span class="code-string">"description"</span>: <span class="code-string">"执行JS/TS代码调用Google Workspace API"</span>,
-  <span class="code-string">"parameters"</span>: {
-    <span class="code-string">"code"</span>: <span class="code-string">"string // JS/TS代码"</span>
-  }
-}
-                </div>
-
-                <p><strong>关键优势：</strong></p>
-                <ul style="color: #b4b8c0; margin-left: 20px;">
-                    <li>Agent可以像程序员一样思考，灵活组合API调用</li>
-                    <li>不需要为每个功能预定义工具函数</li>
-                    <li>自然支持复杂的多步骤操作</li>
-                </ul>
-
-                <p><strong>实践建议：</strong>设计MCP Server时，优先考虑提供"可编程的运行时"而非"功能菜单"。</p>
-            </div>
-
-            <div class="tech-deep-dive">
-                <h3>构建你的三层记忆系统</h3>
-                <p>FelixCraftAI案例展示了如何为AI Agent设计有效的记忆系统，防止"健忘"问题。这种架构可以被复用到你自己的AI项目中。</p>
-                
-                <div class="code-block">
-<span class="code-comment"># 三层记忆架构</span>
-
-<span class="code-comment"># Layer 1: 会话记忆 - 当前对话上下文</span>
-~/.claude/projects/<project-name>/
-
-<span class="code-comment"># Layer 2: 短期记忆 - 跨会话的任务状态</span>
-~/.codex/sessions/<session-id>/
-
-<span class="code-comment"># Layer 3: 长期记忆 - 用户偏好和业务知识</span>
-向量数据库 + 结构化存储
-                </div>
-
-                <p><strong>关键洞察：</strong>好的记忆系统能让AI Agent从"问答工具"升级为"持续学习的协作者"。Claude Code的4% GitHub提交量证明了这一点。</p>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>🛠️ 工具推荐</h2>
-            
-            <div class="tool-card">
-                <h4>AetherViz Master - 互动教育可视化建筑师</h4>
-                <p>开源项目，让教师零代码生成3D互动课件。基于Three.js r134，支持物理模拟、粒子系统、KaTeX公式渲染。如果你是教育科技开发者，这是一个很好的参考实现。</p>
-                <div class="tags">
-                    <span class="tag">Three.js</span>
-                    <span class="tag">教育科技</span>
-                    <span class="tag">可视化</span>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h4>xsct.ai - 大模型评测平台</h4>
-                <p>国内的模型评测Bench，测试用例设计有趣且评估方式客观，可以看到具体case的评测详情。适合用于评估和对比不同大模型的实际表现。</p>
-                <div class="tags">
-                    <span class="tag">模型评测</span>
-                    <span class="tag">LLM</span>
-                    <span class="tag">Benchmark</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>💡 实践指南</h2>
-            
-            <div class="practice-tip">
-                <h4>让Claude Code记住项目上下文</h4>
-                <ul>
-                    <li>使用 ~/.claude/projects/ 目录组织不同项目的上下文</li>
-                    <li>在PROJECT.md中记录项目架构、技术栈、编码规范</li>
-                    <li>开启Copilot记忆功能后，AI会自动学习你的代码模式</li>
-                </ul>
-            </div>
-
-            <div class="practice-tip">
-                <h4>构建AI友好的API设计</h4>
-                <ul>
-                    <li>优先提供可编程接口而非固定功能列表</li>
-                    <li>API文档中包含代码示例，方便AI学习使用模式</li>
-                    <li>考虑为AI Agent提供沙箱执行环境</li>
-                </ul>
-            </div>
-
-            <div class="practice-tip">
-                <h4>Vibe Coding 最佳实践</h4>
-                <ul>
-                    <li>清晰描述你想要的"结果"而非"实现步骤"</li>
-                    <li>提供足够的上下文和约束条件</li>
-                    <li>迭代优化：先跑通，再优化</li>
-                    <li>保持代码审查习惯，AI生成的代码也需要Review</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="sources-section">
-            <h3>📎 参考链接汇总</h3>
-            <ul class="source-list">
-                <li>→ <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank" rel="noopener">VS Code February 2026 Release</a></li>
-                <li>→ <a href="https://x.com/github/status/2025638706393272358" target="_blank" rel="noopener">GitHub Copilot 记忆功能</a></li>
-                <li>→ <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485100" target="_blank" rel="noopener">Claude Code负责人访谈</a></li>
-                <li>→ <a href="https://x.com/LangChain/status/2025612841819025834" target="_blank" rel="noopener">LangSmith Insights Agent</a></li>
-                <li>→ <a href="https://x.com/shao__meng/status/2025577139454816309" target="_blank" rel="noopener">MCP最佳实践分析</a></li>
-                <li>→ <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247719753" target="_blank" rel="noopener">Skill设计指南</a></li>
-                <li>→ <a href="https://x.com/berryxia/status/2025589710375281074" target="_blank" rel="noopener">AetherViz Master项目</a></li>
-                <li>→ <a href="https://x.com/yangyi/status/2025607681596338343" target="_blank" rel="noopener">xsct.ai评测平台</a></li>
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h3>📋 目录导航</h3>
+            <ul>
+                <li><a href="#hot">🔥 今日技术热榜（8条）</a></li>
+                <li><a href="#deep">🧠 深度技术解读（2篇）</a></li>
+                <li><a href="#tools">🛠️ 工具推荐（4款）</a></li>
+                <li><a href="#practice">📖 实践指南</a></li>
+                <li><a href="#sources">📚 信息来源汇总</a></li>
             </ul>
         </div>
 
-        <div class="nav">
-            <a href="index.html">← 返回首页</a>
-        </div>
+        <!-- 今日技术热榜 -->
+        <section id="hot">
+            <div class="section-header">
+                <div class="section-icon">🔥</div>
+                <h2>今日技术热榜</h2>
+            </div>
+
+            <div class="news-card featured">
+                <div class="news-header">
+                    <div class="news-title">
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485100&idx=1&sn=a8bd83006b731cbef47e62035c6e9e15" target="_blank">Claude Code 一周年：编程正在消失，但软件机会才刚刚开始</a>
+                    </div>
+                    <span class="news-tag hot">重磅</span>
+                </div>
+                <div class="news-source">
+                    <span>📰 晚点再听LaterCast</span>
+                    <span>·</span>
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485100&idx=1&sn=a8bd83006b731cbef47e62035c6e9e15" target="_blank">查看原文 ↗</a>
+                </div>
+                <div class="news-summary">
+                    Boris Cherny 作为 Claude Code 创始人分享了一年来最关键的产品洞察：Claude Code 已占据 GitHub 公开提交量的 4%，月活在上个月翻倍。他认为"代码正在被解决，但该做什么反而更稀缺"。团队通过给开发者无限 Token 而非限制成本，倒逼创新工作流的设计。这揭示了 AI 编程工具的核心设计哲学——不是让 AI 做更多，而是让人类做更高维的决策。
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-header">
+                    <div class="news-title">
+                        <a href="https://x.com/github/status/2025638706393272358" target="_blank">GitHub Copilot 新增记忆功能：跨仓库学习你的编码习惯</a>
+                    </div>
+                    <span class="news-tag ai">AI工具</span>
+                </div>
+                <div class="news-source">
+                    <span>📰 GitHub 官方</span>
+                    <span>·</span>
+                    <a href="https://x.com/github/status/2025638706393272358" target="_blank">查看原文 ↗</a>
+                </div>
+                <div class="news-summary">
+                    Copilot 现在可以跨仓库学习你的编码模式了！这项记忆功能已在 VS Code Insiders、Copilot CLI、Coding Agent 和 Code Review 中上线。这意味着你在一个项目中的编码习惯可以被迁移到其他项目，AI 助手会越来越"懂"你的风格。对于大型组织和多项目开发者来说，这是提升一致性和效率的重要更新。
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-header">
+                    <div class="news-title">
+                        <a href="https://x.com/TheRundownAI/status/2025723963997876710" target="_blank">OpenAI Codex 负责人：未来10周的更新将让现有 Coding Agent 显得"原始可笑"</a>
+                    </div>
+                    <span class="news-tag hot">前瞻</span>
+                </div>
+                <div class="news-source">
+                    <span>📰 Tibo (@thsottiaux) via The Rundown AI</span>
+                    <span>·</span>
+                    <a href="https://x.com/TheRundownAI/status/2025723963997876710" target="_blank">查看原文 ↗</a>
+                </div>
+                <div class="news-summary">
+                    OpenAI Codex 负责人在内部 offsite 后透露，未来10周将带来革命性更新，当前 coding agents 与之相比会显得"原始可笑"。Greg Brockman 也呼应表示"周末项目用 Codex 变得更有趣了"。这暗示 OpenAI 可能在 agent 的自主性、上下文理解和长程任务执行上有重大突破，开发者应提前关注其架构设计。
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-header">
+                    <div class="news-title">
+                        <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank">VS Code February 2026 Insiders 发布（版本 1.110）</a>
+                    </div>
+                    <span class="news-tag tool">IDE</span>
+                </div>
+                <div class="news-source">
+                    <span>📰 Microsoft for Developers</span>
+                    <span>·</span>
+                    <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank">查看原文 ↗</a>
+                </div>
+                <div class="news-summary">
+                    VS Code 发布 2026 年 2 月 Insiders 版本，带来一系列开发者体验改进。作为最主流的代码编辑器，VS Code 的每次更新都值得关注。建议开发者保持对 Insiders 渠道的关注，以便第一时间体验新功能并在团队中进行评估。具体更新内容可参考官方发布说明，通常涉及性能优化、语言支持和 AI 功能增强。
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-header">
+                    <div class="news-title">
+                        <a href="https://simonwillison.net/2026/Feb/22/ccc/" target="_blank">Claude C Compiler：Chris Lattner 点评 AI 编码的未来</a>
+                    </div>
+                    <span class="news-tag ai">深度</span>
+                </div>
+                <div class="news-source">
+                    <span>📰 Simon Willison's Weblog</span>
+                    <span>·</span>
+                    <a href="https://simonwillison.net/2026/Feb/22/ccc/" target="_blank">查看原文 ↗</a>
+                </div>
+                <div class="news-summary">
+                    Swift/LLVM/Clang 之父 Chris Lattner 深度点评了 Anthropic 用 Claude 并行构建的 C 编译器（CCC）。他指出：好的软件依赖判断力、沟通和清晰抽象——AI 放大了这一点。AI 编码是实现的自动化，因此设计和治理变得更加重要。手动重写和翻译工作正成为 AI 原生任务，自动化了大量工程工作。这对开发者意味着：架构设计和代码审查能力将比手写代码更重要。
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-header">
+                    <div class="news-title">
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247493485&idx=1&sn=bc8337e1e3095c4a29f20dd46161a14a" target="_blank">GLM-5 技术报告发布：智谱推出下一代 Agentic 编程模型</a>
+                    </div>
+                    <span class="news-tag ai">国产模型</span>
+                </div>
+                <div class="news-source">
+                    <span>📰 智谱官方</span>
+                    <span>·</span>
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247493485&idx=1&sn=bc8337e1e3095c4a29f20dd46161a14a" target="_blank">查看原文 ↗</a>
+                </div>
+                <div class="news-summary">
+                    智谱发布 GLM-5，旨在推动编程范式从"Vibe Coding"转向"Agentic Engineering"。模型采用稀疏注意力（DSA）大幅降低推理成本，同时保持长上下文能力。提出了新型异步 Agent 强化学习算法，使模型能从复杂、长程交互中更有效地学习。在真实世界编程任务中展现出前所未有的能力，在端到端软件工程挑战方面超越了此前所有开源基线。国产大模型在代码能力上正在快速追赶。
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-header">
+                    <div class="news-title">
+                        <a href="https://blog.langchain.com/how-we-built-agent-builders-memory-system/" target="_blank">LangChain 揭秘 Agent Builder 记忆系统的技术实现</a>
+                    </div>
+                    <span class="news-tag tool">架构</span>
+                </div>
+                <div class="news-source">
+                    <span>📰 LangChain Blog</span>
+                    <span>·</span>
+                    <a href="https://blog.langchain.com/how-we-built-agent-builders-memory-system/" target="_blank">查看原文 ↗</a>
+                </div>
+                <div class="news-summary">
+                    LangChain 详细拆解了 Agent Builder 记忆系统的设计理念和技术细节。记忆系统是 Agent 从"工具"进化为"助手"的关键——没有记忆的 Agent 每次对话都是重新开始，难以处理复杂工作流。文章介绍了他们如何平衡记忆的持久性、召回率和隐私性，对于构建自己的 Agent 系统的开发者具有很高的参考价值。
+                </div>
+            </div>
+
+            <div class="news-card">
+                <div class="news-header">
+                    <div class="news-title">
+                        <a href="https://www.infoq.com/news/2026/02/databricks-lakebase-postgresql/" target="_blank">Databricks 发布 Lakebase：面向 AI 工作负载的 PostgreSQL 数据库</a>
+                    </div>
+                    <span class="news-tag tool">数据库</span>
+                </div>
+                <div class="news-source">
+                    <span>📰 InfoQ</span>
+                    <span>·</span>
+                    <a href="https://www.infoq.com/news/2026/02/databricks-lakebase-postgresql/" target="_blank">查看原文 ↗</a>
+                </div>
+                <div class="news-summary">
+                    Databricks 宣布 Lakebase 正式 GA，这是一款无服务器的 PostgreSQL 兼容 OLTP 数据库，计算和存储独立扩展。Lakebase 与 Databricks 平台深度集成，提供混合事务分析（HTAP）能力。对于数据密集型 AI 应用开发者来说，这意味着可以在统一平台上处理事务和分析工作负载，简化架构并降低成本。
+                </div>
+            </div>
+        </section>
+
+        <!-- 深度技术解读 -->
+        <section id="deep">
+            <div class="section-header">
+                <div class="section-icon">🧠</div>
+                <h2>深度技术解读</h2>
+            </div>
+
+            <div class="deep-dive">
+                <h3>解读一：Claude Code 的工程化最佳实践</h3>
+                <p>Cloudflare 工程师 Boris Tane 分享的 Claude Code 工作流值得每个开发者学习。他将使用 Claude Code 的过程分为六个阶段：</p>
+                
+                <h4>1. Research 阶段</h4>
+                <p>深入阅读指定代码目录/模块，输出详细的 research.md 报告。这不是简单的文件列表，而是对代码结构、依赖关系、潜在问题的系统性分析。</p>
+
+                <h4>2. Planning 阶段</h4>
+                <p>基于 research 生成详细的 plan.md 文件。这一步将需求转化为可执行的技术方案。</p>
+
+                <h4>3. Annotation Cycle（关键创新）</h4>
+                <p>在 plan.md 中直接写评论，让 Claude Code 根据评论更新 plan，直到满意。这种"评论驱动规划"避免了反复从头描述问题。</p>
+
+                <div class="code-block">
+<span class="comment"># plan.md 示例结构</span>
+<span class="keyword">##</span> 任务概述
+实现用户认证模块的 JWT Token 刷新机制
+
+<span class="keyword">##</span> 技术方案
+<span class="comment"><!-- CC: 考虑使用 redis 存储 refresh token，避免数据库压力 --></span>
+1. 新增 /auth/refresh 端点
+2. 验证 refresh token 有效性
+3. 生成新的 access token
+
+<span class="keyword">##</span> 依赖文件
+- src/auth/jwt.ts
+- src/middleware/auth.ts
+                </div>
+
+                <h4>4-6. Todo → Implement → Feedback</h4>
+                <p>根据 plan 生成任务清单，执行实现，然后迭代优化。这种结构化的工作流不仅适用于 Claude Code，也可以推广到其他 AI 编程工具。</p>
+
+                <p style="margin-top: 20px;"><strong>核心启示：</strong>AI 编程不是替代思考，而是放大思考。规划与执行的分离，让开发者专注于高价值决策，把实现细节交给 AI。</p>
+            </div>
+
+            <div class="deep-dive" style="margin-top: 25px;">
+                <h3>解读二：AI Agent 的架构设计——"代码在 MCP 里"</h3>
+                <p>Armin Ronacher（Flask 作者）通过实验提出了一个重要观点：AI Agent 的最佳实践是提供少数强大、可编程的工具，而不是堆叠几十个特定函数。</p>
+
+                <h4>实验对比</h4>
+                <p><strong>方案 A：代码在 MCP 里（推荐）</strong></p>
+                <p>MCP Server 只暴露一个 <code>execute</code> 工具，Agent 传入 JS/TS 代码，在安全沙箱中直接调用完整的 Google Workspace API。Agent 像程序员一样思考和编写代码，MCP 只负责提供安全、已认证的运行时环境。</p>
+
+                <div class="code-block">
+<span class="comment">// Agent 生成的代码示例</span>
+<span class="keyword">const</span> <span class="function">events</span> = <span class="keyword">await</span> workspace.<span class="function">call</span>(<span class="string">'calendar.events.list'</span>, {
+  calendarId: <span class="string">'primary'</span>,
+  timeMin: <span class="keyword">new</span> <span class="function">Date</span>().<span class="function">toISOString</span>(),
+  q: <span class="string">'personal trainer'</span>
+});
+
+<span class="keyword">return</span> events.items.<span class="function">map</span>(e => ({
+  summary: e.summary,
+  start: e.start.dateTime
+}));
+                </div>
+
+                <p><strong>方案 B：MCP 在代码里（效果差）</strong></p>
+                <p>Agent 的代码调用现有的 MCP 工具。这种方式让 Agent 陷入"工具选择困境"，难以处理复杂的多步骤任务。</p>
+
+                <h4>架构启示</h4>
+                <p>这个实验揭示了 Agent 设计的核心原则：工具应该是通用的编程接口，而不是特定的功能封装。当 Agent 可以写代码时，它获得了图灵完备的表达力；而沙箱环境保证了安全性。这种"代码即工具"的架构可能是未来 Agent 系统的主流设计模式。</p>
+            </div>
+        </section>
+
+        <!-- 工具推荐 -->
+        <section id="tools">
+            <div class="section-header">
+                <div class="section-icon">🛠️</div>
+                <h2>工具推荐</h2>
+            </div>
+
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🧹</div>
+                        <div class="tool-name">
+                            <a href="https://github.com/tw93/Mole" target="_blank">Mole</a>
+                        </div>
+                    </div>
+                    <div class="tool-desc">
+                        Mac 清理工具，一次可释放数十 GB 空间。支持清理 Group Containers、Maven 本地仓库、Chrome 缓存、React Native 构建产物等。GitHub 36K+ stars，命令行操作，安全高效。
+                    </div>
+                    <div class="tool-meta">
+                        <span>🌟 36K stars</span>
+                        <span>💻 macOS</span>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🎨</div>
+                        <div class="tool-name">
+                            <a href="https://github.com/aryabyte21/ghostty-themes" target="_blank">Ghostty 主题库</a>
+                        </div>
+                    </div>
+                    <div class="tool-desc">
+                        为 Ghostty 终端打造的社区主题库，收录 460+ 个主题，支持预览后直接安装。Ghostty 是 Mitchell Hashimoto 开发的新终端，以性能和易用性著称，这个主题库让你轻松打造个性化终端。
+                    </div>
+                    <div class="tool-meta">
+                        <span>🎨 460+ 主题</span>
+                        <span>🖥️ 终端</span>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">📊</div>
+                        <div class="tool-name">
+                            <a href="https://github.com/andyhuo520/aether-viz" target="_blank">AetherViz Master</a>
+                        </div>
+                    </div>
+                    <div class="tool-desc">
+                        开源的 3D 教学可视化工具，基于 Three.js 和 D3.js。输入任意教学主题，AI 一键生成沉浸式、可交互的 3D 网页。支持物理模拟、粒子系统、公式渲染，适合教育和演示场景。
+                    </div>
+                    <div class="tool-meta">
+                        <span>🔧 Three.js</span>
+                        <span>📚 教育</span>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🔗</div>
+                        <div class="tool-name">
+                            <a href="https://github.com/abhigyanpatwar/GitNexus" target="_blank">GitNexus</a>
+                        </div>
+                    </div>
+                    <div class="tool-desc">
+                        将代码库索引成知识图谱，记录依赖关系、调用链、功能聚类和执行流程。AI 智能体可通过工具查询这些数据，一次调用即可拿到相关上下文，无需反复搜索。提升大型代码库的理解效率。
+                    </div>
+                    <div class="tool-meta">
+                        <span>🧠 知识图谱</span>
+                        <span>🔍 代码检索</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实践指南 -->
+        <section id="practice">
+            <div class="section-header">
+                <div class="section-icon">📖</div>
+                <h2>实践指南</h2>
+            </div>
+
+            <div class="practice-card">
+                <h4>🎯 AI 时代的开发者核心能力</h4>
+                <ul>
+                    <li><strong>扎实的 CS 基础：</strong>编程语言、系统设计、底层原理的理解仍然有价值，因为 AGI 还没到，还需要人给 AI 兜底</li>
+                    <li><strong>产品直觉和系统思维：</strong>瓶颈不在于代码本身，而在于想象"产品应该长什么样"</li>
+                    <li><strong>代码架构和工程判断力：</strong>团队花大量精力设计整体架构和代码审查，不是把一切都扔给 AI</li>
+                    <li><strong>调试和诊断能力：</strong>未来工程师会更像医生，靠症状定位问题，理解系统行为、快速定位异常是核心</li>
+                </ul>
+            </div>
+
+            <div class="practice-card">
+                <h4>⚡ 独立开发者的"穷鬼套餐"</h4>
+                <ul>
+                    <li><strong>Cloudflare：</strong>Worker、R2、KV、D1，几乎涵盖所有基础服务</li>
+                    <li><strong>Tailscale：</strong>内网穿透和组网，免费版足够个人使用</li>
+                    <li><strong>Grafana：</strong>监控和可观测性， generous free tier</li>
+                    <li><strong>PostHog：</strong>产品分析， generous free tier</li>
+                    <li><strong>CodeRabbit：</strong>AI Code Review， generous free tier</li>
+                    <li><strong>Cloudinary：</strong>图片/视频处理、云存储 CDN</li>
+                </ul>
+            </div>
+
+            <div class="practice-card">
+                <h4>🔧 Claude Code 高效配置技巧</h4>
+                <ul>
+                    <li><strong>历史记录查找：</strong>Claude Code 保存在 <code>~/.claude/projects</code>，Codex 在 <code>~/.codex/sessions</code></li>
+                    <li><strong>自定义状态栏：</strong>在 settings.json 中配置显示模型、目录、上下文、费用信息</li>
+                    <li><strong>权限管理：</strong>使用通配符语法预批准安全命令 + Sandbox 隔离</li>
+                    <li><strong>输出风格：</strong>Explanatory 适合新项目，Learning 适合学习指导</li>
+                    <li><strong>团队协作：</strong>将 settings.json 纳入版本控制，团队共享配置</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 信息来源汇总 -->
+        <section id="sources">
+            <div class="section-header">
+                <div class="section-icon">📚</div>
+                <h2>信息来源汇总</h2>
+            </div>
+
+            <div class="sources-section">
+                <h3>本日引用来源（15个）</h3>
+                <div class="sources-grid">
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485100&idx=1&sn=a8bd83006b731cbef47e62035c6e9e15" target="_blank">晚点再听LaterCast</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://x.com/github/status/2025638706393272358" target="_blank">GitHub 官方</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://x.com/TheRundownAI/status/2025723963997876710" target="_blank">The Rundown AI</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://devblogs.microsoft.com/vscode-blog/february-2026-insiders-(version-1.110)" target="_blank">Microsoft DevBlogs</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://simonwillison.net/2026/Feb/22/ccc/" target="_blank">Simon Willison's Weblog</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247493485&idx=1&sn=bc8337e1e3095c4a29f20dd46161a14a" target="_blank">智谱官方</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://blog.langchain.com/how-we-built-agent-builders-memory-system/" target="_blank">LangChain Blog</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://www.infoq.com/news/2026/02/databricks-lakebase-postgresql/" target="_blank">InfoQ</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://github.com/tw93/Mole" target="_blank">Mole GitHub</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://github.com/aryabyte21/ghostty-themes" target="_blank">Ghostty Themes</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://github.com/andyhuo520/aether-viz" target="_blank">AetherViz GitHub</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://github.com/abhigyanpatwar/GitNexus" target="_blank">GitNexus GitHub</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://x.com/vikingmute/status/2025527784706289746" target="_blank">Viking (@vikingmute)</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://x.com/shao__meng/status/2025577139454816309" target="_blank">meng shao (@shao__meng)</a>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-bullet"></div>
+                        <a href="https://x.com/vikingmute/status/2025418966941008085" target="_blank">独立开发者工具集</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>开发者实践版科技日报 · 由 AI 生成于 2026年2月23日</p>
+            <p style="margin-top: 8px;">数据来源：FreshRSS 24小时聚合 · 共筛选 15 条技术新闻</p>
+        </footer>
     </div>
 </body>
 </html>
