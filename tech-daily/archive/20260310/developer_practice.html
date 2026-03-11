@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践日报 - 2026年3月11日</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #58a6ff;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #8b949e;
+            font-size: 1.1em;
+        }
+
+        .date {
+            color: #6e7681;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #f0883e;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0883e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: "▸";
+            color: #f0883e;
+        }
+
+        .news-item {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .news-item:hover {
+            border-color: #58a6ff;
+        }
+
+        .news-title {
+            font-size: 1.15em;
+            color: #58a6ff;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .news-title a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        .news-title a:hover {
+            text-decoration: underline;
+        }
+
+        .news-meta {
+            font-size: 0.85em;
+            color: #6e7681;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .news-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .news-summary {
+            color: #c9d1d9;
+            font-size: 0.95em;
+            line-height: 1.7;
+        }
+
+        .news-summary p {
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: rgba(240, 136, 62, 0.1);
+            border-left: 3px solid #f0883e;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight h3 {
+            color: #f0883e;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        code {
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
+            font-size: 0.9em;
+            color: #e6edf3;
+        }
+
+        pre {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .tool-card {
+            background: linear-gradient(135deg, #161b22 0%, #1c2128 100%);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .tool-card h3 {
+            color: #7ee787;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .tool-card .tool-tag {
+            display: inline-block;
+            background: #238636;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-right: 8px;
+            margin-bottom: 10px;
+        }
+
+        .references {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 25px;
+        }
+
+        .references h3 {
+            color: #8b949e;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .references ul {
+            list-style: none;
+        }
+
+        .references li {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .references a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        .references a:hover {
+            text-decoration: underline;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #21262d;
+            color: #8b949e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-right: 6px;
+        }
+
+        .tag.important {
+            background: rgba(240, 136, 62, 0.2);
+            color: #f0883e;
+        }
+
+        .tag.new {
+            background: rgba(35, 134, 54, 0.2);
+            color: #7ee787;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #30363d;
+            margin-top: 50px;
+            color: #6e7681;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .news-item {
+                padding: 15px;
+            }
+
+            .news-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>开发者实践日报</h1>
+            <p class="subtitle">全栈技术专家的每日技术精选</p>
+            <p class="date">2026年3月11日 星期三</p>
+        </header>
+
+        <!-- 今日技术热榜 -->
+        <section class="section">
+            <h2>今日技术热榜</h2>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://github.blog/ai-and-ml/github-copilot/the-era-of-ai-as-text-is-over-execution-is-the-new-interface/" target="_blank">GitHub Copilot SDK 正式发布：从文本交互转向执行层</a>
+                    <span class="tag new">NEW</span>
+                    <span class="tag important">重要</span>
+                </div>
+                <div class="news-meta">
+                    <span>来源：The GitHub Blog</span>
+                    <span>时间：2026-03-11</span>
+                </div>
+                <div class="news-summary">
+                    <p>GitHub 正式推出 Copilot SDK，将原本仅在 IDE 中可用的 Agentic 工作流开放给开发者集成到自己的应用中。这个 SDK 提供了生产级的规划与执行引擎，让 AI 能够规划步骤、调用工具、修改文件、从错误中恢复，并在开发者定义的约束下自适应运行。</p>
+                    <p>这意味着开发者无需维护自己的编排栈，就能在应用中嵌入与 GitHub Copilot 相同质量的 AI 执行能力。对于构建 AI 驱动的开发工具、自动化工作流或智能代码编辑器的团队来说，这是一个重大利好——它降低了构建可靠 AI Agent 的门槛，同时提供了经过大规模生产验证的底层能力。</p>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule" target="_blank">Node.js 发布周期重大调整</a>
+                    <span class="tag important">重要</span>
+                </div>
+                <div class="news-meta">
+                    <span>来源：Node.js Blog</span>
+                    <span>时间：2026-03-11</span>
+                </div>
+                <div class="news-summary">
+                    <p>Node.js 官方宣布调整其发布周期策略，这是该项目近年来最重要的版本管理变更之一。新的发布节奏旨在更好地平衡新功能交付与长期稳定性支持，同时响应社区对更可预测发布时间表的需求。</p>
+                    <p>对于企业级应用和依赖 Node.js 的基础设施团队，这一调整意味着需要重新评估升级策略。建议开发者关注官方发布的具体时间表，特别是 LTS 版本的维护周期变化，以便规划迁移和升级路线图。</p>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://blog.langchain.com/how-coding-agents-are-reshaping-engineering-product-and-design/" target="_blank">编程 Agent 如何重塑工程、产品和设计角色</a>
+                    <span class="tag">深度</span>
+                </div>
+                <div class="news-meta">
+                    <span>来源：LangChain Blog</span>
+                    <span>时间：2026-03-11</span>
+                </div>
+                <div class="news-summary">
+                    <p>LangChain 创始人 Harrison Chase 发文探讨 Coding Agent 对软件工程团队的深远影响。文章指出，当代码变得极易生成时，传统的 EPD（工程、产品、设计）分工正在被重新定义：PRD 文档的价值在下降，代码审查成为新瓶颈，通才比专才更有价值，每个角色都需要具备产品思维。</p>
+                    <p>核心观点是：未来团队将分化成"构建者"和"审查者"两类角色。构建者使用 AI 快速生成代码，审查者则负责质量把控和架构决策。这要求工程师从"写代码"转向"指导 AI 写代码"，从实现细节转向更高层次的系统设计思考。</p>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://www.infoq.com/news/2026/03/datadog-go-binary-optimization/" target="_blank">Datadog 将 Go 二进制文件体积减少 77% 的技术实践</a>
+                    <span class="tag">性能优化</span>
+                </div>
+                <div class="news-meta">
+                    <span>来源：InfoQ</span>
+                    <span>时间：2026-03-11</span>
+                </div>
+                <div class="news-summary">
+                    <p>Datadog Agent 在 5 年间从 428 MiB 膨胀到 1.22 GiB，工程师团队通过系统性分析发现，Go 二进制文件膨胀主要来自隐藏的依赖项、禁用的链接器优化以及编译器和链接器的微妙行为。</p>
+                    <p>通过针对性的优化策略，团队成功将二进制体积减少了 77%。这对于需要频繁部署、在资源受限环境运行或关注冷启动性能的 Go 项目具有重要参考价值。文章详细分析了体积膨胀的根因和具体的优化手段，是 Go 开发者进行二进制优化的实用指南。</p>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://www.docker.com/blog/whats-holding-back-ai-agents-its-still-security/" target="_blank">Docker 调研：阻碍 AI Agent 落地的最大障碍仍是安全</a>
+                    <span class="tag">安全</span>
+                </div>
+                <div class="news-meta">
+                    <span>来源：Docker Blog</span>
+                    <span>时间：2026-03-10</span>
+                </div>
+                <div class="news-summary">
+                    <p>Docker 发布的《State of Agentic AI》调研报告显示，95% 的受访者将构建 Agent 列为战略优先级，60% 的组织已有 AI Agent 在生产环境运行。然而，安全仍是最大障碍——Agent 的自主性带来了新的攻击面，包括提示注入、权限管理和行为审计等挑战。</p>
+                    <p>报告还发现，当前 Agent 应用主要集中在内部生产力场景，而非直接面向收入或成本削减。这表明市场仍处于早期成熟阶段，开发者在追求功能的同时，必须同步考虑安全架构设计。</p>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://vercel.com/changelog/vercel-sandbox-now-supports-1-vcpu-2-gb-configurations" target="_blank">Vercel Sandbox 新增 1 vCPU + 2GB RAM 配置</a>
+                    <span class="tag new">NEW</span>
+                </div>
+                <div class="news-meta">
+                    <span>来源：Vercel News</span>
+                    <span>时间：2026-03-10</span>
+                </div>
+                <div class="news-summary">
+                    <p>Vercel Sandbox 现在支持创建仅使用 1 vCPU 和 2GB RAM 的轻量级沙箱环境，适合单线程或轻量级工作负载。这一配置选项让开发者能够根据实际需求精确分配资源，避免为不需要的多核能力付费。</p>
+                    <p>默认配置仍为 2 vCPU + 4GB RAM。开发者可以通过 SDK 设置 resources.vcpus 选项或使用 CLI 的 --vcpus 参数来启用轻量配置。这一更新反映了 Serverless 平台向更细粒度资源控制演进的趋势。</p>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://vercel.com/changelog/chat-sdk-adapter-directory" target="_blank">Vercel Chat SDK 推出 Adapter 目录</a>
+                    <span class="tag new">NEW</span>
+                </div>
+                <div class="news-meta">
+                    <span>来源：Vercel News</span>
+                    <span>时间：2026-03-10</span>
+                </div>
+                <div class="news-summary">
+                    <p>Vercel Chat SDK 新增了 Adapter 目录，方便开发者搜索和发现来自 Vercel 官方、厂商官方以及社区贡献的平台和状态适配器。目前已收录 Resend、Beeper 等厂商的官方适配器。</p>
+                    <p>这一举措借鉴了 AI SDK 社区 Provider 的模式，鼓励第三方开发者贡献适配器。对于构建聊天应用的开发者来说，这意味着可以更轻松地集成各种后端服务和状态管理方案，加速功能开发。</p>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://blog.cloudflare.com/investigating-multi-vector-attacks-in-log-explorer/" target="_blank">Cloudflare Log Explorer 新增多向量攻击调查能力</a>
+                    <span class="tag">安全</span>
+                </div>
+                <div class="news-meta">
+                    <span>来源：The Cloudflare Blog</span>
+                    <span>时间：2026-03-10</span>
+                </div>
+                <div class="news-summary">
+                    <p>Cloudflare Log Explorer 新增 14 个数据集，覆盖 Application Services 和 Cloudflare One 产品组合的全表面，使安全分析师能够关联应用层 HTTP 请求、网络层 DDoS 和防火墙日志以及 Zero Trust 访问事件的数据。</p>
+                    <p>现代攻击者不再单一维度攻击，而是同时探测 API、制造噪音干扰、尝试使用窃取凭证渗透。通过 360 度可见性，安全团队可以显著缩短平均检测时间（MTTD），更快识别和响应复杂的多向量攻击。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 深度技术解读 -->
+        <section class="section">
+            <h2>深度技术解读</h2>
+
+            <div class="highlight">
+                <h3>GitHub Copilot SDK：AI 执行层的民主化</h3>
+                <p>GitHub Copilot SDK 的发布标志着 AI 编程工具从"辅助编码"向"可编程执行引擎"的转变。这个 SDK 的核心价值在于将 GitHub 在 Copilot 中积累的大规模生产经验封装成可复用的组件。</p>
+                <p>对于开发者来说，这意味着可以在自己的工具链中实现类似 Cursor、Windsurf 这样的 Agentic 能力，而不必从头构建复杂的提示工程、工具调用和错误恢复机制。SDK 提供的执行层能够理解代码上下文、规划多步操作、调用外部工具，并在遇到错误时自适应调整。</p>
+                <p>实际应用场景包括：构建自定义代码审查工具、自动化重构脚本、智能文档生成器、甚至完整的 IDE 插件。关键在于，这些应用可以继承 Copilot 的质量标准，降低 AI 幻觉和不可靠行为的风险。</p>
+            </div>
+
+            <div class="highlight">
+                <h3>Coding Agent 时代的角色重构</h3>
+                <p>LangChain 的文章揭示了一个正在发生的范式转变：当 AI 能够以可接受的质量生成代码时，软件工程团队的价值创造方式必须重新定位。</p>
+                <p>传统的"产品经理写 PRD → 工程师实现 → 设计师验收"流程正在被打破。新的模式更可能是：工程师直接与 AI 协作生成代码，产品经理深入参与技术决策，设计师和工程师的边界模糊化。这要求每个团队成员都具备更强的产品思维和技术理解能力。</p>
+                <p>对于个人开发者而言，这意味着"通才"价值的上升。能够跨栈工作、理解业务、并有效指导 AI 的工程师将比专精某一领域的专家更有竞争力。同时，代码审查、架构设计和质量把控的能力变得比以往更重要。</p>
+            </div>
+        </section>
+
+        <!-- 工具推荐 -->
+        <section class="section">
+            <h2>工具推荐</h2>
+
+            <div class="tool-card">
+                <h3>GitHub Copilot CLI</h3>
+                <span class="tool-tag">CLI</span>
+                <span class="tool-tag">AI</span>
+                <span class="tool-tag">开源维护</span>
+                <p>GitHub 最新发布的 Copilot CLI 引入了 /fleet 命令，可以并行调度多个 AI Agent 处理开源维护任务。演示视频展示了如何同时解决现有问题和升级 Astro、TinaCMS 等依赖。</p>
+                <p>对于维护多个开源项目或内部库的开发者，这一工具可以大幅减少在依赖更新、Issue 处理等例行事务上的时间投入。跨平台支持意味着无论使用什么操作系统都能获得一致的自动化体验。</p>
+                <p><strong>适用场景：</strong>开源项目维护、依赖管理、批量代码更新、跨仓库操作</p>
+            </div>
+
+            <div class="tool-card">
+                <h3>LangGraph Deploy</h3>
+                <span class="tool-tag">AI Agent</span>
+                <span class="tool-tag">部署</span>
+                <span class="tool-tag">LangChain</span>
+                <p>LangChain 团队发布 langgraph deploy 命令，允许开发者通过单条命令将 Agent 部署到 LangSmith Deployment。</p>
+                <pre><code>$ uvx --from langgraph-cli@latest langgraph deploy</code></pre>
+                <p>这一工具将 Agent 从原型到生产的部署时间缩短到分钟级，解决了 AI Agent 应用最大的痛点之一——部署和运维的复杂性。支持从本地开发环境直接推送到生产，并集成了监控和调试能力。</p>
+                <p><strong>适用场景：</strong>AI Agent 原型快速验证、生产环境部署、Agent 微服务化</p>
+            </div>
+
+            <div class="tool-card">
+                <h3>MQTT + Express.js 实时系统构建指南</h3>
+                <span class="tool-tag">教程</span>
+                <span class="tool-tag">实时</span>
+                <span class="tool-tag">IoT</span>
+                <p>freeCodeCamp 发布的教程详细介绍了如何使用 MQTT 协议和 Express.js 构建生产级实时更新系统。通过一个完整的足球比分直播系统示例，涵盖了从管理界面到观众界面的全栈实现。</p>
+                <p>MQTT 作为轻量级消息协议，在 IoT、实时数据推送等场景表现出色。结合 Mosquitto Broker 和 Express，可以在一个下午内搭建起支持数千并发连接的实时系统。</p>
+                <p><strong>适用场景：</strong>实时数据推送、IoT 仪表盘、聊天应用、股票/体育比分直播</p>
+            </div>
+        </section>
+
+        <!-- 实践指南 -->
+        <section class="section">
+            <h2>实践指南</h2>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://www.freecodecamp.org/news/how-to-build-real-time-update-systems-with-mosquitto-and-expressjs/" target="_blank">构建实时更新系统的最佳实践</a>
+                </div>
+                <div class="news-summary">
+                    <p><strong>场景：</strong>需要向用户实时推送数据变化，如体育比分、股票价格、聊天消息或 IoT 传感器数据。</p>
+                    <p><strong>技术选型：</strong>MQTT（Message Queuing Telemetry Transport）是一个轻量级消息协议，特别适合这类场景。相比 WebSocket，MQTT 提供了更完善的消息质量保证（QoS）、保留消息（Retained Messages）和遗嘱消息（Last Will）等特性。</p>
+                    <p><strong>实施要点：</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>使用 Mosquitto 作为 Broker，它是 Eclipse 基金会维护的开源实现，轻量且稳定</li>
+                        <li>Express.js 处理 HTTP 请求和 WebSocket 升级</li>
+                        <li>设计清晰的主题（Topic）层次结构，如 sports/football/match/{id}/score</li>
+                        <li>实现管理后台用于数据录入，前端使用 MQTT.js 客户端订阅更新</li>
+                        <li>考虑使用 Redis 作为 MQTT Broker 的后端存储，实现多实例部署</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <a href="https://blog.bytebytego.com/p/how-airbnb-rolled-out-20-local-payment" target="_blank">Airbnb 如何在 360 天内推出 20+ 本地支付方式</a>
+                </div>
+                <div class="news-summary">
+                    <p><strong>背景：</strong>Airbnb 业务覆盖 220+ 国家，需要支持各地流行的本地支付方式（如印度的 UPI、巴西的 Pix、荷兰的 iDEAL）。</p>
+                    <p><strong>架构策略：</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>抽象支付接口：</strong>定义统一的 Payment Provider 接口，屏蔽不同支付方式的实现差异</li>
+                        <li><strong>配置化接入：</strong>新支付方式通过配置而非代码变更接入，缩短上线周期</li>
+                        <li><strong>灰度发布：</strong>按国家/地区逐步开放，监控成功率、拒付率等核心指标</li>
+                        <li><strong>合规优先：</strong>每个支付方式都需满足当地的金融监管要求，合规审查并行进行</li>
+                    </ul>
+                    <p><strong>关键经验：</strong>支付系统的国际化不是技术问题，而是产品、合规、运营的协同问题。技术架构需要为业务灵活性提供支撑，而不是成为瓶颈。</p>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">Go 二进制文件优化检查清单</div>
+                <div class="news-summary">
+                    <p>基于 Datadog 的优化实践，总结 Go 二进制文件体积优化的关键检查点：</p>
+                    <pre><code># 1. 检查隐藏的依赖
+go list -deps ./... | sort | uniq | wc -l
+
+# 2. 启用链接器优化
+-go ldflags="-s -w"  # 去除符号表和调试信息
+
+# 3. 使用 upx 压缩（可选）
+upx --best ./binary
+
+# 4. 分析二进制构成
+go tool nm -size ./binary | sort -k2 -n
+
+# 5. 检查 CGO 依赖
+CGO_ENABLED=0 go build  # 静态链接，去除动态库依赖</code></pre>
+                    <p><strong>常见陷阱：</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>引入的库依赖了未使用的功能模块</li>
+                        <li>Debug 信息未在发布时去除</li>
+                        <li>CGO 引入了系统动态库依赖</li>
+                        <li>未使用 -trimpath 去除本地路径信息</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 参考链接汇总 -->
+        <section class="section">
+            <h2>参考链接汇总</h2>
+            <div class="references">
+                <h3>本文引用的新闻来源</h3>
+                <ul>
+                    <li>[1] <a href="https://github.blog/ai-and-ml/github-copilot/the-era-of-ai-as-text-is-over-execution-is-the-new-interface/" target="_blank">The era of "AI as text" is over. Execution is the new interface. - The GitHub Blog</a></li>
+                    <li>[2] <a href="https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule" target="_blank">Evolving the Node.js Release Schedule - Node.js Blog</a></li>
+                    <li>[3] <a href="https://blog.langchain.com/how-coding-agents-are-reshaping-engineering-product-and-design/" target="_blank">How Coding Agents Are Reshaping Engineering, Product and Design - LangChain Blog</a></li>
+                    <li>[4] <a href="https://www.infoq.com/news/2026/03/datadog-go-binary-optimization/" target="_blank">How Datadog Cut the Size of Its Agent Go Binaries by 77% - InfoQ</a></li>
+                    <li>[5] <a href="https://www.docker.com/blog/whats-holding-back-ai-agents-its-still-security/" target="_blank">What's Holding Back AI Agents? It's Still Security - Docker Blog</a></li>
+                    <li>[6] <a href="https://vercel.com/changelog/vercel-sandbox-now-supports-1-vcpu-2-gb-configurations" target="_blank">Vercel Sandbox now supports 1 vCPU + 2 GB RAM configurations - Vercel News</a></li>
+                    <li>[7] <a href="https://vercel.com/changelog/chat-sdk-adapter-directory" target="_blank">Chat SDK now has an adapter directory - Vercel News</a></li>
+                    <li>[8] <a href="https://blog.cloudflare.com/investigating-multi-vector-attacks-in-log-explorer/" target="_blank">Investigating multi-vector attacks in Log Explorer - The Cloudflare Blog</a></li>
+                    <li>[9] <a href="https://blog.cloudflare.com/security-overview-dashboard/" target="_blank">Building a security overview dashboard for actionable insights - The Cloudflare Blog</a></li>
+                    <li>[10] <a href="https://www.freecodecamp.org/news/how-to-build-real-time-update-systems-with-mosquitto-and-expressjs/" target="_blank">How to Build Real-Time Update Systems with MQTT and Express.js - freeCodeCamp</a></li>
+                    <li>[11] <a href="https://blog.bytebytego.com/p/how-airbnb-rolled-out-20-local-payment" target="_blank">How Airbnb Rolled Out 20+ Local Payment Methods in 360 Days - ByteByteGo Newsletter</a></li>
+                    <li>[12] <a href="https://devblogs.microsoft.com/dotnet/dotnet-and-dotnet-framework-march-2026-servicing-updates" target="_blank">.NET and .NET Framework March 2026 servicing releases updates - Microsoft for Developers</a></li>
+                    <li>[13] <a href="https://www.youtube.com/watch?v=BviR6Me36gI" target="_blank">How to use the fleet command in Copilot CLI - GitHub YouTube</a></li>
+                    <li>[14] <a href="https://developers.googleblog.com/unleash-your-development-superpowers-refining-the-core-coding-experience/" target="_blank">Unleash Your Development Superpowers: Refining the Core Coding Experience - Google Developers Blog</a></li>
+                    <li>[15] <a href="https://developers.googleblog.com/introducing-finish-changes-and-outlines-now-available-in-gemini-code-assist-extensions-on-intellij-and-vs-code/" target="_blank">Introducing Finish Changes and Outlines in Gemini Code Assist - Google Developers Blog</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>开发者实践日报 | 由 AI 自动生成于 2026-03-11</p>
+            <p style="margin-top: 10px; font-size: 0.85em;">本期编辑：全栈技术专家角色 | 数据源自 RSS 订阅源</p>
+        </footer>
+    </div>
+</body>
+</html>
