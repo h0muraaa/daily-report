@@ -1,900 +1,788 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>用户研究版科技日报 · 2026年3月21日</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>用户研究版科技日报 · 2026年3月23日</title>
   <style>
-    :root {
-      --primary-orange: #F97316;
-      --primary-purple: #8B5CF6;
-      --gradient-start: #FFF7ED;
-      --gradient-end: #F5F3FF;
-      --text-main: #1C1917;
-      --text-secondary: #57534E;
-      --text-light: #A8A29E;
-      --card-bg: #FFFFFF;
-      --border-color: #E7E5E4;
-      --accent-orange-light: #FFF7ED;
-      --accent-purple-light: #F5F3FF;
-      --tag-orange: #FED7AA;
-      --tag-purple: #DDD6FE;
-    }
+    /* ===== 全局重置 ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    /* ===== 变量 ===== */
+    :root {
+      --orange-light: #FFB347;
+      --orange:       #FF8C42;
+      --orange-deep:  #E05A1A;
+      --purple-light: #C4A3E8;
+      --purple:       #8A5DB8;
+      --purple-deep:  #5C3484;
+      --warm-bg:      #FFF8F3;
+      --card-bg:      #FFFFFF;
+      --text-primary: #2D1B0E;
+      --text-second:  #5C4030;
+      --text-light:   #9E7B6A;
+      --border:       #F0E2D5;
+      --tag-orange:   #FFEADB;
+      --tag-purple:   #F0E8FF;
+      --tag-green:    #E5F7EE;
+      --radius:       14px;
+      --shadow:       0 4px 20px rgba(140, 80, 40, 0.09);
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-      min-height: 100vh;
-      color: var(--text-main);
-      line-height: 1.7;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+      background: var(--warm-bg);
+      color: var(--text-primary);
+      line-height: 1.75;
+      font-size: 15px;
     }
 
-    /* Header */
-    .site-header {
-      background: linear-gradient(135deg, #F97316 0%, #8B5CF6 100%);
-      padding: 40px 24px 32px;
+    /* ===== 顶部 Hero ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--purple) 100%);
+      padding: 48px 24px 40px;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
-
-    .site-header::before {
-      content: '';
+    .hero::before {
+      content: "";
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
-      pointer-events: none;
+      width: 400px; height: 400px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+      top: -100px; right: -100px;
     }
-
-    .header-badge {
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 260px; height: 260px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+      bottom: -60px; left: -60px;
+    }
+    .hero-badge {
       display: inline-block;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.18);
       color: #fff;
       font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      letter-spacing: 0.12em;
       padding: 4px 14px;
       border-radius: 20px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       border: 1px solid rgba(255,255,255,0.3);
     }
-
-    .site-header h1 {
+    .hero h1 {
+      font-size: clamp(22px, 5vw, 36px);
+      font-weight: 700;
       color: #fff;
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      line-height: 1.3;
+      position: relative; z-index: 1;
+    }
+    .hero-sub {
+      margin-top: 10px;
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      position: relative; z-index: 1;
+    }
+    .hero-meta {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      position: relative; z-index: 1;
+    }
+    .hero-meta span {
+      color: rgba(255,255,255,0.8);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    .site-header .subtitle {
-      color: rgba(255,255,255,0.88);
-      font-size: 0.95rem;
-      margin-bottom: 4px;
-    }
-
-    .site-header .date-line {
-      color: rgba(255,255,255,0.7);
-      font-size: 0.85rem;
-    }
-
-    /* Main Layout */
+    /* ===== 主体容器 ===== */
     .container {
-      max-width: 900px;
+      max-width: 820px;
       margin: 0 auto;
-      padding: 32px 24px 60px;
+      padding: 32px 20px 60px;
     }
 
-    /* Section Header */
+    /* ===== 章节标题 ===== */
     .section {
       margin-bottom: 40px;
     }
-
     .section-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
     }
-
     .section-icon {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 18px;
       flex-shrink: 0;
     }
-
-    .icon-orange { background: var(--tag-orange); }
-    .icon-purple { background: var(--tag-purple); }
-    .icon-blue { background: #DBEAFE; }
-    .icon-green { background: #D1FAE5; }
-    .icon-pink { background: #FCE7F3; }
-    .icon-yellow { background: #FEF9C3; }
+    .icon-orange { background: linear-gradient(135deg, #FFB347, #FF8C42); }
+    .icon-purple { background: linear-gradient(135deg, #C4A3E8, #8A5DB8); }
+    .icon-warm   { background: linear-gradient(135deg, #FFD580, #FFAB40); }
+    .icon-teal   { background: linear-gradient(135deg, #80DEEA, #26C6DA); }
+    .icon-rose   { background: linear-gradient(135deg, #F8BBD9, #E91E8C); }
 
     .section-title {
-      font-size: 1.2rem;
+      font-size: 18px;
       font-weight: 700;
-      color: var(--text-main);
+      color: var(--text-primary);
     }
-
-    .section-desc {
-      font-size: 0.8rem;
+    .section-subtitle {
+      font-size: 12px;
       color: var(--text-light);
-      font-weight: 400;
-      margin-left: 4px;
+      margin-top: 2px;
     }
 
-    /* Cards */
+    /* ===== 卡片 ===== */
     .card {
       background: var(--card-bg);
-      border-radius: 16px;
+      border-radius: var(--radius);
       padding: 22px 24px;
       margin-bottom: 16px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-
     .card:hover {
-      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
       transform: translateY(-2px);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
+      box-shadow: 0 8px 28px rgba(140, 80, 40, 0.14);
     }
 
     .card-title {
-      font-size: 1rem;
+      font-size: 16px;
       font-weight: 700;
-      color: var(--text-main);
-      line-height: 1.4;
-      flex: 1;
-    }
-
-    .card-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+      color: var(--text-primary);
       margin-bottom: 10px;
+      line-height: 1.4;
     }
+    .card-body {
+      color: var(--text-second);
+      font-size: 14.5px;
+      line-height: 1.8;
+    }
+    .card-body p + p { margin-top: 10px; }
 
+    /* 标签 */
+    .tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
     .tag {
       display: inline-block;
-      padding: 2px 10px;
+      font-size: 11.5px;
+      padding: 3px 10px;
       border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
+      font-weight: 500;
     }
+    .tag-o  { background: var(--tag-orange); color: var(--orange-deep); }
+    .tag-p  { background: var(--tag-purple); color: var(--purple-deep); }
+    .tag-g  { background: var(--tag-green);  color: #2E7D32; }
 
-    .tag-orange { background: var(--tag-orange); color: #92400E; }
-    .tag-purple { background: var(--tag-purple); color: #5B21B6; }
-    .tag-blue { background: #DBEAFE; color: #1E40AF; }
-    .tag-green { background: #D1FAE5; color: #065F46; }
-    .tag-pink { background: #FCE7F3; color: #9D174D; }
-    .tag-yellow { background: #FEF9C3; color: #92400E; }
-
-    .card-body {
-      color: var(--text-secondary);
-      font-size: 0.92rem;
-      line-height: 1.75;
-    }
-
-    .card-body p {
-      margin-bottom: 8px;
-    }
-
-    .card-body p:last-child {
-      margin-bottom: 0;
-    }
-
-    .ux-insight {
-      background: linear-gradient(135deg, var(--accent-orange-light), var(--accent-purple-light));
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-top: 12px;
-      font-size: 0.88rem;
-      color: var(--text-main);
-      border-left: 3px solid var(--primary-orange);
-    }
-
-    .ux-insight strong {
-      color: var(--primary-orange);
-    }
-
+    /* 来源链接 */
     .source-link {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      margin-top: 10px;
-      font-size: 0.8rem;
-      color: var(--primary-purple);
+      font-size: 12px;
+      color: var(--purple);
       text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
+      margin-top: 12px;
+      padding: 3px 10px;
+      background: var(--tag-purple);
+      border-radius: 20px;
+      transition: background 0.2s;
     }
+    .source-link:hover { background: #E0D0FF; }
 
-    .source-link:hover {
-      color: var(--primary-orange);
-      text-decoration: underline;
-    }
-
-    .source-link::before {
-      content: '→';
-      font-size: 0.85em;
-    }
-
-    /* Highlight card */
-    .card-highlight {
-      background: linear-gradient(135deg, #FFF7ED 0%, #FDF4FF 100%);
-      border: 1px solid #FED7AA;
-    }
-
-    /* Deep dive card */
-    .card-deep {
-      background: linear-gradient(135deg, #F5F3FF 0%, #EFF6FF 100%);
-      border: 1px solid #DDD6FE;
-    }
-
-    /* Number badge */
-    .num-badge {
+    /* 要点序号 */
+    .point-num {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      font-size: 0.8rem;
+      width: 26px; height: 26px;
+      background: linear-gradient(135deg, var(--orange), var(--purple));
+      color: #fff;
+      border-radius: 8px;
+      font-size: 13px;
       font-weight: 700;
+      margin-right: 8px;
       flex-shrink: 0;
-      margin-right: 2px;
     }
+    .point-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .point-header .card-title { margin-bottom: 0; }
 
-    .num-orange { background: var(--primary-orange); color: white; }
-    .num-purple { background: var(--primary-purple); color: white; }
-
-    /* Quote block */
+    /* 洞察引用块 */
     .quote-block {
-      border-left: 3px solid var(--primary-purple);
-      background: #F8F7FF;
+      border-left: 3px solid var(--orange);
+      background: #FFF4EC;
       padding: 12px 16px;
       border-radius: 0 8px 8px 0;
       margin: 12px 0;
+      font-size: 14px;
+      color: var(--text-second);
       font-style: italic;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
+      line-height: 1.7;
     }
 
-    /* Radar grid */
-    .radar-grid {
+    /* 分析列表 */
+    .insight-list {
+      list-style: none;
+      margin-top: 10px;
+    }
+    .insight-list li {
+      padding: 6px 0 6px 18px;
+      position: relative;
+      color: var(--text-second);
+      font-size: 14.5px;
+    }
+    .insight-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--orange);
+    }
+
+    /* 双栏布局（雷达区） */
+    .two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 16px;
     }
-
-    @media (max-width: 640px) {
-      .radar-grid {
-        grid-template-columns: 1fr;
-      }
-      .site-header h1 {
-        font-size: 1.5rem;
-      }
+    @media (max-width: 600px) {
+      .two-col { grid-template-columns: 1fr; }
     }
-
-    .radar-item {
-      background: white;
-      border-radius: 12px;
-      padding: 16px 18px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+    .radar-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
     }
-
-    .radar-item-title {
-      font-size: 0.9rem;
-      font-weight: 700;
+    .radar-card .radar-tag {
+      font-size: 11px;
+      color: var(--orange-deep);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       margin-bottom: 6px;
+    }
+    .radar-card .radar-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .radar-card .radar-body {
+      font-size: 13.5px;
+      color: var(--text-second);
+      line-height: 1.7;
+    }
+
+    /* ===== 来源汇总 ===== */
+    .ref-section {
+      background: linear-gradient(135deg, rgba(255,180,80,0.08), rgba(138,93,184,0.08));
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+    }
+    .ref-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    .radar-signal {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--primary-orange);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.2); }
-    }
-
-    .radar-item-desc {
-      font-size: 0.82rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    /* References */
-    .references-section {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      border: 1px solid var(--border-color);
-    }
-
-    .ref-list {
-      list-style: none;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
-
-    @media (max-width: 640px) {
-      .ref-list {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .ref-list li {
-      font-size: 0.82rem;
-    }
-
-    .ref-list li a {
-      color: var(--primary-purple);
-      text-decoration: none;
+    .ref-list {
       display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      padding: 6px 8px;
-      border-radius: 8px;
-      transition: background 0.15s;
+      flex-direction: column;
+      gap: 8px;
     }
-
-    .ref-list li a:hover {
-      background: var(--accent-purple-light);
-      text-decoration: underline;
+    .ref-item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 13.5px;
     }
-
-    .ref-list li a::before {
-      content: '◆';
-      font-size: 7px;
-      color: var(--primary-orange);
-      margin-top: 5px;
+    .ref-item .ref-num {
+      color: var(--orange);
+      font-weight: 700;
+      flex-shrink: 0;
+      min-width: 20px;
+    }
+    .ref-item a {
+      color: var(--purple);
+      text-decoration: none;
+      line-height: 1.5;
+    }
+    .ref-item a:hover { text-decoration: underline; }
+    .ref-item .ref-source {
+      color: var(--text-light);
+      font-size: 12px;
       flex-shrink: 0;
     }
 
-    /* Divider */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-      margin: 8px 0 16px;
-    }
-
-    /* Footer */
-    .site-footer {
+    /* ===== 页脚 ===== */
+    footer {
       text-align: center;
       padding: 24px;
       color: var(--text-light);
-      font-size: 0.8rem;
+      font-size: 12.5px;
+      border-top: 1px solid var(--border);
     }
 
-    .site-footer a {
-      color: var(--primary-purple);
-      text-decoration: none;
+    /* ===== 分割线 ===== */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 24px 0;
     }
 
-    /* Highlight box */
-    .highlight-box {
-      background: linear-gradient(135deg, #FFF7ED, #FDF4FF);
-      border: 1px solid #FED7AA;
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin: 12px 0;
-    }
+    /* 高亮文字 */
+    .highlight { color: var(--orange-deep); font-weight: 600; }
+    .highlight-p { color: var(--purple); font-weight: 600; }
 
-    .highlight-box-title {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--primary-orange);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .highlight-box-text {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      line-height: 1.65;
+    /* 趋势热度条 */
+    .heat-bar-wrap { margin-top: 10px; }
+    .heat-label { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+    .heat-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right, var(--orange), var(--purple));
     }
   </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="site-header">
-  <div class="header-badge">User Research Edition</div>
-  <h1>用户研究版 · 科技日报</h1>
-  <p class="subtitle">以用户为中心，洞察设计与体验的每日前沿动态</p>
-  <p class="date-line">2026年3月21日 · 今日精选自 501 篇文章</p>
-</header>
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-badge">UX RESEARCH · DAILY BRIEF</div>
+  <h1>用户研究版科技日报</h1>
+  <p class="hero-sub">以用户为中心 · 洞察设计趋势 · 关注体验细节</p>
+  <div class="hero-meta">
+    <span>📅 2026年3月23日</span>
+    <span>🔍 从219条资讯中精选</span>
+    <span>✍️ 用户研究师视角</span>
+  </div>
+</div>
 
 <div class="container">
 
-  <!-- Section 1: 今日要点 -->
-  <section class="section">
+  <!-- ===== 一、今日要点 ===== -->
+  <div class="section">
     <div class="section-header">
-      <div class="section-icon icon-orange">⚡</div>
+      <div class="section-icon icon-orange">🔥</div>
       <div>
         <div class="section-title">今日要点</div>
-        <span class="section-desc">3-5条核心用户体验洞察</span>
+        <div class="section-subtitle">3-5条核心用户体验洞察 · 每条完整分析</div>
       </div>
     </div>
 
     <!-- 要点1 -->
-    <div class="card card-highlight">
-      <div class="card-header">
-        <div style="display:flex;align-items:center;gap:10px;flex:1">
-          <span class="num-badge num-orange">1</span>
-          <div class="card-title">Claude Cowork 项目功能上线：AI协作工具正在重塑个人生产力工作流</div>
-        </div>
-      </div>
-      <div class="card-tags">
-        <span class="tag tag-orange">产品体验</span>
-        <span class="tag tag-purple">AI协作工具</span>
-        <span class="tag tag-blue">设计系统</span>
+    <div class="card">
+      <div class="point-header">
+        <span class="point-num">1</span>
+        <div class="card-title">设计师 × 代码的边界正在消失：Figma MCP让设计↔代码双向流动</div>
       </div>
       <div class="card-body">
-        <p>Anthropic 的 Claude 正式推出 Cowork 中的"项目（Projects）"功能：用户可将任务与上下文集中在一个工作区内，文件和指令直接存于本机，并支持一键导入已有项目或从零开始。这一功能在 24 小时内获得超过 130 万次曝光和 9,000+ 点赞，说明大量用户对"任务碎片化"与"上下文丢失"问题有强烈痛点。</p>
-        <p>从 UX 设计视角看，这是将 AI 助手从"一次性对话"升级为"长期工作伙伴"的关键一步——持久化上下文、本地文件关联与项目聚焦，构成了新一代 AI 协作工具的三要素。用户不再需要在每次会话中重复"给 AI 背景"，认知摩擦显著降低。</p>
-        <div class="ux-insight">
-          <strong>UX洞察：</strong>用户对 AI 工具最核心的诉求从"能力"转向了"记忆"与"持续性"。设计团队应优先考虑上下文持久化与跨会话状态管理，而非仅仅堆砌功能。
+        <p>ADPList CEO Felix Lee 在 Peter Yang 的播客中演示了一个极具参考价值的工作流：借助 Figma MCP（Model Context Protocol）与 Claude Code 的配合，设计师可以实现从 Figma 设计稿到落地代码，以及从现有代码逆向生成可编辑 Figma 图层的<span class="highlight">双向转换</span>，整个过程仅需约 15 分钟。这打破了长期困扰设计与开发协作的"单向瀑布"模式——设计师不再只是交付静态稿件，而能直接参与代码实现，并在代码与设计之间自由切换迭代。</p>
+        <p>这对用户研究员和UX设计师的意义在于：过去因"不懂代码"而被迫依赖开发团队的设计实验将大幅提速。Felix 的案例还展示了用 FigJam 做应用流程图、再直接粘贴链接给 Claude Code 的做法——这实际上是一种新型的<span class="highlight-p">以视觉为主的需求定义方式</span>，天然契合用户研究中"原型优先"的思维。</p>
+        <div class="quote-block">
+          "stop pasting screenshots into Claude Code. Instead, use Figma MCP to pull in all your assets, icons, and images automatically."—— Felix Lee
         </div>
-        <a href="https://x.com/claudeai/status/2035025492617961704" target="_blank" rel="noopener" class="source-link">来源: Claude(@claudeai) on X</a>
+        <div class="tag-wrap">
+          <span class="tag tag-o">设计工具</span>
+          <span class="tag tag-p">Figma MCP</span>
+          <span class="tag tag-g">设计研发协同</span>
+        </div>
       </div>
+      <a href="https://x.com/petergyang/status/2035725814357279117" target="_blank" rel="noopener" class="source-link">↗ 来源: Peter Yang(@petergyang)</a>
     </div>
 
     <!-- 要点2 -->
-    <div class="card card-highlight">
-      <div class="card-header">
-        <div style="display:flex;align-items:center;gap:10px;flex:1">
-          <span class="num-badge num-orange">2</span>
-          <div class="card-title">Notion AI Meeting Notes 实现后台运行：会议工具体验的静默革命</div>
-        </div>
-      </div>
-      <div class="card-tags">
-        <span class="tag tag-orange">产品体验</span>
-        <span class="tag tag-green">无缝体验</span>
-        <span class="tag tag-blue">移动端</span>
+    <div class="card">
+      <div class="point-header">
+        <span class="point-num">2</span>
+        <div class="card-title">影响高管决策的核心技艺：把高管当用户，用同理心代替说服</div>
       </div>
       <div class="card-body">
-        <p>Notion 宣布 AI Meeting Notes 现在支持在 iOS 和 Android 上后台运行——切换应用、锁屏都不会中断记录。这个看似微小的更新实际上解决了一个巨大的用户焦虑：会议中需要操作手机时总担心笔记被打断。该功能发布后获得大量用户的积极反响（48,000+ 曝光，500+ 点赞）。</p>
-        <p>这个更新体现了一个重要的设计哲学转变：从"需要用户配合工具"变为"工具适应用户的自然行为"。用户在开会时的真实行为是多任务并行的，优秀的产品设计应该把"可靠性"作为核心体验而非附加功能。</p>
-        <div class="ux-insight">
-          <strong>UX洞察：</strong>"后台静默运行"正成为 AI 生产力工具的关键可靠性指标。设计师应关注用户的"焦虑态"——那些用户担心工具会失灵的场景——这些场景往往隐藏着最重要的体验改进机会。
+        <p>Webflow 产品负责人、前 Slack CPO 助理 Jessica Fain 在 Lenny's Podcast 中分享了一个颠覆性洞察：产品好想法之所以在高管评审中频繁"死亡"，根本原因是产品经理没有把高管当作真正的"用户"来研究。高管的日历如同频闪灯——刚谈完预算，又处理人员问题，接着是法务，然后才是你精心准备三周的产品评审。</p>
+        <p>她的解决方案是将用户研究方法论移植到内部影响力场景：像研究用户一样研究高管的决策背景、心智模型和当前关注点。<span class="highlight">最有力的问题之一是："这很有意思，是什么让你形成了这个判断？"</span> 这个问题既不对抗，又打开了对话空间。这对研究员和设计师而言是一个重要提醒：用户研究的同理心技能可以直接转移到组织内部，帮助推动设计决策落地。</p>
+        <div class="tag-wrap">
+          <span class="tag tag-o">产品决策</span>
+          <span class="tag tag-p">组织影响力</span>
+          <span class="tag tag-g">用户研究思维迁移</span>
         </div>
-        <a href="https://x.com/NotionHQ/status/2035032689485680829" target="_blank" rel="noopener" class="source-link">来源: Notion(@NotionHQ) on X</a>
       </div>
+      <a href="https://www.youtube.com/watch?v=RP4vJeIb7WU" target="_blank" rel="noopener" class="source-link">↗ 来源: Lenny's Podcast</a>
     </div>
 
     <!-- 要点3 -->
-    <div class="card card-highlight">
-      <div class="card-header">
-        <div style="display:flex;align-items:center;gap:10px;flex:1">
-          <span class="num-badge num-orange">3</span>
-          <div class="card-title">Apple 封堵 AI Vibe Coding 应用：平台管控与用户创造自由的博弈</div>
-        </div>
-      </div>
-      <div class="card-tags">
-        <span class="tag tag-pink">平台政策</span>
-        <span class="tag tag-orange">用户权益</span>
-        <span class="tag tag-purple">App Store体验</span>
+    <div class="card">
+      <div class="point-header">
+        <span class="point-num">3</span>
+        <div class="card-title">微信ClawBot产品体验深评：功能门槛大幅降低，但UX问题明显</div>
       </div>
       <div class="card-body">
-        <p>Apple 悄然暂停了多款 AI "vibe coding" 应用（包括 Replit 和 Vibecode）的 App Store 更新，要求前者将生成应用预览改为在外部浏览器打开，并要求后者完全移除为 Apple 设备生成软件的功能。Replit CEO 对此公开回应，强调该应用已在 App Store 运行4年且核心功能从未违规。</p>
-        <p>这一事件引发了关于"平台作为用户体验守门人"的深层讨论。从用户研究角度看，Apple 的担忧反映了真实用户风险（安全、质量不稳定的 AI 生成代码），但过于保守的限制也在伤害那些正在用这些工具创造价值的用户群体。如何在安全保护与用户自主权之间寻找平衡，是平台设计的永恒难题。</p>
-        <div class="ux-insight">
-          <strong>UX洞察：</strong>平台政策本身即是用户体验的一部分。App Store 的审核决策直接影响数百万用户能用到什么工具。设计团队在平台规则框架内构建产品时，要提前预判平台对"新型交互范式"的接受边界。
+        <p>微信官方下场推出 ClawBot 插件，将 OpenClaw（AI Agent）直接接入个人微信的对话列表，入口地位等同于"文件传输助手"。这是一次真正意义上的 Agent 体验平权——不再只是极客玩具，而是面向十几亿微信用户的日常 AI 入口。从用户访达成本来看，这是今日最重要的产品事件之一。</p>
+        <p>然而，对产品体验的细节观察揭示了明显的 UX 欠账：<span class="highlight">只支持手机，Mac 端缺席</span>（造成跨设备体验断裂）；<span class="highlight">不支持流式输出</span>（消息乱序显示）；Markdown 渲染几乎不可用，链接无法点击；工作区独立，需要手动同步 Skills。这些问题让初次体验用户面临明显的认知落差——入口打开了，但体验质量没有跟上期待。对设计师而言，这是一个关于"快速上线 vs 体验打磨"权衡的典型案例研究。</p>
+        <div class="tag-wrap">
+          <span class="tag tag-o">产品体验</span>
+          <span class="tag tag-p">中国市场</span>
+          <span class="tag tag-g">用户期望落差</span>
         </div>
-        <a href="https://x.com/amasad/status/2035091750533177648" target="_blank" rel="noopener" class="source-link">来源: Amjad Masad(@amasad) on X</a>
       </div>
+      <a href="https://x.com/vista8/status/2035588381426757983" target="_blank" rel="noopener" class="source-link">↗ 来源: 向阳乔木(@vista8)</a>
     </div>
 
     <!-- 要点4 -->
-    <div class="card card-highlight">
-      <div class="card-header">
-        <div style="display:flex;align-items:center;gap:10px;flex:1">
-          <span class="num-badge num-orange">4</span>
-          <div class="card-title">OpenAI 计划推出"超级应用"：AI 产品整合趋势与用户心智模型重构</div>
-        </div>
-      </div>
-      <div class="card-tags">
-        <span class="tag tag-orange">产品设计</span>
-        <span class="tag tag-purple">信息架构</span>
-        <span class="tag tag-blue">超级应用</span>
+    <div class="card">
+      <div class="point-header">
+        <span class="point-num">4</span>
+        <div class="card-title">OpenAI发布前端设计指南：AI辅助UI设计有了系统方法论</div>
       </div>
       <div class="card-body">
-        <p>据《华尔街日报》报道，OpenAI 计划将旗下 ChatGPT、Codex 和其 AI 浏览器整合为一个桌面"超级应用"，以简化用户体验。这一战略方向与 AI 工具碎片化的市场现状形成直接呼应——用户目前需要在多个 AI 产品间来回切换，造成大量认知成本。</p>
-        <p>从信息架构与 UX 设计角度来看，"超级应用"的核心挑战在于：功能整合是否会带来界面复杂度爆炸？如何在统一入口与场景化设计之间取得平衡？中国市场的微信经验证明，成功的超级应用需要极强的底层平台能力和清晰的功能分层设计。</p>
-        <div class="ux-insight">
-          <strong>UX洞察：</strong>AI 工具的"超级应用化"趋势要求设计师重新思考用户的心智模型——用户是否能够流畅地在同一应用内切换"助手、编码工具、浏览器"等完全不同的使用模式？模式切换的认知成本是关键设计挑战。
+        <p>OpenAI 官方发布《Designing Delightful Frontends with GPT-5.4》指南，这是迄今为止最系统的 AI 辅助前端设计方法论文档之一。指南涵盖四大提示技巧、实用设计规则、页面结构建议，并将最佳实践压缩进一个可安装的 frontend-skill——该 skill 会强制模型在写代码之前，先输出<span class="highlight">视觉论点、内容计划和交互论点</span>，再进行编码实现。</p>
+        <p>这个"先论点后代码"的结构与用户研究的工作方式高度同构：先理解用户目标，再定义设计方案，最后实现。实践者的反馈也印证了这一点：GPT-5.4（Codex）在使用 frontend-skill 后设计品味明显提升，但对于追求视觉精致度的场景，Claude Opus 4.6 搭配 impeccable.style 或 taste skill 仍然更令人惊艳。这为设计师提供了一个清晰的<span class="highlight-p">模型选择策略</span>。</p>
+        <div class="tag-wrap">
+          <span class="tag tag-o">AI辅助设计</span>
+          <span class="tag tag-p">前端设计</span>
+          <span class="tag tag-g">设计方法论</span>
         </div>
-        <a href="https://x.com/berryxia/status/2035030049217487184" target="_blank" rel="noopener" class="source-link">来源: Berryxia.AI(@berryxia) on X</a>
       </div>
+      <a href="https://x.com/vikingmute/status/2035684681463869796" target="_blank" rel="noopener" class="source-link">↗ 来源: Viking(@vikingmute)</a>
     </div>
 
     <!-- 要点5 -->
-    <div class="card card-highlight">
-      <div class="card-header">
-        <div style="display:flex;align-items:center;gap:10px;flex:1">
-          <span class="num-badge num-orange">5</span>
-          <div class="card-title">AI 让用户"认知投降"：80%的人会盲目跟随 AI 的错误答案</div>
-        </div>
-      </div>
-      <div class="card-tags">
-        <span class="tag tag-pink">用户行为研究</span>
-        <span class="tag tag-yellow">认知心理</span>
-        <span class="tag tag-orange">AI伦理</span>
+    <div class="card">
+      <div class="point-header">
+        <span class="point-num">5</span>
+        <div class="card-title">代码只是输出物：产品的真正输入是用户在生产环境中的行为</div>
       </div>
       <div class="card-body">
-        <p>一项研究秘密让 AI 在解决逻辑谜题时给出错误答案，结果显示参与者 80% 的情况下会跟随 AI 的错误答案。更令人担忧的是，无论 AI 给出正确还是错误答案，参与者的自信心都有所上升——这就是所谓的"认知投降"现象：人们不再问"这是真的吗？"，转而问"AI 说什么？"Gary Marcus 将此称为 AI 对人类认知的"邓宁-克鲁格效应的恐怖变体"。</p>
-        <p>这一研究对 AI 产品设计有极其重要的启示。如果用户会无批判地接受 AI 输出，那么 AI 产品团队就承担着巨大的伦理责任。不确定性的可视化设计（如置信度显示、来源引用、"请验证"提示）不应只是锦上添花，而应成为负责任 AI 产品的核心设计元素。</p>
-        <div class="ux-insight">
-          <strong>UX洞察：</strong>AI 产品的"反依赖设计"将成为未来重要的设计方向——如何在界面层面引导用户保持批判性思维，而不是被动接受 AI 的所有输出？这是用户研究者和设计师需要共同探索的新议题。
+        <p>Vercel CEO Guillermo Rauch 发表了一篇颠覆开发者视角的文章：我们长期以来把代码当作"输入"来崇拜——为它设计精美的 IDE、语法高亮、格式规范、API 美感。但代码实际上是<span class="highlight">输出物</span>，真正的输入是需求、规格、用户反馈、设计灵感，以及生产环境中用户真实的使用行为。</p>
+        <p>这一论断对 UX 设计师和用户研究员有着深刻的意义。Rauch 提出，我们的编程 Agent 需要理解用户如何体验应用、遇到了什么错误，并将这些转化为代码改变。这意味着用户研究的产出——用户行为数据、访谈洞察、可用性测试报告——将成为 AI Agent 驱动迭代的直接燃料。<span class="highlight-p">研究员的角色将从"提供参考"升级为"驱动系统"</span>，这是对整个研究职能价值的重新定义。</p>
+        <div class="tag-wrap">
+          <span class="tag tag-o">产品哲学</span>
+          <span class="tag tag-p">用户行为驱动</span>
+          <span class="tag tag-g">研究价值重构</span>
         </div>
-        <a href="https://x.com/GaryMarcus/status/2035113104258838915" target="_blank" rel="noopener" class="source-link">来源: Gary Marcus(@GaryMarcus) on X</a>
       </div>
+      <a href="https://x.com/rauchg/status/2035829366165471702" target="_blank" rel="noopener" class="source-link">↗ 来源: Guillermo Rauch(@rauchg)</a>
     </div>
-  </section>
+  </div>
 
-  <!-- Section 2: 设计趋势洞察 -->
-  <section class="section">
+  <!-- ===== 二、设计趋势洞察 ===== -->
+  <div class="section">
     <div class="section-header">
       <div class="section-icon icon-purple">🔭</div>
       <div>
         <div class="section-title">设计趋势洞察</div>
-        <span class="section-desc">深度分析 1-2 个设计趋势或方法</span>
+        <div class="section-subtitle">深度分析当前设计趋势与方法</div>
       </div>
     </div>
 
-    <!-- 趋势1 -->
-    <div class="card card-deep">
-      <div class="card-tags">
-        <span class="tag tag-purple">深度分析</span>
-        <span class="tag tag-blue">IDE演进</span>
-        <span class="tag tag-orange">Agent原生设计</span>
-      </div>
-      <div class="card-title" style="margin-bottom:12px;font-size:1.05rem;">趋势一：IDE 正在死亡——控制平面取代编辑器，成为开发体验新中心</div>
+    <!-- 趋势1：动效工具市场裂变 -->
+    <div class="card">
+      <div class="card-title">趋势一：动效设计工具市场的马太效应——GSAP崛起，Motion受困</div>
       <div class="card-body">
-        <p>Google Chrome 工程副总裁 Addy Osmani 发表深度分析文章，指出软件开发的中心正在从"连续的逐行编辑"迁移到"监督代理（supervising agents）"。开发者的核心操作从"写代码"变成了"审查代理提出的变更"。Cursor 最新发布的"Glass"界面，就是一个专为"与 AI 代理合作"而设计的全新控制面板，而非传统编辑器。</p>
+        <p>动效设计领域出现了一个值得关注的市场分化信号。GSAP（GreenSock Animation Platform）作为 Web 动效的老牌库，近期正式发布了官方 Agent Skills 包，使其能够直接被 AI Agent 调用，大幅降低了动效实现的门槛，在设计开发者圈内迅速传播。</p>
+        <p>与此形成对比的是，曾经炙手可热的 Motion 在脱离 Framer 成为独立公司后，正在走向封闭：其官方 Skills 被锁在每月 $299 的付费墙后，导致<span class="highlight">传播率和影响力大幅下滑</span>。这是一个关于设计工具生态策略的典型案例：开放生态（GSAP 开源、免费 skills）vs 封闭变现（Motion 付费 skills）。在 AI Agent 席卷工具市场的当下，开放生态的网络效应优势被进一步放大——更多人使用意味着更多 Agent Training Data，意味着更好的 AI 支持。</p>
+        <ul class="insight-list">
+          <li>对设计工具选型的建议：优先考虑已有 AI/Agent 生态支持的工具，以降低未来协作成本</li>
+          <li>动效技能依然稀缺，但"会用 AI 指挥动效生成"将取代"手写动效代码"成为核心能力</li>
+          <li>设计系统中的动效规范应考虑 Agent 可读性——即 AI 能否准确理解并执行动效意图</li>
+        </ul>
+        <div class="heat-bar-wrap">
+          <div class="heat-label">趋势热度</div>
+          <div class="heat-bar" style="width: 70%;"></div>
+        </div>
+        <div class="tag-wrap">
+          <span class="tag tag-o">动效设计</span>
+          <span class="tag tag-p">GSAP</span>
+          <span class="tag tag-g">设计工具生态</span>
+        </div>
+      </div>
+      <a href="https://x.com/dingyi/status/2035703802402353393" target="_blank" rel="noopener" class="source-link">↗ 来源: Ding(@dingyi)</a>
+    </div>
 
+    <!-- 趋势2：从聊天到"同居"的AI协作范式 -->
+    <div class="card">
+      <div class="card-title">趋势二：AI协作从"问答模式"进化为"共同工作场域"</div>
+      <div class="card-body">
+        <p>一篇名为《别和AI聊天，要和TA同居》的深度文章揭示了一个正在发生的协作范式转变。作者描述了将 AI（通过 Obsidian × Cowork 的方式）真正嵌入工作场域后的体验质变：<span class="highlight">AI 不再是"对话框另一端的助手"，而是直接进入了工作现场，基于长期积累的上下文工作</span>。</p>
+        <p>从用户研究视角看，这是一个关于"人机协作心智模型"的关键演变。传统的 AI 使用是碎片化的"一问一答"，最小协作单位是一轮对话；新范式下，AI 持续在场，最小单位变成一段"推进中的工作流"。这对 UX 设计师研究 AI 产品有直接意义：用户的目标已经从"得到一个好答案"升级为"维持一段高效的协作关系"，产品的核心价值指标也应从单次满意度转向<span class="highlight-p">协作连续性与上下文保真度</span>。</p>
         <div class="quote-block">
-          "控制平面正在成为主要界面，编辑器只是底层众多工具之一。" —— Addy Osmani, Elevate
+          "AI 不再只是回答我的问题，而是在参与我的项目。而我的角色也随之变化：不再主要扮演'下指令的人'，而更像一个高频 review、redirect、做判断的人。"
         </div>
-
-        <p>这一趋势对 UX 设计的启示是深刻的：当 AI 代理承担了大量执行工作后，用户（无论是开发者还是非技术用户）的主要交互模式将转变为"审查、确认、调整"而非"创作、执行"。这意味着新一代工具的核心 UX 挑战是：如何设计一个让用户能够快速理解 AI 意图、清晰表达反馈、并在必要时介入控制的界面？</p>
-
-        <div class="highlight-box">
-          <div class="highlight-box-title">对 UX 设计的影响</div>
-          <div class="highlight-box-text">
-            1. <strong>信任层级设计</strong>：用户需要清晰的视觉层级来判断"哪些由 AI 完成、哪些需要人工审查"。<br>
-            2. <strong>批量审查模式</strong>：从"逐步操作"变为"批量审阅"，需要全新的信息架构设计。<br>
-            3. <strong>错误恢复体验</strong>：当 AI 出错时，用户的回滚和纠正路径必须极度流畅。
-          </div>
+        <div class="tag-wrap">
+          <span class="tag tag-o">人机协作</span>
+          <span class="tag tag-p">AI产品设计</span>
+          <span class="tag tag-g">用户心智模型</span>
         </div>
-        <a href="https://addyo.substack.com/p/death-of-the-ide" target="_blank" rel="noopener" class="source-link">来源: Addy Osmani - Elevate Substack</a>
       </div>
+      <a href="https://mp.weixin.qq.com/s?__biz=MzE5OTE3NTEyMA==&mid=2247485565&idx=1&sn=58cf2cd5b8a7aa1196922f491c1e906f" target="_blank" rel="noopener" class="source-link">↗ 来源: AI炼金术</a>
     </div>
+  </div>
 
-    <!-- 趋势2 -->
-    <div class="card card-deep">
-      <div class="card-tags">
-        <span class="tag tag-purple">深度分析</span>
-        <span class="tag tag-pink">语音界面</span>
-        <span class="tag tag-blue">工作场所设计</span>
-      </div>
-      <div class="card-title" style="margin-bottom:12px;font-size:1.05rem;">趋势二：语音交互正在征服企业端，开放办公室文化面临重新设计</div>
-      <div class="card-body">
-        <p>a16z 合伙人 Olivia Moore 分享了一个正在发生的工作场所变革：AI 语音听写（voice dictation）正在企业中爆发式增长，最初从 Cursor 等工程师"对着麦克风说话来生成软件"开始，现已扩散到销售、市场和商业部门。这带来了一个以前从未遇过的环境设计问题："在可以听到所有人说话的开放式办公室里，语音工作流根本无法运转。"</p>
-
-        <p>这个趋势揭示了 AI 工具与物理环境之间的摩擦——当数字体验设计快速演进时，物理空间设计却严重滞后。Moore 预测这将带来"文化甚至环境层面"的重大变化，她认为工作的方式、时间和地点都将发生根本性转变。</p>
-
-        <div class="highlight-box">
-          <div class="highlight-box-title">用户研究新课题</div>
-          <div class="highlight-box-text">
-            <strong>语音 AI 工具的企业推广</strong>需要配套的空间使用研究：哪些工作场景适合语音输入？哪些必须保持文字输入？私密性需求如何影响用户对语音 AI 的接受度？这些都是亟待探索的用户研究议题。设计师需要与 HR、空间设计师共同创造"AI 友好型"工作环境。
-          </div>
-        </div>
-        <a href="https://x.com/a16z/status/2035047236091159004" target="_blank" rel="noopener" class="source-link">来源: a16z(@a16z) on X</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 3: 产品体验点评 -->
-  <section class="section">
+  <!-- ===== 三、产品体验点评 ===== -->
+  <div class="section">
     <div class="section-header">
-      <div class="section-icon icon-orange">🔍</div>
+      <div class="section-icon icon-warm">🔬</div>
       <div>
         <div class="section-title">产品体验点评</div>
-        <span class="section-desc">真实产品的用户体验案例深度拆解</span>
+        <div class="section-subtitle">从用户视角深度剖析产品设计决策</div>
       </div>
     </div>
 
-    <!-- 点评1：Dreamer -->
+    <!-- 点评1：Nothing Phone 4a Pro -->
     <div class="card">
-      <div class="card-tags">
-        <span class="tag tag-orange">产品案例</span>
-        <span class="tag tag-purple">Agent OS</span>
-        <span class="tag tag-blue">个人AI助手</span>
-      </div>
-      <div class="card-title" style="margin-bottom:12px;">案例一：Dreamer —— 一个把 Agent 做成"个人 OS"的尝试</div>
+      <div class="card-title">Nothing Phone (4a) Pro：叛逆品牌的"穿西装"时刻——设计语言的战略转型</div>
       <div class="card-body">
-        <p>由前 Stripe CTO David Singleton 和 Hugo Barra 联合创立的 Dreamer，正式从隐身状态中走出，定位为一个消费者优先的个人 AI 代理平台，其核心产品是一个名为"Sidekick"的个人助手——它能帮助用户发现、构建和使用各种 AI 代理，甚至可以通过自然语言来定制体验。</p>
-
-        <p>从产品设计角度最值得关注的是：Dreamer 的设计哲学是"让下一个重要平台看起来更像个人软件的操作系统，而不是聊天机器人"。这意味着其核心 UX 挑战是：如何让普通用户理解并信任一个"会自动构建其他应用"的应用？传统的 App Store 是静态的展示平台，而 Dreamer 的"代理应用商店"是动态生成的，这对信息架构和用户引导设计都提出了全新要求。</p>
-
-        <div class="highlight-box">
-          <div class="highlight-box-title">UX 亮点与挑战</div>
-          <div class="highlight-box-text">
-            <strong>亮点：</strong>自然语言定制体验（降低技术门槛）、以 Sidekick 为中心的统一发现入口。<br>
-            <strong>挑战：</strong>如何向普通用户解释"代理创建代理"的概念？用户的心理安全感如何建立？当代理出错时的责任归属如何清晰呈现？
-          </div>
+        <p>Nothing 在这一代产品中做出了一个颇为冒险的设计决策：将标志性的透明背板换成了铝合金机身，用<span class="highlight">克制与精致</span>取代了此前的张扬与暴露。这对一个以"反传统"定义身份的品牌而言，是一次品牌价值的边界测试。</p>
+        <p>从用户体验的角度分析，这次设计语言转变背后有深刻的战略逻辑：透明背板在前几代产品中已经建立了清晰的认知符号，Nothing 的品牌记忆点已经足够稳固，可以尝试在维持品牌感的同时拓展产品的受众边界——向更广泛的"务实用户"靠拢，而不仅仅是数字潮人。然而，<span class="highlight-p">Nothing 真正的挑战不是在「酷」和「务实」之间二选一，而是找到一种方式将两者融合</span>。Phone (4a) Pro 目前呈现的状态像是穿上了西装但还缺条领带——有克制，但缺少一个新的情感锚点来填补透明感离开后的空白。</p>
+        <ul class="insight-list">
+          <li><strong>UX 洞察1</strong>：品牌识别设计不只是视觉符号，更是用户情感关系的载体；改变时需提供新的情感替代物</li>
+          <li><strong>UX 洞察2</strong>：产品设计决策需要追踪用户对品牌核心价值的认知边界，才能判断改变的安全半径</li>
+          <li><strong>UX 洞察3</strong>：「高辨识度」是溢价产品最稀缺的资源，拓展市场时切忌过快稀释</li>
+        </ul>
+        <div class="tag-wrap">
+          <span class="tag tag-o">品牌体验</span>
+          <span class="tag tag-p">硬件设计</span>
+          <span class="tag tag-g">设计转型案例</span>
         </div>
-        <a href="https://www.latent.space/p/dreamer" target="_blank" rel="noopener" class="source-link">来源: Latent.Space</a>
       </div>
+      <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247626594&idx=2&sn=0743815a1011a0cf329cb4f10d5de164" target="_blank" rel="noopener" class="source-link">↗ 来源: 硅星人Pro</a>
     </div>
 
-    <!-- 点评2：Google Stitch -->
+    <!-- 点评2：Hailuo Light Studio -->
     <div class="card">
-      <div class="card-tags">
-        <span class="tag tag-green">设计工具</span>
-        <span class="tag tag-purple">AI设计</span>
-        <span class="tag tag-orange">Vibe Designing</span>
-      </div>
-      <div class="card-title" style="margin-bottom:12px;">案例二：Google Stitch —— "Vibe Designing"工具重新定义 UI/UX 创作流程</div>
+      <div class="card-title">Hailuo Light Studio：把「打光」从专业技能变成普通人也能玩的交互</div>
       <div class="card-body">
-        <p>Google Labs 推出的 Stitch 从一个实验性工具进化为"AI 原生设计画布"，允许用户通过自然语言提示直接生成生产就绪的前端代码和 UI/UX 原型。Google AI 将这种体验定义为"Vibe Designing"——类比于 Vibe Coding，它降低了非技术人员参与设计的门槛。</p>
-
-        <p>这一工具对用户研究员的意义尤为重大：研究人员可以快速将用户洞察转化为可测试的低保真或高保真原型，大幅缩短"洞察→设计→验证"的循环周期。同时，这也引发了一个专业讨论：当 AI 能够直接生成 UI，设计师的核心价值将如何重新定义？答案可能是：从"像素级执行"转向"用户需求把关与体验判断"。</p>
-
-        <div class="highlight-box">
-          <div class="highlight-box-title">对用户研究工作流的影响</div>
-          <div class="highlight-box-text">
-            AI 设计工具使"快速原型验证"成本极度降低。用户研究员可以更早地将概念转化为可测试物料，甚至在用户访谈现场实时生成替代方案进行对比测试。这将根本性地改变"研究→设计"的协作模式。
-          </div>
+        <p>MiniMax 旗下 Hailuo AI 发布了 Light Studio 功能——一个让用户通过拖拽和点击来控制视频灯光的工具，支持调节光源强度、颜色、角度和强度，完全不需要输入 Prompt。官方的一句话定位非常清晰：<span class="highlight">"Prompts are so yesterday here."</span>（在这里，Prompt 已经是昨天的事了）。</p>
+        <p>这是一个典型的"直接操作"（Direct Manipulation）交互设计的 AI 落地案例。长期以来，AI 视觉工具依赖文本 Prompt 作为主要输入，门槛高且结果不确定。Light Studio 将打光控制从"描述你要什么"转变为"直接调整你看到的"——这种交互范式的转变极大降低了非专业用户的使用门槛，也让结果更可预期。<span class="highlight-p">这预示着 AI 视觉设计工具正在从"生成式"向"操控式"演进</span>，对 UI 设计工具、图像编辑工具都有范式意义。</p>
+        <div class="tag-wrap">
+          <span class="tag tag-o">AI视觉工具</span>
+          <span class="tag tag-p">直接操作交互</span>
+          <span class="tag tag-g">交互范式</span>
         </div>
-        <a href="https://x.com/GoogleAI/status/2035012211681153215" target="_blank" rel="noopener" class="source-link">来源: Google AI(@GoogleAI) on X</a>
       </div>
+      <a href="https://x.com/Hailuo_AI/status/2035560192784626027" target="_blank" rel="noopener" class="source-link">↗ 来源: Hailuo AI(@Hailuo_AI)</a>
     </div>
-  </section>
+  </div>
 
-  <!-- Section 4: 研究方法论 -->
-  <section class="section">
+  <!-- ===== 四、研究方法论 ===== -->
+  <div class="section">
     <div class="section-header">
-      <div class="section-icon icon-green">🧪</div>
+      <div class="section-icon icon-teal">🧪</div>
       <div>
         <div class="section-title">研究方法论</div>
-        <span class="section-desc">用户研究新方法、新工具与智能化工作流</span>
+        <div class="section-subtitle">用户研究新方法、工具与流程推荐</div>
       </div>
     </div>
 
-    <!-- 方法论1 -->
     <div class="card">
-      <div class="card-tags">
-        <span class="tag tag-green">研究工具</span>
-        <span class="tag tag-purple">自动化访谈</span>
-        <span class="tag tag-orange">AI研究方法</span>
-      </div>
-      <div class="card-title" style="margin-bottom:12px;">Listen Labs：AI 自主访谈代理，让用户研究实现"千人同步访谈"</div>
+      <div class="card-title">方法推荐：用 Notion Custom Agent 构建全自动"调研助理"工作流</div>
       <div class="card-body">
-        <p>LangChain 分享了其合作创业公司 Listen Labs 的使用案例：这是一个可以同时进行数千次客户访谈的自主研究代理。企业只需提出业务问题，Listen 就会完成整个研究流程——设计研究方案、招募受访者、主持对话（并能进行智能追问），以及生成结构化洞察报告，全部在一夜之间完成。</p>
-
-        <p>该工具已被 Google、Microsoft、Perplexity、Robinhood、Replit 等企业在其客户研究中采用，核心价值在于"规模化定性研究"——传统用户访谈受制于时间成本，每次研究通常只能完成 10-30 个深度访谈；Listen 将这个数字扩大到数千，同时保持了定性研究的深度（智能追问、情感捕捉）。</p>
-
-        <div class="highlight-box">
-          <div class="highlight-box-title">研究方法论价值</div>
-          <div class="highlight-box-text">
-            <strong>适用场景：</strong>大规模用户需求探索、产品上线前的快速用户反馈收集、跨地区多语言用户研究。<br>
-            <strong>注意事项：</strong>AI 访谈在情感共情、复杂场景挖掘方面仍逊于人类研究员，建议与传统深度访谈结合使用，AI 负责广度、人工负责深度。
-          </div>
+        <p>少数派发布了一篇实操性极强的深度文章，展示了如何利用 Notion 的 Custom Agent 功能构建 7 个真实的自动化工作流。对用户研究员来说，其中最具参考价值的场景是：<span class="highlight">会议与知识沉淀自动化</span>——将访谈录音、会议记录自动整理为结构化的知识条目，并自动推进后续 Action 跟进。</p>
+        <p>传统用户研究工作流中，最耗时的往往不是研究本身，而是研究后的整理与沉淀。录音转文字、关键信息提炼、按主题归类、与历史研究关联——这些工作大量消耗研究员的时间，且难以形成持续更新的知识库。Notion Custom Agent 提供了一种<span class="highlight-p">让知识库"自我更新"的可能性</span>：每次新的研究产出都能自动流入既有的分析框架，逐步积累成真正有价值的洞察资产。</p>
+        <div class="divider"></div>
+        <p><strong>工具推荐：baoyu-youtube-transcript Skill（AI辅助研究资料处理）</strong></p>
+        <p>宝玉发布的这个 Agent Skill 能够自动抓取 YouTube 视频字幕，生成带章节、说话人识别和封面图的结构化文档，不需要任何 API Key。对需要跟踪行业播客、研究竞品访谈的研究员来说，这是一个<span class="highlight">把大量"有声资料"快速转化为可搜索文本资产</span>的实用工具。其说话人识别功能对分析访谈类内容尤其有价值。</p>
+        <div class="tag-wrap">
+          <span class="tag tag-o">研究工作流</span>
+          <span class="tag tag-p">知识管理</span>
+          <span class="tag tag-g">AI辅助研究</span>
         </div>
-        <a href="https://x.com/LangChain/status/2035051119442030715" target="_blank" rel="noopener" class="source-link">来源: LangChain(@LangChainAI) on X</a>
       </div>
+      <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&mid=2247610003&idx=1&sn=6f71a6801c22f3b82c673b57ce504593" target="_blank" rel="noopener" class="source-link">↗ 来源: 少数派</a>
     </div>
 
-    <!-- 方法论2 -->
     <div class="card">
-      <div class="card-tags">
-        <span class="tag tag-green">PM方法论</span>
-        <span class="tag tag-orange">敏捷研究</span>
-        <span class="tag tag-blue">AI时代产品设计</span>
-      </div>
-      <div class="card-title" style="margin-bottom:12px;">AI 时代 PM 角色进化：从"规划者"到"持续验证者"的方法论重构</div>
+      <div class="card-title">工具推荐：infocard-skills——AI生成研究洞察视觉化卡片</div>
       <div class="card-body">
-        <p>Anthropic 产品经理 Cat Wu 发布了一份引发广泛讨论的帖子（50,000+ 曝光，670+ 点赞），核心论点是：传统 PM 方法论建立在"底层技术相对稳定"的假设上，但在 AI 快速迭代的今天，这个假设已经不成立。她分享了 Anthropic 内部进化出的新 PM 工作方式，其中包括 Decagon 的 Bihan Jiang 和 Datadog 的 Kai Xin Tai 贡献的实践案例。</p>
-
-        <p>关键方法论转变：① 用短迭代周期替代长期路线图规划；② 优先使用演示和评估（demo & eval）而非文档，尽快将原型放到用户面前；③ 用新模型重新审视已有功能；④ 始终优先选择最简单的解决方案（特别是在代理系统中，复杂性会成倍放大失败风险）。</p>
-
-        <div class="highlight-box">
-          <div class="highlight-box-title">对用户研究的启示</div>
-          <div class="highlight-box-text">
-            "尽快让原型接触真实用户"的 PM 思维，与用户研究中的"快速迭代验证"方法高度契合。用户研究员应当主动成为这个循环的推动者，而非等待设计完成后才介入。研究计划也应模块化、短周期化，以适应 AI 时代的快速产品节奏。
-          </div>
+        <p>meng shao 开源的 infocard-skills 是一个通过 AI Agent 直接生成视觉信息卡的工具，支持 16:9、4:3、1:1、3:4、9:16 等多种常见比例，最终输出 PNG 图片。其背后逻辑是：输入要展示的内容，AI 自动生成 HTML 排版并截图输出。</p>
+        <p>这对用户研究员的实际价值在于：将<span class="highlight">洞察可视化的成本从"设计师需求"降为"5分钟自助生成"</span>。研究报告中的关键数据、用户引言、用户旅程节点——这些原本需要设计师配合才能输出的视觉内容，现在可以在研究者手中直接完成。这也意味着研究报告的视觉质量有望从"文字密集"升级为"视觉友好"，从而提升洞察的传播力和决策影响力。</p>
+        <div class="tag-wrap">
+          <span class="tag tag-o">研究可视化</span>
+          <span class="tag tag-p">洞察传播</span>
+          <span class="tag tag-g">AI辅助工具</span>
         </div>
-        <a href="https://x.com/_catwu/status/2035104384007422347" target="_blank" rel="noopener" class="source-link">来源: cat(@_catwu) on X</a>
       </div>
+      <a href="https://x.com/shao__meng/status/2035720327037108673" target="_blank" rel="noopener" class="source-link">↗ 来源: meng shao(@shao__meng)</a>
     </div>
+  </div>
 
-    <!-- 方法论3：Pokémon Go -->
-    <div class="card">
-      <div class="card-tags">
-        <span class="tag tag-yellow">案例研究</span>
-        <span class="tag tag-green">众包数据</span>
-        <span class="tag tag-blue">意外洞察</span>
-      </div>
-      <div class="card-title" style="margin-bottom:12px;">Pokémon Go 无意间训练了机器人导航：游戏化用户行为数据的意外价值</div>
-      <div class="card-body">
-        <p>Rowan Cheung 分享了一个令人震撼的案例：Pokémon Go 的 5 亿玩家在游玩过程中，在全球城市拍摄了 300 亿张照片，这些数据被 Niantic 拆分出的 AI 公司 Niantic Spatial 用来训练送货机器人的视觉定位系统。GPS 在密集城市中精度损失高达 50 米，而 Niantic Spatial 的视觉定位系统可以将误差缩小到厘米级。</p>
-
-        <p>这个案例对用户研究方法论的启示是：用户的"副产品"行为数据（即用户完成主任务时无意间产生的数据）往往具有极高的研究价值。在设计阶段就思考"哪些用户行为数据具有额外价值"，并在符合隐私规范的前提下加以利用，是研究驱动产品设计的重要思路。</p>
-
-        <div class="ux-insight">
-          <strong>方法论价值：</strong>行为数据的"意外金矿"——在用户研究中，关注用户完成主要目标时留下的"侧面数据"，往往能发现超出原始研究目的的洞察。
-        </div>
-        <a href="https://x.com/rowancheung/status/2035027417715417434" target="_blank" rel="noopener" class="source-link">来源: Rowan Cheung(@rowancheung) on X</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section 5: UX雷达 -->
-  <section class="section">
+  <!-- ===== 五、UX雷达 ===== -->
+  <div class="section">
     <div class="section-header">
-      <div class="section-icon icon-pink">📡</div>
+      <div class="section-icon icon-rose">📡</div>
       <div>
-        <div class="section-title">UX雷达</div>
-        <span class="section-desc">值得关注的早期设计信号与新兴趋势</span>
+        <div class="section-title">UX 雷达</div>
+        <div class="section-subtitle">值得关注的早期设计信号与弱趋势</div>
       </div>
     </div>
 
-    <div class="radar-grid">
+    <div class="two-col">
 
-      <div class="radar-item">
-        <div class="radar-item-title">
-          <span class="radar-signal"></span>
-          Agent 情感化界面
-        </div>
-        <div class="radar-item-desc">
-          腾讯 QClaw 采用"像素龙虾"作为 AI 代理的可视化拟人角色——代理工作时动画活跃，待机时静止，让用户直观感知 AI 状态。这是 AI 代理交互从"文本列表"走向"情感角色"的早期信号，值得关注其用户接受度数据。
-          <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247721123&idx=1&sn=a6b4f2ae5fc3cc878e1f45f3799f930e" target="_blank" rel="noopener" style="color:#8B5CF6;font-size:0.78rem;display:block;margin-top:6px;">来源: Datawhale</a>
-        </div>
+      <div class="radar-card">
+        <div class="radar-tag">信号01 · 工程团队体验</div>
+        <div class="radar-title">认知负荷与心理安全成为AI时代工程效能的核心指标</div>
+        <div class="radar-body">Nicole Forsgren 在 The Pragmatic Summit 的演讲中指出，AI工具的引入并未自动提升团队效能——Review、发布、部署环节的瓶颈才是真正阻碍加速的因素。心理安全感和决策质量比纯粹的速度指标更能预测团队绩效。这对设计内部工具的 UX 研究员有直接参考价值。</div>
+        <a href="https://www.youtube.com/watch?v=DfrAaDgFgjc" target="_blank" rel="noopener" class="source-link" style="margin-top:8px; font-size:11px;">↗ The Pragmatic Engineer</a>
       </div>
 
-      <div class="radar-item">
-        <div class="radar-item-title">
-          <span class="radar-signal"></span>
-          会议后的 AI 辅助原型
-        </div>
-        <div class="radar-item-desc">
-          Replit CEO Amjad Masad 展示了一个场景：开完产品需求会议走出会议室，Replit 代理已经通过会议记录工具（Granola MCP）开始构建 MVP 了。这个"会议→即时原型"工作流，将彻底改变产品团队与用户研究的节奏。
-          <a href="https://x.com/amasad/status/2035077510720102465" target="_blank" rel="noopener" style="color:#8B5CF6;font-size:0.78rem;display:block;margin-top:6px;">来源: Amjad Masad(@amasad) on X</a>
-        </div>
+      <div class="radar-card">
+        <div class="radar-tag">信号02 · 产品设计范式</div>
+        <div class="radar-title">为 Agent 设计产品：用户从人类变为 AI，UX 语言需要重写</div>
+        <div class="radar-body">YC 合伙人讨论了"打造 Agent 愿意使用的产品"这一新命题。创业者需要"从 Agent 的视角思考"，意味着传统的用户旅程图、用户访谈方法将面临根本性的适配挑战——如何研究一个非人类用户的需求和行为模式？</div>
+        <a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&mid=2247514710&idx=1&sn=18a7e5d65550ef3d1dd134620b5fd8bf" target="_blank" rel="noopener" class="source-link" style="margin-top:8px; font-size:11px;">↗ Z Potentials</a>
       </div>
 
-      <div class="radar-item">
-        <div class="radar-item-title">
-          <span class="radar-signal"></span>
-          下拉菜单在滚动容器中的经典 Bug
-        </div>
-        <div class="radar-item-desc">
-          Smashing Magazine 深度分析了一个在多个代码库中反复出现的 UI Bug：滚动容器内的下拉菜单会被裁切或漂移。这个"人人遇到、人人用 z-index 9999 临时解决"的问题反映了组件库设计的系统性缺陷，提示设计系统团队需要在容器边界问题上建立更完善的规范。
-          <a href="https://smashingmagazine.com/2026/03/dropdowns-scrollable-containers-why-break-how-fix/" target="_blank" rel="noopener" style="color:#8B5CF6;font-size:0.78rem;display:block;margin-top:6px;">来源: Smashing Magazine</a>
-        </div>
+      <div class="radar-card">
+        <div class="radar-tag">信号03 · 界面入口变革</div>
+        <div class="radar-title">微信成为 Agent 入口意味着：中国 10 亿用户的 AI 交互门槛即将大幅降低</div>
+        <div class="radar-body">微信 ClawBot 接入 OpenClaw 意味着 AI Agent 的用户画像即将从"技术早期采用者"扩展到"普通微信用户"。这将产生大量真实的非技术用户 AI 使用数据，是未来 12 个月最值得追踪的用户研究富矿。</div>
+        <a href="https://x.com/Khazix0918/status/2035760405797347757" target="_blank" rel="noopener" class="source-link" style="margin-top:8px; font-size:11px;">↗ 数字生命卡兹克(@Khazix0918)</a>
       </div>
 
-      <div class="radar-item">
-        <div class="radar-item-title">
-          <span class="radar-signal"></span>
-          Notion AI 再次唤起用户热情
-        </div>
-        <div class="radar-item-desc">
-          一位重度 Notion 用户分享："两年没用 Notion 的新功能，昨天开始用 AI + Connectors 将 Notion 变成完整 CRM，完全重新爱上了 Notion。"这说明 AI 功能正在为成熟产品创造"重新激活"的魔法时刻——对 UX 来说，如何设计这些激活点值得深度研究。
-          <a href="https://x.com/akothari/status/2035044895594021012" target="_blank" rel="noopener" style="color:#8B5CF6;font-size:0.78rem;display:block;margin-top:6px;">来源: Akshay Kothari(@akothari) on X</a>
-        </div>
+      <div class="radar-card">
+        <div class="radar-tag">信号04 · 设计工具智能化</div>
+        <div class="radar-title">Claude Stitch Design Mode：AI设计Agent与人类设计师的角色边界正在重绘</div>
+        <div class="radar-body">Anthropic 的 Claude Stitch Design Mode 被评为"在UI设计Agent领域超越 Google"的产品。它代表一类新工具：AI 不只是辅助设计，而是能够自主生成可迭代的设计方案。设计师的核心价值将从"产出设计"转向"定义品味标准和评审框架"。</div>
+        <a href="https://www.youtube.com/watch?v=gDa1VzVPrwI" target="_blank" rel="noopener" class="source-link" style="margin-top:8px; font-size:11px;">↗ AICodeKing</a>
       </div>
 
-      <div class="radar-item">
-        <div class="radar-item-title">
-          <span class="radar-signal"></span>
-          GPT 生成 UI 的意图设计
-        </div>
-        <div class="radar-item-desc">
-          OpenAI 开发者博客发布指南：通过"更严格约束、视觉参考和真实内容"来改善 GPT-5.4 的前端生成质量，定义为"有意图的前端（intentional frontends）"。这反映了 AI 生成 UI 已进入精细化阶段，设计意图的精准传达成为新研究课题。
-          <a href="https://x.com/OpenAIDevs/status/2035113405263355950" target="_blank" rel="noopener" style="color:#8B5CF6;font-size:0.78rem;display:block;margin-top:6px;">来源: OpenAI Developers(@OpenAIDevs) on X</a>
-        </div>
+      <div class="radar-card">
+        <div class="radar-tag">信号05 · 硬件体验创新</div>
+        <div class="radar-title">非侵入式脑机接口助眠设备：从实验室走向消费市场的用研新领域</div>
+        <div class="radar-body">深圳创业公司"溯脑科技"推出的 Tranoo Sleep，通过采集脑电信号进行微电流干预改善睡眠。这类产品将脑机接口技术商业化，意味着用户研究将面临全新挑战：如何研究涉及生理信号、睡眠状态等非意识行为的用户体验？</div>
+        <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650866749&idx=1&sn=9a53298f37ebb15fc35fe35edbf95650" target="_blank" rel="noopener" class="source-link" style="margin-top:8px; font-size:11px;">↗ 创业邦</a>
       </div>
 
-      <div class="radar-item">
-        <div class="radar-item-title">
-          <span class="radar-signal"></span>
-          Anthropic 模型设计类编码任务领先
-        </div>
-        <div class="radar-item-desc">
-          Design Arena 数据显示，截至 2026 年 3 月，Anthropic 的 Claude Opus 4.6 在 Web 开发（HTML/React/全栈）、3D 设计、游戏开发和数据可视化等设计密集型编码任务上全面领先，这对依赖 AI 工具生成设计原型的 UX 团队有直接的工具选型指导意义。
-          <a href="https://x.com/berryxia/status/2035020270134862171" target="_blank" rel="noopener" style="color:#8B5CF6;font-size:0.78rem;display:block;margin-top:6px;">来源: Berryxia.AI(@berryxia) on X</a>
-        </div>
+      <div class="radar-card">
+        <div class="radar-tag">信号06 · AI研究智能化</div>
+        <div class="radar-title">「问题比答案更重要」：AI时代的研究员需要培养显化问题的元能力</div>
+        <div class="radar-body">李继刚提出了一个关于问题发现的方法：在笔记系统中建立「Problems」文件专门记录卡点问题，与 AI 碰撞后，有些形成新视角，有些固化为可复用的思维框架（Skill）。这为用户研究员提供了一个AI时代的个人知识管理范式参考。</div>
+        <a href="https://x.com/lijigang/status/2035630193357025668" target="_blank" rel="noopener" class="source-link" style="margin-top:8px; font-size:11px;">↗ 李继刚(@lijigang_com)</a>
       </div>
 
     </div>
-  </section>
+  </div>
 
-  <!-- Section 6: 信息来源汇总 -->
-  <section class="section">
-    <div class="section-header">
-      <div class="section-icon icon-yellow">📎</div>
-      <div>
-        <div class="section-title">信息来源汇总</div>
-        <span class="section-desc">本期日报所有引用来源</span>
+  <!-- ===== 六、参考来源 ===== -->
+  <div class="section">
+    <div class="ref-section">
+      <div class="ref-title">📚 参考来源汇总</div>
+      <div class="ref-list">
+        <div class="ref-item">
+          <span class="ref-num">01</span>
+          <a href="https://x.com/petergyang/status/2035725814357279117" target="_blank" rel="noopener">A designer who can ship code: Figma MCP × Claude Code 实战演示</a>
+          <span class="ref-source">· Peter Yang(@petergyang)</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">02</span>
+          <a href="https://www.youtube.com/watch?v=RP4vJeIb7WU" target="_blank" rel="noopener">The art of influence: The single most important skill left that AI can't replace | Jessica Fain</a>
+          <span class="ref-source">· Lenny's Podcast</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">03</span>
+          <a href="https://x.com/vista8/status/2035588381426757983" target="_blank" rel="noopener">客观评测微信龙虾ClawBot的优点和缺点</a>
+          <span class="ref-source">· 向阳乔木(@vista8)</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">04</span>
+          <a href="https://x.com/vikingmute/status/2035684681463869796" target="_blank" rel="noopener">OpenAI前端设计指南《Designing Delightful Frontends with GPT-5.4》解读</a>
+          <span class="ref-source">· Viking(@vikingmute)</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">05</span>
+          <a href="https://x.com/rauchg/status/2035829366165471702" target="_blank" rel="noopener">Code is an output. Nature is healing.</a>
+          <span class="ref-source">· Guillermo Rauch(@rauchg)</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">06</span>
+          <a href="https://x.com/dingyi/status/2035703802402353393" target="_blank" rel="noopener">GSAP Skills上线，Motion独立后走向下坡路</a>
+          <span class="ref-source">· Ding(@dingyi)</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">07</span>
+          <a href="https://mp.weixin.qq.com/s?__biz=MzE5OTE3NTEyMA==&mid=2247485565&idx=1&sn=58cf2cd5b8a7aa1196922f491c1e906f" target="_blank" rel="noopener">别和AI聊天，要和TA同居！——AI协作新范式深度体验</a>
+          <span class="ref-source">· AI炼金术</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">08</span>
+          <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247626594&idx=2&sn=0743815a1011a0cf329cb4f10d5de164" target="_blank" rel="noopener">Nothing 穿上了西装，但还差条领带——设计语言转型分析</a>
+          <span class="ref-source">· 硅星人Pro（不客观实验室）</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">09</span>
+          <a href="https://x.com/Hailuo_AI/status/2035560192784626027" target="_blank" rel="noopener">Hailuo Light Studio：拖拽式灯光控制工具</a>
+          <span class="ref-source">· Hailuo AI(@Hailuo_AI)</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">10</span>
+          <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&mid=2247610003&idx=1&sn=6f71a6801c22f3b82c673b57ce504593" target="_blank" rel="noopener">为了让你的笔记不再「吃灰」：全自动Notion效率工作流</a>
+          <span class="ref-source">· 少数派（二一的笔记）</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">11</span>
+          <a href="https://x.com/shao__meng/status/2035720327037108673" target="_blank" rel="noopener">infocard-skills：AI生成多比例视觉信息卡</a>
+          <span class="ref-source">· meng shao(@shao__meng)</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">12</span>
+          <a href="https://www.youtube.com/watch?v=DfrAaDgFgjc" target="_blank" rel="noopener">Nicole Forsgren: Leading high-performing engineering teams in the age of AI</a>
+          <span class="ref-source">· The Pragmatic Engineer</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">13</span>
+          <a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&mid=2247514710&idx=1&sn=18a7e5d65550ef3d1dd134620b5fd8bf" target="_blank" rel="noopener">YC合伙人对谈：打造Agent愿意使用的产品，Agent经济正在崛起</a>
+          <span class="ref-source">· Z Potentials</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">14</span>
+          <a href="https://www.youtube.com/watch?v=gDa1VzVPrwI" target="_blank" rel="noopener">Claude Stitch (Design Mode): Anthropic just CRUSHED Google with their DESIGN AGENT!</a>
+          <span class="ref-source">· AICodeKing</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">15</span>
+          <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650866749&idx=1&sn=9a53298f37ebb15fc35fe35edbf95650" target="_blank" rel="noopener">潮汕00后打造脑机接口助眠设备Tranoo Sleep</a>
+          <span class="ref-source">· 创业邦</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">16</span>
+          <a href="https://x.com/lijigang/status/2035630193357025668" target="_blank" rel="noopener">问题比答案更重要：显化性问题的记录方法</a>
+          <span class="ref-source">· 李继刚(@lijigang_com)</span>
+        </div>
+        <div class="ref-item">
+          <span class="ref-num">17</span>
+          <a href="https://x.com/Khazix0918/status/2035760405797347757" target="_blank" rel="noopener">聊聊微信的Agent野心——ClawBot插件深度分析</a>
+          <span class="ref-source">· 数字生命卡兹克(@Khazix0918)</span>
+        </div>
       </div>
     </div>
-
-    <div class="references-section">
-      <ul class="ref-list">
-        <li><a href="https://x.com/claudeai/status/2035025492617961704" target="_blank" rel="noopener">Claude Cowork 项目功能发布 — Claude(@claudeai)</a></li>
-        <li><a href="https://x.com/NotionHQ/status/2035032689485680829" target="_blank" rel="noopener">Notion AI Meeting Notes 后台运行 — Notion(@NotionHQ)</a></li>
-        <li><a href="https://x.com/amasad/status/2035091750533177648" target="_blank" rel="noopener">Apple 封堵 Vibe Coding 应用 — Amjad Masad(@amasad)</a></li>
-        <li><a href="https://x.com/berryxia/status/2035030049217487184" target="_blank" rel="noopener">OpenAI 超级应用计划 — Berryxia.AI(@berryxia)</a></li>
-        <li><a href="https://x.com/GaryMarcus/status/2035113104258838915" target="_blank" rel="noopener">AI 认知投降研究 — Gary Marcus(@GaryMarcus)</a></li>
-        <li><a href="https://addyo.substack.com/p/death-of-the-ide" target="_blank" rel="noopener">IDE 之死 — Addy Osmani / Elevate</a></li>
-        <li><a href="https://x.com/a16z/status/2035047236091159004" target="_blank" rel="noopener">语音 AI 改变工作场所 — a16z(@a16z)</a></li>
-        <li><a href="https://www.latent.space/p/dreamer" target="_blank" rel="noopener">Dreamer: 个人 Agent OS — Latent.Space</a></li>
-        <li><a href="https://x.com/GoogleAI/status/2035012211681153215" target="_blank" rel="noopener">Google Stitch Vibe Designing — Google AI(@GoogleAI)</a></li>
-        <li><a href="https://x.com/LangChain/status/2035051119442030715" target="_blank" rel="noopener">Listen Labs AI 自主访谈 — LangChain(@LangChainAI)</a></li>
-        <li><a href="https://x.com/_catwu/status/2035104384007422347" target="_blank" rel="noopener">AI 时代 PM 角色进化 — cat(@_catwu)</a></li>
-        <li><a href="https://x.com/rowancheung/status/2035027417715417434" target="_blank" rel="noopener">Pokémon Go 训练机器人 — Rowan Cheung(@rowancheung)</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247721123&idx=1&sn=a6b4f2ae5fc3cc878e1f45f3799f930e" target="_blank" rel="noopener">腾讯 QClaw 像素龙虾界面 — Datawhale</a></li>
-        <li><a href="https://x.com/amasad/status/2035077510720102465" target="_blank" rel="noopener">会议后即时 MVP 构建 — Amjad Masad(@amasad)</a></li>
-        <li><a href="https://smashingmagazine.com/2026/03/dropdowns-scrollable-containers-why-break-how-fix/" target="_blank" rel="noopener">下拉菜单滚动容器 Bug — Smashing Magazine</a></li>
-        <li><a href="https://x.com/akothari/status/2035044895594021012" target="_blank" rel="noopener">Notion AI 唤起用户热情 — Akshay Kothari(@akothari)</a></li>
-        <li><a href="https://x.com/OpenAIDevs/status/2035113405263355950" target="_blank" rel="noopener">GPT 意图前端生成 — OpenAI Developers(@OpenAIDevs)</a></li>
-        <li><a href="https://x.com/berryxia/status/2035020270134862171" target="_blank" rel="noopener">Claude 设计编码任务领先 — Berryxia.AI(@berryxia)</a></li>
-        <li><a href="https://x.com/oran_ge/status/2035121401754263768" target="_blank" rel="noopener">Karpathy：App 该消失，Agent 来接管 — Orange AI(@oran_ge)</a></li>
-        <li><a href="https://supertechfans.com/cn/post/2026-03-21-HackerNews/" target="_blank" rel="noopener">HackerNews 每日摘要 2026-03-21 — SuperTechFans</a></li>
-        <li><a href="https://x.com/sundarpichai/status/2035097196778176617" target="_blank" rel="noopener">Waymo 安全报告 — Sundar Pichai(@sundarpichai)</a></li>
-        <li><a href="https://x.com/latentspacepod/status/2035107381936562645" target="_blank" rel="noopener">Agent App Store 未来 — Latent.Space(@latentspacepod)</a></li>
-      </ul>
-    </div>
-  </section>
+  </div>
 
 </div>
 
-<!-- Footer -->
-<footer class="site-footer">
-  <p>用户研究版科技日报 · 2026年3月21日</p>
-  <p style="margin-top:6px;">数据来源：FreshRSS 24小时抓取（共 501 篇文章） · 由 AI 辅助筛选与分析生成</p>
-  <p style="margin-top:4px;color:#C4B5FD;">以用户为中心，每日洞察不停歇</p>
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>用户研究版科技日报 · 2026年3月23日</p>
+  <p style="margin-top:6px; color: #BBA99A;">数据来源：FreshRSS 24小时聚合 · 从219条资讯中精选 · 以用户为中心的视角解读</p>
 </footer>
 
 </body>
