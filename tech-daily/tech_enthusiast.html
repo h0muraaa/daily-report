@@ -1,455 +1,482 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>科技爱好者日报 · 2026年3月23日</title>
-  <style>
-    :root {
-      --primary: #6c3eff;
-      --secondary: #ff6b6b;
-      --accent1: #ffd93d;
-      --accent2: #6bcb77;
-      --accent3: #4d96ff;
-      --bg: #f0f4ff;
-      --card-bg: #ffffff;
-      --text: #2d2d2d;
-      --muted: #888;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.75;
-    }
-
-    /* ---- 顶部横幅 ---- */
-    header {
-      background: linear-gradient(135deg, #6c3eff 0%, #4d96ff 60%, #6bcb77 100%);
-      padding: 2.5rem 1.5rem 2rem;
-      text-align: center;
-      color: #fff;
-    }
-    header .badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.25);
-      border-radius: 20px;
-      padding: 0.3rem 1rem;
-      font-size: 0.82rem;
-      margin-bottom: 0.8rem;
-      letter-spacing: 0.05em;
-    }
-    header h1 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-    }
-    header p.subtitle {
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    /* ---- 主内容区 ---- */
-    main {
-      max-width: 860px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    /* ---- 区块标题 ---- */
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin: 2.5rem 0 1.2rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 3px solid var(--primary);
-      color: var(--primary);
-    }
-
-    /* ---- 新闻卡片 ---- */
-    .news-card {
-      background: var(--card-bg);
-      border-radius: 14px;
-      padding: 1.4rem 1.6rem;
-      margin-bottom: 1.2rem;
-      box-shadow: 0 4px 18px rgba(108,62,255,0.07);
-      border-left: 5px solid var(--primary);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .news-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 28px rgba(108,62,255,0.14);
-    }
-    .news-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-      color: #1a1a2e;
-    }
-    .news-card p {
-      font-size: 0.93rem;
-      color: #444;
-    }
-    .news-card .tag {
-      display: inline-block;
-      background: #ede8ff;
-      color: var(--primary);
-      border-radius: 8px;
-      padding: 0.15rem 0.6rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-    .news-card .source-link {
-      display: inline-block;
-      margin-top: 0.7rem;
-      font-size: 0.8rem;
-      color: var(--accent3);
-      text-decoration: none;
-      border: 1px solid #c5d8ff;
-      border-radius: 6px;
-      padding: 0.1rem 0.5rem;
-    }
-    .news-card .source-link:hover { background: #e8f0ff; }
-
-    /* 不同颜色的卡片边框 */
-    .card-orange { border-left-color: #ff9040; }
-    .card-green  { border-left-color: var(--accent2); }
-    .card-red    { border-left-color: var(--secondary); }
-    .card-blue   { border-left-color: var(--accent3); }
-    .card-yellow { border-left-color: #f5a623; }
-    .card-pink   { border-left-color: #e040fb; }
-
-    /* ---- 深度话题 ---- */
-    .deep-topic {
-      background: linear-gradient(120deg, #fff8e1 0%, #fce4ec 100%);
-      border-radius: 16px;
-      padding: 1.6rem 1.8rem;
-      margin-bottom: 1.5rem;
-      border: 1.5px solid #ffe0b2;
-    }
-    .deep-topic h3 {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 0.7rem;
-      color: #bf360c;
-    }
-    .deep-topic p { font-size: 0.93rem; color: #555; margin-bottom: 0.6rem; }
-
-    /* ---- 科普小课堂 ---- */
-    .science-box {
-      background: linear-gradient(120deg, #e8f5e9 0%, #e3f2fd 100%);
-      border-radius: 16px;
-      padding: 1.6rem 1.8rem;
-      border: 1.5px solid #a5d6a7;
-      margin-bottom: 1.5rem;
-    }
-    .science-box h3 {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #2e7d32;
-      margin-bottom: 0.6rem;
-    }
-    .science-box p { font-size: 0.93rem; color: #444; margin-bottom: 0.5rem; }
-
-    /* ---- 产品推荐 ---- */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.1rem;
-      margin-bottom: 1.5rem;
-    }
-    .product-card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 1.3rem;
-      box-shadow: 0 3px 14px rgba(0,0,0,0.07);
-      border-top: 4px solid var(--accent1);
-    }
-    .product-card .emoji { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
-    .product-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .product-card p { font-size: 0.86rem; color: #666; }
-    .product-card a { color: var(--accent3); font-size: 0.82rem; text-decoration: none; }
-
-    /* ---- 延伸阅读 ---- */
-    .reference-list {
-      background: #fff;
-      border-radius: 14px;
-      padding: 1.5rem 1.8rem;
-      box-shadow: 0 3px 14px rgba(0,0,0,0.06);
-    }
-    .reference-list ul { list-style: none; padding: 0; }
-    .reference-list li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 0.87rem;
-    }
-    .reference-list li:last-child { border-bottom: none; }
-    .reference-list a { color: var(--accent3); text-decoration: none; }
-    .reference-list a:hover { text-decoration: underline; }
-
-    /* ---- 页脚 ---- */
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-    footer a { color: var(--primary); text-decoration: none; }
-
-    @media (max-width: 600px) {
-      header h1 { font-size: 1.6rem; }
-      .news-card { padding: 1rem 1.1rem; }
-      .product-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技日报 - 科技爱好者版 | 2026年3月24日</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+        .header::before {
+            content: '🚀';
+            font-size: 60px;
+            position: absolute;
+            top: 10px;
+            right: 30px;
+            opacity: 0.3;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        .header .date {
+            margin-top: 15px;
+            font-size: 0.95em;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 35px;
+        }
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title.hot {
+            border-color: #f5576c;
+            color: #f5576c;
+        }
+        .section-title.fresh {
+            border-color: #4facfe;
+            color: #4facfe;
+        }
+        .section-title.tips {
+            border-color: #43e97b;
+            color: #43e97b;
+        }
+        .section-title.product {
+            border-color: #fa709a;
+            color: #fa709a;
+        }
+        .news-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .news-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .news-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .news-content {
+            color: #4a5568;
+            font-size: 0.95em;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        .news-source {
+            font-size: 0.85em;
+            color: #718096;
+        }
+        .news-source a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .news-source a:hover {
+            text-decoration: underline;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .highlight-box h3 {
+            color: #744210;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .highlight-box p {
+            color: #744210;
+            line-height: 1.8;
+        }
+        .product-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+        }
+        .product-card h4 {
+            color: #2d3748;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .product-card p {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        .sources-section {
+            background: #edf2f7;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        .sources-section h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .sources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+        }
+        .source-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        .source-item a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .source-item a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .tag-new {
+            background: #48bb78;
+            color: white;
+        }
+        .tag-hot {
+            background: #f56565;
+            color: white;
+        }
+        .tag-ai {
+            background: #9f7aea;
+            color: white;
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>科技日报</h1>
+            <div class="subtitle">科技爱好者版 —— 探索科技的无限可能</div>
+            <div class="date">📅 2026年3月24日</div>
+        </div>
 
-<!-- ==================== 顶部横幅 ==================== -->
-<header>
-  <div class="badge">🤖 AI时代 · 科技爱好者专属</div>
-  <h1>科技爱好者日报</h1>
-  <p class="subtitle">2026年3月23日 · 精选让你眼前一亮的科技动态 ✨</p>
-</header>
+        <div class="content">
+            <!-- 今日头条 -->
+            <div class="section">
+                <h2 class="section-title hot">🔥 今日头条</h2>
 
-<main>
+                <div class="news-item">
+                    <div class="news-title">
+                        Claude Cowork 重磅更新：AI 终于能操作你的电脑了！
+                        <span class="tag tag-new">NEW</span>
+                        <span class="tag tag-ai">AI</span>
+                    </div>
+                    <div class="news-content">
+                        Anthropic 今天为 Claude Cowork 推出了一组重磅更新，核心能力是「电脑操控（Computer Use）」。简单来说，Claude 现在可以像一个坐在你电脑前的助手一样工作：打开应用、操作浏览器、填写表格。更实用的是"派活"模式：你在手机上给 Claude 布置一个任务，然后去忙别的，回来时电脑上已经有了完成的成果。Claude 还支持跨会话记忆，能记住你的工作习惯和偏好。目前这些功能处于研究预览阶段，仅支持 macOS，Pro 和 Max 用户可以使用。
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://x.com/dotey/status/2036202248238473607" target="_blank">宝玉(@dotey)</a>、
+                        <a href="https://x.com/claudeai/status/2036195789601374705" target="_blank">Claude(@claudeai)</a>
+                    </div>
+                </div>
 
-<!-- ==================== 今日头条 ==================== -->
-<div class="section-title">📰 今日头条</div>
+                <div class="news-item">
+                    <div class="news-title">
+                        OpenAI 收购 Astral：Python 开发者工具的巨变
+                        <span class="tag tag-hot">HOT</span>
+                    </div>
+                    <div class="news-content">
+                        OpenAI 宣布收购 Astral，这家公司是 uv、Ruff 和 ty 等热门 Python 工具的幕后团队。Astral 团队将加入 OpenAI 的 Codex 团队。uv 是一个极速的包和环境管理器，Ruff 是超快的 Python 代码检查工具，ty 是类型检查工具。这些工具每月有数亿次下载，在 Python 社区广受欢迎。这次收购意味着 OpenAI 正在深度布局开发者工具生态，未来 Codex 可能会与这些工具深度集成。
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://blog.jetbrains.com/pycharm/2026/03/openai-acquires-astral-what-it-means-for-pycharm-users/" target="_blank">The JetBrains Blog</a>
+                    </div>
+                </div>
 
-<!-- 头条1：微信接入OpenClaw -->
-<div class="news-card card-green">
-  <div class="tag">🔥 本日最热</div>
-  <h3>微信接入"龙虾"——亿级用户的超级入口打开了</h3>
-  <p>
-    这是今天科技圈最轰动的消息：微信官方正式推出"ClawBot"插件，支持将OpenClaw AI Agent（俗称"龙虾"）接入个人微信！升级微信到8.0.70以上版本后，进入「我→设置→插件」即可找到ClawBot入口，扫个二维码就能让你的AI助手住进微信好友列表，像聊天一样下达任务。这意味着什么？以前用AI助手需要单独打开APP，现在直接在微信里喊一声"帮我查下航班"或者"整理会议记录"，AI就替你去办了。有评论说这是"Agent普及的奇点时刻"——就像2023年大家开始每天用ChatGPT，2026年大家开始每天在微信里命令Agent干活了。不过目前还在灰度阶段，部分用户可能需要等一等才能刷出插件。
-  </p>
-  <a class="source-link" href="https://mp.weixin.qq.com/s?__biz=MzIwMTU5OTQ1Nw==&mid=2653725843&idx=1&sn=b2a88b769d91a20ee83008ad9c45229c" target="_blank" rel="noopener">[来源: 沃垠AI]</a>
-</div>
+                <div class="news-item">
+                    <div class="news-title">
+                        德国总理试戴的中国 AI 眼镜拿下全球第一
+                        <span class="tag tag-new">NEW</span>
+                    </div>
+                    <div class="news-content">
+                        根据 Omdia 最新数据，2025 年全球 AI 眼镜出货量达 870 万台，同比增长 322%。在关键的「带显示的 AI+AR 眼镜」细分赛道中，中国厂商市场占比高达 71%，而杭州乐奇 Rokid 站在这个细分赛道的顶端。与 Meta 的「轻 AI」快消品逻辑不同，乐奇 Rokid 将「AR 显示」与「AI 能力」进行了有机融合。德国总理在访华期间也试戴了这款眼镜，显示出中国 AI 硬件正在获得国际认可。
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&mid=2652799220&idx=1&sn=7c81ec4e4e9c3be6bdd17479beeb41e0" target="_blank">智东西</a>
+                    </div>
+                </div>
 
-<!-- 头条2：马斯克TERAFAB -->
-<div class="news-card card-orange">
-  <div class="tag">🚀 宏大计划</div>
-  <h3>马斯克宣布TERAFAB：比现在全球芯片总产能还大50倍的超级工厂</h3>
-  <p>
-    马斯克又出手了，而且这次的野心大到让人头皮发麻。他正式宣布启动"TERAFAB"项目，联合SpaceX和Tesla，要建一座年产1太瓦（Terawatt）算力芯片的超级工厂——作为对比，目前全地球所有芯片工厂加起来只能满足这个目标需求的2%！更匪夷所思的是，马斯克说这座工厂产出的算力有80%要送上太空，因为太空没有大气层遮挡，太阳能效率是地球的5倍以上，而且永远是晴天。他描绘的终极蓝图是：在轨道上布满AI算力设施，用100亿台Optimus机器人接管地面生产，最终带着人类文明去火星、土星，成为"卡尔达肖夫I型文明"（能利用整个行星能源的超级文明）。梦是挺大的，不过马斯克以前说的大饼也实现了不少，这次且看且期待。
-  </p>
-  <a class="source-link" href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651022970&idx=2&sn=e3eccb77a7b1cecdbacc5d0f7298fe5f" target="_blank" rel="noopener">[来源: 机器之心]</a>
-</div>
+                <div class="news-item">
+                    <div class="news-title">
+                        马斯克要建「Terafab」半导体工厂
+                        <span class="tag tag-ai">AI</span>
+                    </div>
+                    <div class="news-content">
+                        马斯克宣布特斯拉将与 SpaceX 联合建设名为「Terafab」的半导体工厂，选址位于特斯拉奥斯汀总部附近，由两座彼此独立的晶圆厂组成。其中一类芯片面向地面应用，服务于 Cybercab 自动驾驶出租车和 Optimus 人形机器人；另一类芯片则面向太空应用，需要针对更严苛的太空环境重新设计。这是马斯克「银河之心（Galaxy Mind）」计划的一部分，旨在将 AI 带入深空。
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://www.ifanr.com/1659363" target="_blank">爱范儿</a>
+                    </div>
+                </div>
 
-<!-- 头条3：Cursor套壳Kimi事件 -->
-<div class="news-card card-pink">
-  <div class="tag">😮 科技趣闻</div>
-  <h3>Cursor发布自研模型，结果被网友扒出是Kimi K2.5！一场闹剧变成了"意外合作"</h3>
-  <p>
-    这个故事情节堪比商业悬疑剧。AI编程工具Cursor高调发布了自家新模型"Composer 2"，暗示是自己从头训练的。结果不到两小时，一个开发者在调试API时发现模型ID里赫然写着"kimi-k2p5"——这不就是月之暗面的Kimi K2.5吗？Kimi团队技术负责人第一时间发推质问，马斯克还在评论区补了一刀"Yeah, it's Kimi 2.5"。但剧情随后急速反转：月之暗面官方发文，口吻从质疑变成了祝贺，称"我们很自豪看到Kimi K2.5为Composer 2提供了基础"，并解释Cursor是通过合规渠道授权的。从"套壳争议"到"合法合作"，反转只用了几个小时，留下无数吃瓜群众目瞪口呆。Kimi的技术实力也因此再次得到大范围曝光。
-  </p>
-  <a class="source-link" href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247626594&idx=1&sn=3612471b9c262508aa98482a6a215fc7" target="_blank" rel="noopener">[来源: 硅星人Pro]</a>
-</div>
+                <div class="news-item">
+                    <div class="news-title">
+                        ChatGPT 周活用户突破 9 亿，产品负责人揭秘增长秘诀
+                    </div>
+                    <div class="news-content">
+                        OpenAI 产品负责人 Nick Turley 在播客中透露，ChatGPT 周活跃用户已从零飙升到 9 亿，仅用了 3.5 年时间。他分享了打造超级助手的核心方向：从被动聊天向主动执行长线任务的「超级助手」演进。值得注意的是，ChatGPT 推出订阅制的初衷并非变现，而是为了在服务器宕机边缘，能以付费墙「优雅地过滤」溢出的流量需求。这个反直觉的防御性决策，意外奠定了当下最瞩目的 AI 商业模式。
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI0NTAwMzU1MA==&mid=2247505647&idx=1&sn=7c1843ad30c6dfbc19482f0f6ee294fb" target="_blank">随机小分队</a>
+                    </div>
+                </div>
 
-<!-- 头条4：Karpathy谈AI时代的工作方式 -->
-<div class="news-card card-blue">
-  <div class="tag">🧠 深度思考</div>
-  <h3>Karpathy：我已经不"写代码"了，每天管理十几个AI Agent同时干活</h3>
-  <p>
-    AI大神Andrej Karpathy（OpenAI创始成员、前特斯拉AI总监）最近接受访谈，讲述了他工作方式的彻底转变：他已经很少亲自敲代码，而是同时管理十几个AI代理进程，把任务分配给它们，然后审查结果。他说"写代码已经不是一个准确的动词了"，开发者正在从"程序员"变成"系统调度员"。他还介绍了自己的AutoResearch项目——让AI自主完成从设计实验、收集数据到迭代优化的全流程研究，人几乎完全不用介入。这不是科幻，是2026年正在发生的现实。对于普通人的启示：以后不是要学会"写代码"，而是要学会"管理AI去写代码"。
-  </p>
-  <a class="source-link" href="https://mp.weixin.qq.com/s?__biz=Mzg4NDQwNTI0OQ==&mid=2247589078&idx=1&sn=2a4dd23052ddd764457f0bb94fa5066a" target="_blank" rel="noopener">[来源: AI科技大本营]</a>
-</div>
+                <div class="news-item">
+                    <div class="news-title">
+                        Meta 收购 Dreamer 团队，打造超级智能实验室
+                    </div>
+                    <div class="news-content">
+                        Meta 宣布收购 Dreamer 团队，该团队创始人 David Singleton、Hugo Barra 和 Alfredo 将加入 Meta 超级智能实验室。Dreamer 在一个月前发布了 beta 版本，让用户可以用自然语言构建个人智能软件。数千人已经使用 Dreamer 构建代理来管理邮件、日历、待办事项，创建孩子的学习工具，规划旅行等。这次收购显示 Meta 正在加速布局个人 AI 助手领域。
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://x.com/latentspacepod/status/2036174018747965657" target="_blank">Latent.Space(@latentspacepod)</a>
+                    </div>
+                </div>
 
-<!-- 头条5：中国车企全球销量第一 -->
-<div class="news-card card-red">
-  <div class="tag">🚗 产业大事</div>
-  <h3>20年来首次！中国车企2025年全球销量超过日本，坐上头把交椅</h3>
-  <p>
-    《日本经济新闻》传来一条让日本汽车界震动的消息：2025年中国车企全球累计销量约2700万辆，超越日本约2500万辆，这是2000年以来日本汽车业首次跌落全球第一。比亚迪超越福特跻身全球第六，吉利超越本田位列第八，纯电动汽车领域比亚迪更是超越特斯拉排名世界第一。前20名中中国有6家车企上榜，首次超过日本的5家。更有意思的是，与此同时，中国的充电桩总数已突破2101万个，同比增长近48%——基础设施的完善，正在加速新能源普及的飞轮效应。这个数据背后，是中国制造业转型升级的一个重要里程碑。
-  </p>
-  <a class="source-link" href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650866772&idx=3&sn=d678adfaf5d4ac3e1dfa0917a7368332" target="_blank" rel="noopener">[来源: 创业邦]</a>
-</div>
+                <div class="news-item">
+                    <div class="news-title">
+                        中国 AI 图像模型 Kimi K2.5 杀入硅谷核心供应链
+                        <span class="tag tag-hot">HOT</span>
+                    </div>
+                    <div class="news-content">
+                        Cursor 最新发布的 Composer 2 模型底层基于 Kimi K2.5 微调，这一发现引爆技术社区。Kimi K2.5 在 1 月 29 日开源发布，不到两个月就跑进了硅谷从应用层到基础设施层的核心工具链。Cloudflare 已将 K2.5 上架到 Workers AI，内部实测成本降低 77%；马斯克一周内两度公开点赞 Kimi；老黄邀请杨植麟作为唯一的中国独立大模型公司创始人在 GTC 2026 演讲。Kimi 正以 180 亿美元估值进行新一轮 10 亿美元融资。
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://mp.weixin.qq.com/s?__biz=Mzg5NTc0MjgwMw==&mid=2247523413&idx=1&sn=c74a6c43dd69ca43a1a6025fe95a75e2" target="_blank">Founder Park</a>
+                    </div>
+                </div>
 
-<!-- 头条6：AI裁员成为趋势 -->
-<div class="news-card card-yellow">
-  <div class="tag">💼 职场警示</div>
-  <h3>网易、B站、Meta相继传出AI裁员，这一次真的不一样了</h3>
-  <p>
-    最近一段时间，AI裁员的消息接连不断：网易被传"用AI清退全部外包"并随即官方回应（称系正常调整）；B站、Meta等大厂同样有类似动作；甚至还有PC巨头宣布裁员11000人、遣散费近40亿。更值得关注的是一篇深度文章的观点：AI带来的这轮裁员，跟工业革命时织布机替代工人一样，根本无法靠"抵制"阻止。作者的建议简明直接：不要站在审判的角度评价新技术，而要用好奇心去主动拥抱，因为"学习在审判模式下会停止"。对于普通职场人来说，与其担心被AI替代，不如想想怎么把AI变成自己的"超级工具"——正如那个说法：不是AI取代你，而是"会用AI的人"取代你。
-  </p>
-  <a class="source-link" href="https://mp.weixin.qq.com/s?__biz=Mzg5Mjc3MjIyMA==&mid=2247581144&idx=1&sn=e7398546d19ab1d8f942f53b58187702" target="_blank" rel="noopener">[来源: AI产品阿颖]</a>
-</div>
+                <div class="news-item">
+                    <div class="news-title">
+                        爱尔兰工程师用 AI 打遍全国 3000 家酒吧问啤酒价格
+                    </div>
+                    <div class="news-content">
+                        工程师 Matt Cortland 开发了一个 AI 语音代理 Rachel，在圣帕特里克节周末给爱尔兰全国 3000 多家酒吧打电话，问同一个问题：一品脱吉尼斯多少钱？他使用 ElevenLabs 生成语音，Twilio 拨打电话，Google Places API 定位酒吧，Claude 解析价格数据。结果有 2052 家酒吧接听，几乎没人意识到是 AI。整个项目只花了约 200 欧元，却重建了爱尔兰统计局 2011 年就停止追踪的啤酒价格指数。
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://x.com/TheRundownAI/status/2036098794085884132" target="_blank">The Rundown AI(@TheRundownAI)</a>
+                    </div>
+                </div>
+            </div>
 
-<!-- 头条7：Grok 4.20发布 -->
-<div class="news-card card-blue">
-  <div class="tag">🆕 新模型上线</div>
-  <h3>Grok 4.20来了，马斯克家的AI模型有三种"形态"：推理版、极速版、多Agent版</h3>
-  <p>
-    xAI的最新旗舰模型Grok 4.20正式上线Vercel AI Gateway平台，分三个版本：普通推理版（Non-Reasoning）适合快速直接回答，深度思考版（Reasoning）用于复杂问题的扩展分析，多智能体协作版（Multi-Agent）专门为多个AI联合工作的场景打造。官方宣称它有低幻觉率（也就是"乱说话"的概率更低）、高速度以及强大的工具调用能力。对于普通用户来说，最实际的感受是：Grok正在从一个"问答机器人"进化成能主动帮你干活的AI助手，三种形态的切换也让不同场景下都能找到最合适的模式。
-  </p>
-  <a class="source-link" href="https://vercel.com/changelog/grok-4-20-on-ai-gateway" target="_blank" rel="noopener">[来源: Vercel News]</a>
-</div>
+            <!-- 科技新鲜事 -->
+            <div class="section">
+                <h2 class="section-title fresh">💡 科技新鲜事</h2>
 
-<!-- 头条8：Karpathy用AI控制智能家居 -->
-<div class="news-card card-green">
-  <div class="tag">🏠 科幻成真</div>
-  <h3>Karpathy发短信就能控制家里的灯光音响？用AI Agent管家这件事已经实现了</h3>
-  <p>
-    这个视频截图让人叹为观止：Karpathy展示了如何用OpenClaw Agent通过发消息控制整个家——让Agent扫描家里网络，自动发现Sonos音响、智能灯泡、HVAC系统，然后直接"破解"接管，不需要下载任何专属App，也不需要写一行代码。要调音乐、开灯、调温度，只需要发条短信就行。这件事的意义远不止"好玩"——它说明AI Agent已经能够自主探索陌生环境并采取行动，就像一个无需编程的万能遥控器。距离"一个AI管整栋楼"可能真的没多远了。
-  </p>
-  <a class="source-link" href="https://x.com/venturetwins/status/2035773250261930015" target="_blank" rel="noopener">[来源: Justine Moore(@venturetwins)]</a>
-</div>
+                <div class="highlight-box">
+                    <h3>🎬 AI 短剧正在颠覆内容创作</h3>
+                    <p>
+                        一个名为「Fruit Love Island」的 AI 短剧 TikTok 账号成为史上增长最快的账号，9 天内获得 300 万+ 粉丝。这些视频使用 AI 生成角色和场景，有美人鱼、在海滩上跳舞的忧郁北极熊、AI 生成的僵尸，甚至「汉堡 CEO」。TikTok 正在内测专门的短剧入口「TikTok Short Drama」，目前仅面向美国及少数地区年满 18 岁的部分用户开放。AI 让个人创作者或小团队能以远低于好莱坞的成本和速度生产内容，这可能是媒体行业的未来。
+                    </p>
+                    <div class="news-source" style="margin-top: 10px;">
+                        来源：<a href="https://x.com/venturetwins/status/2036107137047527632" target="_blank">Justine Moore(@venturetwins)</a>、
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzA3NTQ4NjczNw==&mid=2650678383&idx=2&sn=85d04c6b64a16302a0432fe562267a95" target="_blank">白鲸出海</a>
+                    </div>
+                </div>
 
+                <div class="highlight-box" style="background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);">
+                    <h3 style="color: #553c9a;">🍰 用蛋糕做销售：AI 时代的创意创业</h3>
+                    <p style="color: #553c9a;">
+                        一位名叫 William 的创业者用 Lovable（AI 建站工具）开发了 Daymaker 平台，帮助公司用送蛋糕代替冷冰冰的邮件进行销售触达。他两个月前开始这个项目，现在月收入已达 11 万美元！上个月他们只送了价值 1 万美元的蛋糕，这个月因为「cold caking」概念爆火，预计要送近 10 万美元的蛋糕。创始人说：「cold emailing 和 cold calling 已经过时了，cold caking 才是未来。」这个故事告诉我们，AI 降低了技术门槛，创意和执行力才是真正的护城河。
+                    </p>
+                    <div class="news-source" style="margin-top: 10px;">
+                        来源：<a href="https://x.com/antonosika/status/2036110880971403710" target="_blank">Anton Osika(@antonosika)</a>
+                    </div>
+                </div>
+            </div>
 
-<!-- ==================== 科技新鲜事（深度话题） ==================== -->
-<div class="section-title">🔭 科技新鲜事</div>
+            <!-- 科普小课堂 -->
+            <div class="section">
+                <h2 class="section-title tips">📚 科普小课堂：什么是 Token？</h2>
+                <div class="news-item" style="border-left-color: #43e97b;">
+                    <div class="news-content">
+                        <p style="margin-bottom: 15px;">
+                            最近你可能经常听到「Token」这个词——黄仁勋在 GTC 大会上称它是「AI 时代的基石」，阿里巴巴甚至专门成立了「Alibaba Token Hub」事业群。那么 Token 到底是什么？
+                        </p>
+                        <p style="margin-bottom: 15px;">
+                            <strong>简单理解：</strong>Token 是 AI 模型处理文本的最小单位。英文中一个 Token 大约是 4 个字符或 0.75 个单词；中文里一个汉字通常等于 1-2 个 Token。当你和 ChatGPT 对话时，你输入的文字会被拆分成 Token，模型根据这些 Token 来理解你的意思并生成回复。
+                        </p>
+                        <p style="margin-bottom: 15px;">
+                            <strong>为什么重要？</strong>Token 是 AI 服务的计费单位。硅谷正在流行「Tokenmaxxing」（Token 最大用量）——Meta 和 OpenAI 内部，工程师们在 AI 使用排行榜上竞争，有人一周消耗 2100 亿个 Token（相当于 33 个维基百科），有人每月 AI 账单高达 15 万美元。Token 预算正在成为工程师的新型工作福利，「就像免费零食或免费午餐曾经那样」。
+                        </p>
+                        <p>
+                            <strong>未来趋势：</strong>黄仁勋预测 Token 将成为「最值钱的大宗商品」。随着 AI 应用的普及，理解 Token 将像理解「流量」「电量」一样重要。
+                        </p>
+                    </div>
+                    <div class="news-source">
+                        来源：<a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&mid=2691566197&idx=1&sn=11e9ebe0c81a193dc983b6aa76755439" target="_blank">腾讯科技</a>
+                    </div>
+                </div>
+            </div>
 
-<div class="deep-topic">
-  <h3>话题一：微信 × OpenClaw，这不只是"接个机器人"那么简单</h3>
-  <p>
-    微信ClawBot插件的上线，在技术圈掀起的热议远超普通功能更新。本质上，微信做的不是"推出一个AI聊天功能"，而是为全球最大的IM平台打开了一扇"Agent入口"。这意味着任何兼容OpenClaw协议（ACP协议）的AI Agent，理论上都能接入微信，而不只是OpenClaw这一家。
-  </p>
-  <p>
-    有人兴奋地畅想：以后可以在微信里让Manus帮你出调研报告、让AI助手帮你点外卖、让Agent帮你订机票——所有动作统一在一个聊天窗口里完成。不过也有人给出了冷静提示：目前ClawBot功能还不完善，不支持群聊，不支持Mac端，Markdown渲染很差，功能迭代还需要时间。此外也有警告——用非官方的Claude等工具桥接微信有封号风险，大家操作时需注意。
-  </p>
-  <p>
-    更有意思的观察是：就连微信这种以克制著称、"极少追热点"的产品，也在OpenClaw爆火后迅速出手，说明Agent这股浪潮已经大到让互联网巨头都坐不住了。正如有人说的："以前内卷外卖、内卷电商，现在不得不为新世界的Agent开入口。"
-  </p>
-  <a class="source-link" href="https://mp.weixin.qq.com/s?__biz=MzkyNzYzODgwNw==&mid=2247496962&idx=1&sn=e52c913d0400b5e7f5bc088efe3a2d44" target="_blank" rel="noopener">[延伸阅读: 阿真Irene - 微信ClawBot完整教程]</a>
-</div>
+            <!-- 产品推荐 -->
+            <div class="section">
+                <h2 class="section-title product">🛒 产品推荐</h2>
 
-<div class="deep-topic">
-  <h3>话题二："Skills"生态的爆发——AI的"App Store"时代来临？</h3>
-  <p>
-    如果说OpenClaw是一台智能手机，那么"Skills"就是它的App Store。这两天，Skills生态正在以惊人的速度扩展：Anthropic（Claude母公司）、OpenAI、MiniMax相继开源了自己的官方精选Skills，GSAP动效库、LlamaParse文档解析等工具也纷纷发布Skills版本，开发者"宝玉"发布的技能包已累计安装近20万次……
-  </p>
-  <p>
-    这些Skills涵盖了办公三件套（PPT/Word/Excel自动处理）、视频字幕抓取与翻译、信息卡片生成、代码开发辅助等几十个场景，每个"一行命令装好就能用"。以前用AI处理文档，要写复杂的提示词；现在装个Skill，AI就自动知道"遇到PPT该怎么做"。Skills正在把AI从"聪明的聊天工具"变成"拥有具体技能的数字同事"。
-  </p>
-  <p>
-    值得注意的是，普通人也开始贡献Skills——这和最初只有程序员能做App，后来普通人也能做小程序的轨迹何其相似。如果说2023年是"人人能用AI"，2026年正在进入"人人能定制AI"的新阶段。
-  </p>
-  <a class="source-link" href="https://x.com/shao__meng/status/2035729570343903284" target="_blank" rel="noopener">[延伸阅读: meng shao(@shao__meng) - MiniMax精选Skills推荐]</a>
-</div>
+                <div class="product-card">
+                    <h4>🤖 Manus Desktop —— 走出云端的 AI Agent</h4>
+                    <p>Manus 推出了桌面版应用，核心功能是「My Computer」——可以直接与你的本地文件夹交互。你可以用它来：创建基于文档的第二大脑、整理数千个文件、构建任何 Web 或原生应用。兼容 macOS 和 Windows，新用户注册可获得 1000 积分免费试用。</p>
+                    <div class="news-source">
+                        来源：<a href="https://x.com/itsPaulAi/status/2036096007096988098" target="_blank">Paul Couvert(@itsPaulAi)</a>
+                    </div>
+                </div>
 
+                <div class="product-card" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                    <h4>🎨 HeyGen Brand Systems —— 品牌视频一键生成</h4>
+                    <p>HeyGen 新推出的 Brand Systems 功能可以彻底改变你制作品牌视频的方式。只需粘贴公司网址，HeyGen 就能自动提取 Logo、字体和配色，无需手动上传和设置。之后制作的所有视频都会自动应用品牌规范，告别反复调整字体颜色的繁琐工作。</p>
+                    <div class="news-source">
+                        来源：<a href="https://x.com/HeyGen/status/2036110726037672389" target="_blank">HeyGen(@HeyGen_Official)</a>
+                    </div>
+                </div>
 
-<!-- ==================== 科普小课堂 ==================== -->
-<div class="section-title">🎓 科普小课堂</div>
+                <div class="product-card" style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);">
+                    <h4>📝 Google AI Studio —— 全栈 Vibe Coding</h4>
+                    <p>Google AI Studio 迎来夸张级升级：现在任何人只用一个提示词，就能做出带身份验证、数据库和真实 API 集成的可生产应用。应用默认私有，支持一键部署 Firebase 数据库和 Cloud Run，甚至可以直接在应用 UI 上画图来给出反馈。</p>
+                    <div class="news-source">
+                        来源：<a href="https://x.com/_philschmid/status/2036089128899510568" target="_blank">Philipp Schmid(@_philschmid)</a>
+                    </div>
+                </div>
+            </div>
 
-<div class="science-box">
-  <h3>今日概念：什么是"AI Agent"（AI智能体）？为什么它比"AI聊天"厉害这么多？</h3>
-  <p>
-    <strong>一句话版本：</strong>普通AI是你问它、它答你；而AI Agent是你给它一个目标，它自己去想办法、自己去行动、自己把事情搞定。
-  </p>
-  <p>
-    <strong>举个例子：</strong>普通AI——你问"帮我找一个周末北京出发去上海的便宜机票"，它给你一段文字告诉你方法，但你还得自己去订票平台搜索下单。AI Agent——你说同样的话，它会自己打开浏览器、搜索多个平台价格、比较时间和价格后，直接把最优选项推荐给你，甚至帮你完成预订。
-  </p>
-  <p>
-    <strong>关键能力：</strong>AI Agent有三个普通聊天AI不具备的核心能力：①记忆（能记住你的喜好和历史操作）；②规划（能把大目标拆分成多个步骤）；③工具使用（能操控电脑、联网、运行代码）。
-  </p>
-  <p>
-    <strong>为什么最近这么火？</strong>因为模型的推理能力刚刚达到了让Agent"真正能完成复杂任务"的阈值。OpenClaw（"龙虾"）就是当前最热门的一款编程领域AI Agent，它能帮你写完整个软件项目，而不只是补全一段代码。
-  </p>
-  <p>
-    <strong>对普通人的影响：</strong>Agent时代意味着，AI将从"工具"变成"数字雇员"。未来你可能有多个AI助手，分别负责日程管理、信息整理、代码开发、购物决策……这不是科幻，今天的顶尖开发者已经在这么做了。
-  </p>
-</div>
+            <!-- 信息来源汇总 -->
+            <div class="sources-section">
+                <h3>📰 信息来源汇总</h3>
+                <div class="sources-list">
+                    <div class="source-item">
+                        <a href="https://x.com/dotey" target="_blank">宝玉(@dotey)</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://x.com/claudeai" target="_blank">Claude(@claudeai)</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://blog.jetbrains.com/pycharm/" target="_blank">The JetBrains Blog</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://mp.weixin.qq.com" target="_blank">智东西</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://www.ifanr.com" target="_blank">爱范儿</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://x.com/TheRundownAI" target="_blank">The Rundown AI</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://x.com/venturetwins" target="_blank">Justine Moore</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://mp.weixin.qq.com" target="_blank">白鲸出海</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://x.com/antonosika" target="_blank">Anton Osika</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://x.com/itsPaulAi" target="_blank">Paul Couvert</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://x.com/HeyGen_Official" target="_blank">HeyGen</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://x.com/_philschmid" target="_blank">Philipp Schmid</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://x.com/latentspacepod" target="_blank">Latent.Space</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://mp.weixin.qq.com" target="_blank">Founder Park</a>
+                    </div>
+                    <div class="source-item">
+                        <a href="https://mp.weixin.qq.com" target="_blank">腾讯科技</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-
-<!-- ==================== 产品推荐 ==================== -->
-<div class="section-title">⭐ 值得关注的产品</div>
-
-<div class="product-grid">
-
-  <div class="product-card">
-    <span class="emoji">🦞</span>
-    <h4>OpenClaw（开源龙虾）</h4>
-    <p>当下最火的AI编程Agent，能自主完成整个软件开发流程。本地运行，支持接入微信、Telegram等平台。技术爱好者必试神器。</p>
-    <br>
-    <a href="https://docs.openclaw.ai/zh-CN/start/getting-started" target="_blank" rel="noopener">官方文档 →</a>
-  </div>
-
-  <div class="product-card">
-    <span class="emoji">🎬</span>
-    <h4>baoyu-youtube-transcript</h4>
-    <p>一个免费的AI Agent技能包：输入YouTube链接，自动抓取字幕、识别说话人、生成带章节的文档，不需要任何API Key。学习党福音。</p>
-    <br>
-    <a href="https://github.com/jimliu/baoyu-skills" target="_blank" rel="noopener">GitHub →</a>
-  </div>
-
-  <div class="product-card">
-    <span class="emoji">🤖</span>
-    <h4>Hailuo Light Studio（海螺AI）</h4>
-    <p>MiniMax出品的AI视频打光工具：把你的素材丢进去，拖拽调整灯光的颜色、角度、强度，轻松给视频打出专业级光效，无需输入提示词。</p>
-    <br>
-    <a href="https://hailuoai.video/tool/relight" target="_blank" rel="noopener">在线体验 →</a>
-  </div>
-
-  <div class="product-card">
-    <span class="emoji">🛠️</span>
-    <h4>chops.md</h4>
-    <p>一款颜值极高的Skills管理应用，可以方便地浏览、安装和管理各种AI Agent技能包。界面做得非常精致，Skills控必备。</p>
-    <br>
-    <a href="https://chops.md" target="_blank" rel="noopener">访问网站 →</a>
-  </div>
-
-  <div class="product-card">
-    <span class="emoji">📱</span>
-    <h4>Nothing Phone (4a) Pro</h4>
-    <p>叛逆设计手机品牌Nothing的新一代产品，从透明塑料换成铝合金外壳，走向"成熟美学"。天猫海外旗舰店已上架，国内爱好者可以海淘。</p>
-    <br>
-    <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247626594&idx=2&sn=0743815a1011a0cf329cb4f10d5de164" target="_blank" rel="noopener">评测文章 →</a>
-  </div>
-
-  <div class="product-card">
-    <span class="emoji">😴</span>
-    <h4>Tranoo Sleep（溯脑助眠仪）</h4>
-    <p>00后创业者打造的非侵入式脑机接口睡眠眼罩，通过采集脑电信号做微电流干预改善睡眠。科幻感十足的硬件，主攻北美市场。</p>
-    <br>
-    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650866749&idx=1&sn=9a53298f37ebb15fc35fe35edbf95650" target="_blank" rel="noopener">了解详情 →</a>
-  </div>
-
-</div>
-
-
-<!-- ==================== 信息来源汇总 ==================== -->
-<div class="section-title">📚 信息来源汇总</div>
-
-<div class="reference-list">
-  <ul>
-    <li>1. <a href="https://mp.weixin.qq.com/s?__biz=MzIwMTU5OTQ1Nw==&mid=2653725843&idx=1&sn=b2a88b769d91a20ee83008ad9c45229c" target="_blank" rel="noopener">沃垠AI - 微信正在杀死比赛！可以接入原生龙虾了（附教程）</a></li>
-    <li>2. <a href="https://mp.weixin.qq.com/s?__biz=MzkyNzYzODgwNw==&mid=2247496962&idx=1&sn=e52c913d0400b5e7f5bc088efe3a2d44" target="_blank" rel="noopener">阿真Irene - 微信ClawBot插件上线，三步连上你的龙虾</a></li>
-    <li>3. <a href="https://x.com/xiaohu/status/2035551974947692746" target="_blank" rel="noopener">小互(@imxiaohu) - 微信全面支持OpenClaw小龙虾接入</a></li>
-    <li>4. <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651022970&idx=2&sn=e3eccb77a7b1cecdbacc5d0f7298fe5f" target="_blank" rel="noopener">机器之心 - 马斯克启动TERAFAB项目：万亿瓦算力工厂，瞄准太空</a></li>
-    <li>5. <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650535197&idx=1&sn=5413b5b4dae95b5cdea4978375fbbc3a" target="_blank" rel="noopener">网易科技 - 嫌台积电们跑得太慢，马斯克要把全球芯片产能飙升50倍（演讲全文）</a></li>
-    <li>6. <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247626594&idx=1&sn=3612471b9c262508aa98482a6a215fc7" target="_blank" rel="noopener">硅星人Pro - Cursor套壳、黄仁勋坐上宾，DeepSeek的光环现在都是Kimi的了</a></li>
-    <li>7. <a href="https://mp.weixin.qq.com/s?__biz=Mzg4NDQwNTI0OQ==&mid=2247589078&idx=1&sn=2a4dd23052ddd764457f0bb94fa5066a" target="_blank" rel="noopener">AI科技大本营 - Andrew Karpathy最新对谈：未来软件的第一客户是Agent</a></li>
-    <li>8. <a href="https://mp.weixin.qq.com/s?__biz=Mzg5Mjc3MjIyMA==&mid=2247581144&idx=1&sn=e7398546d19ab1d8f942f53b58187702" target="_blank" rel="noopener">AI产品阿颖 - AI裁员，铁定是趋势了</a></li>
-    <li>9. <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650866772&idx=3&sn=d678adfaf5d4ac3e1dfa0917a7368332" target="_blank" rel="noopener">创业邦 - 中国车企全球销量20多年来首次超日本居榜首</a></li>
-    <li>10. <a href="https://x.com/venturetwins/status/2035773250261930015" target="_blank" rel="noopener">Justine Moore(@venturetwins) - Karpathy用OpenClaw通过发短信控制家里设备</a></li>
-    <li>11. <a href="https://vercel.com/changelog/grok-4-20-on-ai-gateway" target="_blank" rel="noopener">Vercel News - Grok 4.20 is live on AI Gateway</a></li>
-    <li>12. <a href="https://x.com/shao__meng/status/2035729570343903284" target="_blank" rel="noopener">meng shao(@shao__meng) - MiniMax开源精选Skills</a></li>
-    <li>13. <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247626594&idx=2&sn=0743815a1011a0cf329cb4f10d5de164" target="_blank" rel="noopener">硅星人Pro - Nothing Phone (4a) Pro评测</a></li>
-    <li>14. <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650866749&idx=1&sn=9a53298f37ebb15fc35fe35edbf95650" target="_blank" rel="noopener">创业邦 - 潮汕00后创业打造"助眠神器"Tranoo Sleep</a></li>
-    <li>15. <a href="https://x.com/dotey/status/2035575139316719911" target="_blank" rel="noopener">宝玉(@dotey) - 发布baoyu-youtube-transcript技能</a></li>
-    <li>16. <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247659393&idx=1&sn=91d18fbce29fa41f8c2dfb634ee152db" target="_blank" rel="noopener">AI前线 - 用AI清退全部外包？网易回应；百度挖DeepSeek核心人才</a></li>
-    <li>17. <a href="https://x.com/idoubicc/status/2035718678290088373" target="_blank" rel="noopener">idoubi(@idoubicc) - 微信ClawBot接入原理分析</a></li>
-    <li>18. <a href="https://mp.weixin.qq.com/s?__biz=MzIyMDE5OTYyMw==&mid=2651051504&idx=1&sn=cc66fec24f5390a95cf049fd591c6f04" target="_blank" rel="noopener">42章经 - OpenClaw之后，只想未来3-6个月的事情</a></li>
-  </ul>
-</div>
-
-</main>
-
-<!-- ==================== 页脚 ==================== -->
-<footer>
-  <p>科技爱好者日报 · 2026年3月23日</p>
-  <p style="margin-top:0.4rem">内容来自互联网公开资讯，仅供参考 · 每天给你有趣的科技视角 🚀</p>
-</footer>
-
+        <div class="footer">
+            <p>🚀 科技日报 · 科技爱好者版 | 探索科技的无限可能</p>
+            <p style="margin-top: 8px; opacity: 0.8;">本期共精选 8 条头条新闻、2 个深度话题、1 个科普知识、3 款产品推荐</p>
+        </div>
+    </div>
 </body>
 </html>
