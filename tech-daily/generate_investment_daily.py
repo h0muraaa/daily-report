@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import List, Dict, Any
 
 # 输入输出路径
-INPUT_JSON = '/home/zhangzhan/rss_source/output/freshrss_24h_compact_20260306_094011.json'
+INPUT_JSON = '/home/zhangzhan/rss_source/output/freshrss_24h_compact_20260325_080554.json'
 OUTPUT_HTML = '/home/zhangzhan/rss_source/tech-daily-output/tech-daily/investment_analysis.html'
 
 # 投资相关关键词（按优先级分类）

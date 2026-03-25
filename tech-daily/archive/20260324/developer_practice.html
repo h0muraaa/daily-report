@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践版科技日报 - 2026 年 3 月 25 日</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --accent: #06b6d4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        header .date {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .news-list {
+            list-style: none;
+        }
+
+        .news-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .news-item:hover {
+            transform: translateX(4px);
+            border-color: var(--primary);
+        }
+
+        .news-header {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .rank {
+            background: var(--primary);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .tags {
+            background: rgba(6,182,212,0.15);
+            color: var(--accent);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .news-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-item h3 a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .news-item h3 a:hover {
+            color: var(--accent);
+        }
+
+        .summary {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .link-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.3rem 0.75rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .link-btn:hover {
+            background: var(--secondary);
+        }
+
+        .deep-article {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .deep-article h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .deep-article h3 a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-content h4 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .article-content p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .article-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .read-more {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .tool-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .tool-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .tool-card h3 a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .tool-card h3 a:hover {
+            color: var(--accent);
+        }
+
+        .tool-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .tool-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .ref-table th, .ref-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ref-table th {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .ref-table td a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .ref-table tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .title-cell {
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h2>开发者实践版科技日报</h2>
+            <p class="date">2026 年 3 月 25 日</p>
+        </header>
+
+        <div class="section hotlist">
+<h2>今日技术热榜</h2>
+<ul class="news-list">
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#1</span>
+                <span class="tags">开发工具, 框架库</span>
+            </div>
+            <h3><a href="https://x.com/yangyi/status/2036314154022346889" target="_blank" rel="noopener">这个太牛了啊！
+AI在各大领域平权掉软件壁垒！</a></h3>
+            <p class="summary">这个太牛了啊！AI在各大领域平权掉软件壁垒！Guri Singh🚨Architects are going to hate this.Someone just open sourced a full 3D building editor that runs entirely in your browser.No AutoCAD. No Revit. No $5,000/year licenses....</p>
+            <div class="meta">
+                <span class="source">Yangyi(@Yangyixxxx)</span>
+                <a class="link-btn" href="https://x.com/yangyi/status/2036314154022346889" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#2</span>
+                <span class="tags">开发工具, 编程语言</span>
+            </div>
+            <h3><a href="https://x.com/Lovable/status/2036495427105857716" target="_blank" rel="noopener">Introducing the world’s first penetration testing for vibe coding to Lovable.
+
+You can now prove the...</a></h3>
+            <p class="summary">Introducing the world’s first penetration testing for vibe coding to Lovable.You can now prove the security of your Lovable-built apps through a swarm of AI agents that run comprehensive tests, checki...</p>
+            <div class="meta">
+                <span class="source">Lovable(@lovable_dev)</span>
+                <a class="link-btn" href="https://x.com/Lovable/status/2036495427105857716" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#3</span>
+                <span class="tags">开发工具, 编程语言</span>
+            </div>
+            <h3><a href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank" rel="noopener">How Netflix Live Streams to 100 Million Devices in 60 Seconds</a></h3>
+            <p class="summary">New Year, New Metrics: Evaluating AI Search in the Agentic Era (Sponsored)Most teams pick a search provider by running a few test queries and hoping for the best – a recipe for hallucinations and unpr...</p>
+            <div class="meta">
+                <span class="source">ByteByteGo Newsletter</span>
+                <a class="link-btn" href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#4</span>
+                <span class="tags">框架库, 编程语言</span>
+            </div>
+            <h3><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank" rel="noopener">Unlock More Power in Your Development Workflow: Syncfusion for Visual Studio Subscribers </a></h3>
+            <p class="summary">A few months ago, I was talking with a developer who said something that stuck with me: “I love building apps. I just don’t love rebuilding the same UI controls over and over again.” That’s the realit...</p>
+            <div class="meta">
+                <span class="source">Microsoft for Developers</span>
+                <a class="link-btn" href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#5</span>
+                <span class="tags">开发工具, 框架库</span>
+            </div>
+            <h3><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247546881&idx=1&sn=54b4280ee9bc7f7a68ed5ecf9e35751b" target="_blank" rel="noopener">前端播客周刊 #045 - 远程编码技巧、VoidZero 的野心与 Cloudflare 的 vinext</a></h3>
+            <p class="summary">原创 印记中文团队 2026-03-24 14:24 浙江 本期看点：远程编码 Agent 的各种方式以及技巧；OpenClaw 与 AI Agent 的野蛮生长；古法编程时代是否已经结束？VoidZero 想成为 JavaScript 世界的 Laravel；Cloudflare 的 vinext -- 对 Next.js 的拙略模仿？编辑：Otto 辛宝、TimLiSyntax：987 - 远...</p>
+            <div class="meta">
+                <span class="source">印记中文</span>
+                <a class="link-btn" href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247546881&idx=1&sn=54b4280ee9bc7f7a68ed5ecf9e35751b" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#6</span>
+                <span class="tags">开发工具, 框架库</span>
+            </div>
+            <h3><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651278808&idx=1&sn=cb062b1747e889741fc1ad1e42b7c225" target="_blank" rel="noopener">【第3675期】别再纠结格式：5 种设计模式，构建真正可靠的 AI Agent</a></h3>
+            <p class="summary">Google Cloud 2026-03-24 09:01 福建 五种核心技能设计模式，助你告别脆弱的提示词，构建结构清晰的智能体。 前言三十多款 Agent 工具已统一文件布局，格式不再是瓶颈，内容设计才是关键。本文从 Anthropic、Vercel 与 Google 的实践中，提炼出工具封装器、生成器、审查器、反转模式与流水线五种核心技能设计模式，助你告别脆弱的提示词，构建结构清晰的智能体。...</p>
+            <div class="meta">
+                <span class="source">前端早读课</span>
+                <a class="link-btn" href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651278808&idx=1&sn=cb062b1747e889741fc1ad1e42b7c225" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#7</span>
+                <span class="tags">开发工具, 框架库</span>
+            </div>
+            <h3><a href="https://x.com/leerob/status/2036538155487125973" target="_blank" rel="noopener">https://t.co/GU9s9geUA6</a></h3>
+            <p class="summary">x.com/grabbou/status…Mike evaluated Composer 2 in our React Native evals, and I'll say this: the team is cooking 🧑‍🍳 View Quoted Tweet107👀2824📊1 Powered by xgo.ing...</p>
+            <div class="meta">
+                <span class="source">Lee Robinson(@leerob)</span>
+                <a class="link-btn" href="https://x.com/leerob/status/2036538155487125973" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#8</span>
+                <span class="tags">开发工具, 编程语言</span>
+            </div>
+            <h3><a href="https://x.com/dotey/status/2036530915103612976" target="_blank" rel="noopener">今天刚发生的重大安全事件，Karpathy 亲自发帖警告。
+
+litellm 被投毒：一次教科书级的供应链攻击
+
+今天（3月24日），AI 开发者常用的 Python 库 litellm 在 PyPI...</a></h3>
+            <p class="summary">今天刚发生的重大安全事件，Karpathy 亲自发帖警告。litellm 被投毒：一次教科书级的供应链攻击今天（3月24日），AI 开发者常用的 Python 库 litellm 在 PyPI 上被植入恶意代码。版本 1.82.8 在 UTC 时间 10:52 发布到 PyPI，包含一个名为 litellm_init.pth 的恶意文件，会在每次 Python 进程启动时自动执行。不需要你主动调用...</p>
+            <div class="meta">
+                <span class="source">宝玉(@dotey)</span>
+                <a class="link-btn" href="https://x.com/dotey/status/2036530915103612976" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#9</span>
+                <span class="tags">开发工具, 框架库</span>
+            </div>
+            <h3><a href="https://x.com/ericjing_ai/status/2036503311394779442" target="_blank" rel="noopener">We just open-sourced Clawverse — a complete multiplayer game built 100% by AI agents.
+
+17,500 lines ...</a></h3>
+            <p class="summary">We just open-sourced Clawverse — a complete multiplayer game built 100% by AI agents.17,500 lines of code across 100+ autonomous sprints. No human wrote a single line.What's inside:→ Isometric renderi...</p>
+            <div class="meta">
+                <span class="source">Eric Jing(@ericjing_ai)</span>
+                <a class="link-btn" href="https://x.com/ericjing_ai/status/2036503311394779442" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#10</span>
+                <span class="tags">开发工具, 框架库</span>
+            </div>
+            <h3><a href="https://www.youtube.com/watch?v=7s_XJ5fonGI" target="_blank" rel="noopener">Joe Rogan Experience #2472 - Jeff Ross</a></h3>
+            <p class="summary">💾Jeff Ross is a comic, actor, director, and producer. His new special, “Take a Banana for the Ride,” is streaming on Netflix. Perplexity: Download the app or ask Perplexity anything at Get a free welc...</p>
+            <div class="meta">
+                <span class="source">PowerfulJRE</span>
+                <a class="link-btn" href="https://www.youtube.com/watch?v=7s_XJ5fonGI" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#11</span>
+                <span class="tags">开发工具, 编程语言</span>
+            </div>
+            <h3><a href="https://blog.cloudflare.com/dynamic-workers/" target="_blank" rel="noopener">Sandboxing AI agents, 100x faster</a></h3>
+            <p class="summary">Last September we introduced Code Mode, the idea that agents should perform tasks not by making tool calls, but instead by writing code that calls APIs. We've shown that simply converting an MCP serve...</p>
+            <div class="meta">
+                <span class="source">The Cloudflare Blog</span>
+                <a class="link-btn" href="https://blog.cloudflare.com/dynamic-workers/" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#12</span>
+                <span class="tags">开发工具, AI/ML</span>
+            </div>
+            <h3><a href="https://devblogs.microsoft.com/java/%F0%9F%93%A2langchain4j-got-a-new-video-series" target="_blank" rel="noopener">📢LangChain4j got a new video series</a></h3>
+            <p class="summary">We recently released a step-by-step course from simple chat to AI agents using LangChain4j 👉 Now watch the new 6️⃣part Video series with tons of hands-on demos. Let's break down what you'll learn. Int...</p>
+            <div class="meta">
+                <span class="source">Microsoft for Developers</span>
+                <a class="link-btn" href="https://devblogs.microsoft.com/java/%F0%9F%93%A2langchain4j-got-a-new-video-series" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#13</span>
+                <span class="tags">开发工具, AI/ML</span>
+            </div>
+            <h3><a href="https://aws.amazon.com/blogs/machine-learning/deploy-sagemaker-ai-inference-endpoints-with-set-gpu-capacity-using-training-plans/" target="_blank" rel="noopener">Deploy SageMaker AI inference endpoints with set GPU capacity using training plans</a></h3>
+            <p class="summary">Deploying large language models (LLMs) for inference requires reliable GPU capacity, especially during critical evaluation periods, limited-duration production testing, or burst workloads. Capacity co...</p>
+            <div class="meta">
+                <span class="source">Artificial Intelligence</span>
+                <a class="link-btn" href="https://aws.amazon.com/blogs/machine-learning/deploy-sagemaker-ai-inference-endpoints-with-set-gpu-capacity-using-training-plans/" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#14</span>
+                <span class="tags">开发工具, 编程语言</span>
+            </div>
+            <h3><a href="https://www.youtube.com/watch?v=eoEsVQJruow" target="_blank" rel="noopener">Building a Mobile App with OpenAI Codex (Better than Claude Code)</a></h3>
+            <p class="summary">💾I built a Swift iOS app that builds apps.. a better, simpler alternative to Replit, built entirely without writing code. Using OpenAI's Codex desktop app, Xcode, and the Claude Agent SDK (Claude Code...</p>
+            <div class="meta">
+                <span class="source">Riley Brown</span>
+                <a class="link-btn" href="https://www.youtube.com/watch?v=eoEsVQJruow" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+
+        <li class="news-item">
+            <div class="news-header">
+                <span class="rank">#15</span>
+                <span class="tags">开发工具, AI/ML</span>
+            </div>
+            <h3><a href="https://x.com/antonosika/status/2036497257583837419" target="_blank" rel="noopener">Today Lovable became the first vibe coding tool with built-in penetration testing.
+
+Any Lovable-buil...</a></h3>
+            <p class="summary">Today Lovable became the first vibe coding tool with built-in penetration testing.Any Lovable-built app can now get the same quality of security testing companies typically pay $5k-$50k for, in a coup...</p>
+            <div class="meta">
+                <span class="source">Anton Osika – eu／acc(@antonosika)</span>
+                <a class="link-btn" href="https://x.com/antonosika/status/2036497257583837419" target="_blank" rel="noopener">阅读原文</a>
+            </div>
+        </li>
+        
+</ul></div>
+        <div class="section deep-dive">
+<h2>深度技术解读</h2>
+
+        <article class="deep-article">
+            <h3><a href="https://x.com/yangyi/status/2036314154022346889" target="_blank" rel="noopener">这个太牛了啊！
+AI在各大领域平权掉软件壁垒！</a></h3>
+            <div class="article-meta">
+                <span class="category">开发工具 / 框架库</span>
+                <span class="source">Yangyi(@Yangyixxxx)</span>
+            </div>
+            <div class="article-content">
+                <h4>技术背景</h4>
+                <p>AI 技术正在快速改变开发者的工作方式</p>
+
+                <h4>核心内容</h4>
+                <p>这个太牛了啊！AI在各大领域平权掉软件壁垒！Guri Singh🚨Architects are going to hate this.Someone just open sourced a full 3D building editor that runs entirely in your browser.No AutoCAD. No Revit. No $5,000/year licenses.It's called Pascal Editor.Built with React Three Fiber and WebGPU -- meaning it renders directly on </p>
+
+                <h4>实践意义</h4>
+                <p>建议开发者关注该技术的发展和落地情况，评估是否适合引入自己的工作流。</p>
+            </div>
+            <div class="article-footer">
+                <a href="https://x.com/yangyi/status/2036314154022346889" target="_blank" rel="noopener" class="read-more">阅读原文</a>
+            </div>
+        </article>
+        
+
+        <article class="deep-article">
+            <h3><a href="https://x.com/Lovable/status/2036495427105857716" target="_blank" rel="noopener">Introducing the world’s first penetration testing for vibe coding to Lovable.
+
+You can now prove the...</a></h3>
+            <div class="article-meta">
+                <span class="category">开发工具 / 编程语言</span>
+                <span class="source">Lovable(@lovable_dev)</span>
+            </div>
+            <div class="article-content">
+                <h4>技术背景</h4>
+                <p>AI 技术正在快速改变开发者的工作方式</p>
+
+                <h4>核心内容</h4>
+                <p>Introducing the world’s first penetration testing for vibe coding to Lovable.You can now prove the security of your Lovable-built apps through a swarm of AI agents that run comprehensive tests, checking for OWASP Top 10 vulnerabilities, privilege escalation, and data exposure, powered by .This used to take weeks, require dedicated security teams, and cost $5k-$50k.All findings are validated to eli</p>
+
+                <h4>实践意义</h4>
+                <p>建议开发者关注该技术的发展和落地情况，评估是否适合引入自己的工作流。</p>
+            </div>
+            <div class="article-footer">
+                <a href="https://x.com/Lovable/status/2036495427105857716" target="_blank" rel="noopener" class="read-more">阅读原文</a>
+            </div>
+        </article>
+        
+
+        <article class="deep-article">
+            <h3><a href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank" rel="noopener">How Netflix Live Streams to 100 Million Devices in 60 Seconds</a></h3>
+            <div class="article-meta">
+                <span class="category">开发工具 / 编程语言</span>
+                <span class="source">ByteByteGo Newsletter</span>
+            </div>
+            <div class="article-content">
+                <h4>技术背景</h4>
+                <p>AI 技术正在快速改变开发者的工作方式</p>
+
+                <h4>核心内容</h4>
+                <p>New Year, New Metrics: Evaluating AI Search in the Agentic Era (Sponsored)Most teams pick a search provider by running a few test queries and hoping for the best – a recipe for hallucinations and unpredictable failures. This technical guide from You.com gives you access to an exact framework to evaluate AI search and retrieval.What you’ll get:A four-phase framework for evaluating AI searchHow to b</p>
+
+                <h4>实践意义</h4>
+                <p>建议开发者关注该技术的发展和落地情况，评估是否适合引入自己的工作流。</p>
+            </div>
+            <div class="article-footer">
+                <a href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank" rel="noopener" class="read-more">阅读原文</a>
+            </div>
+        </article>
+        
+
+        <article class="deep-article">
+            <h3><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank" rel="noopener">Unlock More Power in Your Development Workflow: Syncfusion for Visual Studio Subscribers </a></h3>
+            <div class="article-meta">
+                <span class="category">框架库 / 编程语言</span>
+                <span class="source">Microsoft for Developers</span>
+            </div>
+            <div class="article-content">
+                <h4>技术背景</h4>
+                <p>AI 技术正在快速改变开发者的工作方式</p>
+
+                <h4>核心内容</h4>
+                <p>A few months ago, I was talking with a developer who said something that stuck with me: “I love building apps. I just don’t love rebuilding the same UI controls over and over again.” That’s the reality for a lot of teams. You want to focus on your business logic, your architecture, your differentiation. Instead, you burn cycles wiring up grids, charts, document exports, dashboards, and signing wor</p>
+
+                <h4>实践意义</h4>
+                <p>建议开发者关注该技术的发展和落地情况，评估是否适合引入自己的工作流。</p>
+            </div>
+            <div class="article-footer">
+                <a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank" rel="noopener" class="read-more">阅读原文</a>
+            </div>
+        </article>
+        
+
+        <article class="deep-article">
+            <h3><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247546881&idx=1&sn=54b4280ee9bc7f7a68ed5ecf9e35751b" target="_blank" rel="noopener">前端播客周刊 #045 - 远程编码技巧、VoidZero 的野心与 Cloudflare 的 vinext</a></h3>
+            <div class="article-meta">
+                <span class="category">开发工具 / 框架库</span>
+                <span class="source">印记中文</span>
+            </div>
+            <div class="article-content">
+                <h4>技术背景</h4>
+                <p>AI 技术正在快速改变开发者的工作方式</p>
+
+                <h4>核心内容</h4>
+                <p>原创 印记中文团队 2026-03-24 14:24 浙江 本期看点：远程编码 Agent 的各种方式以及技巧；OpenClaw 与 AI Agent 的野蛮生长；古法编程时代是否已经结束？VoidZero 想成为 JavaScript 世界的 Laravel；Cloudflare 的 vinext -- 对 Next.js 的拙略模仿？编辑：Otto 辛宝、TimLiSyntax：987 - 远程编码 Agent - 这一期更偏实战导览：什么是 remote coding agent、为什么有人愿意把它丢到云端或旧电脑上跑，以及 Cursor Cloud、Claude Code 一类方案和自</p>
+
+                <h4>实践意义</h4>
+                <p>建议开发者关注该技术的发展和落地情况，评估是否适合引入自己的工作流。</p>
+            </div>
+            <div class="article-footer">
+                <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247546881&idx=1&sn=54b4280ee9bc7f7a68ed5ecf9e35751b" target="_blank" rel="noopener" class="read-more">阅读原文</a>
+            </div>
+        </article>
+        
+
+        <article class="deep-article">
+            <h3><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651278808&idx=1&sn=cb062b1747e889741fc1ad1e42b7c225" target="_blank" rel="noopener">【第3675期】别再纠结格式：5 种设计模式，构建真正可靠的 AI Agent</a></h3>
+            <div class="article-meta">
+                <span class="category">开发工具 / 框架库</span>
+                <span class="source">前端早读课</span>
+            </div>
+            <div class="article-content">
+                <h4>技术背景</h4>
+                <p>AI 技术正在快速改变开发者的工作方式</p>
+
+                <h4>核心内容</h4>
+                <p>Google Cloud 2026-03-24 09:01 福建 五种核心技能设计模式，助你告别脆弱的提示词，构建结构清晰的智能体。 前言三十多款 Agent 工具已统一文件布局，格式不再是瓶颈，内容设计才是关键。本文从 Anthropic、Vercel 与 Google 的实践中，提炼出工具封装器、生成器、审查器、反转模式与流水线五种核心技能设计模式，助你告别脆弱的提示词，构建结构清晰的智能体。今日前端早读课文章由 Cloud Tech 分享，。译文从这开始～～谈到 SKILL.md，开发者往往把注意力全放在格式上 —— 纠结 YAML 写得对不对、目录结构规不规范、有没有严格遵循规范。然而</p>
+
+                <h4>实践意义</h4>
+                <p>建议开发者关注该技术的发展和落地情况，评估是否适合引入自己的工作流。</p>
+            </div>
+            <div class="article-footer">
+                <a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651278808&idx=1&sn=cb062b1747e889741fc1ad1e42b7c225" target="_blank" rel="noopener" class="read-more">阅读原文</a>
+            </div>
+        </article>
+        
+</div>
+        <div class="section tools">
+<h2>工具推荐</h2>
+<div class="tools-grid">
+
+        <div class="tool-card">
+            <h3><a href="https://x.com/yangyi/status/2036314154022346889" target="_blank" rel="noopener">这个太牛了啊！
+AI在各大领域平权掉软件壁垒！</a></h3>
+            <p>这个太牛了啊！AI在各大领域平权掉软件壁垒！Guri Singh🚨Architects are going to hate this.Someone just open sourced a full 3D building editor that runs entirely in your brow...</p>
+            <div class="tool-meta">
+                <span class="source">Yangyi(@Yangyixxxx)</span>
+            </div>
+        </div>
+        
+
+        <div class="tool-card">
+            <h3><a href="https://x.com/Lovable/status/2036495427105857716" target="_blank" rel="noopener">Introducing the world’s first penetration testing for vibe coding to Lovable.
+
+You can now prove the...</a></h3>
+            <p>Introducing the world’s first penetration testing for vibe coding to Lovable.You can now prove the security of your Lovable-built apps through a swarm...</p>
+            <div class="tool-meta">
+                <span class="source">Lovable(@lovable_dev)</span>
+            </div>
+        </div>
+        
+
+        <div class="tool-card">
+            <h3><a href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank" rel="noopener">How Netflix Live Streams to 100 Million Devices in 60 Seconds</a></h3>
+            <p>New Year, New Metrics: Evaluating AI Search in the Agentic Era (Sponsored)Most teams pick a search provider by running a few test queries and hoping f...</p>
+            <div class="tool-meta">
+                <span class="source">ByteByteGo Newsletter</span>
+            </div>
+        </div>
+        
+
+        <div class="tool-card">
+            <h3><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank" rel="noopener">Unlock More Power in Your Development Workflow: Syncfusion for Visual Studio Subscribers </a></h3>
+            <p>A few months ago, I was talking with a developer who said something that stuck with me: “I love building apps. I just don’t love rebuilding the same U...</p>
+            <div class="tool-meta">
+                <span class="source">Microsoft for Developers</span>
+            </div>
+        </div>
+        
+
+        <div class="tool-card">
+            <h3><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247546881&idx=1&sn=54b4280ee9bc7f7a68ed5ecf9e35751b" target="_blank" rel="noopener">前端播客周刊 #045 - 远程编码技巧、VoidZero 的野心与 Cloudflare 的 vinext</a></h3>
+            <p>原创 印记中文团队 2026-03-24 14:24 浙江 本期看点：远程编码 Agent 的各种方式以及技巧；OpenClaw 与 AI Agent 的野蛮生长；古法编程时代是否已经结束？VoidZero 想成为 JavaScript 世界的 Laravel；Cloudflare 的 vinext...</p>
+            <div class="tool-meta">
+                <span class="source">印记中文</span>
+            </div>
+        </div>
+        
+</div></div>
+        <div class="section references">
+<h2>参考链接汇总</h2>
+<table class="ref-table">
+<thead><tr><th>序号</th><th>标题</th><th>来源</th><th>链接</th></tr></thead>
+<tbody>
+
+        <tr>
+            <td>1</td>
+            <td class="title-cell">这个太牛了啊！
+AI在各大领域平权掉软件壁垒！</td>
+            <td>Yangyi(@Yangyixxxx)</td>
+            <td><a href="https://x.com/yangyi/status/2036314154022346889" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>2</td>
+            <td class="title-cell">Introducing the world’s first penetration testing for vibe coding to Lovable.
+
+You can now prove the...</td>
+            <td>Lovable(@lovable_dev)</td>
+            <td><a href="https://x.com/Lovable/status/2036495427105857716" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>3</td>
+            <td class="title-cell">How Netflix Live Streams to 100 Million Devices in 60 Seconds</td>
+            <td>ByteByteGo Newsletter</td>
+            <td><a href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>4</td>
+            <td class="title-cell">Unlock More Power in Your Development Workflow: Syncfusion for Visual Studio Subscribers </td>
+            <td>Microsoft for Developers</td>
+            <td><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>5</td>
+            <td class="title-cell">前端播客周刊 #045 - 远程编码技巧、VoidZero 的野心与 Cloudflare 的 vinext</td>
+            <td>印记中文</td>
+            <td><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247546881&idx=1&sn=54b4280ee9bc7f7a68ed5ecf9e35751b" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>6</td>
+            <td class="title-cell">【第3675期】别再纠结格式：5 种设计模式，构建真正可靠的 AI Agent</td>
+            <td>前端早读课</td>
+            <td><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651278808&idx=1&sn=cb062b1747e889741fc1ad1e42b7c225" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>7</td>
+            <td class="title-cell">https://t.co/GU9s9geUA6</td>
+            <td>Lee Robinson(@leerob)</td>
+            <td><a href="https://x.com/leerob/status/2036538155487125973" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>8</td>
+            <td class="title-cell">今天刚发生的重大安全事件，Karpathy 亲自发帖警告。
+
+litellm 被投毒：一次教科书级的供应链攻击
+
+今天（3月24日），AI 开发者常用的 Python 库 litellm 在 PyPI...</td>
+            <td>宝玉(@dotey)</td>
+            <td><a href="https://x.com/dotey/status/2036530915103612976" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>9</td>
+            <td class="title-cell">We just open-sourced Clawverse — a complete multiplayer game built 100% by AI agents.
+
+17,500 lines ...</td>
+            <td>Eric Jing(@ericjing_ai)</td>
+            <td><a href="https://x.com/ericjing_ai/status/2036503311394779442" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>10</td>
+            <td class="title-cell">Joe Rogan Experience #2472 - Jeff Ross</td>
+            <td>PowerfulJRE</td>
+            <td><a href="https://www.youtube.com/watch?v=7s_XJ5fonGI" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>11</td>
+            <td class="title-cell">Sandboxing AI agents, 100x faster</td>
+            <td>The Cloudflare Blog</td>
+            <td><a href="https://blog.cloudflare.com/dynamic-workers/" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>12</td>
+            <td class="title-cell">📢LangChain4j got a new video series</td>
+            <td>Microsoft for Developers</td>
+            <td><a href="https://devblogs.microsoft.com/java/%F0%9F%93%A2langchain4j-got-a-new-video-series" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>13</td>
+            <td class="title-cell">Deploy SageMaker AI inference endpoints with set GPU capacity using training plans</td>
+            <td>Artificial Intelligence</td>
+            <td><a href="https://aws.amazon.com/blogs/machine-learning/deploy-sagemaker-ai-inference-endpoints-with-set-gpu-capacity-using-training-plans/" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>14</td>
+            <td class="title-cell">Building a Mobile App with OpenAI Codex (Better than Claude Code)</td>
+            <td>Riley Brown</td>
+            <td><a href="https://www.youtube.com/watch?v=eoEsVQJruow" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>15</td>
+            <td class="title-cell">Today Lovable became the first vibe coding tool with built-in penetration testing.
+
+Any Lovable-buil...</td>
+            <td>Anton Osika – eu／acc(@antonosika)</td>
+            <td><a href="https://x.com/antonosika/status/2036497257583837419" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>16</td>
+            <td class="title-cell">Jump to play: Building with Gemini ＆ MediaPipe</td>
+            <td>Google Developers Blog</td>
+            <td><a href="https://developers.googleblog.com/jump-to-play-building-with-gemini-mediapipe/" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>17</td>
+            <td class="title-cell">Guardrails 2.0 supports trusted enterprise deployments alongside robust data privacy features, optio...</td>
+            <td>ElevenLabs(@elevenlabsio)</td>
+            <td><a href="https://x.com/ElevenLabs/status/2036472153780928525" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>18</td>
+            <td class="title-cell">Unlock More Power in Your Development Workflow: Syncfusion for Visual Studio Subscribers </td>
+            <td>Visual Studio Blog</td>
+            <td><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio/" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>19</td>
+            <td class="title-cell">OpenClaw 架构与运行流程解析</td>
+            <td>奇舞精选</td>
+            <td><a href="https://mp.weixin.qq.com/s?__biz=Mzg4MTYwMzY1Mw==&mid=2247518221&idx=1&sn=e1c7484e98153bbe45f1f75e79617654" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>20</td>
+            <td class="title-cell">you can try this out in cursor today!
+https://t.co/PPjjJO0PEP
+
+this will look at your conversation h...</td>
+            <td>eric zakariasson(@ericzakariasson)</td>
+            <td><a href="https://x.com/ericzakariasson/status/2036375438285766832" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>21</td>
+            <td class="title-cell">FeatDistill: A Feature Distillation Enhanced Multi-Expert Ensemble Framework for Robust AI-generated Image Detection</td>
+            <td>cs.MM updates on arXiv.org</td>
+            <td><a href="https://arxiv.org/abs/2603.21939" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>22</td>
+            <td class="title-cell">SNAP: Speaker Nulling for Artifact Projection in Speech Deepfake Detection</td>
+            <td>cs.SD updates on arXiv.org</td>
+            <td><a href="https://arxiv.org/abs/2603.20686" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>23</td>
+            <td class="title-cell">TaigiSpeech: A Low-Resource Real-World Speech Intent Dataset and Preliminary Results with Scalable Data Mining In-the-Wild</td>
+            <td>eess.AS updates on arXiv.org</td>
+            <td><a href="https://arxiv.org/abs/2603.21478" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>24</td>
+            <td class="title-cell">Elastic build machines now available in beta</td>
+            <td>Vercel News</td>
+            <td><a href="https://vercel.com/changelog/elastic-build-machines-are-available-in-beta" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+
+        <tr>
+            <td>25</td>
+            <td class="title-cell">Frontend-slides now supports deploying your deck as a URL ＆amp; exporting as PDF! 
+
+So you can share...</td>
+            <td>Zara Zhang(@zarazhangrui)</td>
+            <td><a href="https://x.com/zarazhangrui/status/2036552689673445847" target="_blank" rel="noopener">链接</a></td>
+        </tr>
+        
+</tbody></table></div>
+
+        <footer>
+            <p>Generated by Developer Practice Tech Daily Generator</p>
+            <p>数据来源：RSS 聚合 | 筛选原则：技术价值优先，排除纯商业新闻</p>
+        </footer>
+    </div>
+</body>
+</html>
