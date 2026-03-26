@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践版科技日报 - 2026-03-25</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        header p {
+            opacity: 0.8;
+            font-size: 1.1em;
+            color: #aaa;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+        .section-title {
+            font-size: 1.8em;
+            color: #00d9ff;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 217, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title .count {
+            background: rgba(0, 217, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.6em;
+        }
+
+        /* 热榜样式 */
+        .hot-list {
+            display: grid;
+            gap: 16px;
+        }
+        .hot-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .hot-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+        .hot-item .rank {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #00d9ff, #00ff88);
+            color: #1a1a2e;
+            text-align: center;
+            line-height: 28px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 12px;
+        }
+        .hot-item .title {
+            color: #fff;
+            font-size: 1.1em;
+            display: inline;
+        }
+        .hot-item .title a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .hot-item .title a:hover {
+            color: #00d9ff;
+        }
+        .hot-item .summary {
+            color: #aaa;
+            font-size: 0.9em;
+            margin-top: 10px;
+            line-height: 1.6;
+            padding-left: 40px;
+        }
+        .hot-item .meta {
+            margin-top: 10px;
+            padding-left: 40px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* 深度解读样式 */
+        .deep-dive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+            gap: 24px;
+        }
+        .deep-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .deep-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(0, 217, 255, 0.3);
+        }
+        .deep-card h3 {
+            color: #fff;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .deep-card h3 a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .deep-card h3 a:hover {
+            color: #00d9ff;
+        }
+        .deep-card .summary {
+            color: #ccc;
+            font-size: 0.95em;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .deep-card .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .deep-card .tag {
+            background: rgba(0, 217, 255, 0.15);
+            color: #00d9ff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+
+        /* 工具推荐样式 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(0, 255, 136, 0.05));
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+        .tool-card h3 {
+            color: #00ff88;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .tool-card h3 a {
+            color: #00ff88;
+            text-decoration: none;
+        }
+        .tool-card h3 a:hover {
+            color: #00d9ff;
+        }
+        .tool-card .description {
+            color: #ddd;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .tool-card .source {
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        /* 参考链接样式 */
+        .references-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+        }
+        .ref-item {
+            background: rgba(255,255,255,0.05);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .ref-item a {
+            color: #00d9ff;
+            text-decoration: none;
+            font-size: 0.95em;
+            display: block;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+        .ref-item a:hover {
+            text-decoration: underline;
+        }
+        .ref-item .source {
+            color: #888;
+            font-size: 0.8em;
+        }
+
+        /* 来源标签 */
+        .source-tag {
+            display: inline-block;
+            background: rgba(0, 217, 255, 0.1);
+            color: #00d9ff;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            text-decoration: none;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+        .source-tag:hover {
+            background: rgba(0, 217, 255, 0.2);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .deep-dive-grid, .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>开发者实践版科技日报</h1>
+            <p>聚焦技术细节 · 关注工具更新 · 分享最佳实践</p>
+            <p style="margin-top: 10px; color: #666;">2026-03-25 · 过去 24 小时技术动态</p>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">
+                今日技术热榜 <span class="count">20 条</span>
+            </h2>
+            <div class="hot-list">
+
+                <div class="hot-item">
+                    <span class="rank">1</span>
+                    <span class="title"><a href="https://blog.cloudflare.com/dynamic-workers/" target="_blank">Sandboxing AI agents, 100x faster</a></span>
+                    <div class="summary">Last September we introduced Code Mode, the idea that agents should perform tasks not by making tool calls, but instead by writing code that calls APIs We've shown that simply converting an MCP server...</div>
+                    <div class="meta"><a href="https://blog.cloudflare.com/dynamic-workers/" target="_blank" class="source-tag">The Cloudflare Blog</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">2</span>
+                    <span class="title"><a href="https://www.freecodecamp.org/news/build-a-complete-flutter-ci-cd-pipeline-with-codemagic/" target="_blank">How to Build a Complete Flutter CI/CD Pipeline with Codemagic: From PR Quality Gates to Automated...</a></span>
+                    <div class="summary">If you've spent any time shipping Flutter apps manually, you already know the drill Someone on the team finishes a feature, builds the APK locally, signs it (hopefully with the right keystore), upload...</div>
+                    <div class="meta"><a href="https://www.freecodecamp.org/news/build-a-complete-flutter-ci-cd-pipeline-with-codemagic/" target="_blank" class="source-tag">freeCodeCamp Programming Tut...</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">3</span>
+                    <span class="title"><a href="https://blog.langchain.com/how-moda-builds-production-grade-ai-design-agents-with-deep-agents/" target="_blank">How Moda Builds Production-Grade AI Design Agents with Deep Agents</a></span>
+                    <div class="summary">Think Canva or Figma, but with a Cursor-style AI sidebar that builds and iterates on designs directly on a fully editable 2D vector canvas At the core of Moda is a multi-agent system built with Deep A...</div>
+                    <div class="meta"><a href="https://blog.langchain.com/how-moda-builds-production-grade-ai-design-agents-with-deep-agents/" target="_blank" class="source-tag">LangChain Blog</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">4</span>
+                    <span class="title"><a href="https://blog.langchain.com/how-moda-builds-production-grade-ai-design-agents-with-deep-agents/" target="_blank">How Moda Builds Production-Grade AI Design Agents with Deep Agents</a></span>
+                    <div class="summary">Think Canva or Figma, but with a Cursor-style AI sidebar that builds and iterates on designs directly on a fully editable 2D vector canvas At the core of Moda is a multi-agent system built with Deep A...</div>
+                    <div class="meta"><a href="https://blog.langchain.com/how-moda-builds-production-grade-ai-design-agents-with-deep-agents/" target="_blank" class="source-tag">LangChain Blog</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">5</span>
+                    <span class="title"><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank">Unlock More Power in Your Development Workflow: Syncfusion for Visual Studio Subscribers </a></span>
+                    <div class="summary">A few months ago, I was talking with a developer who said something that stuck with me: “I love building apps I just don’t love rebuilding the same UI controls over and over again ” That’s the reality...</div>
+                    <div class="meta"><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank" class="source-tag">Microsoft for Developers</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">6</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.21939" target="_blank">FeatDistill: A Feature Distillation Enhanced Multi-Expert Ensemble Framework for Robust AI-genera...</a></span>
+                    <div class="summary">arXiv:2603.21939v1 Announce Type: cross Abstract: The rapid iteration and widespread dissemination of deepfake technology have posed severe challenges to information security, making robust and genera...</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.21939" target="_blank" class="source-tag">cs.MM updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">7</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.22053" target="_blank">AnimalCLAP: Taxonomy-Aware Language-Audio Pretraining for Species Recognition and Trait Inference</a></span>
+                    <div class="summary">Recent advances in deep learning have enabled automatic species classification from their vocalizations</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.22053" target="_blank" class="source-tag">cs.SD updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">8</span>
+                    <span class="title"><a href="https://x.com/LangChain/status/2036494522851713448" target="_blank">Congrats @anvisha and the @trymoda team on the launch.
+
+Moda built a design platform that turns n...</a></span>
+                    <div class="summary">Congrats @anvisha and the @trymoda team on the launch Moda built a design platform that turns non-designers into design pros Under the hood: Deep Agents powering the design agents, with LangSmith prov...</div>
+                    <div class="meta"><a href="https://x.com/LangChain/status/2036494522851713448" target="_blank" class="source-tag">LangChain(@LangChainAI)</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">9</span>
+                    <span class="title"><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651279611&idx=3&sn=446af69f0456dcfb7c9751d8f396d442" target="_blank">基于 AI 的机器人攻陷微软、DataDog 和 CNCF 项目中的 GitHub Actions 工作流</a></span>
+                    <div class="summary">InfoQ 2026-03-24 13:29 浙江 基于AI的机器人hackerbot-claw在七天内使用五种攻击技术，尝试攻击了微软、DataDog和CNCF项目中的GitHub Actions工作流 该机器人在七个目标中的五个实现了远程代码执行，从awesome-go窃取了GitHub令牌，并完全攻陷了Aqua Security的Trivy 作者 | Steef-Jan Wiggers 译者...</div>
+                    <div class="meta"><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651279611&idx=3&sn=446af69f0456dcfb7c9751d8f396d442" target="_blank" class="source-tag">InfoQ</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">10</span>
+                    <span class="title"><a href="https://simonwillison.net/2026/Mar/24/streaming-experts/#atom-everything" target="_blank">Streaming experts</a></span>
+                    <div class="summary">Five days ago Dan was running Qwen3 5-397B-A17B in 48GB of RAM</div>
+                    <div class="meta"><a href="https://simonwillison.net/2026/Mar/24/streaming-experts/#atom-everything" target="_blank" class="source-tag">Simon Willison's Weblog</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">11</span>
+                    <span class="title"><a href="https://x.com/simonw/status/2036296019835756929" target="_blank">Here's Qwen3.5-397B-A17B- a 397B model - using the streaming MoE weights trick to run on an iPhone!</a></span>
+                    <div class="summary">5-397B-A17B- a 397B model - using the streaming MoE weights trick to run on an iPhone Anemll@anemllRunning 400B model on iPhone</div>
+                    <div class="meta"><a href="https://x.com/simonw/status/2036296019835756929" target="_blank" class="source-tag">Simon Willison(@simonw)</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">12</span>
+                    <span class="title"><a href="https://x.com/simonw/status/2036294026438254783" target="_blank">Turns out you can run enormous Mixture-of-Experts on Mac hardware without fitting the whole model...</a></span>
+                    <div class="summary">5 is 1T, but only 32B active so fits 96GBseikixtc@seikixtcI got a 1T-parameter model running locally on my MacBook Pro</div>
+                    <div class="meta"><a href="https://x.com/simonw/status/2036294026438254783" target="_blank" class="source-tag">Simon Willison(@simonw)</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">13</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.21948" target="_blank">Look, Listen and Segment: Towards Weakly Supervised Audio-visual Semantic Segmentation</a></span>
+                    <div class="summary">21948v1 Announce Type: new Abstract: Audio-Visual Semantic Segmentation (AVSS) aligns audio and video at the pixel level but requires costly per-frame annotations We introduce Weakly Supervised Audio-...</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.21948" target="_blank" class="source-tag">cs.MM updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">14</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.20999" target="_blank">OrbitStream: Training-Free Adaptive 360-degree Video Streaming via Semantic Potential Fields</a></span>
+                    <div class="summary">arXiv:2603.20999v1 Announce Type: cross Abstract: Adaptive 360{\deg} video streaming for teleoperation faces dual challenges: viewport prediction under uncertain gaze patterns and bitrate adaptation o...</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.20999" target="_blank" class="source-tag">cs.MM updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">15</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.21054" target="_blank">Harmful Visual Content Manipulation Matters in Misinformation Detection Under Multimedia Scenarios</a></span>
+                    <div class="summary">21054v1 Announce Type: cross Abstract: Nowadays, the widespread dissemination of misinformation across numerous social media platforms has led to severe negative effects on society</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.21054" target="_blank" class="source-tag">cs.MM updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">16</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.21493" target="_blank">StreamingEval: A Unified Evaluation Protocol towards Realistic Streaming Video Understanding</a></span>
+                    <div class="summary">21493v1 Announce Type: cross Abstract: Real-time, continuous understanding of visual signals is essential for real-world interactive AI applications, and poses a fundamental system-level challenge</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.21493" target="_blank" class="source-tag">cs.MM updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">17</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.21697" target="_blank">Structured Visual Narratives Undermine Safety Alignment in Multimodal Large Language Models</a></span>
+                    <div class="summary">We study comic-template jailbreaks that embed harmful goals inside simple three-panel visual narratives and prompt the model to role-play and "complete the comic</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.21697" target="_blank" class="source-tag">cs.MM updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">18</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.20686" target="_blank">SNAP: Speaker Nulling for Artifact Projection in Speech Deepfake Detection</a></span>
+                    <div class="summary">20686v1 Announce Type: new Abstract: Recent advancements in text-to-speech technologies enable generating high-fidelity synthetic speech nearly indistinguishable from real human voices While recent st...</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.20686" target="_blank" class="source-tag">cs.SD updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">19</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.21316" target="_blank">HELIX: Scaling Raw Audio Understanding with Hybrid Mamba-Attention Beyond the Quadratic Limit</a></span>
+                    <div class="summary">21316v1 Announce Type: new Abstract: Audio representation learning typically evaluates design choices such as input frontend, sequence backbone, and sequence length in isolation We show that these axe...</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.21316" target="_blank" class="source-tag">cs.SD updates on arXiv.org</a></div>
+                </div>
+
+                <div class="hot-item">
+                    <span class="rank">20</span>
+                    <span class="title"><a href="https://arxiv.org/abs/2603.20638" target="_blank">OmniCodec: Low Frame Rate Universal Audio Codec with Semantic-Acoustic Disentanglement</a></span>
+                    <div class="summary">20638v1 Announce Type: new Abstract: Large Language Models (LLMs) have advanced audio generation through discrete representation learning</div>
+                    <div class="meta"><a href="https://arxiv.org/abs/2603.20638" target="_blank" class="source-tag">eess.AS updates on arXiv.org</a></div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">
+                深度技术解读 <span class="count">8 条</span>
+            </h2>
+            <div class="deep-dive-grid">
+
+                <div class="deep-card">
+                    <h3><a href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank">How Netflix Live Streams to 100 Million Devices in 60 Seconds</a></h3>
+                    <div class="tags"><span class="tag">AI/ML</span><span class="tag">后端</span><span class="tag">云计算</span></div>
+                    <div class="summary">This technical guide from You com gives you access to an exact framework to evaluate AI search and retrieval</div>
+                    <div><a href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank" class="source-tag">ByteByteGo Newsletter</a></div>
+                </div>
+
+                <div class="deep-card">
+                    <h3><a href="https://x.com/milvusio/status/2036463548642238468" target="_blank">Most RAG tutorials start at embeddings and assume your data is already clean, chunked, and ready to ...</a></h3>
+                    <div class="tags"><span class="tag">AI/ML</span><span class="tag">后端</span><span class="tag">云计算</span></div>
+                    <div class="summary">Most RAG tutorials start at embeddings and assume your data is already clean, chunked, and ready to go Before any retrieval happens, someone has to move the data — from Kafka topics, S3 buckets, PDFs, databases, websites — into the vector store</div>
+                    <div><a href="https://x.com/milvusio/status/2036463548642238468" target="_blank" class="source-tag">Milvus(@milvusio)</a></div>
+                </div>
+
+                <div class="deep-card">
+                    <h3><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank">Unlock More Power in Your Development Workflow: Syncfusion for Visual Studio Subscribers </a></h3>
+                    <div class="tags"><span class="tag">AI/ML</span><span class="tag">前端</span><span class="tag">后端</span></div>
+                    <div class="summary">A few months ago, I was talking with a developer who said something that stuck with me: “I love building apps I just don’t love rebuilding the same UI controls over and over again ” That’s the reality for a lot of teams</div>
+                    <div><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank" class="source-tag">Microsoft for Developers</a></div>
+                </div>
+
+                <div class="deep-card">
+                    <h3><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio/" target="_blank">Unlock More Power in Your Development Workflow: Syncfusion for Visual Studio Subscribers </a></h3>
+                    <div class="tags"><span class="tag">AI/ML</span><span class="tag">前端</span><span class="tag">后端</span></div>
+                    <div class="summary">A few months ago, I was talking with a developer who said something that stuck with me: “I love building apps I just don’t love rebuilding the same UI controls over and over again ” That’s the reality for a lot of teams</div>
+                    <div><a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio/" target="_blank" class="source-tag">Visual Studio Blog</a></div>
+                </div>
+
+                <div class="deep-card">
+                    <h3><a href="https://x.com/yangyi/status/2036314154022346889" target="_blank">这个太牛了啊！
+AI在各大领域平权掉软件壁垒！</a></h3>
+                    <div class="tags"><span class="tag">AI/ML</span><span class="tag">前端</span><span class="tag">后端</span></div>
+                    <div class="summary">Guri Singh@heygurisingh🚨Architects are going to hate this</div>
+                    <div><a href="https://x.com/yangyi/status/2036314154022346889" target="_blank" class="source-tag">Yangyi(@Yangyixxxx)</a></div>
+                </div>
+
+                <div class="deep-card">
+                    <h3><a href="https://x.com/DeepLearningAI/status/2036516845801419249" target="_blank">Alibaba released the Qwen3.5 family of open-weights vision-language models, ranging from lightweight...</a></h3>
+                    <div class="tags"><span class="tag">AI/ML</span><span class="tag">后端</span><span class="tag">数据库</span></div>
+                    <div class="summary">Alibaba released the Qwen3 5 family of open-weights vision-language models, ranging from lightweight to massive systems Smaller models like Qwen3</div>
+                    <div><a href="https://x.com/DeepLearningAI/status/2036516845801419249" target="_blank" class="source-tag">DeepLearning.AI(@DeepLearnin...</a></div>
+                </div>
+
+                <div class="deep-card">
+                    <h3><a href="https://x.com/cognition/status/2036501536444920190" target="_blank">We've collaborated with @mercor_ai on APEX-SWE, a new benchmark that evaluates AI models on realisti...</a></h3>
+                    <div class="tags"><span class="tag">AI/ML</span><span class="tag">后端</span><span class="tag">数据库</span></div>
+                    <div class="summary">We've collaborated with @mercor_ai on APEX-SWE, a new benchmark that evaluates AI models on realistic software engineering tasks adarsh@adarsh_exeTraditional coding benchmarks do not reflect how software is actually built and maintained That's why we built a new benchmark, APEX-SWE, in partnership with @cognition</div>
+                    <div><a href="https://x.com/cognition/status/2036501536444920190" target="_blank" class="source-tag">Cognition(@cognition_labs)</a></div>
+                </div>
+
+                <div class="deep-card">
+                    <h3><a href="https://x.com/karpathy/status/2036487306585268612" target="_blank">Software horror: litellm PyPI supply chain attack. 
+
+Simple `pip install litellm` was enough to exfi...</a></h3>
+                    <div class="tags"><span class="tag">AI/ML</span><span class="tag">后端</span><span class="tag">DevOps</span></div>
+                    <div class="summary">Software horror: litellm PyPI supply chain attack LiteLLM itself has 97 million downloads per month which is already terrible, but much worse, the contagion spreads to any project that depends on litellm</div>
+                    <div><a href="https://x.com/karpathy/status/2036487306585268612" target="_blank" class="source-tag">Andrej Karpathy(@karpathy)</a></div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">
+                工具推荐 <span class="count">4 个</span>
+            </h2>
+            <div class="tools-grid">
+
+                <div class="tool-card">
+                    <h3><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.113-" target="_blank">Visual Studio Code 1.113</a></h3>
+                    <div class="description">Learn what's new in Visual Studio Code 1.113 (Insiders) Read the full article</div>
+                    <div class="source"><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.113-" target="_blank" class="source-tag">Microsoft for Developers</a></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><a href="https://vercel.com/changelog/elastic-build-machines-are-available-in-beta" target="_blank">Elastic build machines now available in beta</a></h3>
+                    <div class="description">Elastic build machines are now available in beta for all paid plans, giving teams control over build performance without project-level micromanagement You can configure elastic builds at the team or project level Rather than a one-size-fits-all appro...</div>
+                    <div class="source"><a href="https://vercel.com/changelog/elastic-build-machines-are-available-in-beta" target="_blank" class="source-tag">Vercel News</a></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><a href="https://x.com/vista8/status/2036588220738400664" target="_blank">Claude Code 新功能：自动模式。
+
+不用挨个批准文件写入和 bash 命令。
+
+也区别于完全跳过权限检测：
+
+自动模式让 Claude 自己做出权限决策。
+
+现在已经在 Team 计划上作为...</a></h3>
+                    <div class="description">也区别于完全跳过权限检测：自动模式让 Claude 自己做出权限决策</div>
+                    <div class="source"><a href="https://x.com/vista8/status/2036588220738400664" target="_blank" class="source-tag">向阳乔木(@vista8)</a></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><a href="https://x.com/FireworksAI_HQ/status/2036579985998356970" target="_blank">We’re seeing lots of interest in how Cursor delivered Composer 2. One less obvious insight: you don'...</a></h3>
+                    <div class="description">We’re seeing lots of interest in how Cursor delivered Composer 2 One less obvious insight: you don't need to spend billions on a giant cluster to do reinforcement learning With disaggregated sampling, we ran @Cursor_ai Composer 2 training across 3-4 ...</div>
+                    <div class="source"><a href="https://x.com/FireworksAI_HQ/status/2036579985998356970" target="_blank" class="source-tag">Fireworks AI(@FireworksAI_HQ)</a></div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section references-section">
+            <h2 class="section-title">参考链接汇总</h2>
+            <div class="ref-grid">
+
+                <div class="ref-item">
+                    <a href="https://blog.cloudflare.com/dynamic-workers/" target="_blank">Sandboxing AI agents, 100x faster</a>
+                    <span class="source">The Cloudflare Blog</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://www.freecodecamp.org/news/build-a-complete-flutter-ci-cd-pipeline-with-codemagic/" target="_blank">How to Build a Complete Flutter CI/CD Pipeline with Codemagi</a>
+                    <span class="source">freeCodeCamp Programming Tutorials: Python， JavaScript， Git ＆ More</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://blog.langchain.com/how-moda-builds-production-grade-ai-design-agents-with-deep-agents/" target="_blank">How Moda Builds Production-Grade AI Design Agents with Deep </a>
+                    <span class="source">LangChain Blog</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio" target="_blank">Unlock More Power in Your Development Workflow: Syncfusion f</a>
+                    <span class="source">Microsoft for Developers</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.21939" target="_blank">FeatDistill: A Feature Distillation Enhanced Multi-Expert En</a>
+                    <span class="source">cs.MM updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.22053" target="_blank">AnimalCLAP: Taxonomy-Aware Language-Audio Pretraining for Sp</a>
+                    <span class="source">cs.SD updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/LangChain/status/2036494522851713448" target="_blank">Congrats @anvisha and the @trymoda team on the launch.
+
+Moda</a>
+                    <span class="source">LangChain(@LangChainAI)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651279611&idx=3&sn=446af69f0456dcfb7c9751d8f396d442" target="_blank">基于 AI 的机器人攻陷微软、DataDog 和 CNCF 项目中的 GitHub Actions 工作流</a>
+                    <span class="source">InfoQ</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://simonwillison.net/2026/Mar/24/streaming-experts/#atom-everything" target="_blank">Streaming experts</a>
+                    <span class="source">Simon Willison's Weblog</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/simonw/status/2036296019835756929" target="_blank">Here's Qwen3.5-397B-A17B- a 397B model - using the streaming</a>
+                    <span class="source">Simon Willison(@simonw)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/simonw/status/2036294026438254783" target="_blank">Turns out you can run enormous Mixture-of-Experts on Mac har</a>
+                    <span class="source">Simon Willison(@simonw)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.21948" target="_blank">Look, Listen and Segment: Towards Weakly Supervised Audio-vi</a>
+                    <span class="source">cs.MM updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.20999" target="_blank">OrbitStream: Training-Free Adaptive 360-degree Video Streami</a>
+                    <span class="source">cs.MM updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.21054" target="_blank">Harmful Visual Content Manipulation Matters in Misinformatio</a>
+                    <span class="source">cs.MM updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.21493" target="_blank">StreamingEval: A Unified Evaluation Protocol towards Realist</a>
+                    <span class="source">cs.MM updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.21697" target="_blank">Structured Visual Narratives Undermine Safety Alignment in M</a>
+                    <span class="source">cs.MM updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.20686" target="_blank">SNAP: Speaker Nulling for Artifact Projection in Speech Deep</a>
+                    <span class="source">cs.SD updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.21316" target="_blank">HELIX: Scaling Raw Audio Understanding with Hybrid Mamba-Att</a>
+                    <span class="source">cs.SD updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://arxiv.org/abs/2603.20638" target="_blank">OmniCodec: Low Frame Rate Universal Audio Codec with Semanti</a>
+                    <span class="source">eess.AS updates on arXiv.org</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://blog.bytebytego.com/p/how-netflix-live-streams-to-100-million" target="_blank">How Netflix Live Streams to 100 Million Devices in 60 Second</a>
+                    <span class="source">ByteByteGo Newsletter</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/milvusio/status/2036463548642238468" target="_blank">Most RAG tutorials start at embeddings and assume your data </a>
+                    <span class="source">Milvus(@milvusio)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://devblogs.microsoft.com/visualstudio/syncfusion-for-visual-studio/" target="_blank">Unlock More Power in Your Development Workflow: Syncfusion f</a>
+                    <span class="source">Visual Studio Blog</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/yangyi/status/2036314154022346889" target="_blank">这个太牛了啊！
+AI在各大领域平权掉软件壁垒！</a>
+                    <span class="source">Yangyi(@Yangyixxxx)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/DeepLearningAI/status/2036516845801419249" target="_blank">Alibaba released the Qwen3.5 family of open-weights vision-l</a>
+                    <span class="source">DeepLearning.AI(@DeepLearningAI)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/cognition/status/2036501536444920190" target="_blank">We've collaborated with @mercor_ai on APEX-SWE, a new benchm</a>
+                    <span class="source">Cognition(@cognition_labs)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/karpathy/status/2036487306585268612" target="_blank">Software horror: litellm PyPI supply chain attack. 
+
+Simple </a>
+                    <span class="source">Andrej Karpathy(@karpathy)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.113-" target="_blank">Visual Studio Code 1.113</a>
+                    <span class="source">Microsoft for Developers</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://vercel.com/changelog/elastic-build-machines-are-available-in-beta" target="_blank">Elastic build machines now available in beta</a>
+                    <span class="source">Vercel News</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/vista8/status/2036588220738400664" target="_blank">Claude Code 新功能：自动模式。
+
+不用挨个批准文件写入和 bash 命令。
+
+也区别于完全跳过权限检测：
+
+</a>
+                    <span class="source">向阳乔木(@vista8)</span>
+                </div>
+
+                <div class="ref-item">
+                    <a href="https://x.com/FireworksAI_HQ/status/2036579985998356970" target="_blank">We’re seeing lots of interest in how Cursor delivered Compos</a>
+                    <span class="source">Fireworks AI(@FireworksAI_HQ)</span>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</body>
+</html>
