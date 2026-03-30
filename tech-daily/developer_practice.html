@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技日报 - 开发者实践版 | 2026-03-29</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #7d8590;
+            --text-muted: #484f58;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --border-color: #30363d;
+            --code-bg: #1e2530;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Monaco, monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            background: var(--accent-purple);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .date {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-family: var(--font-mono);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* News Items */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .news-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .news-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+
+        .news-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .news-number {
+            background: var(--bg-tertiary);
+            color: var(--accent-blue);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            flex-shrink: 0;
+        }
+
+        .news-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .news-content {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-left: 40px;
+            margin-bottom: 12px;
+        }
+
+        .news-content p {
+            margin-bottom: 10px;
+        }
+
+        .news-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: 40px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .news-meta a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .news-meta a:hover {
+            text-decoration: underline;
+        }
+
+        .tag {
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        /* Deep Dive Section */
+        .deep-dive-item {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .deep-dive-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .deep-dive-number {
+            background: var(--accent-orange);
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+
+        .deep-dive-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .deep-dive-content {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .deep-dive-content p {
+            margin-bottom: 12px;
+        }
+
+        .deep-dive-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .deep-dive-section h4 {
+            color: var(--accent-green);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .deep-dive-section p {
+            margin-bottom: 0;
+        }
+
+        /* Tools Section */
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-green);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tool-icon {
+            font-size: 20px;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tool-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .tool-link {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--accent-blue);
+        }
+
+        .tool-link a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Links Section */
+        .links-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .links-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .link-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .link-bullet {
+            color: var(--accent-blue);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .link-content {
+            flex: 1;
+        }
+
+        .link-title {
+            font-size: 13px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .link-source {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .link-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .footer p {
+            margin-bottom: 8px;
+        }
+
+        /* Code blocks */
+        code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--accent-orange);
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 12px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .news-content,
+            .news-meta {
+                margin-left: 0;
+            }
+
+            .news-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .links-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-meta">
+                <span class="badge">开发者实践版</span>
+                <span class="date">2026-03-29</span>
+            </div>
+            <h1>科技日报</h1>
+            <p class="subtitle">全栈技术专家视角 | 关注工具更新、最佳实践与技术深度解读</p>
+        </header>
+
+        <!-- 今日热榜 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🔥</div>
+                <h2>今日热榜</h2>
+            </div>
+            <div class="news-list">
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">01</span>
+                        <h3 class="news-title">飞书开源 CLI 工具，为 AI Agent 开放全部核心能力</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>飞书正式开源 <code>lark-cli</code>，将即时通讯、云文档、多维表格、日历、邮箱、任务、会议、知识库等 11 个业务域、200+ 命令封装成命令行工具。这意味着 Claude Code、Codex 等 AI Agent 可以直接操作飞书的全部功能，无需在 GUI 和 CLI 之间来回切换。CLI 支持 JSON 输出、Schema 自省、Dry Run 等 Agent 友好特性，并采用 MIT 协议开源，企业可自定义扩展。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">开源工具</span>
+                        <span class="tag">AI Agent</span>
+                        <a href="https://github.com/larksuite/cli" target="_blank">查看源码</a>
+                        <span>来源: 小互(@imxiaohu)</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">02</span>
+                        <h3 class="news-title">Google 发布 TurboQuant：KV 缓存压缩 6 倍，速度提升 8 倍</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>Google Research 发布 TurboQuant 压缩算法，可将大语言模型的 KV 缓存内存占用减少至少 6 倍，在 H100 上实现最高 8 倍速度提升，且精度零损失。该技术无需微调、无需训练数据，可直接接入任意 Transformer 模型。发布后内存类股票应声下跌，Cloudflare CEO 称这是谷歌的 "DeepSeek 时刻"。不过该论文随后陷入学术争议，ETH Zurich 研究人员指出其存在引用和对比问题。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">模型优化</span>
+                        <span class="tag">量化压缩</span>
+                        <a href="https://www.infoq.com/news/2026/03/turboquant-google/" target="_blank">阅读详情</a>
+                        <span>来源: InfoQ / 机器之心</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">03</span>
+                        <h3 class="news-title">Claude Code 推出 AutoDream：AI 也能"睡觉"整理记忆</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>Anthropic 为 Claude Code 推出 AutoDream 功能，在用户不使用时自动运行记忆整理。它会删除重复和过期条目、合并散落信息、用项目当前状态刷新旧记忆。灵感来自神经科学——人睡觉时大脑会重播白天经历、强化重要连接、修剪弱连接。该功能解决了长期项目记忆臃肿的问题，让 Agent 在多次会话后依然保持高效。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">Agent 增强</span>
+                        <span class="tag">记忆系统</span>
+                        <a href="https://mp.weixin.qq.com/s?__biz=MzI1MTUxNzgxMA==&mid=2247501631" target="_blank">阅读详情</a>
+                        <span>来源: 刘小排r</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">04</span>
+                        <h3 class="news-title">OpenAI Codex 发布官方最佳实践指南</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>OpenAI 发布 Codex Skills 最佳实践文档，核心建议包括：每个 Skill 专注单一职责、优先使用指令而非脚本、用祈使句明确输入输出、测试提示词确保触发准确。同时发布的还有《构建 AI Native 工程团队》指南，提出从"写代码"到"指挥 AI"的范式转移：工程师从执行者变为任务分配者，从逐行检查变为架构评估，保留战略决策权但将实现委托给 Agent。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">最佳实践</span>
+                        <span class="tag">AI 编程</span>
+                        <a href="https://developers.openai.com/codex/guides/building-ai-native-engineering-teams" target="_blank">阅读指南</a>
+                        <span>来源: OpenAI Developers</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">05</span>
+                        <h3 class="news-title">Discord 工程师分享：零性能损耗的 Elixir Actor 模型分布式追踪</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>Discord 工程团队详细介绍了如何为 Elixir 的 Actor 模型添加分布式追踪。他们开发了自定义 Transport 库，通过动态采样处理百万级用户扇出场景。关键优化包括跳过未采样追踪、在反序列化前过滤上下文，成功回收 10% 以上的 CPU 开销。这为高并发消息系统的可观测性提供了宝贵经验。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">后端架构</span>
+                        <span class="tag">可观测性</span>
+                        <a href="https://www.infoq.com/news/2026/03/discord-elixir-actor-tracing/" target="_blank">阅读详情</a>
+                        <span>来源: InfoQ</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">06</span>
+                        <h3 class="news-title">Mole 1.32 发布：Mac 清理工具新增并行扫描优化</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>开源 Mac 清理工具 Mole 发布 1.32 版本，GitHub 已获 44.3K Star。新版本采用并行缓存发现、减少子进程开销，大幅提升扫描速度。新增对 PCSX2、RPCS3 模拟器缓存的清理支持，改进 mo status 的磁盘容量报告准确性，并添加高 CPU 进程持久化告警。该工具可一次性释放数十 GB 空间。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">开发工具</span>
+                        <span class="tag">macOS</span>
+                        <a href="https://github.com/tw93/Mole" target="_blank">查看源码</a>
+                        <span>来源: Tw93(@HiTw93)</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">07</span>
+                        <h3 class="news-title">Pake V3.11：一键将网页打包为 5MB 桌面应用</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>基于 Rust Tauri 的网页打包工具 Pake 发布 V3.11，GitHub 已获 47.3K Star。相比 Electron 体积缩小 20 倍。新版本新增 <code>--install</code> 自动移至 Applications、<code>--new-window</code> 保持 OAuth 在应用内、<code>--camera</code> 和 <code>--microphone</code> 媒体权限支持。同时修复了 Linux AppImage 崩溃、Gemini blob 下载等问题。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">开发工具</span>
+                        <span class="tag">桌面应用</span>
+                        <a href="https://github.com/tw93/Pake" target="_blank">查看源码</a>
+                        <span>来源: Tw93(@HiTw93)</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">08</span>
+                        <h3 class="news-title">Roboflow 开源多目标追踪库：2 周斩获 3.1K Star</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>Roboflow 开源多目标追踪库，支持任意检测器即插即用（YOLO / RF-DETR），提供一行 CLI 命令追踪视频、Python API 零配置集成。在 MOT17、SportsMOT、SoccerNet 等基准上表现优异。该项目为计算机视觉开发者提供了开箱即用的追踪解决方案。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">计算机视觉</span>
+                        <span class="tag">开源库</span>
+                        <a href="https://github.com/roboflow/track" target="_blank">查看源码</a>
+                        <span>来源: Berryxia.AI</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">09</span>
+                        <h3 class="news-title">Vercel AI Gateway 新增自定义报告功能</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>Vercel 为 AI Gateway 推出自定义报告功能（Beta），支持按模型、提供商、用户、自定义标签或凭证类型切片分析 AI 支出。所有推理数据已通过 AI Gateway 集中，现在可通过 Custom Reporting API 查询，无需登录多个提供商控制台或维护第三方代理进行成本追踪。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">云服务</span>
+                        <span class="tag">成本管理</span>
+                        <a href="https://vercel.com/changelog/custom-reporting-ai-gateway" target="_blank">阅读详情</a>
+                        <span>来源: Vercel News</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">10</span>
+                        <h3 class="news-title">HashiCorp Vault 1.21 发布：新增 SPIFFE 认证和细粒度密钥恢复</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>HashiCorp 发布 Vault 1.21，引入原生 SPIFFE 认证支持非人工工作负载，扩展了 1.20 引入的细粒度密钥恢复模型。新增 KV v2 密钥归因、MFA TOTP 自助注册、Vault Secrets Operator CSI 驱动（可直接将密钥挂载到 Pod 而无需持久化到 etcd）等功能。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">安全工具</span>
+                        <span class="tag">密钥管理</span>
+                        <a href="https://www.infoq.com/news/2026/03/hashicorp-vault-1-21/" target="_blank">阅读详情</a>
+                        <span>来源: InfoQ</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">11</span>
+                        <h3 class="news-title">美团开源 LongCat-Next：原生多模态大模型</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>美团发布并全面开源原生多模态大模型 LongCat-Next 及其核心组件——离散原生分辨率视觉分词器（dNaViT）。该模型打破"以语言为中心"的传统架构，将图像、语音与文本统一映射为同源离散 Token，通过纯粹的"下一个 Token 预测"范式让视觉与语音成为 AI 的"原生母语"。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">多模态</span>
+                        <span class="tag">开源模型</span>
+                        <a href="https://github.com/MoonshotAI/Kimi" target="_blank">查看源码</a>
+                        <span>来源: 量子位 / AINLP</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">12</span>
+                        <h3 class="news-title">Cloudflare 推出 Custom Regions：精细化数据驻留控制</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>Cloudflare 推出 Custom Regions，扩展其 Regional Services，允许客户精确定义数据处理位置。通过按国家或地区选择特定数据中心组，确保 TLS 终止和应用层处理保持在选定地理边界内，满足合规性和控制需求。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">云服务</span>
+                        <span class="tag">数据合规</span>
+                        <a href="https://www.infoq.com/news/2026/03/cloudflare-custom-regions/" target="_blank">阅读详情</a>
+                        <span>来源: InfoQ</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">13</span>
+                        <h3 class="news-title">GitHub Copilot CLI 新增单元测试生成功能</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>GitHub 宣布 Copilot CLI 支持快速生成健壮测试套件。使用方法：进入 plan 模式（Shift-Tab）、启动 agents 自动运行、用 <code>/tasks</code> 监控进度。这让开发者可以直接从终端为那些"一直说要加但从来没加"的项目快速补齐单元测试。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">AI 编程</span>
+                        <span class="tag">测试工具</span>
+                        <a href="https://x.com/github/status/2037959242863247423" target="_blank">查看详情</a>
+                        <span>来源: GitHub(@github)</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">14</span>
+                        <h3 class="news-title">3 月 GitHub Trending AI Agent 项目盘点</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>值得关注的新项目包括：obra/superpowers（面向 coding agent 的 skills 框架，新增 53K Star）、affaan-m/everything-claude-code（Agent 增强系统，新增 58K Star）、bytedance/deer-flow（开源长任务 SuperAgent harness，新增 28K Star）、shanraisshan/claude-code-best-practice（Claude Code 最佳实践，新增 17K Star）。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">开源项目</span>
+                        <span class="tag">AI Agent</span>
+                        <a href="https://x.com/shao__meng/status/2037865907268252146" target="_blank">查看详情</a>
+                        <span>来源: meng shao</span>
+                    </div>
+                </article>
+
+                <article class="news-item">
+                    <div class="news-header">
+                        <span class="news-number">15</span>
+                        <h3 class="news-title">LiteParse：免费快速的文档解析器，专为 AI Agent 优化</h3>
+                    </div>
+                    <div class="news-content">
+                        <p>LlamaIndex 推出 LiteParse，一个免费快速的文档解析器，提供比其他免费/快速解析库更准确的 AI 就绪文本。特别之处在于它不使用任何模型（无 VLM/LLM/OCR），完全基于启发式规则实现快速解析。输出格式针对 LLM 理解优化，适合接入 Claude Code/OpenClaw 等助手 Agent。</p>
+                    </div>
+                    <div class="news-meta">
+                        <span class="tag">文档处理</span>
+                        <span class="tag">AI Agent</span>
+                        <a href="https://x.com/jerryjliu0/status/2037698512197144690" target="_blank">查看详情</a>
+                        <span>来源: Jerry Liu</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- 深度技术解读 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🔍</div>
+                <h2>深度技术解读</h2>
+            </div>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">1</span>
+                    <h3 class="deep-dive-title">Harness Engineering：AI Agent 时代的工程新范式</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <p>随着 AI Agent 能力快速提升，"Harness Engineering"（脚手架工程）正在成为区分普通开发者与顶尖开发者的关键技能。Anthropic 最新技术博客指出：当模型本身越来越强时，真正拉开差距的是围绕模型构建的整套运行系统。</p>
+                    <p>这套系统包括任务拆解、上下文管理、多智能体协作、评估与反馈、QA 验证、结构化交接等组件。对于长时运行的复杂编码任务，单个 Agent 很容易随着时间推移逐渐失控——上下文越长，模型越容易失去连贯性，甚至表现出"上下文焦虑"（提前收尾、接近上下文极限就想结束工作）。</p>
+
+                    <div class="deep-dive-section">
+                        <h4>核心变化</h4>
+                        <p>工程师角色从"逐行实现"转向"迭代监督"，聚焦设计意图、系统级推理和质量把控。Cognition 联合创始人 Scott Wu 表示："我们 Cognition 的工程师现在已经不打代码了——这就是现实。管理 Devon 一小时，抵得上自己干六到十二小时。"</p>
+                    </div>
+
+                    <div class="deep-dive-section">
+                        <h4>实践建议</h4>
+                        <p>1) 使用 context reset 而非简单压缩，给 Agent 真正的"干净起点"；2) 设计结构化 handoff artifact 进行阶段间状态交接；3) 建立评估闭环，用 outcome-based rewards 训练垂直 Agent 模型。参考 Kimi K2.5、Cursor Composer 2、Chroma Context-1 的技术报告，它们都采用了相同的底层配方：强基座模型 + 生产环境内训练 + 结果导向奖励。</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">2</span>
+                    <h3 class="deep-dive-title">AI 编码工具并未加快项目交付：编码从来都不是瓶颈</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <p>Agoda 软件工程师 Leonardo Stern 发表观察文章，指出尽管 AI 编码工具提高了个人开发者产出，但项目层面的整体开发速度提升远不如预期。Faros AI 研究分析了 1255 个团队、逾万名开发者的数据：高度采用 AI 的团队完成任务量增加 21%，合并 PR 增加 98%，但 PR 评审时间增加 91%。</p>
+                    <p>这说明编码阶段加速会将压力转移到其他环节。开发瓶颈已向上游转移至需求定义与验证环节，因为这些领域更依赖人工判断。这是对 Fred Brooks "没有银弹"论断的重新印证——仅对开发生命周期单一环节提速，对整体交付效率的提升会逐渐递减。</p>
+
+                    <div class="deep-dive-section">
+                        <h4>关键洞察</h4>
+                        <p>传统上要求组建精简高效工程团队的逻辑建立在"编码是最具价值的活动，而沟通是制约效率的成本"这一假设上。如果创造最高价值的工作转变为协作式需求定义与架构对齐，那么沟通不再是要尽量减少的开销，沟通本身就是核心工作。小团队的优势不在于减少协调，而在于更快达成共识。</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">3</span>
+                    <h3 class="deep-dive-title">LLM Post-Training 全景：从 RLHF 到 Agentic RL</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <p>Meta FAIR 研究科学家 Haohe 发布《LLM Post-Training 全景指南》，系统梳理了从 2022 年 ChatGPT 至今的后训练技术演进。核心洞察：SFT 教模型"说什么"，偏好优化教模型"怎么选"，而 RL 教模型"怎么想"。</p>
+                    <p>当前主流技术栈包括：1) SFT（监督微调）作为基础；2) RLHF / DPO / GRPO 进行偏好对齐；3) Agentic RL 让模型学会使用工具、多步推理。Kimi K2.5 通过 RL 学会生成并行子代理，Cursor 在生产 harness 中训练自总结能力，Chroma 的 20B 检索模型学会在搜索中自我剪枝上下文。</p>
+
+                    <div class="deep-dive-section">
+                        <h4>实践意义</h4>
+                        <p>对于构建垂直领域 Agent 的开发者，建议参考这一"强基座 + 生产环境训练 + 结果奖励"的配方。不要在通用模型上简单微调，而是要在真实业务场景中设计完整的训练闭环，让模型在可验证的任务目标上持续优化。</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">4</span>
+                    <h3 class="deep-dive-title">Netflix 图抽象架构：毫秒级处理 650TB 图数据</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <p>Netflix 工程师分享了其高吞吐图抽象系统的设计。该平台支撑多项内部业务：Netflix Gaming 社交图、服务拓扑图（用于故障排查和根因分析）。核心设计决策：将边连接关系与边属性分离存储，全球部署数据副本。</p>
+                    <p>系统通过限制遍历深度、通常要求指定起始节点，以牺牲部分查询灵活性换取大规模场景下稳定的低延迟。最新图状态存储于键值抽象，历史变更通过时序抽象记录，与 EVCache 分布式缓存层深度集成。</p>
+
+                    <div class="deep-dive-section">
+                        <h4>可借鉴经验</h4>
+                        <p>对于需要处理复杂关联数据的系统，Netflix 的架构提供了重要参考：1) 区分实时查询和离线分析的不同存储需求；2) Schema 内存化强制数据校验并优化遍历路径；3) 时序抽象支持图演化分析和审计追溯。</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">5</span>
+                    <h3 class="deep-dive-title">Tool Calling 能力测试：27B 模型表现最优的启示</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <p>开发者 Stevibe 构建了 Tool Calling 测试框架，在 15 个场景、12 个工具上测试了 Qwen3.5 系列从 0.8B 到 397B 的所有尺寸。意外发现：27B 密集模型和蒸馏版 27B 全部通过测试，而 397B 失败 2 项、122B 失败 1 项、35B 失败 2 项。</p>
+                    <p>最暴露问题的测试是"查冰岛人口然后计算 2%"——许多大模型直接用记忆里的近似值而非工具返回的数据，表现出对工具的不信任。小模型则容易陷入循环反复调用工具直到超时。</p>
+
+                    <div class="deep-dive-section">
+                        <h4>关键结论</h4>
+                        <p>小模型会幻觉数据，大模型会无视数据，27B 刚好把链路跑通了。这提示开发者：Agent 场景不一定需要最大参数模型，中等规模的专用模型在工具调用和指令遵循上可能表现更好。选择模型时应针对具体任务进行实测，而非盲目追求参数规模。</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">6</span>
+                    <h3 class="deep-dive-title">供应链安全新威胁：Unicode 私有字符隐藏恶意代码</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <p>Aikido Security 披露新型供应链攻击：攻击者向 GitHub 上传 151 个恶意软件包，利用 Unicode "私有使用区"（Private Use Areas）隐藏恶意载荷。这些字符对应美式英文字母表但完全不可见，代码审查人员或静态分析工具看来一片空白，而 JavaScript 解释器运行时会由解码程序还原并执行。</p>
+                    <p>攻击波及 GitHub、NPM 和 Open VSX。解码后的载荷通过 Solana 区块链传输，拉取并执行第二阶段脚本窃取开发者资产。这种攻击方式对传统基于文本匹配的检测机制构成严峻挑战。</p>
+
+                    <div class="deep-dive-section">
+                        <h4>防御建议</h4>
+                        <p>1) 在 CI/CD 中增加 Unicode 异常字符检测；2) 使用支持 Unicode 规范化的代码审查工具；3) 对依赖包进行行为分析而非仅静态扫描；4) 考虑使用 lockfile 并审查每次依赖变更的实际内容。</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- 工具推荐 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🛠️</div>
+                <h2>工具推荐</h2>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">📦</span>
+                    <span class="tool-name">lark-cli</span>
+                </div>
+                <p class="tool-desc">飞书官方开源的 CLI 工具，覆盖 11 个业务域、200+ 命令，专为 AI Agent 设计。支持 JSON 输出、Schema 自省、Dry Run 等 Agent 友好特性。安装后即可让 Claude Code、Codex 直接操作飞书文档、日历、多维表格等功能。</p>
+                <div class="tool-link">
+                    <a href="https://github.com/larksuite/cli" target="_blank">github.com/larksuite/cli</a>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">🧹</span>
+                    <span class="tool-name">Mole</span>
+                </div>
+                <p class="tool-desc">Mac 清理工具，可一次性释放数十 GB 空间。支持并行扫描优化、高 CPU 进程告警、多种缓存清理。GitHub 44.3K Star，完全开源免费。</p>
+                <div class="tool-link">
+                    <a href="https://github.com/tw93/Mole" target="_blank">github.com/tw93/Mole</a>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">📄</span>
+                    <span class="tool-name">LiteParse</span>
+                </div>
+                <p class="tool-desc">LlamaIndex 开源的文档解析器，专为 AI Agent 设计。不使用任何模型，基于启发式规则实现快速解析，输出格式针对 LLM 理解优化。适合接入 Claude Code/OpenClaw 等助手 Agent。</p>
+                <div class="tool-link">
+                    <a href="https://github.com/run-llama/llama_parse" target="_blank">github.com/run-llama/llama_parse</a>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">🎯</span>
+                    <span class="tool-name">PinchBench</span>
+                </div>
+                <p class="tool-desc">面向 OpenClaw 的真实世界基准测试系统，由 Kilocode 团队用 Rust 开发。测试 Agent 在日程安排、邮件分类、信息检索、文件管理等 23 个真实任务上的端到端表现，支持自动检查 + LLM 评判双重评分。</p>
+                <div class="tool-link">
+                    <a href="https://github.com/pinchbench/skill-bench" target="_blank">github.com/pinchbench/skill-bench</a>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">🖼️</span>
+                    <span class="tool-name">Pake</span>
+                </div>
+                <p class="tool-desc">基于 Rust Tauri 的网页打包工具，可将任何网页打包为约 5MB 的桌面应用，比 Electron 轻量 20 倍。支持自动安装、OAuth 内嵌、媒体权限等功能。GitHub 47.3K Star。</p>
+                <div class="tool-link">
+                    <a href="https://github.com/tw93/Pake" target="_blank">github.com/tw93/Pake</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 参考链接汇总 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🔗</div>
+                <h2>参考链接汇总</h2>
+            </div>
+            <div class="links-section">
+                <div class="links-list">
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/larksuite/cli" target="_blank">飞书 CLI 开源仓库</a></div>
+                            <div class="link-source">github.com/larksuite/cli</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://developers.openai.com/codex/guides/building-ai-native-engineering-teams" target="_blank">OpenAI Codex: 构建 AI Native 工程团队</a></div>
+                            <div class="link-source">developers.openai.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://www.infoq.com/news/2026/03/turboquant-google/" target="_blank">TurboQuant: Google 的 KV 缓存压缩算法</a></div>
+                            <div class="link-source">infoq.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/tw93/Mole" target="_blank">Mole - Mac 清理工具</a></div>
+                            <div class="link-source">github.com/tw93/Mole</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/tw93/Pake" target="_blank">Pake - 网页打包桌面应用</a></div>
+                            <div class="link-source">github.com/tw93/Pake</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/roboflow/track" target="_blank">Roboflow Track - 多目标追踪</a></div>
+                            <div class="link-source">github.com/roboflow/track</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://www.infoq.com/news/2026/03/discord-elixir-actor-tracing/" target="_blank">Discord Elixir 分布式追踪实践</a></div>
+                            <div class="link-source">infoq.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/MoonshotAI/Kimi" target="_blank">Kimi K2.5 技术报告</a></div>
+                            <div class="link-source">github.com/MoonshotAI/Kimi</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://cursor.com/resources/Composer-2" target="_blank">Cursor Composer 2 技术报告</a></div>
+                            <div class="link-source">cursor.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://trychroma.com/research/context-1" target="_blank">Chroma Context-1 技术报告</a></div>
+                            <div class="link-source">trychroma.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247556031" target="_blank">LLM Post-Training 全景指南</a></div>
+                            <div class="link-source">大模型智能</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&mid=2247490124" target="_blank">Harness 设计如何支撑长时运行应用开发</a></div>
+                            <div class="link-source">山行AI</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://blog.bytebytego.com/p/ep208-load-balancer-vs-api-gateway" target="_blank">Load Balancer vs API Gateway</a></div>
+                            <div class="link-source">ByteByteGo Newsletter</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/obra/superpowers" target="_blank">obra/superpowers - Coding Agent Skills 框架</a></div>
+                            <div class="link-source">github.com/obra/superpowers</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/affaan-m/everything-claude-code" target="_blank">everything-claude-code - Agent 增强系统</a></div>
+                            <div class="link-source">github.com/affaan-m/everything-claude-code</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>科技日报 - 开发者实践版</p>
+            <p>数据来源: FreshRSS 24h 聚合 | 生成时间: 2026-03-29</p>
+            <p style="margin-top: 16px; font-size: 12px;">本日报由 AI 辅助生成，内容仅供技术参考</p>
+        </footer>
+    </div>
+</body>
+</html>
