@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技日报 - 开发者实践版 | 2026-03-31</title>
+    <title>科技日报 - 开发者实践版 | 2026-03-29</title>
     <style>
         :root {
             --bg-primary: #0d1117;
@@ -23,13 +23,18 @@
             --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 15px;
         }
 
         .container {
@@ -38,342 +43,1097 @@
             padding: 40px 20px;
         }
 
+        /* Header */
         .header {
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 30px;
             margin-bottom: 40px;
         }
 
-        .header-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
+        .header-meta {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
-        .terminal-prompt {
-            color: var(--accent-green);
-            font-family: var(--font-mono);
+        .badge {
+            background: var(--accent-purple);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        .header-meta {
+        .date {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 14px;
             font-family: var(--font-mono);
         }
 
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Section Headers */
         .section {
             margin-bottom: 50px;
         }
 
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--accent-blue);
+        .section-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
         }
 
-        .card {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
             border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 20px;
-            transition: border-color 0.2s;
+            font-size: 16px;
         }
 
-        .card:hover {
-            border-color: var(--text-muted);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .card-title {
-            font-size: 1.2rem;
+        h2 {
+            font-size: 22px;
             font-weight: 600;
             color: var(--text-primary);
-            text-decoration: none;
-            line-height: 1.4;
         }
 
-        .card-title:hover {
-            color: var(--accent-blue);
-            text-decoration: underline;
-        }
-
-        .tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .tag {
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background-color: var(--bg-tertiary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        .tag.tool { border-color: rgba(88, 166, 255, 0.3); color: var(--accent-blue); }
-        .tag.lang { border-color: rgba(240, 136, 62, 0.3); color: var(--accent-orange); }
-        .tag.framework { border-color: rgba(63, 185, 80, 0.3); color: var(--accent-green); }
-        .tag.architecture { border-color: rgba(163, 113, 247, 0.3); color: var(--accent-purple); }
-
-        .card-body {
-            color: var(--text-primary);
-            font-size: 1rem;
-            margin-bottom: 15px;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            border-top: 1px solid var(--border-color);
-            padding-top: 15px;
-        }
-
-        .source {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .source a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-
-        .source a:hover {
-            color: var(--text-primary);
-            text-decoration: underline;
-        }
-
-        .code-snippet {
-            background-color: var(--code-bg);
-            border-radius: 6px;
-            padding: 16px;
-            margin: 15px 0;
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            overflow-x: auto;
-            border: 1px solid var(--border-color);
-        }
-
-        .code-snippet code {
-            color: #c9d1d9;
-        }
-
-        .practice-highlight {
-            background-color: rgba(88, 166, 255, 0.1);
-            border-left: 4px solid var(--accent-blue);
-            padding: 12px 16px;
-            margin: 15px 0;
-            border-radius: 0 6px 6px 0;
-            font-size: 0.95rem;
-        }
-
+        /* News Items */
         .news-list {
-            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .news-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .news-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+
+        .news-header {
             display: flex;
-            gap: 15px;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
-        .news-item:last-child {
-            border-bottom: none;
-        }
-
-        .news-date {
+        .news-number {
+            background: var(--bg-tertiary);
+            color: var(--accent-blue);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
             font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            min-width: 60px;
+            flex-shrink: 0;
         }
 
-        .news-content h4 {
-            font-size: 1.05rem;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .news-content h4 a {
+        .news-title {
+            font-size: 16px;
+            font-weight: 600;
             color: var(--text-primary);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .news-content {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-left: 40px;
+            margin-bottom: 12px;
+        }
+
+        .news-content p {
+            margin-bottom: 10px;
+        }
+
+        .news-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: 40px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .news-meta a {
+            color: var(--accent-blue);
             text-decoration: none;
         }
 
-        .news-content h4 a:hover {
-            color: var(--accent-blue);
+        .news-meta a:hover {
+            text-decoration: underline;
         }
 
-        .news-desc {
-            font-size: 0.95rem;
+        .tag {
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        /* Deep Dive Section */
+        .deep-dive-item {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .deep-dive-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .deep-dive-number {
+            background: var(--accent-orange);
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+
+        .deep-dive-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .deep-dive-content {
             color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .deep-dive-content p {
+            margin-bottom: 12px;
+        }
+
+        .deep-dive-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .deep-dive-section h4 {
+            color: var(--accent-green);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 8px;
         }
 
+        .deep-dive-section p {
+            margin-bottom: 0;
+        }
+
+        /* Tools Section */
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-green);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tool-icon {
+            font-size: 20px;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tool-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .tool-link {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--accent-blue);
+        }
+
+        .tool-link a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Links Section */
+        .links-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .links-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .link-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .link-bullet {
+            color: var(--accent-blue);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .link-content {
+            flex: 1;
+        }
+
+        .link-title {
+            font-size: 13px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .link-source {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .link-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Footer */
         .footer {
             margin-top: 60px;
             padding-top: 30px;
             border-top: 1px solid var(--border-color);
             text-align: center;
             color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .footer p {
+            margin-bottom: 8px;
+        }
+
+        /* Code blocks */
+        code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
             font-family: var(--font-mono);
-            font-size: 0.9rem;
+            font-size: 13px;
+            color: var(--accent-orange);
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 12px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .news-content,
+            .news-meta {
+                margin-left: 0;
+            }
+
+            .news-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .links-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header class="header">
-            <h1 class="header-title">
-                <span class="terminal-prompt">$</span> 
-                开发者实践版
-            </h1>
             <div class="header-meta">
-                ./tech-daily.sh --date 2026-03-31 --mode practical
+                <span class="badge">开发者实践版</span>
+                <span class="date">2026-03-29</span>
             </div>
+            <h1>科技日报</h1>
+            <p class="subtitle">全栈技术专家视角 | 关注工具更新、最佳实践与技术深度解读</p>
         </header>
 
+        <!-- 今日热榜 -->
         <section class="section">
-            <h2 class="section-title">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                核心工具与框架更新
-            </h2>
+            <div class="section-header">
+                <div class="section-icon">🔥</div>
+                <h2>今日热榜</h2>
+            </div>
+            <div class="news-list">
 
-            <div class="card">
-                <div class="card-header">
-                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.114" class="card-title" target="_blank" rel="noopener">Visual Studio Code 1.114 (Insiders) 新特性前瞻</a>
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">01</span>
+                <h3 class="news-title">Visual Studio Code 1.114</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> Learn what's new in Visual Studio Code 1.114 (Insiders) Read the full article...<br><br><b>开发者视角解读：</b> VS Code 的每一次迭代都极大影响着前端与全栈开发者的日常体验。新版 1.114 带来了更多底层优化和 Insiders 尝鲜功能，建议关注其对于大语言模型插件的 API 支持情况。 <a href='https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.114' target='_blank' rel='noopener'>[来源: Microsoft for Developers]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">02</span>
+                <h3 class="news-title">Hermes Agent v0.6.0 发布：多实例隔离（Profiles）、MCP Server 模式、Docker 官方支持、飞书和企业微信接入、Slack 多工作区、Telegram 生产优化
+...</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> Hermes Agent v0.6.0 发布：多实例隔离（Profiles）、MCP Server 模式、Docker 官方支持、飞书和企业微信接入、Slack 多工作区、Telegram 生产优化核心架构升级 - 多实例隔离（Profiles）· 首次支持在同一安装中运行多个完全隔离的 Hermes 实例· 每个实例拥有独立的配置、记忆、会话、技能和网关服务· 通过 token 锁机制防止多个实...<br><br><b>开发者视角解读：</b> Hermes Agent 的本次更新对实际生产环境至关重要，特别是多实例隔离和 Docker 的官方支持，这意味着开发者终于可以更安全、标准化地将大模型应用部署到企业内网。 <a href='https://x.com/shao__meng/status/2038786904565633052' target='_blank' rel='noopener'>[来源: meng shao(@shao__meng)]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">03</span>
+                <h3 class="news-title">昨天刚推荐了在Claude Code当中用Codex的方法 官方插件就发布了啊
+
+这个太棒了 简单看下文档 支持直接在CC中运行如下命令
+
+/codex:review runs the standar...</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> 昨天刚推荐了在Claude Code当中用Codex的方法 官方插件就发布了啊这个太棒了 简单看下文档 支持直接在CC中运行如下命令/codex:review runs the standard read-only Codex review./codex:adversarial-review runs a steerable challenge review. Use it when you wa...<br><br><b>开发者视角解读：</b> Claude Code 结合 Codex 的能力让我们看到了 AI 原生开发流的闭环可能。这不仅仅是代码补全，而是从编写、编译到测试的一站式自动化，极大地解放了开发生产力。 <a href='https://x.com/vikingmute/status/2038783732598128775' target='_blank' rel='noopener'>[来源: Viking(@vikingmute)]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">04</span>
+                <h3 class="news-title">Claude Code 把 Computer Use 直接塞进 CLI 了！又又更新🤯
+
+现在一条提示词就能让 Claude 完整闭环：
+→ 写代码  
+→ 编译项目  
+→ 启动 App  
+→ ...</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> Claude Code 把 Computer Use 直接塞进 CLI 了！又又更新🤯现在一条提示词就能让 Claude 完整闭环：→ 写代码 → 编译项目 → 启动 App → 自己打开界面点击测试 → 发现 Bug 立刻自动修复并验证通过 从开发到 UI 测试，全程无人值守！Pro/Max用户可体验！Your browser does not support the video tag.🔗 V...<br><br><b>开发者视角解读：</b> Claude Code 结合 Codex 的能力让我们看到了 AI 原生开发流的闭环可能。这不仅仅是代码补全，而是从编写、编译到测试的一站式自动化，极大地解放了开发生产力。 <a href='https://x.com/berryxia/status/2038772923818029107' target='_blank' rel='noopener'>[来源: Berryxia.AI(@berryxia)]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">05</span>
+                <h3 class="news-title">Discord Open Sources Osprey Safety Rules Engine Processing 2.3 Million Rules per Second</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> Discord open-sourced Osprey, a safety rules engine processing 400 million daily actions and 2.3 million rules per second. Osprey uses a polyglot architecture: a Rust coordinator manages traffic, while...<br><br><b>开发者视角解读：</b> Discord 开源的 Osprey 规则引擎展示了如何在高并发场景下结合 Rust 的性能和 Python 的灵活性，对于需要处理海量实时事件的架构师来说，这是一个极佳的参考实现。 <a href='https://www.infoq.com/news/2026/03/discord-osprey/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global' target='_blank' rel='noopener'>[来源: InfoQ]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">06</span>
+                <h3 class="news-title">datasette-files 0.1a3</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> Release: datasette-files 0.1a3 I'm working on integrating datasette-files into other plugins, such as datasette-extract. This necessitated a new release of the base plugin. owners_can_edit and owners_...<br><br><b>开发者视角解读：</b> Datasette 生态继续扩展，为轻量级数据处理和 sqlite 发布提供了极大的便利。对于需要快速搭建数据看板和小工具的开发者而言，这绝对是一个利器。 <a href='https://simonwillison.net/2026/Mar/30/datasette-files/#atom-everything' target='_blank' rel='noopener'>[来源: Simon Willison's Weblog]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">07</span>
+                <h3 class="news-title">10分钟了解突然爆火的CLI并开发一个"烂梗鸡汤"CLI</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> 张佳 2026-03-31 07:46 广东 钉钉和飞书在同一天开放了 CLI 支持，然后企微周末连夜更新增加了 CLI 支持 CLI 到底是个啥？为啥突然火了？钉钉和飞书在同一天开放了 CLI 支持，然后企微周末连夜更新增加了 CLI 支持。在此之前，网易云音乐、美图也开放了 CLI 控制能力，同步上线 Skills更早的，Obsidian 在 1.12.0 版本增加了对 CLI 的支持，可以直...<br><br><b>开发者视角解读：</b> 这条动态涉及了近期备受关注的技术节点，其核心在于如何改善现有的工作流：张佳 2026-03-31 07:46 广东 钉钉和飞书在同一天开放了 CLI 支持，然后企微周末连... 开发者在接下来的版本迁移中应当留意其对既有系统的兼容性影响。 <a href='https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651925824&idx=2&sn=168eb5330610162129a231218a6f14c6' target='_blank' rel='noopener'>[来源: 人人都是产品经理]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">08</span>
+                <h3 class="news-title">Qwen3.6 Plus Preview (free) 可以的，准备给虾哥玩玩。</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> Qwen3.6 Plus Preview (free) 可以的，准备给虾哥玩玩。Your browser does not support the video tag.🔗 View on Twitter💬2🔄0❤️10👀3017📊4⚡ Powered by xgo.ing...<br><br><b>开发者视角解读：</b> 这条动态涉及了近期备受关注的技术节点，其核心在于如何改善现有的工作流：Qwen3.6 Plus Preview (free) 可以的，准备给虾哥玩玩。Your brows... 开发者在接下来的版本迁移中应当留意其对既有系统的兼容性影响。 <a href='https://x.com/geekbb/status/2038760236396454269' target='_blank' rel='noopener'>[来源: Geek(@geekbb)]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">09</span>
+                <h3 class="news-title">十年仍争论不休！嫌它背离Unix哲学，又得用它搞定90%的Linux机器</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> 原创 Can Artuc 2026-03-31 07:16 广东 十年了，也没出现它的完全替代品…… 十五个发行版，零个 systemd。上个月我统计时，这个数字让我吃了一惊。到 2026 年，仍有十五个活跃维护的 Linux 发行版默认不搭载 systemd。经过十多年关于替代品会消亡的预测，它们依然存在。当你启动一台 Linux 机器时，运行的第一个程序叫做初始化系统。它启动你的计算机所需的所...<br><br><b>开发者视角解读：</b> 这条动态涉及了近期备受关注的技术节点，其核心在于如何改善现有的工作流：原创 Can Artuc 2026-03-31 07:16 广东 十年了，也没出现它的完全替代品……... 开发者在接下来的版本迁移中应当留意其对既有系统的兼容性影响。 <a href='https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247635245&idx=1&sn=d386514bef3482ec74b781f424f6a584' target='_blank' rel='noopener'>[来源: dbaplus社群]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">10</span>
+                <h3 class="news-title">model+harness is now over model only. agent perf can be significantly influenced by the design and q...</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> model+harness is now over model only. agent perf can be significantly influenced by the design and quality of harness. i do believe this is a right direction, nice work!Yoonho Lee@yoonholeeeHow can we...<br><br><b>开发者视角解读：</b> AI Agent 的性能已经不再仅仅依赖于底层模型的参数量，外围框架（Harness）的设计变得同等重要。这一趋势提示我们在工程实践中需要更加注重 Agent 周边的基础设施建设。 <a href='https://x.com/JustinLin610/status/2038783276937310582' target='_blank' rel='noopener'>[来源: Junyang Lin(@JustinLin610)]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">11</span>
+                <h3 class="news-title">Vercel CDN now respects Cache-Control headers from external origins by default</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> New Vercel projects will honor cache-control headers by default when proxying requests to external origins, starting April 6th.Previously, responses served through rewrites to external origins were un...<br><br><b>开发者视角解读：</b> 这条动态涉及了近期备受关注的技术节点，其核心在于如何改善现有的工作流：New Vercel projects will honor cache-control heade... 开发者在接下来的版本迁移中应当留意其对既有系统的兼容性影响。 <a href='https://vercel.com/changelog/vercels-cdn-now-respects-cache-control-headers-from-external-origins-by-default' target='_blank' rel='noopener'>[来源: Vercel News]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">12</span>
+                <h3 class="news-title">So proud to have @ggerganov and @ggml_org part of the @huggingface team. One of the unsung heroes of...</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> So proud to have @ggerganov and @ggml_org part of the @huggingface team. One of the unsung heroes of AI, powering the most widely used open-source runtime for local AI!Georgi Gerganov@ggerganovllama.c...<br><br><b>开发者视角解读：</b> 这条动态涉及了近期备受关注的技术节点，其核心在于如何改善现有的工作流：So proud to have @ggerganov and @ggml_org part of ... 开发者在接下来的版本迁移中应当留意其对既有系统的兼容性影响。 <a href='https://x.com/ClementDelangue/status/2038752860192518294' target='_blank' rel='noopener'>[来源: clem 🤗(@ClementDelangue)]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">13</span>
+                <h3 class="news-title">I'm happy to report that @cursor_ai also works perfectly fine in China with all types of models.</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> I'm happy to report that @cursor_ai also works perfectly fine in China with all types of models.💬0🔄0❤️5👀1105📊1⚡ Powered by xgo.ing...<br><br><b>开发者视角解读：</b> 这条动态涉及了近期备受关注的技术节点，其核心在于如何改善现有的工作流：I'm happy to report that @cursor_ai also works per... 开发者在接下来的版本迁移中应当留意其对既有系统的兼容性影响。 <a href='https://x.com/petergyang/status/2038761330392629479' target='_blank' rel='noopener'>[来源: Peter Yang(@petergyang)]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">14</span>
+                <h3 class="news-title">Recently found cc-connect, a neat way to control local AI agents from any chat app. It bridges Claud...</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> Recently found cc-connect, a neat way to control local AI agents from any chat app. It bridges Claude Code, Cursor, Gemini CLI, and Codex to Slack, Telegram, Discord, Feishu, and more, so you can run ...<br><br><b>开发者视角解读：</b> 这条动态涉及了近期备受关注的技术节点，其核心在于如何改善现有的工作流：Recently found cc-connect, a neat way to control l... 开发者在接下来的版本迁移中应当留意其对既有系统的兼容性影响。 <a href='https://x.com/HiTw93/status/2038764711194345795' target='_blank' rel='noopener'>[来源: Tw93(@HiTw93)]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+
+        <div class="news-item">
+            <div class="news-header">
+                <span class="news-number">15</span>
+                <h3 class="news-title">AI，正在“杀死”哪些软件？</h3>
+            </div>
+            <p class="news-summary"><b>内容摘要：</b> 定焦One团队 2026-03-31 07:46 广东 以下文章来源于：定焦One 定焦One 深度影响创新。 留给它们转型的时间，可能不多了。 2026年AI加速冲击软件业：ChatGPT整合Office，Anthropic植入法律金融流程，MiniMax、Kimi已能生成PPT。两类软件最危险——通用功能型易被AI内化，轻交互型将被自然语言替代；社交软件与垂直专业软件（数据壁垒）相对安全。——...<br><br><b>开发者视角解读：</b> 这条动态涉及了近期备受关注的技术节点，其核心在于如何改善现有的工作流：定焦One团队 2026-03-31 07:46 广东 以下文章来源于：定焦One 定焦One 深度... 开发者在接下来的版本迁移中应当留意其对既有系统的兼容性影响。 <a href='https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651925824&idx=1&sn=ef8f5e2ecdf16f9ce9e07fe0460cf050' target='_blank' rel='noopener'>[来源: 人人都是产品经理]</a></p>
+            <div class="news-meta">
+                <span class="tag">动态</span>
+                <span class="tag">技术新闻</span>
+            </div>
+        </div>
+</div>
+        </section>
+
+        <!-- 深度技术解读 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🔍</div>
+                <h2>深度技术解读</h2>
+            </div>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">1</span>
+                    <h3 class="deep-dive-title">[AINews] The Last 4 Jobs in Tech</h3>
                 </div>
-                <div class="card-body">
-                    <p>微软发布了VS Code 1.114的Insiders版本，带来了多项针对开发体验的优化。对于重度依赖编辑器的开发者来说，新版本在性能和扩展API方面有显著提升，可能改善大型项目的加载速度和代码提示响应。持续关注这些更新有助于保持开发环境的高效。</p>
-                    <div class="practice-highlight">
-                        <strong>💡 实践建议：</strong>如果你的团队正在面临大型项目的性能瓶颈，建议部分核心成员试用Insiders版本，评估新特性对日常工作流的实际加速效果，并反馈潜在兼容性问题。
-                    </div>
+                <div class="deep-dive-content">
+                    <h4>1. 技术背景</h4>
+                    <p>随着云计算与人工智能的深度融合，软件的构建方式正在发生根本性转变。开发者需要理解这些底层逻辑，而不仅仅是停留在 API 调用层面。</p>
+                    <h4>2. 核心变化与实现机制</h4>
+                    <p>本文提到的核心机制涉及到了从单点功能向全局优化的跨越。详细来说，It’s well known that org charts are changing with AI - the first trend we called out was in 2023 wit...</p>
+                    <h4>3. 实践意义与迁移建议</h4>
+                    <p>建议在下一次的技术评审会议中引入这一概念，评估其在团队当前 CI/CD 流水线或微服务架构中落地的可行性。 <a href='https://www.latent.space/p/ainews-the-last-4-jobs-in-tech' target='_blank' rel='noopener'>[来源: Latent.Space]</a></p>
                 </div>
-                <div class="tags">
-                    <span class="tag tool">VS Code</span>
-                    <span class="tag architecture">IDE更新</span>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">2</span>
+                    <h3 class="deep-dive-title">别再让AI只干零活了！AI工具正在接管投放全链路</h3>
                 </div>
-                <div class="card-footer">
-                    <div class="source">
-                        <span>[来源: </span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.114" target="_blank" rel="noopener">Microsoft for Developers</a><span>]</span>
-                    </div>
+                <div class="deep-dive-content">
+                    <h4>1. 技术背景</h4>
+                    <p>随着云计算与人工智能的深度融合，软件的构建方式正在发生根本性转变。开发者需要理解这些底层逻辑，而不仅仅是停留在 API 调用层面。</p>
+                    <h4>2. 核心变化与实现机制</h4>
+                    <p>本文提到的核心机制涉及到了从单点功能向全局优化的跨越。详细来说，从行业中来，到行业中去...</p>
+                    <h4>3. 实践意义与迁移建议</h4>
+                    <p>建议在下一次的技术评审会议中引入这一概念，评估其在团队当前 CI/CD 流水线或微服务架构中落地的可行性。 <a href='https://www.qbitai.com/2026/03/393471.html' target='_blank' rel='noopener'>[来源: 量子位]</a></p>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">3</span>
+                    <h3 class="deep-dive-title">When Opus 4.5 came out, it was a one-way door to a new way of engineering. Agents now do most of our...</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <h4>1. 技术背景</h4>
+                    <p>随着云计算与人工智能的深度融合，软件的构建方式正在发生根本性转变。开发者需要理解这些底层逻辑，而不仅仅是停留在 API 调用层面。</p>
+                    <h4>2. 核心变化与实现机制</h4>
+                    <p>本文提到的核心机制涉及到了从单点功能向全局优化的跨越。详细来说，When Opus 4.5 came out, it was a one-way door to a new way of engineering. Agents now do most of our...</p>
+                    <h4>3. 实践意义与迁移建议</h4>
+                    <p>建议在下一次的技术评审会议中引入这一概念，评估其在团队当前 CI/CD 流水线或微服务架构中落地的可行性。 <a href='https://x.com/rauchg/status/2038759092442050651' target='_blank' rel='noopener'>[来源: Guillermo Rauch(@rauchg)]</a></p>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">4</span>
+                    <h3 class="deep-dive-title">Our newest featured notebook is absolutely electric🪁⚡️
+
+We partnered with @googlearts @royalsociety...</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <h4>1. 技术背景</h4>
+                    <p>随着云计算与人工智能的深度融合，软件的构建方式正在发生根本性转变。开发者需要理解这些底层逻辑，而不仅仅是停留在 API 调用层面。</p>
+                    <h4>2. 核心变化与实现机制</h4>
+                    <p>本文提到的核心机制涉及到了从单点功能向全局优化的跨越。详细来说，Our newest featured notebook is absolutely electric🪁⚡️We partnered with @googlearts@royalsociety to ...</p>
+                    <h4>3. 实践意义与迁移建议</h4>
+                    <p>建议在下一次的技术评审会议中引入这一概念，评估其在团队当前 CI/CD 流水线或微服务架构中落地的可行性。 <a href='https://x.com/NotebookLM/status/2038756752758550694' target='_blank' rel='noopener'>[来源: NotebookLM(@NotebookLM)]</a></p>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">5</span>
+                    <h3 class="deep-dive-title">Design ＆ Launch Portfolio Websites FAST with Framer #ux #portfolio #tutorial</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <h4>1. 技术背景</h4>
+                    <p>随着云计算与人工智能的深度融合，软件的构建方式正在发生根本性转变。开发者需要理解这些底层逻辑，而不仅仅是停留在 API 调用层面。</p>
+                    <h4>2. 核心变化与实现机制</h4>
+                    <p>本文提到的核心机制涉及到了从单点功能向全局优化的跨越。详细来说，💾...</p>
+                    <h4>3. 实践意义与迁移建议</h4>
+                    <p>建议在下一次的技术评审会议中引入这一概念，评估其在团队当前 CI/CD 流水线或微服务架构中落地的可行性。 <a href='https://www.youtube.com/shorts/C6Isa8Cdtys' target='_blank' rel='noopener'>[来源: yobi321]</a></p>
+                </div>
+            </article>
+
+            <article class="deep-dive-item">
+                <div class="deep-dive-header">
+                    <span class="deep-dive-number">6</span>
+                    <h3 class="deep-dive-title">重返杭州第一网红楼：抛弃流量，接纳生活</h3>
+                </div>
+                <div class="deep-dive-content">
+                    <h4>1. 技术背景</h4>
+                    <p>随着云计算与人工智能的深度融合，软件的构建方式正在发生根本性转变。开发者需要理解这些底层逻辑，而不仅仅是停留在 API 调用层面。</p>
+                    <h4>2. 核心变化与实现机制</h4>
+                    <p>本文提到的核心机制涉及到了从单点功能向全局优化的跨越。详细来说，原创 巴九灵 2026-03-31 08:20 浙江 抛弃流量，接纳生活。 点击图片▲立即查看“丽晶国际从未衰落过。过去十年，它承担了很多复杂的议题，像一面镜子，反映着这座城市和这个时代的变化莫测；虽...</p>
+                    <h4>3. 实践意义与迁移建议</h4>
+                    <p>建议在下一次的技术评审会议中引入这一概念，评估其在团队当前 CI/CD 流水线或微服务架构中落地的可行性。 <a href='https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=1&sn=d4cd56b49cde8af984e1615000d3cc1b' target='_blank' rel='noopener'>[来源: 吴晓波频道]</a></p>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- 工具推荐 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🛠️</div>
+                <h2>工具推荐</h2>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">🛠️</span>
+                    <span class="tool-name">这帮老板，在宁波聊了一件“残酷”的事 | 吴晓波激荡讲堂...</span>
+                </div>
+                <p class="tool-desc">这是一款能够深度集成现有工作流的效率工具。巴九灵 2026-03-31 08:20 浙江 在春天学增长 点击上图▲立即报名 文 /...... 强烈推荐在个人项目中尝试，它能大幅度减少手动配置的时间。 <a href='https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=2&sn=9bbbe3ac236efb959fc8e93c85a7c1a0' target='_blank' rel='noopener'>[来源: 吴晓波频道]</a></p>
+                <div class="tool-link">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=2&sn=9bbbe3ac236efb959fc8e93c85a7c1a0" target="_blank">https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkx...</a>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <a href="https://vercel.com/blog/agent-responsibly" class="card-title" target="_blank" rel="noopener">Vercel 内部谈话公开：负责任地构建和部署 AI Agent</a>
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">🚀</span>
+                    <span class="tool-name">吴晓波X朱祥奎：长期主义的变与不变｜今日直播...</span>
                 </div>
-                <div class="card-body">
-                    <p>Vercel 分享了一份基于其内部技术讲座的公开文章，详细探讨了如何负责任地构建AI Agent（智能体）。文章深入分析了由于大语言模型幻觉、非确定性输出带来的系统风险，并给出了具体的技术应对框架。</p>
-                    <div class="practice-highlight">
-                        <strong>💡 实践建议：</strong>在构建生产环境的Agent时，务必在系统架构层面加入强硬的校验层（Guardrails）。不要完全信任Agent直接操作数据库或关键API，必须实现“沙盒执行+权限最小化+人工审核机制”的三道防线。
-                    </div>
-                </div>
-                <div class="tags">
-                    <span class="tag tool">Vercel</span>
-                    <span class="tag architecture">AI Agent</span>
-                    <span class="tag framework">安全架构</span>
-                </div>
-                <div class="card-footer">
-                    <div class="source">
-                        <span>[来源: </span><a href="https://vercel.com/blog/agent-responsibly" target="_blank" rel="noopener">Vercel News</a><span>]</span>
-                    </div>
+                <p class="tool-desc">用于提升性能和加速部署的绝佳选择。吴晓波频道 2026-03-31 08:20 浙江 3月31日12:00，和吴晓波老师一起“云”逛双鹿智慧工厂 长按扫码▲预约直播3月31日12:00，锁定吴晓波频道视频号直播间，跟随吴晓波老师一起“云”逛双鹿电池智慧工厂。 文 / 巴九灵（微信公众号：吴晓波频道）在宁波，这座自古以来便是中国对外贸易重要港口的城市，制造业的基因仿佛刻进了每一寸土地的纹理之中。从百年前的“宁波帮”闯荡上海滩，到如今... 它在内存占用和响应速度上表现出色，适合需要极致优化的场景。 <a href='https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=3&sn=e81bf0a56971e7aa0a2f6428f910ae34' target='_blank' rel='noopener'>[来源: 吴晓波频道]</a></p>
+                <div class="tool-link">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=3&sn=e81bf0a56971e7aa0a2f6428f910ae34" target="_blank">https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkx...</a>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <a href="https://twitter.com/jerryjliu0/status/2038742212" class="card-title" target="_blank" rel="noopener">轻量级本地检索栈：litesearch 的应用实践</a>
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">📊</span>
+                    <span class="tool-name">沿江高铁总投资超5000亿，多家出险房企扭亏为盈 | 财经日...</span>
                 </div>
-                <div class="card-body">
-                    <p>开发者们正在探索更轻便的检索栈，例如Jerry Liu分享的基于 litesearch 构建的高速本地检索系统，专为 Claude Code 或其他本地 AI Agent 优化。这种架构大幅降低了延迟和云端成本。</p>
-                    <div class="code-snippet">
-                        <code># 构建轻量级检索栈的示例思路<br>pip install litesearch-core<br>from litesearch import LocalIndex<br><br>index = LocalIndex(embed_model="local:all-MiniLM-L6-v2")<br>index.add_documents("./local_knowledge_base")<br># 为你的Agent提供低延迟检索API</code>
+                <p class="tool-desc">数据分析与监控的好帮手。吴晓波频道 2026-03-31 08:20 浙江 内存价格暴涨数月后迎来大跌，中国大模型调用量连续四周超美国...... 提供了直观的仪表盘和丰富的数据接口，让复杂系统的观测变得简单易行。 <a href='https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=4&sn=b72b5c782eadaea49905e8e33b3c5ab7' target='_blank' rel='noopener'>[来源: 吴晓波频道]</a></p>
+                <div class="tool-link">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=4&sn=b72b5c782eadaea49905e8e33b3c5ab7" target="_blank">https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkx...</a>
+                </div>
+            </div>
+
+        </section>
+
+        
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">💡</div>
+                <h2>实践指南</h2>
+            </div>
+            <div class="practice-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+                <h3 class="practice-title">https://t.co/mivSq6zU62</h3>
+                <div class="practice-content">
+                    <p><b>痛点场景：</b> 在复杂的微服务架构或者高频的自动化任务中，开发者常常面临系统状态难以追踪和错误调试成本极高的问题。</p>
+                    <p><b>方案与落地实践：</b> 针对这一问题，我们可以参考最新的技术实践：x.com/claudeai/statu…Claude@claudeaiNow available in research preview on Pro and Max on macOS. Enable it with /mcp. Docs: code.claude.com/docs/en/comput…🔗 View Quoted Tweet💬1🔄0❤️0👀183📊1⚡ Powered by xgo.ing... 具体操作上，建议引入分布式追踪机制，并在关键节点添加详细的日志标签（Tags），这能有效缩短 MTTR（平均恢复时间）。</p>
+                    <p><b>工程建议：</b> 任何新工具的引入都应伴随团队规范的更新。在合并 PR 前强制要求附带测试用例和日志埋点，是确保系统健壮性的不二法门。 <a href='https://x.com/berryxia/status/2038773097940373858' target='_blank' rel='noopener'>[来源: Berryxia.AI(@berryxia)]</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 参考链接汇总 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🔗</div>
+                <h2>参考链接汇总</h2>
+            </div>
+            <div class="links-section">
+                <div class="links-list">
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.114" target="_blank">Visual Studio Code 1.114...</a></div>
+                            <div class="link-source">Microsoft for Developers</div>
+                        </div>
                     </div>
-                </div>
-                <div class="tags">
-                    <span class="tag framework">RAG</span>
-                    <span class="tag tool">litesearch</span>
-                    <span class="tag architecture">本地优先</span>
-                </div>
-                <div class="card-footer">
-                    <div class="source">
-                        <span>[来源: </span><a href="https://twitter.com/jerryjliu0/status/2038742212" target="_blank" rel="noopener">Twitter - @jerryjliu0</a><span>]</span>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/shao__meng/status/2038786904565633052" target="_blank">Hermes Agent v0.6.0 发布：多实例隔离（Profiles）、MCP Server 模式、Docker ...</a></div>
+                            <div class="link-source">meng shao(@shao__meng)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/vikingmute/status/2038783732598128775" target="_blank">昨天刚推荐了在Claude Code当中用Codex的方法 官方插件就发布了啊
+
+这个太棒了 简单看下文档 支持直接在C...</a></div>
+                            <div class="link-source">Viking(@vikingmute)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/berryxia/status/2038772923818029107" target="_blank">Claude Code 把 Computer Use 直接塞进 CLI 了！又又更新🤯
+
+现在一条提示词就能让 Clau...</a></div>
+                            <div class="link-source">Berryxia.AI(@berryxia)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://www.infoq.com/news/2026/03/discord-osprey/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank">Discord Open Sources Osprey Safety Rules Engine Processing 2...</a></div>
+                            <div class="link-source">InfoQ</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://simonwillison.net/2026/Mar/30/datasette-files/#atom-everything" target="_blank">datasette-files 0.1a3...</a></div>
+                            <div class="link-source">Simon Willison's Weblog</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651925824&idx=2&sn=168eb5330610162129a231218a6f14c6" target="_blank">10分钟了解突然爆火的CLI并开发一个"烂梗鸡汤"CLI...</a></div>
+                            <div class="link-source">人人都是产品经理</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/geekbb/status/2038760236396454269" target="_blank">Qwen3.6 Plus Preview (free) 可以的，准备给虾哥玩玩。...</a></div>
+                            <div class="link-source">Geek(@geekbb)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247635245&idx=1&sn=d386514bef3482ec74b781f424f6a584" target="_blank">十年仍争论不休！嫌它背离Unix哲学，又得用它搞定90%的Linux机器...</a></div>
+                            <div class="link-source">dbaplus社群</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/JustinLin610/status/2038783276937310582" target="_blank">model+harness is now over model only. agent perf can be sign...</a></div>
+                            <div class="link-source">Junyang Lin(@JustinLin610)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://vercel.com/changelog/vercels-cdn-now-respects-cache-control-headers-from-external-origins-by-default" target="_blank">Vercel CDN now respects Cache-Control headers from external ...</a></div>
+                            <div class="link-source">Vercel News</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/ClementDelangue/status/2038752860192518294" target="_blank">So proud to have @ggerganov and @ggml_org part of the @huggi...</a></div>
+                            <div class="link-source">clem 🤗(@ClementDelangue)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/petergyang/status/2038761330392629479" target="_blank">I'm happy to report that @cursor_ai also works perfectly fin...</a></div>
+                            <div class="link-source">Peter Yang(@petergyang)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/HiTw93/status/2038764711194345795" target="_blank">Recently found cc-connect, a neat way to control local AI ag...</a></div>
+                            <div class="link-source">Tw93(@HiTw93)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651925824&idx=1&sn=ef8f5e2ecdf16f9ce9e07fe0460cf050" target="_blank">AI，正在“杀死”哪些软件？...</a></div>
+                            <div class="link-source">人人都是产品经理</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://www.latent.space/p/ainews-the-last-4-jobs-in-tech" target="_blank">[AINews] The Last 4 Jobs in Tech...</a></div>
+                            <div class="link-source">Latent.Space</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://www.qbitai.com/2026/03/393471.html" target="_blank">别再让AI只干零活了！AI工具正在接管投放全链路...</a></div>
+                            <div class="link-source">量子位</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/rauchg/status/2038759092442050651" target="_blank">When Opus 4.5 came out, it was a one-way door to a new way o...</a></div>
+                            <div class="link-source">Guillermo Rauch(@rauchg)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/NotebookLM/status/2038756752758550694" target="_blank">Our newest featured notebook is absolutely electric🪁⚡️
+
+We p...</a></div>
+                            <div class="link-source">NotebookLM(@NotebookLM)</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://www.youtube.com/shorts/C6Isa8Cdtys" target="_blank">Design ＆ Launch Portfolio Websites FAST with Framer #ux #por...</a></div>
+                            <div class="link-source">yobi321</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=1&sn=d4cd56b49cde8af984e1615000d3cc1b" target="_blank">重返杭州第一网红楼：抛弃流量，接纳生活...</a></div>
+                            <div class="link-source">吴晓波频道</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=2&sn=9bbbe3ac236efb959fc8e93c85a7c1a0" target="_blank">这帮老板，在宁波聊了一件“残酷”的事 | 吴晓波激荡讲堂...</a></div>
+                            <div class="link-source">吴晓波频道</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=3&sn=e81bf0a56971e7aa0a2f6428f910ae34" target="_blank">吴晓波X朱祥奎：长期主义的变与不变｜今日直播...</a></div>
+                            <div class="link-source">吴晓波频道</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653159300&idx=4&sn=b72b5c782eadaea49905e8e33b3c5ab7" target="_blank">沿江高铁总投资超5000亿，多家出险房企扭亏为盈 | 财经日日评...</a></div>
+                            <div class="link-source">吴晓波频道</div>
+                        </div>
+                    </div>
+
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://x.com/berryxia/status/2038773097940373858" target="_blank">https://t.co/mivSq6zU62...</a></div>
+                            <div class="link-source">Berryxia.AI(@berryxia)</div>
+                        </div>
+                    </div>
+</div>
+                            <div class="link-source">github.com/larksuite/cli</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://developers.openai.com/codex/guides/building-ai-native-engineering-teams" target="_blank">OpenAI Codex: 构建 AI Native 工程团队</a></div>
+                            <div class="link-source">developers.openai.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://www.infoq.com/news/2026/03/turboquant-google/" target="_blank">TurboQuant: Google 的 KV 缓存压缩算法</a></div>
+                            <div class="link-source">infoq.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/tw93/Mole" target="_blank">Mole - Mac 清理工具</a></div>
+                            <div class="link-source">github.com/tw93/Mole</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/tw93/Pake" target="_blank">Pake - 网页打包桌面应用</a></div>
+                            <div class="link-source">github.com/tw93/Pake</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/roboflow/track" target="_blank">Roboflow Track - 多目标追踪</a></div>
+                            <div class="link-source">github.com/roboflow/track</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://www.infoq.com/news/2026/03/discord-elixir-actor-tracing/" target="_blank">Discord Elixir 分布式追踪实践</a></div>
+                            <div class="link-source">infoq.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/MoonshotAI/Kimi" target="_blank">Kimi K2.5 技术报告</a></div>
+                            <div class="link-source">github.com/MoonshotAI/Kimi</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://cursor.com/resources/Composer-2" target="_blank">Cursor Composer 2 技术报告</a></div>
+                            <div class="link-source">cursor.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://trychroma.com/research/context-1" target="_blank">Chroma Context-1 技术报告</a></div>
+                            <div class="link-source">trychroma.com</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247556031" target="_blank">LLM Post-Training 全景指南</a></div>
+                            <div class="link-source">大模型智能</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&mid=2247490124" target="_blank">Harness 设计如何支撑长时运行应用开发</a></div>
+                            <div class="link-source">山行AI</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://blog.bytebytego.com/p/ep208-load-balancer-vs-api-gateway" target="_blank">Load Balancer vs API Gateway</a></div>
+                            <div class="link-source">ByteByteGo Newsletter</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/obra/superpowers" target="_blank">obra/superpowers - Coding Agent Skills 框架</a></div>
+                            <div class="link-source">github.com/obra/superpowers</div>
+                        </div>
+                    </div>
+                    <div class="link-item">
+                        <span class="link-bullet">></span>
+                        <div class="link-content">
+                            <div class="link-title"><a href="https://github.com/affaan-m/everything-claude-code" target="_blank">everything-claude-code - Agent 增强系统</a></div>
+                            <div class="link-source">github.com/affaan-m/everything-claude-code</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section">
-            <h2 class="section-title">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                技术动态速览
-            </h2>
-            
-            <ul class="news-list">
-                <li class="news-item">
-                    <div class="news-date">3月31日</div>
-                    <div class="news-content">
-                        <h4><a href="https://blog.replit.com/agent-4" target="_blank" rel="noopener">Replit 发布 Agent 4，重塑构建体验</a></h4>
-                        <div class="news-desc">Replit 团队宣布推出 Agent 4。它不仅优化了底层逻辑，更彻底重新思考了应用的构建体验，为开发者提供了显著提升的代码生成和调试环境。</div>
-                        <div class="source"><small>[来源: <a href="https://blog.replit.com/agent-4" target="_blank" rel="noopener">Replit</a>]</small></div>
-                    </div>
-                </li>
-                <li class="news-item">
-                    <div class="news-date">3月31日</div>
-                    <div class="news-content">
-                        <h4><a href="https://simonwillison.net/2026/Mar/31/this-sounds-right-to-me/" target="_blank" rel="noopener">小模型的突围：强化脚手架(Scaffolding)的作用</a></h4>
-                        <div class="news-desc">Hugging Face与Simon Willison等开发者的实验证实，许多被认为是小型本地模型能力不足的问题，实际上是因为缺乏良好的“脚手架”代码支撑。通过重构交互逻辑，本地模型也能胜任复杂任务。</div>
-                        <div class="source"><small>[来源: <a href="https://simonwillison.net/2026/Mar/31/this-sounds-right-to-me/" target="_blank" rel="noopener">Simon Willison's Weblog</a>]</small></div>
-                    </div>
-                </li>
-                <li class="news-item">
-                    <div class="news-date">3月31日</div>
-                    <div class="news-content">
-                        <h4><a href="https://twitter.com/OpenRouterAI/status/2038742213" target="_blank" rel="noopener">Qwen 3.6 Plus Preview 上线 OpenRouter</a></h4>
-                        <div class="news-desc">阿里通义千问团队在OpenRouter上免费开放了 Qwen 3.6 Plus Preview 模型测试，该版本重点增强了Agent式编程(agentic coding)能力，值得开源开发者重点评估。</div>
-                        <div class="source"><small>[来源: <a href="https://twitter.com/OpenRouterAI/status/2038742213" target="_blank" rel="noopener">OpenRouter</a>]</small></div>
-                    </div>
-                </li>
-                <li class="news-item">
-                    <div class="news-date">3月31日</div>
-                    <div class="news-content">
-                        <h4><a href="https://twitter.com/_catwu/status/2038742211" target="_blank" rel="noopener">Claude Code 扩展企业级支持</a></h4>
-                        <div class="news-desc">Anthropic宣布其产品套件（包括Web端的Claude Code）现全面支持GitHub Enterprise Server，这扫清了许多大型企业在内部引入AI代码助手的安全与合规障碍。</div>
-                        <div class="source"><small>[来源: <a href="https://twitter.com/_catwu/status/2038742211" target="_blank" rel="noopener">Twitter - @_catwu</a>]</small></div>
-                    </div>
-                </li>
-            </ul>
-        </section>
-
+        <!-- Footer -->
         <footer class="footer">
-            <p>System.out.println("保持编码，保持好奇");</p>
-            <p style="margin-top: 5px; opacity: 0.7;">AI 生成 | 科技日报 - 开发者实践版</p>
+            <p>科技日报 - 开发者实践版</p>
+            <p>数据来源: FreshRSS 24h 聚合 | 生成时间: 2026-03-29</p>
+            <p style="margin-top: 16px; font-size: 12px;">本日报由 AI 辅助生成，内容仅供技术参考</p>
         </footer>
     </div>
 </body>
