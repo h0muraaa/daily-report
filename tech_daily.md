@@ -9,6 +9,8 @@
 - **必须读取** SKILL.md 并按照规范执行
 - **必须**采用Subagents 并行处理6个角色
 - **严禁直接生成HTML**，必须调用 subagent 生成
+- **超时设置**: Skill 执行超时时间为 **15分钟**，超时后停止并提交已生成的日报
+- **部分提交**: 即使部分角色日报未生成完成，也要提交已生成的日报文件
 
 ---
 
@@ -31,7 +33,24 @@ cat ./tech-daily-generator/SKILL.md
 
 按照 SKILL.md 规范启动6个subagent处理各角色日报。
 
-### 步骤3: 验证生成结果
+### 步骤3: 执行 Skill（带15分钟超时）
+调用 Skill 时设置超时时间为15分钟：
+```
+skill: "tech-daily-generator"
+args: "<JSON文件路径> --timeout 15m"
+```
+或使用环境变量设置超时后自动提交。
+
+**超时处理**: 如果15分钟内未完成，停止执行并收集已生成的日报文件进行提交。
+
+### 步骤4: 提交已生成的日报
+无论6个角色是否全部完成，提交所有已生成的 HTML 文件：
+```bash
+git add tech-daily/*.html
+git commit -m "Auto-generate daily report: $(date +'%Y-%m-%d %H:%M')"
+```
+
+### 验证清单
 - [ ] 使用了 tech-daily-generator Skill
 - [ ] 输入路径正确（`./tech-daily/` 下最新 JSON 文件）
 - [ ] 输出路径正确（直接生成到 `./tech-daily/` 覆盖旧文件）
@@ -39,3 +58,4 @@ cat ./tech-daily-generator/SKILL.md
 - [ ] 生成的HTML每条新闻都有内容摘要(summary)，禁止直接输出难懂的原文
 - [ ] 每条新闻附近的源链接(source link near the news)可点击且跳转正确
 - [ ] 底部链接(links at the bottom)可点击且跳转正确
+- [ ] **15分钟超时后提交了已生成的日报**
