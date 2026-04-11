@@ -5,6 +5,31 @@ on:
     # 定时任务：每天北京时间凌晨2点执行（UTC时间18点）
     - cron: '0 18 * * *'
   workflow_dispatch: # 允许网页端手动触发
+    inputs:
+      mode:
+        description: '运行模式'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full          # 完整流程：导出 FreshRSS + 生成报告
+          - json-only     # 仅导出 JSON，不生成报告
+          - report-only   # 仅用现有 JSON 生成报告，不导出
+      enable_ssh_debug:
+        description: '启用 SSH 调试 (true/false)'
+        required: false
+        default: 'false'
+        type: string
+      ssh_timeout:
+        description: 'SSH 调试超时时间 (分钟)'
+        required: false
+        default: '30'
+        type: string
+      ssh_password:
+        description: 'SSH 会话密码 (留空则使用 Web 链接，无需密码)'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   export-and-sync:
@@ -20,14 +45,15 @@ jobs:
       - name: Checkout Source Repository
         uses: actions/checkout@v4
 
-      # 2. 设置 Python 环境
+      # 2. 导出 FreshRSS 数据（仅在 full 或 json-only 模式下）
       - name: Set up Python
+        if: ${{ github.event.inputs.mode != 'report-only' }}
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      # 3. 执行 FreshRSS 导出脚本
       - name: Run FreshRSS Script
+        if: ${{ github.event.inputs.mode != 'report-only' }}
         env:
           FRESHRSS_USERNAME: ${{ secrets.FRESHRSS_USERNAME }}
           FRESHRSS_PASSWORD: ${{ secrets.FRESHRSS_PASSWORD }}
@@ -36,8 +62,8 @@ jobs:
           cd freshrss
           python freshrss_export_batch.py
 
-      # 4. 复制 JSON 文件到目标目录
       - name: Copy JSON files
+        if: ${{ github.event.inputs.mode != 'report-only' }}
         run: |
           # 检查输出目录是否存在且有文件
           if [ ! -d "freshrss/output" ] || [ -z "$(ls -A freshrss/output/*.json 2>/dev/null)" ]; then
@@ -57,22 +83,30 @@ jobs:
           cp freshrss/output/*.json tech-daily/
           echo "✅ 复制完成"
 
-      # 5. 设置 Node.js 环境
+      # 3. 检查 JSON 文件（仅在 report-only 模式下需要验证）
+      - name: Check JSON files exist
+        if: ${{ github.event.inputs.mode == 'report-only' }}
+        run: |
+          if [ ! -d "tech-daily" ] || [ -z "$(ls -A tech-daily/*.json 2>/dev/null)" ]; then
+            echo "❌ 错误: tech-daily/ 目录不存在或没有 JSON 文件"
+            echo "请先运行 full 或 json-only 模式导出 JSON 数据"
+            exit 1
+          fi
+          echo "✅ 找到 JSON 文件:"
+          ls -la tech-daily/*.json
+
+      # 4. 生成日报（仅在 full 或 report-only 模式下）
       - name: Setup Node.js 24.3.0
+        if: ${{ github.event.inputs.mode != 'json-only' }}
         uses: actions/setup-node@v4
         with:
           node-version: '24.3.0'
 
-      # 6. 安装 Claude Code
       - name: Install claude-code and Initialize Config
+        if: ${{ github.event.inputs.mode != 'json-only' }}
         run: |
-          # 检查版本确认是否切换成功
           node -v
-
-          # 全局安装 claude-code
           npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com
-
-          # 初始化配置
           node --eval "
             const fs = require('fs');
             const os = require('os');
@@ -89,27 +123,49 @@ jobs:
             }
           "
 
-      # 7. 运行 Claude Code 生成日报
-      - name: Run Claude Code
+      # 5. SSH 调试（可选）
+      - name: Setup SSH Debug Session
+        if: ${{ github.event.inputs.enable_ssh_debug == 'true' }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: ${{ fromJson(github.event.inputs.ssh_timeout || '30') }}
+        with:
+          limit-access-to-actor: false
+        env:
+          ENABLE_TOOL_SEARCH: false
+          ANTHROPIC_BASE_URL: https://api.kimi.com/coding/
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Setup SSH Password
+        if: ${{ github.event.inputs.enable_ssh_debug == 'true' && github.event.inputs.ssh_password != '' }}
         run: |
-          # 执行具体的 Claude 指令
+          echo "Setting up SSH password..."
+          echo "runner:${{ github.event.inputs.ssh_password }}" | sudo chpasswd
+          echo "SSH password set for user 'runner'"
+
+      - name: Run Claude Code
+        if: ${{ github.event.inputs.mode != 'json-only' }}
+        run: |
           claude -p "阅读tech_daily.md并执行对应任务"
 
-      # 8. 统一提交所有变更
+      # 6. 提交变更
       - name: Commit All Changes
         run: |
-          # 配置 Git 机器人账号信息
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # 添加所有变更（JSON 文件 + Claude 生成的日报）
           git add .
 
-          # 检查是否有文件变更
           if git diff --staged --quiet; then
             echo "没有新的数据变更，无需提交。"
           else
-            git commit -m "Auto-sync FreshRSS data and generate daily report: $(date +'%Y-%m-%d %H:%M')"
+            # 根据模式选择提交信息
+            if [ "${{ github.event.inputs.mode }}" == "json-only" ]; then
+              git commit -m "Auto-export FreshRSS JSON: $(date +'%Y-%m-%d %H:%M')"
+            elif [ "${{ github.event.inputs.mode }}" == "report-only" ]; then
+              git commit -m "Auto-generate daily report: $(date +'%Y-%m-%d %H:%M')"
+            else
+              git commit -m "Auto-sync FreshRSS data and generate daily report: $(date +'%Y-%m-%d %H:%M')"
+            fi
             git push origin main
             echo "✅ 成功推送到当前仓库！"
           fi
