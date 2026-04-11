@@ -1,0 +1,86 @@
+name: Generate Daily Report from FreshRSS JSON
+
+on:
+  workflow_dispatch: # 仅手动触发，便于调试
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    env:
+      ENABLE_TOOL_SEARCH: false
+      ANTHROPIC_BASE_URL: https://api.kimi.com/coding/
+      ANTHROPIC_API_KEY: ${{ secrets.KIMI_API_KEY }}
+
+    steps:
+      # 1. 拉取当前仓库代码
+      - name: Checkout Source Repository
+        uses: actions/checkout@v4
+
+      # 2. 检查 JSON 文件是否存在
+      - name: Check JSON files exist
+        run: |
+          if [ ! -d "tech-daily" ] || [ -z "$(ls -A tech-daily/*.json 2>/dev/null)" ]; then
+            echo "❌ 错误: tech-daily/ 目录不存在或没有 JSON 文件"
+            echo "请先运行 freshrss-sync.yml 导出 JSON 数据，或手动放置 JSON 文件"
+            exit 1
+          fi
+          echo "✅ 找到 JSON 文件:"
+          ls -la tech-daily/*.json
+
+      # 3. 设置 Node.js 环境
+      - name: Setup Node.js 24.3.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.3.0'
+
+      # 4. 安装 Claude Code
+      - name: Install claude-code and Initialize Config
+        run: |
+          # 检查版本确认是否切换成功
+          node -v
+
+          # 全局安装 claude-code
+          npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com
+
+          # 初始化配置
+          node --eval "
+            const fs = require('fs');
+            const os = require('os');
+            const path = require('path');
+
+            const homeDir = os.homedir();
+            const filePath = path.join(homeDir, '.claude.json');
+
+            if (fs.existsSync(filePath)) {
+                const content = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                fs.writeFileSync(filePath, JSON.stringify({ ...content, hasCompletedOnboarding: true }, null, 2), 'utf-8');
+            } else {
+                fs.writeFileSync(filePath, JSON.stringify({ hasCompletedOnboarding: true }), 'utf-8');
+            }
+          "
+
+      # 5. 运行 Claude Code 生成日报
+      - name: Run Claude Code
+        run: |
+          # 执行具体的 Claude 指令
+          claude -p "阅读tech_daily.md并执行对应任务"
+
+      # 6. 统一提交所有变更
+      - name: Commit All Changes
+        run: |
+          # 配置 Git 机器人账号信息
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # 添加所有变更（Claude 生成的日报）
+          git add .
+
+          # 检查是否有文件变更
+          if git diff --staged --quiet; then
+            echo "没有新的数据变更，无需提交。"
+          else
+            git commit -m "Auto-generate daily report: $(date +'%Y-%m-%d %H:%M')"
+            git push origin main
+            echo "✅ 成功推送到当前仓库！"
+          fi
