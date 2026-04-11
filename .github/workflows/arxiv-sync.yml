@@ -1,0 +1,90 @@
+name: Auto Generate arXiv Daily Report
+
+on:
+  schedule:
+    # 定时任务：每天北京时间早上 6 点执行（UTC时间前一天的22点）
+    - cron: '0 22 * * *'
+  workflow_dispatch: # 允许网页端手动触发
+
+jobs:
+  arxiv-daily-sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. 拉取当前仓库代码
+      - name: Checkout Source Repository
+        uses: actions/checkout@v4
+
+      # 2. 设置 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 3. 安装依赖与工具 (采用 uv)
+      - name: Install Dependencies
+        run: |
+          # 安装基础库和 uv
+          python -m pip install --upgrade pip
+          pip install Pillow uv
+          
+          # 采用 uv tool 独立安装 nlm cli
+          uv tool install notebooklm-mcp-cli
+          
+          # 【关键】：uv tool 默认会将可执行文件安装在 ~/.local/bin，必须将其加入 Github Actions 的 PATH 中
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      # 4. 配置 NotebookLM CLI 登录凭证
+      - name: Setup NotebookLM Auth
+        env:
+          COOKIES: ${{ secrets.COOKIES }}
+          METADATA: ${{ secrets.METADATA }}
+        run: |
+          echo "配置 NotebookLM CLI 登录凭证..."
+          mkdir -p ~/.notebooklm-mcp-cli/profiles/default
+          echo "$COOKIES" > ~/.notebooklm-mcp-cli/profiles/default/cookies.json
+          echo "$METADATA" > ~/.notebooklm-mcp-cli/profiles/default/metadata.json
+
+      # 5. 执行核心流程：拉取代码、抓取RSS、生成图表与HTML、推送
+      - name: Run arXiv Daily Generation & Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.TARGET_GITHUB_TOKEN }}
+          GITHUB_USER: ${{ secrets.TARGET_GITHUB_USER }}
+          GITHUB_REPO: ${{ secrets.TARGET_GITHUB_REPO }}
+          DEBUG_LIMIT: 12
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "正在克隆目标仓库..."
+          rm -rf DEST_REPO
+          git clone "https://${GITHUB_TOKEN}@github.com/${GITHUB_USER}/${GITHUB_REPO}.git" DEST_REPO
+
+          mkdir -p ./arxiv-daily-output/arxiv-daily/images
+          python3 arxiv_codes/fetch_arxiv_rss.py
+
+          echo "检查 NotebookLM 状态..."
+          nlm login --check -p default || nlm login -p default
+
+          echo "生成论文信息图表..."
+          python3 arxiv_codes/process_arxiv_papers.py
+
+          echo "生成 HTML 网页..."
+          python3 arxiv_codes/generate_html_report.py
+
+          echo "同步生成结果至 DEST_REPO..."
+          mkdir -p DEST_REPO/arxiv-daily/images
+          cp ./arxiv-daily-output/arxiv-daily/index.html DEST_REPO/arxiv-daily/
+          cp ./arxiv-daily-output/arxiv-daily/images/*.jpg DEST_REPO/arxiv-daily/images/ 2>/dev/null || true
+
+          cd DEST_REPO
+          git add -A
+          TODAY=$(date +%Y-%m-%d)
+          
+          if git diff --staged --quiet; then
+            echo "没有新的数据变更，无需提交。"
+          else
+            git commit -m "arXiv Daily Report $TODAY"
+            git push origin main
+            echo "✅ 成功推送到目标仓库 GitHub Pages！"
+          fi
