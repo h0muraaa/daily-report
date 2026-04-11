@@ -13,6 +13,11 @@ on:
         required: false
         default: '30'
         type: string
+      ssh_password:
+        description: 'SSH 会话密码 (留空则使用 Web 链接，无需密码)'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   generate-report:
@@ -112,11 +117,19 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: ${{ fromJson(github.event.inputs.ssh_timeout) }}
         with:
-          limit-access-to-actor: true
+          limit-access-to-actor: false  # 不使用 SSH 密钥验证，改为 Web 链接
         env:
           ENABLE_TOOL_SEARCH: false
           ANTHROPIC_BASE_URL: https://api.kimi.com/coding/
           ANTHROPIC_API_KEY: ${{ secrets.KIMI_API_KEY }}
+
+      # 5.1 设置 SSH 密码（可选）
+      - name: Setup SSH Password
+        if: ${{ github.event.inputs.enable_ssh_debug == 'true' && github.event.inputs.ssh_password != '' }}
+        run: |
+          echo "Setting up SSH password..."
+          echo "runner:${{ github.event.inputs.ssh_password }}" | sudo chpasswd
+          echo "SSH password set for user 'runner'"
 
       # 6. 显示调试信息
       - name: Display Debug Info
