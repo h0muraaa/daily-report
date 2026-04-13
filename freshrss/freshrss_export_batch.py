@@ -9,6 +9,7 @@ import re
 import urllib.request
 import urllib.parse
 import glob
+import argparse
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
@@ -17,14 +18,11 @@ import time
 API_BASE = "https://idgktgic.us-east-1.clawcloudrun.com/api"
 USERNAME = os.environ.get('FRESHRSS_USERNAME', '')
 PASSWORD = os.environ.get('FRESHRSS_PASSWORD', '')
-OUTPUT_DIR = "./output"
 BATCH_SIZE = 100
 MAX_WORKERS = 8  # 并发线程数
 
 # 进度锁
 progress_lock = Lock()
-completed_count = 0
-total_feeds = 0
 
 class ProgressTracker:
     """进度追踪器"""
@@ -65,12 +63,12 @@ class ProgressTracker:
         if self.completed == self.total:
             print()  # 换行
 
-def clean_old_json_files():
+def clean_old_json_files(output_dir):
     """清理早于3天前的JSON文件"""
     cutoff_date = datetime.now() - timedelta(days=3)
     removed_count = 0
 
-    json_pattern = os.path.join(OUTPUT_DIR, "freshrss_24h_compact_*.json")
+    json_pattern = os.path.join(output_dir, "freshrss_24h_compact_*.json")
     for filepath in glob.glob(json_pattern):
         try:
             # 从文件名提取日期
@@ -173,6 +171,12 @@ def fetch_with_progress(feed, auth_token, start_time, tracker):
     return result
 
 def main():
+    # 增加命令行参数解析
+    parser = argparse.ArgumentParser(description="FreshRSS 导出工具 - 高性能并行版")
+    parser.add_argument("-o", "--output", default="./output", help="指定输出目录路径 (默认: ./output)")
+    args = parser.parse_args()
+    output_dir = args.output
+
     print("=" * 70)
     print("FreshRSS 高性能并行导出")
     print("=" * 70)
@@ -187,15 +191,15 @@ def main():
 
     print(f"⏰ 当前时间: {now.strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"📅 时间范围: {datetime.fromtimestamp(start_time).strftime('%Y-%m-%d %H:%M:%S')} 至今 (过去24小时)")
-    print(f"📁 输出目录: {OUTPUT_DIR}")
+    print(f"📁 输出目录: {output_dir}")
     print(f"⚡ 并发数: {MAX_WORKERS} 线程")
     print("")
 
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
 
     # 清理旧文件
     print("🧹 清理旧文件...")
-    clean_old_json_files()
+    clean_old_json_files(output_dir)
     print("")
 
     print("🔐 正在认证...")
@@ -219,7 +223,6 @@ def main():
     tracker = ProgressTracker(len(feeds))
 
     all_articles = []
-    batch_num = 1
 
     # 使用线程池并行获取
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
@@ -240,13 +243,14 @@ def main():
 
     print(f"\n{'=' * 70}")
 
-    # 按时间排序
+    # 按时间排序 (此时内部仍保留 published 以供排序)
     all_articles.sort(key=lambda x: x.get('published', 0), reverse=True)
 
-    # 保存最终文件
-    final_file = os.path.join(OUTPUT_DIR, f"freshrss_24h_compact_{now.strftime('%Y%m%d_%H%M%S')}.json")
+    # 组装统计与输出路径
+    final_file = os.path.join(output_dir, f"freshrss_24h_compact_{now.strftime('%Y%m%d_%H%M%S')}.json")
 
-    final_data = {
+    # 构建头部元数据
+    final_data_meta = {
         'export_time': now.strftime('%Y-%m-%d %H:%M:%S'),
         'start_time': datetime.fromtimestamp(start_time).strftime('%Y-%m-%d %H:%M:%S'),
         'end_time': now.strftime('%Y-%m-%d %H:%M:%S'),
@@ -254,18 +258,37 @@ def main():
         'summary_limit': 800,
         'total_count': len(all_articles),
         'source_count': len(feeds),
-        'articles': all_articles
     }
 
+    # 自定义写入逻辑：保证同一篇文章的对象输出在一行
     with open(final_file, 'w', encoding='utf-8') as f:
-        json.dump(final_data, f, ensure_ascii=False, indent=2)
+        f.write("{\n")
+        
+        # 写入外层字段
+        for key, value in final_data_meta.items():
+            f.write(f'  "{key}": {json.dumps(value, ensure_ascii=False)},\n')
+            
+        f.write('  "articles": [\n')
+        
+        # 遍历写入文章（剔除时间字段并在同一行序列化）
+        for i, a in enumerate(all_articles):
+            clean_article = {k: v for k, v in a.items() if k not in ('published', 'published_date')}
+            line_json = json.dumps(clean_article, ensure_ascii=False)
+            
+            if i < len(all_articles) - 1:
+                f.write(f'    {line_json},\n')
+            else:
+                f.write(f'    {line_json}\n')
+                
+        f.write('  ]\n')
+        f.write("}\n")
 
     print(f"✅ 导出完成!")
     print(f"   文章总数: {len(all_articles)}")
     print(f"   输出文件: {final_file}")
     print("")
 
-    # 数据统计
+    # 数据统计（依然可以使用最初保留的时间字段进行统计展示）
     if all_articles:
         latest = all_articles[0]
         oldest = all_articles[-1]
