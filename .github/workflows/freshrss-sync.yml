@@ -4,7 +4,7 @@ on:
   schedule:
     # 定时任务：每天北京时间凌晨2点执行（UTC时间18点）
     - cron: '0 18 * * *'
-  workflow_dispatch: # 允许网页端手动触发
+  workflow_dispatch:
     inputs:
       mode:
         description: '运行模式'
@@ -12,24 +12,9 @@ on:
         default: 'full'
         type: choice
         options:
-          - full          # 完整流程：导出 FreshRSS + 生成报告
-          - json-only     # 仅导出 JSON，不生成报告
-          - report-only   # 仅用现有 JSON 生成报告，不导出
-      enable_ssh_debug:
-        description: '启用 SSH 调试 (true/false)'
-        required: false
-        default: 'false'
-        type: string
-      ssh_timeout:
-        description: 'SSH 调试超时时间 (分钟)'
-        required: false
-        default: '30'
-        type: string
-      ssh_password:
-        description: 'SSH 会话密码 (留空则使用 Web 链接，无需密码)'
-        required: false
-        default: ''
-        type: string
+          - full
+          - json-only
+          - report-only
 
 permissions:
   contents: write
@@ -44,11 +29,10 @@ jobs:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
     steps:
-      # 1. 拉取当前仓库代码
       - name: Checkout Source Repository
         uses: actions/checkout@v4
 
-      # 2. 导出 FreshRSS 数据（仅在 full 或 json-only 模式下）
+      # 2. 导出 FreshRSS 数据
       - name: Set up Python
         if: ${{ github.event.inputs.mode != 'report-only' }}
         uses: actions/setup-python@v5
@@ -61,44 +45,27 @@ jobs:
           FRESHRSS_USERNAME: ${{ secrets.FRESHRSS_USERNAME }}
           FRESHRSS_PASSWORD: ${{ secrets.FRESHRSS_PASSWORD }}
         run: |
-          echo "开始执行 FreshRSS 抓取脚本..."
-          cd freshrss
-          python freshrss_export_batch.py
-
-      - name: Copy JSON files
-        if: ${{ github.event.inputs.mode != 'report-only' }}
-        run: |
-          # 检查输出目录是否存在且有文件
-          if [ ! -d "freshrss/output" ] || [ -z "$(ls -A freshrss/output/*.json 2>/dev/null)" ]; then
-            echo "❌ 错误: freshrss/output/ 目录不存在或没有 JSON 文件"
-            exit 1
-          fi
-
-          # 创建目标目录（如果不存在）
-          mkdir -p tech-daily
-
-          # 清理旧 JSON 文件
           echo "清理 tech-daily 目录下的旧 JSON 文件..."
+          mkdir -p tech-daily
           rm -f tech-daily/*.json
+          
+          echo "开始执行 FreshRSS 抓取脚本并导出到 tech-daily..."
+          cd freshrss
+          # 使用 -o 参数直接导出到目标目录
+          python freshrss_export_batch.py -o ../tech-daily/
 
-          # 复制新生成的 JSON 文件
-          echo "将新的 JSON 数据复制到 tech-daily..."
-          cp freshrss/output/*.json tech-daily/
-          echo "✅ 复制完成"
-
-      # 3. 检查 JSON 文件（仅在 report-only 模式下需要验证）
+      # 3. 检查 JSON 文件
       - name: Check JSON files exist
-        if: ${{ github.event.inputs.mode == 'report-only' }}
         run: |
           if [ ! -d "tech-daily" ] || [ -z "$(ls -A tech-daily/*.json 2>/dev/null)" ]; then
-            echo "❌ 错误: tech-daily/ 目录不存在或没有 JSON 文件"
-            echo "请先运行 full 或 json-only 模式导出 JSON 数据"
-            exit 1
+            echo "❌ 错误: tech-daily/ 目录没有 JSON 文件"
+            if [ "${{ github.event.inputs.mode }}" == "report-only" ]; then exit 1; fi
+          else
+            echo "✅ 找到 JSON 文件:"
+            ls -la tech-daily/*.json
           fi
-          echo "✅ 找到 JSON 文件:"
-          ls -la tech-daily/*.json
 
-      # 4. 生成日报（仅在 full 或 report-only 模式下）
+      # 4. 生成日报
       - name: Setup Node.js 24.3.0
         if: ${{ github.event.inputs.mode != 'json-only' }}
         uses: actions/setup-node@v4
@@ -108,16 +75,13 @@ jobs:
       - name: Install claude-code and Initialize Config
         if: ${{ github.event.inputs.mode != 'json-only' }}
         run: |
-          node -v
           npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com
           node --eval "
             const fs = require('fs');
             const os = require('os');
             const path = require('path');
-
             const homeDir = os.homedir();
             const filePath = path.join(homeDir, '.claude.json');
-
             if (fs.existsSync(filePath)) {
                 const content = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
                 fs.writeFileSync(filePath, JSON.stringify({ ...content, hasCompletedOnboarding: true }, null, 2), 'utf-8');
@@ -126,49 +90,37 @@ jobs:
             }
           "
 
-      # 5. SSH 调试（可选）
-      - name: Setup SSH Debug Session
-        if: ${{ github.event.inputs.enable_ssh_debug == 'true' }}
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: ${{ fromJson(github.event.inputs.ssh_timeout || '30') }}
-        with:
-          limit-access-to-actor: false
-        env:
-          ENABLE_TOOL_SEARCH: false
-          ANTHROPIC_BASE_URL: https://api.kimi.com/coding/
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-
-      - name: Setup SSH Password
-        if: ${{ github.event.inputs.enable_ssh_debug == 'true' && github.event.inputs.ssh_password != '' }}
-        run: |
-          echo "Setting up SSH password..."
-          echo "runner:${{ github.event.inputs.ssh_password }}" | sudo chpasswd
-          echo "SSH password set for user 'runner'"
-
-      - name: Run Claude Code
+      - name: Run Claude Code (with Timeout)
         if: ${{ github.event.inputs.mode != 'json-only' }}
         run: |
-          claude -p "阅读tech_daily.md并执行对应任务"
+          echo "执行 Claude 任务，限时 15 分钟..."
+          # 使用 timeout 命令，如果超过 15 分钟则 kill 掉，|| true 保证报错不中断 workflow
+          timeout 15m claude -p "阅读tech_daily.md并执行对应任务" || {
+            echo "⚠️ Claude 执行超时或遇到错误，尝试继续后续提交步骤..."
+          }
 
-      # 6. 提交变更
+      # 5. 提交变更
       - name: Commit All Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # 检查是否有 HTML 生成（或其他日报产物）
+          REPORT_EXISTS=$(ls *.html 2>/dev/null || echo "")
+          if [ -n "$REPORT_EXISTS" ]; then
+            echo "✅ 检测到新生成的报告文件"
+          fi
 
           git add .
 
           if git diff --staged --quiet; then
             echo "没有新的数据变更，无需提交。"
           else
-            # 根据模式选择提交信息
-            if [ "${{ github.event.inputs.mode }}" == "json-only" ]; then
-              git commit -m "Auto-export FreshRSS JSON: $(date +'%Y-%m-%d %H:%M')"
-            elif [ "${{ github.event.inputs.mode }}" == "report-only" ]; then
-              git commit -m "Auto-generate daily report: $(date +'%Y-%m-%d %H:%M')"
-            else
-              git commit -m "Auto-sync FreshRSS data and generate daily report: $(date +'%Y-%m-%d %H:%M')"
-            fi
+            # 动态生成提交信息
+            MSG="Auto-sync: $(date +'%Y-%m-%d %H:%M')"
+            if [ "${{ github.event.inputs.mode }}" == "json-only" ]; then MSG="Export JSON: $(date +'%Y-%m-%d %H:%M')"; fi
+            
+            git commit -m "$MSG"
             git push origin main
             echo "✅ 成功推送到当前仓库！"
           fi
