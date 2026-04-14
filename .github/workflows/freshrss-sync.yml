@@ -51,7 +51,6 @@ jobs:
           
           echo "开始执行 FreshRSS 抓取脚本并导出到 tech-daily..."
           cd freshrss
-          # 使用 -o 参数直接导出到目标目录
           python freshrss_export_batch.py -o ../tech-daily/
 
       # 3. 检查 JSON 文件
@@ -90,14 +89,61 @@ jobs:
             }
           "
 
-      - name: Run Claude Code (with Timeout)
+      - name: Run Claude Code via Tmux
         if: ${{ github.event.inputs.mode != 'json-only' }}
+        id: run_claude
+        env:
+          EXPECTED_HTML_COUNT: 6  # <--- 在此修改你期望的最低 HTML 文件生成数量
         run: |
-          echo "执行 Claude 任务，限时 15 分钟..."
-          # 使用 timeout 命令，如果超过 15 分钟则 kill 掉，|| true 保证报错不中断 workflow
-          timeout 15m claude -p "阅读tech_daily.md并执行对应任务" || {
-            echo "⚠️ Claude 执行超时或遇到错误，尝试继续后续提交步骤..."
-          }
+          echo "安装 tmux..."
+          sudo apt-get install -y tmux
+          
+          echo "启动 tmux 会话并启动 Claude..."
+          tmux new-session -d -s claude_session
+          tmux send-keys -t claude_session "claude --dangerously-skip-permissions" C-m
+          
+          # 等待 Claude 初始化完成（由于是后台运行，需要给足够的时间冷启动）
+          sleep 10 
+          
+          echo "向 Claude 发送任务指令..."
+          tmux send-keys -t claude_session "阅读tech_daily.md并执行对应任务" C-m
+          
+          echo "轮询检查是否生成了 ${EXPECTED_HTML_COUNT} 个 HTML 文件，限时 15 分钟..."
+          ELAPSED=0
+          TIMEOUT=900
+          SUCCESS=false
+          
+          while [ $ELAPSED -lt $TIMEOUT ]; do
+            CURRENT_COUNT=$(ls -1 *.html 2>/dev/null | wc -l)
+            if [ "$CURRENT_COUNT" -ge "$EXPECTED_HTML_COUNT" ]; then
+              echo "✅ 成功检测到 $CURRENT_COUNT 个 HTML 文件！"
+              SUCCESS=true
+              break
+            fi
+            sleep 10
+            ELAPSED=$((ELAPSED+10))
+          done
+          
+          # 记录运行结果供后续 tmate 步骤判断
+          if [ "$SUCCESS" = true ]; then
+            echo "html_generated=true" >> $GITHUB_OUTPUT
+            # 正常生成后，关闭后台的 tmux 会话
+            tmux kill-session -t claude_session || true
+          else
+            echo "❌ 未在规定时间内生成期望的 HTML 文件数量 (当前: $CURRENT_COUNT, 期望: $EXPECTED_HTML_COUNT)"
+            echo "html_generated=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup tmate debug session
+        if: ${{ github.event.inputs.mode != 'json-only' && steps.run_claude.outputs.html_generated == 'false' }}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+        timeout-minutes: 30
+
+      - name: Fail workflow if generation failed
+        if: ${{ github.event.inputs.mode != 'json-only' && steps.run_claude.outputs.html_generated == 'false' }}
+        run: exit 1
 
       # 5. 提交变更
       - name: Commit All Changes
@@ -105,7 +151,6 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # 检查是否有 HTML 生成（或其他日报产物）
           REPORT_EXISTS=$(ls *.html 2>/dev/null || echo "")
           if [ -n "$REPORT_EXISTS" ]; then
             echo "✅ 检测到新生成的报告文件"
@@ -116,7 +161,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "没有新的数据变更，无需提交。"
           else
-            # 动态生成提交信息
             MSG="Auto-sync: $(date +'%Y-%m-%d %H:%M')"
             if [ "${{ github.event.inputs.mode }}" == "json-only" ]; then MSG="Export JSON: $(date +'%Y-%m-%d %H:%M')"; fi
             
