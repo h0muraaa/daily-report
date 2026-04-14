@@ -1,436 +1,342 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技日报 - 科技爱好者版 | 2026-04-14</title>
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-light: #818cf8;
-            --secondary: #f472b6;
-            --accent: #22d3ee;
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --text: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border: #334155;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-        }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        header {
-            text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-        }
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-        h1 { font-size: 2.5em; position: relative; z-index: 1; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-        .subtitle { color: rgba(255,255,255,0.9); margin-top: 10px; position: relative; z-index: 1; }
-        .date { display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; margin-top: 15px; font-size: 0.9em; }
-
-        .section { margin-bottom: 40px; }
-        .section-title {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .news-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .news-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.2);
-        }
-        .news-title {
-            font-size: 1.2em;
-            color: var(--primary-light);
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-        .news-content {
-            color: var(--text);
-            margin-bottom: 15px;
-        }
-        .news-content p { margin-bottom: 10px; }
-        .news-meta {
-            display: flex;
-            gap: 15px;
-            font-size: 0.85em;
-            color: var(--text-muted);
-            flex-wrap: wrap;
-        }
-        .tag {
-            background: rgba(99, 102, 241, 0.2);
-            color: var(--primary-light);
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.8em;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(244, 114, 182, 0.1) 100%);
-            border: 1px solid var(--primary);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-        }
-        .highlight-box h3 {
-            color: var(--accent);
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-        .highlight-box p { margin-bottom: 12px; }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .product-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid var(--border);
-        }
-        .product-card h4 { color: var(--secondary); margin-bottom: 10px; }
-
-        .sources {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            margin-top: 40px;
-        }
-        .sources h3 { margin-bottom: 15px; color: var(--accent); }
-        .source-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 10px;
-            font-size: 0.9em;
-        }
-        .source-item {
-            color: var(--text-muted);
-            padding: 5px 0;
-            border-bottom: 1px dotted var(--border);
-        }
-
-        .further-reading {
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
-            border-radius: 16px;
-            padding: 24px;
-            margin-top: 30px;
-            border: 1px solid var(--accent);
-        }
-        .further-reading h3 { color: var(--accent); margin-bottom: 15px; }
-        .reading-list li {
-            margin-bottom: 10px;
-            color: var(--text-muted);
-        }
-        .reading-list a {
-            color: var(--primary-light);
-            text-decoration: none;
-        }
-        .reading-list a:hover { text-decoration: underline; }
-
-        .tip-box {
-            background: rgba(34, 211, 238, 0.1);
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 12px;
-            border-left: 4px solid var(--accent);
-        }
-        .tip-box strong { color: var(--accent); }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-muted);
-            font-size: 0.9em;
-            border-top: 1px solid var(--border);
-            margin-top: 40px;
-        }
-
-        a { color: var(--primary-light); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8em; }
-            .news-card { padding: 16px; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>科技日报 · 科技爱好者版 | 2026年4月14日</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --secondary: #f472b6;
+      --accent: #22d3ee;
+      --bg: #fef9ff;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --border: #e5e7eb;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    header {
+      text-align: center;
+      padding: 48px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 24px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: "✨";
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      font-size: 32px;
+      opacity: 0.6;
+    }
+    header::after {
+      content: "🚀";
+      position: absolute;
+      bottom: 20px;
+      right: 30px;
+      font-size: 32px;
+      opacity: 0.6;
+    }
+    h1 { font-size: 2.2rem; margin-bottom: 8px; }
+    .subtitle { font-size: 1rem; opacity: 0.9; }
+    .date-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin: 40px 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .icon { font-size: 1.8rem; }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-2px); }
+    .card h3 {
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .card p { margin-bottom: 12px; }
+    .card p:last-child { margin-bottom: 0; }
+    .source {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+    .source a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--primary);
+    }
+    .source a:hover { border-bottom-style: solid; }
+    .highlight-box {
+      background: linear-gradient(135deg, #fff0f5 0%, #f0f9ff 100%);
+      border-left: 4px solid var(--secondary);
+      padding: 20px;
+      border-radius: 12px;
+      margin: 16px 0;
+    }
+    .highlight-box h4 {
+      color: #be185d;
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+    .tip-box {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    .tip-box h4 {
+      color: #15803d;
+      margin-bottom: 10px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      border: 2px solid var(--border);
+      text-align: center;
+    }
+    .product-card .emoji {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .product-card h4 {
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .refs {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 40px;
+    }
+    .refs h2 { margin-top: 0; }
+    .refs ul {
+      list-style: none;
+      columns: 1;
+    }
+    .refs li {
+      padding: 6px 0;
+      border-bottom: 1px dotted var(--border);
+      font-size: 0.9rem;
+    }
+    .refs li a { color: var(--primary); text-decoration: none; }
+    .refs li a:hover { text-decoration: underline; }
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+    @media (min-width: 600px) {
+      .refs ul { columns: 2; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>科技日报</h1>
-            <p class="subtitle">科技爱好者版 · 探索科技的无限可能</p>
-            <span class="date">2026年4月14日</span>
-        </header>
+  <div class="container">
+    <header>
+      <h1>科技日报</h1>
+      <p class="subtitle">用有趣的方式，读懂正在发生的科技未来</p>
+      <span class="date-badge">2026年4月14日 · 科技爱好者版</span>
+    </header>
 
-        <!-- 今日头条 -->
-        <section class="section">
-            <h2 class="section-title">🔥 今日头条</h2>
+    <h2><span class="icon">📰</span>今日头条</h2>
 
-            <article class="news-card">
-                <h3 class="news-title">Google Gemma 4 来了！你的手机即将拥有"本地超脑"</h3>
-                <div class="news-content">
-                    <p>Google 刚刚发布了全新的 Gemma 4 模型系列，这次最大的卖点不是跑分有多高，而是它专为"本地优先、设备端运行"而生。简单来说，以后的 Android 手机可能不需要联网，就能在本地完成从写代码到调试应用的完整 AI 辅助流程。</p>
-                    <p>这对普通用户意味着什么？首先是隐私更有保障——你的数据不用上传到云端；其次是响应更快，即使信号不好也能用；对开发者而言，更是可以直接在手机上搭建 AI 应用。Google 正在把 AI 从"云服务"变成"随身助手"。</p>
-                </div>
-                <div class="news-meta">
-                    <span class="tag">AI硬件</span>
-                    <span>来源: InfoQ</span>
-                    <span>🔗 <a href="https://www.infoq.com/news/2026/04/gemma-4-android-ai-inference/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <h3 class="news-title">微软 AI 能用 10 美元切片检测癌症，医院里的"高科技平替"来了</h3>
-                <div class="news-content">
-                    <p>癌症检测往往依赖昂贵的专业成像设备，动辄上千美元。但微软最新研发的 GigaTIME AI 系统，却能从医院里最普通的显微镜切片（成本仅约 10 美元）中提取出原本需要高端设备才能看到的免疫信息。</p>
-                    <p>这套系统训练了 4000 万个癌细胞数据，在 51 家医院、超过 1.4 万名患者身上验证过，覆盖 24 种癌症类型。它不仅发现了 1200 多个此前未知的免疫-肿瘤关联，更重要的是，它让精准医疗的成本大幅降低。未来，或许在普通医院就能享受到顶尖肿瘤中心的诊断水平。</p>
-                </div>
-                <div class="news-meta">
-                    <span class="tag">AI医疗</span>
-                    <span>来源: Rowan Cheung(@rowancheung)</span>
-                    <span>🔗 <a href="https://x.com/rowancheung/status/2043709190515114008" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <h3 class="news-title">随手画的草图，AI 帮你变成真正的 App</h3>
-                <div class="news-content">
-                    <p>你有没有过这样的时刻：脑子里闪过一个 App 的点子，画了张草图，然后就卡在了"我不会写代码"这一步？Google 最新演示了一个超酷的功能：在 Google AI Studio 里，用 Nano Banana 模型，仅凭一张手绘涂鸦就能生成可运行的软件。</p>
-                    <p>演示中，团队从一张随手画的"天气穿搭选择器"草图开始，AI 直接把它变成了完整的应用。这种"Vibe Coding"（氛围编程）正在让普通人也能当"产品经理"——有想法、会画画，就能做出东西来。</p>
-                </div>
-                <div class="news-meta">
-                    <span class="tag">AI创意</span>
-                    <span>来源: Google AI(@GoogleAI)</span>
-                    <span>🔗 <a href="https://x.com/GoogleAI/status/2043765855314706899" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <h3 class="news-title">OpenAI Codex 正式入驻 Claude Code，AI 编程工具开始"合体"</h3>
-                <div class="news-content">
-                    <p>以前用 Claude Code 写代码，想换 OpenAI 的 Codex 还得切来切去。现在，OpenAI 推出了官方 Codex 插件，直接在 Claude Code 终端里就能召唤 Codex 来做代码审查、设计批判，甚至一键委托复杂的多步骤任务。</p>
-                    <p>这个变化虽然听起来很"程序员专属"，但它代表了一个大趋势：各大 AI 工具正在从"单打独斗"走向"互联互通"。对科技爱好者来说，这意味着未来你不需要纠结"用哪个 AI"，而是可以像拼乐高一样，把不同 AI 的优势组合起来用。</p>
-                </div>
-                <div class="news-meta">
-                    <span class="tag">AI编程</span>
-                    <span>来源: Berryxia.AI(@berryxia)</span>
-                    <span>🔗 <a href="https://x.com/berryxia/status/2043707207213035857" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <h3 class="news-title">HeyGen 推出 CLI 工具：一句话，AI 帮你拍完整条视频</h3>
-                <div class="news-content">
-                    <p>数字人视频平台 HeyGen 发布了全新的 CLI（命令行工具），现在你只需要在终端里输入一条命令，AI 就能自动完成写脚本、生成虚拟主播、剪辑视频到最终交付的全过程。这对于内容创作者和小团队来说简直是福音。</p>
-                    <p>想象一下，以后做产品宣传视频、教程或者社交媒体内容，不需要请演员、租场地、买设备，甚至连剪辑软件都不用打开。虽然现在的效果可能还比不上专业团队，但对于需要快速产出内容的场景，这个效率提升是革命性的。</p>
-                </div>
-                <div class="news-meta">
-                    <span class="tag">AI视频</span>
-                    <span>来源: HeyGen(@HeyGen_Official)</span>
-                    <span>🔗 <a href="https://x.com/HeyGen/status/2043725015506706900" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <h3 class="news-title">机器人大新闻：宇树人形机器人出海，Uber 和大众联手推自动驾驶出租车</h3>
-                <div class="news-content">
-                    <p>今天的机器人领域有点热闹。首先是国产的宇树科技（Unitree）把它的人形机器人推向了全球市场，而且主打"高性价比"；同时，Uber 和大众汽车宣布在洛杉矶推出自动驾驶出租车服务。此外，特斯拉的 FSD（完全自动驾驶）也获得了首批欧盟批准。</p>
-                    <p>这些消息连起来看，你会发现一个清晰的信号：机器人正从"实验室展品"快速走向"日常生活"。不管是家里帮忙的机器人、路上跑的无人车，还是工厂里的自动化设备，我们离科幻片里的场景真的越来越近了。</p>
-                </div>
-                <div class="news-meta">
-                    <span class="tag">机器人</span>
-                    <span>来源: The Rundown AI(@TheRundownAI)</span>
-                    <span>🔗 <a href="https://x.com/TheRundownAI/status/2043698283357274348" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <h3 class="news-title">Google 手表的"单手操作"新进化：捏一捏就能控制一切</h3>
-                <div class="news-content">
-                    <p>Google 最新一期 Made by Google 播客聊了聊 Pixel Watch 上的 AI 手势控制。当你一手抱娃、一手拎菜时，只需要"捏两下手指"或者"转一转手腕"，就能关掉闹钟、查看通知、控制音乐。</p>
-                    <p>这背后其实是 AI 在学习你的动作模式，并通过视觉提示帮你建立肌肉记忆。智能穿戴设备的发展方向越来越清晰：不是让你更频繁地看屏幕，而是在你最需要的时候，用最自然的方式帮上忙。</p>
-                </div>
-                <div class="news-meta">
-                    <span class="tag">可穿戴</span>
-                    <span>来源: Made by Google Podcast</span>
-                    <span>🔗 <a href="https://www.youtube.com/watch?v=W-dj56fP4jY" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </article>
-
-            <article class="news-card">
-                <h3 class="news-title">OpenRouter 迎来"隐身模型" Elephant Alpha：100B 参数免费试</h3>
-                <div class="news-content">
-                    <p>OpenRouter 平台新上线了一款名为 Elephant Alpha 的"隐身模型"，拥有 1000 亿参数，主打代码补全、调试、文档处理和轻量级 Agent 任务。它的特点是效率极高——相同规模下 token 消耗更少，响应更快。</p>
-                    <p>更吸引人的是，这款模型目前完全免费。虽然作为"stealth model"，提供方会记录提示词和输出内容用于研究，但对于想尝鲜最新开源模型能力的科技爱好者来说，这无疑是一个零成本体验 SOTA 性能的好机会。</p>
-                </div>
-                <div class="news-meta">
-                    <span class="tag">开源AI</span>
-                    <span>来源: OpenRouter(@OpenRouterAI)</span>
-                    <span>🔗 <a href="https://x.com/OpenRouter/status/2043714975756390844" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </article>
-        </section>
-
-        <!-- 科技新鲜事 -->
-        <section class="section">
-            <h2 class="section-title">🌟 科技新鲜事</h2>
-
-            <div class="highlight-box">
-                <h3>🍠 小红书正在变成"AI 孵化器"</h3>
-                <p>一个有趣的现象正在发生：越来越多的年轻人把小红书当成了一个"公开创业"的平台。在最新一届小红书黑客松上，参赛团队展示的项目让人惊叹——从能装进卫星的私人主机，到解决"和 Tony 老师沟通发型"的 AI 工具，再到只有手机大小的"口袋吉他"Pocket Guitar。</p>
-                <p>最意外的是，一支由 12、13 岁初中生组成的团队拿下了"AI 原住民"特别奖。这说明 AI 正在大幅降低创业的门槛：以前创业需要组建团队、融资、找技术合伙人，现在一个有想法的文科生，甚至一个初中生，都能借助 AI 工具做出完整的产品。</p>
-                <p>对普通人来说，这是一个信号：<strong>创意和洞察力，正在取代技术背景，成为新时代最值钱的技能。</strong></p>
-                <div class="news-meta" style="margin-top: 15px;">
-                    <span>来源: 极客公园</span>
-                    <span>🔗 <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653103883&idx=1&sn=6bda1d310c08c517ef5932c6e06302ed" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </div>
-
-            <div class="highlight-box" style="border-color: var(--accent);">
-                <h3 style="color: var(--accent);">🧠 Anthropic 发布 Claude Mythos Preview：最强也最神秘的 AI</h3>
-                <p>Anthropic 悄然推出了 Claude Mythos Preview，官方称其为目前最先进的模型，在推理、编程和网络安全能力上都有显著提升。但和以往不同的是，这个模型不会公开发布，而是通过 Project Glasswing 项目向特定科技公司联盟开放。</p>
-                <p>为什么藏着掖着？因为内部测试发现，这款模型在发现关键安全漏洞方面表现得"过于出色"。这引发了 AI 安全领域的激烈讨论：当 AI 能力强大到一定程度时，是否应该限制它的传播？这就像是发明了"太锋利的刀"，需要更谨慎地分发。</p>
-                <div class="news-meta" style="margin-top: 15px;">
-                    <span>来源: InfoQ / Marcus on AI</span>
-                    <span>🔗 <a href="https://www.infoq.com/news/2026/04/anthropic-claude-mythos/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">查看原文</a></span>
-                </div>
-            </div>
-        </section>
-
-        <!-- 科普小课堂 -->
-        <section class="section">
-            <h2 class="section-title">📚 科普小课堂</h2>
-
-            <div class="highlight-box">
-                <h3>什么是"设备端 AI"？</h3>
-                <p>你可能经常听到"云端 AI"和"设备端 AI"这两个词。简单来说：</p>
-                <ul style="margin: 15px 0; padding-left: 20px; color: var(--text-muted);">
-                    <li><strong>云端 AI</strong>：你的问题发送到远程服务器，AI 在服务器上思考后再把答案发回给你。好处是算力强、模型大；缺点是必须联网，而且你的数据会上传。</li>
-                    <li><strong>设备端 AI</strong>：AI 模型直接运行在你的手机、电脑或手表上。好处是速度快、隐私好、没网也能用；缺点是对设备性能要求高，模型通常更小。</li>
-                </ul>
-                <p>Google Gemma 4 的发布，就是为了推动更多 AI 能力从云端"下沉"到设备端。未来，你的手机可能会像今天的云端服务器一样聪明。</p>
-                <div class="tip-box">
-                    <strong>💡 生活小贴士：</strong>如果你很在意隐私，或者经常在地铁、飞机上使用 AI 功能，设备端 AI 会是你的好伙伴。
-                </div>
-            </div>
-        </section>
-
-        <!-- 产品推荐 -->
-        <section class="section">
-            <h2 class="section-title">💎 产品推荐</h2>
-
-            <div class="product-grid">
-                <div class="product-card">
-                    <h4>🦋 Butterfly — 颜值控的 Linux 新选择</h4>
-                    <p>如果你一直羡慕 macOS 的美观设计，但又想体验 Linux 的自由，可以关注一下正在预热中的 Butterfly。它是由知名设计工作室 Daybreak 打造的一款全新 Linux 发行版，主打高颜值和精致的交互体验。网站的设计本身就已经很吸睛了，值得期待！</p>
-                    <div class="news-meta" style="margin-top: 10px;">
-                        <span>来源: Ding(@dingyi)</span>
-                        <span>🔗 <a href="https://x.com/dingyi/status/2043704878393086013" target="_blank" rel="noopener">查看</a></span>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <h4>📓 NotebookLM — 学生和老师的 AI 学习助手升级了</h4>
-                    <p>Google 的 NotebookLM 宣布为教育用户（Google for Education Plus）免费提升使用限额，包括更多的笔记本数量、测验和闪卡功能，以及视频概览和信息图生成。如果你正在准备考试或者做知识整理，这款工具值得一试。</p>
-                    <div class="news-meta" style="margin-top: 10px;">
-                        <span>来源: NotebookLM(@NotebookLM)</span>
-                        <span>🔗 <a href="https://x.com/NotebookLM/status/2043732645428056304" target="_blank" rel="noopener">查看</a></span>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <h4>💳 Lovable Payments — 用对话就能搭建支付系统</h4>
-                    <p>Lovable 推出了 Payments 功能，号称"描述你想卖什么，测试一下，一次对话就能上线"。对于想快速验证产品想法、或者给小项目加个付费功能的人来说，这种"说人话就能写代码"的工具越来越实用了。</p>
-                    <div class="news-meta" style="margin-top: 10px;">
-                        <span>来源: Lovable(@lovable_dev)</span>
-                        <span>🔗 <a href="https://x.com/Lovable/status/2043708202676568491" target="_blank" rel="noopener">查看</a></span>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <h4>⌨️ Tab Tab Tab — Google AI Studio 的"意念补全"神器</h4>
-                    <p>Google 工程师 Logan Kilpatrick 介绍了 Google AI Studio 里的新功能 Tab Tab Tab，它是一个 prompt 自动补全引擎。当你有一个模糊的想法但不知道怎么表达时，按几下 Tab 键，Gemini 就会帮你把想法补充完整。对于经常和 AI"对话"的人来说，这能省下不少脑细胞。</p>
-                    <div class="news-meta" style="margin-top: 10px;">
-                        <span>来源: Logan Kilpatrick(@OfficialLoganK)</span>
-                        <span>🔗 <a href="https://x.com/OfficialLoganK/status/2043752712127611201" target="_blank" rel="noopener">查看</a></span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 延伸阅读 -->
-        <div class="further-reading">
-            <h3>📖 延伸阅读</h3>
-            <ul class="reading-list">
-                <li>对设备端 AI 感兴趣？<a href="https://www.infoq.com/news/2026/04/gemma-4-android-ai-inference/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ 关于 Gemma 4 的深度报道</a>值得一读。</li>
-                <li>想了解 AI 如何改变癌症诊断？<a href="https://x.com/rowancheung/status/2043709190515114008" target="_blank" rel="noopener">Rowan Cheung 的推文</a>整理了 GigaTIME 的核心数据和意义。</li>
-                <li>关注 AI 编程的最新动态？<a href="https://x.com/berryxia/status/2043707207213035857" target="_blank" rel="noopener">Berryxia.AI 的 Codex 插件教程</a>非常详细。</li>
-                <li>对小红书 AI 创业潮好奇？<a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653103883&idx=1&sn=6bda1d310c08c517ef5932c6e06302ed" target="_blank" rel="noopener">极客公园的现场报道</a>带你走进黑客松现场。</li>
-                <li>想知道 Claude Mythos 有多强？<a href="https://www.infoq.com/news/2026/04/anthropic-claude-mythos/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ 和 Gary Marcus 的评测</a>提供了不同视角的解读。</li>
-            </ul>
-        </div>
-
-        <!-- 信息来源汇总 -->
-        <div class="sources">
-            <h3>📰 信息来源汇总</h3>
-            <div class="source-list">
-                <div class="source-item">InfoQ</div>
-                <div class="source-item">Rowan Cheung(@rowancheung)</div>
-                <div class="source-item">Google AI(@GoogleAI)</div>
-                <div class="source-item">Berryxia.AI(@berryxia)</div>
-                <div class="source-item">HeyGen(@HeyGen_Official)</div>
-                <div class="source-item">The Rundown AI(@TheRundownAI)</div>
-                <div class="source-item">极客公园</div>
-                <div class="source-item">Made by Google Podcast</div>
-                <div class="source-item">OpenRouter(@OpenRouterAI)</div>
-                <div class="source-item">Ding(@dingyi)</div>
-                <div class="source-item">NotebookLM(@NotebookLM)</div>
-                <div class="source-item">Lovable(@lovable_dev)</div>
-                <div class="source-item">Logan Kilpatrick(@OfficialLoganK)</div>
-                <div class="source-item">Marcus on AI</div>
-            </div>
-        </div>
-
-        <footer>
-            <p>科技日报 · 科技爱好者版</p>
-            <p style="margin-top: 10px; font-size: 0.85em;">用通俗易懂的语言，解读复杂的科技世界</p>
-            <p style="margin-top: 5px; color: var(--text-muted);">Generated on 2026-04-14</p>
-        </footer>
+    <div class="card">
+      <h3>Google 机器人能"看懂"物理世界了</h3>
+      <p>DeepMind 刚刚升级了 Gemini Robotics-ER 1.6，这版机器人的核心突破不是跑得更快，而是"脑子更灵"——它能在杂乱的桌子上精准找到目标物品，理解空间关系，甚至能读取仪表盘的精细刻度。研究团队特别强调，这是他们有史以来最安全的机器人模型：它会自动避开液体和超过 20 公斤的重物，识别视频中人类受伤风险的能力也提升了 10%。</p>
+      <p>这意味着什么？机器人终于从"按程序走"进化到了"看情况办"。虽然离走进千家万户还有距离，但在工业巡检、仓储物流这些场景，实用价值已经触手可及。</p>
+      <p class="source">
+        <a href="https://x.com/GoogleDeepMind/status/2044069878781390929" target="_blank" rel="noopener">[来源: Google DeepMind]</a> ·
+        <a href="https://blog.google/innovation-and-ai/models-and-research/google-deepmind/gemini-robotics-er-1-6/" target="_blank" rel="noopener">[来源: The Keyword]</a>
+      </p>
     </div>
+
+    <div class="card">
+      <h3>百度开源 ERNIE-Image 8B，中文生图终于不乱码了</h3>
+      <p>文生图模型一直有个老大难问题：中文文字渲染经常变成"鬼画符"。百度这次发布的 ERNIE-Image 8B 直接把这个问题解决了——不仅中英文文本渲染精准，还能做多对象控制、海报排版、漫画分镜。更狠的是，它在 GenEval、OneIG、LongTextBench 三个权威基准测试上拿下了开源模型第一。</p>
+      <p>模型参数只有 8B，24GB 显存就能本地跑，还有 Turbo 版本 8 步快速出图。对于设计师、自媒体创作者来说，这意味着一台高端游戏本就能在本地跑专业级 AI 绘图，不用再依赖云端 API。</p>
+      <p class="source">
+        <a href="https://x.com/berryxia/status/2044082487505367375" target="_blank" rel="noopener">[来源: Berryxia.AI]</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>AI 在旧金山开了家实体店，还雇佣了真人店员</h3>
+      <p>创业公司 Andon Labs 做了一件很科幻的事：他们给 AI 签了一份 3 年期的实体店面租约，目标是"让它盈利"。结果这个 AI 不仅自己申请了信用卡，还面试并雇佣了全职人类员工，选品时甚至还挑了《超级智能》和《原子弹制造记》这类书。</p>
+      <p>更有趣的后续是，有人开始在 Google 评论区"提示词注入"，试图让 AI 店主进自己推荐的货。这件事既像一场大型社会实验，也让我们不得不思考：当 AI 开始做老板，人类到底该扮演什么角色？</p>
+      <p class="source">
+        <a href="https://x.com/venturetwins/status/2044087794176541138" target="_blank" rel="noopener">[来源: Justine Moore]</a> ·
+        <a href="https://x.com/TheRundownAI/status/2044000302831997282" target="_blank" rel="noopener">[来源: The Rundown AI]</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>医疗 AI 跑到 iPhone 上了，完全不用联网</h3>
+      <p>开发者 Maziyar Panahi 发布了 OpenMed 1.0.0，这是一款能在 iPhone 和 Mac 上完全离线运行的医疗 AI 工具。它基于苹果 MLX 框架，内置 200 多个 PII（个人敏感信息）检测模型，支持 8 种语言，可以直接在手机上完成患者数据脱敏。</p>
+      <p>"无云端、无 API、完全本地"这个设计思路，对于医疗这种极度重视隐私的场景来说意义重大。你的健康数据不再需要上传到某个遥远的服务器，而是在自己的设备上处理。项目已开源，采用 Apache 2.0 协议。</p>
+      <p class="source">
+        <a href="https://x.com/berryxia/status/2044071676699390255" target="_blank" rel="noopener">[来源: Berryxia.AI]</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>斯坦福 423 页 AI 报告：中美差距只剩 2.7%</h3>
+      <p>斯坦福 HAI 研究院发布了 2026 年度《人工智能指数报告》，整整 423 页。其中最引人注目的数据是：截至 2026 年 3 月，中美顶级 AI 模型的性能差距已经收窄到区区 2.7%。报告还指出，2025 年全球 91.6% 的"标志性模型"来自产业界，学术界仅占 1 个；而中国在全球 AI 论文引用量、专利授权数量上均已排名第一。</p>
+      <p>另一个值得关注的信号是：企业 AI 采用率已经达到 88%，五分之四的大学生正在使用生成式 AI。AI 不再是少数科技公司的玩具，而是正在全面渗透进普通人的学习和工作。</p>
+      <p class="source">
+        <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247721855&idx=1&sn=b456da468be7afd5a77d1988d0046c81" target="_blank" rel="noopener">[来源: Datawhale]</a> ·
+        <a href="https://mp.weixin.qq.com/s?__biz=MzkzNDQxOTU2MQ==&mid=2247515435&idx=1&sn=c418d904af4bfe520f2d48e92ede7fdb" target="_blank" rel="noopener">[来源: 赛博禅心]</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>马斯克"微信梦"即将落地，XChat 本周上线</h3>
+      <p>距离马斯克收购 Twitter 并改名为 X 已经过去了快四年，他心心念念的"超级应用"终于要迈出关键一步。4 月 17 日，独立聊天应用 XChat 预计正式上线 App Store。它主打隐私优先：无需手机号、用 X 账号直接登录、消息支持阅后即焚和撤回编辑、群聊上限 481 人、文件传输上限 4GB。</p>
+      <p>最特别的是，Grok AI 被直接嵌入了聊天界面，可以随时调用它来总结内容、实时翻译或规划行程。马斯克想要的从来不只是另一个聊天软件，而是一个能像微信那样整合支付、通讯、服务的数字生活操作系统。XChat 是这场豪赌的第一张明牌。</p>
+      <p class="source">
+        <a href="https://www.ifanr.com/1662059?utm_source=rss&utm_medium=rss&utm_campaign=" target="_blank" rel="noopener">[来源: 爱范儿]</a>
+      </p>
+    </div>
+
+    <h2><span class="icon">🤖</span>科技新鲜事</h2>
+
+    <div class="highlight-box">
+      <h4>当 11 个 AI Agent 帮一位妈妈带 4 个娃</h4>
+      <p>前 YC 创业者 Jesse Genet 的故事听起来像科幻小说，但它是真的。她曾决定"未来五年不再碰技术，专心在家带四个不到六岁的孩子"。但两个月前，Claude Code 改变了她的计划。</p>
+      <p>如今她拥有一支 11 个 Agent 组成的"数字团队"：Claire 是 AI 管家，负责统筹家务；Sylvie 规划蒙特梭利课程表；Cole 写代码；Theo 做内容；Finn 管财务。它们各自运行在独立的 Mac Mini 上，在 Slack 里协作，甚至还有自己的信用卡。</p>
+      <p>Jesse 说，定制一整套蒙氏课程只花了大约 8 美元的 token 费用。六个月前她连终端都没打开过，现在她的 Agent 已经能自己"生"出新的 Agent。这个故事最动人的地方不在于技术有多牛，而在于它展示了 AI 如何帮助一个已经选择把人生交给家庭的人，重新找回另一半人生。</p>
+      <p class="source">
+        <a href="https://x.com/TheRundownAI/status/2044097838225784992" target="_blank" rel="noopener">[来源: The Rundown AI]</a> ·
+        <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485696&idx=1&sn=4e4587f202b2de5bb2c29b5db1f3aed7" target="_blank" rel="noopener">[来源: 晚点再听]</a>
+      </p>
+    </div>
+
+    <div class="highlight-box">
+      <h4>扎克伯格正在把自己炼成"数字 CEO"</h4>
+      <p>《金融时报》爆料，Meta 正在打造一个由扎克伯格本人影像和语音数据训练的 AI 数字分身，目标是作为"代理 CEO"24 小时与员工互动。据说小扎本人也亲自参与了这个项目，每周花 5-10 小时为公司的各种 AI 项目写代码。</p>
+      <p>为了改善数字人的语音效果，Meta 去年还收购了两家语音公司 PlayAI 和 WaveForms。虽然这个项目目前还处于研发阶段，但想象一下：你的老板可能随时以数字形态出现在任何一场会议里，而且永远不会累。这到底是效率革命，还是打工人的终极噩梦？</p>
+      <p class="source">
+        <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650870348&idx=4&sn=e1aaee72da8be195505b6f7991c59079" target="_blank" rel="noopener">[来源: 创业邦]</a>
+      </p>
+    </div>
+
+    <h2><span class="icon">🔬</span>科普小课堂</h2>
+
+    <div class="tip-box">
+      <h4>量子计算：为什么它被称为"下一代算力革命"？</h4>
+      <p>4 月 14 日是世界量子日，Google 专门为此做了一支科普短片。要理解量子计算，关键在于理解"叠加态"。</p>
+      <p>我们日常用的电脑，信息的基本单位是"比特"（bit），它只能是 0 或 1。而量子计算机用的是"量子比特"（qubit），它可以同时处于 0 和 1 的叠加状态。你可以把它想象成一枚在空中旋转的硬币——在落地之前，它既不是正面也不是反面，而是两种可能性的混合。</p>
+      <p>正因为 qubit 能同时表示多种状态，量子计算机在处理某些特定问题时（比如药物分子模拟、密码破解、复杂优化），可以实现经典计算机无法企及的并行计算能力。Nvidia 最近也发布了开源量子 AI 模型 Ising，能把量子处理器的调试时间从几天缩短到几小时。虽然通用量子计算机离我们还有一段路，但量子+AI 的交叉领域，已经开始展现惊人的潜力。</p>
+      <p class="source">
+        <a href="https://www.youtube.com/shorts/bQJRRR9X6qI" target="_blank" rel="noopener">[来源: Google]</a> ·
+        <a href="https://x.com/TheRundownAI/status/2044074505908170923" target="_blank" rel="noopener">[来源: The Rundown AI]</a>
+      </p>
+    </div>
+
+    <h2><span class="icon">📦</span>产品推荐</h2>
+
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="emoji">⚡</div>
+        <h4>Warp 终端</h4>
+        <p>如果你听说过 Claude Code、Codex、Gemini CLI 这些 AI 编程助手，Warp 把它们全部原生集成到了一个终端里。垂直标签页、自动通知、代码审查、手机远程控制——终端和 AI 终于不再是两个割裂的世界。</p>
+        <p class="source">
+          <a href="https://x.com/berryxia/status/2044074357937610996" target="_blank" rel="noopener">[来源: Berryxia.AI]</a>
+        </p>
+      </div>
+      <div class="product-card">
+        <div class="emoji">🧩</div>
+        <h4>Chrome Skills</h4>
+        <p>Google 给 Chrome 浏览器加了一个新功能：把你最顺手的 AI 提示词保存成"Skills"，下次一键调用。再也不用反复输入同样的提示词了，适合经常需要让 AI 帮忙处理固定任务的人。</p>
+        <p class="source">
+          <a href="https://blog.google/products-and-platforms/products/chrome/skills-in-chrome/" target="_blank" rel="noopener">[来源: The Keyword]</a>
+        </p>
+      </div>
+      <div class="product-card">
+        <div class="emoji">🏥</div>
+        <h4>OpenMed</h4>
+        <p>完全离线的医疗 AI，能在 iPhone 上本地运行。200+ PII 检测模型、8 种语言支持、患者数据脱敏——最重要的是，你的健康数据不需要上传任何云端。</p>
+        <p class="source">
+          <a href="https://x.com/berryxia/status/2044071676699390255" target="_blank" rel="noopener">[来源: Berryxia.AI]</a>
+        </p>
+      </div>
+      <div class="product-card">
+        <div class="emoji">🎬</div>
+        <h4>Runway Characters</h4>
+        <p>Runway 最新功能让你可以创建一个虚拟角色，然后派它去参加视频会议。虽然听起来有点 surreal，但对于内容创作者和远程工作者来说，这或许是"数字分身"迈向实用化的又一步。</p>
+        <p class="source">
+          <a href="https://x.com/runwayml/status/2044060582807015482" target="_blank" rel="noopener">[来源: Runway]</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="refs">
+      <h2><span class="icon">📚</span>延伸阅读</h2>
+      <ul>
+        <li><a href="https://x.com/GoogleDeepMind/status/2044069878781390929" target="_blank" rel="noopener">Gemini Robotics-ER 1.6 — Google DeepMind</a></li>
+        <li><a href="https://blog.google/innovation-and-ai/models-and-research/google-deepmind/gemini-robotics-er-1-6/" target="_blank" rel="noopener">Gemini Robotics ER-1.6 官方博客 — The Keyword</a></li>
+        <li><a href="https://x.com/berryxia/status/2044082487505367375" target="_blank" rel="noopener">百度 ERNIE-Image 8B 发布 — Berryxia.AI</a></li>
+        <li><a href="https://x.com/venturetwins/status/2044087794176541138" target="_blank" rel="noopener">AI 零售店 Andon Labs — Justine Moore</a></li>
+        <li><a href="https://x.com/TheRundownAI/status/2044000302831997282" target="_blank" rel="noopener">AI 今日要闻 — The Rundown AI</a></li>
+        <li><a href="https://x.com/berryxia/status/2044071676699390255" target="_blank" rel="noopener">OpenMed 1.0.0 发布 — Berryxia.AI</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247721855&idx=1&sn=b456da468be7afd5a77d1988d0046c81" target="_blank" rel="noopener">斯坦福 2026 AI 指数报告总结 — Datawhale</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzNDQxOTU2MQ==&mid=2247515435&idx=1&sn=c418d904af4bfe520f2d48e92ede7fdb" target="_blank" rel="noopener">斯坦福 AI 年度报告完整解读 — 赛博禅心</a></li>
+        <li><a href="https://www.ifanr.com/1662059?utm_source=rss&utm_medium=rss&utm_campaign=" target="_blank" rel="noopener">马斯克 XChat 上线前瞻 — 爱范儿</a></li>
+        <li><a href="https://x.com/TheRundownAI/status/2044097838225784992" target="_blank" rel="noopener">Jesse Genet 的 Agent 家庭管理方案 — The Rundown AI</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485696&idx=1&sn=4e4587f202b2de5bb2c29b5db1f3aed7" target="_blank" rel="noopener">YC 创始人用 Claude Agent 带娃 — 晚点再听</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650870348&idx=4&sn=e1aaee72da8be195505b6f7991c59079" target="_blank" rel="noopener">Meta 数字 CEO 项目爆料 — 创业邦</a></li>
+        <li><a href="https://www.youtube.com/shorts/bQJRRR9X6qI" target="_blank" rel="noopener">世界量子日科普短片 — Google</a></li>
+        <li><a href="https://x.com/TheRundownAI/status/2044074505908170923" target="_blank" rel="noopener">Nvidia Ising 量子 AI 模型 — The Rundown AI</a></li>
+        <li><a href="https://x.com/berryxia/status/2044074357937610996" target="_blank" rel="noopener">Warp 终端集成 CLI Agent — Berryxia.AI</a></li>
+        <li><a href="https://blog.google/products-and-platforms/products/chrome/skills-in-chrome/" target="_blank" rel="noopener">Chrome Skills 官方博客 — The Keyword</a></li>
+        <li><a href="https://x.com/runwayml/status/2044060582807015482" target="_blank" rel="noopener">Runway Characters 功能 — Runway</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>🌟 科技日报由 AI 自动生成 · 仅供阅读参考</p>
+      <p>2026年4月14日</p>
+    </footer>
+  </div>
 </body>
 </html>
