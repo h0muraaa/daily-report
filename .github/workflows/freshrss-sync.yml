@@ -89,61 +89,42 @@ jobs:
             }
           "
 
-      - name: Run Claude Code via Tmux
+      - name: Generate Daily Reports with Claude
         if: ${{ github.event.inputs.mode != 'json-only' }}
-        id: run_claude
-        env:
-          EXPECTED_HTML_COUNT: 6  # <--- 在此修改你期望的最低 HTML 文件生成数量
+        timeout-minutes: 15
         run: |
-          echo "安装 tmux..."
-          sudo apt-get install -y tmux
-          
-          echo "启动 tmux 会话并启动 Claude..."
-          tmux new-session -d -s claude_session
-          tmux send-keys -t claude_session "claude --dangerously-skip-permissions" C-m
-          
-          # 等待 Claude 初始化完成（由于是后台运行，需要给足够的时间冷启动）
-          sleep 10 
-          
-          echo "向 Claude 发送任务指令..."
-          tmux send-keys -t claude_session "阅读tech_daily.md并执行对应任务" C-m
-          
-          echo "轮询检查是否生成了 ${EXPECTED_HTML_COUNT} 个 HTML 文件，限时 15 分钟..."
-          ELAPSED=0
-          TIMEOUT=900
-          SUCCESS=false
-          
-          while [ $ELAPSED -lt $TIMEOUT ]; do
-            CURRENT_COUNT=$(ls -1 *.html 2>/dev/null | wc -l)
-            if [ "$CURRENT_COUNT" -ge "$EXPECTED_HTML_COUNT" ]; then
-              echo "✅ 成功检测到 $CURRENT_COUNT 个 HTML 文件！"
-              SUCCESS=true
-              break
-            fi
-            sleep 10
-            ELAPSED=$((ELAPSED+10))
+          JSON_FILE=$(ls -t ./tech-daily/*.json | head -1)
+          echo "📄 使用 JSON 文件: $JSON_FILE"
+
+          ROLES="cto_insight developer_practice tech_enthusiast investment_analysis academic_research user_research"
+
+          echo "🚀 并行启动 6 个角色的日报生成..."
+          for ROLE in $ROLES; do
+            echo "  -> 启动 $ROLE"
+            claude -p --dangerously-skip-permissions "使用 tech-daily-generator Skill 读取文件 $JSON_FILE，生成 --role $ROLE 的科技日报，输出到 ./tech-daily/ 目录" &
           done
-          
-          # 记录运行结果供后续 tmate 步骤判断
-          if [ "$SUCCESS" = true ]; then
-            echo "html_generated=true" >> $GITHUB_OUTPUT
-            # 正常生成后，关闭后台的 tmux 会话
-            tmux kill-session -t claude_session || true
-          else
-            echo "❌ 未在规定时间内生成期望的 HTML 文件数量 (当前: $CURRENT_COUNT, 期望: $EXPECTED_HTML_COUNT)"
-            echo "html_generated=false" >> $GITHUB_OUTPUT
+
+          echo "⏳ 等待所有任务完成..."
+          wait
+
+          echo "📂 检查生成的文件："
+          ls -la ./tech-daily/*.html || true
+
+          SUCCESS_COUNT=0
+          for ROLE in $ROLES; do
+            if [ -f "./tech-daily/${ROLE}.html" ]; then
+              SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+            else
+              echo "⚠️ 缺少: tech-daily/${ROLE}.html"
+            fi
+          done
+
+          if [ "$SUCCESS_COUNT" -eq 0 ]; then
+            echo "❌ 没有任何角色的日报生成成功"
+            exit 1
           fi
 
-      - name: Setup tmate debug session
-        if: ${{ github.event.inputs.mode != 'json-only' && steps.run_claude.outputs.html_generated == 'false' }}
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
-        timeout-minutes: 30
-
-      - name: Fail workflow if generation failed
-        if: ${{ github.event.inputs.mode != 'json-only' && steps.run_claude.outputs.html_generated == 'false' }}
-        run: exit 1
+          echo "✅ 有 $SUCCESS_COUNT 个角色的日报生成成功，继续提交"
 
       # 5. 提交变更
       - name: Commit All Changes
@@ -151,7 +132,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          REPORT_EXISTS=$(ls *.html 2>/dev/null || echo "")
+          REPORT_EXISTS=$(ls tech-daily/*.html 2>/dev/null || echo "")
           if [ -n "$REPORT_EXISTS" ]; then
             echo "✅ 检测到新生成的报告文件"
           fi
