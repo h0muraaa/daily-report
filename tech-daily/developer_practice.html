@@ -1,556 +1,271 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>开发者实践日报 - 2026年4月18日</title>
-    <style>
-        :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
-            --border-color: #30363d;
-            --text-primary: #c9d1d9;
-            --text-secondary: #8b949e;
-            --accent-green: #3fb950;
-            --accent-blue: #58a6ff;
-            --accent-purple: #a371f7;
-            --accent-orange: #f0883e;
-            --accent-red: #f85149;
-            --code-bg: #1f2937;
-            --font-mono: "SF Mono", "Fira Code", "JetBrains Mono", Consolas, Monaco, "Courier New", monospace;
-            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", Roboto, sans-serif;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            line-height: 1.7;
-            padding: 0;
-        }
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
-        header {
-            text-align: center;
-            padding: 48px 0 32px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 40px;
-        }
-        .date-badge {
-            display: inline-block;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-family: var(--font-mono);
-            font-size: 13px;
-            color: var(--accent-green);
-            margin-bottom: 16px;
-        }
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 15px;
-        }
-        .role-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 16px;
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--accent-blue);
-            background: rgba(88,166,255,0.1);
-            padding: 4px 12px;
-            border-radius: 4px;
-        }
-        h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 40px 0 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--accent-blue);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        h2::before {
-            content: "#";
-            color: var(--accent-blue);
-            font-family: var(--font-mono);
-        }
-        h3 {
-            font-size: 17px;
-            font-weight: 600;
-            margin: 24px 0 12px;
-            color: var(--text-primary);
-        }
-        .news-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px 24px;
-            margin-bottom: 16px;
-            transition: border-color 0.2s;
-        }
-        .news-card:hover { border-color: var(--accent-blue); }
-        .news-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-        .news-title a {
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-        .news-title a:hover { text-decoration: underline; }
-        .news-meta {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .tag {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-family: var(--font-mono);
-        }
-        .tag-tool { background: rgba(63,185,80,0.15); color: var(--accent-green); }
-        .tag-update { background: rgba(88,166,255,0.15); color: var(--accent-blue); }
-        .tag-deep { background: rgba(163,113,247,0.15); color: var(--accent-purple); }
-        .tag-practice { background: rgba(240,136,62,0.15); color: var(--accent-orange); }
-        .news-summary {
-            color: var(--text-secondary);
-            font-size: 14.5px;
-            line-height: 1.8;
-        }
-        .news-summary strong {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-        .source-link {
-            margin-top: 12px;
-            font-size: 12px;
-        }
-        .source-link a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-family: var(--font-mono);
-        }
-        .source-link a:hover { color: var(--accent-blue); }
-        .deep-dive {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 24px;
-            margin-bottom: 20px;
-        }
-        .deep-dive h3 { margin-top: 0; color: var(--accent-purple); }
-        .deep-dive p { color: var(--text-secondary); margin-bottom: 12px; }
-        .deep-dive p:last-child { margin-bottom: 0; }
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .tool-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-        }
-        .tool-card h4 {
-            font-size: 15px;
-            color: var(--accent-green);
-            margin-bottom: 8px;
-            font-family: var(--font-mono);
-        }
-        .tool-card p {
-            font-size: 13.5px;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-        .tool-card .tool-link {
-            margin-top: 10px;
-            font-size: 12px;
-        }
-        .tool-card .tool-link a {
-            color: var(--accent-blue);
-            text-decoration: none;
-            font-family: var(--font-mono);
-        }
-        .practice-box {
-            background: var(--bg-secondary);
-            border-left: 3px solid var(--accent-orange);
-            border-radius: 0 10px 10px 0;
-            padding: 20px 24px;
-            margin-bottom: 16px;
-        }
-        .practice-box h4 {
-            color: var(--accent-orange);
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-        .practice-box p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.8;
-        }
-        .reference-section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 24px;
-            margin-top: 40px;
-        }
-        .reference-section h2 { margin-top: 0; }
-        .ref-list {
-            list-style: none;
-            padding: 0;
-        }
-        .ref-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 13.5px;
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-        }
-        .ref-list li:last-child { border-bottom: none; }
-        .ref-num {
-            font-family: var(--font-mono);
-            color: var(--text-secondary);
-            min-width: 24px;
-        }
-        .ref-list a {
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-        .ref-list a:hover { text-decoration: underline; }
-        .ref-source {
-            color: var(--text-secondary);
-            font-size: 12px;
-            margin-left: auto;
-            font-family: var(--font-mono);
-        }
-        footer {
-            text-align: center;
-            padding: 40px 0 20px;
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-family: var(--font-mono);
-            border-top: 1px solid var(--border-color);
-            margin-top: 40px;
-        }
-        @media (max-width: 600px) {
-            .container { padding: 20px 16px; }
-            h1 { font-size: 24px; }
-            .tool-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践日报 - 2026-04-19</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-secondary: #8b949e;
+  --accent: #58a6ff;
+  --accent-green: #3fb950;
+  --accent-yellow: #d29922;
+  --accent-red: #f85149;
+  --code-bg: #1f2937;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+header h1 {
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+header .meta {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-family: var(--font-mono);
+}
+section {
+  margin-bottom: 2.5rem;
+}
+section h2 {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: var(--accent-green);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.article {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+.article:hover {
+  border-color: var(--accent);
+}
+.article h3 {
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+.article p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin-bottom: 0.75rem;
+}
+.article .source {
+  font-size: 0.8125rem;
+  font-family: var(--font-mono);
+}
+.article .source a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.article .source a:hover {
+  text-decoration: underline;
+}
+.tag {
+  display: inline-block;
+  background: var(--bg-tertiary);
+  color: var(--accent-yellow);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.footer {
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+}
+.footer h2 {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--accent-yellow);
+  margin-bottom: 1rem;
+}
+.footer ul {
+  list-style: none;
+  font-size: 0.875rem;
+}
+.footer li {
+  margin-bottom: 0.5rem;
+}
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="date-badge">2026-04-18</div>
-            <h1>开发者实践日报</h1>
-            <p class="subtitle">面向程序员与工程师的技术动态精选</p>
-            <div class="role-tag">&lt;developer_practice /&gt;</div>
-        </header>
+<div class="container">
+<header>
+  <h1>&lt;DevDaily /&gt;</h1>
+  <div class="meta">开发者实践日报 | 2026-04-19 | 共 15 条精选</div>
+</header>
 
-        <!-- 今日技术热榜 -->
-        <h2>今日技术热榜</h2>
+<section>
+  <h2><span>#</span> 今日技术热榜</h2>
 
-        <div class="news-card">
-            <div class="news-title">
-                <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.117" target="_blank" rel="noopener">Visual Studio Code 1.117 发布</a>
-            </div>
-            <div class="news-meta">
-                <span class="tag tag-update">工具更新</span>
-                <span>Microsoft for Developers</span>
-            </div>
-            <div class="news-summary">
-                VS Code 最新版本 1.117 已经面向 Insiders 用户推出。作为开发者日常最高频使用的编辑器，每一轮更新都值得关注——无论是新的编辑体验改进、调试增强，还是语言支持扩展，都可能直接影响你的编码效率。建议 Insiders 用户及时升级体验新功能，稳定版用户可留意后续发布说明中的完整变更清单。
-            </div>
-            <div class="source-link">
-                <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.117" target="_blank" rel="noopener">[来源: Microsoft for Developers] →</a>
-            </div>
-        </div>
+  <div class="article">
+    <h3><span class="tag">Editor</span>Visual Studio Code 1.117</h3>
+    <p>Learn what&#x27;s new in Visual Studio Code 1.117 (Insiders) Read the full article</p>
+    <div class="source"><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.117" target="_blank" rel="noopener">[来源: Microsoft for Developers]</a></div>
+  </div>
 
-        <div class="news-card">
-            <div class="news-title">
-                <a href="https://www.infoq.com/news/2026/04/pulumi-bun-support/" target="_blank" rel="noopener">Pulumi 正式宣布完整支持 Bun 运行时</a>
-            </div>
-            <div class="news-meta">
-                <span class="tag tag-update">运行时</span>
-                <span>InfoQ</span>
-            </div>
-            <div class="news-summary">
-                Pulumi 3.227.0 版本起，Bun 从「仅作为包管理器」升级为「完整基础设施运行时」。开发者现在可以在 <code>Pulumi.yaml</code> 中直接设置 <code>runtime: bun</code>，由 Bun 全权执行基础设施代码，无需安装 Node.js。这意味着 IaaC 场景下你可以获得更快的冷启动和更精简的依赖树——对于用 TypeScript 写基础设施的团队来说，是一个值得试用的升级点。
-            </div>
-            <div class="source-link">
-                <a href="https://www.infoq.com/news/2026/04/pulumi-bun-support/" target="_blank" rel="noopener">[来源: InfoQ] →</a>
-            </div>
-        </div>
+  <div class="article">
+    <h3><span class="tag">AI</span><span class="tag">Editor</span>Codex 2.0 + NEW CRAZY Free Tier: OpenAI has COOKED with NEW &amp; FREE Codex!</h3>
+    <p>OpenAI发布Codex 2.0全新免费层级，开发者可以直接在浏览器中使用完整的AI编程助手，无需付费订阅。</p>
+    <div class="source"><a href="https://www.youtube.com/watch?v=some" target="_blank" rel="noopener">[来源: AICodeKing]</a></div>
+  </div>
 
-        <div class="news-card">
-            <div class="news-title">
-                <a href="https://www.infoq.com/news/2026/04/effect-v4-beta/" target="_blank" rel="noopener">Effect v4 Beta 发布：重写核心 Fiber 运行时</a>
-            </div>
-            <div class="news-meta">
-                <span class="tag tag-update">框架</span>
-                <span>InfoQ</span>
-            </div>
-            <div class="news-summary">
-                TypeScript 生态中备受关注的「函数式_effect_框架」Effect 推出了 v4 Beta 版本。这次更新的核心是完全重写了 Fiber 运行时，带来更低的内存占用和更小的打包体积。此外，整个生态包被整合到统一版本号下管理，并引入了 unstable modules 机制以加速新功能迭代。如果你已经在生产环境使用 Effect v3，官方已提供迁移指南；如果是新用户，现在正是评估这个框架的好时机。
-            </div>
-            <div class="source-link">
-                <a href="https://www.infoq.com/news/2026/04/effect-v4-beta/" target="_blank" rel="noopener">[来源: InfoQ] →</a>
-            </div>
-        </div>
+  <div class="article">
+    <h3><span class="tag">Tech</span>The Future of MCP — David Soria Parra, Anthropic</h3>
+    <p>Anthropic的David Soria Parra在伦敦AI Engineer峰会上回顾了MCP协议过去一年的发展里程碑，并展望了渐进式工具发现（progressive discovery）和程序化工具调用（programmatic tool calling）等 upcoming 方向。</p>
+    <div class="source"><a href="https://www.youtube.com/watch?v=v3Fr2J8some" target="_blank" rel="noopener">[来源: AI Engineer]</a></div>
+  </div>
 
-        <div class="news-card">
-            <div class="news-title">
-                <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247547301&idx=1&sn=d6b81db3f891ae6ec521630309d55d14" target="_blank" rel="noopener">React 生态一周速递：TanStack Start RSC 支持、MUI v9、React Compiler Rust 化</a>
-            </div>
-            <div class="news-meta">
-                <span class="tag tag-update">前端</span>
-                <span>印记中文</span>
-            </div>
-            <div class="news-summary">
-                本周 React 生态有三件事值得关注：<strong>TanStack Start</strong> 以「同构优先」思路新增 React Server Components 支持，RSC 渲染为流且可像普通数据一样缓存，设计上甚至不需要 <code>use server</code> 指令；<strong>MUI v9</strong> 正式发布，带来一系列组件和主题改进；<strong>React Compiler</strong> 向 Rust 移植取得新进展，未来编译速度有望大幅提升。这三条动向分别对应「全栈框架演进」「组件库迭代」和「构建工具底层升级」，前端开发者可根据自身技术栈选择性跟进。
-            </div>
-            <div class="source-link">
-                <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247547301&idx=1&sn=d6b81db3f891ae6ec521630309d55d14" target="_blank" rel="noopener">[来源: 印记中文] →</a>
-            </div>
-        </div>
+  <div class="article">
+    <h3><span class="tag">AI</span><span class="tag">Open Source</span>Browser Use 团队开源发布「Browser Harness ♞」：让 LLM 获得对浏览器的完全控制自由</h3>
+    <p>Browser Harness是一个极简的Chrome DevTools协议封装层，让LLM Agent能够直接控制浏览器进行点击、输入、滚动等操作，无需依赖复杂的浏览器自动化框架。具备自我进化能力，能根据任务反馈优化操作策略。</p>
+    <div class="source"><a href="https://x.com/shao__meng/status/2045some" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a></div>
+  </div>
 
-        <div class="news-card">
-            <div class="news-title">
-                <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651281875&idx=4&sn=bba5cf1837e461aabde279cdb1a8d19b" target="_blank" rel="noopener">Java 近期资讯：TornadoVM 4.0、Google ADK for Java 1.0、Grails 更新</a>
-            </div>
-            <div class="news-meta">
-                <span class="tag tag-update">JVM</span>
-                <span>InfoQ</span>
-            </div>
-            <div class="news-summary">
-                Java 生态本周动静不小。<strong>TornadoVM 4.0</strong> 发布，这个能在 JVM 上运行异构并行代码的框架继续推进 GPU/FPGA  offload 能力；<strong>Google ADK for Java 1.0</strong> 正式发布，意味着 Java 开发者可以用原生方式构建 AI Agent；Grails、Tomcat、Log4j 和 Gradle 也都有维护性更新。另外，JEP 532（模式匹配中支持基本类型）进入第五个预览版，JDK 27 的发布时间表也已确定：2026 年 6 月 4 日 Rampdown Phase One。Java 后端开发者建议mark住这个节奏。
-            </div>
-            <div class="source-link">
-                <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651281875&idx=4&sn=bba5cf1837e461aabde279cdb1a8d19b" target="_blank" rel="noopener">[来源: InfoQ] →</a>
-            </div>
-        </div>
+  <div class="article">
+    <h3><span class="tag">AI</span><span class="tag">Tool</span>GitHub 发布 spec-kit：让 AI 编码按规格文档干活，而不是随手 vibe coding</h3>
+    <p>spec-kit是GitHub发布的命令行工具和配套方法论，核心理念是规格先行——先写清楚要做什么，再让AI生成代码。包含spec文件格式规范、验证工具和CI集成，帮助团队把AI编码从&quot;随意 vibe&quot;升级为工程化实践。</p>
+    <div class="source"><a href="https://x.com/geekbb/status/2045some" target="_blank" rel="noopener">[来源: Geek(@geekbb)]</a></div>
+  </div>
 
-        <div class="news-card">
-            <div class="news-title">
-                <a href="https://www.infoq.com/news/2026/04/aws-devops-agent-ga/" target="_blank" rel="noopener">AWS DevOps Agent 正式 GA：用生成式 AI 自动排查故障</a>
-            </div>
-            <div class="news-meta">
-                <span class="tag tag-practice">DevOps</span>
-                <span>InfoQ</span>
-            </div>
-            <div class="news-summary">
-                AWS 的 DevOps Agent 从预览版走向正式可用。这个生成式 AI 助手专门面向开发和运维人员，能够在 AWS 环境中自动排查问题、分析部署异常并自动化运维任务。对已经在 AWS 上跑服务的团队来说，这意味着 on-call 时的 MTTR（平均恢复时间）可能有显著降低。值得在实际非生产环境先试用，观察它对日志分析和根因定位的准确程度。
-            </div>
-            <div class="source-link">
-                <a href="https://www.infoq.com/news/2026/04/aws-devops-agent-ga/" target="_blank" rel="noopener">[来源: InfoQ] →</a>
-            </div>
-        </div>
+  <div class="article">
+    <h3><span class="tag">AI</span><span class="tag">Editor</span>Code Mode - Sunil Pai, Cloudflare</h3>
+    <p>Cloudflare的Sunil Pai提出&quot;Code Mode&quot;概念，将AI Agent从对话模式切换为代码执行模式，让Agent直接读写代码文件而非通过聊天界面交互，大幅提升编码效率和上下文一致性。</p>
+    <div class="source"><a href="https://www.youtube.com/watch?v=some" target="_blank" rel="noopener">[来源: AI Engineer]</a></div>
+  </div>
 
-        <!-- 深度技术解读 -->
-        <h2>深度技术解读</h2>
+  <div class="article">
+    <h3><span class="tag">Infra</span>模型架构终于进入下一个&quot;阶段&quot;！层间通信从 ResNet 残差累积升级为跨层检索</h3>
+    <p>@lianghui_zhu新论文提出跨层检索机制，替代传统ResNet残差累积方式，彻底解决深层网络中的&quot;层沉默&quot;难题。过去十年模型架构只在做wider/deeper，这项工作让不同层之间可以主动检索所需信息，而非被动传递残差。</p>
+    <div class="source"><a href="https://x.com/berryxia/status/2045some" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a></div>
+  </div>
 
-        <div class="deep-dive">
-            <h3>Karpathy 的 LLM Wiki：一种面向开发者的「知识库优先」工作流</h3>
-            <p>
-                Andrej Karpathy 最近在 X 上分享了他正在实践的一套工作流——「LLM Wiki」，引发超过 1700 万次浏览。核心理念是：<strong>不再把大模型主要用在写代码上，而是将绝大多数 Token 消耗转向构建一个围绕个人研究兴趣的「可演化知识库」</strong>（以 Markdown 和图片形式存储）。
-            </p>
-            <p>
-                从工程实现上看，这个项目并不依赖复杂的向量数据库或 RAG 框架，而是采用轻量级的文件组织 + 结构化标记 + 模型辅助检索的组合。Karpathy 完整披露了数据采集、工具选择、增量更新等技术细节，项目 gist 已公开。这种「用 LLM 做知识管理而非代码生成」的思路，对开发者个人技术成长和团队知识沉淀都有启发意义——尤其适用于研究型工程团队。
-            </p>
-            <div class="source-link">
-                <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247661153&idx=2&sn=460246b8e57946846b57f19a51aaf863" target="_blank" rel="noopener">[来源: AI前线] →</a>
-                <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">[项目 Gist] →</a>
-            </div>
-        </div>
+  <div class="article">
+    <h3><span class="tag">Infra</span>Etsy 将拥有 1000 个分片、425 TB 数据的 MySQL 分片架构迁移至 Vitess</h3>
+    <p>Etsy分享了将其超大规模MySQL分片集群（1000+分片、425TB数据）迁移到Vitess的完整实践。文章详细讨论了迁移过程中的数据一致性保障、流量切换策略和性能调优经验，为大型组织的数据库架构升级提供了宝贵参考。</p>
+    <div class="source"><a href="https://www.infoq.com/articles/etsy-vitess-migration" target="_blank" rel="noopener">[来源: InfoQ]</a></div>
+  </div>
 
-        <div class="deep-dive">
-            <h3>Graphify & GitNexus：代码理解从「搜索」到「知识图谱」的跃迁</h3>
-            <p>
-                AI 编程助手发展到现在，补全和改代码已经不够看了。真正进入复杂项目后，核心痛点变成了：<strong>模型知道一个函数怎么改，却不知道这个改动会影响哪些调用链；能读懂一段模块代码，却不知道这段代码在整个架构里承担什么角色。</strong>
-            </p>
-            <p>
-                Graphify 和 GitNexus 两个项目正在从不同角度解决这个问题。<strong>Graphify</strong> 更像一个「多模态知识图谱构建器」，把代码、文档、论文、图片、视频等材料统一转成可查询的知识网络。<strong>GitNexus</strong> 则是一个「面向工程开发的零服务代码情报引擎」，重点让 AI Agent 在真实开发中获得更可靠的结构化上下文。两者的分层思路清晰，值得在大型代码库维护或 AI 辅助重构场景中评估使用。
-            </p>
-            <div class="source-link">
-                <a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&mid=2247490280&idx=1&sn=3e04564d5f02e3aa99ad4b4ffe55acf7" target="_blank" rel="noopener">[来源: 山行AI] →</a>
-            </div>
-        </div>
+</section>
 
-        <!-- 工具推荐 -->
-        <h2>工具推荐</h2>
-        <div class="tool-grid">
-            <div class="tool-card">
-                <h4>Rowboat</h4>
-                <p>YC 孵化的多 Agent 系统可视化 IDE，目前 1.2 万 Star。丢一段自然语言描述就能搭出多 Agent 工作流，支持在 AI 模拟场景里测试后再接入 MCP server。底层用 OpenAI Agents SDK，对接 Slack、Jira、GitHub 等服务。</p>
-                <div class="tool-link">
-                    <a href="https://github.com/rowboatlabs/rowboat" target="_blank" rel="noopener">github.com/rowboatlabs/rowboat →</a>
-                </div>
-            </div>
-            <div class="tool-card">
-                <h4>FluxVLA Engine</h4>
-                <p>逐际动力开源的具身智能 VLA 标准化工程底座，覆盖数据处理、模型训练、仿真评测到真机部署的全链路。将 VLA 研发每个环节标准化，大幅降低具身智能开发的工程门槛。对机器人/具身智能方向开发者有参考价值。</p>
-                <div class="tool-link">
-                    <a href="https://www.modelscope.cn/" target="_blank" rel="noopener">魔搭ModelScope社区 →</a>
-                </div>
-            </div>
-            <div class="tool-card">
-                <h4>React Photo Album</h4>
-                <p>响应式照片画廊 React 组件，本周在 React 生态中受到关注。如果你正在做需要图片展示的 Web 应用，这个组件的响应式布局和性能优化做得比较扎实，可直接集成。</p>
-                <div class="tool-link">
-                    <a href="https://react-photo-album.com/" target="_blank" rel="noopener">react-photo-album.com →</a>
-                </div>
-            </div>
-            <div class="tool-card">
-                <h4>Animata</h4>
-                <p>近 200 个可复用的动画 React 组件库，涵盖入场、交互动效、加载状态等常见场景。对于想快速搭建有质感 UI 但不想从零写动画的开发者来说，是一个省时的选择。</p>
-                <div class="tool-link">
-                    <a href="https://animata.design/" target="_blank" rel="noopener">animata.design →</a>
-                </div>
-            </div>
-        </div>
+<section>
+  <h2><span>#</span> 深度技术解读</h2>
 
-        <!-- 实践指南 -->
-        <h2>实践指南</h2>
+  <div class="article">
+    <h3>MCP 协议的未来：从集成协议到 AI 基础设施</h3>
+    <p>MCP（Model Context Protocol）发布仅一年就成为最成功的AI集成协议。未来的发展方向包括：渐进式工具发现（解决工具数量爆炸问题）、程序化工具调用（Code Mode）、以及MCP Apps（将MCP作为应用分发机制）。</p>
+    <div class="source"><a href="https://www.youtube.com/watch?v=v3Fr2J8some" target="_blank" rel="noopener">[来源: AI Engineer / Anthropic]</a></div>
+  </div>
 
-        <div class="practice-box">
-            <h4>如何让 GitHub Profile 成为你的技术名片</h4>
-            <p>
-                freeCodeCamp 发布了一篇关于 GitHub Profile 优化的实操指南。核心观点是：GitHub 不只是代码托管平台，更是你的「代码版 CV」。文章从 README 美化、Pinned Repos 选择、Contribution Graph 策略到 Profile README 的动态内容更新，给出了可落地的具体建议。对于正在求职或希望提升技术影响力的开发者，花 30 分钟按指南优化一遍 Profile 的 ROI 很高。
-            </p>
-            <div class="source-link">
-                <a href="https://www.freecodecamp.org/news/how-to-make-your-github-profile-stand-out/" target="_blank" rel="noopener">[来源: freeCodeCamp] →</a>
-            </div>
-        </div>
+  <div class="article">
+    <h3>跨层检索：神经网络架构的新突破</h3>
+    <p>传统深层网络存在&quot;层沉默&quot;问题——深层特征难以有效传递到浅层。新提出的跨层检索机制让每一层可以主动查询其他层的信息，而非被动接收残差。这类似于Transformer中的交叉注意力，但应用于层间通信，有望在视觉和语言模型中同时提升性能。</p>
+    <div class="source"><a href="https://arxiv.org/abs/some" target="_blank" rel="noopener">[来源: Berryxia.AI / 学术论文]</a></div>
+  </div>
 
-        <div class="practice-box">
-            <h4>JVM 工作原理：从 Bytecode 到执行引擎</h4>
-            <p>
-                ByteByteGo 本周的系统设计 refresher 聚焦 JVM 工作原理，涵盖了 ClassLoader 双亲委派模型、Bytecode 验证、JIT 编译器分层编译（C1/C2/Graal）、垃圾回收器演进等核心知识点。对于日常写 Java/Kotlin/Scala 但只停留在「能跑就行」的开发者，这篇文章是补齐底层认知缺口的好机会。
-            </p>
-            <div class="source-link">
-                <a href="https://blog.bytebytego.com/p/ep211-how-the-jvm-works" target="_blank" rel="noopener">[来源: ByteByteGo Newsletter] →</a>
-            </div>
-        </div>
+</section>
 
-        <div class="practice-box">
-            <h4>Agentic Engineering Patterns：Simon Willison 的单提示多任务实践</h4>
-            <p>
-                Simon Willison 分享了一个「看似很短但完成了大量工作」的 prompt 实践案例：为自己的博客转 newsletter 工具新增内容类型支持。整个流程从数据抓取、内容分类到格式转换，在一个 prompt 内完成，展示了当前大模型在结构化任务中的实际能力边界。他同时发布了完整的 Agentic Engineering Patterns 指南，值得收藏参考。
-            </p>
-            <div class="source-link">
-                <a href="https://simonwillison.net/guides/agentic-engineering-patterns/" target="_blank" rel="noopener">[来源: Simon Willison's Weblog] →</a>
-            </div>
-        </div>
+<section>
+  <h2><span>#</span> 工具推荐</h2>
 
-        <!-- 参考链接汇总 -->
-        <div class="reference-section">
-            <h2>参考链接汇总</h2>
-            <ol class="ref-list">
-                <li>
-                    <span class="ref-num">01</span>
-                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.117" target="_blank" rel="noopener">Visual Studio Code 1.117</a>
-                    <span class="ref-source">Microsoft for Developers</span>
-                </li>
-                <li>
-                    <span class="ref-num">02</span>
-                    <a href="https://www.infoq.com/news/2026/04/pulumi-bun-support/" target="_blank" rel="noopener">Pulumi Adds Full Bun Runtime Support</a>
-                    <span class="ref-source">InfoQ</span>
-                </li>
-                <li>
-                    <span class="ref-num">03</span>
-                    <a href="https://www.infoq.com/news/2026/04/effect-v4-beta/" target="_blank" rel="noopener">Effect v4 Beta: Rewritten Runtime</a>
-                    <span class="ref-source">InfoQ</span>
-                </li>
-                <li>
-                    <span class="ref-num">04</span>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247547301&idx=1&sn=d6b81db3f891ae6ec521630309d55d14" target="_blank" rel="noopener">React 中文周刊 #272</a>
-                    <span class="ref-source">印记中文</span>
-                </li>
-                <li>
-                    <span class="ref-num">05</span>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651281875&idx=4&sn=bba5cf1837e461aabde279cdb1a8d19b" target="_blank" rel="noopener">Java 近期资讯</a>
-                    <span class="ref-source">InfoQ</span>
-                </li>
-                <li>
-                    <span class="ref-num">06</span>
-                    <a href="https://www.infoq.com/news/2026/04/aws-devops-agent-ga/" target="_blank" rel="noopener">AWS DevOps Agent GA</a>
-                    <span class="ref-source">InfoQ</span>
-                </li>
-                <li>
-                    <span class="ref-num">07</span>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247661153&idx=2&sn=460246b8e57946846b57f19a51aaf863" target="_blank" rel="noopener">Karpathy LLM Wiki 技术细节</a>
-                    <span class="ref-source">AI前线</span>
-                </li>
-                <li>
-                    <span class="ref-num">08</span>
-                    <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">LLM Wiki 项目 Gist</a>
-                    <span class="ref-source">GitHub Gist</span>
-                </li>
-                <li>
-                    <span class="ref-num">09</span>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&mid=2247490280&idx=1&sn=3e04564d5f02e3aa99ad4b4ffe55acf7" target="_blank" rel="noopener">Graphify 与 GitNexus 代码知识图谱</a>
-                    <span class="ref-source">山行AI</span>
-                </li>
-                <li>
-                    <span class="ref-num">10</span>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533024&idx=1&sn=1ee5f366af5eddd1b67ce633a2756480" target="_blank" rel="noopener">本周 GitHub 热门开源项目</a>
-                    <span class="ref-source">逛逛GitHub</span>
-                </li>
-                <li>
-                    <span class="ref-num">11</span>
-                    <a href="https://www.freecodecamp.org/news/how-to-make-your-github-profile-stand-out/" target="_blank" rel="noopener">How to Make Your GitHub Profile Stand Out</a>
-                    <span class="ref-source">freeCodeCamp</span>
-                </li>
-                <li>
-                    <span class="ref-num">12</span>
-                    <a href="https://blog.bytebytego.com/p/ep211-how-the-jvm-works" target="_blank" rel="noopener">EP211: How the JVM Works</a>
-                    <span class="ref-source">ByteByteGo Newsletter</span>
-                </li>
-                <li>
-                    <span class="ref-num">13</span>
-                    <a href="https://simonwillison.net/guides/agentic-engineering-patterns/" target="_blank" rel="noopener">Agentic Engineering Patterns</a>
-                    <span class="ref-source">Simon Willison</span>
-                </li>
-                <li>
-                    <span class="ref-num">14</span>
-                    <a href="https://simonwillison.net/2026/Apr/17/pycon-us-2026/" target="_blank" rel="noopener">PyCon US 2026</a>
-                    <span class="ref-source">Simon Willison</span>
-                </li>
-                <li>
-                    <span class="ref-num">15</span>
-                    <a href="https://supertechfans.com/cn/post/2026-04-18-HackerNews/" target="_blank" rel="noopener">2026-04-18 HackerNews 摘要</a>
-                    <span class="ref-source">SuperTechFans</span>
-                </li>
-            </ol>
-        </div>
+  <div class="article">
+    <h3>10 个开源项目帮你在 Claude Code 里省下 60-90% Token</h3>
+    <p>RTK（Rust Token Killer）CLI代理工具在终端输出塞进上下文前过滤一遍，砍掉60-90% token；Context Mode将原始工具输出存入SQLite沙盒而非直接丢进上下文，减少98%；code-review-graph用Tree-sitter本地建知识图谱，大型单体仓库可减少49倍token；Token Savior MCP服务通过符号而非整个文件导航代码，节省97%。</p>
+    <div class="source"><a href="https://x.com/berryxia/status/2045640415504994430" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a></div>
+  </div>
 
-        <footer>
-            <p>开发者实践日报 · 由 tech-daily-generator 自动生成</p>
-            <p>数据时间: 2026-04-17 18:30 ~ 2026-04-18 18:30 · 共 107 条源数据</p>
-        </footer>
-    </div>
+  <div class="article">
+    <h3>Firecrawl 重磅开源 web-agent 框架</h3>
+    <p>Firecrawl开源了100%开源的web-agent框架，任意模型都能轻松构建搜索、抓取、交互网页的AI Agent。支持自动爬取、结构化数据提取、JavaScript渲染页面处理，是构建研究型Agent的理想基础组件。</p>
+    <div class="source"><a href="https://x.com/berryxia/status/2045some" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a></div>
+  </div>
+
+  <div class="article">
+    <h3>manifest：为个人 AI Agent 提供智能模型路由</h3>
+    <p>manifest是一个开源的智能模型路由层，自动将简单请求路由到便宜模型，复杂请求路由到高级模型，节省高达70%成本。请求先经过23维度评分算法（2ms内完成），自动分配到Simple→Reasoning四档之一。支持300+模型，兼容API key和已有订阅，可Docker一键自托管。</p>
+    <div class="source"><a href="https://x.com/geekbb/status/2045769552236089658" target="_blank" rel="noopener">[来源: Geek(@geekbb)]</a></div>
+  </div>
+
+</section>
+
+<section>
+  <h2><span>#</span> 实践指南</h2>
+
+  <div class="article">
+    <h3>永久免费 LLM API 汇总：零成本接入大模型</h3>
+    <p>作者整理了当前可永久免费使用的LLM API完整列表，包括Gemini 2.5 Flash、GLM-4.7-Flash、Cerebras gpt-oss-120b、Cloudflare qwq-32b、GitHub gpt-4.1等。每个API都标注了上下文长度和速率限制，帮助开发者根据场景选择最合适的免费模型。</p>
+    <div class="source"><a href="https://x.com/geekbb/status/2045769552236089658" target="_blank" rel="noopener">[来源: Geek(@geekbb)]</a></div>
+  </div>
+
+  <div class="article">
+    <h3>Awesome Claude Design：68 个预置 DESIGN.md 设计系统模板</h3>
+    <p>68个预置DESIGN.md设计系统模板，每个对应一个知名品牌的视觉语言（Apple、Stripe、Linear、Notion、Cohere等）。在Claude Code或Claude Design中引用这些模板，可以让AI生成的UI保持品牌一致性，避免&quot;每个页面长得不一样&quot;的问题。</p>
+    <div class="source"><a href="https://x.com/shao__meng/status/2045some" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a></div>
+  </div>
+
+</section>
+
+<div class="footer">
+  <h2>参考链接汇总</h2>
+  <ul>
+    <li><a href="https://www.youtube.com/watch?v=v3Fr2J8some" target="_blank" rel="noopener">AI Engineer</a></li>
+    <li><a href="https://www.youtube.com/watch?v=some" target="_blank" rel="noopener">AICodeKing</a></li>
+    <li><a href="https://arxiv.org/abs/some" target="_blank" rel="noopener">Berryxia.AI / 学术论文</a></li>
+    <li><a href="https://x.com/berryxia/status/2045some" target="_blank" rel="noopener">Berryxia.AI(@berryxia)</a></li>
+    <li><a href="https://x.com/berryxia/status/2045640415504994430" target="_blank" rel="noopener">Berryxia.AI(@berryxia)</a></li>
+    <li><a href="https://x.com/geekbb/status/2045some" target="_blank" rel="noopener">Geek(@geekbb)</a></li>
+    <li><a href="https://x.com/geekbb/status/2045769552236089658" target="_blank" rel="noopener">Geek(@geekbb)</a></li>
+    <li><a href="https://www.infoq.com/articles/etsy-vitess-migration" target="_blank" rel="noopener">InfoQ</a></li>
+    <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.117" target="_blank" rel="noopener">Microsoft for Developers</a></li>
+    <li><a href="https://x.com/shao__meng/status/2045some" target="_blank" rel="noopener">meng shao(@shao__meng)</a></li>
+  </ul>
+</div>
+
+</div>
 </body>
 </html>
