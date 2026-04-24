@@ -1,366 +1,433 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>开发者实践日报 · 2026-04-23</title>
-<style>
-:root {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b22;
-  --bg-card: #1c2128;
-  --border: #30363d;
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --accent: #58a6ff;
-  --accent-green: #3fb950;
-  --accent-orange: #f0883e;
-  --accent-purple: #a371f7;
-  --accent-red: #f85149;
-  --code-bg: #0d1117;
-  --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
-  line-height: 1.7;
-  font-size: 15px;
-}
-.container { max-width: 920px; margin: 0 auto; padding: 40px 24px; }
-header {
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 24px;
-  margin-bottom: 32px;
-}
-header h1 {
-  font-family: var(--font-mono);
-  font-size: 28px;
-  color: var(--accent);
-  letter-spacing: -0.5px;
-}
-header .meta {
-  color: var(--text-secondary);
-  font-size: 13px;
-  margin-top: 8px;
-  font-family: var(--font-mono);
-}
-header .badge {
-  display: inline-block;
-  background: var(--accent-green);
-  color: var(--bg-primary);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 12px;
-  margin-left: 8px;
-  vertical-align: middle;
-}
-section { margin-bottom: 40px; }
-.section-title {
-  font-family: var(--font-mono);
-  font-size: 18px;
-  color: var(--text-primary);
-  margin-bottom: 20px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-title .icon { font-size: 20px; }
-.news-item {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 16px;
-  transition: border-color 0.2s;
-}
-.news-item:hover { border-color: var(--accent); }
-.news-item .news-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.news-item .tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.tag-ai { background: rgba(163,113,247,0.15); color: var(--accent-purple); }
-.tag-infra { background: rgba(88,166,255,0.15); color: var(--accent); }
-.tag-mobile { background: rgba(63,185,80,0.15); color: var(--accent-green); }
-.tag-backend { background: rgba(240,136,62,0.15); color: var(--accent-orange); }
-.tag-frontend { background: rgba(248,81,73,0.15); color: var(--accent-red); }
-.tag-tools { background: rgba(139,148,158,0.15); color: var(--text-secondary); }
-.news-item h3 {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.4;
-}
-.news-item h3 a {
-  color: var(--text-primary);
-  text-decoration: none;
-}
-.news-item h3 a:hover { color: var(--accent); text-decoration: underline; }
-.news-item .summary {
-  color: var(--text-secondary);
-  font-size: 14px;
-  line-height: 1.7;
-  margin-bottom: 12px;
-}
-.news-item .source {
-  font-size: 12px;
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-}
-.news-item .source a {
-  color: var(--accent);
-  text-decoration: none;
-}
-.news-item .source a:hover { text-decoration: underline; }
-.deep-dive {
-  background: var(--bg-secondary);
-  border-left: 3px solid var(--accent-purple);
-  padding: 20px;
-  border-radius: 0 10px 10px 0;
-  margin-bottom: 16px;
-}
-.deep-dive h3 {
-  font-size: 16px;
-  color: var(--accent-purple);
-  margin-bottom: 10px;
-}
-.tool-card {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-}
-.tool-card .news-item { margin-bottom: 0; }
-footer {
-  border-top: 1px solid var(--border);
-  padding-top: 24px;
-  margin-top: 40px;
-  color: var(--text-secondary);
-  font-size: 13px;
-}
-footer h3 {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-}
-footer ul {
-  list-style: none;
-  columns: 2;
-  column-gap: 24px;
-}
-footer ul li {
-  margin-bottom: 6px;
-  font-size: 12px;
-  break-inside: avoid;
-}
-footer ul li a {
-  color: var(--text-secondary);
-  text-decoration: none;
-}
-footer ul li a:hover { color: var(--accent); }
-@media (max-width: 600px) {
-  .container { padding: 20px 16px; }
-  header h1 { font-size: 22px; }
-  footer ul { columns: 1; }
-  .tool-card { grid-template-columns: 1fr; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>开发者实践日报 | 2026-04-24</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-secondary: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #3fb950;
+      --accent-orange: #f0883e;
+      --accent-purple: #a371f7;
+      --accent-red: #f85149;
+      --code-bg: #1e2530;
+      --font-mono: "SFMono-Regular", "JetBrains Mono", "Fira Code", Consolas, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.7;
+      padding: 0;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 36px;
+    }
+    .meta {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .badge {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 12px 0 8px;
+      letter-spacing: -0.5px;
+    }
+    h1 span { color: var(--accent); }
+    .subtitle { color: var(--text-muted); font-size: 15px; }
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 40px 0 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .icon { font-size: 22px; }
+    h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin: 28px 0 12px;
+      color: var(--accent);
+    }
+    .news-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin-bottom: 18px;
+      transition: border-color 0.2s;
+    }
+    .news-item:hover { border-color: var(--accent); }
+    .news-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .news-item p {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .source a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .source a:hover { text-decoration: underline; }
+    .tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      background: var(--code-bg);
+      color: var(--accent-green);
+      border: 1px solid var(--border);
+    }
+    .tag.api { color: var(--accent-orange); }
+    .tag.tool { color: var(--accent-purple); }
+    .tag.practice { color: var(--accent); }
+    .tag.model { color: var(--accent-green); }
+    .highlight-box {
+      background: var(--code-bg);
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    .highlight-box strong { color: var(--text); }
+    code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent-orange);
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 12px 0;
+    }
+    .tool-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .tool-card .tool-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .tool-card h4 { margin-bottom: 6px; font-size: 15px; }
+    .tool-card p { font-size: 14px; color: var(--text-muted); margin: 0; }
+    .source-section {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .source-section h2 { margin-top: 0; }
+    .source-list {
+      columns: 2;
+      column-gap: 32px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .source-list a { color: var(--accent); text-decoration: none; }
+    .source-list a:hover { text-decoration: underline; }
+    .source-list li { margin-bottom: 6px; break-inside: avoid; }
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px; }
+      h1 { font-size: 22px; }
+      .source-list { columns: 1; }
+      .tool-card { flex-direction: column; gap: 10px; }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<header>
-  <h1>开发者实践日报 <span class="badge">DEV</span></h1>
-  <div class="meta">2026-04-23 · 589 sources scanned · 8 curated</div>
-</header>
-
-<section>
-  <div class="section-title"><span class="icon">🔥</span> 今日技术热榜</div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-ai">AI</span>
-      <h3><a href="https://x.com/sama/status/2047378254575685707" target="_blank" rel="noopener">OpenAI 发布 GPT-5.5 + Codex 新功能 bundle</a></h3>
-    </div>
-    <p class="summary">GPT-5.5 正式向 ChatGPT 和 Codex 用户推出。根据 Sam Altman 的说明，新模型在保持与 GPT-5.4 同等 per-token 速度的同时，显著减少了每个任务的 token 消耗量。API 定价为每百万输入 token $5、输出 token $30，上下文窗口 100 万 token。同时 Codex 将迎来一大波新功能，意味着开发者可以在同一套工具链里获得更快的模型响应和更丰富的编码辅助能力。API 版本正在与合作伙伴进行安全测试，即将开放。</p>
-    <div class="source">📎 来源: <a href="https://x.com/sama/status/2047378254575685707" target="_blank" rel="noopener">Sam Altman (@sama)</a> · <a href="https://x.com/sama/status/2047378431260664058" target="_blank" rel="noopener">Codex features 预告</a></div>
-  </div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-ai">AI</span>
-      <h3><a href="https://x.com/berryxia/status/2047213112072511820" target="_blank" rel="noopener">阿里开源 Qwen3.6-27B：27B 参数打出旗舰级代码能力</a></h3>
-    </div>
-    <p class="summary">Qwen3.6-27B 是阿里云最新发布的密集开源模型，参数量仅 27B，却在主要代码基准测试中超越了自家 397B 参数的 Qwen3.5-A17B 模型。这意味着开发者可以在消费级 GPU 上本地运行一个具备顶尖编程能力的模型，无需依赖云端大模型。对于构建本地 Coding Agent、私有代码审查工具或离线开发环境的团队来说，这是成本和性能之间的一个重要平衡点。</p>
-    <div class="source">📎 来源: <a href="https://x.com/berryxia/status/2047213112072511820" target="_blank" rel="noopener">Berryxia.AI</a> · <a href="https://x.com/Alibaba_Qwen/status/2047209876543210000" target="_blank" rel="noopener">Qwen 官方 (@Alibaba_Qwen)</a></div>
-  </div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-infra">Infra</span>
-      <h3><a href="https://x.com/berryxia/status/2047277339651068249" target="_blank" rel="noopener">腾讯开源 Cube Sandbox：AI Agent 专用轻量级沙箱运行时</a></h3>
-    </div>
-    <p class="summary">Cube Sandbox 基于 RustVMM + KVM 构建，专为 AI Agent 的安全隔离执行设计。核心指标相当亮眼：冷启动低于 60ms（比同类方案快 2.5-50 倍），每个实例内存开销不到 5MB（节省 6 倍），每个沙箱拥有独立内核实现硬件级隔离。单节点可支持上千并发沙箱，且与 E2B SDK 100% 兼容，零代码改动即可迁移。如果你在自托管 AI Agent 或构建多租户代码执行平台，这是目前最值得关注的开源沙箱方案。</p>
-    <div class="source">📎 来源: <a href="https://x.com/berryxia/status/2047277339651068249" target="_blank" rel="noopener">Berryxia.AI</a> · <a href="https://github.com/TencentCloud/CubeSandbox" target="_blank" rel="noopener">GitHub: TencentCloud/CubeSandbox</a></div>
-  </div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-backend">Backend</span>
-      <h3><a href="https://www.infoq.com/news/2026/04/room-3-kotlin-async-sqlite/" target="_blank" rel="noopener">Google Room 3.0：Kotlin-First、异步、多平台的持久化库</a></h3>
-    </div>
-    <p class="summary">Android 官方持久化库 Room 迎来 3.0 大版本，这是一次涉及多个破坏性变更的现代化重构。新版本围绕 Kotlin Multiplatform 重新设计，平台支持扩展到 JavaScript 和 WebAssembly，同时全面拥抱 Kotlin 协程的异步编程模型。对于已经使用 Kotlin Multiplatform 构建跨端应用的团队，这意味着可以在 Android、iOS、桌面和 Web 之间共享同一套数据库层代码，不再需要为不同平台维护多套持久化方案。</p>
-    <div class="source">📎 来源: <a href="https://www.infoq.com/news/2026/04/room-3-kotlin-async-sqlite/" target="_blank" rel="noopener">InfoQ</a></div>
-  </div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-backend">Backend</span>
-      <h3><a href="https://spring.io/blog/2026/04/23/spring-boot-4-0-6-available-now" target="_blank" rel="noopener">Spring Boot 三连发：4.0.6 / 3.5.14 / 4.1.0-RC1</a></h3>
-    </div>
-    <p class="summary">Spring 团队在同一天发布了三个版本：稳定版 4.0.6（65 个 bug 修复和依赖升级）、维护版 3.5.14（48 个修复），以及下一个大版本的 4.1.0-RC1（113 个增强、文档改进和 bug 修复）。如果你还在使用 Spring Boot 3.x，3.5.14 是继续升级路径上的可靠选择；而 4.1.0-RC1 值得关注的新特性包括对一些新 JDK 特性的支持和配置层面的增强，建议在新项目或预研环境中提前验证。</p>
-    <div class="source">📎 来源: <a href="https://spring.io/blog/2026/04/23/spring-boot-4-0-6-available-now" target="_blank" rel="noopener">Spring Blog (4.0.6)</a> · <a href="https://spring.io/blog/2026/04/23/spring-boot-3-5-14-available-now" target="_blank" rel="noopener">(3.5.14)</a> · <a href="https://spring.io/blog/2026/04/23/spring-boot-4-1-0-RC1-available-now" target="_blank" rel="noopener">(4.1.0-RC1)</a></div>
-  </div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-ai">AI</span>
-      <h3><a href="https://x.com/berryxia/status/2047275082792509516" target="_blank" rel="noopener">DeepSeek 开源 Tile Kernels：打破 CUDA 绑定的 LLM GPU 内核优化</a></h3>
-    </div>
-    <p class="summary">DeepSeek 开源了基于 TileLang 编写的高性能 GPU 内核，专门针对 LLM 的核心计算操作进行优化。关键突破在于实现了硬件无关设计：同一套代码同时支持 NVIDIA GPU 和华为 Ascend NPU，计算强度和内存带宽都逼近硬件理论上限。这些内核已经在 DeepSeek 内部的训练和推理生产环境中大规模验证。对于从事国产大模型适配或需要跨平台推理优化的开发者来说，这是直接可用的生产级代码。</p>
-    <div class="source">📎 来源: <a href="https://x.com/berryxia/status/2047275082792509516" target="_blank" rel="noopener">Berryxia.AI</a> · <a href="https://github.com/deepseek-ai/TileKernels" target="_blank" rel="noopener">GitHub: deepseek-ai/TileKernels</a></div>
-  </div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-mobile">Mobile</span>
-      <h3><a href="https://www.infoq.com/news/2026/04/react-navigation-8-alpha/" target="_blank" rel="noopener">React Navigation 8.0 Alpha：原生 Bottom Tabs、TypeScript 推断重构</a></h3>
-    </div>
-    <p class="summary">React Navigation 发布了 8.0 Alpha 版本，这是 React Native 生态最重要的路由库之一的大版本更新。变化包括：原生 Bottom Tabs 成为默认实现（性能更好）、TypeScript 类型推断全面重写（减少泛型体操）、Deep Linking 默认开启。版本优先保证稳定性，并提供了详细的迁移指南。对于使用 React Navigation 的 React Native 项目，建议先在分支上评估迁移成本。</p>
-    <div class="source">📎 来源: <a href="https://www.infoq.com/news/2026/04/react-navigation-8-alpha/" target="_blank" rel="noopener">InfoQ</a></div>
-  </div>
-</section>
-
-<section>
-  <div class="section-title"><span class="icon">🔬</span> 深度技术解读</div>
-
-  <div class="deep-dive">
-    <h3>MDN 新前端重构：从 React 到 Lit + Web Components</h3>
-    <p class="summary">MDN Web Docs 去年上线了全新的前端界面，表面上看是设计样式的统一，实际上底层经历了彻底的技术栈重构。开发团队告别了积重难返的 React 旧架构，转而以 Lit、Web Components 和自研服务端组件为核心，构建了一套轻量、解耦且高性能的新体系。这个决策本身就很有参考价值：当内容型站点的交互复杂度不高时，引入 React 及其生态的 bundle 体积和运行时开销可能是一种过度设计。MDN 的实践表明，Web Components + 轻量渲染层的组合，在大型文档站点场景下可以获得更好的首屏性能和长期维护性。对于正在评估前端技术栈的团队，这是一个从"还原复杂度"角度做决策的典型案例。</p>
-    <div class="source">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651278964&idx=1&sn=2cc25711f66f3c3672c4186db5961a6b" target="_blank" rel="noopener">前端早读课</a> · 原文来自 MDN 团队 Leo McArdle</div>
-  </div>
-
-  <div class="deep-dive">
-    <h3>B-Trees vs LSM Trees：数据库底层存储的两条路线</h3>
-    <p class="summary">ByteByteGo 的这篇对比文章梳理了数据库在磁盘上组织数据的两种主导方案。B-Tree 家族（如 InnoDB、PostgreSQL）的核心优势是读取性能稳定和范围查询友好，每次写入都是原地更新，适合读多写少、需要强一致性的场景。LSM-Tree 家族（如 RocksDB、Cassandra）则通过顺序写入和分层合并来优化写吞吐量，代价是读取时需要合并多层数据，适合写密集型、可容忍最终一致性的场景。理解这两种存储引擎的 trade-off，是做出正确数据库选型和性能调优决策的基础。文章还提到了混合方案（如 WiredTiger 的 B-Tree + LSM 混合）以及在实际工程中的取舍考量。</p>
-    <div class="source">📎 来源: <a href="https://blog.bytebytego.com/p/b-trees-vs-lsm-trees-comparison-and" target="_blank" rel="noopener">ByteByteGo Newsletter</a></div>
-  </div>
-</section>
-
-<section>
-  <div class="section-title"><span class="icon">🛠️</span> 工具推荐</div>
-  <div class="tool-card">
-    <div class="news-item">
-      <div class="news-header">
-        <span class="tag tag-frontend">Frontend</span>
-        <h3><a href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">HyperFrames：用 HTML/CSS/JS 创建视频</a></h3>
+  <div class="container">
+    <header>
+      <div class="meta">
+        <span class="badge">DEVELOPER_PRACTICE</span>
+        <span>2026-04-24</span>
+        <span>643 articles parsed</span>
+        <span>8 curated</span>
       </div>
-      <p class="summary">HeyGen 开源的 HyperFrames 允许开发者用熟悉的 Web 技术栈（HTML、CSS、GSAP）来创建和编辑视频。最新的 Timeline 编辑器支持直接拖拽调整预览，Claude Code 可以自动生成视频编辑逻辑。对于需要批量生成技术演示视频、产品介绍的开发者，这意味着可以用代码版本控制视频内容，而不是手动操作 After Effects。</p>
-      <div class="source">📎 来源: <a href="https://x.com/HeyGen_Official/status/2047333014024396873" target="_blank" rel="noopener">HeyGen 官方</a> · <a href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">GitHub</a></div>
-    </div>
+      <h1>开发者实践日报 <span>Developer Daily</span></h1>
+      <p class="subtitle">为一线开发者精选的技术动态、工具更新与最佳实践</p>
+    </header>
 
-    <div class="news-item">
-      <div class="news-header">
-        <span class="tag tag-tools">Tool</span>
-        <h3><a href="https://nanoclaw.dev" target="_blank" rel="noopener">NanoClaw 2.0：AI Agent 安全审批框架</a></h3>
+    <section>
+      <h2><span class="icon">🔥</span> 今日技术热榜</h2>
+
+      <div class="news-item">
+        <span class="tag model">LLM</span><span class="tag tool">开源</span>
+        <h4>DeepSeek-V4 开源发布：1M 上下文窗口，北大团队 10 小时内完成自动化评测</h4>
+        <p>DeepSeek 正式发布 V4 Preview 并全面开源，提供两个版本：Pro 版拥有 1.6T 总参数 / 49B 激活参数，性能对标顶级闭源模型；Flash 版为 284B 总参数 / 13B 激活参数，主打速度与经济性。最引人注目的是其支持的 1M 上下文窗口，这在开源模型中极为罕见。</p>
+        <p>更具开发者价值的是，北京大学 DCAI 团队在 DeepSeek-V4 发布仅 10 小时后，就用其开源的 <strong>One-Eval</strong> 框架完成了对 V4 的自动化评测。One-Eval 是一款交互式大模型评测框架，它重构了传统"写配置跑脚本"的评测模式，允许开发者用自然语言描述评测需求，系统自动规划、执行并生成可分析的报告。GitHub 地址：<code>github.com/OpenDCAI/One-Eval</code>。对需要自托管模型或做模型选型的团队来说，这套组合提供了一个可复现、低门槛的评估流水线。</p>
+        <div class="source">
+          来源：<a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247722249&idx=1&sn=7e9f29cb43e6948fe35c0a1435f013d8" target="_blank" rel="noopener">Datawhale</a>
+          &nbsp;|
+          <a href="https://github.com/OpenDCAI/One-Eval" target="_blank" rel="noopener">One-Eval GitHub</a>
+        </div>
       </div>
-      <p class="summary">NanoClaw v2 与 Vercel、OneCLI 合作，为企业 AI Agent 的权限管理提供了一个务实的解决方案。Agent 运行在隔离容器中，敏感操作通过 Rust 网关拦截，审批请求直接推送到 Slack/Telegram/微信等 15 个平台。核心代码仅 500 行，8 分钟可完成审计，MIT 开源。如果你正在企业环境中部署 Claude Code 或 Codex，这是补齐安全短板的轻量选择。</p>
-      <div class="source">📎 来源: <a href="https://x.com/dingyi/status/2047286708387934304" target="_blank" rel="noopener">Ding (@dingyi)</a> · <a href="https://nanoclaw.dev" target="_blank" rel="noopener">nanoclaw.dev</a></div>
-    </div>
 
-    <div class="news-item">
-      <div class="news-header">
-        <span class="tag tag-ai">AI</span>
-        <h3><a href="https://x.com/weaviate_io/status/2047329848251634037" target="_blank" rel="noopener">Weaviate 1.37：内置 MCP Server 的向量数据库</a></h3>
+      <div class="news-item">
+        <span class="tag model">LLM</span><span class="tag practice">实践</span>
+        <h4>GPT-5.5 发布：不只是模型升级，更是开发者工作流的战略落位</h4>
+        <p>OpenAI 正式发布 GPT-5.5，外界聚焦 benchmark 数据，但对开发者而言更值得关注的是其工程化特性。GPT-5.5 在 token 效率上有所提升，能够更好地处理模糊需求到结构化输出的转换——这意味着从 PRD 到代码实现的链路被进一步压缩。</p>
+        <p>实际评测显示，GPT-5.5 在编码任务和部分 UI 生成上仍有提升空间，AICodeKing 的 KingBench 2.0 对比测试表明，Claude Opus 4.7 在复杂前端和 3D 任务上仍保持领先。开发者的选型策略应回归场景：需要长上下文和性价比优先考虑 DeepSeek-V4，需要顶尖代码质量仍可选 Opus 4.7，而 GPT-5.5 适合需要强对话理解和多轮协作的场景。</p>
+        <div class="source">
+          来源：<a href="https://www.youtube.com/watch?v=exS-Y6XGk6s" target="_blank" rel="noopener">AICodeKing</a>
+          &nbsp;|
+          <a href="https://x.com/FinanceYF5/status/2047665086991650869" target="_blank" rel="noopener">AI Will(@FinanceYF5)</a>
+        </div>
       </div>
-      <p class="summary">Weaviate 1.37 新增了内置 MCP（Model Context Protocol）Server，地址在 /v1/mcp，可以直接把向量数据库接入 Claude Code、Cursor、VS Code 等任何支持 MCP 的工具。这意味着你的代码编辑器可以直接查询和操作向量数据库，无需额外写胶水代码。此外还有可扩展 Token 验证和新的预览功能，正在把向量数据库推向 AI Agent 工具链的一等公民。</p>
-      <div class="source">📎 来源: <a href="https://x.com/weaviate_io/status/2047329848251634037" target="_blank" rel="noopener">Weaviate AI Database (@weaviate_io)</a></div>
-    </div>
+
+      <div class="news-item">
+        <span class="tag tool">工具</span><span class="tag practice">性能优化</span>
+        <h4>Milvus 推出 Claude Context 插件：用语义代码搜索替代 grep，降低 40% Token 成本</h4>
+        <p>Claude Code 用户的一个隐性成本是每次搜索都会读取大量无关代码行——grep 无法识别 <code>compute_final_cost()</code> 和 <code>calculate_total_price()</code> 是同一概念，只能将所有可能匹配的结果堆给模型。</p>
+        <p>本周 GitHub 日榜上的 Claude Context 插件（8.8k stars）用向量语义搜索解决了这个问题。它将代码库索引到向量数据库，按 AST（抽象语法树）分块以保持函数完整性，并用 Merkle 树实现增量索引——修改单个文件不会触发全量重建。基准测试中的 Django YearLookup bug 显示，原生 Claude Code 消耗 130,819 token，而 Claude Context 方案大幅降低这一数字。对于每天大量使用 AI 编码助手的团队，这是一个立即可部署的成本优化方案。</p>
+        <div class="source">
+          来源：<a href="https://x.com/milvusio/status/2047692042906828817" target="_blank" rel="noopener">Milvus(@milvusio)</a>
+        </div>
+      </div>
+
+      <div class="news-item">
+        <span class="tag tool">CLI</span><span class="tag api">SDK</span>
+        <h4>OpenRouter 发布 create-agent-tui：基于 Agent SDK 快速构建终端 UI</h4>
+        <p>OpenRouter 推出了 "create-agent-tui"，一个用于构建 Agent Harness + 终端 UI（TUI）的 skill。它基于 OpenRouter Agent SDK 构建，提供干净的多模型推理代码和工具调用逻辑。开发者可以通过 4 种不同的定制方式调整界面外观，并支持数十种可选功能。</p>
+        <p>对于想快速搭建本地 Agent 原型但不想从零处理模型路由、工具调用和状态管理的开发者，这个 skill 提供了一个"从顶部楼层开始建造"的基座——用经过实战检验的抽象层，直接对接模型智能。SDK 地址：<code>openrouter.ai/sdk</code>。</p>
+        <div class="source">
+          来源：<a href="https://x.com/OpenRouter/status/2047701992798392484" target="_blank" rel="noopener">OpenRouter(@OpenRouterAI)</a>
+        </div>
+      </div>
+
+      <div class="news-item">
+        <span class="tag practice">方法论</span><span class="tag model">Agent</span>
+        <h4>Google Cloud AI 总监 Addy Osmani：Agent = Model + Harness，多数失败是 Skill Issue 而非模型问题</h4>
+        <p>Addy Osmani 在一篇长文中系统阐述了 Agent Harness Engineering 的核心理念。他认为，Agent 的完整定义是"模型 + 驾驭层（Harness）"——后者包括系统提示、工具、记忆、钩子、沙箱、子 Agent 编排和可观测性。没有 Harness，大模型只是一个推理引擎，而非能完成任务的 Agent。</p>
+        <p>核心观点之一是"棘轮原则"（The Ratchet）：将每一次 Agent 的错误都转化为永久性约束——一条新规则、一个新的钩子检查，或一个专用工具。约束只基于真实失败经历添加，只在模型能力进化到冗余时才移除。这让 Harness 成为从失败历史中生长出来的工程纪律，而非预先设计的完美架构。这对正在构建生产级 Agent 的开发者是一针清醒剂：与其频繁切换模型，不如先完善 Harness。</p>
+        <div class="source">
+          来源：<a href="https://x.com/shao__meng/status/2047677925999456748" target="_blank" rel="noopener">meng shao(@shao__meng)</a>
+          &nbsp;|
+          <a href="https://addyosmani.com/blog/agent-harness-engineering/" target="_blank" rel="noopener">addyosmani.com</a>
+        </div>
+      </div>
+
+      <div class="news-item">
+        <span class="tag practice">工作流</span>
+        <h4>Claude Code 产品负责人 Cat Wu：Anthropic 如何把发布周期从 6 个月压缩到 1 天</h4>
+        <p>Anthropic 的产品开发速度在近期引发广泛关注。Claude Code 与 Co-work 产品负责人 Cat Wu 在 Lenny's Podcast 中透露，团队的产品周期已从半年缩短到一个月，有时一周，甚至一天。</p>
+        <p>加速的关键不是"模型最强"，而是三个工程实践：一、将新产品发布到 "research preview"，明确标注早期、实验性、可能不长期支持，降低发布心理门槛；二、建立一个 evergreen "launch room"，工程师发布就绪功能，市场团队次日就能输出公告；三、PM 角色从协调多季度路线图转向赋能团队每日发布。对开发者团队而言，"当代码变得便宜，真正更有价值的是决定写什么"——这要求 PM 和工程师重新分工。</p>
+        <div class="source">
+          来源：<a href="https://x.com/lennysan/status/2047669259380383955" target="_blank" rel="noopener">Lenny Rachitsky(@lennysan)</a>
+          &nbsp;|
+          <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247485935&idx=1&sn=a6716d15990b1b5bab10144b30cc97f0" target="_blank" rel="noopener">晚点再听LaterCast</a>
+        </div>
+      </div>
+
+      <div class="news-item">
+        <span class="tag tool">硬件</span>
+        <h4>Jeff Geerling 评测新款 10GbE USB 适配器：更小、更凉、更便宜</h4>
+        <p>长期以来，笔记本电脑上实现 10GbE 网络的唯一选择是昂贵、笨重且发热的 Thunderbolt 适配器。Jeff Geerling 评测了基于 RTL8159 芯片的新型 10G USB 3.2 适配器，体积大幅缩小，温度显著降低，价格也更亲民。</p>
+        <p>对于需要高带宽网络环境的开发者——比如在本地测试微服务集群、传输大型容器镜像、或进行视频/数据流处理——这款适配器提供了一个更便携的选择。虽然 2.5G 和 5G USB 网卡已存在一段时间，但 10G 带宽在特定场景下仍是刚需。</p>
+        <div class="source">
+          来源：<a href="https://www.jeffgeerling.com/blog/2026/new-10-gbe-usb-adapters-cooler-smaller-cheaper/" target="_blank" rel="noopener">Jeff Geerling</a>
+        </div>
+      </div>
+
+      <div class="news-item">
+        <span class="tag model">本地推理</span><span class="tag tool">开源</span>
+        <h4>Llama.cpp 跑 Qwen3.6 27B：开源本地模型逼近 Claude Code 体验</h4>
+        <p>Hugging Face 联合创始人 Julien Chaumond 分享了一个里程碑式的实测：在 MacBook Pro 上通过 Llama.cpp 运行 Qwen3.6 27B，配合 Pi coding agent，在处理 Hugging Face 代码库的非平凡任务时，体验"非常、非常接近"最新的 Claude Opus。</p>
+        <p>关键细节是"全程飞行模式"——完全不依赖网络。这意味着本地开源模型已经跨过了一个临界点：对于常规编码任务，开发者可以在没有 API 订阅、没有网络连接的情况下获得接近顶级闭源模型的体验。如果你还没尝试在本地部署大模型进行日常开发，现在可能是最好的入门时机。</p>
+        <div class="source">
+          来源：<a href="https://x.com/julien_c/status/2047647522173104145" target="_blank" rel="noopener">Julien Chaumond(@julien_c)</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="icon">🔍</span> 深度技术解读</h2>
+
+      <h3>AI 辅助开发完整生命周期：Matt Pocock 的实战工作坊</h3>
+      <p>Matt Pocock 在 AI Engineer 频道发布了一场长达数小时的完整工作坊 "AI Coding For Real Engineers"，系统覆盖了 AI 辅助开发的全生命周期。这不是一个"用 AI 写代码"的炫技视频，而是一套可落地的方法论。</p>
+      <div class="highlight-box">
+        <strong>核心流程：</strong><br>
+        1. <strong>需求澄清</strong>：将模糊 brief 通过压力测试转化为结构化的 PRD（产品需求文档），这是 AI 能正确理解的前提。<br>
+        2. <strong>切片策略</strong>：将工作拆分为细粒度的 "tracer bullet" 垂直切片——每个切片都是一个可独立运行、可验证的最小功能单元。<br>
+        3. <strong>TDD + Agent</strong>：让 AI 代理先写测试、再实现代码、最后提交。观察 Agent 在哪类任务上挣扎，然后针对性优化提示词。<br>
+        4. <strong>渐进自治</strong>：从人机协作（human-in-the-loop）逐步过渡到完全自主运行（AFK runs），同时设计能最大化 Agent 效率的代码库结构。
+      </div>
+      <p>配套还有一个关键演讲 "Why Software Fundamentals Matter More than Ever"——在 AI 能自动生成代码的时代，数据结构、算法、系统设计和架构思维反而变得更加重要，因为人类的职责从"写代码"转向"定义正确的问题和验证解决方案"。</p>
+      <div class="source">
+        来源：<a href="https://www.youtube.com/watch?v=-QFHIoCo-Ko" target="_blank" rel="noopener">AI Engineer (YouTube)</a>
+        &nbsp;|
+        <a href="https://x.com/aiDotEngineer/status/2047704667967381811" target="_blank" rel="noopener">AI Engineer(@aiDotEngineer)</a>
+      </div>
+
+      <h3>Gemini CLI 完整教程：freeCodeCamp 的 Agentic Coding 入门课</h3>
+      <p>freeCodeCamp 发布了由 ExamPro 制作的 Gemini CLI 完整教程，这是目前最系统的 Gemini CLI 学习资源。课程涵盖了 Gemini 模型选择、API Key 配置、Context Window 设置、Session 管理、Memory 机制（GEMINI Markdown File）以及 Agentic 执行模式。</p>
+      <p>对于想尝试 Google 官方 CLI 工具进行 AI 编码的开发者，这门课提供了一个零门槛的入口。Gemini CLI 的核心优势在于与 Google 生态的深度融合，以及在某些场景下更优的上下文窗口管理。</p>
+      <div class="source">
+        来源：<a href="https://www.youtube.com/watch?v=XKOR4h3CrwE" target="_blank" rel="noopener">freeCodeCamp.org</a>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="icon">🛠️</span> 工具推荐</h2>
+
+      <div class="tool-card">
+        <div class="tool-icon">🌲</div>
+        <div>
+          <h4>diffs + trees — 极致的代码 Diff 和文件树渲染库</h4>
+          <p>The Pierre Computer Co. 出品的两个开源库正在开发者社区快速传播。<strong>diffs</strong> 用于渲染代码 diff，可配置性极强；<strong>trees</strong> 是一个 React 文件树组件，最大亮点是虚拟化渲染——demo 中演示了 2956 个文件仍能瞬间加载，只渲染可见部分。两个库都遵循同一个产品哲学：把一个小需求做到极致。非常适合构建代码审查工具、IDE 侧边栏或 Git 客户端界面。<br>
+          <code>diffs.com</code> &nbsp;|&nbsp; <code>trees.software</code></p>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-icon">🔎</div>
+        <div>
+          <h4>Claude Context — 语义代码搜索插件</h4>
+          <p>将向量数据库引入 Claude Code 的搜索链路，用 AST 分块 + Merkle 树增量索引替代原生 grep。实测可降低 40% 的 token 消耗。GitHub 日榜 trending，适合高频使用 AI 编码助手且关注成本的开发者。</p>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-icon">🤖</div>
+        <div>
+          <h4>create-agent-tui — OpenRouter Agent SDK 上的 TUI 脚手架</h4>
+          <p>基于 OpenRouter Agent SDK 的 skill，提供多模型推理、工具调用和终端 UI 的一站式脚手架。支持 4 种界面定制方式和数十种可选功能。适合想快速验证 Agent 原型但不想处理底层模型路由的开发者。</p>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-icon">📊</div>
+        <div>
+          <h4>One-Eval — 交互式大模型自动化评测框架</h4>
+          <p>北大 DCAI 团队开源，用自然语言描述评测需求即可自动规划、执行并生成报告。解决了传统评测框架中"搭流程时间比跑评测还长"的痛点。GitHub: <code>OpenDCAI/One-Eval</code></p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="icon">📋</span> 实践指南</h2>
+
+      <h3>用 GPT-5.5 批量消灭技术债务</h3>
+      <p>How I AI 频道分享了一个值得尝试的实践：将安全修复清单、技术债务积压、flaky tests、前端遗留问题整理成 CSV，丢给 GPT-5.5 批量处理。GPT-5.5 在"loosely related tasks"的执行上表现出色——它能理解一组松散关联的任务之间的关系，并在最小人工干预下完成实施，开发者只需做代码审查。</p>
+      <p><strong>实践建议：</strong>不要期望 AI 一次性解决复杂架构债务，而是将债务拆分为"可 CSV 化"的原子任务（如"将组件 X 从 class 组件迁移到函数组件 + Hooks"、"修复测试文件 Y 中的 3 个 mock 问题"）。给 AI 明确的输入格式和输出标准，最后人工做架构层面的把关。</p>
+      <div class="source">
+        来源：<a href="https://www.youtube.com/shorts/VICLRfvLdh8" target="_blank" rel="noopener">How I AI</a>
+      </div>
+
+      <h3>Intercom 如何用 Claude Code Skills 在 9 个月内让工程产出翻倍</h3>
+      <p>Intercom 的 Brian Scanlan 分享了一个案例：通过 Claude Code Skills 功能，团队实现了"backlog zero"——积压清零。Skills 允许团队将常见的开发模式、代码规范和审查 checklist 封装为可复用的指令集，Claude Code 在执行任务时自动遵循这些规则。</p>
+      <p><strong>落地建议：</strong>如果你正在使用 Claude Code，花一个下午把团队最常重复的 3-5 个开发模式封装成 Skill。比如"新增 API 端点的标准流程"、"前端组件的测试模板"、"数据库 migration 的检查清单"。这不是为了替代工程师的判断，而是为了消除重复性的认知负荷，让人类专注于架构决策和边界情况处理。</p>
+      <div class="source">
+        来源：<a href="https://www.youtube.com/shorts/0r8F3KnIGpk" target="_blank" rel="noopener">How I AI</a>
+        &nbsp;|
+        <a href="https://x.com/lennysan/status/2047669259380383955" target="_blank" rel="noopener">Lenny Rachitsky</a>
+      </div>
+
+      <h3>构建 AI-Native 公司的四个核心原则（Y Combinator）</h3>
+      <p>YC Partner Diana Hu 在最新一期 Startup School 中提出，AI 不仅提升团队效率，更在改变公司的构建方式。AI-Native 公司意味着 AI 不是工具，而是公司运行的操作系统。</p>
+      <div class="highlight-box">
+        <strong>四个关键转变：</strong><br>
+        1. <strong>公司可查询化（Queryable）</strong>：所有信息、流程、决策都需要结构化到 Agent 可以访问和优化的程度。<br>
+        2. <strong>开放 vs 闭环</strong>：建立让 Agent 能够持续学习和改进的反馈回路，而非一次性自动化。<br>
+        3. <strong>千倍工程师的崛起</strong>：当 AI 接管执行层，单个工程师的影响面可以指数级扩大。<br>
+        4. <strong>中层管理的消解</strong>：当智能层取代"人际传声筒"，管理架构会扁平化。
+      </div>
+      <p>对开发者的启示：你的下一份工作可能不是在"写更多代码"，而是在"设计让 AI 能正确执行的系统和规范"。</p>
+      <div class="source">
+        来源：<a href="https://www.youtube.com/watch?v=EN7frwQIbKc" target="_blank" rel="noopener">Y Combinator</a>
+        &nbsp;|
+        <a href="https://x.com/ycombinator/status/2047684931464417744" target="_blank" rel="noopener">Y Combinator(@ycombinator)</a>
+      </div>
+    </section>
+
+    <section class="source-section">
+      <h2><span class="icon">🔗</span> 参考链接汇总</h2>
+      <ul class="source-list">
+        <li><a href="https://github.com/OpenDCAI/One-Eval" target="_blank" rel="noopener">One-Eval GitHub</a> — 自动化评测框架</li>
+        <li><a href="https://github.com/OpenRouterTeam/create-agent-tui" target="_blank" rel="noopener">create-agent-tui</a> — Agent TUI 脚手架</li>
+        <li><a href="https://openrouter.ai/sdk" target="_blank" rel="noopener">OpenRouter Agent SDK</a></li>
+        <li><a href="https://diffs.com" target="_blank" rel="noopener">diffs.com</a> — 代码 diff 渲染库</li>
+        <li><a href="https://trees.software" target="_blank" rel="noopener">trees.software</a> — React 文件树组件</li>
+        <li><a href="https://addyosmani.com/blog/agent-harness-engineering/" target="_blank" rel="noopener">Agent Harness Engineering</a> — Addy Osmani</li>
+        <li><a href="https://www.youtube.com/watch?v=-QFHIoCo-Ko" target="_blank" rel="noopener">AI Coding For Real Engineers</a> — Matt Pocock</li>
+        <li><a href="https://www.youtube.com/watch?v=XKOR4h3CrwE" target="_blank" rel="noopener">Gemini CLI Essentials</a> — freeCodeCamp</li>
+        <li><a href="https://www.jeffgeerling.com/blog/2026/new-10-gbe-usb-adapters-cooler-smaller-cheaper/" target="_blank" rel="noopener">10GbE USB Adapters Review</a> — Jeff Geerling</li>
+        <li><a href="https://chat.deepseek.com" target="_blank" rel="noopener">DeepSeek-V4</a> — 官方体验入口</li>
+        <li><a href="https://www.youtube.com/watch?v=EN7frwQIbKc" target="_blank" rel="noopener">Build AI-Native Company</a> — Y Combinator</li>
+        <li><a href="https://x.com/milvusio/status/2047692042906828817" target="_blank" rel="noopener">Claude Context Plugin</a> — Milvus</li>
+        <li><a href="https://x.com/lennysan/status/2047669259380383955" target="_blank" rel="noopener">Claude Code 产品方法论</a> — Lenny's Podcast</li>
+        <li><a href="https://x.com/julien_c/status/2047647522173104145" target="_blank" rel="noopener">Llama.cpp + Qwen3.6 实测</a> — Julien Chaumond</li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>Developer Practice Daily · 2026-04-24 · Generated from 643 sources</p>
+    </footer>
   </div>
-</section>
-
-<section>
-  <div class="section-title"><span class="icon">📖</span> 实践指南</div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-ai">AI</span>
-      <h3><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&mid=2247559661&idx=1&sn=ca9426f948819f172ec44f671127aa29" target="_blank" rel="noopener">深入源码：Hermes Agent 如何实现 "Self-Improving"</a></h3>
-    </div>
-    <p class="summary">Hermes Agent 在 OpenRouter 排行榜上以 +204% 增速登顶 Coding Agents 榜首，GitHub Star 半年破 10 万。与 OpenClaw 的手写 Skill 不同，Hermes 的核心创新在于"自改进"机制：Agent 完成任务后，会自动把踩坑经验提炼成可复用的 Skill 文件，写入自己的知识库。这意味着系统提示词不会随着 Skill 数量线性膨胀，Agent 的能力边界可以持续扩展而不会退化。对于想要构建可持续进化的 Coding Agent 的开发者，这篇源码分析提供了具体的设计思路和实现路径。</p>
-    <div class="source">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&mid=2247559661&idx=1&sn=ca9426f948819f172ec44f671127aa29" target="_blank" rel="noopener">阿里云开发者</a></div>
-  </div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-ai">AI</span>
-      <h3><a href="https://x.com/ycombinator/status/2047322414565204478" target="_blank" rel="noopener">GStack：把 Claude Code 变成一支 AI 工程团队</a></h3>
-    </div>
-    <p class="summary">YC CEO Garry Tan 开源了 GStack，一套将 Claude Code 扩展为完整 AI 工程团队的工具集。它通过 Skill 机制为 Claude Code 添加了办公室时间（Office Hours）、设计审查、代码审查、QA 测试和浏览器自动化测试等能力。本质是围绕 Claude Code 构建一个结构化的工作流框架，让单一 Agent 能够覆盖软件开发生命周期的多个环节。对于已经在使用 Claude Code 但希望把它从"代码助手"升级为"团队协作者"的开发者，GStack 提供了一套可落地的扩展模式。</p>
-    <div class="source">📎 来源: <a href="https://x.com/ycombinator/status/2047322414565204478" target="_blank" rel="noopener">Y Combinator (@ycombinator)</a> · <a href="https://github.com/gstack/gstack" target="_blank" rel="noopener">GitHub</a></div>
-  </div>
-
-  <div class="news-item">
-    <div class="news-header">
-      <span class="tag tag-ai">AI</span>
-      <h3><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247722227&idx=1&sn=91cdeb9ed199ea27bf816d8f58822044" target="_blank" rel="noopener">Generic Agent：比 Hermes 省 10 倍 Token 的轻量 Agent 方案</a></h3>
-    </div>
-    <p class="summary">Datawhale 开源的 Generic Agent（GA）针对当前 Coding Agent 的几个通病给出了方案：系统提示词吃掉几万 token、Skill 装多了就卡顿、教过的操作转头就忘。GA 的设计目标是用 2000 个 token 完成别人 20000 个 token 才能启动的任务。实现思路包括精简的系统提示词设计、按需加载的 Skill 机制、以及经验持久化存储。如果你在使用 Claude Code 或类似工具时被 token 账单困扰，这个项目值得一试。</p>
-    <div class="source">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247722227&idx=1&sn=91cdeb9ed199ea27bf816d8f58822044" target="_blank" rel="noopener">Datawhale</a></div>
-  </div>
-</section>
-
-<footer>
-  <h3>参考链接汇总</h3>
-  <ul>
-    <li><a href="https://x.com/sama/status/2047378254575685707" target="_blank" rel="noopener">Sam Altman - GPT-5.5 发布</a></li>
-    <li><a href="https://x.com/Alibaba_Qwen/status/2047209876543210000" target="_blank" rel="noopener">Qwen3.6-27B 官方公告</a></li>
-    <li><a href="https://github.com/TencentCloud/CubeSandbox" target="_blank" rel="noopener">Tencent Cloud Cube Sandbox</a></li>
-    <li><a href="https://www.infoq.com/news/2026/04/room-3-kotlin-async-sqlite/" target="_blank" rel="noopener">InfoQ - Room 3.0 报道</a></li>
-    <li><a href="https://spring.io/blog/2026/04/23/spring-boot-4-0-6-available-now" target="_blank" rel="noopener">Spring Boot 4.0.6 发布说明</a></li>
-    <li><a href="https://spring.io/blog/2026/04/23/spring-boot-3-5-14-available-now" target="_blank" rel="noopener">Spring Boot 3.5.14 发布说明</a></li>
-    <li><a href="https://spring.io/blog/2026/04/23/spring-boot-4-1-0-RC1-available-now" target="_blank" rel="noopener">Spring Boot 4.1.0-RC1 发布说明</a></li>
-    <li><a href="https://github.com/deepseek-ai/TileKernels" target="_blank" rel="noopener">DeepSeek Tile Kernels</a></li>
-    <li><a href="https://www.infoq.com/news/2026/04/react-navigation-8-alpha/" target="_blank" rel="noopener">InfoQ - React Navigation 8.0</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651278964&idx=1&sn=2cc25711f66f3c3672c4186db5961a6b" target="_blank" rel="noopener">MDN 新前端内部机制</a></li>
-    <li><a href="https://blog.bytebytego.com/p/b-trees-vs-lsm-trees-comparison-and" target="_blank" rel="noopener">ByteByteGo - B-Trees vs LSM Trees</a></li>
-    <li><a href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">HyperFrames GitHub</a></li>
-    <li><a href="https://nanoclaw.dev" target="_blank" rel="noopener">NanoClaw 官网</a></li>
-    <li><a href="https://x.com/weaviate_io/status/2047329848251634037" target="_blank" rel="noopener">Weaviate 1.37 公告</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&mid=2247559661&idx=1&sn=ca9426f948819f172ec44f671127aa29" target="_blank" rel="noopener">Hermes Agent 源码分析</a></li>
-    <li><a href="https://github.com/gstack/gstack" target="_blank" rel="noopener">GStack GitHub</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247722227&idx=1&sn=91cdeb9ed199ea27bf816d8f58822044" target="_blank" rel="noopener">Generic Agent 教程</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&mid=2247695386&idx=1&sn=7b4ec46bedf2b841680912d6be029a81" target="_blank" rel="noopener">Agentic Engineering 第一性原理</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTE0ODA2MQ==&mid=2650996715&idx=1&sn=4589a54540c424d6953e7b64b269a6d8" target="_blank" rel="noopener">腾讯研究院 AI Coding 报告 2.0</a></li>
-    <li><a href="https://blog.jetbrains.com/teamcity/2026/04/ai-in-devops/" target="_blank" rel="noopener">JetBrains - AI in DevOps</a></li>
-  </ul>
-  <p style="margin-top:16px;color:#484f58;font-size:12px;">Generated by tech-daily-generator · Data source: FreshRSS 24h compact export · 2026-04-23</p>
-</footer>
-
-</div>
 </body>
 </html>
