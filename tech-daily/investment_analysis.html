@@ -1,413 +1,596 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>科技投资日报 | 2026-04-24 | 投资分析版</title>
-<style>
-  :root {
-    --bg: #0f172a;
-    --card: #1e293b;
-    --accent: #059669;
-    --accent-light: #34d399;
-    --text: #e2e8f0;
-    --text-muted: #94a3b8;
-    --border: #334155;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --info: #3b82f6;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.7;
-  }
-  .container { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
-  header {
-    border-bottom: 2px solid var(--accent);
-    padding-bottom: 20px;
-    margin-bottom: 32px;
-  }
-  header h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-  header .meta {
-    color: var(--text-muted);
-    font-size: 14px;
-    margin-top: 8px;
-  }
-  header .tag {
-    display: inline-block;
-    background: var(--accent);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 10px;
-    border-radius: 4px;
-    margin-left: 10px;
-    text-transform: uppercase;
-  }
-  .summary-bar {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    margin-bottom: 32px;
-  }
-  .kpi {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px;
-    text-align: center;
-  }
-  .kpi .num {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--accent-light);
-  }
-  .kpi .label {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-  h2 {
-    font-size: 20px;
-    color: var(--accent-light);
-    margin: 32px 0 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  h3 {
-    font-size: 16px;
-    color: var(--text);
-    margin: 20px 0 10px;
-  }
-  .news-item {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 16px;
-  }
-  .news-item .title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    line-height: 1.5;
-  }
-  .news-item .body {
-    color: var(--text-muted);
-    font-size: 14px;
-    margin-bottom: 12px;
-  }
-  .news-item .source {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-  .news-item .source a {
-    color: var(--info);
-    text-decoration: none;
-  }
-  .news-item .source a:hover { text-decoration: underline; }
-  .tag-pill {
-    display: inline-block;
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    margin-right: 6px;
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-  .tag-funding { background: rgba(5,150,105,0.15); color: var(--accent-light); }
-  .tag-ipo { background: rgba(59,130,246,0.15); color: var(--info); }
-  .tag-valuation { background: rgba(245,158,11,0.15); color: var(--warning); }
-  .tag-market { background: rgba(239,68,68,0.15); color: var(--danger); }
-  .tag-insight { background: rgba(148,163,184,0.15); color: var(--text-muted); }
-  .deep-dive {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-left: 4px solid var(--accent);
-    padding: 24px;
-    border-radius: 0 8px 8px 0;
-    margin-bottom: 20px;
-  }
-  .deep-dive h3 { color: var(--accent-light); margin-top: 0; }
-  .deep-dive p { color: var(--text-muted); font-size: 14px; margin-bottom: 10px; }
-  .deep-dive ul { margin-left: 20px; color: var(--text-muted); font-size: 14px; }
-  .deep-dive li { margin-bottom: 6px; }
-  .sources-section {
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-  }
-  .sources-section h2 { margin-top: 0; }
-  .sources-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 8px;
-    font-size: 13px;
-  }
-  .sources-grid a {
-    color: var(--info);
-    text-decoration: none;
-  }
-  .sources-grid a:hover { text-decoration: underline; }
-  footer {
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-  .highlight-box {
-    background: rgba(5,150,105,0.08);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 16px;
-    margin: 16px 0;
-    font-size: 14px;
-  }
-  .highlight-box strong { color: var(--accent-light); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技投资日报 | 2026-04-25</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --border: #334155;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+        header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+        .header-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-investment {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .date-line {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .executive-summary {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(245, 158, 11, 0.05));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .executive-summary h2 {
+            font-size: 16px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .executive-summary p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .section-number {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .news-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+        .news-card:hover {
+            border-color: var(--accent-gold);
+        }
+        .news-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .news-card .meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .news-card .tag {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+        .news-card .tag-funding {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+        }
+        .news-card .tag-macro {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-gold);
+        }
+        .news-card .tag-ipo {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+        }
+        .news-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .news-card .source {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .news-card .source a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        .news-card .source a:hover {
+            text-decoration: underline;
+        }
+
+        .deep-dive {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.5));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+        }
+        .deep-dive h3 {
+            font-size: 18px;
+            color: var(--accent-gold);
+            margin-bottom: 16px;
+        }
+        .deep-dive .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .deep-dive p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+        .insight-box {
+            background: rgba(245, 158, 11, 0.08);
+            border-left: 3px solid var(--accent-gold);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+        }
+        .insight-box strong {
+            color: var(--accent-gold);
+        }
+
+        .track-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        .track-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .track-card h4 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .track-card .signal {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+        .track-card p {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .valuation-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .valuation-table th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        .valuation-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .valuation-table td:first-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        .up { color: var(--accent-green); }
+        .down { color: var(--accent-red); }
+        .neutral { color: var(--accent-gold); }
+
+        .sources {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+        }
+        .sources h3 {
+            font-size: 15px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .sources ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 8px;
+        }
+        .sources li {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .sources a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        .sources a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
+    <div class="container">
+        <header>
+            <div class="header-meta">
+                <h1>科技投资日报</h1>
+                <span class="badge badge-investment">投资分析版</span>
+            </div>
+            <div class="date-line">2026年4月25日 | 覆盖周期：2026-04-24 至 2026-04-25</div>
+        </header>
 
-<header>
-  <h1>科技投资日报 <span class="tag">投资分析版</span></h1>
-  <div class="meta">2026年4月24日 | 覆盖过去24小时全球科技投融资动态</div>
-</header>
+        <div class="executive-summary">
+            <h2>投资摘要</h2>
+            <p>今日科技投资市场呈现"冰火两重天"格局：一级市场融资热度不减，谷歌拟向Anthropic投资高达400亿美元，Cognition AI估值飙至250亿美元；二级市场英特尔暴涨24%创1987年来最大单日涨幅，英伟达市值重回5万亿美元。DeepSeek V4开源并适配华为昇腾芯片，标志着中国AI算力自主化取得关键突破。具身智能赛道融资纪录被它石智航刷新，Pre-A轮即拿下4.55亿美元。AI应用层与基础设施层的估值分化正在加速。</p>
+        </div>
 
-<div class="summary-bar">
-  <div class="kpi"><div class="num">$1T+</div><div class="label">Anthropic 二级市场估值</div></div>
-  <div class="kpi"><div class="num">$1.75T</div><div class="label">SpaceX 目标 IPO 估值</div></div>
-  <div class="kpi"><div class="num">300亿+</div><div class="label">Q1 具身智能融资(元)</div></div>
-  <div class="kpi"><div class="num">4.6x</div><div class="label">商业航天融资同比增长</div></div>
-</div>
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">1</span>
+                <h2>市场概览</h2>
+            </div>
 
-<h2>一、市场概览：重要投融资动态</h2>
+            <div class="news-card">
+                <div class="meta">
+                    <span class="tag tag-funding">融资动态</span>
+                    <span class="tag tag-macro">超级交易</span>
+                </div>
+                <h3>谷歌拟向Anthropic投资高达400亿美元</h3>
+                <p>据创业邦援引睿兽分析报道，谷歌计划向AI初创公司Anthropic投资高达400亿美元。这笔投资若达成，将刷新AI领域单笔投资的纪录，并进一步加剧谷歌与亚马逊在Anthropic股东结构中的博弈。Anthropic此前已从亚马逊获得数十亿美元投资，此次谷歌的大手笔入局意味着AI基础模型赛道的"站队游戏"进入白热化阶段。对于一级市场投资者而言，这释放了一个明确信号：头部大模型公司的估值天花板正在被重新定义，具备安全AI差异化定位的厂商仍具有极强的战略收购价值。</p>
+                <div class="source">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872369&idx=1&sn=73abbd902ba9934d1fcd3c768b6c2039" target="_blank" rel="noopener">[来源: 创业邦]</a>
+                </div>
+            </div>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-valuation">估值</span>
-    Anthropic 二级市场估值突破万亿美元，首次超越 OpenAI
-  </div>
-  <div class="body">
-    Anthropic 在 Forge Global 等未上市企业股权交易平台上的估值已升至约 1 万亿美元，超过了 OpenAI 今年 3 月末最新一轮融资时的 8520 亿美元估值。由于买家竞相抢购 Anthropic 日益稀缺的二级市场股票，其估值被迅速推高。这一变化标志着 AI 大模型赛道估值格局的重大逆转——曾经稳坐头把交椅的 OpenAI 正面临被追赶甚至被超越的压力。
-  </div>
-  <div class="source">
-    <a href="https://www.ifanr.com/1663666" target="_blank" rel="noopener">[来源: 爱范儿]</a>
-    &nbsp;|&nbsp;
-    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650871949&idx=2&sn=62469bc100c191dc7faa2a6c8a0726f4" target="_blank" rel="noopener">[来源: 创业邦]</a>
-  </div>
-</div>
+            <div class="news-card">
+                <div class="meta">
+                    <span class="tag tag-funding">融资动态</span>
+                    <span class="tag">AI应用</span>
+                </div>
+                <h3>Cognition AI融资谈判中，估值达250亿美元</h3>
+                <p>人工智能初创公司Cognition AI正在进行融资谈判，估值已达到250亿美元。Cognition AI凭借AI编程助手Devin迅速崛起，成为AI Agent赛道最受关注的独角兽之一。这一估值水平反映出资本市场对"AI能替代白领工作"这一叙事的高度认可。值得注意的是，250亿美元估值已接近部分上市SaaS公司的市值，一级市场对AI原生应用的定价显著高于传统软件的估值倍数，投资者需警惕Agent赛道过热后的回调风险。</p>
+                <div class="source">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872369&idx=1&sn=73abbd902ba9934d1fcd3c768b6c2039" target="_blank" rel="noopener">[来源: 创业邦]</a>
+                </div>
+            </div>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-funding">融资</span>
-    它石智航完成 4.55 亿美元 Pre-A 轮融资，创中国具身智能单轮融资纪录
-  </div>
-  <div class="body">
-    以通用具身大模型为核心的全栈具身智能公司它石智航宣布完成 4.55 亿美元 Pre-A 轮融资，创下中国具身智能有史以来最高单轮融资纪录。2026 年前三个月，具身智能行业融资事件接近 200 起，融资规模已超 300 亿元人民币，达到 2025 年全年近六成。行业正从"本体路线"（以宇树为代表）与"物理世界模型路线"（以它石智航为代表）两条路径展开竞争，市场正在用脚投票决定估值天花板。
-  </div>
-  <div class="source">
-    <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651029959&idx=1&sn=2aa3285bd8c85d42d7f6c5bc5143cdde" target="_blank" rel="noopener">[来源: 机器之心]</a>
-  </div>
-</div>
+            <div class="news-card">
+                <div class="meta">
+                    <span class="tag tag-funding">融资动态</span>
+                    <span class="tag">具身智能</span>
+                </div>
+                <h3>它石智航4.55亿美元Pre-A轮融资，创中国具身智能史上最高纪录</h3>
+                <p>具身智能领军企业它石智航宣布完成4.55亿美元Pre-A轮融资，创下中国具身智能史上最高单轮融资纪录和最大Pre-A轮融资纪录。成立首年累计公开融资已达6.97亿美元，这个数字甚至超过了当前全球估值最高的人形机器人企业Figure的同期融资规模。远川研究所的分析指出，中国机器人产业正在从"硬件靠中国，模型靠美国"的刻板印象中突围，真实数据驱动的模型迭代正在形成闭环。对于投资者而言，具身智能赛道已从"概念验证"进入"资本军备竞赛"阶段，头部公司的融资门槛正在快速抬高。</p>
+                <div class="source">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872434&idx=3&sn=aa3319aa699fc6a6ea058af245ecc73d" target="_blank" rel="noopener">[来源: 创业邦 / 远川研究所]</a>
+                </div>
+            </div>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-ipo">IPO</span>
-    AI 视频赛道中国公司加速港股 IPO，中美走出相反路径
-  </div>
-  <div class="body">
-    生数科技、爱诗科技相继传出港股 IPO 消息，两家公司均成立于 2023 年，不到三年即从 0 走到 IPO 门口。与此同时，OpenAI 刚刚关停了 Sora，Runway 在转型，Pika 融资停滞，美国视频模型整体降温。生数、爱诗今年都完成了 10 亿级融资，估值跨过 10 亿美元门槛。用 a16z 的话说，中国视频模型在输出质量上已形成"群体性领先"，这在整个 AI 竞争里是第一次。
-  </div>
-  <div class="source">
-    <a href="https://mp.weixin.qq.com/s?__biz=MzkyNTY1MjE2OA==&mid=2247493594&idx=1&sn=d87d5eab8682656c4390dbd625140057" target="_blank" rel="noopener">[来源: 硅基观察Pro]</a>
-  </div>
-</div>
+            <div class="news-card">
+                <div class="meta">
+                    <span class="tag tag-ipo">IPO</span>
+                    <span class="tag">AI+医疗</span>
+                </div>
+                <h3>AI病程管理公司冲刺港股IPO，年入8亿集齐BAT系资本</h3>
+                <p>一家由48岁浙大校友创立的AI病程管理公司正在冲刺港股IPO，若成功将成为港股"AI+全病程管理"赛道的第一股。该公司年营收已达8亿元，背后站着BAT系资本。AI医疗赛道在经历2023-2024年的泡沫挤出后，具备真实营收能力和医院落地场景的企业开始获得资本市场认可。"AI+垂直行业"的IPO窗口正在打开，投资者应重点关注那些拥有数据壁垒和付费客户的教育、医疗、金融等垂直领域AI公司。</p>
+                <div class="source">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872390&idx=1&sn=be48ca527fddaa5ec1a4aa9c2f74ade8" target="_blank" rel="noopener">[来源: 创业邦]</a>
+                </div>
+            </div>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-funding">融资</span>
-    商业航天 Q1 融资暴涨 4.6 倍，SpaceX 计划 750 亿美元募资
-  </div>
-  <div class="body">
-    2026 年一季度中国商业航天一级市场披露融资总额达 80.2 亿元，同比大幅增长 4.6 倍。全球范围内，SpaceX 计划募资 750 亿美元，估值直指 1.75 万亿美元，有望成为全球规模最大的 IPO 项目之一。星链在轨卫星数量已突破 10,000 颗，中国星网 GW、G60 千帆星座按下万颗组网加速键。预计到 2035 年，全球太空经济规模将达到 1.8 万亿美元。
-  </div>
-  <div class="source">
-    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872298&idx=2&sn=24d7bdd9a8a91754bca356b49a6fd96b" target="_blank" rel="noopener">[来源: 创业邦/睿兽Pro]</a>
-  </div>
-</div>
+            <div class="news-card">
+                <div class="meta">
+                    <span class="tag tag-ipo">IPO</span>
+                    <span class="tag">出行</span>
+                </div>
+                <h3>网约车老三T3出行拟上市：净利润率仅0.04%，八成订单依赖聚合平台</h3>
+                <p>T3出行作为网约车市场第三名正在推进上市计划。但财务数据显示，该公司净利润率仅为0.04%，且八成订单来自聚合平台而非自有App。这意味着T3出行的品牌粘性和定价权极其有限，本质上是一家依附于高德、美团等流量平台的运力供应商。对于投资者而言，这是一个警示案例：在平台经济中，缺乏用户心智和直接获客能力的"中间商"，即使营收规模可观，也难以构建可持续的护城河。T3出行的IPO定价或将面临严峻考验。</p>
+                <div class="source">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872369&idx=3&sn=6bd1191bd019ada8c3b7d60b346c686e" target="_blank" rel="noopener">[来源: 创业邦 / 定焦One]</a>
+                </div>
+            </div>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-funding">融资</span>
-    AI 笔记应用 Granola 估值 15 亿美元，完成 1.25 亿美元融资
-  </div>
-  <div class="body">
-    AI 笔记应用 Granola 近期以 15 亿美元估值完成 1.25 亿美元融资，成为 AI 应用赛道最受瞩目的新星之一。其产品以"令人惊讶地没野心"的极简设计著称，专注于服务会议连轴转的职场人。增长几乎完全来自用户口碑传播，不保存音频、不让机器人加入会议等独特抉择形成了差异化。这印证了 AI 应用层的一个重要投资逻辑：在巨头林立的基础设施层之外，聚焦细分场景、强调产品体验的垂直应用仍有巨大的估值空间。
-  </div>
-  <div class="source">
-    <a href="https://www.xiaoyuzhoufm.com/episode/69eb94ba1d989496e770bdb2" target="_blank" rel="noopener">[来源: 跨国串门儿计划]</a>
-  </div>
-</div>
+            <div class="news-card">
+                <div class="meta">
+                    <span class="tag tag-macro">二级市场</span>
+                    <span class="tag">半导体</span>
+                </div>
+                <h3>英特尔股价暴涨24%创1987年来最大单日涨幅，财报超预期</h3>
+                <p>英特尔股价周五飙升24%，创下自1987年10月以来最佳单日表现，收盘价82.57美元。公司第一季度营收135.8亿美元，同比增长7.2%，超出市场预期。这是英特尔在连续七个季度中五次营收下滑后的重大转折。新任CEO陈立武通过争取特朗普政府和英伟达的投资，帮助英特尔重回AI竞争轨道。Evercore ISI已将英特尔评级上调至"买入"。英特尔一季度 turnaround 的成功验证了"逆境反转"策略的有效性，但投资者仍需关注其芯片代工业务能否在2027年前获得大客户订单，这是决定长期估值的关键变量。</p>
+                <div class="source">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653104706&idx=1&sn=3464e3f14e1956ba44b5ee8782b1e42f" target="_blank" rel="noopener">[来源: 极客公园]</a>
+                </div>
+            </div>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-funding">融资</span>
-    阅星曈获博裕、经纬、顺为等联合投资，累计五轮超亿元
-  </div>
-  <div class="body">
-    AI 超便携电子纸品牌阅星曈近日完成天使轮至 A 轮融资，累计五轮金额超亿元人民币。投资方包括博裕创投、清流资本、希扬资本、小红书、经纬创投、顺为资本，多数股东持续追加。其首款产品重量仅 70 克、4.3 寸屏幕、售价不到 300 元，在零推广费用前提下依靠小红书社区"云股东"共创众筹，一年内完成从产品定义到规模化验证的闭环。创始人胡宇沸为资深连续创业者，曾任新石器无人车 COO、OYO 酒店首席发展官等职。
-  </div>
-  <div class="source">
-    <a href="https://mp.weixin.qq.com/s?__biz=MzA3NTQ4NjczNw==&mid=2650679544&idx=2&sn=87face85c94eb3854b87fee0a4c22053" target="_blank" rel="noopener">[来源: 白鲸出海/硬氪]</a>
-  </div>
-</div>
+            <div class="news-card">
+                <div class="meta">
+                    <span class="tag tag-macro">二级市场</span>
+                    <span class="tag">AI芯片</span>
+                </div>
+                <h3>英伟达市值重回5万亿美元，GAAP毛利率维持75.2%印钞机水平</h3>
+                <p>英伟达股价上涨3.08%至209.50美元，总市值再次突破5万亿美元。根据其2026财年第四季度财报，GAAP毛利率高达75.2%，几乎等同于"印钞机"。然而，几乎所有AI大厂都在明里暗里试图摆脱英伟达的算力围笼。DeepSeek V4首次明确披露已适配华为昇腾芯片，谷歌、微软、亚马逊也在加速自研芯片。英伟达的定价权正在面临"客户变竞争对手"的威胁。短期来看，英伟达的业绩仍将保持强劲；中长期而言，毛利率能否维持在70%以上，取决于其软件生态（CUDA）的锁定效应能否抵御开放标准的侵蚀。</p>
+                <div class="source">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872434&idx=1&sn=9989879139a2379ec6a758ef975c4428" target="_blank" rel="noopener">[来源: 创业邦 / 最话 FunTalk]</a>
+                </div>
+            </div>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-market">市场</span>
-    DeepSeek 估值涨至 400 亿美元，开源策略重塑 AI 估值逻辑
-  </div>
-  <div class="body">
-    DeepSeek 最新估值已涨至 400 亿美元。其 V4 系列采用全面开源策略，Pro 版本 1.6T 总参数/49B 激活参数，Flash 版本定价大幅降低（输入成本降幅 50%）。有投资人评论称："如果 AGI 的秘方最终是公开的，商业模式就会改变，估值会被压缩，防御性会消失。" DeepSeek 的策略正在迫使市场重新思考闭源 vs 开源的估值方法论。
-  </div>
-  <div class="source">
-    <a href="https://x.com/AiBreakfast/status/2047680107163144474" target="_blank" rel="noopener">[来源: AI Breakfast]</a>
-    &nbsp;|&nbsp;
-    <a href="https://x.com/vista8/status/2047670050392526871" target="_blank" rel="noopener">[来源: 向阳乔木]</a>
-  </div>
-</div>
+            <div class="news-card">
+                <div class="meta">
+                    <span class="tag tag-macro">二级市场</span>
+                    <span class="tag">光通信</span>
+                </div>
+                <h3>诺基亚光通信份额全球第一，下一代光纤技术市占率35%</h3>
+                <p>诺基亚在光通信领域实现了令人瞩目的复苏。2025年，诺基亚拥有光通信全球约21%的份额，十大云服务商中有九家采用了其技术。在下一代光纤技术市场，诺基亚以35%的份额位居第一。这是一个经典的"被低估价值"案例：在5G建设周期放缓后，市场一度将诺基亚视为"没落的手机巨头"，却忽视了其在光网络基础设施领域的深厚积累。随着AI数据中心对光互联带宽需求的爆发性增长，诺基亚的光通信业务正迎来第二增长曲线。对于价值投资者而言，这一案例说明：旧巨头的转型价值往往被市场过早地判了死刑。</p>
+                <div class="source">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653160950&idx=1&sn=ad8924f7f07d05eb7a6c79829ef55f35" target="_blank" rel="noopener">[来源: 吴晓波频道]</a>
+                </div>
+            </div>
+        </section>
 
-<h2>二、深度投资分析</h2>
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2>深度投资分析</h2>
+            </div>
 
-<div class="deep-dive">
-  <h3>分析一：AI 大模型估值格局变天——Anthropic 凭什么超越 OpenAI？</h3>
-  <p>Anthropic 在私募二级市场的估值突破 1 万亿美元，超过 OpenAI 的 8520 亿美元，这是一个标志性事件。传统观点认为 OpenAI 凭借先发优势和 ChatGPT 的用户规模理应在估值上领先，但市场给出的信号是：投资人对 Anthropic 的技术路线、安全理念和长期商业化潜力给出了更高溢价。</p>
-  <p><strong>关键观察点：</strong></p>
-  <ul>
-    <li>Anthropic 的产品开发周期从 6 个月缩短到 1 周，得益于 Mythos 等最新模型的内部优先使用权</li>
-    <li>Claude Code 已建立开发者心智，形成与 OpenAI 的差异化竞争</li>
-    <li>OpenAI 的频繁领导层动荡和战略摇摆可能影响了二级市场信心</li>
-    <li>私募市场的估值更多由"稀缺性"驱动——Anthropic 的二级股票供给更少</li>
-  </ul>
-  <p><strong>投资启示：</strong>大模型赛道的估值逻辑正从"用户规模"转向"技术差异化 + 开发者生态 + 执行效率"。对于一级市场投资者，需要关注被投企业是否有清晰的差异化定位，而非盲目追逐最大玩家。</p>
-</div>
+            <div class="deep-dive">
+                <div class="subtitle">深度分析 01</div>
+                <h3>DeepSeek V4 + 华为昇腾：中国AI算力自主化的投资拐点</h3>
+                <p>DeepSeek V4的发布不仅是模型层面的迭代，更是一次具有战略意义的"去英伟达化"宣言。V4系列首次明确披露已适配华为昇腾芯片，这意味着中国AI产业在"算法-芯片-系统"全栈自主化上取得了实质性突破。</p>
+                <p>从投资角度，这一事件有三个层面的影响：</p>
+                <p><strong>第一，模型层估值重构。</strong>DeepSeek V4-Pro-Max性能小幅超越当前领先开源模型，但团队坦诚仍落后于GPT-5.4和Gemini-3.1-Pro约三到六个月。这种"诚实"反而增强了市场对其技术路线可信度的认可。InfoQ报道显示，有企业将全部模型换成DeepSeek V4后，月账单降低90%。这意味着DeepSeek正在以"足够好用+极致性价比"的策略，蚕食OpenAI和Anthropic在中低端市场的份额。对于投资者而言，开源模型的商业化路径正在从"卖API"转向"卖部署方案+企业支持服务"。</p>
+                <p><strong>第二，算力层格局重塑。</strong>英伟达CEO黄仁勋此前警告："如果DeepSeek先在华为平台上发布，那对美国来说将是灾难性的。"如今这一预言正在应验。华为昇腾芯片获得DeepSeek官方适配，将直接带动国产AI芯片的出货量和生态建设。投资者应关注华为昇腾产业链上的标的机会，包括服务器、光模块、液冷等配套环节。</p>
+                <p><strong>第三，地缘风险溢价。</strong>在中美科技脱钩的大背景下，具备"非美系"供应链能力的企业正在获得估值溢价。DeepSeek+昇腾的组合，为那些担忧美国出口管制风险的全球客户提供了"Plan B"。这一逻辑同样适用于评估其他中国AI基础设施公司的投资价值。</p>
+                <div class="insight-box">
+                    <strong>投资启示：</strong>中国AI产业的"自主可控"叙事正在从政治口号转化为商业现实。建议投资者在2026年Q2-Q3重点关注：1）国产AI芯片及配套产业链；2）开源模型的商业化落地案例；3）具备多芯片平台适配能力的AI中间件公司。
+                </div>
+                <div class="source" style="margin-top:12px;font-size:13px;">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650536031&idx=1&sn=1911be1f5c4ed3afbbcf6203ccabdd5e" target="_blank" rel="noopener">[来源: 网易科技]</a> |
+                    <a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&mid=2691567428&idx=1&sn=4736ee9a8d2a4a38dd51deda53076628" target="_blank" rel="noopener">[来源: 腾讯科技]</a> |
+                    <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653104706&idx=1&sn=3464e3f14e1956ba44b5ee8782b1e42f" target="_blank" rel="noopener">[来源: 极客公园]</a>
+                </div>
+            </div>
 
-<div class="deep-dive">
-  <h3>分析二：具身智能——从概念验证到千亿赛道的投资节奏</h3>
-  <p>2026 年 Q1 具身智能融资规模超 300 亿元，接近 2025 年全年六成。它石智航 4.55 亿美元 Pre-A 轮创下行业纪录，互联网大厂从"用钱投票"到"亲自下场"——阿里、百度、小米、美团、腾讯 2025 年合计投资机器人企业 62 次。</p>
-  <p><strong>赛道分化与投资判断：</strong></p>
-  <ul>
-    <li><strong>本体路线（宇树为代表）：</strong>硬件自研能力强，但面临同质化竞争和商业化路径不清晰的风险</li>
-    <li><strong>物理世界模型路线（它石智航为代表）：</strong>以 AI 原生为主，软件定义机器人，可能获得更高估值倍数</li>
-    <li><strong>大厂入局：</strong>意味着行业从"概念验证"走向"场景落地"，初创公司的窗口期正在缩小</li>
-  </ul>
-  <p><strong>投资建议：</strong>具身智能正处于从"技术驱动"向"商业落地"过渡的关键节点。投资重心应从"谁能做出最酷的机器人"转向"谁能在具体场景中产生可量化的 ROI"。制造业、物流、安防等 B 端场景可能是率先产生规模化收入的领域。</p>
-</div>
+            <div class="deep-dive" style="margin-top:24px;">
+                <div class="subtitle">深度分析 02</div>
+                <h3>AI Agent掀起企业裁员潮：劳动力替代的投资逻辑</h3>
+                <p>今日多条新闻指向同一个趋势：AI正在从"辅助工具"升级为"替代劳动力"。微软向7%美国员工提出自愿退休方案，Meta大幅裁员，黄仁勋要求英伟达全体员工使用OpenAI Codex编程工具。OpenAI推出GPT-5.5和Codex，具备独立完成代码编写、数据分析、文档创建等工作的能力。</p>
+                <p>这一趋势对投资者有三重含义：</p>
+                <p><strong>第一，AI Agent赛道的TAM（总可寻址市场）被显著低估。</strong>如果把Agent的目标市场从"软件支出"重新定义为"劳动力成本"，那么TAM将从数千亿美元跃升至数万亿美元。Cognition AI 250亿美元的估值，正是基于这一逻辑重估的结果。</p>
+                <p><strong>第二，SaaS行业面临"债务炸弹"风险。</strong>All-In Podcast讨论了SaaS行业的"血洗"和即将到来的债务炸弹。传统SaaS公司的核心价值主张是"用软件提升人力效率"，而AI Agent的价值主张是"用AI替代人力"。这种范式转移意味着，那些只是将传统工作流数字化的SaaS产品，可能被直接绕过。投资者需要重新审视SaaS投资组合，区分"会被Agent吞噬"和"会与Agent共生"的两类公司。</p>
+                <p><strong>第三，"算力即杠杆"成为新的投资框架。</strong>SpaceX与Cursor的合作（All-In Podcast讨论），以及SemiAnalysis联合创始人Dylan Patel揭示的Token经济，都指向同一个结论：在AI时代，算力和Token的投入产出比正在成为企业的核心竞争指标。能够用更少的Token创造更多价值的公司，将享有持久的成本优势。</p>
+                <div class="insight-box">
+                    <strong>投资启示：</strong>AI劳动力替代是最具确定性的投资主题之一。建议采取"卖铲子+买金矿"的双边策略：一方面配置算力基础设施（英伟达、云服务厂商），另一方面配置AI Agent赛道的头部标的（Cognition AI、OpenAI等）。同时，对传统SaaS持仓进行压力测试，评估其被Agent替代的风险敞口。
+                </div>
+                <div class="source" style="margin-top:12px;font-size:13px;">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872369&idx=1&sn=73abbd902ba9934d1fcd3c768b6c2039" target="_blank" rel="noopener">[来源: 创业邦]</a> |
+                    <a href="https://www.youtube.com/watch?v=1bCXCxrDsCs" target="_blank" rel="noopener">[来源: All-In Podcast]</a> |
+                    <a href="https://www.xiaoyuzhoufm.com/episode/69ec84b71e94ae69211ea385" target="_blank" rel="noopener">[来源: 跨国串门儿计划 / Dylan Patel访谈]</a>
+                </div>
+            </div>
+        </section>
 
-<h2>三、赛道雷达：值得关注的细分方向</h2>
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">3</span>
+                <h2>赛道雷达</h2>
+            </div>
+            <div class="track-grid">
+                <div class="track-card">
+                    <h4><span class="signal"></span> 具身智能 / 人形机器人</h4>
+                    <p>它石智航4.55亿美元Pre-A轮创纪录， Figure估值被对标。中国从"强制造"向"强模型"转型，物理AI成为中美竞争新前线。投资建议：关注具备真实场景落地能力的机器人本体厂商和核心零部件供应商。</p>
+                </div>
+                <div class="track-card">
+                    <h4><span class="signal"></span> 智能驾驶 / 物理AI</h4>
+                    <p>华为ADS 5发布并投入180亿，轻舟智航率先进军物理AI，元戎启行装车量超30万辆。自动驾驶正从"感知决策"转向"世界模型"范式。投资建议：关注车路云一体化和端到端大模型方案商。</p>
+                </div>
+                <div class="track-card">
+                    <h4><span class="signal"></span> AI+病程管理 / 数字医疗</h4>
+                    <p>港股"AI+全病程管理"第一股即将诞生，BAT系资本加持。AI医疗从"概念"进入"营收验证"阶段。投资建议：关注具备医院付费能力和数据壁垒的垂直场景AI公司。</p>
+                </div>
+                <div class="track-card">
+                    <h4><span class="signal"></span> 国产AI芯片 / 昇腾生态</h4>
+                    <p>DeepSeek V4适配华为昇腾，国产算力自主化取得里程碑突破。在中美脱钩背景下，非美系供应链溢价正在形成。投资建议：关注昇腾服务器、光模块、液冷等配套产业链标的。</p>
+                </div>
+                <div class="track-card">
+                    <h4><span class="signal" style="background:#f59e0b;box-shadow:0 0 8px #f59e0b;"></span> AI编程 / Agent工具</h4>
+                    <p>Cognition AI估值250亿美元，Codex进入企业级应用。但Roo Code宣布关停VS Code扩展，AI编程工具竞争加剧。投资建议：区分"会被IDE厂商整合"和"能独立成平台"的两类工具。</p>
+                </div>
+                <div class="track-card">
+                    <h4><span class="signal" style="background:#ef4444;box-shadow:0 0 8px #ef4444;"></span> 传统SaaS / 企业软件</h4>
+                    <p>面临AI Agent的"债务炸弹"风险。若Agent可直接完成工作流，传统SaaS的中间层价值将被侵蚀。投资建议：对缺乏AI原生能力的SaaS持仓保持谨慎，关注积极拥抱Agent转型的标的。</p>
+                </div>
+            </div>
+        </section>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-funding">融资</span>
-    Adaptive：a16z 和 Emergence Capital 背书的 AI 原生建筑会计平台
-  </div>
-  <div class="body">
-    Adaptive 是一家面向建筑行业的 AI 原生项目会计平台，自 2023 年推出以来已扩展至 7,000+ 承包商、10,000+ 活跃项目，年化处理建筑量达 100 亿美元。其将 AI Agent 直接嵌入到作业成本核算、计费和预测工作流中。这代表了一个明确的投资主题：垂直行业 + AI Agent = 高粘性 SaaS 的下一个范式。
-  </div>
-  <div class="source">
-    <a href="https://x.com/LangChain/status/2047685293428355124" target="_blank" rel="noopener">[来源: LangChain]</a>
-  </div>
-</div>
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">4</span>
+                <h2>估值观察</h2>
+            </div>
+            <table class="valuation-table">
+                <thead>
+                    <tr>
+                        <th>标的/事件</th>
+                        <th>关键数据</th>
+                        <th>变动/趋势</th>
+                        <th>投资评级信号</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>英伟达 (NVDA)</td>
+                        <td>市值 5.0万亿美元，毛利率 75.2%</td>
+                        <td class="up">+3.08% | 市值重回5万亿</td>
+                        <td class="neutral">持有 — 短期强劲，长期面临客户自研芯片威胁</td>
+                    </tr>
+                    <tr>
+                        <td>英特尔 (INTC)</td>
+                        <td>股价 $82.57，Q1营收 $135.8亿 (+7.2%)</td>
+                        <td class="up">+24% | 创1987年来最大单日涨幅</td>
+                        <td class="up">关注 — turnaround 初见成效，但代工业务仍存疑</td>
+                    </tr>
+                    <tr>
+                        <td>Anthropic</td>
+                        <td>谷歌拟投资 400亿美元</td>
+                        <td class="up">估值再上层楼 | 超级交易</td>
+                        <td class="up">买入逻辑 — 大模型安全差异化具备战略价值</td>
+                    </tr>
+                    <tr>
+                        <td>Cognition AI</td>
+                        <td>融资谈判中，估值 250亿美元</td>
+                        <td class="up">AI Agent赛道估值飙升</td>
+                        <td class="neutral">谨慎乐观 — 产品领先但商业化早期，估值已含高预期</td>
+                    </tr>
+                    <tr>
+                        <td>它石智航</td>
+                        <td>Pre-A轮 4.55亿美元，累计 6.97亿美元</td>
+                        <td class="up">创中国具身智能融资纪录</td>
+                        <td class="up">赛道龙头 — 但需关注估值与量产进度的匹配</td>
+                    </tr>
+                    <tr>
+                        <td>T3出行</td>
+                        <td>净利润率 0.04%，80%订单来自聚合</td>
+                        <td class="down">IPO前景存疑 | 缺乏定价权</td>
+                        <td class="down">回避 — 平台依附型模式难以构建护城河</td>
+                    </tr>
+                    <tr>
+                        <td>诺基亚 (光通信)</td>
+                        <td>光通信全球份额 21%，下一代光纤 35%</td>
+                        <td class="up">AI数据中心需求驱动第二曲线</td>
+                        <td class="up">价值发现 — 市场低估了光网络基础设施的确定性增长</td>
+                    </tr>
+                    <tr>
+                        <td>DeepSeek (开源模型)</td>
+                        <td>API价格地板级，月账单可降低 90%</td>
+                        <td class="up">性价比优势冲击闭源模型定价</td>
+                        <td class="neutral">观察 — 开源模型的商业化路径仍在探索中</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-market">市场</span>
-    Replit 宣布 10 倍估值和 200 倍 ARR 增长，离开旧金山两年后
-  </div>
-  <div class="body">
-    Replit 创始人 Amjad Masad 披露，离开旧金山 Foster City 两年后，公司实现了 10 倍估值和 200 倍 ARR 增长，并接管了旧 IBM 园区作为新总部。这一案例验证了"地理套利"对初创公司专注度的价值，也显示了 AI 编程工具市场的爆发性增长。
-  </div>
-  <div class="source">
-    <a href="https://x.com/amasad/status/2047424463113785654" target="_blank" rel="noopener">[来源: Amjad Masad]</a>
-  </div>
-</div>
+        <section class="section">
+            <div class="section-header">
+                <span class="section-number">5</span>
+                <h2>数据来源声明</h2>
+            </div>
+            <div class="sources">
+                <h3>引用来源</h3>
+                <ul>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872369&idx=1&sn=73abbd902ba9934d1fcd3c768b6c2039" target="_blank" rel="noopener">创业邦 — 邦早报</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872434&idx=1&sn=9989879139a2379ec6a758ef975c4428" target="_blank" rel="noopener">创业邦 / 最话 FunTalk — 不只DeepSeek，大厂都想"抛弃"英伟达</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872434&idx=3&sn=aa3319aa699fc6a6ea058af245ecc73d" target="_blank" rel="noopener">创业邦 / 远川研究所 — 中国机器人，开始给模型上强度</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872390&idx=1&sn=be48ca527fddaa5ec1a4aa9c2f74ade8" target="_blank" rel="noopener">创业邦 — 集齐BAT系资本、年入8亿，冲刺IPO</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872369&idx=3&sn=6bd1191bd019ada8c3b7d60b346c686e" target="_blank" rel="noopener">创业邦 / 定焦One — 网约车老三，要上市了</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653104706&idx=1&sn=3464e3f14e1956ba44b5ee8782b1e42f" target="_blank" rel="noopener">极客公园 — 英特尔股价暴涨24%；谷歌计划向Anthropic投资400亿美元</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653160950&idx=1&sn=ad8924f7f07d05eb7a6c79829ef55f35" target="_blank" rel="noopener">吴晓波频道 — 命运之神重新眷顾了诺基亚</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650536031&idx=1&sn=1911be1f5c4ed3afbbcf6203ccabdd5e" target="_blank" rel="noopener">网易科技 — DeepSeek V4发布戳中海外</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&mid=2691567428&idx=1&sn=4736ee9a8d2a4a38dd51deda53076628" target="_blank" rel="noopener">腾讯科技 — 深度解读DeepSeek V4</a></li>
+                    <li><a href="https://www.qbitai.com/2026/04/407363.html" target="_blank" rel="noopener">量子位 — 华为发布ADS 5</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=1bCXCxrDsCs" target="_blank" rel="noopener">All-In Podcast — SpaceX-Cursor Deal, SaaS Debt Bomb</a></li>
+                    <li><a href="https://www.xiaoyuzhoufm.com/episode/69ec84b71e94ae69211ea385" target="_blank" rel="noopener">跨国串门儿计划 / Dylan Patel — Token的供需死局</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzIxNTAzNzU0Ng==&mid=2654905013&idx=1&sn=ecabb1d2e06c8678f963d2f78850bd9e" target="_blank" rel="noopener">笔记侠 / 王田苗 — 智能机器人，下一个万亿赛道</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzA5ODEzMjIyMA==&mid=2247733772&idx=1&sn=febe22f1d1253d1be2249a9236ad7129" target="_blank" rel="noopener">AI科技评论 — 腾讯AI·五问丨混元的三年战争</a></li>
+                </ul>
+            </div>
+        </section>
 
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-ipo">IPO</span>
-    T3 出行赴港上市，出行赛道竞争加剧
-  </div>
-  <div class="body">
-    T3 出行宣布赴港上市，这将是中国出行市场的又一个重要 IPO。在自动驾驶和 Robotaxi 概念持续升温的背景下，传统网约车平台的资本化路径值得关注。
-  </div>
-  <div class="source">
-    <a href="https://www.ifanr.com/1663686" target="_blank" rel="noopener">[来源: 爱范儿]</a>
-  </div>
-</div>
-
-<div class="news-item">
-  <div class="title">
-    <span class="tag-pill tag-insight">洞察</span>
-    HuggingFace CEO：投资人过度痴迷收入增速，应更多关注护城河
-  </div>
-  <div class="body">
-    Clem Delangue（HuggingFace CEO）评论称，大多数投资人过度痴迷收入增速数字，将其作为 AI 企业未来成功的万能预测指标。他呼吁投资人回归更理性的思考，关注护城河、收入质量和使用差异化。这与当前一级市场对 AI 企业"唯增长论"的估值方式形成鲜明对照。
-  </div>
-  <div class="source">
-    <a href="https://x.com/ClementDelangue/status/2047684789021384801" target="_blank" rel="noopener">[来源: Clem Delangue]</a>
-  </div>
-</div>
-
-<h2>四、估值观察</h2>
-
-<div class="highlight-box">
-  <strong>DeepSeek 开源策略的估值冲击：</strong> DeepSeek 全面开源 V4 系列的举动，正在迫使市场重新评估 AI 模型的估值方法论。如果最先进的模型权重是公开的，"模型即产品"的公司的防御性将大幅下降，估值会面临压缩压力。相反，计算资源（谁能部署最多 tokens/秒）、数据飞轮和工程驾驭层（Harness）的价值可能被重估。
-</div>
-
-<div class="highlight-box">
-  <strong>Token 效率成为新的能力信号：</strong> 如 Taranjeet 所观察，模型评估的维度正在从"能不能完成任务"转向"用多少 token 完成"。GPT-5.5 的核心卖点之一就是"更聪明、更省"——同样的 Codex 任务消耗 token 显著更少。在规模化部署中，token 效率直接转化为成本优势，这将成为影响企业客户选择和模型估值的重要因素。
-</div>
-
-<div class="highlight-box">
-  <strong>半导体产业链的景气度分化：</strong> SK 海力士利润暴涨五倍，三星芯片部门员工集会要求分享 AI 热潮利润（要求 15% 营业利润分配，约 270 亿美元），美光/闪迪股价持续大涨。AI 算力需求持续推升存储芯片景气度，但也要注意地缘政治风险（伊朗战争导致油价突破 100 美元/桶）对供应链的潜在冲击。
-</div>
-
-<div class="sources-section">
-<h2>数据来源声明</h2>
-<div class="sources-grid">
-  <div><a href="https://www.ifanr.com/1663666" target="_blank" rel="noopener">爱范儿</a></div>
-  <div><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650872298&idx=2&sn=24d7bdd9a8a91754bca356b49a6fd96b" target="_blank" rel="noopener">创业邦/睿兽Pro</a></div>
-  <div><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651029959&idx=1&sn=2aa3285bd8c85d42d7f6c5bc5143cdde" target="_blank" rel="noopener">机器之心</a></div>
-  <div><a href="https://mp.weixin.qq.com/s?__biz=MzkyNTY1MjE2OA==&mid=2247493594&idx=1&sn=d87d5eab8682656c4390dbd625140057" target="_blank" rel="noopener">硅基观察Pro</a></div>
-  <div><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTQ4NjczNw==&mid=2650679544&idx=2&sn=87face85c94eb3854b87fee0a4c22053" target="_blank" rel="noopener">白鲸出海/硬氪</a></div>
-  <div><a href="https://www.xiaoyuzhoufm.com/episode/69eb94ba1d989496e770bdb2" target="_blank" rel="noopener">跨国串门儿计划</a></div>
-  <div><a href="https://x.com/AiBreakfast/status/2047680107163144474" target="_blank" rel="noopener">AI Breakfast</a></div>
-  <div><a href="https://x.com/vista8/status/2047670050392526871" target="_blank" rel="noopener">向阳乔木</a></div>
-  <div><a href="https://x.com/LangChain/status/2047685293428355124" target="_blank" rel="noopener">LangChain</a></div>
-  <div><a href="https://x.com/amasad/status/2047424463113785654" target="_blank" rel="noopener">Amjad Masad</a></div>
-  <div><a href="https://x.com/ClementDelangue/status/2047684789021384801" target="_blank" rel="noopener">Clem Delangue</a></div>
-  <div><a href="https://x.com/paulg/status/2047687279137771573" target="_blank" rel="noopener">Paul Graham</a></div>
-  <div><a href="https://simonwillison.net/2026/Apr/24/deepseek-v4/" target="_blank" rel="noopener">Simon Willison's Weblog</a></div>
-  <div><a href="https://x.com/taranjeetio/status/2047530126678896926" target="_blank" rel="noopener">Taranjeet</a></div>
-  <div><a href="https://mp.weixin.qq.com/s?__biz=MzIwMTY1NDg4Nw==&mid=2247525280&idx=1&sn=2e1b99ddc577697d13ae4ed739417ab3" target="_blank" rel="noopener">深网腾讯新闻</a></div>
-  <div><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650871949&idx=2&sn=62469bc100c191dc7faa2a6c8a0726f4" target="_blank" rel="noopener">科创板日报/创业邦</a></div>
-</div>
-</div>
-
-<footer>
-  本报告基于公开新闻数据生成，仅供信息参考，不构成投资建议。<br>
-  生成时间：2026-04-24 | 数据来源：FreshRSS 24h 聚合
-</footer>
-
-</div>
+        <footer>
+            <p>科技投资日报 · 投资分析版</p>
+            <p>数据覆盖周期：2026-04-24 18:33 至 2026-04-25 18:33 | 本报告仅供参考，不构成投资建议</p>
+        </footer>
+    </div>
 </body>
 </html>
