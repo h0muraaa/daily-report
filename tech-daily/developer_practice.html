@@ -1,651 +1,618 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>开发者实践日报 - 2026-04-29</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --bg-secondary: #161b22;
-      --bg-tertiary: #21262d;
-      --border: #30363d;
-      --text: #c9d1d9;
-      --text-secondary: #8b949e;
-      --text-muted: #6e7681;
-      --accent: #58a6ff;
-      --accent-secondary: #3fb950;
-      --accent-warn: #d29922;
-      --accent-danger: #f85149;
-      --code-bg: #1e2530;
-      --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-sans);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
-
-    .header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 24px;
-      margin-bottom: 32px;
-    }
-
-    .header-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .badge {
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border);
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-family: var(--font-mono);
-      color: var(--accent);
-    }
-
-    .date {
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: 13px;
-    }
-
-    h1 {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      color: var(--text-secondary);
-      font-size: 15px;
-    }
-
-    .section {
-      margin-bottom: 40px;
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-icon {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-tertiary);
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 16px;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover {
-      border-color: var(--accent);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 1.4;
-      flex: 1;
-    }
-
-    .card-title a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .card-title a:hover {
-      text-decoration: underline;
-    }
-
-    .card-tag {
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-family: var(--font-mono);
-      color: var(--accent-secondary);
-      white-space: nowrap;
-    }
-
-    .card-body {
-      color: var(--text-secondary);
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    .card-body p {
-      margin-bottom: 10px;
-    }
-
-    .card-body p:last-child {
-      margin-bottom: 0;
-    }
-
-    .card-source {
-      margin-top: 12px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .card-source a {
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-
-    .card-source a:hover {
-      color: var(--accent);
-    }
-
-    .dive-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 10px 10px 0;
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-
-    .dive-card h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 14px;
-      color: var(--accent);
-    }
-
-    .dive-card p {
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-
-    .dive-card ul {
-      margin-left: 20px;
-      margin-bottom: 12px;
-      color: var(--text-secondary);
-    }
-
-    .dive-card li {
-      margin-bottom: 6px;
-    }
-
-    .dive-card code {
-      background: var(--code-bg);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--accent);
-    }
-
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-    }
-
-    .tool-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-    }
-
-    .tool-card h4 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .tool-card h4 a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .tool-card p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    .tool-meta {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-    }
-
-    .source-list {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-    }
-
-    .source-list ul {
-      list-style: none;
-      column-count: 2;
-      column-gap: 24px;
-    }
-
-    .source-list li {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
-      break-inside: avoid;
-    }
-
-    .source-list li a {
-      color: var(--text-secondary);
-      text-decoration: none;
-    }
-
-    .source-list li a:hover {
-      color: var(--accent);
-    }
-
-    @media (max-width: 640px) {
-      .source-list ul { column-count: 1; }
-      .container { padding: 24px 16px; }
-      h1 { font-size: 22px; }
-    }
-
-    .highlight-box {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 18px;
-      margin: 14px 0;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
-
-    .highlight-box .cmd {
-      color: var(--accent-secondary);
-    }
-
-    .highlight-box .comment {
-      color: var(--text-muted);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践日报 | 2026-05-01</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-green: #3fb950;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --code-bg: #1e2530;
+            --font-mono: "SFMono-Regular", "Fira Code", "JetBrains Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+        a { color: var(--accent-blue); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 40px 0 24px;
+            margin-bottom: 32px;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .badge {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 4px;
+            letter-spacing: 0.3px;
+        }
+        .date { color: var(--text-muted); font-family: var(--font-mono); font-size: 13px; }
+        h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+        .subtitle { color: var(--text-secondary); font-size: 15px; }
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 40px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2 .icon { font-size: 18px; }
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 24px 0 10px;
+            color: var(--text-primary);
+        }
+        .news-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+        .news-item:hover { border-color: var(--border-color); }
+        .news-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .news-summary {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.75;
+            margin-bottom: 10px;
+        }
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            flex-wrap: wrap;
+        }
+        .news-meta a { color: var(--text-muted); }
+        .news-meta a:hover { color: var(--accent-blue); }
+        .tag {
+            display: inline-block;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-family: var(--font-mono);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 6px;
+            border: 1px solid var(--border-color);
+        }
+        .tag.tool { color: var(--accent-green); border-color: #238636; }
+        .tag.release { color: var(--accent-blue); border-color: #1f6feb; }
+        .tag.paper { color: var(--accent-purple); border-color: #8957e5; }
+        .tag.practice { color: var(--accent-orange); border-color: #bd561d; }
+        .deep-dive {
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--accent-purple);
+            border-radius: 0 8px 8px 0;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+        .deep-dive h3 { margin-top: 0; color: var(--accent-purple); }
+        .deep-dive p { color: var(--text-secondary); font-size: 14px; margin-bottom: 10px; }
+        .deep-dive ul { margin-left: 20px; color: var(--text-secondary); font-size: 14px; }
+        .deep-dive li { margin-bottom: 6px; }
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .tool-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .tool-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 14px 18px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-primary);
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .code-block .comment { color: var(--text-muted); }
+        .code-block .keyword { color: var(--accent-purple); }
+        .code-block .string { color: var(--accent-green); }
+        .sources {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 40px;
+        }
+        .sources h2 { margin-top: 0; }
+        .sources-list {
+            column-count: 2;
+            column-gap: 24px;
+        }
+        @media (max-width: 640px) { .sources-list { column-count: 1; } }
+        .sources-list li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            list-style: none;
+            font-family: var(--font-mono);
+        }
+        .sources-list li::before {
+            content: "->";
+            color: var(--accent-blue);
+            margin-right: 8px;
+        }
+        .sources-list a { color: var(--text-secondary); }
+        .sources-list a:hover { color: var(--accent-blue); }
+        footer {
+            text-align: center;
+            padding: 32px 0 48px;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-family: var(--font-mono);
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+        .highlight-box {
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 14px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .highlight-box strong { color: var(--text-primary); }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div class="header-meta">
-        <span class="badge">DEV</span>
-        <span class="date">2026-04-29</span>
-      </div>
-      <h1>开发者实践日报</h1>
-      <p class="subtitle">聚焦技术实现、工具更新与可落地的最佳实践</p>
-    </header>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <span class="badge">DEV</span>
+                <span class="date">2026-05-01</span>
+            </div>
+            <h1>开发者实践日报</h1>
+            <p class="subtitle">全栈视角，关注工具更新、最佳实践与可落地的技术方案</p>
+        </header>
 
-    <section class="section">
-      <h2 class="section-title">
-        <span class="section-icon">&#128293;</span>
-        今日技术热榜
-      </h2>
+        <section>
+            <h2><span class="icon">&#128293;</span> 今日技术热榜</h2>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://x.com/dotey/status/2049541257756811517" target="_blank" rel="noopener">Cursor 官方 TypeScript SDK 公测：把智能体运行时开放给开发者</a>
-          </div>
-          <span class="card-tag">SDK</span>
-        </div>
-        <div class="card-body">
-          <p>Cursor 正式开放了驱动其编辑器、CLI 和网页版的核心智能体框架。安装 <code>npm install @cursor/sdk</code> 即可获得完整的 agent 运行时，包括代码库索引、语义搜索、MCP 工具接入、子 agent 任务拆分等能力。Agent 支持本地运行或部署到 Cursor 云端沙箱，后者提供独立虚拟机、克隆仓库和完整开发环境，断网也不中断任务。</p>
-          <p>官方示例覆盖 CI/CD 自动修复、内部数据查询工具、以及将 agent 嵌入自有产品等场景。Faire 工程团队已用其替代自托管方案来维护代码库。这意味着 Cursor 正从一个编辑器进化为可嵌入的 AI 基础设施。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://x.com/dotey/status/2049541257756811517" target="_blank" rel="noopener">[来源: 宝玉 @dotey]</a>
-        </div>
-      </div>
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag release">RELEASE</span>
+                    OpenAI Codex 史诗级更新：/goal 命令、Ralph Loop 与 Mac 全面接管
+                </div>
+                <div class="news-summary">
+                    Codex 在 0.128.0 版本中引入了 /goal 命令，实现目标驱动的持续执行循环——设定目标后代理会跨多轮不丢上下文，不达目的不停。同时 Codex 已从纯代码工具进化为通用个人助理，可操控 Adobe 全家桶、管理日历、连接 Slack/邮箱/Google Drive。Greg Brockman 亲自下场带货，称 "Codex 人人可用，计算机任务全可做"。实测显示，给 Codex 一个含上千张图片的素材包，它能自动拼成总览图并标注文件名，供快速选图。
+                </div>
+                <div class="news-meta">
+                    <a href="https://x.com/dotey/status/2050028108787450148" target="_blank" rel="noopener">[来源: 宝玉@X]</a>
+                    <a href="https://x.com/gdb/status/2050194039077495089" target="_blank" rel="noopener">[Greg Brockman]</a>
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652696950&idx=1&sn=21fccc2ad1d6da0a9081e392ba631c10" target="_blank" rel="noopener">[新智元]</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://x.com/shao__meng/status/2049437470362878179" target="_blank" rel="noopener">Poolside AI 开源 Laguna XS.2：前 GitHub CTO 团队的首个权重模型</a>
-          </div>
-          <span class="card-tag">LLM</span>
-        </div>
-        <div class="card-body">
-          <p>由前 GitHub CTO Jason Warner 创立的 Poolside AI 发布了首个开源权重模型 Laguna XS.2。这是一个 33B 总参 / 3B 激活参数的 MoE 模型，专为 agentic coding 和长时序任务设计，单张 GPU 即可流畅运行，采用 Apache 2.0 协议完全开源。</p>
-          <p>值得关注的是，该模型完全基于 Poolside 自研技术栈训练，不依赖第三方基础模型。同时发布的 Laguna M.1 为当前最强版本，另有 Agent Harness 配套。对于希望在本地或私有环境部署代码智能体的团队，这是一个值得评估的新选项。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://x.com/shao__meng/status/2049437470362878179" target="_blank" rel="noopener">[来源: meng shao @shao__meng]</a> |
-          <a href="https://x.com/berryxia/status/2049250710492160228" target="_blank" rel="noopener">[来源: Berryxia.AI @berryxia]</a>
-        </div>
-      </div>
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag tool">TOOL</span>
+                    Warp 终端正式开源：Rust 从零编写的 AI 原生开发环境
+                </div>
+                <div class="news-summary">
+                    开源不到 24 小时冲上 3.5 万 Star，现总 Star 已超 5 万。Warp 用 Rust 重写终端，支持 macOS/Linux/Windows 三平台，被 TIME 评为 2025 年最佳发明之一。其核心创新是用 Block 模型替代传统滚动输出——每条命令和输出成为独立块，可像编辑器一样选中、复制、搜索、分享。创始人 Zach Lloyd 解释开源三大原因：软件开发方式已变（AI 写代码，人类审代码）、需与资金更充足的闭源对手竞争、以及五年前在 HN 的承诺。目前超过 70 万活跃开发者在使用。
+                </div>
+                <div class="news-meta">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533405&idx=1&sn=1ee7cfefd01d9fd9c666e5d4cf22dce0" target="_blank" rel="noopener">[来源: 逛逛GitHub]</a>
+                    <a href="https://github.com/warpdotdev/warp" target="_blank" rel="noopener">[GitHub]</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://www.freecodecamp.org/news/how-to-build-an-agentic-terminal-workflow-with-github-copilot-cli-and-mcp-servers/" target="_blank" rel="noopener">用 GitHub Copilot CLI + MCP Servers 构建 Agentic Terminal Workflow</a>
-          </div>
-          <span class="card-tag">Tutorial</span>
-        </div>
-        <div class="card-body">
-          <p>这是一篇来自 freeCodeCamp 的实战教程，演示如何将 GitHub Copilot CLI 与 MCP（Model Context Protocol）服务器结合，把终端从一个被动执行命令的工具升级为理解项目上下文、能查询实时数据源、自主链式调用工具的 agentic 工作流。</p>
-          <p>教程覆盖了从环境配置到实际连线的完整步骤，最终效果包括：自动理解 Git 状态、查询数据库、执行多步操作等。对于习惯在终端工作的开发者，这是将 AI 能力深度融入日常 workflow 的实用路径。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://www.freecodecamp.org/news/how-to-build-an-agentic-terminal-workflow-with-github-copilot-cli-and-mcp-servers/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
-        </div>
-      </div>
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag paper">PAPER</span>
+                    DeepSeek 开源多模态技术：Thinking with Visual Primitives
+                </div>
+                <div class="news-summary">
+                    DeepSeek 联合北大、清华提出"视觉基元推理"框架，将边界框与坐标点提升为"最小思考单元"，解决 MLLM 在复杂空间推理中的 Reference Gap（指代鸿沟）问题。基于 DeepSeek-V4-Flash 构建的模型仅用约 90 个 KV Cache 视觉 token，性能即可比肩 GPT-5.4、Claude-Sonnet-4.6 与 Gemini-3-Flash。核心洞察是：自然语言天生模糊连续，而视觉空间精确离散——当模型用语言描述"左边第二个红色物体"时，已丢失精确空间锚点，导致推理链条与图像实体脱节。
+                </div>
+                <div class="news-meta">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650451731&idx=1&sn=90eacbc2b061ae7b9b72527f575b7b2e" target="_blank" rel="noopener">[来源: AINLP]</a>
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247628394&idx=1&sn=376bab661f833655590e4a71a947bb5b" target="_blank" rel="noopener">[硅星人Pro]</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://x.com/HiTw93/status/2049480328423608522" target="_blank" rel="noopener">Warp 终端宣布全面开源：现代终端 + Agentic 开发环境</a>
-          </div>
-          <span class="card-tag">Open Source</span>
-        </div>
-        <div class="card-body">
-          <p>知名现代终端 Warp 正式宣布全面开源。Warp 不仅是一个功能丰富的终端替代品（支持块编辑、智能补全、协作等），还在向 Agentic 开发环境演进。开源后，开发者可以深度定制终端行为、集成内部工具链，甚至基于其架构构建自己的 AI 驱动开发环境。</p>
-          <p>对于团队而言，这意味着可以私有化部署并结合内部知识库和工具，打造符合自身 workflow 的智能终端。Warp 的开源也可能推动终端软件在 AI 时代的整体演进。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://x.com/HiTw93/status/2049480328423608522" target="_blank" rel="noopener">[来源: Tw93 @HiTw93]</a> |
-          <a href="https://x.com/aaditsh/status/2049480328423608522" target="_blank" rel="noopener">[来源: Aadit Sheth @aaditsh]</a>
-        </div>
-      </div>
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag release">RELEASE</span>
+                    Vitest 4.1 发布：Test Tags、原生 Node.js 执行与 AI Agent Reporter
+                </div>
+                <div class="news-summary">
+                    VoidZero 发布的 Vitest 4.1 带来多项测试体验升级：Test Tags 支持按标签过滤和配置测试；实验模式可绕过 Vite 的模块运行器直接使用原生 Node.js 执行；新增生命周期钩子。该版本首发即支持 Vite 8，并在性能上相较 Jest 有显著改进。对使用 AI 编码代理的团队而言，AI Agent Reporter 功能让测试结果更易被代理消费和解析，是测试基础设施向 agent-native 演进的一小步。
+                </div>
+                <div class="news-meta">
+                    <a href="https://www.infoq.com/news/2026/05/vitest-4-1-ai-agents/" target="_blank" rel="noopener">[来源: InfoQ]</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://www.infoq.com/news/2026/04/angular-compiler-rust/" target="_blank" rel="noopener">VoidZero 实验性 Rust Angular 编译器：构建性能最高提升 20 倍</a>
-          </div>
-          <span class="card-tag">Rust</span>
-        </div>
-        <div class="card-body">
-          <p>VoidZero 发布了一个基于 Rust 的实验性 Angular 编译器，旨在替代现有的 Angular CLI 构建 pipeline。Benchmark 显示，对于大型应用，新编译器最高可达 6.4 倍于 Angular CLI 的构建速度，部分场景下性能提升接近 20 倍。</p>
-          <p>该项目与 Vite 深度集成，开发周期仅两个月且大量使用了 AI 辅助编程。虽然标注为研究性质（research only），但它展示了用系统级语言重写前端构建工具的巨大潜力，也为 Angular 生态的未来演进提供了一个值得关注的方向。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://www.infoq.com/news/2026/04/angular-compiler-rust/" target="_blank" rel="noopener">[来源: InfoQ]</a>
-        </div>
-      </div>
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag tool">TOOL</span>
+                    Faster Rust Testing at Scale：cargo-nextest 实战解析
+                </div>
+                <div class="news-summary">
+                    JetBrains 直播特邀 cargo-nextest 作者 Rain，深入探讨 Rust 测试、开发者工具与大型 Rust 项目的日常开发体验。cargo-nextest 作为下一代测试运行器，专为大型代码库、CI 流水线和复杂集成测试设计，使 Rust 测试执行更快、更可观测、更可靠。RustRover 已将其集成到 IDE 中，开发者可直接在编辑器内获得 nextest 的测试输出、重试机制和并行执行能力。
+                </div>
+                <div class="news-meta">
+                    <a href="https://blog.jetbrains.com/rust/2026/05/01/faster-rust-tests-with-cargo-nextest/" target="_blank" rel="noopener">[来源: The JetBrains Blog]</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://www.infoq.com/news/2026/04/dotnet-11-preview-3/" target="_blank" rel="noopener">Microsoft 发布 .NET 11 Preview 3：Runtime Async 正式转正</a>
-          </div>
-          <span class="card-tag">.NET</span>
-        </div>
-        <div class="card-body">
-          <p>.NET 11 Preview 3 已发布，这是 2026 年 11 月标准支持版本的第三个预览。本次更新横跨 Runtime、SDK、类库、ASP.NET Core、EF Core 和 .NET MAUI 多个模块。重点包括：Runtime Async 正式脱离预览特性门控、JIT 编译器新增优化、ASP.NET Core 引入 Zstandard 压缩支持、MAUI Map 控件扩展等。</p>
-          <p>对于 .NET 开发者，Runtime Async 的正式可用意味着异步编程模型在运行时层面获得了更原生的支持，有望简化高并发场景下的代码编写和性能调优。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://www.infoq.com/news/2026/04/dotnet-11-preview-3/" target="_blank" rel="noopener">[来源: InfoQ]</a>
-        </div>
-      </div>
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag release">RELEASE</span>
+                    Cloudflare Dynamic Workflows：随租户迁移的持久化执行
+                </div>
+                <div class="news-summary">
+                    Cloudflare 推出 Dynamic Workflows，为 Workers 平台补上持久化执行原语。在 AI 写代码、多租户 SaaS 运行用户 TypeScript、代理自写自运行工具等场景下，平台需要一种能跟随租户、在计算节点间迁移的工作流机制。Dynamic Workflows 将状态持久化与执行逻辑分离，使平台可以" handed the Workers runtime some code and a state snapshot"，真正实现 serverless 级别的 durable execution。
+                </div>
+                <div class="news-meta">
+                    <a href="https://blog.cloudflare.com/dynamic-workflows/" target="_blank" rel="noopener">[来源: The Cloudflare Blog]</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://www.infoq.com/news/2026/04/aws-interconnect-multicloud-ga/" target="_blank" rel="noopener">AWS Interconnect 正式 GA：多云互联 + 开源规范</a>
-          </div>
-          <span class="card-tag">Cloud</span>
-        </div>
-        <div class="card-body">
-          <p>AWS Interconnect 达到 GA 状态，提供到 Google Cloud 的托管私有 L3 连接，并通过 Lumen 提供最后一公里接入能力。Azure 和 OCI 支持计划在 2026 年下半年推出。更关键的是，AWS 将底层规范以 Apache 2.0 协议发布在 GitHub 上。</p>
-          <p>Forrester 分析师认为，这是 AWS 试图为多云互联建立事实标准的举措。对于运维和平台工程师，这意味着未来跨云网络配置可能有统一的标准接口，降低多云架构的复杂度和厂商锁定风险。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://www.infoq.com/news/2026/04/aws-interconnect-multicloud-ga/" target="_blank" rel="noopener">[来源: InfoQ]</a>
-        </div>
-      </div>
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag practice">PRACTICE</span>
+                    GitBook 在 Vercel 上服务 3 万站点：AI 爬虫已占 41% 流量
+                </div>
+                <div class="news-summary">
+                    GitBook 分享其架构数据：在单个 Vercel 部署上托管 3 万个文档站点，月 PV 1.2 亿，每天处理 4 万次缓存失效且每次低于 300ms。最引人注目的数据是——41% 的流量来自 AI 爬虫和自动化系统。这意味着文档站点的设计思路需要转变：不仅要给人读，还要给 agent 消费。建议将文档从"给人看"改写为"给 agent 消费"，包括结构化 API 文档、机器可读的权限描述和清晰的导航层级。
+                </div>
+                <div class="news-meta">
+                    <a href="https://vercel.com/blog/how-gitbook-serves-30000-sites-with-sub-second-content-updates" target="_blank" rel="noopener">[来源: Vercel News]</a>
+                </div>
+            </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651283014&idx=1&sn=5a091006bc6d7da752556322b9f26ed3" target="_blank" rel="noopener">OpenAI x AWS 史上最大联合发布：Codex 上云、Managed Agents 预览</a>
-          </div>
-          <span class="card-tag">AI Infra</span>
-        </div>
-        <div class="card-body">
-          <p>4 月 29 日凌晨的 AWS 旧金山发布会上，OpenAI 旗舰模型正式接入 Amazon Bedrock 限量预览（GPT-5.4 优先，5.5 及后续 frontier 模型陆续跟进）。同时，由 OpenAI 驱动的 Amazon Bedrock Managed Agents 进入预览阶段，Codex 编程工具也一并上架。</p>
-          <p>对开发者而言，这意味着可以在 AWS 生态内直接调用 OpenAI 模型构建生产级应用，配合 Bedrock 的 Stateful Runtime Environment，agent 的状态管理和持久化能力得到云原生支持。多云 AI 基础设施的格局正在加速成型。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651283014&idx=1&sn=5a091006bc6d7da752556322b9f26ed3" target="_blank" rel="noopener">[来源: InfoQ 微信公众号]</a>
-        </div>
-      </div>
-    </section>
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag release">RELEASE</span>
+                    Confluent 将 Schema ID 迁移至 Kafka Headers
+                </div>
+                <div class="news-summary">
+                    Confluent 引入新方案，将 Apache Kafka 的 schema ID 从消息 payload 移至 record headers，旨在简化 schema 治理和演进。该更新与 Schema Registry 深度集成，提升跨序列化格式的兼容性，并降低事件驱动架构中数据与元数据的耦合度。对于维护多语言微服务系统的团队，这意味着消费端不再需要预先知道序列化格式即可解析消息元数据。
+                </div>
+                <div class="news-meta">
+                    <a href="https://www.infoq.com/news/2026/05/confluent-kafka-header-schema-id/" target="_blank" rel="noopener">[来源: InfoQ]</a>
+                </div>
+            </div>
+        </section>
 
-    <section class="section">
-      <h2 class="section-title">
-        <span class="section-icon">&#128269;</span>
-        深度技术解读
-      </h2>
+        <section>
+            <h2><span class="icon">&#128300;</span> 深度技术解读</h2>
 
-      <div class="dive-card">
-        <h3>Cursor SDK 的技术架构与生态影响</h3>
-        <p>Cursor SDK 的发布标志着一个关键转折：AI 编程工具正从"更好的编辑器"演进为"可嵌入的 AI 基础设施"。SDK 暴露的核心能力包括：</p>
-        <ul>
-          <li><strong>多模型 harness</strong>：不绑定单一模型，OpenAI、Anthropic、Google 及 Cursor 自研 Composer 2 可一键切换</li>
-          <li><strong>代码库索引与语义搜索</strong>：内置对大型代码库的向量化索引和即时 grep</li>
-          <li><strong>MCP 工具接入</strong>：标准化接口连接外部数据源和工具</li>
-          <li><strong>技能系统</strong>：自动从 <code>.cursor/skills/</code> 目录加载自定义技能</li>
-          <li><strong>子 agent 编排</strong>：支持将复杂任务拆分给多个并行 agent 处理</li>
-          <li><strong>可观察性 hooks</strong>：允许观察和干预 agent 的执行循环</li>
-        </ul>
-        <p>从架构视角看，Cursor 正在构建一个"AI 原生开发操作系统"——它不再关心你用什么编辑器，而是提供 agent 运行时、沙箱环境和编排能力。这与 Vercel 从部署平台演进为前端云的路径类似。对于开发者，短期收益是能在 CI/CD 和内部工具中复用 Cursor 的 agent 能力；长期影响则是开发工具的边界被重新定义——IDE 可能只是这个运行时的一个客户端。</p>
-        <div class="highlight-box">
-          <span class="comment"># 典型集成场景</span><br>
-          <span class="cmd">CI/CD Pipeline</span> &rarr; 自动总结 PR 改动、定位失败原因、提交修复<br>
-          <span class="cmd">Internal Tools</span> &rarr; 销售/市场团队无代码查询产品数据<br>
-          <span class="cmd">Embedded Agent</span> &rarr; 将 Cursor agent 嵌入自有 SaaS 产品
-        </div>
-        <div class="card-source" style="margin-top: 14px;">
-          <a href="https://x.com/leerob/status/2049522118757331426" target="_blank" rel="noopener">[来源: Lee Robinson @leerob]</a> |
-          <a href="https://x.com/ericzakariasson/status/2049511147762753581" target="_blank" rel="noopener">[来源: eric zakariasson]</a>
-        </div>
-      </div>
+            <div class="deep-dive">
+                <h3>Codex 的 Agent 进化路径：从代码补全到目标驱动执行</h3>
+                <p>Codex 的更新节奏揭示了一条清晰的 agent 进化路径。0.128.0 版本的 /goal 命令本质上是将"一次性提示"升级为"状态化任务管理"——代理不再只是响应单轮指令，而是维护一个可验证的目标清单，将目标需求映射到证据（文件、测试结果、PR 等），并自主决定下一步行动。这对开发者工作流的启示是：</p>
+                <ul>
+                    <li><strong>分会话隔离关注点</strong>：同一 Session 同时做"生成设计图"和"开发应用"效果会打折扣。推荐先用一个会话生成设计图，再开新会话以图片为输入，明确要求"像素级还原"。</li>
+                    <li><strong>善用 /plan 模式处理复杂项目</strong>：GPT-5.5 在编码细节把控、指令遵循和创造性上显著提升，但复杂任务仍需结构化规划。</li>
+                    <li><strong>闭环验证不可少</strong>：内置的浏览器执行 + 效果评估迭代流程，能减少"把设计仅当灵感"的实现偏差。</li>
+                </ul>
+                <p>Codex 同时新增了 Computer Use 能力——可把儿子的小联盟赛程截图丢给它，自动添加到 Apple Calendar 的所有日期、时间和场地。这意味着代理正从"代码编辑器里的副驾驶"进化为"操作系统级别的自动化层"。</p>
+                <div class="news-meta" style="margin-top:12px;">
+                    <a href="https://x.com/vista8/status/2050216261213163991" target="_blank" rel="noopener">[来源: 向阳乔木@X]</a>
+                    <a href="https://x.com/gdb/status/2050192975372673447" target="_blank" rel="noopener">[Greg Brockman]</a>
+                </div>
+            </div>
 
-      <div class="dive-card">
-        <h3>MCP 正在成为 AI 工具链的"USB-C"标准</h3>
-        <p>Model Context Protocol（MCP）在近期密集出现：Cursor SDK 将其作为核心扩展机制、GitHub Copilot CLI 教程围绕 MCP servers 展开、AWS Bedrock AgentCore Runtime 支持 serverless MCP proxy 部署。这并非巧合。</p>
-        <p>MCP 的本质是一个开放协议，定义了 AI 模型如何安全地发现和调用外部工具。它的价值在于解耦：模型厂商无需为每个工具写适配器，工具开发者只需实现一次 MCP 接口。当前已有覆盖数据库查询、API 调用、文件操作、第三方服务集成的 MCP server 生态。</p>
-        <p>从工程实践角度，如果你正在构建 AI 应用，现在就应该评估 MCP 的集成。AWS 的方案尤其值得关注：通过 Bedrock AgentCore Runtime 部署 serverless MCP proxy，可以在协议层实现输入消毒、审计日志、敏感数据脱敏等企业级治理需求，而不需要修改每个下游 tool 的实现。</p>
-        <div class="card-source" style="margin-top: 14px;">
-          <a href="https://aws.amazon.com/blogs/machine-learning/run-custom-mcp-proxies-serverless-on-amazon-bedrock-agentcore-runtime/" target="_blank" rel="noopener">[来源: AWS Machine Learning Blog]</a>
-        </div>
-      </div>
-    </section>
+            <div class="deep-dive">
+                <h3>CLAUDE.md 工程化实践：把项目经验沉淀为 AI 的"长期记忆"</h3>
+                <p>Anthropic 官方文档推荐的 Claude Code 标准范式正在社区快速传播。核心理念只有三条：每次 Claude 犯错 -> 你加一条规则；每次你重复自己 -> 你加一个工作流；每次出 bug -> 你加一道护栏。这不仅是提示工程，而是一种基础设施思维：</p>
+                <div class="code-block">
+<span class="comment"># 项目根目录结构</span>
+CLAUDE.md      <span class="comment"># 入职手册：项目背景、架构约束、编码规范</span>
+skills/        <span class="comment"># 工作 SOP：可复用的 agent 技能脚本</span>
+hooks/         <span class="comment"># 合规部：pre-commit / review 自动化检查</span>
+docs/          <span class="comment"># 公司章程：设计决策、ADR、API 文档</span>
+tools/         <span class="comment"># 后勤组：辅助脚本、代码生成模板</span>
+src/           <span class="comment"># 业务部门：真正的业务代码</span>
+                </div>
+                <p>配置完成后，Claude 会自动审查代码、按指令重构、强制执行架构规则、撰写发布说明、从 skills 中运行工作流、记住过去错误。它越用越聪明——因为规则在积累。这种"AI 上下文负债"的治理思路，正是企业级 AI 编程从"玩具"走向"生产工具"的关键一跃。InfoQ 的专题文章进一步指出：模型问题缓解后，更深层的约束是代码库中的业务隐知识、历史决策与架构习惯——它们不会因为模型升级而自动变得可理解。</p>
+                <div class="news-meta" style="margin-top:12px;">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652696950&idx=2&sn=b8388fc8a9c5f6b51dbdf7e799d7f349" target="_blank" rel="noopener">[来源: 新智元]</a>
+                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651283248&idx=2&sn=b17e226b2bdecbdfb34f9231832bbe6b" target="_blank" rel="noopener">[InfoQ]</a>
+                </div>
+            </div>
 
-    <section class="section">
-      <h2 class="section-title">
-        <span class="section-icon">&#128295;</span>
-        工具推荐
-      </h2>
+            <div class="deep-dive">
+                <h3>从 Vibe Coding 到 Agentic Engineering：Karpathy 的范式跃迁</h3>
+                <p>Andrej Karpathy 在 Sequoia Ascent 2026 的炉边对话相比一年前的 "vibe coding" 有明显跃迁。去年谈的是个体开发者如何驾驭 LLM，今年谈的是整个软件与经济体系如何围绕 agent 重构。三条主线值得开发者关注：</p>
+                <ul>
+                    <li><strong>LLM 的价值判断标准变了</strong>：不要问"它加速了什么"，而要问"它让什么变得不必要、或第一次变得可能"。MenuGen 的例子：整条 OCR+检索+渲染流水线被一次 prompt 吞掉。</li>
+                    <li><strong>.md skill 取代 .sh script</strong>：软件分发的最小单位从"可执行指令"变成"写给 agent 的自然语言说明"，由 LLM 按环境自适应、自调试。</li>
+                    <li><strong>Jaggedness（能力锯齿）</strong>：同一个模型能重构十万行代码，也会让你走路去洗车。原因是可验证性 * 经济学的叠加——RL 只能打磨有清晰奖励信号的领域，实验室按 TAM 决定把什么灌进 RL 数据分布。</li>
+                </ul>
+                <p>推论很明确：下一层基础设施不是面向用户，而是面向 agent。文档、API、权限、日志都要从"给人看"改写为"给 agent 消费"。</p>
+                <div class="news-meta" style="margin-top:12px;">
+                    <a href="https://x.com/shao__meng/status/2050020673393926632" target="_blank" rel="noopener">[来源: meng shao@X]</a>
+                    <a href="https://www.youtube.com/shorts/R95PiIXrPKU" target="_blank" rel="noopener">[Sequoia Capital]</a>
+                </div>
+            </div>
+        </section>
 
-      <div class="tool-grid">
-        <div class="tool-card">
-          <h4><a href="https://x.com/geekbb/status/2049496649844846999" target="_blank" rel="noopener">Codex2API</a></h4>
-          <p>基于 Go + Gin + React/Vite 的 Codex 反向代理与管理后台。对外提供 OpenAI 标准接口，对内维护 Refresh Token 账号池和动态并发调度。支持 PostgreSQL + Redis 或 SQLite + 内存缓存两种模式，Docker 一键启动。</p>
-          <div class="tool-meta">Go / Gin / React / Docker</div>
+        <section>
+            <h2><span class="icon">&#128295;</span> 工具推荐</h2>
+
+            <div class="tool-card">
+                <div class="tool-icon">&#129408;</div>
+                <div class="tool-info">
+                    <h4>cargo-nextest</h4>
+                    <p>Rust 下一代测试运行器，专为大型代码库和 CI 流水线设计。提供更快的并行执行、更清晰的重试机制、以及可观测的测试输出。RustRover 已原生集成。</p>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">&#127908;</div>
+                <div class="tool-info">
+                    <h4>OpenLess</h4>
+                    <p>开源语音输入工具，按住快捷键说话，松开后自动完成录音、转写和 AI 润色，结果直接插入光标所在位置。对标 Typeless、Wispr Flow 等付费产品。</p>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">&#127912;</div>
+                <div class="tool-info">
+                    <h4>Web UI Bench</h4>
+                    <p>给 20 个模型相同的 UI 组件提示词，将所有输出并排展示供直观对比。解决"模型审美"难以量化的问题，由 Cursor SDK 构建。webuibench.dev</p>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">&#127932;</div>
+                <div class="tool-info">
+                    <h4>audio.raphaelsalaja.com</h4>
+                    <p>一个设计完美的音频组件库，交互和动效细节到位。适合需要嵌入音频播放功能的 Web 项目参考。</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2><span class="icon">&#128203;</span> 实践指南</h2>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag practice">PRACTICE</span>
+                    GEO（生成式引擎优化）：让你的内容被 AI 主动推荐
+                </div>
+                <div class="news-summary">
+                    当用户问 ChatGPT、Claude、Grok、Gemini、Perplexity 时，如何让你的作品被主动推荐？实践者分享了一套低成本方案：1）在站点根目录放置 llms.txt，用 markdown 写清楚站点是做什么的、有哪些关键页面——AI 检索时会优先读取；2）各站点的 llms.txt 互相引用形成网状结构；3）robots.txt 中区分训练爬虫和搜索爬虫；4）主动提交到 directory.llmstxt.cloud、llmstxt.site 等目录。当前全球配置 llms.txt 的站点很少，早期布局有先发优势。
+                </div>
+                <div class="news-meta">
+                    <a href="https://x.com/HiTw93/status/2050066416561520677" target="_blank" rel="noopener">[来源: Tw93@X]</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag practice">PRACTICE</span>
+                    函数命名对 AI 理解代码的影响远超想象
+                </div>
+                <div class="news-summary">
+                    Adam Tornhill 翻出老问题：函数应该写多长？研究发现，AI 模型理解代码的方式和人类不同——命名对 AI 的理解能力影响极大。把有意义的变量名换成随机字符，模型表现显著下降。AI 依赖的是字面特征（名字、结构、局部上下文），而非推断出的语义。Fowler 的观点依然成立：函数长短不重要，重要的是意图和实现的分离。如果你需要花时间读一段代码才能理解它在做什么，那就应该提取成一个函数，用函数名说清楚"它在做什么"。这个逻辑在 AI 编程时代同样成立，甚至可能更重要——因为 AI 比你更依赖好的命名。
+                </div>
+                <div class="news-meta">
+                    <a href="https://x.com/vista8/status/2050222575674925186" target="_blank" rel="noopener">[来源: 向阳乔木@X]</a>
+                    <a href="https://martinfowler.com/fragments/2026-function-length.html" target="_blank" rel="noopener">[Martin Fowler]</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag practice">PRACTICE</span>
+                    Vibe Coding 的陷阱：不要让 AI 把你的大脑搞崩
+                </div>
+                <div class="news-summary">
+                    一位 22 岁开发者的真诚自白引发共鸣：连续 6 个月每天开 6-8 个 Claude Code 终端窗口，75% 的时间只是在按回车继续，结果发现自己和朋友都变得反应迟钝。应对建议：不要开太多任务并行（最多 3 个），review AI 生成的代码而非无脑点继续，从 AI 代码中提取知识点并写成文档甚至纸质笔记，规定固定编码时间，不要在手机上 coding，每天外出晒太阳、运动、放空。核心原则：你可以外包思考过程，但不能外包理解本身。
+                </div>
+                <div class="news-meta">
+                    <a href="https://x.com/vikingmute/status/2050212242130657506" target="_blank" rel="noopener">[来源: Viking@X]</a>
+                    <a href="https://x.com/howie_serious/status/2050212313664492030" target="_blank" rel="noopener">[howie.serious]</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag practice">PRACTICE</span>
+                    JavaScript Temporal API：终结日期时间处理噩梦
+                </div>
+                <div class="news-summary">
+                    Stack Overflow 播客邀请了 Bloomberg 资深软件工程师、Rust 版 JS 引擎 Boa 作者 Jason Williams，深入探讨为什么 JavaScript 的日期时间处理如此困难，以及 Temporal 提案如何从根本上修复这个问题。Temporal 提供不可变的日期时间对象、明确的时区处理、以及更直观的算术运算。对于还在用 moment.js 或 date-fns 填坑的开发者，这是浏览器原生解决方案即将到来的信号。
+                </div>
+                <div class="news-meta">
+                    <a href="https://stackoverflow.blog/2026/05/01/time-is-a-construct-but-it-can-still-break-your-software/" target="_blank" rel="noopener">[来源: Stack Overflow Blog]</a>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2><span class="icon">&#128240;</span> 其他值得关注</h2>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag paper">PAPER</span>
+                    YC Decoded：递归推理让小模型超越千倍参数大模型
+                </div>
+                <div class="news-summary">
+                    Y Combinator 最新一期 Decoded 解析了两篇递归 AI 模型论文 HRMs 和 TRMs——仅用 700 万参数的模型在 ARC Prize 等推理任务上击败了参数大上千倍的模型。核心思路：标准 LLM 在某些推理任务上存在根本性天花板，而推理时的递归机制赋予小模型足够的计算深度来突破它。当递归思想与大规模基础模型结合时，效果更惊人。
+                </div>
+                <div class="news-meta">
+                    <a href="https://www.youtube.com/watch?v=DGtUUMNYLcc" target="_blank" rel="noopener">[来源: Y Combinator]</a>
+                    <a href="https://x.com/ycombinator/status/2050224443461718118" target="_blank" rel="noopener">[YC@X]</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag practice">PRACTICE</span>
+                    图灵奖得主 Stonebraker：AI Agent 最后全是数据库问题
+                </div>
+                <div class="news-summary">
+                    数据库图灵奖得主 Mike Stonebraker（Ingres/Postgres 创造者）在最新访谈中指出：当前 agentic AI 本质上是"大模型 + 一层系统包装"，大多数停在"只读"阶段。一旦进入真正的"读写"世界（转账、库存更新），问题立刻回到数据库的老问题——事务、一致性、原子性。这不是 AI 问题，而是分布式数据库问题。他还点名批评了 Oracle、Google MapReduce/Hadoop、以及 AWS 的 15 种数据库冗余。对大模型写 SQL 的判断：公开 benchmark 上模型已经能做到不错的水平，但生产环境复杂查询的可靠性仍有距离。
+                </div>
+                <div class="news-meta">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247661911&idx=1&sn=3fbd0317f4e3719e4e691f92c12a2716" target="_blank" rel="noopener">[来源: AI前线]</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag release">RELEASE</span>
+                    Meta 统一 AI Agent 自动化超大规模性能优化
+                </div>
+                <div class="news-summary">
+                    Meta 发布新一代 AI 驱动的容量效率平台，使用统一 AI agent 自动检测和解决全球基础设施中的性能问题。这是超大规模系统向自优化演进的重要一步——agent 不再只是辅助工具，而是直接参与资源调度、异常检测和自动修复的运维核心层。对于管理大规模 K8s 集群的团队，这标志着 AIOps 从概念验证走向生产落地的拐点。
+                </div>
+                <div class="news-meta">
+                    <a href="https://www.infoq.com/news/2026/05/meta-ai-agents-hyperscale/" target="_blank" rel="noopener">[来源: InfoQ]</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag release">RELEASE</span>
+                    Broadcom 将 Velero 捐赠给 CNCF
+                </div>
+                <div class="news-summary">
+                    Broadcom 宣布将其 Kubernetes 原生备份、恢复和迁移项目 Velero 贡献给 CNCF 作为 Sandbox 项目。Velero 在 Kubernetes API 层操作，通过 CRD 捕获集群状态，而非依赖 hypervisor 或存储层快照。对于需要在多云环境中进行灾难恢复和迁移的团队，这是社区治理下的重要基础设施工具。
+                </div>
+                <div class="news-meta">
+                    <a href="https://www.infoq.com/news/2026/05/broadcom-velero-cncf/" target="_blank" rel="noopener">[来源: InfoQ]</a>
+                </div>
+            </div>
+
+            <div class="news-item">
+                <div class="news-title">
+                    <span class="tag release">RELEASE</span>
+                    微软开源 86-DOS 1.00 源码
+                </div>
+                <div class="news-summary">
+                    在 86-DOS 1.00 诞生 45 周年之际，微软将已发现的最早 DOS 源代码整理并公开发布。这批源码揭示了初代操作系统的开发面貌——包括那个著名的拼写错误 creat()（Unix 创建文件的系统调用，Ken Thompson 说如果能重来会加上那个缺失的 e）。对于操作系统历史和早期系统软件研究者，这是一份珍贵资料。
+                </div>
+                <div class="news-meta">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247830702&idx=1&sn=52521d39315f53b733bd8ff46bc0f94b" target="_blank" rel="noopener">[来源: CSDN]</a>
+                    <a href="https://github.com/DOS-History/Paterson-Listings" target="_blank" rel="noopener">[GitHub]</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="sources">
+            <h2><span class="icon">&#128279;</span> 参考链接汇总</h2>
+            <ul class="sources-list">
+                <li><a href="https://x.com/dotey/status/2050028108787450148" target="_blank" rel="noopener">宝玉 - Codex /goal 命令详解</a></li>
+                <li><a href="https://x.com/gdb/status/2050194039077495089" target="_blank" rel="noopener">Greg Brockman - Codex Ralph Loop</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652696950&idx=1&sn=21fccc2ad1d6da0a9081e392ba631c10" target="_blank" rel="noopener">新智元 - Codex 升级报道</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533405&idx=1&sn=1ee7cfefd01d9fd9c666e5d4cf22dce0" target="_blank" rel="noopener">逛逛GitHub - Warp 终端开源</a></li>
+                <li><a href="https://github.com/warpdotdev/warp" target="_blank" rel="noopener">Warp GitHub 仓库</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650451731&idx=1&sn=90eacbc2b061ae7b9b72527f575b7b2e" target="_blank" rel="noopener">AINLP - DeepSeek 多模态技术</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247628394&idx=1&sn=376bab661f833655590e4a71a947bb5b" target="_blank" rel="noopener">硅星人Pro - DeepSeek 视觉能力</a></li>
+                <li><a href="https://www.infoq.com/news/2026/05/vitest-4-1-ai-agents/" target="_blank" rel="noopener">InfoQ - Vitest 4.1 发布</a></li>
+                <li><a href="https://blog.jetbrains.com/rust/2026/05/01/faster-rust-tests-with-cargo-nextest/" target="_blank" rel="noopener">JetBrains Blog - cargo-nextest</a></li>
+                <li><a href="https://blog.cloudflare.com/dynamic-workflows/" target="_blank" rel="noopener">Cloudflare Blog - Dynamic Workflows</a></li>
+                <li><a href="https://vercel.com/blog/how-gitbook-serves-30000-sites-with-sub-second-content-updates" target="_blank" rel="noopener">Vercel News - GitBook 架构</a></li>
+                <li><a href="https://www.infoq.com/news/2026/05/confluent-kafka-header-schema-id/" target="_blank" rel="noopener">InfoQ - Confluent Kafka Headers</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652696950&idx=2&sn=b8388fc8a9c5f6b51dbdf7e799d7f349" target="_blank" rel="noopener">新智元 - CLAUDE.md 工程化</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651283248&idx=2&sn=b17e226b2bdecbdfb34f9231832bbe6b" target="_blank" rel="noopener">InfoQ - 企业 AI 编程障碍</a></li>
+                <li><a href="https://x.com/shao__meng/status/2050020673393926632" target="_blank" rel="noopener">meng shao - Karpathy 解读</a></li>
+                <li><a href="https://www.youtube.com/shorts/R95PiIXrPKU" target="_blank" rel="noopener">Sequoia Capital - Karpathy 短片</a></li>
+                <li><a href="https://x.com/HiTw93/status/2050066416561520677" target="_blank" rel="noopener">Tw93 - GEO 实践</a></li>
+                <li><a href="https://x.com/vista8/status/2050222575674925186" target="_blank" rel="noopener">向阳乔木 - 函数命名与 AI</a></li>
+                <li><a href="https://martinfowler.com/fragments/2026-function-length.html" target="_blank" rel="noopener">Martin Fowler - 函数长度</a></li>
+                <li><a href="https://x.com/vikingmute/status/2050212242130657506" target="_blank" rel="noopener">Viking - Vibe Coding 陷阱</a></li>
+                <li><a href="https://stackoverflow.blog/2026/05/01/time-is-a-construct-but-it-can-still-break-your-software/" target="_blank" rel="noopener">Stack Overflow - Temporal API</a></li>
+                <li><a href="https://www.youtube.com/watch?v=DGtUUMNYLcc" target="_blank" rel="noopener">Y Combinator - 递归模型解析</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247661911&idx=1&sn=3fbd0317f4e3719e4e691f92c12a2716" target="_blank" rel="noopener">AI前线 - Stonebraker 访谈</a></li>
+                <li><a href="https://www.infoq.com/news/2026/05/meta-ai-agents-hyperscale/" target="_blank" rel="noopener">InfoQ - Meta AI Agents</a></li>
+                <li><a href="https://www.infoq.com/news/2026/05/broadcom-velero-cncf/" target="_blank" rel="noopener">InfoQ - Velero CNCF</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247830702&idx=1&sn=52521d39315f53b733bd8ff46bc0f94b" target="_blank" rel="noopener">CSDN - 微软开源 DOS</a></li>
+                <li><a href="https://github.com/DOS-History/Paterson-Listings" target="_blank" rel="noopener">GitHub - 86-DOS 源码</a></li>
+                <li><a href="https://x.com/ericzakariasson/status/2050168491291062717" target="_blank" rel="noopener">eric zakariasson - Web UI Bench</a></li>
+                <li><a href="https://x.com/geekbb/status/2050077628913345007" target="_blank" rel="noopener">Geek - OpenLess</a></li>
+                <li><a href="https://x.com/dingyi/status/2050137408268886450" target="_blank" rel="noopener">Ding - 音频组件库</a></li>
+                <li><a href="https://blog.jetbrains.com/education/2026/05/01/jetbrains-academy-april-2026/" target="_blank" rel="noopener">JetBrains Blog - Academy Digest</a></li>
+                <li><a href="https://www.infoq.com/articles/securing-autonomous-ai-agents-kubernetes/" target="_blank" rel="noopener">InfoQ - K8s AI Agent 安全</a></li>
+                <li><a href="https://smashingmagazine.com/2026/05/designing-stable-interfaces-streaming-content/" target="_blank" rel="noopener">Smashing Magazine - 流式 UI 稳定性</a></li>
+                <li><a href="https://stackoverflow.blog/2026/05/01/dispatches-from-o-reilly-fast-paths-and-slow-paths/" target="_blank" rel="noopener">Stack Overflow - 快慢路径</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651031232&idx=2&sn=d9bede92f805cf8bbb184d9ff344cca6" target="_blank" rel="noopener">机器之心 - RL 算法演进</a></li>
+                <li><a href="https://www.infoq.com/news/2026/05/clawrunr/" target="_blank" rel="noopener">InfoQ - ClawRunr Java Agent</a></li>
+                <li><a href="https://www.deeplearning.ai/the-batch/issue-351" target="_blank" rel="noopener">DeepLearning.AI - The Batch #351</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247722427&idx=1&sn=55776d0460899f38803067362f1b2c06" target="_blank" rel="noopener">Datawhale - 吴恩达新课</a></li>
+            </ul>
         </div>
 
-        <div class="tool-card">
-          <h4><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533359&idx=1&sn=96657227556350b11390573f365b3631" target="_blank" rel="noopener">MonkeyCode</a></h4>
-          <p>国产在线 AI 编程平台，覆盖需求到 Review 全流程。底层接入 Codex、Claude Code、OpenCode 等主流 Agent，支持 DeepSeek、Qwen、Kimi 等国产模型。每次任务自动创建独立虚拟机，与 GitHub 绑定后可在浏览器完成完整开发。</p>
-          <div class="tool-meta">Web / Cloud IDE / AI Agent</div>
-        </div>
-
-        <div class="tool-card">
-          <h4><a href="https://www.youtube.com/watch?v=w2_ZwhzB1g4" target="_blank" rel="noopener">Open Design</a></h4>
-          <p>本地优先的开源替代方案，对标 Claude Design。兼容 Claude Code、Codex CLI、Cursor Agent 等主流 coding agent，内置 19 个可组合技能和 71 套设计系统。通过 DESIGN.md 文件定义视觉方向和设计规范。</p>
-          <div class="tool-meta">Open Source / Design / Agent</div>
-        </div>
-
-        <div class="tool-card">
-          <h4><a href="https://github.com/shaom/brand-to-design-md" target="_blank" rel="noopener">Brand to DESIGN.md Skill</a></h4>
-          <p>读取任意网站的设计风格，自动提炼为 DESIGN.md 规范文件。基于该文件可输出复刻版 Demo。已有 Poolside 等网站的复刻案例。适合快速建立项目的视觉规范基线。</p>
-          <div class="tool-meta">Python / AI / Design System</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">
-        <span class="section-icon">&#128221;</span>
-        实践指南
-      </h2>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://blog.jetbrains.com/kotlin/2026/04/next-level-observability-with-opentelemetry/" target="_blank" rel="noopener">用 OpenTelemetry 实现下一代可观测性</a>
-          </div>
-          <span class="card-tag">Observability</span>
-        </div>
-        <div class="card-body">
-          <p>日志（Logging）通常是开发者排查问题的第一手段，但在分布式系统和微服务架构中，单纯的日志已难以追踪跨服务请求链路。JetBrains 发布的这篇教程系统介绍了如何用 OpenTelemetry 构建现代化的可观测性体系。</p>
-          <p>文章覆盖从基础概念到实战代码的完整路径，包括 trace、metric、log 三种信号的采集与关联，以及如何在实际项目中落地。对于正在从"打日志"向"全链路追踪"过渡的团队，这是一份不错的入门参考。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://blog.jetbrains.com/kotlin/2026/04/next-level-observability-with-opentelemetry/" target="_blank" rel="noopener">[来源: The JetBrains Blog]</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://www.freecodecamp.org/news/how-to-deploy-a-full-stack-next-js-app-on-cloudflare-workers-with-github-actions-ci-cd/" target="_blank" rel="noopener">部署全栈 Next.js 到 Cloudflare Workers + GitHub Actions CI/CD</a>
-          </div>
-          <span class="card-tag">DevOps</span>
-        </div>
-        <div class="card-body">
-          <p>作者对比了 Vercel 和 Cloudflare Workers 两个平台的实际表现后，分享了基于 <code>@opennextjs/cloudflare</code> 的完整部署方案。关键发现：Cloudflare Workers 在延迟（TTFB）和免费额度灵活性上优于 Vercel，且最新方案已解决此前对完整 Next.js 特性支持不足的问题。</p>
-          <p>教程涵盖 Next.js 14 App Router + Supabase 认证的全栈应用，从项目配置到 GitHub Actions 自动部署的完整 pipeline。对于追求边缘部署和成本控制的项目，这是值得评估的替代方案。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://www.freecodecamp.org/news/how-to-deploy-a-full-stack-next-js-app-on-cloudflare-workers-with-github-actions-ci-cd/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://martinfowler.com/fragments/2026-04-29.html" target="_blank" rel="noopener">Martin Fowler：AI 编程实践指南更新（第三版）</a>
-          </div>
-          <span class="card-tag">Best Practice</span>
-        </div>
-        <div class="card-body">
-          <p>软件工程大师 Martin Fowler 推荐并引用了 Chris Parsons 的 AI 编程指南第三版。该指南的核心原则包括：保持改动粒度小、建立防护栏（guardrails）、 ruthlessly 文档化、确保每个变更在发布前经过验证。</p>
-          <p>值得注意的是，"验证"的定义正在演变：以前意味着"人读过"，现在可以是"测试覆盖 + AI 审查 + 人在关键环节把关"。Fowler 认为这篇文章提供了足够具体的操作细节，可以作为团队建立 AI 辅助开发规范的起点。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://martinfowler.com/fragments/2026-04-29.html" target="_blank" rel="noopener">[来源: Martin Fowler]</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <a href="https://www.freecodecamp.org/news/how-to-build-a-multi-tenant-saas-platform-with-next-js-express-and-prisma/" target="_blank" rel="noopener">用 Next.js + Express + Prisma 构建多租户 SaaS 平台</a>
-          </div>
-          <span class="card-tag">Architecture</span>
-        </div>
-        <div class="card-body">
-          <p>Webflow、Notion 这类平台如何用一个代码库服务数千用户，每个用户又有独立子域名？答案是多租户架构。这篇教程从零开始构建一个多租户作品集 SaaS：用户注册后即时获得独立子域名 portfolio，由单一后端和单一数据库支撑。</p>
-          <p>技术亮点包括：Next.js middleware 层检测子域名并路由到对应租户、Express + Prisma 处理租户隔离、以及完整的数据模型设计。对于正在设计或重构多租户系统的开发者，这是一份可直接参考的实现方案。</p>
-        </div>
-        <div class="card-source">
-          <a href="https://www.freecodecamp.org/news/how-to-build-a-multi-tenant-saas-platform-with-next-js-express-and-prisma/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">
-        <span class="section-icon">&#128279;</span>
-        参考链接汇总
-      </h2>
-      <div class="source-list">
-        <ul>
-          <li><a href="https://x.com/dotey/status/2049541257756811517" target="_blank" rel="noopener">宝玉 @dotey</a></li>
-          <li><a href="https://x.com/shao__meng/status/2049437470362878179" target="_blank" rel="noopener">meng shao @shao__meng</a></li>
-          <li><a href="https://x.com/berryxia/status/2049250710492160228" target="_blank" rel="noopener">Berryxia.AI @berryxia</a></li>
-          <li><a href="https://www.freecodecamp.org/news/how-to-build-an-agentic-terminal-workflow-with-github-copilot-cli-and-mcp-servers/" target="_blank" rel="noopener">freeCodeCamp</a></li>
-          <li><a href="https://x.com/HiTw93/status/2049480328423608522" target="_blank" rel="noopener">Tw93 @HiTw93</a></li>
-          <li><a href="https://x.com/aaditsh/status/2049480328423608522" target="_blank" rel="noopener">Aadit Sheth @aaditsh</a></li>
-          <li><a href="https://www.infoq.com/news/2026/04/angular-compiler-rust/" target="_blank" rel="noopener">InfoQ - Angular Compiler</a></li>
-          <li><a href="https://www.infoq.com/news/2026/04/dotnet-11-preview-3/" target="_blank" rel="noopener">InfoQ - .NET 11</a></li>
-          <li><a href="https://www.infoq.com/news/2026/04/aws-interconnect-multicloud-ga/" target="_blank" rel="noopener">InfoQ - AWS Interconnect</a></li>
-          <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651283014&idx=1&sn=5a091006bc6d7da752556322b9f26ed3" target="_blank" rel="noopener">InfoQ 微信公众号</a></li>
-          <li><a href="https://x.com/leerob/status/2049522118757331426" target="_blank" rel="noopener">Lee Robinson @leerob</a></li>
-          <li><a href="https://x.com/ericzakariasson/status/2049511147762753581" target="_blank" rel="noopener">eric zakariasson</a></li>
-          <li><a href="https://aws.amazon.com/blogs/machine-learning/run-custom-mcp-proxies-serverless-on-amazon-bedrock-agentcore-runtime/" target="_blank" rel="noopener">AWS Machine Learning Blog</a></li>
-          <li><a href="https://blog.jetbrains.com/kotlin/2026/04/next-level-observability-with-opentelemetry/" target="_blank" rel="noopener">The JetBrains Blog</a></li>
-          <li><a href="https://www.freecodecamp.org/news/how-to-deploy-a-full-stack-next-js-app-on-cloudflare-workers-with-github-actions-ci-cd/" target="_blank" rel="noopener">freeCodeCamp - Cloudflare</a></li>
-          <li><a href="https://martinfowler.com/fragments/2026-04-29.html" target="_blank" rel="noopener">Martin Fowler</a></li>
-          <li><a href="https://www.freecodecamp.org/news/how-to-build-a-multi-tenant-saas-platform-with-next-js-express-and-prisma/" target="_blank" rel="noopener">freeCodeCamp - SaaS</a></li>
-          <li><a href="https://x.com/geekbb/status/2049496649844846999" target="_blank" rel="noopener">Geek @geekbb</a></li>
-          <li><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533359&idx=1&sn=96657227556350b11390573f365b3631" target="_blank" rel="noopener">逛逛GitHub</a></li>
-          <li><a href="https://www.youtube.com/watch?v=w2_ZwhzB1g4" target="_blank" rel="noopener">AICodeKing - Open Design</a></li>
-          <li><a href="https://github.com/shaom/brand-to-design-md" target="_blank" rel="noopener">Brand to DESIGN.md Skill</a></li>
-          <li><a href="https://www.youtube.com/watch?v=fLUtUkqYHnQ" target="_blank" rel="noopener">AI Engineer - Liquid AI</a></li>
-          <li><a href="https://www.youtube.com/watch?v=PmW4-tcMQbc" target="_blank" rel="noopener">Spring I/O - Claude Code</a></li>
-          <li><a href="https://developers.googleblog.com/speeding-up-ai-bringing-google-colossus-to-pytorch-via-gcsfs-and-rapid-bucket/" target="_blank" rel="noopener">Google Developers Blog</a></li>
-          <li><a href="https://www.infoq.com/news/2026/04/mistral-ai-workflows/" target="_blank" rel="noopener">InfoQ - Mistral Workflows</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <footer style="text-align: center; padding: 32px 0; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border); margin-top: 20px;">
-      开发者实践日报 &middot; 2026-04-29 &middot; 数据来源: FreshRSS 24h 聚合
-    </footer>
-  </div>
+        <footer>
+            <p>开发者实践日报 &middot; 生成时间: 2026-05-01 18:53:51</p>
+            <p>数据来自 FreshRSS 24h 聚合 &middot; 共 465 条新闻 &middot; 筛选后呈现</p>
+        </footer>
+    </div>
 </body>
 </html>
