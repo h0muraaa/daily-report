@@ -112,6 +112,15 @@
       line-height: 1.5;
     }
 
+    .news-title a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .news-title a:hover {
+      color: var(--accent);
+    }
+
     .news-body {
       color: var(--text-secondary);
       font-size: 13.5px;
@@ -152,6 +161,7 @@
     .tag.tool { color: var(--accent-purple); }
     .tag.practice { color: var(--accent-yellow); }
     .tag.news { color: var(--accent); }
+    .tag.infra { color: var(--accent-red); }
 
     .deep-dive {
       background: var(--bg-secondary);
@@ -174,6 +184,15 @@
       font-weight: 600;
       color: var(--accent-green);
       margin-bottom: 8px;
+    }
+
+    .tool-name a {
+      color: var(--accent-green);
+      text-decoration: none;
+    }
+
+    .tool-name a:hover {
+      text-decoration: underline;
     }
 
     .practice-card {
@@ -266,6 +285,16 @@
       color: var(--text-muted);
       font-size: 12px;
     }
+
+    ul, ol {
+      margin-left: 20px;
+      color: var(--text-secondary);
+      font-size: 13.5px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
   </style>
 </head>
 <body>
@@ -280,34 +309,46 @@
     <h2>今日技术热榜</h2>
 
     <div class="news-item">
-      <div class="news-title">OpenRouter 推出 Response Caching：为 Agent 测试和重试节省大量成本</div>
+      <div class="news-title"><a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&mid=2247535723&idx=1&sn=3ce8e3b143288b97de15097229cd7396" target="_blank" rel="noopener">详解 DeepSeek V4：全新注意力机制 mHC，百万上下文走进现实</a></div>
       <div class="news-body">
-        <p>OpenRouter 正式发布 Response Caching 功能，允许开发者缓存 API 响应以节省测试和 Agent 重试场景下的成本。该功能完全免费，支持通过 <code>X-OpenRouter-Cache-TTL</code> 头部自定义缓存生命周期（1 秒到 24 小时，默认 5 分钟），也可通过 <code>X-OpenRouter-Cache-Clear</code> 清除特定条目。缓存按 API key 隔离，命中缓存的请求不会计入供应商速率限制——因为请求根本不会到达上游提供商。响应头会返回 HIT/MISS 状态和 Age/TTL 信息，便于调试。</p>
-        <p>对于频繁运行测试套件或 Agent 反复调用相同提示的场景，这是一个直接降低账单的功能。当前处于 Beta 阶段。</p>
+        <p>DeepSeek-V4 正式发布，不再使用 MLA，而是采用全新的注意力机制 mHC（multi-head comprehension），在百万上下文场景下实现系统级耦合优化。实测数学推理、代码能力和 Agent 指令执行均比 V3 提升明显，尤其是幻觉率大幅下降。技术报告还详细披露了从字节 Seed 提出的 HC 到 DeepSeek 的 mHC、再到 Kimi 的 Attention Residuals 的演进脉络，以及围绕 Muon 优化器的社区改进竞赛。</p>
+        <p>对于关注大模型 Infra 的开发者来说，这是理解当下开源模型工程化路线的关键切片。从 R1 的一鸣惊人到如今的百花齐放，核心驱动力是人才密度和竞争烈度达到一定阈值后的自然质变。</p>
       </div>
       <div class="source">
-        <span class="tag news">API</span>
-        <a href="https://openrouter.ai/announcements/response-caching" target="_blank" rel="noopener">[来源: OpenRouter Blog]</a>
+        <span class="tag infra">INFRA</span>
+        <a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&mid=2247535723&idx=1&sn=3ce8e3b143288b97de15097229cd7396" target="_blank" rel="noopener">[来源: 晚点LatePost]</a>
       </div>
     </div>
 
     <div class="news-item">
-      <div class="news-title">OpenRouter 新增 "-latest" 模型别名：像 semver 一样路由到最新模型</div>
+      <div class="news-title"><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247635818&idx=1&sn=d086b06ce518fde66c110eb9aab0bad2" target="_blank" rel="noopener">Claude Code 源码深度分析：51 万行代码背后的五条设计原则</a></div>
       <div class="news-body">
-        <p>OpenRouter 引入了语义化版本风格的模型别名机制。开发者现在可以请求 <code>~anthropic/claude-opus-latest</code> 或 <code>~openai/gpt-latest</code> 等别名，系统会自动路由到对应系列的最新版本。这解决了生产环境中模型版本更新的痛点——不再需要手动追踪每个提供商的模型 ID 变更。灵感来自 npm 的 semver 约定，用 <code>~</code> 前缀表示"最新补丁版本"。</p>
-        <p>对于需要紧跟模型前沿但又不想频繁修改代码的团队，这个设计非常实用。</p>
+        <p>有开发者通读了 Claude Code 全部 51 万行源码，提炼出五条贯穿全局的设计原则：工具即能力边界（Agent 能做什么完全由工具集决定）、Fail-closed 安全默认、Context Engineering > Prompt Engineering、权限即 UX（每条工具调用都有独立的权限确认 UX）、以及 React 终端渲染引擎的自研 Fork。</p>
+        <p>模块规模上，utils 占 35%（权限、bash 安全、git、MCP 等基础设施），components 占 16%（React 终端 UI），tools 占 10%（40+ 工具实现）。对想自建 Coding Agent 的开发者来说，这是目前最完整的架构参考。</p>
       </div>
       <div class="source">
-        <span class="tag news">API</span>
-        <a href="https://openrouter.ai/models?q=latest" target="_blank" rel="noopener">[来源: OpenRouter]</a>
+        <span class="tag news">AGENT ARCH</span>
+        <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247635818&idx=1&sn=d086b06ce518fde66c110eb9aab0bad2" target="_blank" rel="noopener">[来源: dbaplus社群 / 熵减矩阵]</a>
       </div>
     </div>
 
     <div class="news-item">
-      <div class="news-title">Poolside 发布 Laguna XS.2：33B MoE 开源模型，单 GPU 运行，专注 Agentic Coding</div>
+      <div class="news-title"><a href="https://x.com/OpenRouter/status/2050616590098473445" target="_blank" rel="noopener">OpenRouter 推出 Response Caching：测试和 Agent 重试的省钱利器</a></div>
       <div class="news-body">
-        <p>Poolside 发布了其首个开源权重模型 Laguna XS.2，采用 33B 总参数 / 3B 激活参数的 MoE 架构，专为 agentic coding 和长程任务设计。该模型完全在 Poolside 自研基础设施上训练，Apache 2.0 许可，可在单张 GPU 上运行。目前在 Arena.ai 的 Code Arena: Front-end 排行榜上接受评测。API 也已通过 Poolside 平台对外开放。</p>
-        <p>对于需要本地部署代码助手或在资源受限环境下运行的团队，单 GPU 即可运行的特性是一个重要卖点。MoE 架构以 3B 激活参数实现了接近更大密集模型的性能，代表了当前高效模型设计的前沿方向。</p>
+        <p>OpenRouter 正式上线 Response Caching 功能，免费可用。开发者可通过 <code>X-OpenRouter-Cache-TTL</code> 头设置缓存生命周期（1 秒到 24 小时，默认 5 分钟），用 <code>X-OpenRouter-Cache-Clear</code> 清除特定条目。缓存按 API Key 隔离，命中缓存的请求不会消耗提供商的速率限制。</p>
+        <p>对于频繁运行测试、Agent 反复重试相同请求的场景，这个功能能显著降低 token 开销和延迟。同时 OpenRouter 还推出了 <code>-latest</code> 模型别名（如 <code>~anthropic/claude-opus-latest</code>），自动路由到各厂商最新版本模型，省去手动追踪版本号的麻烦。</p>
+      </div>
+      <div class="source">
+        <span class="tag news">API</span>
+        <a href="https://x.com/OpenRouter/status/2050616590098473445" target="_blank" rel="noopener">[来源: OpenRouter(@OpenRouterAI)]</a>
+      </div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title"><a href="https://x.com/arena/status/2050314664693977338" target="_blank" rel="noopener">Poolside 开源 Laguna XS.2：33B MoE 单卡可跑的 Agentic 代码模型</a></div>
+      <div class="news-body">
+        <p>Poolside 发布了首个开源权重模型 Laguna XS.2，采用 33B 总参数 / 3B 激活参数的 MoE 架构，专为 Agentic 编码和长程任务设计。模型完全在自有技术栈上训练，单张 GPU 即可运行，Apache 2.0 协议发布。在 Arena 的 Code Arena 前端开发榜单中已上线测试。API 也已通过 Poolside 平台对外开放。</p>
+        <p>对于希望在本地或私有环境部署代码模型的团队，这是一个值得关注的新选项——尤其是 3B 激活参数意味着推理成本控制在了生产可用的范围。</p>
       </div>
       <div class="source">
         <span class="tag news">模型</span>
@@ -317,51 +358,51 @@
     </div>
 
     <div class="news-item">
-      <div class="news-title">NVIDIA NeMo-RL + vLLM 实现 Speculative Decoding：RL 训练吞吐提升 1.8x</div>
+      <div class="news-title"><a href="https://x.com/vista8/status/2050390804103888912" target="_blank" rel="noopener">RecursiveMAS：递归多 Agent 系统，Token 用量降低 75%</a></div>
       <div class="news-body">
-        <p>NVIDIA Research 发布新论文，展示了在 NeMo-RL 框架中结合 vLLM 实现投机解码（Speculative Decoding）来加速 RL 后训练 rollout 的方法。实验结果显示，在 8B 模型上实现了 1.8 倍的无损吞吐提升，在 235B 模型上预计可达 2.5 倍端到端加速。RL 后训练长期以来受限于 rollout 瓶颈——每次策略更新都需要大量环境交互来收集经验，而投机解码通过用小型草稿模型预测 token、大型模型验证的方式，在不改变输出分布的前提下大幅提升了生成速度。</p>
-        <p>对于正在自己训练 RL 模型（如 DPO、PPO、GRPO）的团队，这项技术可以显著缩短实验周期。</p>
+        <p>本周 HuggingFace 热度第一的论文提出了 RecursiveMAS，核心思路是让 Agent 之间不再传递文本，而是直接传递模型内部的数值向量，形成一个递归闭环。连接模块极其轻量，底层模型全程冻结，只训练中间"传话"的小模块。</p>
+        <p>在 AIME 数学竞赛题上比最强基线高 13-18 个百分点，推理速度快 2.4 倍，Token 用量减少 75%，训练成本比 LoRA 还低。且递归轮次越多优势越大。这为多 Agent 协作的效率瓶颈提供了一个全新的工程方向。</p>
       </div>
       <div class="source">
-        <span class="tag news">训练</span>
-        <a href="https://nvda.ws/49kX9eo" target="_blank" rel="noopener">[来源: NVIDIA Research]</a>
-        <a href="https://nvda.ws/4ulCCi3L" target="_blank" rel="noopener">[代码]</a>
+        <span class="tag news">RESEARCH</span>
+        <a href="https://x.com/vista8/status/2050390804103888912" target="_blank" rel="noopener">[来源: 向阳乔木(@vista8)]</a>
+        <a href="https://arxiv.org/abs/2604.25917" target="_blank" rel="noopener">[论文: arxiv.org/abs/2604.25917]</a>
       </div>
     </div>
 
     <div class="news-item">
-      <div class="news-title">Cloudflare 完成 "Code Orange: Fail Small" 工程：避免 2025 年 11 月和 12 月全球宕机重演</div>
+      <div class="news-title"><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247547565&idx=1&sn=6844dc78212c384618d0187f158d533a" target="_blank" rel="noopener">Node 26.0 延期发布，JavaScript ES2025/ES2026 新特性一览</a></div>
       <div class="news-body">
-        <p>Cloudflare 经过两个多季度的密集工程投入，完成了内部代号 "Code Orange: Fail Small" 的韧性提升项目。这项工作聚焦于三个核心方向：更安全的配置变更机制（防止错误配置引发级联故障）、缩小故障爆炸半径、以及改进应急流程和事故管理。团队还引入了防止配置漂移和回归的长期措施，并加固了变更管理流程。</p>
-        <p>Cloudflare 明确表示，韧性改进永远不会"完成"，但这次工作已经覆盖了此前两次全球宕机的根因。对于运维大规模分布式系统的工程师，这篇博客详细披露了从故障中学习并系统性改进的方法论，值得细读。</p>
+        <p>Node 26.0 因 macOS 构建问题延期至 5 月 5 日发布，原定默认启用的 Temporal API 跳过 Rosetta 2 支持。ES2025 已确认的特性包括 <code>Promise.try</code>、Set 的 union/intersection/difference、<code>Array.fromAsync</code>、<code>using</code> 声明等；即将到来的还有 <code>Math.sumPrecise</code> 和 <code>Map.getOrInsert</code>。</p>
+        <p>pnpm 11.0 也发布了 <code>pack-app</code> 命令，可将应用打包为 Node SEA（Single Executable Application）。对于 Node 生态开发者，这是一份不错的特性路线图参考。</p>
       </div>
       <div class="source">
-        <span class="tag news">基础设施</span>
-        <a href="https://blog.cloudflare.com/code-orange-fail-small-complete/" target="_blank" rel="noopener">[来源: Cloudflare Blog]</a>
+        <span class="tag news">NODE.JS</span>
+        <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247547565&idx=1&sn=6844dc78212c384618d0187f158d533a" target="_blank" rel="noopener">[来源: 印记中文 / Node Weekly #224]</a>
       </div>
     </div>
 
     <div class="news-item">
-      <div class="news-title">Browser Use 推出桌面版：AI Agent 浏览器自动化获得原生界面</div>
+      <div class="news-title"><a href="https://x.com/shao__meng/status/2050560260151333018" target="_blank" rel="noopener">Codex Computer Use 技术解析：屏幕录制 + 辅助功能驱动的 macOS GUI 自动化</a></div>
       <div class="news-body">
-        <p>Browser Use 团队发布了 Browser Use Desktop，为 AI 浏览器自动化提供了全新的桌面界面。核心特性包括：全局快捷键快速启动 Agent、支持在后台运行多个 Agent、兼容 Claude Code 和 Codex。这意味着开发者可以将浏览器自动化任务集成到日常开发工作流中，而不必在终端和浏览器之间反复切换。</p>
-        <p>对于需要自动化网页测试、数据抓取或执行复杂 Web 工作流的开发者，这是一个从"脚本工具"升级为"生产力环境"的重要信号。</p>
+        <p>OpenAI Codex App 的 Computer Use 功能通过屏幕录制（Screen Recording）和辅助功能（Accessibility）两项 macOS 系统权限，让 Codex 直接"看屏幕、动鼠标键盘"。最佳使用场景包括：测试 macOS App / iOS 模拟器流程、复现 GUI 专属 bug、跨应用协作工作流、以及"操作 -> 改代码 -> 再跑同一流程"的自闭环验证。</p>
+        <p>权限模型分两层：macOS 系统权限决定能否感知和操作 GUI，Codex 内部权限决定能执行哪些操作。一个关键原则是：本地在开发的 Web 应用优先用 Codex 自带的 in-app browser；目标应用有 plugin / MCP server 时优先走结构化集成，Computer Use 仅用于必须"视觉操作"的场景。</p>
       </div>
       <div class="source">
-        <span class="tag news">Agent</span>
-        <a href="https://x.com/browser_use/status/2050316869505315147" target="_blank" rel="noopener">[来源: Browser Use]</a>
+        <span class="tag tool">AI CODING</span>
+        <a href="https://x.com/shao__meng/status/2050560260151333018" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
       </div>
     </div>
 
     <div class="news-item">
-      <div class="news-title">DeepSeek-VL 多模态新论文：用空间标记（Bounding Box / Point）嵌入思维链解决视觉推理</div>
+      <div class="news-title"><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650451743&idx=1&sn=6983b10273a31c5c19a66eff719a5901" target="_blank" rel="noopener">Apple Support App 误打包 Claude.md，暴露内部 AI 客服架构</a></div>
       <div class="news-body">
-        <p>DeepSeek 发布多模态大模型新论文，提出将边界框（bounding box）和点（point）等空间标记直接嵌入思维链（Chain-of-Thought）的推理框架。核心动机是解决视觉推理中的 "Reference Gap"（指代鸿沟）——模型在复杂图像推理中经常搞混所指对象，导致数错、漏判或空间关系错误。通过在推理过程中用空间标记作为"视觉指针"，模型可以像人类用手指比划一样，边指点边推理。</p>
-        <p>架构上沿用经典三段式：内部 DeepSeek-ViT 视觉编码器（支持任意分辨率，通过 CSA 机制实现 7056x 压缩率）+ DeepSeek-V4-Flash（284B 总参数）语言模型。论文在发布后不久从 GitHub 删除，但已有开发者提前下载保存。</p>
+        <p>Apple Support App v5.13 更新中，开发者 Aaron Perris 拆包后发现两个本不该出现的文件：CLAUDE.md。文件内容揭示苹果正在用 Claude Code 构建一套名为"Juno AI"的 AI 客服系统，包含 client（用户）、agent（真人客服）、assistant（AI 助手）三个角色的完整消息路由、异步流式传输和会话持久化设计。苹果发现后立即更新了 App，但截图已传遍开发者社区。</p>
+        <p>这个乌龙事件至少说明了两件事：一是大厂也在用 Claude Code 做生产级开发，二是 vibe coding 的代码审查流程确实需要加强。</p>
       </div>
       <div class="source">
-        <span class="tag news">多模态</span>
-        <a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247556256&idx=1&sn=63bf2aea8a4fd589a6331734a03aac9a" target="_blank" rel="noopener">[来源: 大模型智能]</a>
+        <span class="tag news">BUG</span>
+        <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650451743&idx=1&sn=6983b10273a31c5c19a66eff719a5901" target="_blank" rel="noopener">[来源: AINLP / 新智元]</a>
       </div>
     </div>
 
@@ -369,27 +410,40 @@
     <h2>深度技术解读</h2>
 
     <div class="deep-dive">
-      <h3>MCP vs Skills：Agent 能力扩展的两种范式如何选择</h3>
+      <h3>DeepSeek V4 的"系统级耦合优化"意味着什么</h3>
       <div class="news-body">
-        <p>ByteByteGo 本周深度剖析了 MCP（Model Context Protocol）与 Skills 两种 Agent 能力扩展机制的区别与适用场景。MCP 是 Anthropic 推动的开放协议，旨在标准化 AI 模型与外部工具/数据源之间的通信；Skills 则是更轻量、更内聚的功能模块概念，通常绑定在特定平台或框架内。</p>
-        <p>核心区别在于：MCP 强调<strong>互操作性</strong>——一个 MCP server 可以被任何兼容的 client 使用，适合需要跨工具、跨团队协作的场景；Skills 强调<strong>内聚性和易用性</strong>——通常带有预设的提示模板、错误处理和上下文管理，适合快速构建特定工作流。当前生态中，Claude Code 和 Codex 都在向 Skill/MCP 混合模式演进。</p>
-        <p>实践建议：如果你正在构建内部工具链，优先评估团队现有系统是否已有 MCP server 生态；如果是面向终端用户的产品功能，从 Skill 的封装性和体验一致性出发可能更高效。两者并非互斥——LangChain 已经在 deepagents 中同时支持 Browserbase 的浏览器子 agent 和 MCP 工具调用。</p>
+        <p>DeepSeek 从 V2 的 MLA（Multi-head Latent Attention）到 V4 的 mHC，标志着一个重要转变：单点创新已经见顶，真正难的变成系统级耦合优化。用 UCLA 博士刘益枫的话说，"系统级耦合优化比单点创新更难"。</p>
+        <div class="highlight-box">
+          <strong>关键变化：</strong><br>
+          - V4 弃用 MLA，采用全新的 mHC 注意力机制，与 DeepSeek-ViT 视觉编码器和 CSA 机制深度耦合，实现 7056 倍视觉 token 压缩率。<br>
+          - 对北大团队开源的 TileLang 深度使用，说明国产开源工具链正在进入大厂核心生产路径。<br>
+          - 围绕 Muon 优化器的改进竞赛（字节 Seed -> DeepSeek -> Kimi）展现了开源社区的正反馈循环。<br>
+          - 代码能力仍弱于 Opus 4.6 等闭源模型，但幻觉率大幅下降，这对生产环境的 Agent 部署是更务实的指标。
+        </div>
+        <p>对于后端/Infra 开发者，V4 的技术报告提供了一个观察中国开源模型生态演进的最佳切片。相比"哪个模型更强"，更值得跟踪的是这些团队如何在系统层面做取舍：什么时候用稀疏化、什么时候做量化、如何把推理框架（如 SGLang）与模型设计协同优化。</p>
       </div>
       <div class="source">
         <span class="tag practice">架构</span>
-        <a href="https://blog.bytebytego.com/p/ep213-mcp-vs-skills-clearly-explained" target="_blank" rel="noopener">[来源: ByteByteGo Newsletter]</a>
+        <a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&mid=2247535723&idx=1&sn=3ce8e3b143288b97de15097229cd7396" target="_blank" rel="noopener">[来源: 晚点LatePost]</a>
       </div>
     </div>
 
     <div class="deep-dive">
-      <h3>LlamaIndex CEO：LLM 栈正在从"框架抽象层"向"数据上下文层"迁移</h3>
+      <h3>Claude Code 源码揭示的 Agent 工程范式</h3>
       <div class="news-body">
-        <p>LlamaIndex CEO Jerry Liu 在 VentureBeat 访谈中指出，2023 年帮开发者节省数月的框架抽象层（如通用的 RAG pipeline、chain 编排）正在变成"死重"。真正 survive 下来的是<strong>数据层</strong>——因为无论你用 OpenAI Codex 还是 Claude Code，agent 的表现只取决于它获取的上下文质量，而企业最有价值的上下文仍然锁在 PDF、合同和监管文件中。</p>
-        <p>这个观点与近期多个技术趋势相互印证：GitHub Copilot cloud agent 可以直接理解整个代码库的语义结构；Codex 的 Computer Use 通过屏幕录制+辅助功能权限来操作 GUI，本质上也是在获取传统 API 无法触达的上下文。对于开发者而言，这意味着投资重心应该从"选哪个框架"转向"如何解锁和结构化自己的数据"。</p>
+        <p>51 万行代码的 Claude Code 被完整拆解后，最值得关注的是它的<strong>工具-权限-UX 三位一体</strong>设计。每个工具都有明确的并发安全声明（<code>isConcurrencySafe</code>）、只读声明（<code>isReadOnly</code>）和权限确认 UX。这不是安全补丁，而是架构核心——Fail-closed 默认策略意味着所有安全相关的默认值都是最保守的。</p>
+        <div class="highlight-box">
+          <strong>可复用的设计原则：</strong><br>
+          1. <strong>工具即能力边界</strong>：Agent 能做什么完全由工具集决定，新增能力 = 新增工具，没有后门。<br>
+          2. <strong>Context Engineering > Prompt Engineering</strong>：与其花时间在 prompt 调优，不如把上下文结构做好。<br>
+          3. <strong>自研终端渲染引擎</strong>：Claude Code 没有依赖现成的 TUI 库，而是 fork 了 Ink 并深度定制，这说明复杂 Agent 的交互层需要高度定制。<br>
+          4. <strong>bridge 模式</strong>：支持远程控制（本地机器作为 bridge 环境），12,613 行代码专门处理这个场景——Agent 的远程执行是真实需求。
+        </div>
+        <p>如果你正在考虑自建 Coding Agent，建议直接对照 Claude Code 的模块划分来审视自己的架构：utils（基础设施）> components（UI）> services（API/MCP）> tools（工具实现）> commands（斜杠命令）。这个分层不是随意的，而是反映了 Agent 系统的真实依赖关系。</p>
       </div>
       <div class="source">
         <span class="tag practice">架构</span>
-        <a href="https://venturebeat.com/infrastructure/llamaindex-ceo-llm-stack-context/" target="_blank" rel="noopener">[来源: VentureBeat]</a>
+        <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247635818&idx=1&sn=d086b06ce518fde66c110eb9aab0bad2" target="_blank" rel="noopener">[来源: dbaplus社群 / 熵减矩阵]</a>
       </div>
     </div>
 
@@ -397,36 +451,48 @@
     <h2>工具推荐</h2>
 
     <div class="tool-card">
-      <div class="tool-name">OpenAI Codex「Computer Use」—— 让 Agent 真正"看见"你的屏幕</div>
+      <div class="tool-name"><a href="https://github.com/rtk-ai/rtk" target="_blank" rel="noopener">RTK — Rust 写的省 Token 神器</a></div>
       <div class="news-body">
-        <p>Codex App 的 Computer Use 功能可能是近期最被低估的 Agent 能力升级。它通过 macOS 的屏幕录制（Screen Recording）和辅助功能（Accessibility）两项系统权限，让 Codex 能够直接观察 GUI、移动鼠标、敲击键盘，操作 macOS 上的图形界面应用。</p>
-        <p><strong>什么时候用它：</strong></p>
-        <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 13px;">
-          <li>测试 macOS app 或 iOS 模拟器流程</li>
-          <li>复现只在 GUI 中出现的 bug</li>
-          <li>修改必须点 UI 才能改的应用设置</li>
-          <li>查看没有 API/插件接入的数据源</li>
-          <li>跨多个应用协作的复杂工作流</li>
-        </ul>
-        <p><strong>触发方式：</strong>在 prompt 中 <code>@ Computer Use</code> 或直接 <code>@ AppName</code>（如 <code>@ Chrome</code>），清晰描述目标应用、窗口和操作流程。最有价值的用法是"操作 -> 改代码 -> 再跑同一流程"的闭环：让 agent 自己验证自己的修改。</p>
-        <p><strong>重要原则：</strong>本地开发的 Web 应用优先用 Codex 自带的 in-app browser；目标应用如果有专属 plugin/MCP server，优先走结构化集成，Computer Use 仅用于必须"视觉操作"的场景。</p>
+        <p>拦截并压缩 AI Coding 工具（Claude Code、Cursor、Codex 等 12 种）的命令输出，平均压缩率 80-90%。支持 100+ 命令的智能过滤，覆盖 git、测试框架、构建工具、Docker、AWS 等场景。通过 Hook 机制自动改写命令，对 AI 完全透明。零依赖，开销低于 10ms。</p>
+        <p>对于重度使用 AI Coding 工具的开发者来说，这个工具能直接帮你省钱，同时让会话的上下文活得更久，AI 的推理质量也更稳定。</p>
       </div>
       <div class="source">
-        <span class="tag tool">Agent</span>
-        <a href="https://developers.openai.com/codex/app/computer-use" target="_blank" rel="noopener">[来源: OpenAI Developers]</a>
+        <span class="tag tool">CLI</span>
+        <a href="https://github.com/rtk-ai/rtk" target="_blank" rel="noopener">[来源: GitHub / rtk-ai/rtk]</a>
       </div>
     </div>
 
     <div class="tool-card">
-      <div class="tool-name">Skills CLI — 将优质 UI 细节文章转化为可安装的代码片段库</div>
+      <div class="tool-name"><a href="https://github.com/darrylmorley/whatcable" target="_blank" rel="noopener">WhatCable — 终结 USB-C 线的玄学时代</a></div>
       <div class="news-body">
-        <p>Jakub Krehel 的文章 <em>Details That Make Interfaces Feel Better</em> 详细拆解了圆角、字体、动画等 UI 细节的实现技巧，每条都配有可运行的代码示例。更实用的是，作者将这些技巧打包成了一个可安装的 skills 库：</p>
-        <pre>npx skills add jakubkrehel/make-interfaces-feel-better</pre>
-        <p>包括双层 border、微动画、文字渲染优化等实用技巧。对于前端开发者来说，这种"文章 + 可安装代码库"的形式是一个值得借鉴的知识传播模式。</p>
+        <p>macOS 菜单栏小工具，读取 IOKit 数据，插上 USB-C 线就能用大白话显示它的真实能力：能不能充电、传数据、跑雷电。解决开发者桌面上"这根线到底能不能用"的终极问题。社区已移植到 Linux/CLI。</p>
+        <p>作为开发者，桌面上往往有一堆来历不明的 USB-C 线。这个工具用一个简洁的菜单栏图标终结了所有猜测。</p>
       </div>
       <div class="source">
-        <span class="tag tool">前端</span>
-        <a href="https://jakub.kr/writing/details-that-make-interfaces-feel-better" target="_blank" rel="noopener">[来源: jakub.kr]</a>
+        <span class="tag tool">macOS</span>
+        <a href="https://github.com/darrylmorley/whatcable" target="_blank" rel="noopener">[来源: GitHub / darrylmorley/whatcable]</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-name"><a href="https://github.com/zerx-lab/warp" target="_blank" rel="noopener">OpenWarp — Warp 终端的开源版本</a></div>
+      <div class="news-body">
+        <p>Rust 编写的代理式开发环境，定位是内置编码代理的终端，同时可接入 Claude Code、Codex、Gemini CLI 等外部代理。对于喜欢 Warp 的体验但希望完全掌控代码和数据的开发者，这是值得关注的替代方案。</p>
+      </div>
+      <div class="source">
+        <span class="tag tool">Terminal</span>
+        <a href="https://github.com/zerx-lab/warp" target="_blank" rel="noopener">[来源: GitHub / zerx-lab/warp]</a>
+      </div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-name"><a href="https://github.com/lijigang/ljg-skills" target="_blank" rel="noopener">ljg-skills — 李继刚的认知工具箱</a></div>
+      <div class="news-body">
+        <p>新增 <code>/ljg-qa</code> skill，用于提取信息 QA 对。整个仓库覆盖从阅读到表达的完整认知链：<code>ljg-plain</code>（逼 AI 说人话）、<code>ljg-learn</code>（概念解剖器）、<code>ljg-read</code>（伴读教练）、<code>ljg-card</code>（认知可视化）、<code>ljg-think</code>（追本之箭）。安装命令：<code>npx skills add lijigang/ljg-skills</code>。</p>
+      </div>
+      <div class="source">
+        <span class="tag tool">Skills</span>
+        <a href="https://github.com/lijigang/ljg-skills" target="_blank" rel="noopener">[来源: GitHub / lijigang/ljg-skills]</a>
       </div>
     </div>
 
@@ -434,19 +500,36 @@
     <h2>实践指南</h2>
 
     <div class="practice-card">
-      <div class="practice-title">构建 3 层上下文系统，让 AI 不生成"垃圾"原型</div>
+      <div class="practice-title">Codex Computer Use 的正确打开方式</div>
       <div class="news-body">
-        <p>Peter Yang 在即将发布的节目中分享了 Ravi 的 3 层上下文系统，解决"给 AI 一行提示就抱怨输出像 slop"的问题：</p>
-        <div class="highlight-box">
-          <strong>Functional Layer（功能层）：</strong>应用做什么，核心业务流程是什么<br>
-          <strong>Visual Layer（视觉层）：</strong>应用长什么样，设计系统和组件规范<br>
-          <strong>Data Layer（数据层）：</strong>数据结构如何工作，API 契约和状态管理
-        </div>
-        <p>其中<strong>数据层是最被低估的</strong>。在提示中包含数据模型、API 响应结构、状态流转逻辑，能让 AI 生成的原型具备真正的灵活性——而不是只能处理硬编码的演示数据。这适用于 Codex、Claude Code、v0 等所有 AI 代码生成工具。</p>
+        <p>Computer Use 不是万能药，它的价值在于填补"结构化集成无法覆盖的 GUI 操作"。两条核心原则：</p>
+        <ol>
+          <li><strong>优先层级</strong>：本地 Web 应用优先用 Codex 自带的 in-app browser；目标应用有 plugin / MCP server 时优先走结构化集成；Computer Use 仅用于必须"视觉操作"的场景（如点 UI 改设置、跨多个 GUI 应用协作）。</li>
+          <li><strong>自闭环验证</strong>：让 Agent 能自己验证自己的修改是 Computer Use 最有价值的用法——"操作 -> 改代码 -> 再跑同一流程"。</li>
+        </ol>
+        <p>权限方面，macOS 系统权限（Screen Recording + Accessibility）和 Codex 内部权限是两层独立的系统。前者决定能不能感知/操作 GUI，后者决定能执行哪些操作。建议在生产环境中对内部权限做严格收敛。</p>
       </div>
       <div class="source">
-        <span class="tag practice">提示工程</span>
-        <a href="https://x.com/petergyang/status/2050583660576092404" target="_blank" rel="noopener">[来源: Peter Yang]</a>
+        <span class="tag practice">AI CODING</span>
+        <a href="https://x.com/shao__meng/status/2050560260151333018" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
+      </div>
+    </div>
+
+    <div class="practice-card">
+      <div class="practice-title">Skills 工程化：从 Prompt 玩具到可执行协议</div>
+      <div class="news-body">
+        <p>当前市面上大量"Skill"本质上还是角色扮演 prompt 的变体。真正的 Skill 工程化应该把领域内的隐性经验、边界条件、工具链、失败处理、验收标准压缩成 Agent 可以稳定调用的<strong>可执行协议</strong>。</p>
+        <div class="highlight-box">
+          <strong>关键区分：</strong><br>
+          - ❌ 伪 Skill：换个语气说话、存一段 prompt、套一层人设<br>
+          - ✅ 真 Skill：封装能力、约束、脚本、参考资料、验收规则和修复策略的可组合执行单元<br><br>
+          传统 workflow（n8n/Zapier）擅长确定性链路，但遇到需要理解上下文、动态决策、局部修复的场景就会变成巨型流程图。Skills 的优势在于保持模块化的同时允许 Agent 动态决策——不是把流程画死在节点图里，而是把能力封装成可组合单元。
+        </div>
+        <p>对于正在构建 Agent 系统的开发者，建议把 Skill 设计成"有输入契约、有输出校验、有失败回退"的三段式结构，而不是一段自由的 prompt。</p>
+      </div>
+      <div class="source">
+        <span class="tag practice">AGENT ENGINEERING</span>
+        <a href="https://mp.weixin.qq.com/s?__biz=MzIzNjE2NTI3NQ==&mid=2247491869&idx=1&sn=f33fefc279f7f11c3d2b2a8569d2f7b8" target="_blank" rel="noopener">[来源: 浮之静 — Codex Pet Skill 工程化]</a>
       </div>
     </div>
 
@@ -465,42 +548,30 @@
       </div>
     </div>
 
-    <div class="practice-card">
-      <div class="practice-title">Simon Willison 模式：用手机 + Claude Code for Web 构建完整功能</div>
-      <div class="news-body">
-        <p>Simon Willison 再次展示了"全移动开发"的可行性：他在露营期间完全用手机上的 Claude Code for Web，为自己的博客构建了一个从 iNaturalist 导入野生动物照片的新功能。工作流程是：</p>
-        <ol style="margin-left: 20px; color: var(--text-secondary); font-size: 13px;">
-          <li>用 Claude Code 构建 <code>inaturalist-clumper</code> Python CLI，获取并按时间/地理距离分组观测数据</li>
-          <li>设为 Git scraping 仓库，定时运行并将结果写入 <code>clumps.json</code></li>
-          <li>用 CORS 让前端直接 fetch GitHub 上的 JSON</li>
-          <li>让 AI 生成 <code>inat-sightings.html</code> 可视化应用</li>
-        </ol>
-        <p>这个案例的启示不在于"用手机开发"本身，而在于展示了 Claude Code 处理端到端工作流的能力——从 CLI 工具、自动化流水线到前端界面，全程由 AI 辅助完成。</p>
-      </div>
-      <div class="source">
-        <span class="tag practice">AI辅助编程</span>
-        <a href="https://simonwillison.net/2026/May/2/sightings/" target="_blank" rel="noopener">[来源: Simon Willison's Weblog]</a>
-      </div>
-    </div>
-
     <!-- 参考链接汇总 -->
     <div class="sources-section">
       <h2>参考链接汇总</h2>
       <ul class="source-list">
-        <li><a href="https://openrouter.ai/announcements/response-caching" target="_blank" rel="noopener">OpenRouter Response Caching 公告</a> — OpenRouter Blog</li>
-        <li><a href="https://openrouter.ai/models?q=latest" target="_blank" rel="noopener">OpenRouter -latest 模型别名</a> — OpenRouter</li>
-        <li><a href="https://poolside.ai/blog/laguna-a-33b-moe-model-for-agentic-coding" target="_blank" rel="noopener">Laguna XS.2 发布博客</a> — Poolside</li>
-        <li><a href="https://huggingface.co/poolside/Laguna-XS.2" target="_blank" rel="noopener">Laguna XS.2 模型权重</a> — HuggingFace</li>
-        <li><a href="https://nvda.ws/49kX9eo" target="_blank" rel="noopener">NeMo-RL Speculative Decoding 论文</a> — NVIDIA Research</li>
-        <li><a href="https://blog.cloudflare.com/code-orange-fail-small-complete/" target="_blank" rel="noopener">Code Orange: Fail Small 工程总结</a> — Cloudflare Blog</li>
-        <li><a href="https://blog.bytebytego.com/p/ep213-mcp-vs-skills-clearly-explained" target="_blank" rel="noopener">EP213: MCP vs Skills</a> — ByteByteGo Newsletter</li>
-        <li><a href="https://venturebeat.com/infrastructure/llamaindex-ceo-llm-stack-context/" target="_blank" rel="noopener">LlamaIndex CEO 访谈</a> — VentureBeat</li>
-        <li><a href="https://developers.openai.com/codex/app/computer-use" target="_blank" rel="noopener">Codex Computer Use 文档</a> — OpenAI Developers</li>
-        <li><a href="https://jakub.kr/writing/details-that-make-interfaces-feel-better" target="_blank" rel="noopener">Details That Make Interfaces Feel Better</a> — jakub.kr</li>
-        <li><a href="https://simonwillison.net/2026/May/2/sightings/" target="_blank" rel="noopener">iNaturalist Sightings 功能</a> — Simon Willison's Weblog</li>
-        <li><a href="https://github.com/sparanoid/chinese-copywriting-guidelines" target="_blank" rel="noopener">chinese-copywriting-guidelines</a> — GitHub</li>
-        <li><a href="https://github.com/sivan/heti" target="_blank" rel="noopener">赫蹏 Heti</a> — GitHub</li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247556256&idx=1&sn=63bf2aea8a4fd589a6331734a03aac9a" target="_blank" rel="noopener">DeepSeek-VL 多模态技术解读</a> — 大模型智能</li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&mid=2247535723&idx=1&sn=3ce8e3b143288b97de15097229cd7396" target="_blank" rel="noopener">晚点LatePost — DeepSeek V4 详解</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247635818&idx=1&sn=d086b06ce518fde66c110eb9aab0bad2" target="_blank" rel="noopener">dbaplus社群 — Claude Code 源码分析</a></li>
+        <li><a href="https://x.com/OpenRouter/status/2050616590098473445" target="_blank" rel="noopener">OpenRouter — Response Caching</a></li>
+        <li><a href="https://x.com/arena/status/2050314664693977338" target="_blank" rel="noopener">Arena.ai — Laguna XS.2</a></li>
+        <li><a href="https://x.com/vista8/status/2050390804103888912" target="_blank" rel="noopener">向阳乔木 — RecursiveMAS 论文</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247547565&idx=1&sn=6844dc78212c384618d0187f158d533a" target="_blank" rel="noopener">印记中文 — Node Weekly #224</a></li>
+        <li><a href="https://x.com/shao__meng/status/2050560260151333018" target="_blank" rel="noopener">meng shao — Codex Computer Use</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650451743&idx=1&sn=6983b10273a31c5c19a66eff719a5901" target="_blank" rel="noopener">AINLP — Apple Claude.md 泄露</a></li>
+        <li><a href="https://github.com/rtk-ai/rtk" target="_blank" rel="noopener">GitHub — RTK</a></li>
+        <li><a href="https://github.com/darrylmorley/whatcable" target="_blank" rel="noopener">GitHub — WhatCable</a></li>
+        <li><a href="https://github.com/zerx-lab/warp" target="_blank" rel="noopener">GitHub — OpenWarp</a></li>
+        <li><a href="https://github.com/lijigang/ljg-skills" target="_blank" rel="noopener">GitHub — ljg-skills</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNjE2NTI3NQ==&mid=2247491869&idx=1&sn=f33fefc279f7f11c3d2b2a8569d2f7b8" target="_blank" rel="noopener">浮之静 — Codex Pet Skill 工程化</a></li>
+        <li><a href="https://blog.bytebytego.com/p/ep213-mcp-vs-skills-clearly-explained" target="_blank" rel="noopener">ByteByteGo — MCP vs Skills</a></li>
+        <li><a href="https://blog.cloudflare.com/code-orange-fail-small-complete/" target="_blank" rel="noopener">Cloudflare Blog — Code Orange</a></li>
+        <li><a href="https://x.com/geekbb/status/2050535774093983802" target="_blank" rel="noopener">Geek — Claude Code 可视化工具</a></li>
+        <li><a href="https://simonwillison.net/2026/May/2/sightings/" target="_blank" rel="noopener">Simon Willison — iNaturalist + Claude Code</a></li>
+        <li><a href="https://www.infoq.com/news/2026/05/ducklake-sql-catalog/" target="_blank" rel="noopener">InfoQ — DuckLake 1.0</a></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247628413&idx=1&sn=3a2d41025ce091f6d4b4d8912a5016cc" target="_blank" rel="noopener">硅星人Pro — EverMind 长期记忆</a></li>
+        <li><a href="https://juejin.cn/post/7634480683300028450" target="_blank" rel="noopener">掘金 — HarmonyOS UDMF 跨应用数据流转</a></li>
       </ul>
     </div>
 
