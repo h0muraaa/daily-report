@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 import time
 
-API_BASE = "https://idgktgic.us-east-1.clawcloudrun.com/api"
+API_BASE = "http://vcocoonv.qzz.io:8080/api"
 USERNAME = os.environ.get('FRESHRSS_USERNAME', '')
 PASSWORD = os.environ.get('FRESHRSS_PASSWORD', '')
 BATCH_SIZE = 100
