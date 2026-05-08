@@ -1,0 +1,1 @@
+git push -f origin main 2>&1
