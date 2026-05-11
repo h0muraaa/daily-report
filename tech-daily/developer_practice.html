@@ -1,589 +1,392 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>开发者实践日报 · 2026-05-10</title>
-    <style>
-        :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
-            --border-color: #30363d;
-            --text-primary: #c9d1d9;
-            --text-secondary: #8b949e;
-            --text-muted: #6e7681;
-            --accent-green: #3fb950;
-            --accent-blue: #58a6ff;
-            --accent-purple: #bc8cff;
-            --accent-orange: #f0883e;
-            --accent-red: #f85149;
-            --code-bg: #1e2530;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.7;
-            font-size: 15px;
-        }
-        .container { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
-        header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 30px;
-            margin-bottom: 40px;
-        }
-        .tag {
-            display: inline-block;
-            background: var(--bg-tertiary);
-            color: var(--accent-green);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
-        }
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #f0f6fc;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        .subtitle code {
-            background: var(--code-bg);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: "SF Mono", "Fira Code", monospace;
-            font-size: 13px;
-            color: var(--accent-orange);
-        }
-        h2 {
-            font-size: 22px;
-            font-weight: 600;
-            color: #f0f6fc;
-            margin: 40px 0 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        h2 .icon { font-size: 20px; }
-        h3 {
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--accent-blue);
-            margin: 24px 0 12px;
-        }
-        .news-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px 24px;
-            margin-bottom: 16px;
-            transition: border-color 0.2s;
-        }
-        .news-item:hover { border-color: var(--accent-blue); }
-        .news-item h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #f0f6fc;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-        .news-item p {
-            color: var(--text-primary);
-            margin-bottom: 12px;
-        }
-        .news-item .source {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-        .news-item .source a {
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-        .news-item .source a:hover { text-decoration: underline; }
-        .news-item .tag-inline {
-            display: inline-block;
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-right: 6px;
-            font-weight: 600;
-        }
-        .tag-hot { background: rgba(248, 81, 73, 0.15); color: var(--accent-red); }
-        .tag-tool { background: rgba(63, 185, 80, 0.15); color: var(--accent-green); }
-        .tag-code { background: rgba(188, 140, 255, 0.15); color: var(--accent-purple); }
-        .tag-deep { background: rgba(88, 166, 255, 0.15); color: var(--accent-blue); }
-        .deep-dive {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 24px;
-            margin-bottom: 16px;
-        }
-        .deep-dive h3 { margin-top: 0; }
-        .deep-dive p { margin-bottom: 12px; color: var(--text-primary); }
-        .deep-dive ul, .deep-dive ol {
-            margin: 12px 0 12px 24px;
-            color: var(--text-primary);
-        }
-        .deep-dive li { margin-bottom: 8px; }
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-        }
-        .tool-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-        }
-        .tool-card h4 {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--accent-green);
-            margin-bottom: 8px;
-        }
-        .tool-card p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-        .tool-card .source {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .tool-card .source a {
-            color: var(--accent-blue);
-            text-decoration: none;
-        }
-        code {
-            background: var(--code-bg);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
-            font-size: 13px;
-            color: var(--accent-orange);
-        }
-        pre {
-            background: var(--code-bg);
-            padding: 16px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 12px 0;
-            font-family: "SF Mono", "Fira Code", monospace;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-        pre code { background: none; padding: 0; color: var(--text-primary); }
-        .highlight-box {
-            background: rgba(88, 166, 255, 0.08);
-            border-left: 3px solid var(--accent-blue);
-            padding: 16px 20px;
-            border-radius: 0 8px 8px 0;
-            margin: 16px 0;
-        }
-        .tip-box {
-            background: rgba(63, 185, 80, 0.08);
-            border-left: 3px solid var(--accent-green);
-            padding: 16px 20px;
-            border-radius: 0 8px 8px 0;
-            margin: 16px 0;
-        }
-        .sources-section {
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border-color);
-        }
-        .sources-section h2 { margin-top: 0; }
-        .source-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .source-chip {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-        footer {
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-        @media (max-width: 600px) {
-            .tool-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 24px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者日报 · 2026-05-11</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-elevated: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --text-bright: #f0f6fc;
+  --accent: #58a6ff;
+  --accent-soft: #388bfd;
+  --accent-green: #3fb950;
+  --accent-orange: #d29922;
+  --accent-red: #f85149;
+  --accent-purple: #a371f7;
+  --code-bg: #0d1117;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", "JetBrains Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  font-size: 15px;
+}
+.container { max-width: 860px; margin: 0 auto; padding: 32px 20px; }
+header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+header h1 {
+  font-size: 28px;
+  color: var(--text-bright);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+header .meta {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+}
+header .badge {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-right: 8px;
+  font-weight: 600;
+}
+.section {
+  margin-bottom: 40px;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 16px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.item {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  transition: border-color .2s;
+}
+.item:hover { border-color: var(--accent-soft); }
+.item-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.item-title a { color: var(--accent); text-decoration: none; }
+.item-title a:hover { text-decoration: underline; }
+.item-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+}
+.item-meta a {
+  color: var(--accent-green);
+  text-decoration: none;
+}
+.item-meta a:hover { text-decoration: underline; }
+.item-body {
+  color: var(--text);
+  font-size: 14.5px;
+  line-height: 1.8;
+}
+.item-body p { margin-bottom: 10px; }
+.item-body p:last-child { margin-bottom: 0; }
+.tag {
+  display: inline-block;
+  background: rgba(88,166,255,0.1);
+  color: var(--accent);
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-right: 6px;
+  font-family: var(--font-mono);
+}
+.tag-green { background: rgba(63,185,80,0.1); color: var(--accent-green); }
+.tag-orange { background: rgba(210,153,34,0.1); color: var(--accent-orange); }
+.tag-red { background: rgba(248,81,73,0.1); color: var(--accent-red); }
+.tag-purple { background: rgba(163,113,247,0.1); color: var(--accent-purple); }
+
+.source-section {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+.source-section h3 {
+  font-size: 15px;
+  color: var(--text-bright);
+  margin-bottom: 12px;
+}
+.source-list {
+  list-style: none;
+  columns: 2;
+  column-gap: 24px;
+}
+.source-list li {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  break-inside: avoid;
+}
+.source-list a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.source-list a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+@media (max-width: 640px) {
+  .source-list { columns: 1; }
+  .container { padding: 20px 14px; }
+  header h1 { font-size: 22px; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="tag">#developer_practice</div>
-            <h1>开发者实践日报</h1>
-            <div class="subtitle">面向程序员与工程师 · <code>2026-05-10</code> · 精选 24h 技术动态</div>
-        </header>
+<div class="container">
 
-        <!-- 今日技术热榜 -->
-        <h2><span class="icon">🔥</span> 今日技术热榜</h2>
+<header>
+  <h1><span style="color:#58a6ff"></></h1>
+  <div class="meta">
+    <span class="badge">开发者实践版</span>
+    2026-05-11 · 502 条原始数据 · 精选 22 条
+  </div>
+</header>
 
-        <div class="news-item">
-            <div style="margin-bottom:8px;">
-                <span class="tag-inline tag-hot">HOT</span>
-                <span class="tag-inline tag-code">AI 架构</span>
-            </div>
-            <h4>Claude Code 团队弃用 Markdown，全面转向 HTML 输出</h4>
-            <p>Anthropic 工程师 Thariq Shihipar 在 X 上发表文章《Using Claude Code: The Unreasonable Effectiveness of HTML》，引发 AI 圈热议。核心观点：Markdown 在过去三年一直是 AI 与人类之间最自然的交付格式，但 HTML 在信息密度、可视化表达和人机协作上有明显优势。Thariq 展示了 20 个 AI 生成 HTML 的示例，涵盖 code review、架构图、设计稿、报告等场景。团队内部已逐渐将默认输出从 Markdown 切换为 HTML，认为 Markdown 的"简单"在很多场景下反而成了限制。这一转变意味着 AI 产品中最默认的输出格式，正在被它的缔造者悄悄抛弃。</p>
-            <div class="source">
-                📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247722630&idx=1&sn=d3388e11ee2f5a557f7469f5167f5fba" target="_blank" rel="noopener">Datawhale</a> · 
-                <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650451819&idx=1&sn=879a464ce14d4a8081ab682949501a6f" target="_blank" rel="noopener">AINLP</a>
-            </div>
-        </div>
+<div class="section">
+  <div class="section-title"><span>🔥</span> 今日技术热榜</div>
 
-        <div class="news-item">
-            <div style="margin-bottom:8px;">
-                <span class="tag-inline tag-hot">HOT</span>
-                <span class="tag-inline tag-deep">架构解析</span>
-            </div>
-            <h4>Agent = Model + Harness：为什么底层模型相同，Claude Code、Cursor、Codex 表现却截然不同</h4>
-            <p>meng shao 深入分析了 AI 编码工具的核心架构差异。Claude Code、Cursor、Codex 和 Aider 可能使用完全相同的底层模型，但它们的 Agent 行为差异巨大，根本原因在于 "Harness"（驾驭层）的设计不同。Harness 决定了工具如何调用模型、如何管理上下文、如何编排工具链、如何处理错误和重试。这解释了为什么同样是 Claude 3.7 Sonnet，在 Claude Code 和 Cursor 中的表现会有明显差异。理解这一架构分层，有助于开发者在选择工具时做出更理性的决策，也为构建自己的 Agent 系统提供了设计思路。</p>
-            <div class="source">
-                📎 来源: <a href="https://x.com/shao__meng/status/2053482153154142653" target="_blank" rel="noopener">meng shao (@shao__meng)</a>
-            </div>
-        </div>
-
-        <div class="news-item">
-            <div style="margin-bottom:8px;">
-                <span class="tag-inline tag-tool">数据库</span>
-            </div>
-            <h4>MySQL 9.7 正式发布：8.4 之后首个主要 LTS 版本，企业特性下放社区版</h4>
-            <p>Oracle 宣布 MySQL 9.7.0 全面可用，标志着新的 9.7 LTS 发布系列的起点，也是自 MySQL 8.4 以来的首个重大版本。此次发布正值社区对 MySQL 开发活动减少和 Oracle 长期承诺的担忧之际。9.7 版本将原本仅在企业版中提供的部分功能下放到了社区版，包括改进的 JSON 支持、性能 Schema 增强和优化器改进。对于仍在使用 MySQL 8.0 或 8.4 的开发者，这是一个值得评估升级的重要节点。</p>
-            <div class="source">
-                📎 来源: <a href="https://www.infoq.com/news/2026/05/mysql-97-lts/" target="_blank" rel="noopener">InfoQ</a>
-            </div>
-        </div>
-
-        <div class="news-item">
-            <div style="margin-bottom:8px;">
-                <span class="tag-inline tag-code">本地 AI</span>
-            </div>
-            <h4>本地 AI 迎来爆发时刻：GGUF 模型月增量接近翻倍</h4>
-            <p>Hugging Face CEO Clement Delangue 分享了 GGUF 模型生态的最新数据。过去 8 个月中，HF 上公有 GGUF 模型总数已达 17.6 万个。10 月至 2 月期间，月均新增约 5100 个；而 3 月至 4 月跃升至月均 9200 个，接近翻倍。3 月是关键拐点（环比增长 55%），主要驱动力是一波新的开源权重模型发布后被量化为 GGUF 格式。4 月保持了 9700 个的势头，表明这不是一次性峰值而是新的基线。背后的关键因素包括 llama.cpp 改进、自动化量化流水线的成熟，以及更多模型原生支持 GGUF 格式。对开发者而言，这意味着本地部署大模型的门槛和选择范围都在快速扩大。</p>
-            <div class="source">
-                📎 来源: <a href="https://x.com/ClementDelangue/status/2053536106143261106" target="_blank" rel="noopener">clem 🤗 (@ClementDelangue)</a>
-            </div>
-        </div>
-
-        <div class="news-item">
-            <div style="margin-bottom:8px;">
-                <span class="tag-inline tag-deep">行业洞察</span>
-            </div>
-            <h4>TypeScript 之父 Anders Hejlsberg 谈 AI 与 Coding 的未来</h4>
-            <p>Delphi、C#、TypeScript 核心设计者 Anders Hejlsberg 分享了他对 AI 编程的深层看法。核心观点：AI 永远不会取代程序员，而是成为加速器。原因在于三点：一是 AI 自身依赖代码而存在——编程语言、编译器、框架、操作系统都需要人去设计；二是 AI 擅长重复模式但不擅长创新，业务逻辑和深层架构决策始终来自人类；三是行业进步来自"洗澡时冒出的疯狂想法"，AI 不会那样工作。他对 "vibe coding" 持高度怀疑态度——代码总得来自某处，并不全由 AI 生成。对初学者的建议：绝对值得学编程。编程语言是 AI 表达自己的方式；不懂代码就无法理解 AI 在生成什么。最常见的错误是停留在语法层而不真正理解变量、数组、数据结构、指针的工作原理。</p>
-            <div class="source">
-                📎 来源: <a href="https://x.com/shao__meng/status/2053463039744352704" target="_blank" rel="noopener">meng shao (@shao__meng)</a>
-            </div>
-        </div>
-
-        <div class="news-item">
-            <div style="margin-bottom:8px;">
-                <span class="tag-inline tag-hot">HOT</span>
-                <span class="tag-inline tag-deep">行业警示</span>
-            </div>
-            <h4>微软 CTO 警告：AI 正在掏空初级开发者的培养渠道</h4>
-            <p>微软 Azure CTO Mark Russinovich 与开发社区副总裁 Scott Hanselman 在《ACM 通讯》发表观点文章，指出自主决策型 AI 编码工具正在给软件工程行业带来结构性危机。核心问题：AI 能大幅提升资深工程师效率，但缺乏判断力来引导、验证和整合 AI 输出的初级开发者（EiC）会面临"AI 拖累"。企业倾向聘用资深工程师并将初级工作自动化，导致培养下一代资深工程师的人才梯队在悄然崩塌。文章强调：必须继续招聘初级开发者，接受他们入职初期降低团队生产力的事实，并刻意设计系统将他们的成长作为明确的组织目标。支撑论点的数据令人警醒——哈佛大学研究显示过度依赖 AI 辅助的初级开发者在独立解决问题能力上的成长速度明显慢于传统培养路径。</p>
-            <div class="source">
-                📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247662140&idx=2&sn=ee65b265b4a6cf8be78f66330478e79d" target="_blank" rel="noopener">AI前线</a>
-            </div>
-        </div>
-
-        <div class="news-item">
-            <div style="margin-bottom:8px;">
-                <span class="tag-inline tag-code">算法</span>
-            </div>
-            <h4>图灵奖得主 Sutton 新作：用 1967 年公式解决流式强化学习缺陷</h4>
-            <p>阿尔伯塔大学 Mahmood 团队提出了一种全新视角来解决"流式壁垒"（stream barrier）问题。此前研究表明，去掉回放缓冲区、将批大小设为 1 时，深度强化学习训练会崩溃。该团队之前靠精细调配的超参数勉强越过这堵墙，但新论文指出：流式壁垒的根源不是"数据不够多"，而是"步长选错了单位"。作者使用了一个 1967 年的公式重新推导了意图更新（Intentional Updates），在批量大小为 1 的纯流式设置下实现了稳定的训练，无需复杂的超参数调优。这为在资源受限或实时性要求高的场景下部署 RL 提供了理论基础。</p>
-            <div class="source">
-                📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651032178&idx=2&sn=808a052337690b7775a056dc4f7acd52" target="_blank" rel="noopener">机器之心</a> · 
-                <a href="https://arxiv.org/pdf/2604.19033v1" target="_blank" rel="noopener">论文 arXiv</a>
-            </div>
-        </div>
-
-        <div class="news-item">
-            <div style="margin-bottom:8px;">
-                <span class="tag-inline tag-code">算法突破</span>
-            </div>
-            <h4>浙大校友用 AI 突破 32 年拉姆齐数下界：R(3,17) 从 92 提升至 93</h4>
-            <p>浙江大学校友团队利用 AI 辅助搜索，将拉姆齐数 R(3,17) 的下界从保持了 32 年的 92 提升至 93。拉姆齐数是组合数学中的经典难题，研究"在足够大的结构中必然出现某种子结构"的最小规模。这一突破展示了 AI 在纯数学研究中的潜力——不是替代数学家的直觉，而是在海量搜索空间中加速发现反例和构造证明。</p>
-            <div class="source">
-                📎 来源: <a href="https://www.qbitai.com/2026/05/415031.html" target="_blank" rel="noopener">量子位</a>
-            </div>
-        </div>
-
-        <!-- 深度技术解读 -->
-        <h2><span class="icon">🔍</span> 深度技术解读</h2>
-
-        <div class="deep-dive">
-            <h3>Agentic AI 工作流的可扩展模式</h3>
-            <p>除了上下文工程，我们应该在 Agent 周围投入更多的系统工程精力。一个常被忽视的事实是：Agentic RAG 管道的性能瓶颈几乎从来不是 LLM 调用本身，而是底层的数据平面——预处理、嵌入和向量检索之间的序列化开销，以及分布式服务之间的协调开销。</p>
-            <p>这篇研究展示了一个典型案例：通过系统层面的优化（而非模型层面的改进），将端到端延迟降低了数量级。关键洞察包括：</p>
-            <ul>
-                <li><strong>数据平面优化优先于模型优化</strong>：在大多数生产场景中，数据流管道的效率提升带来的收益远超换用更强的模型</li>
-                <li><strong>序列化是隐藏杀手</strong>：预处理 → 嵌入 → 检索之间的数据转换往往消耗大量时间和内存</li>
-                <li><strong>分布式协调开销不可忽视</strong>：多服务架构中的网络往返和同步点常常是延迟的主要来源</li>
-            </ul>
-            <div class="tip-box">
-                <strong>实践建议</strong>：在优化 Agent 性能时，先用 profiling 工具定位真正的瓶颈。先用 <code>perf</code> 或 <code>jaeger</code>  trace 整个调用链，再决定是否值得升级模型或增加上下文长度。
-            </div>
-            <div class="source" style="margin-top:16px;">
-                📎 来源: <a href="https://x.com/omarsar0/status/2053515178482999533" target="_blank" rel="noopener">elvis (@omarsar0)</a>
-            </div>
-        </div>
-
-        <div class="deep-dive">
-            <h3>从"能跑就行"到"能上线"：Granola 工程师的一课</h3>
-            <p>Granola 的工程师 Mehedi Hassan 分享了一个惨痛但真实的教训：他们给会议笔记应用快速上线了一个聊天功能，结果发现"在 playground 里能跑"和"在生产环境能跑"之间的差距巨大。</p>
-            <p>具体踩过的坑：</p>
-            <ul>
-                <li><strong>Web Search 看起来只是一行代码的 tool call</strong>——直到它爆掉上下文窗口、每次聊天收费 10 便士、专业用户一次会话触发 30+ 次搜索</li>
-                <li><strong>单个 prompt 无法服务所有用户</strong>：不同用户场景需要不同的 prompt 策略和参数配置</li>
-                <li><strong>一次部署远远不够</strong>：需要持续监控、迭代和回滚机制</li>
-            </ul>
-            <div class="highlight-box">
-                <strong>核心观点</strong>：One-shotting（一次性搞定）虽然诱人，但生产级 AI 功能需要的是系统工程思维——版本管理、A/B 测试、监控告警、成本控制和渐进式发布。
-            </div>
-            <div class="source" style="margin-top:16px;">
-                📎 来源: <a href="https://www.youtube.com/watch?v=ON5LIT0M4do" target="_blank" rel="noopener">AI Engineer</a>
-            </div>
-        </div>
-
-        <div class="deep-dive">
-            <h3>为什么大应用选择 Web 而非 Native</h3>
-            <p>freeCodeCamp 的一篇文章分析了大型应用（如 Figma、Notion、Slack、VS Code）选择 Web 技术栈而非原生开发的核心原因。这不是技术宗教之争，而是基于实际工程考量的理性选择：</p>
-            <ul>
-                <li><strong>跨平台一致性</strong>：一套代码覆盖 Web、Desktop（Electron/Tauri）、Mobile（PWA/Capacitor），维护成本大幅降低</li>
-                <li><strong>迭代速度</strong>：Web 的热更新能力让功能发布周期从天级缩短到小时级</li>
-                <li><strong>人才池</strong>：Web 开发者数量远超任何单一平台的原生开发者</li>
-                <li><strong>性能边界在移动</strong>：WebAssembly 和 WebGPU 正在模糊 Web 与原生的性能边界</li>
-            </ul>
-            <div class="tip-box">
-                <strong>选型建议</strong>：如果你的应用需要极致的硬件性能（如 3D 游戏、视频编解码）或深度系统集成（如系统级快捷键、文件系统监控），原生仍有优势。但对于大多数生产力工具和内容平台，Web 技术栈已经足够，且生态红利不可忽视。
-            </div>
-            <div class="source" style="margin-top:16px;">
-                📎 来源: <a href="https://www.freecodecamp.org/news/why-big-apps-choose-web-over-native/" target="_blank" rel="noopener">freeCodeCamp.org</a>
-            </div>
-        </div>
-
-        <!-- 工具推荐 -->
-        <h2><span class="icon">🛠️</span> 工具推荐</h2>
-
-        <div class="tool-grid">
-            <div class="tool-card">
-                <h4>9router — AI Coding 路由</h4>
-                <p>将 40+ AI 提供商、100+ 模型统一接入你的 AI Coding 工具。内置三层自动故障转移，订阅额度用完自动切到免费/低价模型。RTK Token Saver 自动压缩 git diff 等输出，每个请求省 20-40% token。Caveman 模式可砍掉 65% 输出 token。</p>
-                <div class="source">
-                    📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533561&idx=1&sn=d904e88426e300ddd2055e0d9b66da07" target="_blank" rel="noopener">逛逛GitHub</a>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h4>Kaku V0.10 — 终端 Agent 助手</h4>
-                <p>Tw93 开发的终端工具新增端内 Agent 助手，Cmd+L 一键唤起，智能读取上下文。支持窗口快照恢复多 tab/pane 布局，智能拦截关闭窗口防止误操作丢失 AI 工作进度。推荐配置搜索能力增强 Agent 功能。</p>
-                <div class="source">
-                    📎 来源: <a href="https://x.com/HiTw93/status/2053298431917977646" target="_blank" rel="noopener">Tw93 (@HiTw93)</a>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h4>Terax AI — 轻量 AI 终端</h4>
-                <p>基于 Tauri 2 + Rust + React 19 构建，安装包仅约 7MB。将终端、编辑器、文件浏览器和 AI 助手整合在一个轻量级应用中。适合追求原生体验又需要 AI 辅助的开发者。</p>
-                <div class="source">
-                    📎 来源: <a href="https://github.com/crynta/terax-ai" target="_blank" rel="noopener">GitHub</a>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h4>Lanes — 多 Agent 看板</h4>
-                <p>同时跑多个 AI 编码智能体时，不用在终端标签页里翻来找去。看板一眼看清谁在干活、谁在等你、谁已经做完。解决多 Agent 并行开发时的状态追踪痛点。</p>
-                <div class="source">
-                    📎 来源: <a href="https://github.com/lanes-sh/app" target="_blank" rel="noopener">GitHub</a>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h4>SkillGuard — Skill 安全防护</h4>
-                <p>Yangyi 开源的 Skill 安全审查工具，已审查 Clawhub 上 64758 个 Skill，生成 57580 份安全报告。聚合集成各类安全策略，可本地安装检查是否安装了带毒 Skill。开源免费。</p>
-                <div class="source">
-                    📎 来源: <a href="https://github.com/yangyixxxx/skillguard" target="_blank" rel="noopener">GitHub</a> · 
-                    <a href="https://skillguard.vip/report/clawhub" target="_blank" rel="noopener">审查报告</a>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h4>CC-Router — Claude Code 额度合并</h4>
-                <p>将多家 Claude Code 编程套餐的 Token Plan、Coding Plan、API 额度合并为一个虚拟 Plan。支持按顺序或轮询调度，限流与失败自动切换，充分利用每一份额度，避免浪费。</p>
-                <div class="source">
-                    📎 来源: <a href="https://github.com/finch-xu/cc-router" target="_blank" rel="noopener">GitHub</a>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h4>Claude Code Monitor — 终端监控</h4>
-                <p>用终端界面实时监控 Claude Code 会话的 CPU、内存、Token 用量和上下文窗口状态，相当于 Claude 版的 htop。帮助开发者直观了解资源消耗，优化使用策略。</p>
-                <div class="source">
-                    📎 来源: <a href="https://github.com/aakashadesara/claude-code-monitor" target="_blank" rel="noopener">GitHub</a>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <h4>MacBook 合盖不休眠</h4>
-                <p>一个简单的工具让 MacBook 合盖后也能保持代理继续运行，不让系统休眠打断长时间任务。对于需要长时间运行 AI 编码任务或模型训练的场景非常实用。</p>
-                <div class="source">
-                    📎 来源: <a href="https://github.com/narcotic-sh/moonlight" target="_blank" rel="noopener">GitHub</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- 实践指南 -->
-        <h2><span class="icon">📋</span> 实践指南</h2>
-
-        <div class="deep-dive">
-            <h3>UI Bug 调试古法：录屏慢放法</h3>
-            <p>Tw93 分享了一个在"古法代码阶段"常用的 UI bug 调试技巧——录屏慢放。核心思路：当遇到 UI 闪动、布局错位或动画异常时，用录屏软件捕捉整个操作过程，然后以 0.25x 或 0.5x 速度回放，定位到出问题的那一帧。找到问题帧后截图给 AI，比打日志和猜测的排查效率高出很多。</p>
-            <p>这个方法的价值在于：AI 很难直接理解"某个动画中间态出了问题"，但人眼可以通过慢放快速定位异常。将定位结果（截图）作为输入给 AI，AI 就能精准分析原因并提出修复建议。这是人机协作排查的经典范例。</p>
-            <div class="source" style="margin-top:16px;">
-                📎 来源: <a href="https://x.com/HiTw93/status/2053514325793677756" target="_blank" rel="noopener">Tw93 (@HiTw93)</a>
-            </div>
-        </div>
-
-        <div class="deep-dive">
-            <h3>一条命令让 CDN 视频带宽成本降低 90%</h3>
-            <p>转转技术团队分享了一个真实案例：一个 1GB、30 分钟的培训视频推送给 2500 人观看，CDN 监控显示消耗了 120TB 流量——远超理论值。经过排查发现，问题的根源在于 MP4 视频的元数据（moov atom）位于文件尾部。</p>
-            <p>当浏览器/播放器请求视频时，如果 moov atom 在尾部，播放器必须先下载整个文件才能获取时长、编码等元信息，导致大量不必要的流量消耗。移动端的 seek 行为更是加剧了这个问题。</p>
-            <p>解决方案极其简单：</p>
-            <pre><code>ffmpeg -i input.mp4 -movflags faststart -c copy output.mp3</code></pre>
-            <p>这条命令将 moov atom 从文件尾部移到头部，播放器可以在只下载极小数据量的情况下获取元信息并正常播放。实施后该域名的 CDN 带宽从 120TB 骤降至约 12TB，降幅约 90%。</p>
-            <div class="tip-box">
-                <strong>最佳实践</strong>：所有面向 Web 的 MP4 视频，上传 CDN 前都应该执行 <code>-movflags faststart</code> 处理。可以集成到 CI/CD 流水线中自动处理。
-            </div>
-            <div class="source" style="margin-top:16px;">
-                📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636027&idx=1&sn=db2f5560e564aedbb53df9043c5b8682" target="_blank" rel="noopener">dbaplus社群 / 转转技术</a>
-            </div>
-        </div>
-
-        <div class="deep-dive">
-            <h3>让简历脱颖而出的 11 条建议</h3>
-            <p>Vercel 的 Lee Robinson 从招聘方的视角分享了如何让技术简历脱颖而出的建议：</p>
-            <ol>
-                <li><strong>简历控制在一页</strong>。如果需要更多空间，链接到个人网站。不需要为每份工作写 10+ 个 bullet point</li>
-                <li><strong>有个人网站就能超过 90% 的申请者</strong>，关键是要有"意图性"——不是随便搭个模板，而是展示你真正关心的技术方向</li>
-                <li><strong>如果链接 X/Twitter 账号</strong>，先清理一下帖子。招聘方真的会看</li>
-                <li><strong>GitHub 活跃度很重要</strong>：contribution graph、项目的 README 质量、最近的 commit 时间都会被看到</li>
-                <li><strong>项目描述比技术栈列表更有价值</strong>："用 React 和 Node.js 做了个应用" vs "为 10 万用户优化了首屏加载时间从 4s 到 1.2s"</li>
-                <li><strong>避免过度使用流行词</strong>："passionate about"、"team player" 这类词在几百份简历中出现频率太高，已经失去了区分度</li>
-            </ol>
-            <div class="source" style="margin-top:16px;">
-                📎 来源: <a href="https://x.com/leerob/status/2053287286226166254" target="_blank" rel="noopener">Lee Robinson (@leerob)</a>
-            </div>
-        </div>
-
-        <div class="deep-dive">
-            <h3>Shopify 的 River Agent：公共场域中的集体学习</h3>
-            <p>Shopify 的 River agent 系统有一个有趣的设计约束：只能在公共 Slack 频道使用。这个设计的灵感来自 Midjourney 的 Discord-only 发布策略——通过公开场景让所有人互相学习 prompt 技巧。Shopify 认为，在公共频道使用 Agent 可以让其他员工观察和学习最佳实践，加速组织层面的 Agent 技能普及。</p>
-            <p>这对团队建设 Agent 文化有重要启示：</p>
-            <ul>
-                <li>Agent 使用不应该是个体"暗箱操作"，而应该成为团队共享的知识资产</li>
-                <li>公共场景天然提供了 peer review 和最佳实践传播机制</li>
-                <li>"在公共频道使用 Agent"可能成为未来组织的默认规范，类似于"代码必须提交到公共仓库"</li>
-            </ul>
-            <div class="source" style="margin-top:16px;">
-                📎 来源: <a href="https://x.com/simonw/status/2053529689122328947" target="_blank" rel="noopener">Simon Willison (@simonw)</a>
-            </div>
-        </div>
-
-        <!-- 参考链接汇总 -->
-        <div class="sources-section">
-            <h2><span class="icon">🔗</span> 参考链接汇总</h2>
-            <p style="color:var(--text-secondary);margin-bottom:20px;">以下信息源为本期日报的内容基础，按类型分组：</p>
-            
-            <h3>技术社区与博客</h3>
-            <div class="source-list">
-                <span class="source-chip">InfoQ</span>
-                <span class="source-chip">freeCodeCamp.org</span>
-                <span class="source-chip">机器之心</span>
-                <span class="source-chip">量子位</span>
-                <span class="source-chip">AI前线</span>
-                <span class="source-chip">AINLP</span>
-                <span class="source-chip">Datawhale</span>
-                <span class="source-chip">dbaplus社群</span>
-                <span class="source-chip">逛逛GitHub</span>
-                <span class="source-chip">Simon Willison's Weblog</span>
-            </div>
-
-            <h3 style="margin-top:24px;">开发者与工程师 (X/Twitter)</h3>
-            <div class="source-list">
-                <span class="source-chip">clem 🤗</span>
-                <span class="source-chip">meng shao</span>
-                <span class="source-chip">Tw93</span>
-                <span class="source-chip">Geek</span>
-                <span class="source-chip">Lee Robinson</span>
-                <span class="source-chip">Simon Willison</span>
-                <span class="source-chip">elvis</span>
-                <span class="source-chip">Yangyi</span>
-                <span class="source-chip">Satya Nadella</span>
-                <span class="source-chip">Peter Yang</span>
-                <span class="source-chip">Boris Cherny</span>
-                <span class="source-chip">向阳乔木</span>
-                <span class="source-chip">小互</span>
-                <span class="source-chip">Orange AI</span>
-                <span class="source-chip">歸藏</span>
-                <span class="source-chip">Viking</span>
-                <span class="source-chip">Patrick Loeber</span>
-                <span class="source-chip">Julien Chaumond</span>
-                <span class="source-chip">Addy Osmani</span>
-                <span class="source-chip">Harrison Chase</span>
-                <span class="source-chip">Greg Brockman</span>
-                <span class="source-chip">Sam Altman</span>
-                <span class="source-chip">Gary Marcus</span>
-                <span class="source-chip">Marc Andreessen</span>
-                <span class="source-chip">宝玉</span>
-                <span class="source-chip">傅盛</span>
-                <span class="source-chip">马东锡 NLP</span>
-            </div>
-
-            <h3 style="margin-top:24px;">播客与视频</h3>
-            <div class="source-list">
-                <span class="source-chip">AI Engineer</span>
-                <span class="source-chip">All-In Podcast</span>
-                <span class="source-chip">Lenny's Podcast</span>
-                <span class="source-chip">Product School</span>
-                <span class="source-chip">The Diary Of A CEO</span>
-                <span class="source-chip">Dwarkesh Patel</span>
-                <span class="source-chip">Matt Wolfe</span>
-                <span class="source-chip">TED</span>
-            </div>
-        </div>
-
-        <footer>
-            <p>开发者实践日报 · 2026-05-10 · 从 233 条新闻中精选 40+ 条技术动态</p>
-            <p>由 tech-daily-generator 自动生成 · 面向一线开发者</p>
-        </footer>
+  <div class="item">
+    <div class="item-title"><a href="https://blog.bytebytego.com/p/how-pinterest-built-a-production" target="_blank" rel="noopener">Pinterest 构建生产级 MCP 生态系统的实践</a></div>
+    <div class="item-meta">ByteByteGo Newsletter · <a href="https://blog.bytebytego.com/p/how-pinterest-built-a-production" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-purple">MCP</span><span class="tag">Agent</span></div>
+    <div class="item-body">
+      <p>Pinterest 分享了他们如何在内部构建生产级的 MCP（Model Context Protocol）生态系统。文章详细阐述了多阶段 Agent 在实际生产环境中的痛点：Agent 需要上下文，但上下文往往散落在用户日常使用的各种工具中，每个工具都需要独立的 OAuth 流程和令牌生命周期管理。Pinterest 的解决方案展示了如何将 Agent 与 GitHub、Slack、Salesforce、Google Drive 等企业工具深度集成，让 Agent 在任务的每个步骤都能拉取到所需上下文。</p>
+      <p>对于正在构建 Agent 产品的开发者来说，核心启示是：Agent 的能力上限取决于它能获取的上下文质量，而上下文的获取不应该成为每个工具都需要重新造轮子的事情。</p>
     </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://aws.amazon.com/blogs/machine-learning/introducing-claude-platform-on-aws-anthropics-native-platform-through-your-aws-account/" target="_blank" rel="noopener">Claude Platform on AWS 正式发布：通过 AWS 账户直接使用 Anthropic 原生平台</a></div>
+    <div class="item-meta">AWS Artificial Intelligence · <a href="https://aws.amazon.com/blogs/machine-learning/introducing-claude-platform-on-aws-anthropics-native-platform-through-your-aws-account/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-orange">AI平台</span><span class="tag">AWS</span></div>
+    <div class="item-body">
+      <p>Anthropic 的 Claude Platform 现已通过 AWS 正式发布，这是首家云厂商提供原生 Claude Platform 体验。开发者可以直接通过 AWS 账户访问，无需单独的 Anthropic 凭证、合同或计费关系。</p>
+      <p>可用的 API 和功能包括：Messages API、Claude Managed Agents（beta）、advisor tool（beta）、web search 和 web fetch、MCP connector（beta）等，与 Anthropic 官方平台完全对等。对于已经在 AWS 生态中的团队来说，这意味着可以统一账单管理和 IAM 权限控制，大幅降低企业接入门槛。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://mp.weixin.qq.com/s?__biz=Mzg3MTkxMjYzOA==&mid=2247514676" target="_blank" rel="noopener">Agent Harness 解析：智能体架构深度拆解</a></div>
+    <div class="item-meta">AI寒武纪 · <a href="https://mp.weixin.qq.com/s?__biz=Mzg3MTkxMjYzOA==&mid=2247514676" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-purple">架构</span><span class="tag">Agent</span></div>
+    <div class="item-body">
+      <p>这篇文章深入拆解了 Agent Harness 的概念——即包裹 LLM 的完整软件基础设施。核心观点是：模型能力越来越强，但 Harness 不会消失。LangChain 的一个案例证明了这一点：只改了包裹 LLM 的基础设施，模型权重完全没动，在 TerminalBench 2.0 上的排名就从 30 名开外直接跳到第 5。</p>
+      <p>文章对比了 Anthropic（Claude Code SDK）、OpenAI（Codex Harness）和 LangChain 在 Harness 设计上的不同侧重：Anthropic 强调长时运行稳定性（多层记忆系统 + CLAUDE.md 约束），OpenAI 聚焦人机交互协议（零手写代码），Cursor 关注多 Agent 协同。对于实际落地，最大的启示是：工作流只是管道，知识才是流过管道的活水。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://github.blog/developer-skills/github/github-for-beginners-getting-started-with-oss-contributions/" target="_blank" rel="noopener">GitHub 官方指南：如何开始你的开源贡献之旅</a></div>
+    <div class="item-meta">The GitHub Blog · <a href="https://github.blog/developer-skills/github/github-for-beginners-getting-started-with-oss-contributions/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-green">开源</span><span class="tag">入门</span></div>
+    <div class="item-body">
+      <p>GitHub 发布了面向初学者的开源贡献指南，系统性地讲解了从理解开源概念到提交第一个 PR 的完整流程。文章覆盖了如何阅读开源仓库结构、理解 Issue 和 PR 流程、以及如何找到适合自己的第一个贡献目标。</p>
+      <p>对于刚入门的开发者，核心建议是不要从"大型热门项目"开始，而是寻找那些与你日常使用的工具相关、Issue 标签有"good first issue"的中型项目。实践表明，持续的小贡献比偶尔的大贡献更有价值——它们帮助你建立与维护者的信任关系，也让你逐步深入理解代码库。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://blog.jetbrains.com/teamcity/2026/05/cve-2026-44413/" target="_blank" rel="noopener">TeamCity On-Premises 高危漏洞 CVE-2026-44413：请立即升级至 2026.1</a></div>
+    <div class="item-meta">The JetBrains Blog · <a href="https://blog.jetbrains.com/teamcity/2026/05/cve-2026-44413/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-red">安全</span><span class="tag">CVE</span></div>
+    <div class="item-body">
+      <p>JetBrains 披露了 TeamCity On-Premises 的一个高危认证后漏洞（CVE-2026-44413），该漏洞可能允许任意认证用户将 TeamCity 服务器 API 的部分内容暴露给未授权用户。受影响范围包括所有 2025.11.4 及以下版本。</p>
+      <p>JetBrains 已在 2026.1 版本中修复此问题，并同时发布了安全补丁插件供无法立即升级的用户使用。TeamCity Cloud 版本不受影响。对于自托管 CI/CD 基础设施的团队，建议立即检查版本并安排升级——CI/CD 服务器往往持有代码仓库密钥和部署凭证，是供应链攻击的高价值目标。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://cloud.google.com/blog/products/databases/postgres-18-and-extended-support-for-legacy-versions-in-alloydb/" target="_blank" rel="noopener">AlloyDB 正式支持 PostgreSQL 18，并推出旧版本扩展支持</a></div>
+    <div class="item-meta">Google Cloud Blog · <a href="https://cloud.google.com/blog/products/databases/postgres-18-and-extended-support-for-legacy-versions-in-alloydb/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-green">数据库</span><span class="tag">PostgreSQL</span></div>
+    <div class="item-body">
+      <p>Google Cloud 宣布 AlloyDB 正式支持 PostgreSQL 18，同时推出 Extended Support 计划，为旧版本提供长期支持。这一更新解决了数据库升级中的核心矛盾：团队既想使用最新特性，又需要为生产环境提供稳定支持。</p>
+      <p>AlloyDB 作为 Google Cloud 的 PostgreSQL 兼容托管数据库，此次更新让企业可以在不中断业务的情况下规划版本迁移。Extended Support 覆盖了从 PostgreSQL 11 开始的多个主要版本，为无法立即升级的大型遗留系统提供了安全网。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://spring.io/blog/2026/05/11/spring-office-hours-podcast-S5E15" target="_blank" rel="noopener">Spring Office Hours：升级 Spring 应用与开源安全实践</a></div>
+    <div class="item-meta">Spring · <a href="https://spring.io/blog/2026/05/11/spring-office-hours-podcast-S5E15" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-green">Spring</span><span class="tag">安全</span></div>
+    <div class="item-body">
+      <p>本期 Spring Office Hours 讨论了每个 Spring 开发者都面临的两个挑战：保持应用更新和应对开源依赖中的安全漏洞。节目重点介绍了 AI 工具如何重塑升级体验——从自动化的迁移方案（migration recipes）到智能漏洞检测和修复。</p>
+      <p>Spring 团队展示了当前可用的工具和即将推出的功能，帮助开发者在自己的项目中应用这些自动化能力。对于运行大量 Spring 应用的团队，结合 Dependabot 和 Spring Boot 的升级自动化可以显著降低技术债务累积速度。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://www.youtube.com/watch?v=pUHA_jNwuYE" target="_blank" rel="noopener">Notion 工程师揭秘：用 AI 自动生成每日站会报告</a></div>
+    <div class="item-meta">How I AI · <a href="https://www.youtube.com/watch?v=pUHA_jNwuYE" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-orange">AI工作流</span><span class="tag">Notion</span></div>
+    <div class="item-body">
+      <p>Notion 工程师 Ryan Nystrom 分享了团队内部的 AI 工程实践：构建一个 Notion AI 自定义 Agent，自动从 Slack、GitHub、Honeycomb 指标和昨日会议记录中提取信息，生成每日站会预读材料。</p>
+      <p>这个 Agent 通过配置子 Agent 和 MCP 集成，能够在 Notion AI 内部完成跨工具数据聚合。Ryan 同时介绍了 Notion 内部的 "Boxy" 系统——允许工程师通过 @mention 直接调用 Codex Agent。对于正在探索 AI 工程化落地的团队，这是一个非常具体的参考实现。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title"><span>🔍</span> 深度技术解读</div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://www.infoq.com/articles/local-first-ai-inference-cloud/" target="_blank" rel="noopener">Local-First AI Inference：面向文档处理的云架构模式</a></div>
+    <div class="item-meta">InfoQ · <a href="https://www.infoq.com/articles/local-first-ai-inference-cloud/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-purple">架构模式</span><span class="tag">成本优化</span></div>
+    <div class="item-body">
+      <p>这篇文章提出了一种 "Local-First AI Inference" 架构模式，核心思想是将 70-80% 的文档路由到确定性的本地提取流程（零 API 成本），仅将边缘案例和低置信度结果提交给 Azure OpenAI 并标记供人工审核。</p>
+      <p>在 4,700 份工程图纸 PDF 的真实部署中，该模式将 API 成本降低了 75%，处理时间缩短了 55%，同时通过人工审核层限制了错误传播。文章详细阐述了如何设计置信度阈值、如何构建本地提取流水线、以及人工审核层的触发条件。对于处理大量文档的团队，这个模式展示了如何在成本和准确率之间取得平衡——不是所有任务都需要大模型，正确的任务路由策略往往比模型选择更重要。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://www.infoq.com/presentations/streaming-application-aws-infrastructure/" target="_blank" rel="noopener">从单节点到 Serverless：流媒体应用后端的架构演进</a></div>
+    <div class="item-meta">InfoQ · <a href="https://www.infoq.com/presentations/streaming-application-aws-infrastructure/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-purple">架构演进</span><span class="tag">AWS</span></div>
+    <div class="item-body">
+      <p>德国流媒体巨头 Joyn 的架构师 Daniele Frasca 分享了从脆弱的单节点架构演进为弹性 Serverless 架构的完整历程。演讲中涵盖了 Hub and Spoke 模式在数据一致性方面的应用、基于 Cell 的隔离策略以缩小故障爆炸半径、以及多区域 active-active 设置的成本优化策略。</p>
+      <p>特别值得学习的是 Cell-based 架构的实践：将整个系统划分为独立的单元（Cell），每个 Cell 可以独立运行，故障被限制在单个 Cell 内。这种设计在大规模流媒体场景中尤为重要——当用户基数达到千万级时，任何全局故障都可能是灾难性的。文章还分享了如何在多区域部署中控制成本，这对预算敏感但要求高可用的团队有直接参考价值。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title"><span>🛠️</span> 工具推荐</div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533562" target="_blank" rel="noopener">Maigret：输入一个用户名，查遍 3000+ 网站的 OSINT 工具</a></div>
+    <div class="item-meta">逛逛GitHub · <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533562" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-green">开源工具</span><span class="tag">OSINT</span></div>
+    <div class="item-body">
+      <p>Maigret 是一个在 GitHub 上获得 2.4 万 Star 的开源情报（OSINT）工具。输入一个用户名，它会在 3000 多个网站上搜索该用户名是否注册了账号，并汇总所有找到的公开信息生成完整报告。不需要任何 API Key，安装即可使用。</p>
+      <p>核心特性包括：递归搜索（发现一个关联 ID 后自动继续追踪）、按标签筛选站点（国家/类型）、2026 年 4 月新增的 AI 分析模式（接入 LLM 智能分析搜索结果），以及丰富的报告输出格式（HTML、PDF、XMind、JSON、CSV 和交互式 D3 图谱）。已被 Social Links、Crimewall 等专业调查机构集成到商业化产品中。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://x.com/CodexReleases/status/205343434343" target="_blank" rel="noopener">Codex CLI 0.130.0 发布：新增 Remote Control 模式</a></div>
+    <div class="item-meta">马东锡 NLP / Codex Releases · <a href="https://x.com/dongxi_nlp/status/2053597714525434348" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-orange">Coding Agent</span><span class="tag">OpenAI</span></div>
+    <div class="item-body">
+      <p>Codex CLI 发布 0.130.0 版本，核心更新是新增的 <code>codex remote-control</code> 命令——提供了一个更简单的方式启动 headless、可远程控制的 app-server。这意味着 Codex Mobile 的推出已经近在眼前。</p>
+      <p>其他更新包括：插件详情现在显示 bundled hooks；插件分享功能增加了链接元数据和可发现性控制；app-server 客户端支持分页加载大型线程；Bedrock 认证现在支持从 AWS login profiles 获取凭证。由于 Codex 是开源项目，开发者可以很容易地给 personal agent 加上类似功能。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://x.com/NVIDIAAI/status/2053883076691030447" target="_blank" rel="noopener">OpenShell v0.0.37：NVIDIA 开源的模块化 Shell 框架</a></div>
+    <div class="item-meta">NVIDIA AI · <a href="https://x.com/NVIDIAAI/status/2053883076691030447" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-green">开源</span><span class="tag">DevOps</span></div>
+    <div class="item-body">
+      <p>NVIDIA 发布了 OpenShell v0.0.37，一个模块化的 Shell/终端框架。新版本引入了可插拔的计算驱动（支持 Docker、Podman、Kubernetes、MicroVM），以及 OIDC + RBAC 网关认证。</p>
+      <p>部署方面提供了 Helm chart 和 Kubernetes user namespaces 支持，包管理覆盖 Debian、RPM 和 Homebrew。对于需要为团队提供安全、可审计的远程 Shell 访问的场景，OpenShell 提供了一个值得关注的开源方案——特别是在多租户 K8s 环境中，RBAC 和 namespace 隔离是刚需。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://blog.jetbrains.com/ai/2026/05/our-2026-direction-ai-and-classic-workflows-in-jetbrains-ides-2/" target="_blank" rel="noopener">JetBrains 2026 方向：AI 与经典工作流在 IDE 中如何共存</a></div>
+    <div class="item-meta">The JetBrains Blog · <a href="https://blog.jetbrains.com/ai/2026/05/our-2026-direction-ai-and-classic-workflows-in-jetbrains-ides-2/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag">IDE</span><span class="tag tag-orange">AI</span></div>
+    <div class="item-body">
+      <p>JetBrains 阐述了 2026 年的核心产品方向：不强迫开发者选择 AI 或传统编码方式，而是让两者在同一个 IDE 中无阻碍地共存。如果你选择手写代码，IDE 聚焦于纯粹的编码体验，AI 不会干扰核心流程；如果你选择 AI 辅助，IDE 则提供完整的 Agent 协作能力。</p>
+      <p>这一哲学与当前某些"全 AI"或"零 AI"的极端路线形成对比。JetBrains 认为，两种工作流都有合理的应用场景——调试和精细控制适合手动编码， boilerplate 和文档生成适合 AI 辅助。对于长期使用 JetBrains 工具的开发者，这意味着现有快捷键和工作流不会被 AI 功能打断。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title"><span>📋</span> 实践指南</div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://www.infoq.com/news/2026/05/dora-roi-ai-assisted-dev-report/" target="_blank" rel="noopener">DORA 报告：强大的工程基础才是 AI 投资回报率的关键</a></div>
+    <div class="item-meta">InfoQ · <a href="https://www.infoq.com/news/2026/05/dora-roi-ai-assisted-dev-report/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-purple">DevOps</span><span class="tag">报告</span></div>
+    <div class="item-body">
+      <p>Google Cloud 的 DORA 团队发布了关于 AI 辅助开发 ROI 评估框架的报告。核心发现是：AI 的成功实施取决于组织系统工程能力，而不仅仅是工具本身。报告引入了 J 曲线模型来解释价值实现过程——初期生产力可能下降，随着流程重设计和团队适应，长期收益才会显现。</p>
+      <p>报告还强调了员工留存和流程重设计对实现长期收益的重要性。对于正在推行 AI 编码工具的团队，这意味着不应该期待"即插即用"的效果，而是需要将 AI 工具纳入整体工程能力提升的框架中考虑。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649801507" target="_blank" rel="noopener">Harness 不是目的，知识才是护城河 —— AI 工程交付团队的知识沉淀实践</a></div>
+    <div class="item-meta">腾讯技术工程 · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649801507" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-orange">工程实践</span><span class="tag">知识管理</span></div>
+    <div class="item-body">
+      <p>当业界争论"该用多大的模型"还是"该搭多复杂的工作流"时，腾讯 AI 工程团队在落地实践中发现了一个被低估的事实：构建 Harness 工作流不是最终目的，私域和团队知识的沉淀才是真正的技术护城河。</p>
+      <p>文章分享了团队在 AI Team 工程交付编排系统中的四项实践：设计知识分层架构、团队知识库共建共享、让工作流成为知识沉淀的载体、突破人机交互瓶颈实现随时随地的工作流流转。核心方法论是：工作流只是管道，知识才是流过管道的活水。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://www.infoq.com/news/2026/05/coder-agents-self-hosted-ai/" target="_blank" rel="noopener">Coder Agents：在自托管基础设施上运行 AI 编码工作流</a></div>
+    <div class="item-meta">InfoQ · <a href="https://www.infoq.com/news/2026/05/coder-agents-self-hosted-ai/" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-purple">自托管</span><span class="tag">安全</span></div>
+    <div class="item-body">
+      <p>Coder Agents 是一个模型无关的平台，允许组织在自己的基础设施上运行 AI 编码 Agent，而不是依赖云端服务。这让团队可以完全控制代码、数据和执行环境——对于金融、医疗等受监管行业，以及对数据主权有要求的组织，这是一个关键能力。</p>
+      <p>与 SaaS 编码助手不同，自托管方案意味着代码不会离开组织边界，同时也允许使用私有模型或微调模型。文章讨论了如何在安全性和便利性之间取得平衡，以及自托管带来的运维复杂度增加是否值得。</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-title"><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651283867" target="_blank" rel="noopener">CodeGuardian：AI 代码质量分析的 MCP 服务器实践</a></div>
+    <div class="item-meta">InfoQ · <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651283867" target="_blank" rel="noopener">阅读原文</a> · <span class="tag tag-red">安全</span><span class="tag">MCP</span></div>
+    <div class="item-body">
+      <p>CodeGuardian 是一个 MCP（Model Context Protocol）服务器，通过十一种专门的工具扩展 AI 助手，用于自动化代码分析和漏洞检测。核心洞察是：现有 AI 编码助手（如 GitHub Copilot）主要基于句法理解运行，未能与 SonarQube、Checkmarx 等专业安全扫描工具深度集成。</p>
+      <p>借助 MCP，CodeGuardian 让开发者能够在 IDE 内通过自然语言对话调用专业扫描工具。与传统工具仅标记问题不同，它提供 AI 驱动的修复能力，实际代码修复时间可以减少十倍。架构上使用 Node.js 实现服务器，官方 MCP SDK 处理协议协商，集中的"工具路由器"进行请求分发，每个功能实现为独立模块确保可扩展性。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="source-section">
+    <h3>📚 参考链接汇总</h3>
+    <ul class="source-list">
+      <li><a href="https://blog.bytebytego.com/p/how-pinterest-built-a-production" target="_blank" rel="noopener">Pinterest MCP 生态系统 - ByteByteGo</a></li>
+      <li><a href="https://aws.amazon.com/blogs/machine-learning/introducing-claude-platform-on-aws-anthropics-native-platform-through-your-aws-account/" target="_blank" rel="noopener">Claude Platform on AWS - AWS</a></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3MTkxMjYzOA==&mid=2247514676" target="_blank" rel="noopener">Agent Harness 解析 - AI寒武纪</a></li>
+      <li><a href="https://github.blog/developer-skills/github/github-for-beginners-getting-started-with-oss-contributions/" target="_blank" rel="noopener">GitHub OSS 贡献指南 - GitHub Blog</a></li>
+      <li><a href="https://blog.jetbrains.com/teamcity/2026/05/cve-2026-44413/" target="_blank" rel="noopener">TeamCity CVE-2026-44413 - JetBrains</a></li>
+      <li><a href="https://cloud.google.com/blog/products/databases/postgres-18-and-extended-support-for-legacy-versions-in-alloydb/" target="_blank" rel="noopener">AlloyDB PostgreSQL 18 - Google Cloud</a></li>
+      <li><a href="https://spring.io/blog/2026/05/11/spring-office-hours-podcast-S5E15" target="_blank" rel="noopener">Spring Office Hours S5E15 - Spring</a></li>
+      <li><a href="https://www.youtube.com/watch?v=pUHA_jNwuYE" target="_blank" rel="noopener">Notion AI 工程会议 - How I AI</a></li>
+      <li><a href="https://www.infoq.com/articles/local-first-ai-inference-cloud/" target="_blank" rel="noopener">Local-First AI Inference - InfoQ</a></li>
+      <li><a href="https://www.infoq.com/presentations/streaming-application-aws-infrastructure/" target="_blank" rel="noopener">流媒体后端架构演进 - InfoQ</a></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247533562" target="_blank" rel="noopener">Maigret OSINT 工具 - 逛逛GitHub</a></li>
+      <li><a href="https://x.com/dongxi_nlp/status/2053597714525434348" target="_blank" rel="noopener">Codex 0.130.0 Release</a></li>
+      <li><a href="https://x.com/NVIDIAAI/status/2053883076691030447" target="_blank" rel="noopener">OpenShell v0.0.37 - NVIDIA</a></li>
+      <li><a href="https://blog.jetbrains.com/ai/2026/05/our-2026-direction-ai-and-classic-workflows-in-jetbrains-ides-2/" target="_blank" rel="noopener">JetBrains 2026 方向 - JetBrains</a></li>
+      <li><a href="https://www.infoq.com/news/2026/05/dora-roi-ai-assisted-dev-report/" target="_blank" rel="noopener">DORA AI ROI 报告 - InfoQ</a></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649801507" target="_blank" rel="noopener">知识沉淀实践 - 腾讯技术工程</a></li>
+      <li><a href="https://www.infoq.com/news/2026/05/coder-agents-self-hosted-ai/" target="_blank" rel="noopener">Coder Agents 自托管 - InfoQ</a></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651283867" target="_blank" rel="noopener">CodeGuardian MCP - InfoQ</a></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  开发者日报 · 2026-05-11 · 从 502 条科技资讯中精选生成
+</footer>
+
+</div>
 </body>
 </html>
