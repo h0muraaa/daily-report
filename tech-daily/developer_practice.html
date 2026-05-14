@@ -1,356 +1,361 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>开发者实践日报 | 2026-05-13</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --bg-elevated: #161b22;
-      --bg-card: #1c2128;
-      --border: #30363d;
-      --text: #c9d1d9;
-      --text-muted: #8b949e;
-      --text-dim: #6e7681;
-      --accent: #58a6ff;
-      --accent-green: #3fb950;
-      --accent-yellow: #d29922;
-      --accent-red: #f85149;
-      --accent-purple: #a371f7;
-      --code-bg: #0d1117;
-      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
-      --font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-    .container { max-width: 880px; margin: 0 auto; padding: 40px 24px; }
-    header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 24px;
-      margin-bottom: 32px;
-    }
-    header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--accent);
-      font-family: var(--font-mono);
-      letter-spacing: -0.5px;
-    }
-    header .meta {
-      color: var(--text-dim);
-      font-size: 13px;
-      margin-top: 8px;
-      font-family: var(--font-mono);
-    }
-    header .tagline {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-top: 6px;
-    }
-    .section { margin-bottom: 40px; }
-    .section-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 20px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--accent);
-      display: inline-block;
-      font-family: var(--font-mono);
-    }
-    .section-title .icon { margin-right: 8px; }
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 24px;
-      margin-bottom: 16px;
-      transition: border-color 0.2s;
-    }
-    .card:hover { border-color: var(--accent); }
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--accent);
-      margin-bottom: 8px;
-      line-height: 1.4;
-    }
-    .card-title a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    .card-title a:hover { text-decoration: underline; }
-    .card-meta {
-      font-size: 12px;
-      color: var(--text-dim);
-      font-family: var(--font-mono);
-      margin-bottom: 12px;
-    }
-    .card-meta .badge {
-      display: inline-block;
-      padding: 1px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      margin-right: 8px;
-      font-weight: 500;
-    }
-    .badge-hot { background: rgba(248,81,73,0.15); color: var(--accent-red); }
-    .badge-deep { background: rgba(163,113,247,0.15); color: var(--accent-purple); }
-    .badge-tool { background: rgba(63,185,80,0.15); color: var(--accent-green); }
-    .badge-practice { background: rgba(210,153,34,0.15); color: var(--accent-yellow); }
-    .card-body {
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.8;
-    }
-    .card-body p { margin-bottom: 10px; }
-    .card-body p:last-child { margin-bottom: 0; }
-    .source {
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-    .source a {
-      color: var(--text-dim);
-      text-decoration: none;
-    }
-    .source a:hover { color: var(--accent); text-decoration: underline; }
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 640px) {
-      .two-col { grid-template-columns: 1fr; }
-      .container { padding: 24px 16px; }
-      header h1 { font-size: 22px; }
-    }
-    .sources-section {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-    }
-    .sources-section h3 {
-      font-size: 16px;
-      color: var(--text);
-      margin-bottom: 16px;
-      font-family: var(--font-mono);
-    }
-    .sources-section ul {
-      list-style: none;
-      columns: 2;
-      column-gap: 32px;
-    }
-    @media (max-width: 640px) {
-      .sources-section ul { columns: 1; }
-    }
-    .sources-section li {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      break-inside: avoid;
-    }
-    .sources-section li a {
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-    .sources-section li a:hover { color: var(--accent); }
-    .highlight-box {
-      background: rgba(88,166,255,0.08);
-      border-left: 3px solid var(--accent);
-      padding: 14px 18px;
-      border-radius: 0 8px 8px 0;
-      margin: 12px 0;
-      font-size: 13px;
-      color: var(--text);
-    }
-    .highlight-box code {
-      background: var(--code-bg);
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--accent-yellow);
-    }
-    footer {
-      text-align: center;
-      padding: 32px 0;
-      color: var(--text-dim);
-      font-size: 12px;
-      border-top: 1px solid var(--border);
-      margin-top: 40px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践日报 - 2026-05-14</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --border: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-yellow: #d29922;
+            --accent-purple: #a371f7;
+            --code-bg: #1e2530;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+        .date-badge {
+            display: inline-block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .section {
+            margin-bottom: 48px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--accent-green);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+        .news-grid {
+            display: grid;
+            gap: 16px;
+        }
+        .news-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .news-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .news-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .news-summary {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+        .news-meta {
+            font-size: 13px;
+        }
+        .news-meta a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .news-meta a:hover {
+            text-decoration: underline;
+        }
+        .sources-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 40px;
+        }
+        .sources-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-yellow);
+            margin-bottom: 16px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+        }
+        .sources-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 8px;
+        }
+        .sources-list li {
+            font-size: 13px;
+        }
+        .sources-list a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .sources-list a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-secondary);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 20px 12px; }
+            h1 { font-size: 24px; }
+            .sources-list { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>&lt;DevDaily /&gt;</h1>
-      <div class="meta">2026-05-13 | Wednesday | developer_practice edition</div>
-      <div class="tagline">面向一线开发者的技术日报 —— 工具、实践、深度解读</div>
-    </header>
+    <div class="container">
+        <header>
+            <div class="date-badge">2026-05-14</div>
+            <h1>开发者实践日报</h1>
+            <p class="subtitle">面向一线开发者的技术动态、工具更新与最佳实践</p>
+        </header>
 
-    <section class="section">
-      <h2 class="section-title"><span class="icon">🔥</span>今日技术热榜</h2>
+        
+        <section class="section">
+            <h2 class="section-title">🔥 今日技术热榜</h2>
+            <div class="news-grid">
+                
+        <article class="news-card">
+            <h3 class="news-title">Claude Code for Beginners</h3>
+            <p class="news-summary">AI-powered coding has evolved beyond simple chat interfaces. The latest leap forward is Claude Code, a command-line tool from Anthropic that lives directly in your terminal and understands your entire local codebase. We just released a comprehensive course on the freeCodeCamp.org YouTube channel to help you integrate this tool into your professional workflow. Unlike standard LLM web interfaces, Claude Code acts as an agentic partner. It can search your files, run terminal commands, and execute t...</p>
+            <div class="news-meta">
+                <a href="https://www.freecodecamp.org/news/claude-code-for-beginners/" target="_blank" rel="noopener">[来源: freeCodeCamp Programming Tutorials: Python， JavaScript， Git ＆ More]</a>
+            </div>
+        </article>
+        
 
-    <div class="card">
-      <div class="card-title"><a href="https://devblogs.microsoft.com/dotnet/dotnet-11-preview-4" target="_blank" rel="noopener">.NET 11 Preview 4 is now available!</a></div>
-      <div class="card-meta"><span class="badge badge-hot">RELEASE</span>Microsoft Dev Blog</div>
-      <div class="card-body"><p>.NET 11 第四个预览版正式发布，涵盖 Runtime、SDK、类库、ASP.NET Core、.NET MAUI、C#、EF Core 等多个领域的改进。类库方面新增 Span-based Deflate/ZLib/GZip 编解码 API、浮点十六进制格式化，以及 System.Text.Json 的性能优化。Runtime 引入运行时异步 JIT 优化和硬件指令集增强。MAUI 方面，Android、iOS 和 Mac Catalyst 平台已默认迁移至 CoreCLR，与 ASP.NET Core 使用同一运行时。</p></div>
-      <div class="source">📎 来源: <a href="https://devblogs.microsoft.com/dotnet/dotnet-11-preview-4" target="_blank" rel="noopener">Microsoft Dev Blog</a></div>
+        <article class="news-card">
+            <h3 class="news-title">A Guide To Event-Driven Architectural Patterns</h3>
+            <p class="news-summary">Distributed systems are built out of services that need to communicate, and the simplest way to do that is for one service to call another directly and wait for a response. This pattern works well for small systems and predictable workloads.However, as systems grow, it tends to produce tight coupling between services, fragile failure behavior, and bottlenecks at the slowest component in any chain of calls.Event-driven architecture is an alternative communication model where services publish even...</p>
+            <div class="news-meta">
+                <a href="https://blog.bytebytego.com/p/a-guide-to-event-driven-architectural" target="_blank" rel="noopener">[来源: ByteByteGo Newsletter]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">Cline SDK 终于发布了，同时发布的还有以 Cline SDK 为基础的 Cline CLI 和 Skills @cline 是最早一批 Agentic Coding 工具了，之前主要以 ID...</h3>
+            <p class="news-summary">Cline SDK 终于发布了，同时发布的还有以 Cline SDK 为基础的 Cline CLI 和 Skills@cline 是最早一批 Agentic Coding 工具了，之前主要以 IDE 插件的形式存在，Cline 的实际表现一直都很强，而且团队有很多技术工程实践，都早于 Claude Code 等团队，技术博客价值很高！后来经历了一些变动，工程团队很多人都去了 Codex，现在重新看到 Cline 的最新进展，还是很期待实际表现。cline.bot/blog/introduci…最新发布的 Cline CLI 在 Terminal Benchmark 上多项第一，超过 Claude Code、Codex 和 Droid 等 Agent，咱们一起看看它在 Harness 方面的重要实践。Cline 在 Harness 方面的升级Cline 2.0 重写了 prompts、简化 loop、收紧上下文管理、改进反馈与错误处理、重新设计了工具如何暴露给模型。官方公布的 Terminal-Bench 2.0 成绩：1. 前沿模型上 Cline CLI 的表现：· claude-op...</p>
+            <div class="news-meta">
+                <a href="https://x.com/shao__meng/status/2054929515563155639" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">Moonrepo Releases Moon v2.0 with WASM Plugin Toolchains and Overhauled CLI</h3>
+            <p class="news-summary">Moonrepo has released moon v2.0, its first major update since v1, featuring a plugin-based toolchain system and support for multiple configuration formats including JSON and TOML. The CLI has been restructured, enhancing task inheritance and Docker integration. Notable changes include a shift in architecture and improvements to VCS support. By Daniel Curtis</p>
+            <div class="news-meta">
+                <a href="https://www.infoq.com/news/2026/05/moonrepo-2-release/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">TW-Sound580K: A Regional Audio-Text Dataset with Verification-Guided Curation for Localized Audio-Language Modeling</h3>
+            <p class="news-summary">arXiv:2603.05094v3 Announce Type: replace Abstract: Large Audio-Language Models (LALMs) typically struggle with localized dialectal prosody due to the scarcity of specialized corpora. We present TW-Sound580K, a Taiwanese audio-text instruction dataset developed through a Verify-Generate-Critique (VGC) protocol. This pipeline leverages Dual-ASR validation to filter 522K raw clips, subsequently expanding them into 580,000 high-fidelity instruction pairs using a teacher model. The dataset's utility...</p>
+            <div class="news-meta">
+                <a href="https://arxiv.org/abs/2603.05094" target="_blank" rel="noopener">[来源: cs.SD updates on arXiv.org]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">Rubber Duck Thursdays</h3>
+            <p class="news-summary">💾▬▬▬▬▬▬ WANT TO LEARN MORE? 🚀 ▬▬▬▬▬▬ ▬▬▬▬▬▬ TIMESTAMPS ⌚ ▬▬▬▬▬▬ Stay up-to-date on all things GitHub by connecting with us: YouTube: https://gh.io/subgithub Blog: https://github.blog X: https://twitter.com/github LinkedIn: https://linkedin.com/company/github Insider newsletter: https://resources.github.com/newsletter/ Instagram: https://www.instagram.com/github TikTok: https://www.tiktok.com/@github About GitHub It’s where over 180 million developers create, share, and ship the best code possibl...</p>
+            <div class="news-meta">
+                <a href="https://www.youtube.com/watch?v=iI5s3jx2-RM" target="_blank" rel="noopener">[来源: GitHub]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">LMU-Based Sequential Learning and Posterior Ensemble Fusion for Cross-Domain Infant Cry Classification</h3>
+            <p class="news-summary">arXiv:2603.02245v3 Announce Type: replace-cross Abstract: Decoding infant cry causes remains challenging for healthcare monitoring due to short nonstationary signals, limited annotations, and strong domain shifts across infants and datasets. We propose a compact acoustic framework that fuses mel-frequency cepstral coefficients (MFCCs), short-time Fourier transform (STFT) features, and fundamental-frequency (F0) contours within a multi-branch convolutional neural network (CNN) encoder, and models...</p>
+            <div class="news-meta">
+                <a href="https://arxiv.org/abs/2603.02245" target="_blank" rel="noopener">[来源: cs.SD updates on arXiv.org]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">New course: Transformers in Practice. You'll get a practical view of how transformer-based LLMs work...</h3>
+            <p class="news-summary">New course: Transformers in Practice. You'll get a practical view of how transformer-based LLMs work, so you can reason about their behavior, diagnose problems like slow inference, and make smarter decisions about deployment. This course is built in partnership with @AMD and taught by @realSharonZhou.You'll see how transformers generate text one token at a time, how the model decides which earlier words matter most when predicting the next one, and how techniques like quantization speed up infer...</p>
+            <div class="news-meta">
+                <a href="https://x.com/AndrewYNg/status/2054964560403300359" target="_blank" rel="noopener">[来源: Andrew Ng(@AndrewYNg)]</a>
+            </div>
+        </article>
+        
+            </div>
+        </section>
+        
+        
+        <section class="section">
+            <h2 class="section-title">🔍 深度技术解读</h2>
+            <div class="news-grid">
+                
+        <article class="news-card">
+            <h3 class="news-title">DeePen: Penetration Testing for Audio Deepfake Detection</h3>
+            <p class="news-summary">arXiv:2502.20427v3 Announce Type: replace-cross Abstract: Deepfakes - manipulated or forged audio and video media - pose significant security risks to individuals, organizations, and society at large. To address these challenges, machine learning-based classifiers are commonly employed to detect deepfake content. In this paper, we assess the robustness of such classifiers through a systematic penetration testing methodology, which we introduce as DeePen. Our approach operates without prior knowl...</p>
+            <div class="news-meta">
+                <a href="https://arxiv.org/abs/2502.20427" target="_blank" rel="noopener">[来源: cs.SD updates on arXiv.org]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">Ship Real Agents: Hands-On Evals for Agentic Applications — Laurie Voss, Arize</h3>
+            <p class="news-summary">💾Most agents get tested by running a few queries and checking if it looks right. Laurie calls this the vibes problem: it doesn't catch regressions, doesn't run in CI, and doesn't tell you whether a prompt fix broke three other things. This workshop builds a complete eval pipeline from scratch on a financial analysis agent: tracing with Phoenix, reading traces before writing a single eval, categorizing failures by root cause, then building code evals, built-in LLM-as-a-judge evals, and a custom r...</p>
+            <div class="news-meta">
+                <a href="https://www.youtube.com/watch?v=Xfl50508LZM" target="_blank" rel="noopener">[来源: AI Engineer]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">Pinterest Engineers Eliminate CPU Zombies to Resolve Production Bottlenecks</h3>
+            <p class="news-summary">Pinterest identified and resolved CPU starvation issues that affected machine learning training jobs on its Kubernetes-based platform, PinCompute. The engineers traced the problem to an unused Amazon ECS agent, which caused memory cgroup leaks. By disabling the agent, they stabilised performance. This case illustrates the importance of understanding system defaults for effective troubleshooting. By Mark Silvester</p>
+            <div class="news-meta">
+                <a href="https://www.infoq.com/news/2026/05/pinterest-cpu-zombies-bottleneck/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">What AI Agent Should YOU be Using?</h3>
+            <p class="news-summary">💾Which AI Agent Should You Use? Claude Code vs Codex vs Manus vs OpenClaw and others. If you want to test out a persistent cloud agent for free. (Add Claude Code to your iMessage) https://chorus.com/skills 00:00 Intro 00:45 Claude Code and the Types of Agents 02:41 Claude Cowork 05:12 Task Based Computer 05:54 Claude Code in iMessage Group Chats 08:24 Claude Code 10:12 Claude Code &Codex act AS YOU 12:39 OpenClaw and Hermes 15:51 Sandboxed Claws 18:37 Picking the right agent 22:00 Sync vs Async ...</p>
+            <div class="news-meta">
+                <a href="https://www.youtube.com/watch?v=CF8sq1kYIOo" target="_blank" rel="noopener">[来源: Riley Brown]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">Accelerating on-device AI: A look at Arm and Google AI Edge optimization</h3>
+            <p class="news-summary">Integration of Arm Scalable Matrix Extension 2 (SME2) and the Google AI Edge software stack enables high-performance, on-device generative AI by turning the CPU into a powerful matrix-compute accelerator. Using Stability AI’s "stable-audio-open-small" model as a case study, it outlines a streamlined "Convert, Optimize, and Deploy" pipeline that utilizes LiteRT, XNNPACK, and KleidiAI to automate hardware acceleration. The resulting implementation achieves over a 2x speedup in audio generation and...</p>
+            <div class="news-meta">
+                <a href="https://developers.googleblog.com/accelerating-on-device-ai-a-look-at-arm-and-google-ai-edge-optimization/" target="_blank" rel="noopener">[来源: Google Developers Blog]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">OpenAI 给 Codex 在 Windows 造了一个沙箱，过程比想象中曲折 ... 来自 Codex 团队 David Wiesen 非常有深度的技术博客，推荐阅读！ https://t.co...</h3>
+            <p class="news-summary">OpenAI 给 Codex 在 Windows 造了一个沙箱，过程比想象中曲折 ...来自 Codex 团队 David Wiesen 非常有深度的技术博客，推荐阅读！openai.com/index/building…问题的起点：Windows 上的 Codex 没有沙箱Codex 运行在开发者本地（CLI / IDE 扩展 / App），默认以当前用户身份执行命令——既能读写文件、跑测试、操作 Git，也意味着潜在风险。macOS 有 Seatbelt，Linux 有 seccomp/bubblewrap，Windows 原生缺乏这种"按进程做强约束"的能力。结果 Windows 用户只能在两个糟糕方案中二选一：· 每条命令都审批（甚至读操作），打断流畅性；· 开启 Full Access，放弃所有约束。团队的目标，是把 Codex 在 macOS/Linux 已有的"默认安全"体验搬到 Windows：只能在工作区内写、默认无网络访问，且全程不需要用户介入。现成 Windows 方案为什么都不够用？· AppContainer：是为"功能边界清晰的应用"设计的；Codex 要驱...</p>
+            <div class="news-meta">
+                <a href="https://x.com/shao__meng/status/2054791308603265044" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
+            </div>
+        </article>
+        
+            </div>
+        </section>
+        
+        
+        <section class="section">
+            <h2 class="section-title">🛠️ 工具推荐</h2>
+            <div class="news-grid">
+                
+        <article class="news-card">
+            <h3 class="news-title">From latency to instant: Modernizing GitHub Issues navigation performance</h3>
+            <p class="news-summary">When you’re working through a backlog—opening an issue, jumping to a linked thread, then back to the list—latency isn’t just a metric. It’s a context switch. Even small delays add up, and they hit hardest at the exact moments developers are trying to stay in flow. It’s not that GitHub Issues was “slow” in isolation; it’s that too many navigations still paid the cost of redundant data fetching, breaking flow again and again. Earlier this year, we set out to fix that—not by chasing marginal backen...</p>
+            <div class="news-meta">
+                <a href="https://github.blog/engineering/architecture-optimization/from-latency-to-instant-modernizing-github-issues-navigation-performance/" target="_blank" rel="noopener">[来源: The GitHub Blog]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">Announcing Genkit Middleware: Intercept, extend, and harden your agentic apps</h3>
+            <p class="news-summary">Genkit is an open-source framework designed to help developers build production-ready, agentic AI applications using TypeScript, Go, Dart, and Python. The framework utilizes a powerful middleware system that intercepts generation calls to inject custom behaviors like retries, model fallbacks, and human-in-the-loop tool approvals. By attaching hooks at the generate, model, and tool layers, developers can ensure high reliability and deterministic control over model outputs. Furthermore, Genkit all...</p>
+            <div class="news-meta">
+                <a href="https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/" target="_blank" rel="noopener">[来源: Google Developers Blog]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">AWS Certified Cloud Practitioner Certification Course 2026 (CLF-C02) - Pass the Exam!</h3>
+            <p class="news-summary">💾Prepare for the AWS Certified Cloud Practitioner Certification (CLF-C02) and pass! ✏️ Developed by Andrew Brown of ExamPro 🔗 https://twitter.com/andrewbrown Get your Free Practice and Downloadable Cheatsheets 🎁 https://www.exampro.co/clf-c02 ❤️ Support for this channel comes from our friends at Scrimba – the coding platform that's reinvented interactive learning: https://scrimba.com/freecodecamp ⭐️ Chapters ⭐️ 00:01:07 Introduction 00:08:50 Cloud Concepts 00:44:23 Getting Started 01:14:08 Digit...</p>
+            <div class="news-meta">
+                <a href="https://www.youtube.com/watch?v=7HKot-brXFE" target="_blank" rel="noopener">[来源: freeCodeCamp.org]</a>
+            </div>
+        </article>
+        
+
+        <article class="news-card">
+            <h3 class="news-title">Make your own event-sourced agent harness using stream processors — Jonas Templestein, Iterate</h3>
+            <p class="news-summary">💾The abstraction is three things: state, a synchronous reducer that derives state from events, and an after-append hook for side effects. The split matters: when your program restarts after 100 events, you want to catch up state without replaying LLM requests. Everything that happens (streaming chunks, tool calls, errors, circuit breaker triggers) is an event in the log. The interesting part is deployment. Jonas demos "dynamic worker configured," an event whose payload is a JavaScript string con...</p>
+            <div class="news-meta">
+                <a href="https://www.youtube.com/watch?v=vi-2nasppAg" target="_blank" rel="noopener">[来源: AI Engineer]</a>
+            </div>
+        </article>
+        
+            </div>
+        </section>
+        
+        
+
+        <section class="sources-section">
+            <h2 class="sources-title">参考链接汇总</h2>
+            <ul class="sources-list">
+                <li><a href="https://www.youtube.com/watch?v=Xfl50508LZM" target="_blank" rel="noopener">AI Engineer</a></li><li><a href="https://www.youtube.com/watch?v=vi-2nasppAg" target="_blank" rel="noopener">AI Engineer</a></li><li><a href="https://x.com/AndrewYNg/status/2054964560403300359" target="_blank" rel="noopener">Andrew Ng(@AndrewYNg)</a></li><li><a href="https://blog.bytebytego.com/p/a-guide-to-event-driven-architectural" target="_blank" rel="noopener">ByteByteGo Newsletter</a></li><li><a href="https://www.youtube.com/watch?v=iI5s3jx2-RM" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://developers.googleblog.com/accelerating-on-device-ai-a-look-at-arm-and-google-ai-edge-optimization/" target="_blank" rel="noopener">Google Developers Blog</a></li><li><a href="https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/" target="_blank" rel="noopener">Google Developers Blog</a></li><li><a href="https://www.infoq.com/news/2026/05/moonrepo-2-release/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></li><li><a href="https://www.infoq.com/news/2026/05/pinterest-cpu-zombies-bottleneck/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></li><li><a href="https://www.youtube.com/watch?v=CF8sq1kYIOo" target="_blank" rel="noopener">Riley Brown</a></li><li><a href="https://github.blog/engineering/architecture-optimization/from-latency-to-instant-modernizing-github-issues-navigation-performance/" target="_blank" rel="noopener">The GitHub Blog</a></li><li><a href="https://arxiv.org/abs/2502.20427" target="_blank" rel="noopener">cs.SD updates on arXiv.org</a></li><li><a href="https://arxiv.org/abs/2603.02245" target="_blank" rel="noopener">cs.SD updates on arXiv.org</a></li><li><a href="https://arxiv.org/abs/2603.05094" target="_blank" rel="noopener">cs.SD updates on arXiv.org</a></li><li><a href="https://www.freecodecamp.org/news/claude-code-for-beginners/" target="_blank" rel="noopener">freeCodeCamp Programming Tutorials: Python， JavaScript， Git ＆ More</a></li><li><a href="https://www.youtube.com/watch?v=7HKot-brXFE" target="_blank" rel="noopener">freeCodeCamp.org</a></li><li><a href="https://x.com/shao__meng/status/2054791308603265044" target="_blank" rel="noopener">meng shao(@shao__meng)</a></li><li><a href="https://x.com/shao__meng/status/2054929515563155639" target="_blank" rel="noopener">meng shao(@shao__meng)</a></li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>数据来源于 FreshRSS 24小时聚合 · 生成时间: 2026-05-14 19:25:21</p>
+            <p>开发者实践版 · 关注技术实现细节与最佳实践</p>
+        </footer>
     </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&amp;mid=2247547757&amp;idx=1&amp;sn=b4ce5fa9f69d9c6cb946f89938c07adf" target="_blank" rel="noopener">TanStack npm 供应链攻击事件深度复盘</a></div>
-      <div class="card-meta"><span class="badge badge-hot">SECURITY</span>印记中文</div>
-      <div class="card-body"><p>名为 Shai-Hulud 的蠕虫通过 GitHub Actions 缓存投毒攻击了 TanStack 仓库，在 26 分钟内发布了 84 个恶意版本，波及 170 余个 npm 包。攻击手法极具创意：先提交看似正常的 PR，在 CI 运行时窃取缓存写权限和 OIDC token，将恶意 payload 注入共享缓存，随后 release workflow 从污染缓存拉取依赖并自动签名发布。更阴险的是，恶意脚本会轮询 GitHub API 检测 token 是否被撤销，一旦撤销立即执行 rm -rf ~/。官方建议全面轮换凭证，并使用 zizmor 审计 Actions 工作流安全。</p></div>
-      <div class="source">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&amp;mid=2247547757&amp;idx=1&amp;sn=b4ce5fa9f69d9c6cb946f89938c07adf" target="_blank" rel="noopener">印记中文</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://devblogs.microsoft.com/ifdef-windows/build-native-windows-apps-with-ai-agents-for-winui-and-windows-app-sdk" target="_blank" rel="noopener">Introducing WinUI agent plugin for GitHub Copilot and Claude Code</a></div>
-      <div class="card-meta"><span class="badge badge-hot">AI DEV</span>Microsoft Dev Blog</div>
-      <div class="card-body"><p>微软发布了面向 WinUI 和 Windows App SDK 的 AI Agent 插件，支持 GitHub Copilot 和 Claude Code。该插件围绕&quot;脚手架 → 构建 → 运行 → 测试 → 迭代&quot;的端到端闭环设计，优化了 Agent 在每个阶段的决策能力，能识别常见失败模式并引导至成功路径，同时最小化 Token 消耗。开发者现在可以用自然语言描述需求，Agent 即可在几分钟内生成原生 Windows 应用。</p></div>
-      <div class="source">📎 来源: <a href="https://devblogs.microsoft.com/ifdef-windows/build-native-windows-apps-with-ai-agents-for-winui-and-windows-app-sdk" target="_blank" rel="noopener">Microsoft Dev Blog</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://aws.amazon.com/blogs/machine-learning/securing-ai-agents-how-aws-and-cisco-ai-defense-scale-mcp-and-a2a-deployments/" target="_blank" rel="noopener">Securing AI agents: How AWS and Cisco AI Defense scale MCP and A2A deployments</a></div>
-      <div class="card-meta"><span class="badge badge-hot">SECURITY</span>AWS AI Blog</div>
-      <div class="card-body"><p>MCP 自 2024 年 11 月推出以来，企业 MCP 服务器数量从几十增长到数百。A2A 协议也在 2025 年 4 月跟进，让 Agent 能够自主通信。但快速增长带来了三大安全缺口：缺乏工具/Agent 部署的可视性、人工安全审查无法匹配部署速度、合规审计追踪缺失。AWS 与 Cisco AI Defense 联合推出了解决方案，为 MCP 和 A2A 部署提供自动化的安全扫描、可见性管理和合规审计能力。</p></div>
-      <div class="source">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/securing-ai-agents-how-aws-and-cisco-ai-defense-scale-mcp-and-a2a-deployments/" target="_blank" rel="noopener">AWS AI Blog</a></div>
-    </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title"><span class="icon">🔍</span>深度技术解读</h2>
-
-    <div class="card">
-      <div class="card-title"><a href="https://x.com/NotionHQ/status/2054596465994191248" target="_blank" rel="noopener">Notion 开发者平台全面上线：CLI、Workers、Database Sync</a></div>
-      <div class="card-meta"><span class="badge badge-deep">PLATFORM</span>Notion (@NotionHQ)</div>
-      <div class="card-body"><p>Notion 正式推出开发者平台，三大核心能力值得关注。首先是 Notion CLI，通过 curl -fsSL ntn.dev | bash 一键安装，支持登录工作空间、读写数据、构建和部署 Workers。其次是 Notion Workers，托管运行时代码，无需自建服务器即可连接其他工具 API，实现跨工具自动化。第三是 Database Sync，可将任何有 API 的数据源同步到 Notion 数据库。此外还推出了 Agent SDK（即将发布），支持将 Notion Agent 嵌入任意应用，通过 API 触发 Agent 运行并获取流式响应。Notion 正在从文档工具转型为可编程的协作操作系统。</p></div>
-      <div class="source">📎 来源: <a href="https://x.com/NotionHQ/status/2054596465994191248" target="_blank" rel="noopener">Notion (@NotionHQ)</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://x.com/adocomplete/status/2054614468458688716" target="_blank" rel="noopener">Claude Agent SDK 将纳入付费订阅计划：每人每月固定额度</a></div>
-      <div class="card-meta"><span class="badge badge-deep">POLICY</span>Ado (@adocomplete)</div>
-      <div class="card-body"><p>Anthropic 宣布从 6 月 15 日起，付费 Claude 订阅用户将获得专属的月度程序化使用额度。该额度覆盖 Claude Agent SDK、claude -p 命令行、Claude Code GitHub Actions，以及基于 Agent SDK 构建的第三方应用。这一变化意味着开发者无需单独为程序化调用付费，降低了 AI 辅助开发的基础设施成本，也反映出 Anthropic 对开发者生态的战略投入。</p></div>
-      <div class="source">📎 来源: <a href="https://x.com/adocomplete/status/2054614468458688716" target="_blank" rel="noopener">Ado (@adocomplete)</a></div>
-    </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title"><span class="icon">🛠️</span>工具推荐</h2>
-
-    <div class="card">
-      <div class="card-title"><a href="https://www.microsoft.com/en-us/research/blog/mimalloc-a-high-performance-scalable-memory-allocator-for-the-modern-era/" target="_blank" rel="noopener">mimalloc：微软开源的高性能内存分配器</a></div>
-      <div class="card-meta"><span class="badge badge-tool">C/CPP</span>Microsoft Research Blog - Microsoft Research</div>
-      <div class="card-body"><p>mimalloc 是微软研究院出品的开源内存分配器，作为 malloc/free 的 drop-in 替代品，代码仅约 12K 行。核心特性包括：有界的最坏情况分配时间（仅依赖 OS 原语）、有界的空间开销、低内部碎片、以及通过原子操作实现的最小竞争。在 LLM 时代的大内存场景（数百 GB）和高并发场景（数百线程）下尤为有价值。GitHub 上已有超过 12K star，集成难度低，适合生产环境直接替换。</p></div>
-      <div class="source">📎 来源: <a href="https://www.microsoft.com/en-us/research/blog/mimalloc-a-high-performance-scalable-memory-allocator-for-the-modern-era/" target="_blank" rel="noopener">Microsoft Research Blog - Microsoft Research</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://x.com/jerryjliu0/status/2054328239297106137" target="_blank" rel="noopener">LiteParse：本地运行的无模型文档解析器</a></div>
-      <div class="card-meta"><span class="badge badge-tool">PYTHON</span>Jerry Liu (@jerryjliu0)</div>
-      <div class="card-body"><p>LlamaIndex 团队开源的 LiteParse 是一款无需调用云端 VLM API 的文档解析工具，支持 50+ 文档格式，能在数秒内解析复杂文本布局和表格，提取干净文本。最新发布的 liteparse-server 通过 HTTP API 暴露解析能力，可在本地部署，敏感文档无需上传第三方。对于需要处理 PDF、Word、扫描件等复杂文档的 RAG 和 Agent 应用，这是一个兼顾隐私和成本的实用方案。</p></div>
-      <div class="source">📎 来源: <a href="https://x.com/jerryjliu0/status/2054328239297106137" target="_blank" rel="noopener">Jerry Liu (@jerryjliu0)</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://simonwillison.net/2026/May/12/datasette/#atom-everything" target="_blank" rel="noopener">Datasette 1.0a29：Python 数据探索工具新版</a></div>
-      <div class="card-meta"><span class="badge badge-tool">PYTHON</span>Simon Willison&#x27;s Weblog</div>
-      <div class="card-body"><p>Simon Willison 的数据集探索工具 Datasette 发布 1.0a29。本次更新修复了一个棘手的 segfault 竞态条件（Datasette.close() 与 Database.close() 之间的竞争），新增 TokenRestrictions.abbreviated() 工具方法。有趣的是，这个 bug 的修复方案是由 Codex CLI（GPT-5.5 xhigh）生成的。空表场景下表头和列选项现在也能正常显示，Mobile Safari 的列操作对话框 bug 也已修复。</p></div>
-      <div class="source">📎 来源: <a href="https://simonwillison.net/2026/May/12/datasette/#atom-everything" target="_blank" rel="noopener">Simon Willison&#x27;s Weblog</a></div>
-    </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title"><span class="icon">📋</span>实践指南</h2>
-      <div class="two-col">
-
-    <div class="card">
-      <div class="card-title"><a href="https://www.infoq.com/news/2026/05/jep-533-jdk-27/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">JEP 533：Java 结构化并发的异常处理升级</a></div>
-      <div class="card-meta"><span class="badge badge-practice">JAVA</span>InfoQ</div>
-      <div class="card-body"><p>JEP 533 已集成至 JDK 27，对结构化并发 API 的异常处理和类型安全进行了精细化改进。新增 ExecutionException 的异常流机制，让并发任务中的错误传播更加可控。对于已在生产中使用 Project Loom 虚拟线程的 Java 开发者，这是一个值得关注的里程碑。</p></div>
-      <div class="source">📎 来源: <a href="https://www.infoq.com/news/2026/05/jep-533-jdk-27/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://blog.jetbrains.com/pycharm/2026/05/support-for-uv-poetry-and-hatch-workspaces-beta/" target="_blank" rel="noopener">PyCharm 新增 uv、Poetry、Hatch Workspace 支持</a></div>
-      <div class="card-meta"><span class="badge badge-practice">PYTHON</span>JetBrains Blog</div>
-      <div class="card-body"><p>JetBrains PyCharm 宣布 Beta 支持 uv、Poetry 和 Hatch 的 Workspace 功能。Workspace 已成为管理多服务共享代码和统一依赖的事实标准，PyCharm 现在可以正确识别 workspace 结构、解析跨包依赖、并提供重构和导航支持。对于使用 monorepo 架构的 Python 团队，IDE 级别的 workspace 支持将显著提升开发体验。</p></div>
-      <div class="source">📎 来源: <a href="https://blog.jetbrains.com/pycharm/2026/05/support-for-uv-poetry-and-hatch-workspaces-beta/" target="_blank" rel="noopener">JetBrains Blog</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://x.com/NVIDIAAI/status/2054610877765275748" target="_blank" rel="noopener">OpenShell v0.0.40：K8s 调度控制与安全修复</a></div>
-      <div class="card-meta"><span class="badge badge-practice">K8S</span>NVIDIA AI (@NVIDIAAI)</div>
-      <div class="card-body"><p>NVIDIA 开源的 OpenShell 发布 v0.0.40，新增本地域名服务路由、K8s 节点调度与容忍配置。安全方面，CLI TLS 改为使用操作系统信任库，SecretResolver 调试不再泄露敏感信息，并修复了两个安全漏洞。对于使用 OpenShell 管理 GPU 集群的开发者，建议尽快升级。</p></div>
-      <div class="source">📎 来源: <a href="https://x.com/NVIDIAAI/status/2054610877765275748" target="_blank" rel="noopener">NVIDIA AI (@NVIDIAAI)</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://simonwillison.net/2026/May/13/csp-allow/#atom-everything" target="_blank" rel="noopener">CSP 白名单实验：沙箱 iframe 中的安全 fetch</a></div>
-      <div class="card-meta"><span class="badge badge-practice">WEB</span>Simon Willison&#x27;s Weblog</div>
-      <div class="card-body"><p>Simon Willison 的最新实验展示了在 CSP 保护的沙箱 iframe 中加载应用的可行性：通过自定义 fetch() 拦截 CSP 错误并传递给父窗口处理。这为第三方脚本集成提供了一种新的安全模型，可能改变广告、分析脚本和外部组件的嵌入方式。</p></div>
-      <div class="source">📎 来源: <a href="https://simonwillison.net/2026/May/13/csp-allow/#atom-everything" target="_blank" rel="noopener">Simon Willison&#x27;s Weblog</a></div>
-    </div>
-      </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&amp;mid=2247606847&amp;idx=2&amp;sn=574d270872032d4e8412c40d6a0e08ce" target="_blank" rel="noopener">百度 LoongForge：一套代码跑通 GPU 与昆仑芯的多模态训练框架</a></div>
-      <div class="card-meta"><span class="badge badge-practice">AI INFRA</span>百度Geek说</div>
-      <div class="card-body"><p>百度百舸开源全模态训练框架 LoongForge，核心亮点是&quot;一套代码&quot;同时支持 NVIDIA GPU 和自研昆仑芯，多模态训练速度提升 45%。框架针对新一代多模态大模型（同时理解图像、视频和物理世界）的训练需求进行了系统性设计，解决了 LLM 时代基础设施与多模态模型形态之间的结构性错位。</p></div>
-      <div class="source">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&amp;mid=2247606847&amp;idx=2&amp;sn=574d270872032d4e8412c40d6a0e08ce" target="_blank" rel="noopener">百度Geek说</a></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><a href="https://mp.weixin.qq.com/s?__biz=Mzg2NzU4MDM0MQ==&amp;mid=2247500458&amp;idx=1&amp;sn=71cab423eae7c92311161560422d80e1" target="_blank" rel="noopener">快手 OneSearch-V2：生成式搜索的工业级实践</a></div>
-      <div class="card-meta"><span class="badge badge-practice">SEARCH</span>快手技术</div>
-      <div class="card-body"><p>快手电商搜索平台全量上线 OneSearch-V2，基于自蒸馏隐式推理增强的生成式搜索框架。核心创新包括：思维增强的复杂查询理解、推理内化的自蒸馏训练 pipeline、基于真实用户行为反馈的偏好对齐优化。在零额外推理成本前提下，商品 CTR 提升 3.98%，买家数提升 2.07%，同时有效缓解了信息茧房和长尾稀疏问题。</p></div>
-      <div class="source">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=Mzg2NzU4MDM0MQ==&amp;mid=2247500458&amp;idx=1&amp;sn=71cab423eae7c92311161560422d80e1" target="_blank" rel="noopener">快手技术</a></div>
-    </div>
-    </section>
-
-    <section class="section">
-      <div class="sources-section">
-        <h3>📚 参考链接汇总</h3>
-        <ul>
-          <li><a href="https://x.com/adocomplete/status/2054614468458688716" target="_blank" rel="noopener">Ado (@adocomplete)</a></li>
-          <li><a href="https://www.youtube.com/watch?v=OV56RddyFuU" target="_blank" rel="noopener">AI Engineer</a></li>
-          <li><a href="https://aws.amazon.com/blogs/machine-learning/securing-ai-agents-how-aws-and-cisco-ai-defense-scale-mcp-and-a2a-deployments/" target="_blank" rel="noopener">AWS AI Blog</a></li>
-          <li><a href="https://www.infoq.com/news/2026/05/jep-533-jdk-27/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></li>
-          <li><a href="https://x.com/jerryjliu0/status/2054328239297106137" target="_blank" rel="noopener">Jerry Liu (@jerryjliu0)</a></li>
-          <li><a href="https://blog.jetbrains.com/pycharm/2026/05/support-for-uv-poetry-and-hatch-workspaces-beta/" target="_blank" rel="noopener">JetBrains Blog</a></li>
-          <li><a href="https://devblogs.microsoft.com/dotnet/dotnet-11-preview-4" target="_blank" rel="noopener">Microsoft Dev Blog</a></li>
-          <li><a href="https://devblogs.microsoft.com/ifdef-windows/build-native-windows-apps-with-ai-agents-for-winui-and-windows-app-sdk" target="_blank" rel="noopener">Microsoft Dev Blog</a></li>
-          <li><a href="https://www.microsoft.com/en-us/research/blog/mimalloc-a-high-performance-scalable-memory-allocator-for-the-modern-era/" target="_blank" rel="noopener">Microsoft Research Blog - Microsoft Research</a></li>
-          <li><a href="https://x.com/NotionHQ/status/2054596465994191248" target="_blank" rel="noopener">Notion (@NotionHQ)</a></li>
-          <li><a href="https://x.com/NVIDIAAI/status/2054610877765275748" target="_blank" rel="noopener">NVIDIA AI (@NVIDIAAI)</a></li>
-          <li><a href="https://simonwillison.net/2026/May/12/datasette/#atom-everything" target="_blank" rel="noopener">Simon Willison&#x27;s Weblog</a></li>
-          <li><a href="https://simonwillison.net/2026/May/13/csp-allow/#atom-everything" target="_blank" rel="noopener">Simon Willison&#x27;s Weblog</a></li>
-          <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&amp;mid=2247547757&amp;idx=1&amp;sn=b4ce5fa9f69d9c6cb946f89938c07adf" target="_blank" rel="noopener">印记中文</a></li>
-          <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2NzU4MDM0MQ==&amp;mid=2247500458&amp;idx=1&amp;sn=71cab423eae7c92311161560422d80e1" target="_blank" rel="noopener">快手技术</a></li>
-          <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&amp;mid=2247606847&amp;idx=2&amp;sn=574d270872032d4e8412c40d6a0e08ce" target="_blank" rel="noopener">百度Geek说</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <footer>
-      <p>开发者实践日报 · 2026-05-13 · 由 tech-daily-generator 自动生成</p>
-      <p>数据来源于 freshrss_24h_compact_20260513_192738.json · 共 596 条原始资讯</p>
-    </footer>
-  </div>
 </body>
 </html>
