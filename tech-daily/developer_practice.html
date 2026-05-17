@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>开发者实践日报 · 2026-05-16</title>
+    <title>开发者实践日报 · 2026-05-17</title>
     <style>
         :root {
             --bg: #0d1117;
@@ -49,179 +50,174 @@
             color: var(--accent);
             font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
         }
-        .date { color: var(--text-secondary); font-size: 13px; }
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-        h1 .highlight { color: var(--accent); }
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
         .subtitle { color: var(--text-secondary); font-size: 14px; }
-
-        h2 {
+        .section { margin-bottom: 40px; }
+        .section-title {
             font-size: 18px;
             font-weight: 600;
-            margin: 40px 0 20px;
-            padding-bottom: 8px;
+            color: var(--accent);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
-        h2 .icon { font-size: 20px; }
-
+        .section-title::before {
+            content: ">";
+            color: var(--accent-green);
+            font-family: monospace;
+            font-weight: bold;
+        }
         .card {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 20px 22px;
+            padding: 20px;
             margin-bottom: 16px;
             transition: border-color 0.2s;
         }
-        .card:hover { border-color: var(--border-hover, #484f58); }
+        .card:hover { border-color: var(--accent); }
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             gap: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }
         .card-title {
             font-size: 16px;
             font-weight: 600;
-            color: var(--text);
             line-height: 1.4;
+            flex: 1;
         }
-        .card-title a { color: inherit; text-decoration: none; }
-        .card-title a:hover { color: var(--accent); text-decoration: underline; }
-        .card-source {
-            font-size: 12px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .card-source a {
-            color: var(--text-secondary);
+        .card-title a {
+            color: var(--text);
             text-decoration: none;
         }
-        .card-source a:hover { color: var(--accent); }
+        .card-title a:hover { color: var(--accent); text-decoration: underline; }
+        .tag {
+            display: inline-block;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--accent-yellow);
+            font-family: monospace;
+            white-space: nowrap;
+        }
         .card-body {
             color: var(--text-secondary);
             font-size: 14px;
             line-height: 1.75;
+            margin-bottom: 12px;
         }
-        .card-body p { margin-bottom: 8px; }
+        .card-body p { margin-bottom: 10px; }
         .card-body p:last-child { margin-bottom: 0; }
-        .card-tags {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-        .tag {
-            font-size: 11px;
-            padding: 1px 8px;
-            border-radius: 10px;
-            background: var(--bg-tertiary);
+        .card-source {
+            font-size: 12px;
             color: var(--text-secondary);
-            font-family: "SF Mono", "Fira Code", monospace;
+            font-family: monospace;
         }
-        .tag.tool { color: var(--accent-green); }
-        .tag.ai { color: var(--accent-purple); }
-        .tag.arch { color: var(--accent-yellow); }
-        .tag.practice { color: var(--accent); }
-
-        .deep-dive {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-            border-left: 3px solid var(--accent-purple);
-        }
-        .deep-dive .card-title { color: var(--accent-purple); }
-
-        .tool-card {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-        .tool-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            background: var(--bg-tertiary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-        .tool-info { flex: 1; }
-        .tool-name {
-            font-weight: 600;
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-        .tool-name a { color: var(--accent); text-decoration: none; }
-        .tool-name a:hover { text-decoration: underline; }
-        .tool-desc { color: var(--text-secondary); font-size: 13px; }
-
-        .practice-box {
-            background: var(--code-bg);
-            border-radius: 8px;
-            padding: 16px 18px;
-            margin: 12px 0;
-        }
-        .practice-box code {
-            font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
-            font-size: 13px;
-            color: var(--accent-green);
-        }
-        .practice-box .cmd {
-            color: var(--text);
-            display: block;
-            margin: 4px 0;
-            padding-left: 12px;
-            border-left: 2px solid var(--border);
-        }
-
-        .sources {
-            margin-top: 48px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-        }
-        .sources h2 { margin-top: 0; }
-        .source-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 8px;
-        }
-        .source-item {
-            font-size: 13px;
-            padding: 6px 10px;
-            background: var(--bg-secondary);
-            border-radius: 6px;
-            border: 1px solid var(--border);
-        }
-        .source-item a {
-            color: var(--text-secondary);
+        .card-source a {
+            color: var(--accent);
             text-decoration: none;
         }
-        .source-item a:hover { color: var(--accent); }
-
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
+        .card-source a:hover { text-decoration: underline; }
+        .deep-dive {
+            border-left: 3px solid var(--accent-purple);
+        }
+        .deep-dive .card-title a { color: var(--accent-purple); }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+        }
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .tool-card h4 {
+            font-size: 14px;
+            color: var(--accent-green);
+            margin-bottom: 6px;
+            font-family: monospace;
+        }
+        .tool-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .tool-card a {
+            font-size: 12px;
+            color: var(--accent);
+            text-decoration: none;
+            font-family: monospace;
+        }
+        .tool-card a:hover { text-decoration: underline; }
+        .highlight-box {
+            background: var(--code-bg);
+            border: 1px dashed var(--border);
+            border-radius: 6px;
+            padding: 14px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .highlight-box strong { color: var(--text); }
+        code {
+            background: var(--code-bg);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: "SF Mono", "Fira Code", monospace;
+            font-size: 13px;
+            color: var(--accent);
+        }
+        .sources-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .sources-section h3 {
+            font-size: 15px;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+        .sources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 6px;
+        }
+        .source-item {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+        .source-item a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .source-item a:hover { text-decoration: underline; }
+        footer {
             text-align: center;
+            padding: 32px 0;
             color: var(--text-secondary);
             font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+            font-family: monospace;
         }
-
         @media (max-width: 600px) {
             .container { padding: 24px 16px; }
             h1 { font-size: 22px; }
             .card-header { flex-direction: column; }
-            .card-source { white-space: normal; }
-            .tool-card { flex-direction: column; gap: 10px; }
+            .tool-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -229,457 +225,298 @@
     <div class="container">
         <header>
             <div class="meta">
-                <span class="badge">developer_practice</span>
-                <span class="date">2026-05-16 · 周期: 2026-05-15 18:45 ~ 2026-05-16 18:45</span>
+                <span class="badge">2026-05-17</span>
+                <span class="badge">DEVELOPER_PRACTICE</span>
             </div>
-            <h1>开发者实践日报 <span class="highlight">Developer Daily</span></h1>
-            <p class="subtitle">面向一线开发者的技术动态、工具更新与实践指南</p>
+            <h1>开发者实践日报</h1>
+            <p class="subtitle">Developer Practice Daily Report</p>
         </header>
 
-        <!-- 今日技术热榜 -->
-        <h2><span class="icon">🔥</span> 今日技术热榜</h2>
+        <section class="section">
+            <h2 class="section-title">今日技术热榜</h2>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.121" target="_blank" rel="noopener">Visual Studio Code 1.121 发布</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://github.blog/engineering/architecture-optimization/from-latency-to-instant-modernizing-github-issues-navigation-performance/" target="_blank" rel="noopener">GitHub Issues 导航性能优化：从 600ms 降至 70ms 的实践</a></h3>
+                    <span class="tag">PERFORMANCE</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.121" target="_blank" rel="noopener">[Microsoft for Developers]</a>
+                <div class="card-body">
+                    <p>GitHub 团队围绕"本地优先、stale-while-revalidate"模型重建了 Issue 导航系统。核心思路是从 IndexedDB 缓存直接渲染，后台异步重新验证。改造后约 70% 的 React 导航实现即时响应，P10 延迟从 600ms 降至 70ms。</p>
+                    <p>文章深入介绍了 GitHub React/Rails 混合技术栈中的缓存架构、预取策略和状态同步机制，对大型前端应用的性能优化极具参考价值。特别关注 stale-while-revalidate 模型在真实生产环境中的应用细节。</p>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>VS Code 团队发布了 1.121 版本的 Insider 更新。作为开发者日常最依赖的编辑器之一，VS Code 的每次迭代都值得关注——无论是性能优化、新语言支持，还是与 GitHub Copilot 的深度集成改进，都可能直接影响你的编码效率。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag tool">编辑器</span>
-                <span class="tag">VS Code</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://github.blog/engineering/architecture-optimization/from-latency-to-instant-modernizing-github-issues-navigation-performance/" target="_blank" rel="noopener">GitHub Blog</a> | <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247547815&idx=1&sn=d7c7704a8b1c803489ff06c4d50d59d5" target="_blank" rel="noopener">印记中文</a></div>
+            </article>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://www.infoq.com/news/2026/05/aspire-13-3-release/" target="_blank" rel="noopener">Microsoft Aspire 13.3 发布：原生 Kubernetes 部署与前端发布支持</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://github.com/vercel-labs/zero" target="_blank" rel="noopener">Vercel 发布 Zero：专为 AI Agent 设计的编程语言</a></h3>
+                    <span class="tag">NEW_LANGUAGE</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://www.infoq.com/news/2026/05/aspire-13-3-release/" target="_blank" rel="noopener">[InfoQ]</a>
+                <div class="card-body">
+                    <p>Vercel Labs 推出了 Zero，一款从第一天起就为 AI Agent 设计的系统级编程语言。其设计目标明确：比现有语言更快、更小、更易于 Agent 编写和修复。核心特性包括显式能力声明（Explicit Capabilities）、JSON 格式的诊断输出（JSON Diagnostics）和类型安全的自动修复（Typed Safe Fixes）。</p>
+                    <p>这是首次有主流团队从语言层面而非框架层面解决 Agent 编程的痛点——hallucination 导致的编译错误、不安全的自动修复等。Chris Tate 主导开发，值得所有关注 AI 编程的开发者关注。</p>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>Microsoft 发布了 Aspire 13.3，带来了多项重要更新。新增的 <code>aspire destroy</code> 命令支持一键清理 Azure、Kubernetes 和 Compose 上的部署；原生 Kubernetes 部署进入预览阶段；首次支持 Next.js 和 Vite 的一等公民 JavaScript 发布流程；还加入了浏览器日志捕获和默认启用的容器隧道功能。对于使用 .NET 云原生技术栈的开发者来说，这是值得升级的一版——但注意有几项 breaking changes，升级前务必查阅迁移指南。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag tool">云原生</span>
-                <span class="tag">.NET</span>
-                <span class="tag arch">部署</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://github.com/vercel-labs/zero" target="_blank" rel="noopener">GitHub - Vercel Labs</a> | <a href="https://x.com/ctatedev" target="_blank" rel="noopener">Chris Tate (@ctatedev)</a></div>
+            </article>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://blog.bytebytego.com/p/ep215-the-anatomy-of-an-ai-agent" target="_blank" rel="noopener">AI Agent 的解剖学：系统架构深度解析</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://github.com/Zoo-Code-Org/Zoo-Code" target="_blank" rel="noopener">Zoo Code 接棒 Roo Code：VS Code AI 编程代理的新选择</a></h3>
+                    <span class="tag">AI_CODING</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://blog.bytebytego.com/p/ep215-the-anatomy-of-an-ai-agent" target="_blank" rel="noopener">[ByteByteGo Newsletter]</a>
+                <div class="card-body">
+                    <p>Roo Code 团队宣布停止开发后，一批核心贡献者将项目 Fork 并更名为 Zoo Code 继续维护。Zoo Code 在 VS Code 中提供一整套 AI 编程代理团队，支持代码生成、调试、架构设计和自定义工作模式。</p>
+                    <p>与 Roo Code 一脉相承的功能设计，加上活跃社区维护，使其成为目前最稳定的 Roo Code 替代方案。对于已经习惯 Roo Code 工作流但担心后续维护的开发者，Zoo Code 是平滑迁移的最佳选择。</p>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>ByteByteGo 本周的系统设计 refresher 聚焦 AI Agent 架构，涵盖 Prompt Injection 防御、REST vs GraphQL vs gRPC 的技术选型对比，以及 Claude Code 这类 AI 编程工具的定位分析。对于正在设计或集成 AI Agent 系统的开发者，这是一份不可多得的架构参考——它把 Agent 的组成部分（感知、推理、行动、记忆）拆解得清晰明了，并对比了不同通信协议在 Agent 生态中的适用场景。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag arch">架构</span>
-                <span class="tag ai">AI Agent</span>
-                <span class="tag">系统设计</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://github.com/Zoo-Code-Org/Zoo-Code" target="_blank" rel="noopener">GitHub - Zoo Code</a> | <a href="https://x.com/geekbb" target="_blank" rel="noopener">Geek (@geekbb)</a></div>
+            </article>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://x.com/cognition/status/2055360350862610690" target="_blank" rel="noopener">Devin 完成 AngelList 14,000 个 Dashboard 的 Redshift→Snowflake 迁移，提速 5.2 倍</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://gh.io/github-copilot-app" target="_blank" rel="noopener">GitHub Copilot App 即将上线，对标 Codex App</a></h3>
+                    <span class="tag">AI_CODING</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://x.com/cognition/status/2055360350862610690" target="_blank" rel="noopener">[Cognition Labs]</a>
+                <div class="card-body">
+                    <p>GitHub 正式宣布 Copilot 将推出独立 App 形态，功能定位与 OpenAI 的 Codex App 相似。用户可以在移动端创建仓库、发起编码任务并远程协同。这意味着 GitHub 正在从"编辑器插件"向"全平台 AI 编程助手"转型。</p>
+                    <p>申请页面已开放，值得尝鲜。GitHub 移动端此前已支持创建仓库（public/private、选择模板），这次 App 化将进一步把 AI 编程能力扩展到任何设备。</p>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>这是一个值得所有数据工程师关注的实战案例。AngelList 的新工程师 Beau Rothrock 接手一个已经延期两个月的 Redshift 到 Snowflake 迁移项目，需要在 5 周内完成 14,000 个 dashboard 和报表的迁移。他没有申请更多人手，而是使用 Devin（AI 软件工程师）协助完成。最终迁移速度比预期快了 5.2 倍。这个案例展示了 AI Agent 在数据迁移这类重复性高、规则明确的工程任务中的真实生产力价值——不是替代工程师，而是让一个人能完成原本需要一个团队的工作量。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag ai">AI编程</span>
-                <span class="tag practice">数据迁移</span>
-                <span class="tag">案例</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://gh.io/github-copilot-app" target="_blank" rel="noopener">GitHub</a> | <a href="https://x.com/shao__meng" target="_blank" rel="noopener">meng shao (@shao__meng)</a></div>
+            </article>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://x.com/gdb/status/2055646916499714488" target="_blank" rel="noopener">Codex Skill：自动分析代码复杂度热点</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://testingcatalog.com/openai-will-let-codex-control-other-devices" target="_blank" rel="noopener">OpenAI 构建 Codex 设备网络：从单设备到分布式 Agent 舰队</a></h3>
+                    <span class="tag">AGENT_ARCH</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://x.com/gdb/status/2055646916499714488" target="_blank" rel="noopener">[Greg Brockman / OpenAI]</a>
+                <div class="card-body">
+                    <p>OpenAI 正在将 Codex 从"单设备运行"升级为"个人设备网络"。核心设计是：手机作为入口，Mac Mini、工作站甚至闲置老电脑都可作为执行节点。通过"Locked Use"设置，Codex 可在锁屏状态下继续通过 Computer Use 操作 GUI。</p>
+                    <p>这意味着你可以从手机派任务给家中或办公室的任意设备执行，无需 SSH、无需保持设备唤醒。这是 AI Agent 从单机走向分布式协作的关键一步，也暗示了未来"个人算力云"的可能性。</p>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>社区开发者基于 Codex 创建了一个实用的 Skill，能够自动扫描代码库并报告性能优化机会——检测 O(n²)、O(n*m) 复杂度、重复扫描、N+1 查询模式等。Codex 会给出优化前后的复杂度对比，确保改动不会破坏原有行为。这类工具的出现标志着 AI 辅助编程正在从"生成代码"进化到"优化现有代码"，对维护 legacy codebase 的团队尤其有价值。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag ai">Codex</span>
-                <span class="tag practice">性能优化</span>
-                <span class="tag">代码分析</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://testingcatalog.com/openai-will-let-codex-control-other-devices" target="_blank" rel="noopener">TestingCatalog</a> | <a href="https://x.com/gdb" target="_blank" rel="noopener">Greg Brockman (@gdb)</a></div>
+            </article>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://x.com/gdb/status/2055695957057036452" target="_blank" rel="noopener">GPT-5.5 发现全新安全漏洞，10 分钟内通过初步审核</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://www.infoq.com/news/2026/05/monzo-data-mesh/" target="_blank" rel="noopener">Monzo 数据网格实践：100 个团队、12000 个 dbt 模型的治理之道</a></h3>
+                    <span class="tag">DATA_ENGINEERING</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://x.com/gdb/status/2055695957057036452" target="_blank" rel="noopener">[Greg Brockman / OpenAI]</a>
+                <div class="card-body">
+                    <p>英国数字银行 Monzo 分享了其数据平台重构经验。面对 100 多个团队、超过 12000 个 dbt 模型的复杂局面，Monzo 引入"meshy"架构（数据网格的改良版），将数据仓库成本降低了约 40%，数据交付速度提升 25%。</p>
+                    <p>关键实践包括：域自治（domain ownership）、标准化数据契约（data contracts）和统一的数据发现层。对于正在经历数据规模膨胀的团队，Monzo 的经验证明了数据网格不只是理论，而是可落地的架构方案。</p>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>安全研究员 Philo Groves 使用 GPT-5.5 发现了一个真正新颖的安全漏洞，报告在不到 10 分钟内就通过了初步审核，且未发现有重复提交。Greg Brockman 转发并强调了 GPT 在防御性安全领域的潜力。对于安全工程师和白帽黑客来说，这意味着 AI 正在成为漏洞挖掘的加速器——但前提是你要会设计正确的 prompt 和验证流程，AI 发现≠真实可利用。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag ai">AI安全</span>
-                <span class="tag practice">漏洞挖掘</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://www.infoq.com/news/2026/05/monzo-data-mesh/" target="_blank" rel="noopener">InfoQ</a> | Renato Losio</div>
+            </article>
 
-        <!-- 深度技术解读 -->
-        <h2><span class="icon">🔬</span> 深度技术解读</h2>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://weread.qq.com/r/weread-skills" target="_blank" rel="noopener">微信读书 Skills 上线：让 Agent 拥有个人图书馆</a></h3>
+                    <span class="tag">AGENT_ECO</span>
+                </div>
+                <div class="card-body">
+                    <p>微信读书官方推出 Skills 系统，支持查看笔记和划线、推荐书籍、查看阅读数据统计。安装方式简单：下载 skill 包后在 Codex 或 Claude Code 中直接安装即可。这意味着每个 Agent 都可以接入用户的真实阅读数据，变成"智能图书馆"。</p>
+                    <p>开发者可以基于此构建读书报告生成、阅读偏好分析、知识盲区补全等应用。姚金刚也开源了 yao-weread-skill，可生成包含 26 个图表的可视化读书报告。</p>
+                </div>
+                <div class="card-source">📎 <a href="https://weread.qq.com/r/weread-skills" target="_blank" rel="noopener">微信读书</a> | <a href="https://x.com/op7418" target="_blank" rel="noopener">歸藏 (@op7418)</a> | <a href="https://x.com/vista8" target="_blank" rel="noopener">向阳乔木 (@vista8)</a></div>
+            </article>
 
-        <div class="card deep-dive">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://www.youtube.com/watch?v=eW_vxrjvERk" target="_blank" rel="noopener">向量检索不够了：Neo4j 的上下文图（Context Graphs）实践</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://www.infoq.com/news/2026/05/ubuntu-on-device-ai/" target="_blank" rel="noopener">Ubuntu 明确本地 AI 战略：拒绝云优先，拥抱本地智能</a></h3>
+                    <span class="tag">OS</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://www.youtube.com/watch?v=eW_vxrjvERk" target="_blank" rel="noopener">[AI Engineer / Neo4j]</a>
+                <div class="card-body">
+                    <p>Canonical 正式阐述了 Ubuntu 的 AI 战略：与行业"云优先"趋势背道而驰，Ubuntu 将专注于本地智能、模块化设计和严格的用户控制。这意味着未来 Ubuntu 版本将内置更多本地 AI 能力，而非简单地将用户数据送往云端。</p>
+                    <p>对于开发者而言，这提供了更可控的 AI 开发环境——本地模型运行、隐私保护、离线可用。这也是目前唯一明确押注"本地优先"的主流操作系统。</p>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>Neo4j 的 Stephen Chin 在一个演讲中用医疗场景完美诠释了为什么"检索"（Retrieval）不等于"理解"。当你问一个向量 RAG 系统关于患者肺气肿护理计划的问题，它返回的是通用建议：呼吸治疗、深呼吸练习。但如果你给它一张基于该患者真实病史的图——知道他吸烟、做过手术——系统给出的建议就会完全个性化。</p>
-                <p>关键洞察：信息本身存在于两种系统中，区别在于系统是否能遍历连接这些信息的关系。对于构建复杂 AI Agent 的开发者，这提出了一个重要的架构选择：当业务实体之间存在丰富关系时，图数据库（Graph DB）+ 向量检索的混合方案可能比纯向量 RAG 更适合。</p>
-                <p>实践建议：如果你的 Agent 需要处理"这个用户的上次订单""这个项目的依赖关系"这类需要关系遍历的查询，考虑在向量相似度搜索之外引入图遍历能力。Neo4j 的 GDS 库或 Amazon Neptune 都提供了与 LLM 集成的方案。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag arch">RAG</span>
-                <span class="tag">图数据库</span>
-                <span class="tag ai">Agent架构</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://www.infoq.com/news/2026/05/ubuntu-on-device-ai/" target="_blank" rel="noopener">InfoQ</a> | Sergio De Simone</div>
+            </article>
+        </section>
 
-        <div class="card deep-dive">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://simonwillison.net/2026/May/16/julia-evans/" target="_blank" rel="noopener">Julia Evans：认真对待 CSS，而不是贬低它</a>
-                </div>
-                <div class="card-source">
-                    <a href="https://simonwillison.net/2026/May/16/julia-evans/" target="_blank" rel="noopener">[Simon Willison's Weblog]</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <p>Julia Evans（以技术漫画闻名）分享了她对 CSS 的态度转变：从"CSS is hard"的抱怨者，变成真正尊重这门技术的实践者。她发现很多 frustration（比如"居中不可能"）其实在 CSS 中早已被优雅解决，而且"居中"本身就不是一个简单的问题——不同场景下有不同的语义和实现方式。</p>
-                <p>这个观点与最近"逃离 Tailwind"的讨论形成呼应。Tailwind 的 utility-first 方法在快速原型阶段很有价值，但当项目进入维护期，内联的 utility class 会让 CSS 的语义层完全消失。Julia 的做法是：花时间去学习 CSS 的现代特性（Grid、Flexbox、Container Queries），你会发现原生 CSS 的能力远比你想象的强大。</p>
-                <p>给前端开发者的建议：如果你还在用 <code>!important</code> 和负 margin 做布局，值得花一个周末系统学习现代 CSS——这会从根本上提升你的布局效率和代码可维护性。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag practice">前端</span>
-                <span class="tag">CSS</span>
-                <span class="tag">Tailwind</span>
-            </div>
-        </div>
+        <section class="section">
+            <h2 class="section-title">深度技术解读</h2>
 
-        <div class="card deep-dive">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651284432&idx=4&sn=bbcba848e095ac647a3099e2a7c56af5" target="_blank" rel="noopener">Netflix 的模型生命周期图：企业级 ML 系统的元数据架构</a>
+            <article class="card deep-dive">
+                <div class="card-header">
+                    <h3 class="card-title">Mitchell Hashimoto 警示：行业正陷入"AI 精神错乱"状态</h3>
+                    <span class="tag">TECH_REFLECTION</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651284432&idx=4&sn=bbcba848e095ac647a3099e2a7c56af5" target="_blank" rel="noopener">[InfoQ / Netflix]</a>
+                <div class="card-body">
+                    <p>HashiCorp 创始人 Mitchell Hashimoto 发文指出，许多公司正陷入严重的"AI 痴迷状态"——以速度和高变更率掩盖架构退化。他类比了云时代的 MTBF vs MTTR 之争：当年大家争论"减少故障间隔"还是"加速恢复时间"，如今 AI 让问题重演，但范围扩大到整个软件开发过程。</p>
+                    <p>核心风险在于：AI 可能将系统自动化成"看起来很稳健的灾难机器"——局部指标正常，但全局越来越难以理解；bug 报告下降，潜在风险却在爆炸式增长；测试覆盖率上升，但对系统的真正理解在下降。变化太快，没人注意到底层架构正在悄悄腐烂。</p>
+                    <div class="highlight-box">
+                        <strong>对开发者的启示：</strong><br>
+                        AI 是放大器，不是替代器。高绩效组织用 AI 放大优势，低效组织用 AI 放大混乱。在引入 AI 编程工具时，必须保持对架构的深入理解，不能为了速度牺牲可理解性。
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>Netflix 分享了一种基于图（Graph）的机器学习系统管理架构——"模型生命周期图"（Model Lifecycle Graph）。在大型组织中，ML 资产（数据集、特征、模型、实验、工作流）呈指数级增长，传统的元数据管理工具越来越难以回答"这个模型依赖哪些上游数据集""某个数据集的变更会影响哪些下游模型"这类问题。</p>
-                <p>Netflix 的解决方案是将 ML 资产及其关系作为一等基础设施关注：用图结构建模数据集→特征→模型→评估→部署的完整链路。这种以元数据为中心的 ML 平台设计正在成为行业趋势，Google 的 Vertex AI、AWS 的 SageMaker Lineage 都在走类似路线。</p>
-                <p>对 ML 工程师的启示：如果你的团队已经开始为"模型版本混乱""实验不可复现""特征来源不明"头疼，引入一个支持血缘追踪（lineage tracking）的 ML 元数据平台（如 MLflow、KubeFlow Pipelines 或自研图系统）是架构升级的关键一步。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag arch">MLOps</span>
-                <span class="tag">数据血缘</span>
-                <span class="tag">元数据</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://x.com/mitchellh" target="_blank" rel="noopener">Mitchell Hashimoto (@mitchellh)</a> | <a href="https://x.com/vikingmute" target="_blank" rel="noopener">Viking (@vikingmute)</a> | <a href="https://supertechfans.com/cn/post/2026-05-17-HackerNews/" target="_blank" rel="noopener">HackerNews 每日摘要</a></div>
+            </article>
 
-        <!-- 工具推荐 -->
-        <h2><span class="icon">🛠️</span> 工具推荐</h2>
+            <article class="card deep-dive">
+                <div class="card-header">
+                    <h3 class="card-title">谷歌 DORA 报告：AI 软件开发 ROI 的真相</h3>
+                    <span class="tag">ENG_MANAGEMENT</span>
+                </div>
+                <div class="card-body">
+                    <p>谷歌云 DORA 团队发布了《AI 辅助软件开发的 ROI》报告，核心结论：AI 投资的最大回报并非来自工具本身，而是底层组织系统的战略性完善——内部平台完善度、工作流程清晰度和团队协作一致性。没有这个基础，AI 只能带来局部生产力提升，这些提升会在后续流程的混乱中损耗殆尽。</p>
+                    <p>报告提出了"价值实现 J 曲线"概念：大多数组织在收获 AI 长期收益前，会经历短期生产力下滑。原因有三：适应新工作流的学习成本、审核 AI 生成代码的校验成本、以及代码产出增加后需要调整的下游流程（测试、变更审批等）。如果管理者误判为失败并在低谷期撤回投入，将错失长期回报。</p>
+                    <div class="highlight-box">
+                        <strong>实践建议：</strong><br>
+                        • 建立系统性的 AI 应用评估框架，而非只看单一指标<br>
+                        • 预期短期生产力下降，将其视为"转型的学费"<br>
+                        • ROI 计算基于七项核心能力：代码生成、代码审查、测试、文档、安全、可观测性和发布管理
+                    </div>
+                </div>
+                <div class="card-source">📎 <a href="https://www.infoq.com/news/2026/05/monzo-data-mesh/" target="_blank" rel="noopener">InfoQ</a> | 译者: 明知山</div>
+            </article>
+        </section>
 
-        <div class="card tool-card">
-            <div class="tool-icon">🖥️</div>
-            <div class="tool-info">
-                <div class="tool-name">
-                    <a href="https://x.com/geekbb/status/2055655509059928551" target="_blank" rel="noopener">Kooky — AI 编码专用 macOS 终端</a>
+        <section class="section">
+            <h2 class="section-title">工具推荐</h2>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h4>Lapce</h4>
+                    <p>纯 Rust 编写的轻量级编辑器，原生 GUI + GPU 加速，比 Zed 还快。支持 LSP、Git 集成、内置终端。适合追求极致性能和低资源占用的开发者。</p>
+                    <a href="https://lap.dev/lapce/" target="_blank" rel="noopener">lap.dev/lapce →</a>
                 </div>
-                <div class="tool-desc">
-                    把工作区管理、分屏和 AI Agent 启动流程整合到一个终端里。支持横竖分屏，一键启动 Claude Code、Codex、Gemini CLI 等 7 个 AI Agent，右键选中内容直接提交给 Agent 提问。GitHub: github.com/iAmCorey/kooky
-                </div>
-                <div class="card-tags" style="margin-top:8px">
-                    <span class="tag tool">终端</span>
-                    <span class="tag">macOS</span>
-                    <span class="tag ai">AI Agent</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="card tool-card">
-            <div class="tool-icon">📄</div>
-            <div class="tool-info">
-                <div class="tool-name">
-                    <a href="https://x.com/geekbb/status/2055562646884167759" target="_blank" rel="noopener">md2html — AI 文档自动转 HTML</a>
+                <div class="tool-card">
+                    <h4>Reframe</h4>
+                    <p>three.js 作者 mrdoob 的极简视频处理工具。拖拽视频即可调整内边距、圆角、边框、阴影和背景色，一键导出 MP4。仅三个文件，部署在 GitHub Pages 上。</p>
+                    <a href="https://github.com/mrdoob/reframe" target="_blank" rel="noopener">github.com/mrdoob/reframe →</a>
                 </div>
-                <div class="tool-desc">
-                    AI 生成的 Markdown 技术文档动辄几千字，在终端里滚动没人愿意看。md2html 自动把 Markdown 转成带侧边栏目录、图表、时间线、卡片和警告框的 HTML 页面，单文件即可分享。GitHub: github.com/haidang1810/md2html
-                </div>
-                <div class="card-tags" style="margin-top:8px">
-                    <span class="tag tool">文档工具</span>
-                    <span class="tag">Markdown</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="card tool-card">
-            <div class="tool-icon">🔗</div>
-            <div class="tool-info">
-                <div class="tool-name">
-                    <a href="https://x.com/geekbb/status/2055622038396846105" target="_blank" rel="noopener">Claude Code API 代理 — 10 家 LLM 提供商兼容</a>
+                <div class="tool-card">
+                    <h4>MagicPath + Codex</h4>
+                    <p>在 Codex 中直接运行 MagicPath 作为原生画布。边拖拽设计 UI，边让 Codex 实时感知项目并自动生成代码。安装命令：<code>npx skills add github.com/magicpathai/...</code></p>
+                    <a href="https://magicpath.ai" target="_blank" rel="noopener">magicpath.ai →</a>
                 </div>
-                <div class="tool-desc">
-                    架设一个兼容 Anthropic Messages API 的代理层，把 Claude Code 的请求路由到你配置的任意 LLM 提供商。支持 OpenRouter、DeepSeek、OpenAI、GitHub Copilot、NVIDIA NIM、Kimi、Google AI、Ollama 等 10 种。想用 DeepSeek 或本地模型跑 Claude Code？这个工具让切换零成本。GitHub: github.com/danielalves96
-                </div>
-                <div class="card-tags" style="margin-top:8px">
-                    <span class="tag tool">代理</span>
-                    <span class="tag">Claude Code</span>
-                    <span class="tag">开源</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="card tool-card">
-            <div class="tool-icon">🔍</div>
-            <div class="tool-info">
-                <div class="tool-name">
-                    <a href="https://x.com/LangChain/status/2055369808536076777" target="_blank" rel="noopener">LangChain SmithDB — 秒级 Trace 查看</a>
+                <div class="tool-card">
+                    <h4>Cloudflare Workers Auth</h4>
+                    <p>为 Cloudflare Workers 项目添加自托管登录系统，支持账号密码、魔术链接、邮箱验证和找回密码。全栈 Serverless 认证方案。</p>
+                    <a href="https://github.com/leopoldsw/cloudflare-workers-auth" target="_blank" rel="noopener">GitHub →</a>
                 </div>
-                <div class="tool-desc">
-                    LangChain 推出的 SmithDB 大幅提升了 Agent trace 的查询性能——从分钟级降到秒级。对于运行大量后台 Agent 的团队（如 Cogent Security），实时可观测性是生产环境的刚需。如果你正在用 LangChain 构建 Agent 系统，这是值得关注的基础设施升级。
-                </div>
-                <div class="card-tags" style="margin-top:8px">
-                    <span class="tag tool">可观测性</span>
-                    <span class="tag">LangChain</span>
-                    <span class="tag">Agent</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="card tool-card">
-            <div class="tool-icon">🧠</div>
-            <div class="tool-info">
-                <div class="tool-name">
-                    <a href="https://x.com/itsPaulAi/status/2055402817871872250" target="_blank" rel="noopener">NVIDIA 2.6B 开源 World Model — 单 GPU 运行</a>
+                <div class="tool-card">
+                    <h4>Network Topology Builder</h4>
+                    <p>浏览器内的拖拽式网络架构图工具，画服务器、代理、数据库间的数据流向。无需编码即可搭建网络拓扑图。</p>
+                    <a href="https://github.com/ShadowArcanist/Network-Topology-Builder" target="_blank" rel="noopener">GitHub →</a>
                 </div>
-                <div class="tool-desc">
-                    NVIDIA 发布了一个 26 亿参数的开源世界模型，可将单张图片、文本提示和轨迹转换为可控制的世界模拟。最大亮点：能在单张 GPU（如 RTX 5090 或 H100）上运行。适用于具身 AI、机器人研究、物理仿真等场景。代码和论文均已公开。
-                </div>
-                <div class="card-tags" style="margin-top:8px">
-                    <span class="tag ai">世界模型</span>
-                    <span class="tag">NVIDIA</span>
-                    <span class="tag">开源</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- 实践指南 -->
-        <h2><span class="icon">📋</span> 实践指南</h2>
+                <div class="tool-card">
+                    <h4>Obsidian Dashboard</h4>
+                    <p>一站式仪表盘插件，整合备忘、待办、项目卡片、快捷链接和最近文档到一个页面，免去笔记间来回切换。</p>
+                    <a href="https://github.com/PandoraReads/obsidian-dashboard" target="_blank" rel="noopener">GitHub →</a>
+                </div>
+            </div>
+        </section>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://www.youtube.com/watch?v=kfSDc2eVLo4" target="_blank" rel="noopener">AI 产品中如何利用领域专家：三种组织模式</a>
-                </div>
-                <div class="card-source">
-                    <a href="https://www.youtube.com/watch?v=kfSDc2eVLo4" target="_blank" rel="noopener">[AI Engineer / Notius Labs]</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <p>Chris Lovejoy 分享了 Granola 团队组织 AI 产品开发的三种模式，对正在构建 AI 应用的团队非常有参考价值：</p>
-                <p><strong>Oracle（神谕模式）</strong>：领域专家拥有完整闭环——既评估质量，又直接改进 prompt。适合创意类输出（如会议记录），因为没有"客观完美"的标准，需要有人用品味做判断。</p>
-                <p><strong>Evaluator（评估者模式）</strong>：领域专家定义质量标准并度量，工程师负责迭代实现。适合有明确评估指标的任务（如准确率、召回率）。</p>
-                <p><strong>Architect（架构师模式）</strong>：构建能从使用数据中自动改进的系统。适合大规模、高频场景，系统通过用户反馈自学习。</p>
-                <p>关键教训：引入领域专家但不给 ownership 是最大的浪费。无论选择哪种模式，专家必须对输出质量有真正的决策权。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag practice">AI产品</span>
-                <span class="tag">团队组织</span>
-                <span class="tag">最佳实践</span>
-            </div>
-        </div>
+        <section class="section">
+            <h2 class="section-title">实践指南</h2>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636259&idx=1&sn=ec6701a68b3cb0c89e80a3e04745c285" target="_blank" rel="noopener">8 维度 Skill 量化评估框架：你写的 Skill 及格了吗？</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://seangoedecke.com/how-i-use-llms-in-2026/" target="_blank" rel="noopener">Staff Engineer 的 2026 LLM 使用指南</a></h3>
+                    <span class="tag">BEST_PRACTICE</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636259&idx=1&sn=ec6701a68b3cb0c89e80a3e04745c285" target="_blank" rel="noopener">[dbaplus社群 / 百度Geek说]</a>
+                <div class="card-body">
+                    <p>资深工程师 Sean Goedecke 分享了他在 2026 年使用 LLM 的实际经验。一年间，他从"Copilot 自动补全 + 一次性研究代码"的用法，进化到"AI 编写完整 PR、自动处理票务、参与技术决策"的深度用法。关键转变在于：从把 AI 当作"更快的搜索引擎"到"可靠的协作伙伴"。</p>
+                    <div class="highlight-box">
+                        <strong>实用建议：</strong><br>
+                        1. 在陌生领域让 AI 写初稿，在自己熟悉的领域让 AI 做 Review<br>
+                        2. 用 AI 处理"一次性研究代码"——探索性、用完即弃的代码<br>
+                        3. 技术文档和大纲的 AI 辅助撰写效率最高<br>
+                        4. 明确划定"不用 AI"的边界：核心架构决策、安全敏感代码、需要深度理解的调试
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>Skill 是 Agent 能力的最小封装单元，但现在所有人都在写 Skill，质量参差不齐。百度团队提出了一套 8 维度评估框架：元数据质量、执行引导清晰度、领域知识密度、错误处理完备性、输入输出规范度、可复用性、文档完整性和安全性。</p>
-                <p>实践要点：description 写得太宽泛，Agent 根本不会触发；工作流缺少分支处理，遇到异常就崩溃；没有示例输入输出，Agent 难以正确使用。框架还设计了多模型交叉验证流程，通过不同模型对同一 Skill 打分取均值，降低评估偏差。</p>
-                <p>如果你正在为自己的团队或开源社区编写 Skill，建议先用这套框架自评——"能跑"和"好用"之间确实隔着十万八千里。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag practice">Skill设计</span>
-                <span class="tag">评估框架</span>
-                <span class="tag ai">Agent</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://seangoedecke.com/how-i-use-llms-in-2026/" target="_blank" rel="noopener">seangoedecke.com</a></div>
+            </article>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://x.com/geekbb/status/2055582433681244540" target="_blank" rel="noopener">GitHub Copilot 桌面应用：多 Agent 工作流正式落地</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://claude.com/blog/the-founders-playbook" target="_blank" rel="noopener">Anthropic 创始人手册：AI 原生创业实战</a></h3>
+                    <span class="tag">STARTUP_GUIDE</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://x.com/geekbb/status/2055582433681244540" target="_blank" rel="noopener">[GitHub]</a>
+                <div class="card-body">
+                    <p>Anthropic 发布了《The Founder's Playbook》，按 Idea → MVP → Launch → Scale 四个阶段拆解 AI 原生创业。关键洞察：AI 原生创业的核心不是"用 AI 做事"，而是重新设计每个阶段的工作流。创始人角色正从"亲自做事的人"变成"指挥 agents、工具和少数人的总指挥"。</p>
+                    <div class="highlight-box">
+                        <strong>关键要点：</strong><br>
+                        • AI 技术债的本质是<strong>上下文漂移</strong>——没有规格、架构和持久记忆，代码库会失去连贯心智模型<br>
+                        • 真正的 PMF = 留存 + 付费 + 推荐，以及用户主动拉着产品往前走<br>
+                        • Launch 阶段的关键是<strong>系统化</strong>——把增长、产品、客服从创始人手里释放出来<br>
+                        • Scale 阶段的护城河来自领域知识、用户数据、集成深度和工作流锁定的复利
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>GitHub 官方推出 Copilot 桌面应用，专为 Agent 驱动的开发流程设计。核心能力包括：同时运行多个 AI Agent 工作流、原生集成 GitHub Issues / Pull Requests / CI 流水线，覆盖从编码到 PR 合并的完整开发生命周期。</p>
-                <p>这标志着 AI 编程工具从"辅助写代码"正式进入"管理工作流"的阶段。对于团队而言，这意味着 Agent 不再只是个人效率工具，而是可以融入协作流程的基础设施——自动关联 Issue 和 PR、根据 CI 结果迭代修复、在代码审查阶段提供 AI 辅助检查。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag tool">GitHub Copilot</span>
-                <span class="tag ai">Agent工作流</span>
-                <span class="tag practice">团队协作</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://claude.com/blog/the-founders-playbook" target="_blank" rel="noopener">claude.com/blog/the-founders-playbook</a> | <a href="https://x.com/shao__meng" target="_blank" rel="noopener">meng shao (@shao__meng)</a></div>
+            </article>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <a href="https://x.com/shao__meng/status/2055462663254385143" target="_blank" rel="noopener">Claude Code 主动重置 Rate Limit，对标 Codex 竞争白热化</a>
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636264&idx=1&sn=d0dc739ebd41457d7dd8a1a5c7a9406d" target="_blank" rel="noopener">PostgreSQL work_mem 的"定时炸弹"</a></h3>
+                    <span class="tag">DATABASE</span>
                 </div>
-                <div class="card-source">
-                    <a href="https://x.com/shao__meng/status/2055462663254385143" target="_blank" rel="noopener">[meng shao]</a>
+                <div class="card-body">
+                    <p>digoal 德哥深入分析了 PostgreSQL work_mem 配置最容易被误解的陷阱。核心问题：<code>work_mem</code> 不是"每条 SQL 的内存上限"，而是执行计划中单个内存操作节点的预算起点。复杂查询中多个 sort/hash 节点并发执行时，总内存消耗可能是 work_mem 的数倍。并行查询时每个 worker 独立吃资源，4-worker 查询可能接近 5 倍消耗。</p>
+                    <div class="highlight-box">
+                        <strong>正确姿势：</strong><br>
+                        • 先看并发数、执行计划中内存节点数量、是否并行、hash 是否放大<br>
+                        • 哈希操作上限还会乘以 <code>hash_mem_multiplier</code>（默认 2.0）<br>
+                        • 2TB 内存也可能 OOM——work_mem 调太大 + 高并发 + 复杂查询 = 灾难<br>
+                        • 不要单独讨论 work_mem 数字，要看完整执行计划
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <p>Claude Code 团队周五主动重置了所有用户的 5 小时和每周 rate limit——这是 Codex 的标志性策略（Codex 用户享受几乎无限制的使用），Claude Code 显然是直接对标跟进。Anthropic 和 OpenAI 在 AI 编程助手领域的竞争正在进入正面肉搏阶段。</p>
-                <p>对开发者的实际影响：现在两家都在争取"主力编辑器"的位置，功能和定价策略都在快速迭代。建议不要过早绑定单一工具——Claude Code 在代码理解和重构上仍有优势，Codex 在代码生成速度和 context 长度上更激进。最佳策略是根据项目类型切换，或像社区里很多人做的那样，用 API 代理层（如前面推荐的工具）同时接入两家模型。</p>
-            </div>
-            <div class="card-tags">
-                <span class="tag ai">Claude Code</span>
-                <span class="tag ai">Codex</span>
-                <span class="tag practice">工具选型</span>
-            </div>
-        </div>
+                <div class="card-source">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636264&idx=1&sn=d0dc739ebd41457d7dd8a1a5c7a9406d" target="_blank" rel="noopener">dbaplus 社群 / digoal德哥</a></div>
+            </article>
+        </section>
 
-        <!-- 参考链接汇总 -->
-        <div class="sources">
-            <h2><span class="icon">📎</span> 参考链接汇总</h2>
-            <div class="source-list">
-                <div class="source-item">
-                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.121" target="_blank" rel="noopener">Visual Studio Code 1.121 — Microsoft</a>
+        <section class="section">
+            <h2 class="section-title">安全警示</h2>
+
+            <article class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><a href="https://www.infoq.com/news/2026/05/" target="_blank" rel="noopener">38 万应用暴露、近 2000 个泄露敏感数据：Vibe Coding 的安全暗礁</a></h3>
+                    <span class="tag">SECURITY</span>
                 </div>
-                <div class="source-item">
-                    <a href="https://www.infoq.com/news/2026/05/aspire-13-3-release/" target="_blank" rel="noopener">Microsoft Aspire 13.3 — InfoQ</a>
+                <div class="card-body">
+                    <p>以色列安全公司 RedAccess 研究发现，使用 Lovable、Base44、Netlify 和 Replit 等 Vibe Coding 工具创建的约 38 万个应用暴露在公开网络上。其中约 5000 个几乎没有任何安全机制或身份验证，近 2000 个应用暴露了医疗记录、财务数据、财富 500 强内部文件等敏感信息。许多应用只需获取 URL 就能直接访问。</p>
+                    <p>问题根源：Vibe Coding 工具让任何人一键创建并托管应用，但默认不提供安全防护。许多开发者甚至不知道自己的应用是公开的。这对开发者敲响警钟——使用 AI 编码工具时，安全意识不能"Vibe"过去。</p>
                 </div>
-                <div class="source-item">
-                    <a href="https://blog.bytebytego.com/p/ep215-the-anatomy-of-an-ai-agent" target="_blank" rel="noopener">The Anatomy of an AI Agent — ByteByteGo</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/cognition/status/2055360350862610690" target="_blank" rel="noopener">Devin x AngelList 迁移案例 — Cognition</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/gdb/status/2055646916499714488" target="_blank" rel="noopener">Codex 复杂度分析 Skill — OpenAI</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/gdb/status/2055695957057036452" target="_blank" rel="noopener">GPT-5.5 安全漏洞发现 — OpenAI</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://www.youtube.com/watch?v=eW_vxrjvERk" target="_blank" rel="noopener">Context Graphs — Neo4j / AI Engineer</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://simonwillison.net/2026/May/16/julia-evans/" target="_blank" rel="noopener">Julia Evans on CSS — Simon Willison</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651284432&idx=4&sn=bbcba848e095ac647a3099e2a7c56af5" target="_blank" rel="noopener">Netflix 模型生命周期图 — InfoQ</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://www.youtube.com/watch?v=kfSDc2eVLo4" target="_blank" rel="noopener">Leverage Domain Expertise — AI Engineer</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636259&idx=1&sn=ec6701a68b3cb0c89e80a3e04745c285" target="_blank" rel="noopener">8维度Skill评估框架 — 百度Geek说</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/geekbb/status/2055655509059928551" target="_blank" rel="noopener">Kooky AI终端 — github.com/iAmCorey/kooky</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/geekbb/status/2055562646884167759" target="_blank" rel="noopener">md2html — github.com/haidang1810/md2html</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/geekbb/status/2055622038396846105" target="_blank" rel="noopener">Claude Code API代理 — github.com/danielalves96</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/LangChain/status/2055369808536076777" target="_blank" rel="noopener">LangChain SmithDB — LangChain</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/itsPaulAi/status/2055402817871872250" target="_blank" rel="noopener">NVIDIA 2.6B World Model — NVIDIA</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/geekbb/status/2055582433681244540" target="_blank" rel="noopener">GitHub Copilot 桌面应用 — GitHub</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/shao__meng/status/2055462663254385143" target="_blank" rel="noopener">Claude Code vs Codex — meng shao</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://www.youtube.com/shorts/dlSfOx8pUpk" target="_blank" rel="noopener">Redact: AI-built React alternative — GitHub</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://seangoedecke.com/steering-vectors/" target="_blank" rel="noopener">DeepSeek-V4-Flash & Steering — seangoedecke.com</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/jerryjliu0/status/2055405690538070340" target="_blank" rel="noopener">Infinity-Parser2 文档理解模型 — INF</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/v0/status/2055402612791669061" target="_blank" rel="noopener">v0 Browser Use — Vercel</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/NotionHQ/status/2055375419549897067" target="_blank" rel="noopener">Notion Workers — Notion</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/dotey/status/2055489040531570740" target="_blank" rel="noopener">Zed 编辑器体验 — 宝玉</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://x.com/dotey/status/2055470006679302261" target="_blank" rel="noopener">Sublime vs VSCode — 宝玉</a>
-                </div>
-                <div class="source-item">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651284432&idx=3&sn=0175b7ee4e1627354451b4dff3f4c753" target="_blank" rel="noopener">AutoMQ x StarRocks — InfoQ</a>
+                <div class="card-source">📎 <a href="https://www.infoq.com/news/2026/05/" target="_blank" rel="noopener">InfoQ</a> | RedAccess</div>
+            </article>
+        </section>
+
+        <section class="section">
+            <div class="sources-section">
+                <h3>参考链接汇总</h3>
+                <div class="sources-list">
+                    <div class="source-item">📎 <a href="https://github.blog/engineering/architecture-optimization/from-latency-to-instant-modernizing-github-issues-navigation-performance/" target="_blank" rel="noopener">GitHub Blog - Issues 性能优化</a></div>
+                    <div class="source-item">📎 <a href="https://github.com/vercel-labs/zero" target="_blank" rel="noopener">Vercel Labs / Zero</a></div>
+                    <div class="source-item">📎 <a href="https://github.com/Zoo-Code-Org/Zoo-Code" target="_blank" rel="noopener">GitHub - Zoo Code</a></div>
+                    <div class="source-item">📎 <a href="https://gh.io/github-copilot-app" target="_blank" rel="noopener">GitHub Copilot App</a></div>
+                    <div class="source-item">📎 <a href="https://www.infoq.com/news/2026/05/monzo-data-mesh/" target="_blank" rel="noopener">InfoQ - Monzo 数据网格</a></div>
+                    <div class="source-item">📎 <a href="https://weread.qq.com/r/weread-skills" target="_blank" rel="noopener">微信读书 Skills</a></div>
+                    <div class="source-item">📎 <a href="https://www.infoq.com/news/2026/05/ubuntu-on-device-ai/" target="_blank" rel="noopener">InfoQ - Ubuntu 本地 AI</a></div>
+                    <div class="source-item">📎 <a href="https://claude.com/blog/the-founders-playbook" target="_blank" rel="noopener">Anthropic 创始人手册</a></div>
+                    <div class="source-item">📎 <a href="https://seangoedecke.com/how-i-use-llms-in-2026/" target="_blank" rel="noopener">seangoedecke.com - LLM 使用指南</a></div>
+                    <div class="source-item">📎 <a href="https://lap.dev/lapce/" target="_blank" rel="noopener">Lapce Editor</a></div>
+                    <div class="source-item">📎 <a href="https://github.com/mrdoob/reframe" target="_blank" rel="noopener">mrdoob / reframe</a></div>
+                    <div class="source-item">📎 <a href="https://magicpath.ai" target="_blank" rel="noopener">MagicPath</a></div>
+                    <div class="source-item">📎 <a href="https://github.com/yaojingang/yao-weread-skill" target="_blank" rel="noopener">yao-weread-skill</a></div>
+                    <div class="source-item">📎 <a href="https://x.com/mitchellh" target="_blank" rel="noopener">Mitchell Hashimoto</a></div>
+                    <div class="source-item">📎 <a href="https://supertechfans.com/cn/post/2026-05-17-HackerNews/" target="_blank" rel="noopener">HackerNews 每日摘要</a></div>
+                    <div class="source-item">📎 <a href="https://testingcatalog.com/openai-will-let-codex-control-other-devices" target="_blank" rel="noopener">TestingCatalog - Codex 设备网络</a></div>
+                    <div class="source-item">📎 <a href="https://github.com/leopoldsw/cloudflare-workers-auth" target="_blank" rel="noopener">Cloudflare Workers Auth</a></div>
+                    <div class="source-item">📎 <a href="https://github.com/ShadowArcanist/Network-Topology-Builder" target="_blank" rel="noopener">Network Topology Builder</a></div>
+                    <div class="source-item">📎 <a href="https://github.com/PandoraReads/obsidian-dashboard" target="_blank" rel="noopener">Obsidian Dashboard</a></div>
+                    <div class="source-item">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==" target="_blank" rel="noopener">印记中文 / React 周刊</a></div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="footer">
-            <p>开发者实践日报 · 由 freshrss_24h_compact_20260516_184500.json 生成</p>
-            <p style="margin-top:4px">数据周期: 2026-05-15 18:45 ~ 2026-05-16 18:45 · 共筛选 283 条资讯</p>
-        </div>
+        <footer>
+            <p>开发者实践日报 | 数据截止: 2026-05-17 18:49:39 | 共筛选 261 条新闻</p>
+            <p style="margin-top: 8px;">Generated with tech-daily-generator skill</p>
+        </footer>
     </div>
 </body>
 </html>
