@@ -1,588 +1,499 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>开发者实践日报 - 2026-05-19</title>
-    <style>
-        :root {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --bg-card: #0f3460;
-            --accent: #e94560;
-            --accent-secondary: #533483;
-            --text-primary: #eaeaea;
-            --text-secondary: #a0a0a0;
-            --text-muted: #6c757d;
-            --code-bg: #0d1117;
-            --border: #2d3748;
-            --success: #28a745;
-            --warning: #ffc107;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.7;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            padding: 40px 20px;
-            border-bottom: 2px solid var(--accent);
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-        }
-
-        header h1 {
-            font-size: 2.2em;
-            color: var(--accent);
-            margin-bottom: 8px;
-            letter-spacing: 2px;
-        }
-
-        header .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.95em;
-        }
-
-        header .date {
-            color: var(--text-muted);
-            font-size: 0.85em;
-            margin-top: 10px;
-        }
-
-        .section {
-            margin-bottom: 35px;
-        }
-
-        .section-title {
-            font-size: 1.3em;
-            color: var(--accent);
-            border-left: 4px solid var(--accent);
-            padding-left: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .news-card {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 16px;
-            transition: border-color 0.2s;
-        }
-
-        .news-card:hover {
-            border-color: var(--accent);
-        }
-
-        .news-card h3 {
-            font-size: 1.1em;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-
-        .news-card h3 a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .news-card h3 a:hover {
-            color: var(--accent);
-        }
-
-        .news-card .summary {
-            color: var(--text-secondary);
-            font-size: 0.92em;
-            margin-bottom: 12px;
-        }
-
-        .news-card .source {
-            font-size: 0.8em;
-            color: var(--text-muted);
-        }
-
-        .news-card .source a {
-            color: var(--accent-secondary);
-            text-decoration: none;
-        }
-
-        .news-card .source a:hover {
-            text-decoration: underline;
-        }
-
-        .tag {
-            display: inline-block;
-            background-color: var(--bg-card);
-            color: var(--accent);
-            padding: 2px 10px;
-            border-radius: 4px;
-            font-size: 0.75em;
-            margin-right: 6px;
-            margin-bottom: 6px;
-            border: 1px solid var(--accent);
-        }
-
-        .tag.green {
-            color: var(--success);
-            border-color: var(--success);
-        }
-
-        .tag.yellow {
-            color: var(--warning);
-            border-color: var(--warning);
-        }
-
-        .deep-dive {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
-            border: 1px solid var(--accent-secondary);
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 16px;
-        }
-
-        .deep-dive h3 {
-            color: var(--accent);
-            margin-bottom: 12px;
-            font-size: 1.15em;
-        }
-
-        .deep-dive p {
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            font-size: 0.95em;
-        }
-
-        .deep-dive ul {
-            margin-left: 20px;
-            color: var(--text-secondary);
-            font-size: 0.95em;
-        }
-
-        .deep-dive li {
-            margin-bottom: 6px;
-        }
-
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-        }
-
-        .tool-card {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 18px;
-        }
-
-        .tool-card h4 {
-            color: var(--accent);
-            font-size: 1em;
-            margin-bottom: 8px;
-        }
-
-        .tool-card p {
-            color: var(--text-secondary);
-            font-size: 0.88em;
-            margin-bottom: 10px;
-        }
-
-        .sources {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-        }
-
-        .sources h3 {
-            color: var(--accent);
-            margin-bottom: 15px;
-        }
-
-        .sources ul {
-            list-style: none;
-            columns: 2;
-            column-gap: 30px;
-        }
-
-        .sources li {
-            margin-bottom: 8px;
-            font-size: 0.88em;
-        }
-
-        .sources li a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-
-        .sources li a:hover {
-            color: var(--accent);
-            text-decoration: underline;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-muted);
-            font-size: 0.85em;
-            border-top: 1px solid var(--border);
-            margin-top: 40px;
-        }
-
-        @media (max-width: 600px) {
-            .sources ul {
-                columns: 1;
-            }
-            header h1 {
-                font-size: 1.6em;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者科技日报 - 2026-05-20</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #21262d;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-secondary: #8b949e;
+    --accent: #58a6ff;
+    --accent-green: #3fb950;
+    --accent-yellow: #d29922;
+    --accent-red: #f85149;
+    --accent-purple: #a371f7;
+    --code-bg: #1e2530;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Cascadia Code', Consolas, Monaco, 'Courier New', monospace;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+  .meta {
+    color: var(--text-secondary);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .tagline {
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent-green);
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent-yellow);
+    margin: 20px 0 10px;
+  }
+  .news-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .news-item:hover {
+    border-color: var(--accent);
+  }
+  .news-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .news-body {
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+  .news-body p { margin-bottom: 8px; }
+  .source {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .source a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .source a:hover { text-decoration: underline; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .badge-new { background: rgba(63,185,80,0.15); color: var(--accent-green); }
+  .badge-update { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .badge-tool { background: rgba(163,113,247,0.15); color: var(--accent-purple); }
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-size: 12.5px;
+    overflow-x: auto;
+    color: #e6edf3;
+  }
+  .code-block .comment { color: #8b949e; }
+  .code-block .keyword { color: #ff7b72; }
+  .code-block .string { color: #a5d6ff; }
+  .code-block .number { color: #79c0ff; }
+  .highlight-box {
+    background: rgba(88,166,255,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    margin: 14px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .tool-card {
+    display: flex;
+    gap: 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .tool-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .tool-info h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .tool-info p {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .refs {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .refs h2 { color: var(--accent-purple); }
+  .refs ul {
+    list-style: none;
+    padding: 0;
+  }
+  .refs li {
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  .refs li a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .refs li a:hover { text-decoration: underline; }
+  .refs .ref-domain {
+    color: var(--text-secondary);
+    font-size: 11px;
+  }
+  footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+  .metric {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-tertiary);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  .metric-key { color: var(--text-secondary); }
+  .metric-val { color: var(--accent-green); font-weight: 600; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>&lt;Developer_Daily /&gt;</h1>
-            <p class="subtitle">开发者实践日报 —— 工具、代码与最佳实践</p>
-            <p class="date">2026-05-19 | Google I/O 2026 特别版</p>
-        </header>
+<div class="container">
 
-        <!-- 今日技术热榜 -->
-        <section class="section">
-            <h2 class="section-title">$ cat tech_headlines.md</h2>
+<header>
+  <div class="meta">DEVELOPER PRACTICE EDITION // 2026-05-20</div>
+  <h1>&lt;tech-daily /&gt;</h1>
+  <div class="tagline">面向开发者的技术日报 — 工具、实践与深度解读</div>
+</header>
 
-            <article class="news-card">
-                <h3><a href="https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/" target="_blank" rel="noopener">Google 统一 AI 终端工具：Gemini CLI 迁移至 Antigravity CLI</a></h3>
-                <div>
-                    <span class="tag">CLI</span>
-                    <span class="tag green">Go</span>
-                    <span class="tag yellow">Breaking</span>
-                </div>
-                <p class="summary">
-                    Google 正在将社区版 Gemini CLI 整合进全新的 Antigravity CLI，这是一个基于 Go 语言构建的 agent-first 平台，专为复杂多智能体工作流设计。新工具提供更快的执行速度、异步处理能力和与 Antigravity 2.0 桌面应用的统一架构同步。个人和免费用户需要在 2026 年 6 月 18 日前完成迁移，企业客户则维持现有访问权限不变。对于习惯在终端使用 AI 的开发者来说，这意味着工作流的一次重要升级——从简单的问答式交互转向真正的 agent 编排。
-                </p>
-                <p class="source">
-                    <a href="https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/" target="_blank" rel="noopener">[来源: Google Developers Blog]</a>
-                </p>
-            </article>
+<!-- ============ 今日技术热榜 ============ -->
+<h2><span style="font-size:20px">🔥</span> 今日技术热榜</h2>
 
-            <article class="news-card">
-                <h3><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.121" target="_blank" rel="noopener">Visual Studio Code 1.121 发布</a></h3>
-                <div>
-                    <span class="tag">IDE</span>
-                    <span class="tag green">Release</span>
-                </div>
-                <p class="summary">
-                    VS Code 团队发布了 1.121 Insiders 版本的新特性。作为开发者日常最高频的工具之一，VS Code 的每次更新都值得关注。建议升级后关注性能优化和新扩展 API 的变化，特别是与 AI 辅助编程相关的集成点是否有新的 hook 点可供扩展开发者利用。
-                </p>
-                <p class="source">
-                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.121" target="_blank" rel="noopener">[来源: Microsoft for Developers]</a>
-                </p>
-            </article>
+<div class="news-item">
+  <div class="news-title"><span class="badge badge-new">NEW</span>Google I/O 2026 发布 Gemini 3.5 Flash：速度 4x、价格腰斩、代码能力超越上代旗舰</div>
+  <div class="news-body">
+    <p>Google 在 I/O 2026 大会上发布了 Gemini 3.5 Flash，这是今年开发者最关心的模型更新。官方数据显示，3.5 Flash 的输出速度是其他前沿模型的 <strong>4 倍</strong>（每秒 289 token），同时 Benchmark 表现全面超越上一代旗舰 3.1 Pro。</p>
+    <p>对开发者最关键的数字：代码能力（Terminal-Bench 2.1）达到 <strong>76.2%</strong>，Agent 任务（GDPval-AA）<strong>1656 分</strong>，工具调用（MCP Atlas）<strong>83.6%</strong>。多模态理解（MMMU Pro）<strong>81.2%</strong>，全球第一。API 定价为输入 $1.50 / 输出 $9.00（每百万 token），缓存输入仅 $0.15，上下文窗口 1M token。这个价格是 Claude Sonnet 4.6 的六折左右，性价比极高。</p>
+    <p>如果你正在构建 Agent 应用，3.5 Flash 的高速和工具调用能力使其成为目前最值得接入的模型之一。现已通过 Gemini API 和 Google AI Studio 向所有用户开放。</p>
+  </div>
+  <div class="metric"><span class="metric-key">input:</span><span class="metric-val">$1.50/M</span></div>
+  <div class="metric"><span class="metric-key">output:</span><span class="metric-val">$9.00/M</span></div>
+  <div class="metric"><span class="metric-key">speed:</span><span class="metric-val">289 t/s</span></div>
+  <div class="metric"><span class="metric-key">ctx:</span><span class="metric-val">1M</span></div>
+  <div class="source" style="margin-top:10px">
+    <a href="https://blog.google/innovation-and-ai/gemini-3-5-flash" target="_blank" rel="noopener">[来源: Google AI Blog]</a>
+    <a href="https://x.com/oran_ge/status/2056860218387321054" target="_blank" rel="noopener">[来源: Orange AI @ Twitter]</a>
+  </div>
+</div>
 
-            <article class="news-card">
-                <h3><a href="https://x.com/cursor_ai/status/2056803731367456993" target="_blank" rel="noopener">Cursor 正式接入 Jira：AI 编程助手进入项目管理流程</a></h3>
-                <div>
-                    <span class="tag">AI Coding</span>
-                    <span class="tag">Integration</span>
-                </div>
-                <p class="summary">
-                    Cursor 现在可以直接在 Jira 中使用。开发者可以将 Cursor 分配给工作项，或在评论中 @Cursor 来触发云端 agent。Cursor 会读取任务标题、描述、评论和团队仓库设置，自动生成可合并的 PR。这标志着 AI 编程工具从单纯的编辑器插件向完整研发生命链路的深度整合——从需求跟踪到代码提交的闭环正在形成。同一天，Cursor 还发布了 Composer 2.5，声称是其最强大的模型，在长时任务和复杂指令遵循上有显著提升。
-                </p>
-                <p class="source">
-                    <a href="https://x.com/cursor_ai/status/2056803731367456993" target="_blank" rel="noopener">[来源: Cursor (@cursor_ai)]</a>
-                    &nbsp;|&nbsp;
-                    <a href="https://x.com/mntruell/status/2056780569380626686" target="_blank" rel="noopener">[来源: Michael Truell (@mntruell)]</a>
-                </p>
-            </article>
+<div class="news-item">
+  <div class="news-title"><span class="badge badge-new">NEW</span>Google Antigravity CLI 发布：在终端里直接跑 Agent</div>
+  <div class="news-body">
+    <p>Google 推出了 Antigravity CLI，让你可以直接从终端启动与 Antigravity 平台相同的 Agent harness。这不是一个简单的 API 客户端，而是一个完整的终端原生体验：适配你的快捷键、主题和工作流。</p>
+    <p>配合同时发布的 Antigravity SDK，开发者可以在自己的基础设施上完全自定义和部署 Agent。SDK 提供与 Gemini 优化相同的 harness，灵活性极高。此外，Google AI Studio 现在支持 "Managed Agents" —— 一个 API 调用就能获得一个完整的 Agent，包含代码执行、网页浏览和文件管理功能，运行在一个隔离的 Linux sandbox 中。</p>
+    <p>你可以在 AGENTS.md 和 SKILL.md 文件中定义自定义 Agent 行为，挂载 GitHub 仓库、GCS bucket 或内联文件到环境中。对于想要快速原型 Agent 的开发者来说，这套工具链大大降低了入门门槛。</p>
+  </div>
+  <div class="code-block">
+    <span class="comment"># 安装 Antigravity CLI</span><br>
+    npm install -g @antigravity/cli &amp;&amp; antigravity init<br><br>
+    <span class="comment"># 创建一个带 sandbox 的 managed agent</span><br>
+    curl -X POST <span class="string">"https://ai.google.dev/gemini-api/agents"</span> <span class="keyword">\</span><br>
+    &nbsp;&nbsp;-H <span class="string">"Authorization: Bearer $API_KEY"</span> <span class="keyword">\</span><br>
+    &nbsp;&nbsp;-d <span class="string">'{"model": "gemini-3.5-flash", "tools": ["code", "web", "file"]}'</span>
+  </div>
+  <div class="source">
+    <a href="https://x.com/antigravity/status/2056827231310094698" target="_blank" rel="noopener">[来源: Google Antigravity @ Twitter]</a>
+    <a href="https://x.com/_philschmid/status/2056836567470362955" target="_blank" rel="noopener">[来源: Philipp Schmid @ Twitter]</a>
+  </div>
+</div>
 
-            <article class="news-card">
-                <h3><a href="https://www.infoq.com/news/2026/05/claude-mcp-tunnels/" target="_blank" rel="noopener">Anthropic 推出 MCP Tunnels 与 Self-hosted Sandboxes</a></h3>
-                <div>
-                    <span class="tag">MCP</span>
-                    <span class="tag">Enterprise</span>
-                    <span class="tag green">Security</span>
-                </div>
-                <p class="summary">
-                    Anthropic 为 Claude Managed Agents 平台新增两项企业级能力：self-hosted sandboxes 和 MCP tunnels。这解决了企业 AI 部署中的一个核心矛盾——组织希望使用自主 agent，但又不能让执行环境或内部系统离开安全边界。通过自托管沙箱，agent 在本地安全环境中运行；MCP tunnels 则提供了安全的私有网络通道。对于需要在合规环境下部署 AI agent 的开发者来说，这是一个关键的基础设施更新。
-                </p>
-                <p class="source">
-                    <a href="https://www.infoq.com/news/2026/05/claude-mcp-tunnels/" target="_blank" rel="noopener">[来源: InfoQ]</a>
-                </p>
-            </article>
+<div class="news-item">
+  <div class="news-title"><span class="badge badge-update">UPDATE</span>Cursor 3.5 + Cursor SDK：程序化访问 Composer 2.5</div>
+  <div class="news-body">
+    <p>Cursor 发布了 3.5 版本，并同步推出了官方 SDK：<code>npm install @cursor/sdk</code>。这意味着你可以在自己的工具链中程序化调用 Cursor 的 Composer 2.5 能力，而不必局限于 IDE 界面。</p>
+    <p>3.5 版本的另一个亮点是 Automation 功能 —— 现在可以在 Agents Window 中创建和管理自动化工作流，甚至支持创建不关联任何代码仓库的自动化，比如每日 Slack 摘要 Agent，自动整理未读消息和 DM 的优先级。新创建的 Automation 在前 7 天内享受 50% 的 Agent 运行费用折扣。</p>
+    <p>对于已经在使用 Cursor 的开发者，3.5 的升级路径非常平滑；对于希望将 AI 编程能力集成到内部工具的团队，SDK 提供了新的可能性。</p>
+  </div>
+  <div class="source">
+    <a href="https://x.com/cursor_ai/status/2057167364161208506" target="_blank" rel="noopener">[来源: Cursor @ Twitter]</a>
+    <a href="https://x.com/ericzakariasson/status/2057165920263614920" target="_blank" rel="noopener">[来源: Eric Zakariasson @ Twitter]</a>
+  </div>
+</div>
 
-            <article class="news-card">
-                <h3><a href="https://developers.googleblog.com/google-tensor-sdk-beta-with-litert/" target="_blank" rel="noopener">Google Tensor SDK Beta 发布：在 Pixel TPU 上本地运行 ML 模型</a></h3>
-                <div>
-                    <span class="tag">ML SDK</span>
-                    <span class="tag">Edge AI</span>
-                    <span class="tag green">TPU</span>
-                </div>
-                <p class="summary">
-                    Google Tensor ML SDK 进入 Beta 阶段，开发者可以直接在 Google Pixel 10 设备的 TPU 上构建和部署高性能机器学习模型。SDK 与 LiteRT（Google 的边缘部署框架）集成，提供统一的工作流来转换、编译和运行 PyTorch 或 TFLite 模型，并具备完善的 fallback 机制。新的模型花园提供超过 100 个经典和生成式 AI 模型（包括 Gemma 3），支持语音识别、计算机视觉和文本生成等低延迟、隐私优先的功能。
-                </p>
-                <p class="source">
-                    <a href="https://developers.googleblog.com/google-tensor-sdk-beta-with-litert/" target="_blank" rel="noopener">[来源: Google Developers Blog]</a>
-                </p>
-            </article>
+<div class="news-item">
+  <div class="news-title"><span class="badge badge-update">UPDATE</span>LangSmith Sandboxes 正式 GA：Agent 终于有真正的运行环境了</div>
+  <div class="news-body">
+    <p>LangChain 宣布 LangSmith Sandboxes 正式 GA（全面可用）。这是一个让 Agent 获得真实运行环境的关键基础设施更新 —— Agent 现在可以访问真正的文件系统、shell 和包管理器，而且与你的基础设施完全隔离。</p>
+    <p>核心特性包括：与 Deep Agents、Open SWE 或你自己的代码兼容；使用已有的 API key 即可认证；不需要构建或管理新的运行时。这意味着你可以让 Agent 安全地执行代码、安装依赖、操作文件，而不必担心影响生产环境。</p>
+    <p>对于正在构建复杂 Agent 工作流的开发者，LangSmith Sandboxes 解决了"Agent 能做什么"和"Agent 应该在哪里运行"这两个核心问题。</p>
+  </div>
+  <div class="source">
+    <a href="https://x.com/LangChain/status/2057152025058558072" target="_blank" rel="noopener">[来源: LangChain @ Twitter]</a>
+    <a href="https://langchain.com/blog/introducing-langsmith-sandboxes" target="_blank" rel="noopener">[来源: LangChain Blog]</a>
+  </div>
+</div>
 
-            <article class="news-card">
-                <h3><a href="https://x.com/LangChain/status/2056789875555250573" target="_blank" rel="noopener">LangSmith Engine 发布：LangChain 的 Agent 可观测性新引擎</a></h3>
-                <div>
-                    <span class="tag">Observability</span>
-                    <span class="tag">Agent</span>
-                </div>
-                <p class="summary">
-                    LangChain 推出了 LangSmith Engine，被团队内部预测将成为增长最快的产品。这个新引擎专注于 agent 的可观测性和调试能力，帮助开发者在构建复杂 agent 工作流时追踪每个步骤的执行状态、token 消耗和延迟指标。对于在生产环境运行 LLM agent 的团队来说，可观测性是从 demo 走向可靠产品的关键一环。
-                </p>
-                <p class="source">
-                    <a href="https://x.com/LangChain/status/2056789875555250573" target="_blank" rel="noopener">[来源: LangChain (@LangChainAI)]</a>
-                </p>
-            </article>
+<div class="news-item">
+  <div class="news-title"><span class="badge badge-new">NEW</span>Perplexity 开源查询感知压缩技术：上下文减少 70%，质量反而提升</div>
+  <div class="news-body">
+    <p>Perplexity 发布了他们的查询感知上下文压缩（Query-Aware Compression）系统的技术细节。这不是简单的截断或摘要，而是一个针对查询动态优化、保留引用、且速度足够快可用于生产编排的系统。</p>
+    <p>关键数据：上下文 token <strong>减少最多 70%</strong>，同时回答质量提升；每片段有效内容提升 <strong>63%</strong>（通过剔除广告、导航、元数据和低价值内容）；在 SimpleQA 上达到 <strong>50 倍压缩比</strong>，同时保持前沿级性能。</p>
+    <p>技术原理上，这套系统在将内容交给回答模型之前，先根据查询语义进行智能筛选和压缩，保留与问题最相关的段落和引用信息。对于需要处理大量检索结果的 RAG 系统开发者，这是一个值得深入研究的方向。</p>
+  </div>
+  <div class="source">
+    <a href="https://x.com/perplexity_ai/status/2057151002105753950" target="_blank" rel="noopener">[来源: Perplexity @ Twitter]</a>
+    <a href="https://research.perplexity.ai/articles/query-aware-compression" target="_blank" rel="noopener">[来源: Perplexity Research Blog]</a>
+  </div>
+</div>
 
-            <article class="news-card">
-                <h3><a href="https://x.com/_akhaliq/status/2056763911462891825" target="_blank" rel="noopener">NVIDIA 开源 LongLive 2.0：首个 4-bit 长视频生成基础设施</a></h3>
-                <div>
-                    <span class="tag">Open Source</span>
-                    <span class="tag">Video</span>
-                    <span class="tag green">FP4</span>
-                </div>
-                <p class="summary">
-                    NVIDIA 研究员 Yukang Chen 发布了 LongLive 2.0，这是全球首个端到端支持 4-bit 量化的长视频生成开源基础设施，训练和推理全流程打通。核心技术包括 FP4 量化 + 并行加速，在 5B 模型上达到 45.7 FPS 的生成速度。项目还支持真实视频训练、few-step 蒸馏、多 shot 训练/推理、序列并行、NVFP4 KV cache 和异步 VAE 解码。代码、论文和 demo 均已开源。
-                </p>
-                <p class="source">
-                    <a href="https://x.com/_akhaliq/status/2056763911462891825" target="_blank" rel="noopener">[来源: AK (@_akhaliq)]</a>
-                    &nbsp;|&nbsp;
-                    <a href="https://github.com/NVlabs/LongLive" target="_blank" rel="noopener">[GitHub: github.com/NVlabs/LongLive]</a>
-                </p>
-            </article>
+<div class="news-item">
+  <div class="news-title"><span class="badge badge-update">UPDATE</span>OpenAI Codex 登陆移动端：随时编码，跨设备同步</div>
+  <div class="news-body">
+    <p>OpenAI 宣布 Codex 现在可以从 ChatGPT 移动应用中使用。你可以在手机上发起编码任务，之后从电脑上继续同一线程。同时，OpenAI 推出了 "Guaranteed Capacity" 服务 —— 通过 1-3 年的容量承诺换取折扣 token 价格和容量可用性保障。</p>
+    <p>对于开发者而言，移动端 Codex 的价值在于随时响应紧急代码审查或快速原型需求；Guaranteed Capacity 则适合有稳定大规模 API 调用需求的企业团队，帮助在算力紧张的环境中锁定资源。</p>
+  </div>
+  <div class="source">
+    <a href="https://x.com/OpenAIDevs/status/2057142816497906045" target="_blank" rel="noopener">[来源: OpenAI Developers @ Twitter]</a>
+    <a href="https://openai.com/guaranteed-capacity" target="_blank" rel="noopener">[来源: OpenAI]</a>
+  </div>
+</div>
 
-            <article class="news-card">
-                <h3><a href="https://x.com/HeyGen/status/2056781720842899794" target="_blank" rel="noopener">HeyGen Avatar V API 上线：$0.05/秒的高质量 AI 数字人接口</a></h3>
-                <div>
-                    <span class="tag">API</span>
-                    <span class="tag">Avatar</span>
-                </div>
-                <p class="summary">
-                    HeyGen 的 Avatar V API 正式上线，定价 $0.05/秒。该模型在跨场景说话人生成任务中，针对 Veo 3.1、Kling O3 Pro、OmniHuman 1.5 和 Seedance 2.0 进行了基准测试，并在所有类别中获胜。API 支持更优的动作质量和更连贯的长时间脚本表情，以及多角度的角色一致性能力。开发者可以通过 HeyGen 的开发者平台直接接入。
-                </p>
-                <p class="source">
-                    <a href="https://x.com/HeyGen/status/2056781720842899794" target="_blank" rel="noopener">[来源: HeyGen (@HeyGen_Official)]</a>
-                </p>
-            </article>
-        </section>
+<div class="news-item">
+  <div class="news-title"><span class="badge badge-update">UPDATE</span>Visual Studio Code 1.121 发布</div>
+  <div class="news-body">
+    <p>VS Code 团队发布了 1.121 版本（Insiders）。作为最常用的代码编辑器，每次更新都值得关注。具体更新内容涵盖编辑器改进、调试增强和扩展 API 更新等方面，建议升级体验。</p>
+  </div>
+  <div class="source">
+    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.121" target="_blank" rel="noopener">[来源: Microsoft for Developers]</a>
+  </div>
+</div>
 
-        <!-- 深度技术解读 -->
-        <section class="section">
-            <h2 class="section-title">$ cat deep_dive.md</h2>
+<div class="news-item">
+  <div class="news-title"><span class="badge badge-update">UPDATE</span>FreshRSS 1.29.1 发布：支持 .txt 导入与新 CLI 导出工具</div>
+  <div class="news-body">
+    <p>FreshRSS 发布了 1.29.1 错误修复版本。新增功能包括：支持 .txt 格式的 feed URL 导入（之前仅支持 OPML 等格式），以及一个新的 CLI 工具用于自动周期性 SQLite 数据库导出并支持保留策略。此外还修复了某些浏览器的 cookie 问题和共享用户查询的搜索 bug。</p>
+    <p>对于自建 RSS 服务的开发者，CLI 导出功能特别适合设置定时备份任务。</p>
+  </div>
+  <div class="source">
+    <a href="https://github.com/FreshRSS/FreshRSS/releases/tag/1.29.1" target="_blank" rel="noopener">[来源: FreshRSS releases]</a>
+  </div>
+</div>
 
-            <div class="deep-dive">
-                <h3>Gemini 3.5 Flash：不只是快，更是 agentic 编程的新基准</h3>
-                <p>
-                    Google I/O 2026 上发布的 Gemini 3.5 Flash 可能是今年对开发者影响最大的模型更新。与 3.1 Pro 相比，它在几乎各项基准上都有提升，尤其在编程能力上进步显著，同时输出速度达到其他前沿模型的 4 倍。在 Antigravity 中进一步优化后甚至可达 12 倍速。
-                </p>
-                <p>核心技术规格：</p>
-                <ul>
-                    <li><strong>上下文窗口</strong>：1M token，最大输出 65K token，可以一次性处理大型代码库</li>
-                    <li><strong>思考层级</strong>：4 个级别（minimal / low / medium / high），medium 为新的默认值</li>
-                    <li><strong>多轮对话</strong>：自动保留思考链（thought preservation），agent 可以记住之前的推理过程</li>
-                    <li><strong>定价</strong>：$1.50/M input, $9/M output（OpenRouter 数据）</li>
-                    <li><strong>Code Arena 评分</strong>：1507 分，在 Frontend 编码任务中超越 3.1 Pro，较 3 Flash 提升 +70 分</li>
-                </ul>
-                <p>
-                    目前已集成至 Gemini API、Google AI Studio、Android Studio、Antigravity、Gemini App 和 GitHub Copilot。开发者 Philipp Schmid 发布了迁移指南，推荐通过 <code>npx skills add google-gemini/gemini-skills --skill gemini-interactions-api</code> 安装 Interactions API Skill 后执行 <code>/gemini-interactions-api migrate my app to Gemini 3.5 Flash</code> 一键迁移。
-                </p>
-                <p class="source">
-                    <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/" target="_blank" rel="noopener">[来源: Google Blog - Gemini 3.5]</a>
-                    &nbsp;|&nbsp;
-                    <a href="https://ai.google.dev/gemini-api/docs/migrate-to-3-5" target="_blank" rel="noopener">[来源: Gemini 3.5 Developer Guide]</a>
-                </p>
-            </div>
+<!-- ============ 深度技术解读 ============ -->
+<h2><span style="font-size:20px">🔍</span> 深度技术解读</h2>
 
-            <div class="deep-dive">
-                <h3>Agentic 编码工具链的 Google I/O 格局重塑</h3>
-                <p>
-                    本次 Google I/O 在开发者工具层面释放了一个明确信号：Google 正在围绕 Antigravity 构建完整的 agentic 开发生态，直接与 Cursor、GitHub Copilot、Claude Code 等工具正面竞争。
-                </p>
-                <p>关键更新梳理：</p>
-                <ul>
-                    <li><strong>Antigravity 2.0</strong>：全新的独立桌面应用，支持多 agent 团队协作、定时任务、原生语音和一键集成其他 Google 产品</li>
-                    <li><strong>Data Agent Kit</strong>：开源的数据工程和科学工具集，直接集成到 VS Code、Claude Code、Codex、Gemini CLI 等开发者已有环境</li>
-                    <li><strong>Managed Agents API</strong>：支持将 agent 定义为文件，在安全的云端沙箱中运行</li>
-                    <li><strong>Android Studio 集成</strong>：Gemini 3.5 Flash 已内置到 Android Studio，提供实时代码辅助</li>
-                </ul>
-                <p>
-                    对于开发者而言，这意味着选择 agentic 编码工具时多了一个重量级选项。Google 的优势在于与整个云生态的整合深度——从本地 IDE 到云端部署再到 Gemini Enterprise 治理，形成了一条完整的链路。不过 Antigravity 上线首日即遭遇登录和认证问题，也反映出大规模 traffic 下的 thundering herd 挑战，这类高并发场景的系统设计值得后端开发者关注。
-                </p>
-                <p class="source">
-                    <a href="https://cloud.google.com/blog/topics/developers-practitioners/io26-news-for-agent-developers-on-google-cloud/" target="_blank" rel="noopener">[来源: Cloud Blog - I/O Agent Developer News]</a>
-                    &nbsp;|&nbsp;
-                    <a href="https://x.com/_mohansolo/status/2056810847155126337" target="_blank" rel="noopener">[来源: Varun Mohan (@_mohansolo) - Antigravity 故障]</a>
-                </p>
-            </div>
-        </section>
+<h3>Google I/O 2026 的 Agent 生态：从辅助工具到独立智能体</h3>
 
-        <!-- 工具推荐 -->
-        <section class="section">
-            <h2 class="section-title">$ npm install new-tools</h2>
+<div class="news-item">
+  <div class="news-body">
+    <p>今年 Google I/O 的核心叙事非常明确：从 assistive AI（辅助式 AI）转向 independent agents（独立智能体）。这不仅仅是营销话术，而是一整套技术栈的重新定位。作为开发者，我们需要理解这个生态的层次结构：</p>
 
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <h4>OpenRouter Agentic Web Search</h4>
-                    <p>
-                        OpenRouter 新增了原生 web search 和 web fetch 工具，任何支持 tool-calling 的模型都可以 agentic 地调用。模型自主决定何时搜索、搜索什么、搜索多少次。支持 allowed_domains / blocked_domains 限制，适合构建仅访问内部文档或可信来源的 agent。
-                    </p>
-                    <p class="source">
-                        <a href="https://x.com/OpenRouter/status/2056758698400452705" target="_blank" rel="noopener">[来源: OpenRouter]</a>
-                    </p>
-                </div>
+    <p><strong>模型层 — Gemini 3.5 Flash</strong>：这是整个生态的基石。速度 4x 的意义不仅仅是"更快"，而是让 Agent 可以在合理时间内完成多步骤任务。Terminal-Bench 76.2% 和 MCP Atlas 83.6% 意味着它在代码执行和工具调用方面已经具备了可靠的自主能力。</p>
 
-                <div class="tool-card">
-                    <h4>Weaviate 多模态视频嵌入</h4>
-                    <p>
-                        Weaviate 推出了直接嵌入原始视频进行搜索的方案，无需转录或元数据。流程：分割视频为重叠片段 -> 用 Gemini embedding 2 多模态嵌入 -> 存入 Weaviate -> 检索精确时刻并生成回答。Notebook 和完整指南已开源。
-                    </p>
-                    <p class="source">
-                        <a href="https://x.com/weaviate_io/status/2056751772937474092" target="_blank" rel="noopener">[来源: Weaviate]</a>
-                        &nbsp;|&nbsp;
-                        <a href="https://github.com/weaviate/recipes" target="_blank" rel="noopener">[GitHub Recipes]</a>
-                    </p>
-                </div>
+    <p><strong>运行层 — Agent Executor + GKE Agent Sandbox</strong>：Google 开源了 Agent Executor，一个分布式 Agent 运行时标准，支持持久执行（断点恢复）、人机协同确认（HITL）和分布式部署。GKE Agent Sandbox 在 5 个月内增长了 16 倍，LangChain 和 Lovable 等关键客户已在生产环境部署数百万 Agent。这解决了一个长期痛点：Agent 工作流运行 hours 甚至 days 时的可靠性问题。</p>
 
-                <div class="tool-card">
-                    <h4>GitHub Copilot Auto Mode</h4>
-                    <p>
-                        GitHub 发布了 Copilot auto mode，可智能根据推理需求和实时容量将 prompt 路由到最佳可用模型，无需手动测试不同模型。Gemini 3.5 Flash 已作为新模型加入 Copilot，早期测试显示其工具使用能力强、响应快、缓存效率高。
-                    </p>
-                    <p class="source">
-                        <a href="https://github.blog/changelog/2026-05-19-gemini-3-5-flash-in-copilot/" target="_blank" rel="noopener">[来源: GitHub Blog]</a>
-                        &nbsp;|&nbsp;
-                        <a href="https://www.youtube.com/watch?v=a-c1M8QwK84" target="_blank" rel="noopener">[YouTube: GitHub Checkout]</a>
-                    </p>
-                </div>
+    <p><strong>开发层 — Antigravity + AI Studio</strong>：Antigravity CLI/SDK 让开发者可以在终端或自己的基础设施上运行 Agent。AI Studio 的 Managed Agents 则是一个 API 调用获得完整 Agent（sandbox + 代码执行 + 网页浏览 + 文件管理）。Chrome DevTools for agents 和 WebMCP 提案则表明 Google 正在将 Agent 能力延伸到浏览器端。</p>
 
-                <div class="tool-card">
-                    <h4>NVIDIA SANA-WM 世界模型</h4>
-                    <p>
-                        NVIDIA 研究团队发布了 SANA-WM，一个 2.6B 参数的开源世界模型，支持在单张 GPU 上基于一张图片 + 文本 + 相机轨迹生成 60 秒可控视频。采用 Hybrid Linear Attention 和双分支相机控制架构。论文、代码和模型均已发布。
-                    </p>
-                    <p class="source">
-                        <a href="https://x.com/NVIDIAAI/status/2056806466317701446" target="_blank" rel="noopener">[来源: NVIDIA AI]</a>
-                        &nbsp;|&nbsp;
-                        <a href="https://nvlabs.github.io/Sana/WM/2" target="_blank" rel="noopener">[项目主页]</a>
-                    </p>
-                </div>
-            </div>
-        </section>
+    <p><strong>对开发者的建议</strong>：如果你正在评估 Agent 平台，Google 今年的布局值得认真考虑。从模型到运行时的完整垂直整合，加上有竞争力的定价（3.5 Flash 比 Claude Sonnet 便宜 40%），构成了一个对开发者友好的完整栈。不过生态成熟度仍需观察，特别是与 LangChain、LlamaIndex 等现有框架的集成情况。</p>
+  </div>
+  <div class="source">
+    <a href="https://cloud.google.com/blog/products/ai-machine-learning/agent-executor-googles-distributed-agent-runtime/" target="_blank" rel="noopener">[来源: Google Cloud Blog - Agent Executor]</a>
+    <a href="https://cloud.google.com/blog/products/containers-kubernetes/bringing-you-agent-sandbox-on-gke-and-agent-substrate/" target="_blank" rel="noopener">[来源: Google Cloud Blog - GKE Agent Sandbox]</a>
+    <a href="https://developers.googleblog.com/all-the-news-from-the-google-io-2026-developer-keynote/" target="_blank" rel="noopener">[来源: Google Developers Blog]</a>
+  </div>
+</div>
 
-        <!-- 实践指南 -->
-        <section class="section">
-            <h2 class="section-title">$ cat best_practices.md</h2>
+<h3>上下文压缩：RAG 系统的下一个优化前沿</h3>
 
-            <div class="deep-dive">
-                <h3>Coding Agents 的可维护性传感器：Martin Fowler 团队的经验</h3>
-                <p>
-                    Birgitta Böckeler 在 Martin Fowler 网站上发布了关于 coding agent "传感器" 的系列文章。她将 agent harness（引导 agent 输出质量的系统）类比为自动驾驶汽车的传感器网络——通过静态分析、代码 linting 等基础检查，在问题到达人类审查者之前实现自我纠正。
-                </p>
-                <p>
-                    第一部分聚焦于基础代码 linting 作为最轻量级的质量守门人。文章提出一个核心观点：agent 生成的代码量越大，自动化质量检测的必要性就越高。这套方法不依赖特定 AI 工具，适用于 Cursor、Claude Code、Copilot 等任何 agentic 编码环境。建议将 linter 规则与团队现有代码规范对齐，避免 agent 引入风格不一致的代码。
-                </p>
-                <p class="source">
-                    <a href="https://martinfowler.com/articles/sensors-for-coding-agents.html" target="_blank" rel="noopener">[来源: Martin Fowler]</a>
-                </p>
-            </div>
+<div class="news-item">
+  <div class="news-body">
+    <p>Perplexity 的查询感知压缩技术值得单独拿出来分析，因为它触及了当前 RAG 系统的一个核心瓶颈：检索结果往往太长，而模型上下文窗口虽然越来越大，"更多上下文"并不总是等于"更好答案"。</p>
 
-            <div class="deep-dive">
-                <h3>AWS Bedrock Programmatic Tool Calling：告别串行调用的延迟噩梦</h3>
-                <p>
-                    AWS 博客详细介绍了 Programmatic Tool Calling (PTC) 范式。传统 tool-calling 中，每次工具调用都需要完整的模型往返——模型调用工具、接收结果、推理、调用下一个工具，循环往复，延迟和 token 消耗随调用次数线性增长。
-                </p>
-                <p>
-                    PTC 改变了这一模式：模型直接编写 Python 代码，在沙箱执行环境中以编程方式调用多个工具。代码可以包含循环、条件判断、过滤和聚合逻辑，中间结果无需回传模型。这种"代码即编排"的方式将多工具工作流的延迟从 O(n) 降低到 O(1)，特别适合需要多次数据查询和转换的复杂 agent 场景。
-                </p>
-                <p class="source">
-                    <a href="https://aws.amazon.com/blogs/machine-learning/implementing-programmatic-tool-calling-on-amazon-bedrock/" target="_blank" rel="noopener">[来源: AWS Machine Learning Blog]</a>
-                </p>
-            </div>
+    <p>Perplexity 的方案有几个技术亮点：</p>
+    <p>1. <strong>Query-aware</strong>：压缩不是静态的，而是基于具体查询动态决定保留哪些内容。这与传统的摘要方法有本质区别。</p>
+    <p>2. <strong>Citation-preserving</strong>：压缩过程中保留引用信息，确保答案的可追溯性。这对需要事实核查的场景至关重要。</p>
+    <p>3. <strong>Orchestration-ready latency</strong>：速度足够快，可以作为生产编排流水线的一环，而不是离线预处理。</p>
 
-            <div class="deep-dive">
-                <h3>Snapchat 如何在 100ms 内完成十亿级预测</h3>
-                <p>
-                    ByteByteGo 本周的技术文章拆解了 Snapchat 的推荐系统架构。系统在约 100 毫秒的延迟窗口内，需要从数百万视频中检索候选、获取用户特征、运行数十个机器学习模型、排序并返回结果。
-                </p>
-                <p>
-                    关键设计要点：多级检索漏斗（从数百万到数百候选）、特征预计算与实时特征混合、模型推理的并行化和缓存策略。文章还包含一个由 You.com 赞助的 AI 搜索评估框架，提供四阶段评估方法论和黄金查询集构建指南。对于构建高并发推荐系统的后端开发者有直接参考价值。
-                </p>
-                <p class="source">
-                    <a href="https://blog.bytebytego.com/p/how-snapchat-serves-a-billion-predictions" target="_blank" rel="noopener">[来源: ByteByteGo Newsletter]</a>
-                </p>
-            </div>
+    <p>从实现角度看，这套系统的效果数据很亮眼：50 倍压缩比下仍保持前沿性能，每片段有效内容提升 63%。这暗示他们的压缩算法能够精准识别并剔除低信息熵内容（广告、导航模板、重复结构）。</p>
 
-            <div class="deep-dive">
-                <h3>Databricks Unity Catalog：给 Agent 套上安全缰绳</h3>
-                <p>
-                    随着 agentic AI 从实验走向生产，权限控制成为不可忽视的问题。Databricks 发布了 Unity Catalog 的 agent 安全能力，解决" rogue AI "（失控 agent）的风险。agent 连接到外部工具时，如果没有细粒度的访问控制，可能执行越权操作或泄露敏感数据。
-                </p>
-                <p>
-                    Unity Catalog 的核心思路是将 agent 行为纳入统一的数据治理框架：每个 agent action 都经过权限校验，所有操作可审计追踪，敏感数据访问遵循最小权限原则。对于在企业环境中部署 agent 的开发者，这篇文章提供了一个安全 checklist 和架构参考。
-                </p>
-                <p class="source">
-                    <a href="https://www.databricks.com/blog/stop-rogue-ai-how-unity-catalog-secures-your-agent-actions" target="_blank" rel="noopener">[来源: Databricks Blog]</a>
-                </p>
-            </div>
-        </section>
+    <p><strong>实践建议</strong>：如果你正在构建 RAG 系统，不要默认将所有检索结果塞进 prompt。考虑在检索层和生成层之间加入一个压缩/重排序层。Perplexity 的博客提供了很好的参考思路，但具体实现可能需要根据你的数据特征调整。</p>
+  </div>
+  <div class="source">
+    <a href="https://research.perplexity.ai/articles/query-aware-compression" target="_blank" rel="noopener">[来源: Perplexity Research Blog]</a>
+  </div>
+</div>
 
-        <!-- 参考链接汇总 -->
-        <section class="section">
-            <div class="sources">
-                <h3>参考链接汇总</h3>
-                <ul>
-                    <li><a href="https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/" target="_blank" rel="noopener">Google Developers Blog - Antigravity CLI</a></li>
-                    <li><a href="https://developers.googleblog.com/google-tensor-sdk-beta-with-litert/" target="_blank" rel="noopener">Google Developers Blog - Tensor SDK</a></li>
-                    <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.121" target="_blank" rel="noopener">Microsoft - VS Code 1.121</a></li>
-                    <li><a href="https://www.infoq.com/news/2026/05/claude-mcp-tunnels/" target="_blank" rel="noopener">InfoQ - Anthropic MCP Tunnels</a></li>
-                    <li><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/" target="_blank" rel="noopener">Google Blog - Gemini 3.5</a></li>
-                    <li><a href="https://cloud.google.com/blog/topics/developers-practitioners/io26-news-for-agent-developers-on-google-cloud/" target="_blank" rel="noopener">Cloud Blog - I/O Agent Developer</a></li>
-                    <li><a href="https://martinfowler.com/articles/sensors-for-coding-agents.html" target="_blank" rel="noopener">Martin Fowler - Coding Agent Sensors</a></li>
-                    <li><a href="https://aws.amazon.com/blogs/machine-learning/implementing-programmatic-tool-calling-on-amazon-bedrock/" target="_blank" rel="noopener">AWS - Programmatic Tool Calling</a></li>
-                    <li><a href="https://blog.bytebytego.com/p/how-snapchat-serves-a-billion-predictions" target="_blank" rel="noopener">ByteByteGo - Snapchat 推荐系统</a></li>
-                    <li><a href="https://www.databricks.com/blog/stop-rogue-ai-how-unity-catalog-secures-your-agent-actions" target="_blank" rel="noopener">Databricks - Unity Catalog Agent Security</a></li>
-                    <li><a href="https://github.com/NVlabs/LongLive" target="_blank" rel="noopener">GitHub - NVIDIA LongLive 2.0</a></li>
-                    <li><a href="https://langchain.com/blog/introducing-langsmith-engine" target="_blank" rel="noopener">LangChain - LangSmith Engine</a></li>
-                    <li><a href="https://github.com/weaviate/recipes" target="_blank" rel="noopener">GitHub - Weaviate Recipes</a></li>
-                    <li><a href="https://nvlabs.github.io/Sana/WM/2" target="_blank" rel="noopener">NVIDIA - SANA-WM 项目</a></li>
-                    <li><a href="https://openrouter.ai/announcements/2026-05-19-web-tools" target="_blank" rel="noopener">OpenRouter - Web Tools</a></li>
-                    <li><a href="https://github.blog/changelog/2026-05-19-gemini-3-5-flash-in-copilot/" target="_blank" rel="noopener">GitHub Blog - Copilot Gemini 3.5</a></li>
-                    <li><a href="https://cursor.com/changelog/05-19-2026" target="_blank" rel="noopener">Cursor - Jira Integration</a></li>
-                    <li><a href="https://ai.google.dev/gemini-api/docs/migrate-to-3-5" target="_blank" rel="noopener">Google AI - Gemini 3.5 Dev Guide</a></li>
-                </ul>
-            </div>
-        </section>
+<!-- ============ 工具推荐 ============ -->
+<h2><span style="font-size:20px">🛠️</span> 工具推荐</h2>
 
-        <footer>
-            <p>Developer Daily | Generated on 2026-05-19</p>
-            <p>Data source: FreshRSS 24h compact export</p>
-        </footer>
-    </div>
+<div class="tool-card">
+  <div class="tool-icon">⚡</div>
+  <div class="tool-info">
+    <h4>llm-gemini 0.32a0</h4>
+    <p>Simon Willison 的 llm CLI 工具新增 Gemini 插件，支持流式推理 token。如果你在用 llm 命令行工具管理多个模型，现在可以无缝接入 Gemini 3.5 Flash。<br>
+    <a href="https://simonwillison.net/2026/May/19/llm-gemini/" target="_blank" rel="noopener">查看详情 →</a></p>
+  </div>
+</div>
+
+<div class="tool-card">
+  <div class="tool-icon">🎙️</div>
+  <div class="tool-info">
+    <h4>ElevenLabs Speech Engine</h4>
+    <p>一个 prompt 即可将现有聊天 Agent 转换为完整语音 Agent。Speech Engine 整合了 ElevenLabs 的语音合成、转录和语音编排模型，API 定价 8¢/分钟，随用量递减。适合需要给 Agent 添加语音交互的开发者。<br>
+    <a href="https://elevenlabs.io/speech-engine" target="_blank" rel="noopener">查看详情 →</a></p>
+  </div>
+</div>
+
+<div class="tool-card">
+  <div class="tool-icon">📹</div>
+  <div class="tool-info">
+    <h4>HeyGen API 大幅降价</h4>
+    <p>HeyGen 调整了 API 定价：唇同步（Lipsync）Speed 从 $0.05/秒降至 $0.033/秒（降 34%），Precision 从 $0.10/秒降至 $0.067/秒。对于需要批量视频生成或配音的开发者，成本进一步优化。<br>
+    <a href="https://x.com/HeyGen/status/2056833360459440369" target="_blank" rel="noopener">查看详情 →</a></p>
+  </div>
+</div>
+
+<div class="tool-card">
+  <div class="tool-icon">🔬</div>
+  <div class="tool-info">
+    <h4>Google AI Edge Portal：设备端 LLM 基准测试</h4>
+    <p>新增设备端 LLM 基准测试和调试能力，覆盖 120+ 种代表性 Android 设备类型，深入分析 CPU/GPU/NPU 各后端的延迟和性能。如果你在开发移动端的端侧 AI 应用，这是目前最全面的测试平台。<br>
+    <a href="https://cloud.google.com/blog/products/ai-machine-learning/benchmark-llms-on-device-with-ai-edge-portal/" target="_blank" rel="noopener">查看详情 →</a></p>
+  </div>
+</div>
+
+<div class="tool-card">
+  <div class="tool-icon">🧠</div>
+  <div class="tool-info">
+    <h4>LiteRT-LM：端侧 GenAI 推理引擎</h4>
+    <p>Google AI Edge 的 LiteRT-LM 为 Gemma 4 提供跨平台移动和边缘环境支持。核心特性包括：内存高效的动态加载、Multi-Token Prediction（最高 2.2x 加速）、Thinking Mode 和 Constrained Decoding。新增 Swift API（Apple 生态）和 WebGPU 加速的 JavaScript API。<br>
+    <a href="https://developers.googleblog.com/blazing-fast-on-device-genai-with-litert-lm/" target="_blank" rel="noopener">查看详情 →</a></p>
+  </div>
+</div>
+
+<!-- ============ 实践指南 ============ -->
+<h2><span style="font-size:20px">📋</span> 实践指南</h2>
+
+<div class="news-item">
+  <div class="news-title">用 Manus AI 构建自动化工作流</div>
+  <div class="news-body">
+    <p>freeCodeCamp 发布了一套完整的 Manus AI 教程。Manus 与普通聊天机器人的区别在于它是一个真正的 AI Agent：在隔离的云计算机（sandbox）中运行任务，可以浏览实时网页、编写和执行代码、与真实网站交互，并处理复杂的多步骤流程，无需你逐歩指导。</p>
+    <p>教程涵盖从免费账户设置到构建自定义自动化、程序化操作的全部内容。你将学习如何运行深度网页研究、自动化数据处理流程，以及将 Manus 集成到自己的工具链中。</p>
+  </div>
+  <div class="source">
+    <a href="https://www.freecodecamp.org/news/learn-to-build-automated-workflows-with-manus-ai/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
+  </div>
+</div>
+
+<div class="news-item">
+  <div class="news-title">Andrew Ng 新课：构建生成图像和视频的 AI Agent</div>
+  <div class="news-body">
+    <p>吴恩达发布了新课程《Build AI agents that generate images and videos》，与 Google Cloud 合作开发。课程核心思想是：让 Agent 评估自己的输出并迭代改进质量。</p>
+    <p>三种评估技术的组合实践：图像-文本相似度评分（验证输出是否符合 prompt）、LLM Judge（按自定义标准如品牌一致性评分）、结构化评分表（将 prompt 拆解为可验证的是/否问题如"主体是否在画面中？"）。课程包含构建将品牌指南转为 UI mockup 的图像 Agent，以及视频生成 Agent 的完整项目。</p>
+  </div>
+  <div class="source">
+    <a href="https://x.com/AndrewYNg/status/2057146565500998024" target="_blank" rel="noopener">[来源: Andrew Ng @ Twitter]</a>
+  </div>
+</div>
+
+<div class="news-item">
+  <div class="news-title">在 AWS 上构建勒索软件恢复能力：架构参考</div>
+  <div class="news-body">
+    <p>AWS Architecture Blog 发布了一篇关于网络弹性（Cyber Resilience）的详细指南。与侧重预防和检测的安全方案不同，这篇文章聚焦"恢复"：当备份、凭证或基础设施部分已被攻陷时，如何将工作负载恢复到可信状态。</p>
+    <p>文章提供了一个隔离恢复环境的参考架构，包括不可变备份策略、凭证轮换机制和基础设施即代码的快速重建流程。对于运行关键工作负载的 DevOps 团队，这是一份值得收藏的实践指南。</p>
+  </div>
+  <div class="source">
+    <a href="https://aws.amazon.com/blogs/architecture/cyber-resilience-on-aws-a-reference-approach-for-recovery-from-ransomware-and-destructive-events/" target="_blank" rel="noopener">[来源: AWS Architecture Blog]</a>
+  </div>
+</div>
+
+<!-- ============ 参考链接汇总 ============ -->
+<div class="refs">
+  <h2><span style="font-size:20px">🔗</span> 参考链接汇总</h2>
+  <ul>
+    <li><a href="https://blog.google/innovation-and-ai/gemini-3-5-flash" target="_blank" rel="noopener">Gemini 3.5 Flash 官方公告</a> <span class="ref-domain">blog.google</span></li>
+    <li><a href="https://x.com/oran_ge/status/2056860218387321054" target="_blank" rel="noopener">Gemini 3.5 Flash 详细参数分析</a> <span class="ref-domain">twitter.com</span></li>
+    <li><a href="https://x.com/antigravity/status/2056827231310094698" target="_blank" rel="noopener">Antigravity CLI 发布</a> <span class="ref-domain">twitter.com</span></li>
+    <li><a href="https://x.com/_philschmid/status/2056836567470362955" target="_blank" rel="noopener">Gemini Managed Agents 详解</a> <span class="ref-domain">twitter.com</span></li>
+    <li><a href="https://ai.google.dev/gemini-api/docs/agents" target="_blank" rel="noopener">Gemini API Agents 文档</a> <span class="ref-domain">ai.google.dev</span></li>
+    <li><a href="https://cursor.com/sdk" target="_blank" rel="noopener">Cursor SDK</a> <span class="ref-domain">cursor.com</span></li>
+    <li><a href="https://x.com/cursor_ai/status/2057167364161208506" target="_blank" rel="noopener">Cursor 3.5 发布</a> <span class="ref-domain">twitter.com</span></li>
+    <li><a href="https://langchain.com/blog/introducing-langsmith-sandboxes" target="_blank" rel="noopener">LangSmith Sandboxes GA</a> <span class="ref-domain">langchain.com</span></li>
+    <li><a href="https://research.perplexity.ai/articles/query-aware-compression" target="_blank" rel="noopener">Perplexity 查询感知压缩研究</a> <span class="ref-domain">research.perplexity.ai</span></li>
+    <li><a href="https://openai.com/guaranteed-capacity" target="_blank" rel="noopener">OpenAI Guaranteed Capacity</a> <span class="ref-domain">openai.com</span></li>
+    <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.121" target="_blank" rel="noopener">VS Code 1.121 更新</a> <span class="ref-domain">microsoft.com</span></li>
+    <li><a href="https://github.com/FreshRSS/FreshRSS/releases/tag/1.29.1" target="_blank" rel="noopener">FreshRSS 1.29.1 Release</a> <span class="ref-domain">github.com</span></li>
+    <li><a href="https://elevenlabs.io/speech-engine" target="_blank" rel="noopener">ElevenLabs Speech Engine</a> <span class="ref-domain">elevenlabs.io</span></li>
+    <li><a href="https://cloud.google.com/blog/products/ai-machine-learning/agent-executor-googles-distributed-agent-runtime/" target="_blank" rel="noopener">Google Agent Executor</a> <span class="ref-domain">cloud.google.com</span></li>
+    <li><a href="https://cloud.google.com/blog/products/containers-kubernetes/bringing-you-agent-sandbox-on-gke-and-agent-substrate/" target="_blank" rel="noopener">GKE Agent Sandbox</a> <span class="ref-domain">cloud.google.com</span></li>
+    <li><a href="https://developers.googleblog.com/all-the-news-from-the-google-io-2026-developer-keynote/" target="_blank" rel="noopener">Google I/O 2026 Developer Keynote 汇总</a> <span class="ref-domain">googleblog.com</span></li>
+    <li><a href="https://developers.googleblog.com/blazing-fast-on-device-genai-with-litert-lm/" target="_blank" rel="noopener">LiteRT-LM 端侧推理</a> <span class="ref-domain">googleblog.com</span></li>
+    <li><a href="https://cloud.google.com/blog/products/ai-machine-learning/benchmark-llms-on-device-with-ai-edge-portal/" target="_blank" rel="noopener">Google AI Edge Portal</a> <span class="ref-domain">cloud.google.com</span></li>
+    <li><a href="https://www.freecodecamp.org/news/learn-to-build-automated-workflows-with-manus-ai/" target="_blank" rel="noopener">Manus AI 教程</a> <span class="ref-domain">freecodecamp.org</span></li>
+    <li><a href="https://aws.amazon.com/blogs/architecture/cyber-resilience-on-aws-a-reference-approach-for-recovery-from-ransomware-and-destructive-events/" target="_blank" rel="noopener">AWS 勒索软件恢复架构</a> <span class="ref-domain">aws.amazon.com</span></li>
+    <li><a href="https://simonwillison.net/2026/May/19/llm-gemini/" target="_blank" rel="noopener">llm-gemini 0.32a0 发布</a> <span class="ref-domain">simonwillison.net</span></li>
+    <li><a href="https://simonwillison.net/2026/May/20/tokens-per-second/" target="_blank" rel="noopener">Tokens Per Second 可视化工具</a> <span class="ref-domain">simonwillison.net</span></li>
+    <li><a href="https://aws.amazon.com/blogs/machine-learning/multimodal-evaluators-mllm-as-a-judge-for-image-to-text-tasks-in-strands-evals/" target="_blank" rel="noopener">AWS 多模态评估器 MLLM-as-a-Judge</a> <span class="ref-domain">aws.amazon.com</span></li>
+  </ul>
+</div>
+
+<footer>
+  <p>开发者科技日报 | 数据覆盖 2026-05-19 19:59 ~ 2026-05-20 19:59 | 共 667 条源数据</p>
+  <p style="margin-top:6px">筛选原则：聚焦可落地的技术方案、工具更新、代码示例与最佳实践 | 排除纯商业新闻与融资信息</p>
+</footer>
+
+</div>
 </body>
 </html>
