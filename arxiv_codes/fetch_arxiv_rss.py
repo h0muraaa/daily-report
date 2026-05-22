@@ -38,7 +38,17 @@ def _strip_tags(value: str) -> str:
     return _clean_text(re.sub(r"<[^>]+>", " ", value))
 
 
-def _download_url(url: str, output_path: str, accept: str, retries: int = 3, delay: int = 5) -> None:
+def _build_opener(use_proxy: bool = False) -> urllib.request.OpenerDirector:
+    """Build urllib opener, optionally with proxy from PROXY env var."""
+    if use_proxy:
+        proxy_url = os.environ.get("PROXY")
+        if proxy_url:
+            proxy_handler = urllib.request.ProxyHandler({"http": proxy_url, "https": proxy_url})
+            return urllib.request.build_opener(proxy_handler)
+    return urllib.request.build_opener()
+
+
+def _download_url(url: str, output_path: str, accept: str, retries: int = 6, delay: int = 5) -> None:
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     last_error: Exception | None = None
     request = urllib.request.Request(
@@ -48,18 +58,36 @@ def _download_url(url: str, output_path: str, accept: str, retries: int = 3, del
             "Accept": accept,
         },
     )
+    proxy_url = os.environ.get("PROXY")
 
     for attempt in range(retries):
+        use_proxy = False
+        # On first 429, switch to proxy if available
+        if attempt > 0 and proxy_url:
+            use_proxy = True
+
+        opener = _build_opener(use_proxy=use_proxy)
         try:
-            with urllib.request.urlopen(request, timeout=30) as response:
+            with opener.open(request, timeout=30) as response:
                 payload = response.read()
             with open(output_path, "wb") as handle:
                 handle.write(payload)
             return
+        except urllib.error.HTTPError as exc:
+            last_error = exc
+            if exc.code == 429 and proxy_url and attempt == 0:
+                print(f"429 限流，尝试使用代理: {proxy_url}")
+                continue
+            if attempt < retries - 1:
+                backoff = delay * (2 ** attempt)
+                print(f"下载失败 (attempt {attempt + 1}/{retries}): {exc}, {backoff}s 后重试...")
+                time.sleep(backoff)
         except (urllib.error.URLError, TimeoutError, OSError) as exc:
             last_error = exc
             if attempt < retries - 1:
-                time.sleep(delay)
+                backoff = delay * (2 ** attempt)
+                print(f"下载失败 (attempt {attempt + 1}/{retries}): {exc}, {backoff}s 后重试...")
+                time.sleep(backoff)
 
     raise RuntimeError(f"Failed to download {url}: {last_error}")
 
@@ -93,6 +121,7 @@ def _fetch_abstract(abs_url: str, cache: dict[str, str]) -> str:
         abs_url,
         abs_url.replace("https://export.arxiv.org", "https://arxiv.org"),
     ]
+    proxy_url = os.environ.get("PROXY")
 
     for candidate in candidates:
         request = urllib.request.Request(
@@ -102,10 +131,32 @@ def _fetch_abstract(abs_url: str, cache: dict[str, str]) -> str:
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             },
         )
-        try:
-            with urllib.request.urlopen(request, timeout=30) as response:
-                page = response.read().decode("utf-8", errors="replace")
-        except (urllib.error.URLError, TimeoutError, OSError):
+        page = None
+        for attempt in range(3):
+            use_proxy = False
+            if attempt > 0 and proxy_url:
+                use_proxy = True
+
+            opener = _build_opener(use_proxy=use_proxy)
+            try:
+                with opener.open(request, timeout=30) as response:
+                    page = response.read().decode("utf-8", errors="replace")
+                break
+            except urllib.error.HTTPError as exc:
+                if exc.code == 429:
+                    if attempt == 0 and proxy_url:
+                        print(f"429 限流，尝试使用代理获取摘要: {proxy_url}")
+                        continue
+                    if attempt < 2:
+                        time.sleep(5 * (2 ** attempt))
+                        continue
+                page = None
+                break
+            except (urllib.error.URLError, TimeoutError, OSError):
+                page = None
+                break
+
+        if page is None:
             continue
 
         match = re.search(
