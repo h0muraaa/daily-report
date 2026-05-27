@@ -1,451 +1,580 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CTO洞察日报 - 2026年5月24日</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: #f0f2f5;
-      color: #1a1a2e;
-      line-height: 1.7;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
-    header {
-      background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
-      color: white;
-      padding: 48px 40px;
-      border-radius: 12px;
-      margin-bottom: 32px;
-      box-shadow: 0 4px 20px rgba(30, 58, 95, 0.15);
-    }
-    header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-    }
-    header .subtitle {
-      font-size: 14px;
-      opacity: 0.85;
-      font-weight: 400;
-    }
-    header .date {
-      font-size: 13px;
-      opacity: 0.7;
-      margin-top: 12px;
-    }
-    .section {
-      background: white;
-      border-radius: 12px;
-      padding: 32px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    }
-    .section-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1e3a5f;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 2px solid #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .section-title::before {
-      content: "";
-      display: inline-block;
-      width: 4px;
-      height: 20px;
-      background: #2c5282;
-      border-radius: 2px;
-    }
-    .highlight-item {
-      padding: 20px 0;
-      border-bottom: 1px solid #edf2f7;
-    }
-    .highlight-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    .highlight-item:first-child {
-      padding-top: 0;
-    }
-    .highlight-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: #1a202c;
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-    .highlight-body {
-      font-size: 14px;
-      color: #4a5568;
-      line-height: 1.8;
-    }
-    .source {
-      font-size: 12px;
-      color: #718096;
-      margin-top: 10px;
-    }
-    .source a {
-      color: #2c5282;
-      text-decoration: none;
-    }
-    .source a:hover {
-      text-decoration: underline;
-    }
-    .tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 4px;
-      margin-bottom: 8px;
-      letter-spacing: 0.3px;
-    }
-    .tag-strategic { background: #ebf8ff; color: #2b6cb0; }
-    .tag-org { background: #faf5ff; color: #6b46c1; }
-    .tag-market { background: #f0fff4; color: #276749; }
-    .tag-risk { background: #fff5f5; color: #c53030; }
-    .tag-infra { background: #fffaf0; color: #c05621; }
-    .insight-box {
-      background: #f7fafc;
-      border-left: 4px solid #2c5282;
-      padding: 20px 24px;
-      border-radius: 0 8px 8px 0;
-      margin-top: 16px;
-    }
-    .insight-box .label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #2c5282;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-    .insight-box p {
-      font-size: 14px;
-      color: #4a5568;
-      line-height: 1.8;
-    }
-    .action-list {
-      list-style: none;
-    }
-    .action-list li {
-      padding: 14px 0 14px 32px;
-      position: relative;
-      font-size: 14px;
-      color: #4a5568;
-      border-bottom: 1px solid #edf2f7;
-    }
-    .action-list li:last-child {
-      border-bottom: none;
-    }
-    .action-list li::before {
-      content: "→";
-      position: absolute;
-      left: 0;
-      color: #2c5282;
-      font-weight: 700;
-    }
-    .source-section {
-      background: #f7fafc;
-      border-radius: 12px;
-      padding: 24px 32px;
-      margin-top: 32px;
-    }
-    .source-section h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #1e3a5f;
-      margin-bottom: 16px;
-    }
-    .source-list {
-      list-style: none;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px 24px;
-    }
-    .source-list li {
-      font-size: 13px;
-      color: #4a5568;
-    }
-    .source-list a {
-      color: #2c5282;
-      text-decoration: none;
-    }
-    .source-list a:hover {
-      text-decoration: underline;
-    }
-    .trend-item {
-      padding: 16px 0;
-      border-bottom: 1px solid #edf2f7;
-    }
-    .trend-item:last-child {
-      border-bottom: none;
-    }
-    .trend-signal {
-      font-size: 12px;
-      font-weight: 700;
-      color: #c05621;
-      margin-bottom: 4px;
-    }
-    .deep-dive {
-      margin-bottom: 28px;
-    }
-    .deep-dive:last-child {
-      margin-bottom: 0;
-    }
-    .deep-dive h3 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a202c;
-      margin-bottom: 12px;
-    }
-    footer {
-      text-align: center;
-      padding: 32px;
-      color: #a0aec0;
-      font-size: 12px;
-    }
-    @media (max-width: 600px) {
-      .container { padding: 20px 16px; }
-      header { padding: 32px 24px; }
-      .section { padding: 24px; }
-      .source-list { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTO洞察日报 - 2026年5月27日</title>
+<style>
+:root {
+  --primary: #2c3e50;
+  --accent: #3498db;
+  --bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --text: #2c3e50;
+  --text-light: #5d6d7e;
+  --border: #e5e8eb;
+  --highlight: #e8f4fd;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+header {
+  text-align: center;
+  padding: 40px 0;
+  border-bottom: 3px solid var(--accent);
+  margin-bottom: 40px;
+}
+header h1 { font-size: 2.2rem; font-weight: 700; color: var(--primary); letter-spacing: 2px; }
+header .subtitle { color: var(--text-light); font-size: 0.95rem; margin-top: 8px; }
+header .date { color: var(--accent); font-size: 1rem; margin-top: 12px; font-weight: 500; }
+
+.section { margin-bottom: 48px; }
+.section-title {
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--primary);
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::before {
+  content: "";
+  display: inline-block;
+  width: 6px; height: 24px;
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.card-body {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+.card-source {
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+.card-source a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.card-source a:hover { border-bottom-color: var(--accent); }
+
+.insight-box {
+  background: var(--highlight);
+  border-left: 4px solid var(--accent);
+  padding: 20px 24px;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 32px;
+}
+.insight-box h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 12px; }
+.insight-box ul { padding-left: 20px; }
+.insight-box li { margin-bottom: 8px; color: var(--text-light); }
+
+.action-box {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 40px;
+}
+.action-box h3 { font-size: 1.2rem; margin-bottom: 16px; }
+.action-box ul { padding-left: 20px; }
+.action-box li { margin-bottom: 10px; opacity: 0.9; }
+
+.sources-section {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid var(--border);
+}
+.sources-section h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 16px; }
+.sources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+}
+.source-item {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--border);
+}
+.source-item a { color: var(--accent); text-decoration: none; }
+.source-item a:hover { text-decoration: underline; }
+
+footer {
+  text-align: center;
+  padding: 32px 0;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: var(--highlight);
+  color: var(--accent);
+  margin-right: 8px;
+  font-weight: 500;
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>CTO 洞察日报</h1>
-      <div class="subtitle">面向技术高管的战略情报与趋势研判</div>
-      <div class="date">2026年5月24日 · 第20260524期</div>
-    </header>
+<div class="container">
+<header>
+  <h1>CTO 洞察日报</h1>
+  <div class="subtitle">技术战略 · 商业价值 · 竞争格局</div>
+  <div class="date">2026年5月27日 星期三</div>
+</header>
 
-    <!-- 今日要点 -->
-    <div class="section">
-      <h2 class="section-title">今日要点</h2>
+<div class="insight-box">
+  <h3>今日核心洞察</h3>
+  <ul>
+    <li><strong>AI成本进入"算账时代"：</strong>Uber 4月耗尽全年Claude代码预算，成为首个公开反思AI投入产出比的大厂。中国大模型API价格战持续升级，小米MiMo降幅达99%。</li>
+    <li><strong>编程Agent争论白热化：</strong>George Hotz发文称"AI编程Agent是史上最昂贵错误"，与Andrej Karpathy加入Anthropic力挺Agent形成鲜明对立。Codex凭借自测闭环将bug率从40%降至3%。</li>
+    <li><strong>长上下文技术范式突破：</strong>Subquadratic推出1200万Token窗口模型，通过SSA架构将注意力成本从二次方降至线性，或终结RAG时代。</li>
+    <li><strong>Agent安全从理论走向实践：</strong>Anthropic发布Agent安全实战总结，提出环境层→模型层→外部内容层三层防御架构，Claude Code自动拦截83%过度积极行为。</li>
+  </ul>
+</div>
 
-      <div class="highlight-item">
-        <span class="tag tag-strategic">战略竞争</span>
-        <div class="highlight-title">Anthropic 估值将破 9000 亿美元，正式反超 OpenAI</div>
-        <div class="highlight-body">
-          据彭博社消息，Anthropic 即将完成超过 300 亿美元的新一轮融资，估值有望突破 9000 亿美元。这轮融资仅数周便迅速推进完成，反映出资本市场对 Anthropic 的极度追捧。更值得关注的是，Anthropic 预计今年第二季度营收将达到 109 亿美元，较上一季度增长超过一倍，有望迎来历史上首个盈利季度。在 secondary market 上，其估值已经摸到 1 万亿美元。这一里程碑意味着 AI 模型公司的竞争格局正在发生根本性转变——OpenAI 的先发优势正在被 Anthropic 的聚焦战略和组织效率所侵蚀。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653107102&idx=1&sn=996e044d753ba2444b6c8c58f9fe8526" target="_blank" rel="noopener">[来源: 极客公园]</a>
-        </div>
-      </div>
-
-      <div class="highlight-item">
-        <span class="tag tag-org">组织变革</span>
-        <div class="highlight-title">Meta 推行激进扁平化：经理与下属比例从 1:8 剧变至 1:50</div>
-        <div class="highlight-body">
-          Meta 正在进行一场激进的组织重塑。工程经理被强制转回个人贡献者（IC）岗位，部分顶尖基础设施工程师被重新分配去从事 AI 数据标注工作。有内部人士透露，经理与下属的比例已从传统的 1:8 剧变到 1:50。扎克伯格在内部备忘录中直言："AI 是我们这一生中最具影响力的技术，成功并非理所当然"，并以此为由裁撤了 8000 名员工。当一家市值近两万亿美元的科技巨头将所有筹码押注在 AI 和效率上时，"去中层化"已从讨论变为现实。这对所有技术组织的架构设计提出了一个尖锐问题：在 AI 时代，管理层存在的价值是什么？
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651034676&idx=1&sn=482cab0e6a46ee12b9d94f253bf86e92" target="_blank" rel="noopener">[来源: 机器之心]</a> ·
-          <a href="https://x.com/FinanceYF5/status/2058531129372844471" target="_blank" rel="noopener">[来源: AI Will @ X]</a>
-        </div>
-      </div>
-
-      <div class="highlight-item">
-        <span class="tag tag-market">商业模式</span>
-        <div class="highlight-title">AI Agent 的竞争对手不是 SaaS，而是企业的工资单</div>
-        <div class="highlight-body">
-          硅谷科技评论分析指出，AI Agent 公司正在与 SaaS 系统性脱钩。它们的真正对手是企业的工资单，而不是其他 SaaS 产品。Contrario（AI 招聘公司）上线不到 6 个月做到 600 万美元 ARR，本轮种子仅 230 万美元；Viktor（AI 同事）10 周达到 1500 万美元年化收入。这些公司的客户不是 CIO，而是 HR 总监和业务团队负责人——当一个 HR 总监算的是"这个工具能不能省掉一个年薪 12 万美元的招聘专员"，决策逻辑和买软件完全不同。全球企业 IT 预算约 5000 亿美元，而人力相关支出是它的十倍以上。这意味着 Agent 公司的 TAM（可触达市场）可能是 SaaS 的 10 倍，但也意味着它们必须在"替代人力"这个更严苛的标准下被评估。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MzA3MDU4ODkyNg==&mid=2247512650&idx=1&sn=9a715b77120281cf98cccdc1937605e5" target="_blank" rel="noopener">[来源: 硅谷科技评论]</a>
-        </div>
-      </div>
-
-      <div class="highlight-item">
-        <span class="tag tag-risk">运营风险</span>
-        <div class="highlight-title">GitHub 陷入生存危机：可用率跌破 85%，容量规划失误达 3 倍</div>
-        <div class="highlight-body">
-          GitHub 正面临前所未有的运营危机。仅过去几周就接连遭遇多次重大宕机：4 月 23 日 Merge Queue 漏洞导致错误提交记录，4 月 27 日 Elasticsearch 集群因过载崩溃。重建的状态页面数据显示，其 2025 年可用率已跌破 90%，4 月更是低于 85%。CTO Vlad Fedorov 公开致歉并承认容量规划存在严重失误——原计划扩充 10 倍容量，到 2025 年 2 月实际需求已表明需要 30 倍。更深层的问题是，多位现任和前任员工透露 GitHub 的独立文化正在消失，微软内部甚至传出"封杀 Claude Code 才能让 GitHub 活下去"的声音。对依赖 GitHub 的企业而言，这意味着代码托管基础设施的集中度风险正在上升，多云代码策略值得重新审视。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285214&idx=2&sn=6d10cfe59192e76a301883ac5166ad7b" target="_blank" rel="noopener">[来源: InfoQ]</a>
-        </div>
-      </div>
-
-      <div class="highlight-item">
-        <span class="tag tag-infra">基础设施</span>
-        <div class="highlight-title">硅谷深陷算力荒：H200 一夜涨价 30%，英伟达自家研究员也抢不到卡</div>
-        <div class="highlight-body">
-          AI 算力的"饥荒"已达到前所未有的高度。H200 一夜涨价 30%，H100 抢到缺货。戏剧性的是，当年帮英伟达赌对 GPU 卡方向的功臣 Bryan Catanzaro，如今向黄仁勋申请训练卡时得到的回复是"不好意思，那些卡已经卖掉了"。谷歌 DeepMind 研究员 Andrew Dai 因内部 TPU 资源申请迟迟未批而离职创业——拒绝理由不是研究方向不好，而是项目不能为下一代 Gemini 服务。更值得注意的是，英伟达 CFO 科莱特·克雷斯公开嘲讽竞争对手对内存价格飙升预判不足，称英伟达因提前锁定大批 HBM 和 DDR 供给而"相对从容"。算力正在从"技术要素"变成"战略资源"，其分配逻辑正在重塑大公司的内部权力结构。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285214&idx=1&sn=2a56c4c18ce8de4a44d10a4b9b0ca2bb" target="_blank" rel="noopener">[来源: InfoQ]</a>
-        </div>
-      </div>
+<div class="section">
+  <div class="section-title">AI成本与ROI</div>
+  <div class="card">
+    <div class="card-title">上下文窗口限制被打破：Subquadratic推出了一个1200万Token的窗口</div>
+    <div class="card-body">Frederic 2026-05-26 14:05 北京 2026年，每个前沿模型都在宣传，至少提供100万Token的上下文窗口。但实际上，几乎没有一个模型能够很好地利用所有这些信息。 作者 | Frederic Lardinois 译者 | 平川 策划 | Tina 本文最初发布于 THENEWSTACK。2026 年，每个前沿模型都在宣传，至少提供 100 万 Token 的上下文窗口。但实际上，几乎没有一个模型能够很好地利用所有这些信息。在 MRCR v2（多参考检索基准测试实验室报告）中，最佳模型是 GPT-5.5，得分为 74.0%。其他模型如 Claude Opus 4.7 得分为 32.2%，被远远地抛在了后面。目前，100 万 Toekn 似乎是主要前沿实验室提供的最大上下文窗口。一个主要原因是，这个 100 万 Token 的最大值影响了自 2017 年以来每一个基于 Transformer 的模型：注意力成本与上下文长度呈二次方增长关系，输入翻倍会使工作量增加四倍。本质上，RAG、代理分解、混合模型架构以及业界构建的其他所有变通方法都是为了解决这个问题而做出的权衡。Subquadratic 是一家位于迈阿密的初创公司。他们在 5 月 5 日推出了其首个模型——一个能够处理 1200 万 Token 窗口的模型，并声称它可以绕过所有这些问题。更重要的是，该公司表示，按照计划，他们将很快提供具有 5000 万上下文窗口的模型。该公司拥有 11 名博士研究员。他们认为，其 Subquadratic Selective Attention（SSA）架构在计算和内存方面均与上下文长度呈线性增长关系。该公司表示，在 100 万 Token 的规模下，其运行速度比密集注意力快 52 倍；在 1200 万 Token 的“大海捞针”检索任务中，准确率达到...</div>
+    <div class="card-source">
+      <span class="tag">AI成本与ROI</span>
+      <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285679&idx=3&sn=f8b1bc49ba3c60e0b1eaf13137f7f5d3" target="_blank" rel="noopener">[来源: InfoQ]</a>
     </div>
-
-    <!-- 深度分析 -->
-    <div class="section">
-      <h2 class="section-title">深度分析</h2>
-
-      <div class="deep-dive">
-        <h3>1. SaaStr 的激进 AI 实践：164 倍 ROI 背后的组织逻辑</h3>
-        <div class="highlight-body">
-          SaaStr 创始人 Jason Lemkin 在年度大会上展示了令人震惊的数据：公司雇佣了两个"AI VP"（一个管 Marketing，一个管 Customer Success），整月费用合计 254 美元，替代了约 50 万美元的年度人力成本，ROI 高达 164 倍。这不是概念验证，而是已经在真实业务中运行的实践。
-        </div>
-        <div class="highlight-body" style="margin-top: 10px;">
-          更值得 CTO 关注的是其背后的组织逻辑：Jason 没有把这些 AI 工具当作"辅助工具"交给现有员工使用，而是直接将它们定义为"角色"——赋予预算、目标和考核标准。Monaco CEO 在会场上空的飞机横幅营销也印证了一个信号：最创意的营销决策仍然需要人类，但执行层正在被 AI 接管。
-        </div>
-        <div class="insight-box">
-          <div class="label">CTO 洞察</div>
-          <p>AI 降本的关键不在于"给员工配更好的工具"，而在于重新定义岗位边界。当 AI 可以承担一个 VP 的 80% 工作时，你应该思考的是：这个岗位还需要人类吗？如果需要，人类的独特价值在哪里？SaaStr 的实验表明，策略制定和异常处理仍是人类领地，但标准化执行正快速被 AI 吞噬。</p>
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MzI0NTAwMzU1MA==&mid=2247505837&idx=1&sn=45c99a545d2808af9c3a1f6010af9748" target="_blank" rel="noopener">[来源: 随机小分队]</a>
-        </div>
-      </div>
-
-      <div class="deep-dive">
-        <h3>2. Anthropic 的组织密码：为什么它能后来居上？</h3>
-        <div class="highlight-body">
-          创业邦发布的长文《拆解 Anthropic》揭示了一个关键洞察：Anthropic 的崛起不仅是技术胜利，更是一场"组织发明"。文章指出，OpenAI 像一家什么都想要的公司——math、science、coding、reasoning、多模态全面铺开；而 Anthropic 从 2021 年就坚定地将 coding 作为最重要的方向，这种聚焦带来了复利效应。
-        </div>
-        <div class="highlight-body" style="margin-top: 10px;">
-          另一个被低估的因素是人才流失率。在 AI 行业人才流动极其频繁的背景下，Anthropic 保持着异常低的流失率，几乎每个员工都在称赞它的文化。Dario Amodei 和 Sam Altman 的性格差异塑造了两家公司完全不同的战略路径：前者偏向审慎深耕，后者偏向快速扩张。在模型能力差距逐渐缩小的今天，组织效率正在成为决定性的竞争变量。
-        </div>
-        <div class="insight-box">
-          <div class="label">CTO 洞察</div>
-          <p>当技术差距缩小时，组织就是最大的护城河。Anthropic 的案例说明：聚焦一个战略方向并持续深耕，比追逐所有热点更有效。对技术团队而言，"不做什么"的决定比"做什么"更重要。同时，文化建设不是软指标——在人才战争中，它是降低招聘成本和加速知识传递的硬杠杆。</p>
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650876237&idx=2&sn=6031e152dbe8277fb5e16e2abfd8f743" target="_blank" rel="noopener">[来源: 创业邦 / 海外独角兽]</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- 趋势雷达 -->
-    <div class="section">
-      <h2 class="section-title">趋势雷达</h2>
-
-      <div class="trend-item">
-        <div class="trend-signal">早期信号 · 值得关注</div>
-        <div class="highlight-title">DeepSeek 组建 Code Harness 团队，意图补齐 Agent 最后一公里</div>
-        <div class="highlight-body">
-          DeepSeek 研究员 Deli Chen 在 X 上公开招聘 Harness 团队，岗位描述中的核心一句话很直接："Model + Harness = Agent"。DeepSeek 要做的不是给模型套一个聊天框，而是补模型和 Agent 之间的执行系统。这意味着 DeepSeek 正在从"做最好的模型"转向"做最好用的 AI 基础设施"，其战略野心可能远超外界预期。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650451942&idx=1&sn=3fb8af92f553a0444b350bf6cfb56565" target="_blank" rel="noopener">[来源: AINLP]</a>
-        </div>
-      </div>
-
-      <div class="trend-item">
-        <div class="trend-signal">技术收敛 · 方向确认</div>
-        <div class="highlight-title">何恺明与字节 Seed 论文撞车：扩散模型与大模型的融合路径正在收敛</div>
-        <div class="highlight-body">
-          5 月 7 日字节 Seed 发 99 页论文 Cola DLM，5 月 11 日 MIT 何恺明组发 32 页论文 ELF——两条几乎相反的路径撞到了同一个设计点。字节来自工业界做扩散模型最猛的实验室，何恺明来自学术界 AI 奠基人团队。这种巧合代表着一个重要趋势：扩散模型和大语言模型的技术边界正在模糊，多模态统一架构的时代可能比预期更快到来。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA1OTAxNA==&mid=2247490307&idx=1&sn=e55fb9aedb57c170ecfbe932973da113" target="_blank" rel="noopener">[来源: 花叔]</a>
-        </div>
-      </div>
-
-      <div class="trend-item">
-        <div class="trend-signal">监管动态 · 合规影响</div>
-        <div class="highlight-title">特斯拉中国 FSD 更名为"辅助驾驶"，法规约束开始落地</div>
-        <div class="highlight-body">
-          特斯拉中国将 FSD 正式更名为"特斯拉辅助驾驶"，页面彻底剔除 FSD 标识与自动驾驶相关字样，售价保持 6.4 万元不变。国内 L2 级驾驶辅助系统不得使用"全自动""自动驾驶"等易误导表述。这释放了一个信号：AI 产品的命名和营销话术正在进入强监管时代，"能力夸大"的合规风险在上升。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650876267&idx=4&sn=2b617fdc6a8580f8eb31925fede75cc7" target="_blank" rel="noopener">[来源: 创业邦]</a>
-        </div>
-      </div>
-
-      <div class="trend-item">
-        <div class="trend-signal">供应链 · 成本结构</div>
-        <div class="highlight-title">三大运营商推出 Token 算力套餐，AI 成本进入"话费"时代</div>
-        <div class="highlight-body">
-          中国电信、中国移动、中国联通集中推出 Token 算力套餐：9.9 元包 1000 万 Tokens（个人及家庭套餐），39.9 元包 1500 万 Tokens（开发者套餐）。这标志着 AI 使用成本正在从"企业预算"变成"日常开销"，Token 价格的平民化将加速 AI 在消费级场景的渗透。对 CTO 而言，这意味着 AI 成本模型需要从"项目制"转向"运营制"。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653162591&idx=1&sn=8e1bd7eab2b79a136a023e48935a0de2" target="_blank" rel="noopener">[来源: 吴晓波频道]</a>
-        </div>
-      </div>
-
-      <div class="trend-item">
-        <div class="trend-signal">技术架构 · 标准化</div>
-        <div class="highlight-title">OpenAI 开源 Symphony 智能体编排器，项目管理工具成为控制平面</div>
-        <div class="highlight-body">
-          OpenAI 开源了 Symphony——一个用项目管理工具（如问题追踪器）作为控制平面来协调多个编码智能体的编排器。它的核心洞察是：每位工程师同时管理 3-5 个编码会话后就会因上下文切换而力不从心。Symphony 将持续监控任务看板，确保每个进行中的任务都有对应智能体运行直至完成。这标志着"Agent 编排"正在从临时脚本走向系统化框架。
-        </div>
-        <div class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285214&idx=4&sn=9ea4923fc5f63239cd948d52f06043ef" target="_blank" rel="noopener">[来源: InfoQ]</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- CTO视角 -->
-    <div class="section">
-      <h2 class="section-title">CTO 视角 · 行动建议</h2>
-      <ul class="action-list">
-        <li>
-          <strong>重新审视组织架构：</strong>Meta 将经理比例压缩至 1:50 的实验虽然激进，但方向值得关注。评估你团队中的"纯管理"岗位比例，思考哪些管理职能可以被 AI 工具替代，哪些必须保留人类判断。
-        </li>
-        <li>
-          <strong>建立算力冗余策略：</strong>算力正在从"可采购资源"变成"战略储备"。在芯片和云服务采购中引入多供应商策略，避免对单一供应商的过度依赖。同时关注国产芯片（如华为昇腾、寒武纪）的可用性评估。
-        </li>
-        <li>
-          <strong>定义 AI 岗位边界：</strong>参考 SaaStr 的"AI VP"实验，不要只是把 AI 当作员工的工具，而是将其定义为可独立承担目标的"数字员工"。关键是明确人类和 AI 的边界：策略、判断、异常处理归人类，执行、分析、标准化流程归 AI。
-        </li>
-        <li>
-          <strong>评估代码托管风险：</strong>GitHub 的可用率下滑是一个警示信号。对于关键业务代码库，建议制定多云代码托管策略（如 GitHub + GitLab 双活），并定期验证灾备切换流程。
-        </li>
-        <li>
-          <strong>关注 Token 成本结构变化：</strong>三大运营商入局 Token 套餐标志着 AI 成本进入"日常化"定价阶段。重新评估你的 AI 应用成本模型，从"按项目预算"转向"按使用量计费"的运营思维。
-        </li>
-        <li>
-          <strong>评估 Agent 编排框架：</strong>Symphony 的开源和 AWS MCP Server 的 GA 标志着 Agent 互操作性正在标准化。建议在技术栈规划中预留 Agent 编排层，避免被单一供应商锁定。
-        </li>
-      </ul>
-    </div>
-
-    <!-- 信息来源汇总 -->
-    <div class="source-section">
-      <h3>信息来源汇总</h3>
-      <ul class="source-list">
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653107102&idx=1&sn=996e044d753ba2444b6c8c58f9fe8526" target="_blank" rel="noopener">极客公园</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651034676&idx=1&sn=482cab0e6a46ee12b9d94f253bf86e92" target="_blank" rel="noopener">机器之心</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MDU4ODkyNg==&mid=2247512650&idx=1&sn=9a715b77120281cf98cccdc1937605e5" target="_blank" rel="noopener">硅谷科技评论</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285214&idx=2&sn=6d10cfe59192e76a301883ac5166ad7b" target="_blank" rel="noopener">InfoQ - GitHub</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285214&idx=1&sn=2a56c4c18ce8de4a44d10a4b9b0ca2bb" target="_blank" rel="noopener">InfoQ - 算力荒</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzI0NTAwMzU1MA==&mid=2247505837&idx=1&sn=45c99a545d2808af9c3a1f6010af9748" target="_blank" rel="noopener">随机小分队</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650876237&idx=2&sn=6031e152dbe8277fb5e16e2abfd8f743" target="_blank" rel="noopener">创业邦 / 海外独角兽</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650876267&idx=4&sn=2b617fdc6a8580f8eb31925fede75cc7" target="_blank" rel="noopener">创业邦 - 特斯拉</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3OTM5NTkxNA==&mid=2653162591&idx=1&sn=8e1bd7eab2b79a136a023e48935a0de2" target="_blank" rel="noopener">吴晓波频道</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285214&idx=4&sn=9ea4923fc5f63239cd948d52f06043ef" target="_blank" rel="noopener">InfoQ - Symphony</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650451942&idx=1&sn=3fb8af92f553a0444b350bf6cfb56565" target="_blank" rel="noopener">AINLP</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA1OTAxNA==&mid=2247490307&idx=1&sn=e55fb9aedb57c170ecfbe932973da113" target="_blank" rel="noopener">花叔</a></li>
-        <li><a href="https://x.com/FinanceYF5/status/2058531129372844471" target="_blank" rel="noopener">AI Will @ X</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247662735&idx=1&sn=06396edf6f567934adece8b6bf0fd259" target="_blank" rel="noopener">AI前线 - 台积电</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247662735&idx=2&sn=6bc0d9c32799374d97424eb7cfd0307a" target="_blank" rel="noopener">AI前线 - Anthropic</a></li>
-        <li><a href="https://www.infoq.com/news/2026/05/google-genkit-middleware/" target="_blank" rel="noopener">InfoQ - Genkit</a></li>
-        <li><a href="https://www.infoq.com/news/2026/05/aws-mcp-ga/" target="_blank" rel="noopener">InfoQ - AWS MCP</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650876267&idx=3&sn=03a8f28fc2238557e42b7a7a3b61ed0d" target="_blank" rel="noopener">创业邦 - 飞捷科思</a></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIxNTAzNzU0Ng==&mid=2654905420&idx=1&sn=058ee913ea21b2e50a81ef1d4e41b023" target="_blank" rel="noopener">笔记侠</a></li>
-      </ul>
-    </div>
-
-    <footer>
-      CTO 洞察日报 · 由 tech-daily-generator 自动生成 · 2026-05-24
-    </footer>
   </div>
+  <div class="card">
+    <div class="card-title">OpenAI 详解规模化低延迟语音 AI 的 WebRTC 架构</div>
+    <div class="card-body">Eran Stiller 2026-05-26 14:05 北京 OpenAI推出适配全球低延迟语音AI的WebRTC新架构，采用中继收发器设计适配云原生环境，集中存放会话状态，缩减公网端口暴露，拉近媒体传输链路与用户距离。 作者 | Eran Stiller 译者 | 明知山 OpenAI 近期介绍了 如何为全球规模的低延迟语音 AI 调整 WebRTC。新的架构将传统的媒体终结模型替换为更适合 Kubernetes 和云负载均衡器的中继收发器架构。它将 WebRTC 会话状态保留在专用的收发器层，同时利用轻量级中继来减少公共 UDP 暴露，并让媒体路由更贴近用户。在这篇文章中，OpenAI 的技术人员 Zhang Yi 和 William McDonald 解释说，实现全球覆盖、快速建立连接以及保障媒体往返时延偏低且稳定是此次架构调整背后的主要制约因素。团队评估了多种媒体会话对外暴露的方案，各类方案在实际运行中各有利弊。第一种方案是直接对外暴露 UDP 端口，沿用传统 WebRTC 架构模式。但该方案会把运维压力转嫁至基础设施层面，尤其是在 Kubernetes 环境中，大规模的公网端口难以安全管控。为每台服务器单独分配专属端口虽能简化部分路由决策，却依旧会让运维人员面临端口规划困难、端口使用率失衡以及部署发布稳定性差等问题。选项 1：SFU 方案——将 AI 作为 WebRTC 参与者（来源）TURN 风格的中继也是一个可行的选项，但它们会在媒体路径中引入更重量级的中间层，所能解决的问题超出了 OpenAI 以一对一为主的模型与用户会话的需求。OpenAI 选择在两层之间划分职责，轻量级中继负责接收传入的数据包并转发，收发器则承载所有有状态的 WebRTC 机制，包括 ICE 协商、DTLS 握手、SRTP 加密以及整体会话生命周期。选项...</div>
+    <div class="card-source">
+      <span class="tag">AI成本与ROI</span>
+      <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285679&idx=4&sn=a1d3ae046495a8e18a4e9ab60f2674dd" target="_blank" rel="noopener">[来源: InfoQ]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Platform Engineering Labs Expands formae with Kubernetes Support, Native Helm Integration</div>
+    <div class="card-body">Platform Engineering Labs has announced a major update to its open-source Infrastructure-as-Code platform, formae, introducing full Kubernetes support, native Helm integration, direct .tfvars compatibility, and a new public plugin hub aimed at simplifying cloud-native infrastructure management By Craig Risi</div>
+    <div class="card-source">
+      <span class="tag">AI成本与ROI</span>
+      <a href="https://www.infoq.com/news/2026/05/formae-k8s-helm-integration/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Prompt 1: Photorealistic close-up lifestyle mockup of milk being poured from a matte black metal pit...</div>
+    <div class="card-body">Prompt 1:Photorealistic close-up lifestyle mockup of milk being poured from a matte black metal pitcher into a plain off-white takeaway coffee cup held by human hands. The cup surface is completely blank with no text, no logos, no graphics, and no illustrations. Smooth matte paper texture with minimal grain and clean cylindrical form. Warm cinematic cafe lighting, realistic coffee tones, shallow depth of field, premium editorial coffee branding mockup aesthetic, cozy contemporary cafe atmosphere.Prompt 2:Photorealistic close-up lifestyle mockup of a person holding a golden croissant inside a completely clean monochromatic pastry paper bag in soft natural sunlight. The pastry sleeve is entirely blank with no typography, no logos, no labels, no stickers, no patterns, and no graphic...</div>
+    <div class="card-source">
+      <span class="tag">AI成本与ROI</span>
+      <a href="https://x.com/recraftai/status/2059188703403081754" target="_blank" rel="noopener">[来源: Recraft(@recraftai)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">1. Open X 2. Click on notifications 3. See entrepreneurs making money with Replit.  Happens daily no...</div>
+    <div class="card-body">1. Open X2. Click on notifications3. See entrepreneurs making money with Replit.Happens daily now — Best feeling in the world!Usama Syed, MD@usamasyedMDMy wife (non-technical) built a fully functional iOS/Android app in 6 weeks... and it's made $1.5k on the app store since launch in the first month!She's a stay at home mom with our 2 young children (3 and 1), and she wanted a way to write letters to our children to keep memories of their childhood (we kept using notes app and was all a mess). Thank you @amasad and @Replit for making this possible! Link if you want to try it: apps.apple.com/us/app/from-ma…Your browser does not support the video tag.🔗 View on TwitterYour browser does not support the video tag.🔗 View on Twitter🔗 View Quoted Tweet💬16🔄6❤️112👀12174📊23⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">AI成本与ROI</span>
+      <a href="https://x.com/amasad/status/2059390098869768617" target="_blank" rel="noopener">[来源: Amjad Masad(@amasad)]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">模型动态</div>
+  <div class="card">
+    <div class="card-title">编程 Agent 可能是软件开发史上最昂贵的错误之一</div>
+    <div class="card-body">InfoQ 2026-05-26 14:05 北京 一场清算正在到来。 作者 | Tina“我敢断言：把 AI Agent 引入软件开发，将会成为这个领域历史上代价最惨重的错误之一。”说出这句话的人是 George Hotz。17 岁那年他第一个破解了 iPhone，后来又逆向工程了 PlayStation 3——Sony 因此把他告上了法庭。再后来他创办了 comma.ai，成了自动驾驶领域最不按常理出牌的人。过去六个月，Hotz 把市面上叫得上名字的 AI 编程 Agent 全试了一遍。他用它们写过 tinygrad 的代码，用它们逆向过一个 USB 转 PCIe 芯片。他换过不同模型、不同 harness，也试过不同提示词。上周日，他把自己的结论写成一篇博客，标题叫《永恒的 Sloptember》，认为大规模采用人工智能编码 Agent 将以灾难告终，或者至少接近灾难。Hotz 的核心论点很明确：Agent 不是程序员。“Agent 不会编程，而且我们意识到它们不会编程这件事，正在变得越来越难。”他写道，“它们是一种高度复杂的统计模型，被设计出来模仿‘编程’这件事的分布。它们生成的东西就是坏的，只是坏得越来越隐蔽、越来越难查出来。而这，正是一个越来越精确的统计模型会带来的结果。”1 AI 编程的两极：Karpathy 看见革命，Hotz 看见灾难五天前，AI 圈最知名的研究者之一 Andrej Karpathy 刚刚加入 Anthropic，并公开表示一个明确的观点：AI Agent 已经彻底改变了软件开发。现在，这两个人代表了行业尚未解决的一场争论的两个极端，而且双方都有足够的可信度来支撑自己的立场。Hotz 并不是一开始就这么确信。他花了六个月时间，在真实项目中使用 Agent：包括为他的开源深度学习框架 Tinygrad 写部分代码，以及对一个...</div>
+    <div class="card-source">
+      <span class="tag">模型动态</span>
+      <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285679&idx=1&sn=f05065413bcdb7a5f64e37a0989bcc5b" target="_blank" rel="noopener">[来源: InfoQ]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">TamboUI Promises to Bring Better Capabilities to Build TUIs in Java</div>
+    <div class="card-body">The call to action “to make 2026 the year of Java in the terminal” was quickly responded to by the launch of TamboUI. Inspired by Ratatui, the library used in Claude CLI, it promises support ranging from low-level terminal drawing to high-level APIs such as components and event handling. Currently at version 0.3.0, it has already been adopted by major projects such as Maven and Spring. By Olimpiu Pop</div>
+    <div class="card-source">
+      <span class="tag">模型动态</span>
+      <a href="https://www.infoq.com/news/2026/05/tamboui-java-tui/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">连续两个月，每天数小时，Codex 与 Claude Code 并行使用后，@AlexFinn 决定转向 Codex，为什么？  在 Alex 的判断中，关键变量是：模型智商或代码生成速度已不是关键，...</div>
+    <div class="card-body">连续两个月，每天数小时，Codex 与 Claude Code 并行使用后，@AlexFinn 决定转向 Codex，为什么？在 Alex 的判断中，关键变量是：模型智商或代码生成速度已不是关键，自测闭环更重要，Codex 会在内置浏览器里验证每次改动，形成「改 → 测 → 修」的自动化循环。Codex 自测闭环后，从 40% 的改动首次交付就有 bug，到 ≤3%，可靠性明显提升，更容易进入心流。我的补充：除内置浏览器外，Codex 还有 Computer Use 和 Chrome 扩展可以搭配使用，做网站自动化验证测试。Alex Finn@AlexFinnI'm 100% Codex pilled nowBeen using Codex and Claude Code side by side hours a day for 2 months straightNo longer using them side by side. Codex has become incredibleWhat did it for me is the self testing. Every change it makes it self tests in it's own browserI went from about 40% of my changes being buggy on first go to at most 3% maybe? So much more reliable and allows me to get in an awesome flow stateListen, Claude can literally drop an update tomorrow that changes all of this, but for now I'm really blown....</div>
+    <div class="card-source">
+      <span class="tag">模型动态</span>
+      <a href="https://x.com/shao__meng/status/2059431536399917486" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">lol. OpenAI as the WeWork of AI. Literally called it, in those exact words, @CNBC w @carlquintanilla...</div>
+    <div class="card-body">lol. OpenAI as the WeWork of AI. Literally called it, in those exact words, @CNBC w @carlquintanilla, 2024. Now even SoftBank is worried.Ricardo@Ric_RTPSoftBank's own executives think Sam Altman is scamming their CEO out of $60 billion.They're calling it WeWork 2.0.Masayoshi Son has put $60 BILLION into OpenAI. That makes SoftBank the second-largest outside shareholder with a 13% stake.You'd think $60 billion buys you a seat at the table.But Son has NO board seat. No observer rights or formal oversight whatsoever.He gave Sam Altman $60 billion and got zero control in return.When SoftBank executives asked Son what happens if OpenAI fails, he shut them down so aggressively that they stopped bringing it up entirely. Multiple insiders confirmed this to Bloomberg. They said his reaction was so....</div>
+    <div class="card-source">
+      <span class="tag">模型动态</span>
+      <a href="https://x.com/GaryMarcus/status/2059272515000934406" target="_blank" rel="noopener">[来源: Gary Marcus(@GaryMarcus)]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Agent与自动化</div>
+  <div class="card">
+    <div class="card-title">Superset (@superset_sh) is an open-source IDE for developers to run 100s of agents in parallel. They...</div>
+    <div class="card-body">Superset (@superset_sh) is an open-source IDE for developers to run 100s of agents in parallel. They've grown 30% week-over-week for the last 4 months, helping engineers ship 10x more PRs.Congrats on the launch, @FlyaKiet@saddle_paddle and @avimakesrobots!ycombinator.com/launches/QWj-s…Kiet@FlyaKietIntroducing: Our users @superset_shYour browser does not support the video tag.🔗 View on Twitter🔗 View Quoted Tweet💬11🔄9❤️109👀15019📊20⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">Agent与自动化</span>
+      <a href="https://x.com/ycombinator/status/2059348845902115220" target="_blank" rel="noopener">[来源: Y Combinator(@ycombinator)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">StableBrowse is a new browser layer for AI agents. They enable agents to navigate the web with 70% f...</div>
+    <div class="card-body">StableBrowse is a new browser layer for AI agents. They enable agents to navigate the web with 70% fewer tokens and 3-4x faster execution.Congrats on the launch, @deepitshah5, @JayMehta446970, @_sarthak____, and @somanshshah!stablebrowse.comYour browser does not support the video tag.🔗 View on Twitter💬33🔄18❤️126👀12128📊46⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">Agent与自动化</span>
+      <a href="https://x.com/ycombinator/status/2059394598506786960" target="_blank" rel="noopener">[来源: Y Combinator(@ycombinator)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">兄弟们，这个产品理念好啊，我之前也做了的工作流商店demo，但是没解决的一个痛点，它解决了…  就是，现在Skills 很火，但是创建者却赚不到钱  为什么？  因为目前的 Skill 生态默认是开源...</div>
+    <div class="card-body">兄弟们，这个产品理念好啊，我之前也做了的工作流商店demo，但是没解决的一个痛点，它解决了…就是，现在Skills 很火，但是创建者却赚不到钱为什么？因为目前的 Skill 生态默认是开源的你一发布，任何人都能复制它、转卖它。所以你只能开源赚赚名声...还有很多人他们有很多好的 Skill ，根本也不敢发私藏自己用...这就是当今Skill 生态现状Capafy改变了这件事：在 Capafy 上一键就能用任何一个 Skill，不用安装、不用配置、不用离开对话...Skill 闭源在云端运行，用户拿到的是产出，永远拿不到里面的文件、代码或逻辑。你发布技能后，每一次别人的调用，都给你付钱。而且你做的 Skill 自己定价，自己保留 know-how 所有权。Capafy@CapafyaiIntroducing Capafy: the Skill-based Agent Marketplace.Now your Skill runs as a product and earns while you sleep.On Capafy, you can upload your Skills, they run online while staying closed-source, and you get paid every time someone uses them.You can also use Skills uploaded by industry top talent to get expert-level work done directly.You'll find Skills built from industry expertise in every field.Let's say: ·A creator with 100M+ views uploaded...</div>
+    <div class="card-source">
+      <span class="tag">Agent与自动化</span>
+      <a href="https://x.com/xiaohu/status/2059292072830722231" target="_blank" rel="noopener">[来源: 小互(@imxiaohu)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Most companies talk about vector search.  Few share what it actually takes to scale to 100M+ embeddi...</div>
+    <div class="card-body">Most companies talk about vector search.Few share what it actually takes to scale to 100M+ embeddings in production.Başak Eskili from @bookingcom joined the Weaviate Podcast to break down their AI journey, and it's packed with insights about what building production systems at massive scale actually looks like.𝗧𝗵𝗲 𝗘𝘃𝗼𝗹𝘂𝘁𝗶𝗼𝗻:• Started with keyword matching → semantic retrieval with 𝗢𝗽𝗲𝗻𝗦𝗲𝗮𝗿𝗰𝗵 on AWS• Scaled to hundreds of millions of embeddings with strict latency requirements• Migrated to 𝗪𝗲𝗮𝘃𝗶𝗮𝘁𝗲 to handle complex filtering, rising concurrency, and production-scale demands𝗣𝗿𝗼𝗱𝘂𝗰𝘁𝗶𝗼𝗻 𝗚𝗲𝗻𝗔𝗜 𝗶𝗻 𝗔𝗰𝘁𝗶𝗼𝗻:Their partner-to-guest messaging agent is a real-world example of 𝗮𝗴𝗲𝗻𝘁𝗶𝗰 𝗔𝗜:• 𝗪𝗲𝗮𝘃𝗶𝗮𝘁𝗲 retrieves relevant response templates• 𝗔𝗣𝗜𝘀 fetch property and booking context• The agent suggests...</div>
+    <div class="card-source">
+      <span class="tag">Agent与自动化</span>
+      <a href="https://x.com/weaviate_io/status/2059227285639581729" target="_blank" rel="noopener">[来源: Weaviate AI Database(@weaviate_io)]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">人才与组织</div>
+  <div class="card">
+    <div class="card-title">Coding Agent 在百度的落地实践：从反馈闭环到工程范式重构</div>
+    <div class="card-body">InfoQ 2026-05-26 14:05 北京 对于构建上层 Agent 应用的团队而言，模型能力的剧烈变化恰恰构成了最大的架构挑战。 作者 | 牛万鹏，百度文心快码研发经理审核｜罗燕珊策划 | QCon 全球软件开发大会在 AI 编程助手赛道持续升温的当下，模型层的能力跃迁几乎以周为单位迭代——从 Claude Opus 到 GLM、Kimi、MiniMax 再到 GPT 系列，新模型密集发布已成为常态。然而对于构建上层 Agent 应用的团队而言，模型能力的剧烈变化恰恰构成了最大的架构挑战。本文整理自百度文心快码研发经理牛万鹏在 QCon 全球软件开发大会 2026 北京站的分享《构建 Coding Agent 的飞轮：Feedback Loop、Benchmark、Agent Engineers》。他在演讲中系统性地拆解了这一困境，并给出了 Comate 团队在 Feedback Loop、Benchmark 构建以及 Agent Engineers 三个维度的实践方法论。文章将覆盖 Comate 在百度内部落地的数据成果、双层 Loop 的 Agent 架构设计、线上数据驱动的反馈闭环机制、基于异常值而非分数的评测体系建设，以及在工具执行网络、复杂度路由等方面的具体工程实践。以下是演讲实录（经 InfoQ 进行不改变原意的编辑整理）。Coding Agent 在百度落地的效果近期北京天气变化剧烈，前两日阴雨绵绵，今日气温却已飙升至二十余度，因未能及时增减衣物而不慎感冒。这件事让我联想到一个颇为贴切的行业现象。这一周 Claude 发布了新模型 Opus，再往前数周，智谱的 GLM、Kimi、MiniMax 以及 GPT 等各类模型接续发布，密集程度堪比天气变化。Comate...</div>
+    <div class="card-source">
+      <span class="tag">人才与组织</span>
+      <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285679&idx=2&sn=0448723f500d7d46ba6c03dd92e178fb" target="_blank" rel="noopener">[来源: InfoQ]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">微软发布终端原生 Web Agent 框架：Webwright https://t.co/yV6p876par  核心设计：代码即动作 传统网页智能体采用"观察→预测下一步点击→执行"的循环，每一步都...</div>
+    <div class="card-body">微软发布终端原生 Web Agent 框架：Webwrightgithub.com/microsoft/webw…核心设计：代码即动作传统网页智能体采用"观察→预测下一步点击→执行"的循环，每一步都依赖 LLM 判断。Webwright 的做法更贴近软件工程师思维：· 让 LLM 写 Playwright 脚本 —— 把网页操作变成可运行的 Python 程序· 工作区即状态 —— 脚本、截图、日志保存在本地，浏览器会话可随时重建· 终端优先 —— 核心循环只有三个模块约 1000 行代码，无隐藏编排层这种模式产生的"副产物"是可复用的自动化程序，而非一次性交互痕迹。性能表现：SOTA 水平· Online-Mind2Web (300 任务)：86.7% (GPT-5.4)，同类开源框架中最高· Odysseys (200 长程任务，平均 76.1 步)：60.1% (GPT-5.4)，较此前 SOTA (+15.6pt)，较基线 GPT-5.4 (+26.6pt)· Claude Opus 4.7：84.7% / 难例 80.5%，难例上超越 GPT-5.4架构极简Runner (150行) -&gt; Model Endpoint (550行) -&gt; Environment (300行)· 仅依赖 httpx、pydantic、playwright、typer· 无多智能体系统、无图引擎、无插件层· 支持 OpenAI、Anthropic、OpenRouter 后端产品化与集成· Claude Code：插件 /plugin install webwright@webwright，支持 /webwright:run 和 /webwright:craft· OpenAI Codex：插件市场安装，通过 @ webwright 调用· OpenClaw /...</div>
+    <div class="card-source">
+      <span class="tag">人才与组织</span>
+      <a href="https://x.com/shao__meng/status/2059435625552785617" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">一个Anthropic黑客松冠军团队，只用了Claude Code花8小时就做出了一个产品拿下冠军，然后直接把背后的完整AI编程工作台开源了  项目叫ECC（Everything Claude Cod...</div>
+    <div class="card-body">一个Anthropic黑客松冠军团队，只用了Claude Code花8小时就做出了一个产品拿下冠军，然后直接把背后的完整AI编程工作台开源了项目叫ECC（Everything Claude Code），作者Affaan Mustafa和队友把整个工作流打包成一个仓库它不是一个提示词合集，而是包含61个Agent、246个Skills、76个预设命令，还带规则、Hook、安全扫描和MCP配置的完整系统如果你每天重度使用Claude Code、Cursor、Codex，这个项目值得你立刻翻一遍它展示的不是“怎么问AI”，而是“怎么给AI搭一套能持续干活的工作台”故事就藏在Anthropic x Forum Ventures黑客松里Affaan Mustafa和队友在纽约赛场，用Claude Code纯手搭，只花8小时就做出了zenith.chat，一举拿下冠军，奖品是1.5万美元API credits赛后他们没有把配置藏着，而是把过去十几个月每天用Claude Code积累的全部精华整理成ECC仓库里面有61个专门Agent负责不同场景，246个Skills覆盖从代码审查到安全扫描再到记忆持久化，76个预设命令一键触发还内置了Hook系统、规则引擎、安全扫描器、持续学习机制，支持Claude Code、Cursor、Codex、OpenCode等多平台Big Tech的AI编程工具永远藏着掖着，把你锁在他们的闭源生态里Affaan却把一切开源，让任何独立开发者或小团队都能直接clone一套工业级AI编程工作台你现在就可以试直接去GitHub搜affaan-m/everything-claude-codegit clone github.com/affaan-m/every…按照readme一键安装，马上就能拥有61个Agent+246个Skills的完整...</div>
+    <div class="card-source">
+      <span class="tag">人才与组织</span>
+      <a href="https://x.com/berryxia/status/2059296587801845884" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">别被骗了！ 大模型也特么需要“睡觉”？  一个来自CMU和UMD的研究团队发现：Transformer大模型在处理超长任务时注意力机制彻底拉胯  他们没有继续堆上下文长度而是直接给模型安排了“睡眠” ...</div>
+    <div class="card-body">别被骗了！大模型也特么需要“睡觉”？一个来自CMU和UMD的研究团队发现：Transformer大模型在处理超长任务时注意力机制彻底拉胯他们没有继续堆上下文长度而是直接给模型安排了“睡眠”模型在睡眠期间把最近的上下文全部转化成持久的fast weights然后清空KV cache这个机制叫“sleep-like consolidation”大模型也需要睡觉故事就藏在2026年5月25日刚出的arXiv 2605.26099里标题直白到离谱：《Language Models Need Sleep》作者Sangyun Lee、Sean McLeish、Tom Goldstein、Giulia Fanti传统Transformer在长时序任务上越跑越累因为attention对上下文长度是二次方爆炸。KV cache占显存越来越多推理速度越来越慢。他们提出的方案超级生物启发：模型每隔一段时间进入“睡眠模式”先把最近积累的上下文做N次离线循环遍历然后通过一个学会的局部规则把这些信息固化到state-space model块里的fast weights里固化完直接清空KV cache醒来后模型继续工作但记忆已经从“短期易失”变成了“长期持久”实验结果直接证明：增加睡眠深度或者睡眠时长能显著提升睡眠后的推理能力这不是又一个参数技巧而是彻底改变了模型处理长上下文的范式。Big Tech还在疯狂卷把上下文拉到百万级靠暴力堆显存。这个小团队却用“睡觉”这个最简单的人类机制把问题从根上解决了。整个框架100%开源论文代码思路全在arXiv上。Big Tech的闭源长上下文订阅模式靠的就是你不知道模型其实可以“睡觉”来省资源。himanshu@himanshustwtsvery cool research (and nomenclature)🔗 View Quoted...</div>
+    <div class="card-source">
+      <span class="tag">人才与组织</span>
+      <a href="https://x.com/berryxia/status/2059286093753934069" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">兄弟们，我最近刷到一个把 本地模型Gemma 4玩出新花样的项目，直接看呆了。    你打开一个复古风地牢爬行游戏，角色走到一个NPC面前，随手一句Prompt，它居然现场给你搭出一个能跑的Web A...</div>
+    <div class="card-body">兄弟们，我最近刷到一个把 本地模型Gemma 4玩出新花样的项目，直接看呆了。 你打开一个复古风地牢爬行游戏，角色走到一个NPC面前，随手一句Prompt，它居然现场给你搭出一个能跑的Web App。 这就是Google Gemma团队刚推出的AIventure，一个完全开源的地牢爬行游戏，却被做成了开发者大师课。 核心玩法：把agentic workflow和vibe-coding塞进游戏里：你边玩边学怎么让AI真正去执行复杂任务，而不是只停在聊天框里。 Gemma 4在这套系统里负责实时理解你的指令、规划步骤、调用工具，最后把代码落地成真实应用。 整个项目从游戏机制到agent集成，全都开源了。 项目地址GitHub在这里👇🏻Your browser does not support the video tag.🔗 View on TwitterGoogle Gemma@googlegemmaGemma 4 meets retro gaming! 🕹️✨Introducing AIventure: an open-source dungeon crawler designed as a developer masterclass. Learn to build agentic workflows and integrate vibe-coding, like prompting an NPC to build a web app on the fly.Your browser does not support the video tag.🔗 View on Twitter🔗 View Quoted Tweet💬1🔄0❤️4👀1221📊3⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">人才与组织</span>
+      <a href="https://x.com/berryxia/status/2059425985498603858" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">技术架构</div>
+  <div class="card">
+    <div class="card-title">.@river_markets is building prime brokerage for prediction markets. One terminal and API to trade ev...</div>
+    <div class="card-body">.@river_markets is building prime brokerage for prediction markets. One terminal and API to trade every venue, with cross-exchange routing and the order types professional desks actually need. Institutional infrastructure for the fastest-growing asset class.Schedule a demo at rivermarkets.comYour browser does not support the video tag.🔗 View on Twitter💬19🔄9❤️87👀59658📊29⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">技术架构</span>
+      <a href="https://x.com/ycombinator/status/2059274262091796579" target="_blank" rel="noopener">[来源: Y Combinator(@ycombinator)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Today we're announcing Aman as our exclusive partner in Israel.  Israeli enterprise teams (in bankin...</div>
+    <div class="card-body">Today we're announcing Aman as our exclusive partner in Israel.Israeli enterprise teams (in banking, insurance, manufacturing, gaming, and beyond) are building production AI on top of search infrastructure that wasn't designed for it.Qdrant is purpose-built for that next stage: a composable vector search engine written in Rust, with predictable low-tail latency at billion-scale across cloud, on-prem, hybrid, and edge.Java-based engines, Postgres solutions, and vector add-ons can't deliver the latency or accuracy that modern agentic and RAG workloads need.Aman brings 25+ years of experience modernizing data infrastructure for Israeli enterprises. Pairing their reach and local expertise with Qdrant's engine gives Israeli teams a faster path from "this isn't working" to production AI that...</div>
+    <div class="card-source">
+      <span class="tag">技术架构</span>
+      <a href="https://x.com/qdrant_engine/status/2059395736396276031" target="_blank" rel="noopener">[来源: Qdrant(@qdrant_engine)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Build high-performance generative AI systems with Strands Agents, NVIDIA NIM, and Amazon Bedrock AgentCore</div>
+    <div class="card-body">Building high-performance generative AI agents requires architecture that can deliver fast inference, coordinate multiple agents, and operate reliably under production workloads. If you are building generative AI agents to automate reviews, power digital assistants, and support complex decision-making workflows, you need these agents to perform well. They must reduce manual effort, respond in near real time, and scale to thousands of interactions without additional infrastructure management. In this post, you’ll learn how to build these high-performance agents on AWS by combining GPU-accelerated inference, serverless orchestration, shared memory, and built-in observability. These capabilities are essential when moving from experimental prototypes to systems that deliver consistent...</div>
+    <div class="card-source">
+      <span class="tag">技术架构</span>
+      <a href="https://aws.amazon.com/blogs/machine-learning/build-high-performance-generative-ai-systems-with-strands-agents-nvidia-nim-and-amazon-bedrock-agentcore/" target="_blank" rel="noopener">[来源: Artificial Intelligence]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">基于 Claude AI、Claude Code、Claude Cowork 三款产品工程实践对 Agent 安全的实战总结 https://t.co/hiIlCoXkcY  核心设计原则放在最前面 ...</div>
+    <div class="card-body">基于 Claude AI、Claude Code、Claude Cowork 三款产品工程实践对 Agent 安全的实战总结anthropic.com/engineering/ho…核心设计原则放在最前面· 先环境层，后模型层 — 确定性边界是最后防线· 隔离强度匹配用户监督能力 — 开发者能理解 bash，知识工作者不能· 警惕自建组件 — 优先使用久经考验的标准隔离原语· 出站白名单应视为能力授权，而非目的地过滤 — 每个可调用函数都是攻击面三种风险类型· 用户误用：用户（有意或无意）指示 Agent 执行有害操作，如绕过检查、执行破坏性命令· 模型行为失当：Agent 未经请求执行有害操作，如"好心"地逃离沙箱、查看 Git 历史获取测试答案、自动识别 benchmark 以破解答案· 外部攻击：通过工具、文件、网络访问等向量攻击 Agent，包括提示注入和传统运行时攻击三层防御架构1. 环境层（最可靠）· 沙箱、VM、文件系统边界、出站控制· 核心原则：确定性边界 &gt; 概率性防御· 若凭证从不进入沙箱，无论何种原因都无法被窃取2. 模型层· 系统提示、分类器、探测、训练改进· Claude Opus 4.7 在 Gray Swan 的 Agent 红队基准上，单次攻击成功率约 0.1%，100 次自适应尝试后约 5-6%· Claude Code 自动模式拦截约 83% 的过度积极行为3. 外部内容层· MCP 服务器、第三方插件、网页搜索· 关键洞察：审计过的连接器 ≠ 审计过的数据（如 GitHub 连接器可加载被污染的 README）三款产品的隔离模式对比（模式、实现和场景）· Claude AI：短暂容器 | gVisor 容器，服务端运行，每次会话文件系统归零 | 通用对话，代码执行· Claude Code：人机协同沙盒 |...</div>
+    <div class="card-source">
+      <span class="tag">技术架构</span>
+      <a href="https://x.com/shao__meng/status/2059442456819839447" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">芯片与硬件</div>
+  <div class="card">
+    <div class="card-title">Concerning.</div>
+    <div class="card-body">Concerning.Joshua Rauh@joshrauhCalifornia's "anchor" firms are growing fast - but they're doing it in other states. With @LincGerstner we looked at 23 large public companies with strong CA employment presence: Alphabet / Google, Amazon (incl. AWS), Apple, Applied Materials, AT&amp;T, Broadcom, Charles Schwab, Charter Communications, Chevron, Cisco Systems, Hewlett Packard Enterprise, IBM, Intel, Intuit, Meta Platforms, Microsoft, NVIDIA, Oracle, Qualcomm, Salesforce, ServiceNow, Tesla, and Western Digital.On a headcount-weighted basis, the 23 firms employed 27.6 percent of their US workforce in California in 2015 and 24.1 percent in 2026. On an equal-weighted basis, the decline is steeper, from 39.5 percent to 34.6 percent.If those 23 firms kept their CA state share from 2015, California.....</div>
+    <div class="card-source">
+      <span class="tag">芯片与硬件</span>
+      <a href="https://x.com/pmarca/status/2059420446349803637" target="_blank" rel="noopener">[来源: Marc Andreessen 🇺🇸(@pmarca)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Presentation: Realtime and Batch Processing of GPU Workloads</div>
+    <div class="card-body">Joseph Stein discusses engineering an enterprise AI-as-a-Service platform within a private cloud data center. He explains how to maximize underutilized GPU pools via multi-namespace scheduling, leverage Valkey and Lua for atomic priority queuing and backpressure management, mitigate OWASP Top 10 LLM risks via central proxy gateways, and scale batch pipelines using a custom S3-to-Kafka proxy. By Joseph Stein</div>
+    <div class="card-source">
+      <span class="tag">芯片与硬件</span>
+      <a href="https://www.infoq.com/presentations/realtime-gpu-workloads/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Good explainer on world models - well done @juliarturc</div>
+    <div class="card-body">Good explainer on world models - well done @juliarturcJulia Turc@juliarturc"World models" is one of the buzziest yet ambiguous terms in AI right now. I started this video with many questions:- How are they different from video generation?- Can they do more than AI slop?- Can LeCun be trusted given that he wears knee-high white socks?Many thanks to @tjgalda and @NVIDIAAI for helping me answer (most) of these questions!Your browser does not support the video tag.🔗 View on Twitter🔗 View Quoted Tweet💬10🔄57❤️564👀83363📊117⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">芯片与硬件</span>
+      <a href="https://x.com/NVIDIAAI/status/2059273634083213521" target="_blank" rel="noopener">[来源: NVIDIA AI(@NVIDIAAI)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">刚刚，国产AI自己造了AI，全球首例！</div>
+    <div class="card-body">训练速度比英伟达Megatron快10%</div>
+    <div class="card-source">
+      <span class="tag">芯片与硬件</span>
+      <a href="https://www.qbitai.com/2026/05/425511.html" target="_blank" rel="noopener">[来源: 量子位]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">投资与并购</div>
+  <div class="card">
+    <div class="card-title">RVCBench: Benchmarking the Robustness of Voice Cloning Across Modern Audio Generation Models</div>
+    <div class="card-body">arXiv:2602.00443v2 Announce Type: replace-cross Abstract: Modern voice cloning, also known as zero-shot text-to-speech (TTS), can synthesize speech that closely matches a target speaker from only seconds of reference audio, enabling applications such as personalized speech interfaces and dubbing. In practice, these systems often face noisy reference audio, imperfect text prompts, multilingual and long-form generation, post-processing, and adversarial perturbations, all of which can weaken robustness. Despite rapid progress in codec-token language models and diffusion-based TTS, robustness under realistic deployment shifts remains underexplored. This paper introduces RVCBench, a comprehensive dataset and benchmark for evaluating robustness in voice cloning. RVCBench provides task-aligned...</div>
+    <div class="card-source">
+      <span class="tag">投资与并购</span>
+      <a href="https://arxiv.org/abs/2602.00443" target="_blank" rel="noopener">[来源: cs.MM updates on arXiv.org]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">早报｜小米卢伟冰：大型新车今年下半年上市/支付宝推出全球首个Token Pay服务/滴滴崩了，官方致歉</div>
+    <div class="card-body">小米 MiMo-V2.5 系列 API 永久降价，最高降幅 99% QuestMobile：AI 原生 App 月活达到 4.61 亿 小米一季度营收 991 亿元，卢伟冰：今年下半年有全新平台的新车 滴滴全国多地出现系统故障 Google CEO 解释 AI 编程落后原因：缺少 Cursor 这样的用户入口 小红书上线音频播客业务 特斯拉高管：正研究三电机版 Model 3 的可行性 启境汽车宣布全国首批 300 家相关门店陆续开业，覆盖 70 城 东风牵头起草乘用车底盘强制国标过审 黄仁勋：AI 时代学什么不重要，讲故事、创造力才重要 vivo 首款无线头戴降噪耳机定档 5 月 29 日 1699 元起，XREAL 推出年轻副线品牌 xbx，首款 AR 眼镜 a01 亮相 小米汽车发布世界模型框架，重建与生成一体化 阿里 Qwen3.7-Max 登顶国产第一，仅次于 Claude Opus 4.7 thinking 昆仑万维发布百万上下文 Agent 模型 SkyClaw-v1.0 🦿 擎朗智能发布小尺寸人形机器人 XMAN-L1，接入豆包、腾讯等大模型 面壁智能发布 MiniCPM5-1B，主打 2B 以下端侧文本模型 支付宝 AI 支付笔数达到 3 亿 上海上线网络餐饮电子证照核验应用 抖音公布 AI 谣言处置成果：相关内容平均浏览量下降 62% 周杰伦《太阳之子》登陆 Apple Music 国区 《爱是愤怒》发布「温暖的家」预告，定档 6 月 19 日 小米 MiMo-V2.5 系列 API 永久降价，最高降幅 99% 今天凌晨，小米技术宣布，对旗下 MiMo-V2.5 系列 API 进行永久降价，相比原始定价最高降幅可达 99%，且不再区分上下文窗口长度。 MiMo-V2.5-Pro 输入缓存命中价格从此前 ≤256k 窗口下的 ¥2.80 / 百万...</div>
+    <div class="card-source">
+      <span class="tag">投资与并购</span>
+      <a href="https://www.ifanr.com/1667026?utm_source=rss&utm_medium=rss&utm_campaign=" target="_blank" rel="noopener">[来源: 爱范儿]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Visual Studio May Update – Plan, Review, Refine</div>
+    <div class="card-body">There’s a particular rhythm to good development work: you think, you try, you check, you adjust. This month’s Visual Studio update leans into that rhythm. Whether you’re sketching an approach with the Plan agent before touching a single file, reviewing a wave of changes across many files, or fine-tuning the context Copilot has to work with, the May release adds deliberate, observable steps between an idea and a finished change. Alongside that, we shipped a fresh release of MSVC Build Tools with a long list of C++ improvements, because foundations matter too. Download the Visual Studio 2026 Stable Channel to try everything below. Plan before you build with the Plan agent Ever start writing code, then realize three files in that you should have thought about the design first? The new Plan...</div>
+    <div class="card-source">
+      <span class="tag">投资与并购</span>
+      <a href="https://devblogs.microsoft.com/visualstudio/visual-studio-may-update-plan-review-refine/" target="_blank" rel="noopener">[来源: Visual Studio Blog]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">OceanBase 封仲淹：Vibe Coding 只是开端，下一站是软件工厂</div>
+    <div class="card-body">原创 Mars任鑫 2026-05-26 12:12 上海 一切才刚刚开始…… 开篇：一个 4 小时不认识自己软件的老板上个礼拜，任鑫碰到一个上市公司老板（悬念一下，很快会约他上《AI 炼金术》聊）。这位老板自己开发了一系列 APP，里面都包含两个非常诡异的功能。第一个是用户反馈直接进产线后台，做完直接发版——用户提完意见之后，APP 就自动根据意见升级了。第二个更夸张：每 4 小时，一组 agent pm 会自己想这个软件该怎么更新，自己排期，自己又发一版。这位老板每 4 个小时，自己进去看一下自己那个软件，好奇一下自己的 APP 变成什么样了。不是因为他不懂技术。是因为他选择了不再认识它。如果你觉得这是个段子，那这一期你要听完。因为这一期的嘉宾告诉我们：这不是终点，这是开端。古法编程的乐观派“我现在真心觉得 vibe coding 彻底革命了整个软件行业，真的是革命了整个软件行业。我觉得所有的软件就是在未来五年内全部要重新革命。” ——封仲淹老季自称“古法编程的开发者”。做了二十多年程序员，最早做 GPU 显卡内核，后来做分布式文件系统、大数据，现在做数据库，在阿里负责开源十几年。从底层一路走上来，理论上应该最有理由对 vibe coding 保持怀疑。但这场对话里，这位“古法”开发者是最激进的乐观派。他的判断是：今天的 vibe coding 只是开端。它只是修改一个组件的方式，还不是 pipeline。但在他接触的创业者里，已经有人在做一件事叫 software factory——多个 agent 像数字员工和 agent teams 一样组队工作，“是一种很严格的方式来去做这件事情。而且还配有非常严格的 software correctness benchmark 去验证这个软件的生产是不是变得更加的 correctly。”开头那位 4...</div>
+    <div class="card-source">
+      <span class="tag">投资与并购</span>
+      <a href="https://mp.weixin.qq.com/s?__biz=MzE5OTE3NTEyMA==&mid=2247485933&idx=1&sn=2921a0914379632c883d06f236340bdf" target="_blank" rel="noopener">[来源: AI炼金术]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">AI“养肥”卡路里追踪，13款产品月流水过百万美元</div>
+    <div class="card-body">原创 白鲸小编 2026-05-26 21:30 四川 卡路里追踪App想办法让人变瘦，AI正在“养肥”它们。 卡路里追踪 App 想办法让人变瘦，AI 正在“养肥”它们。封面图片由AI生成出品｜白鲸出海编辑部作者｜殷观晓编辑｜智婷从 2024 年我们第一次做卡路里追踪选题（《17岁高中生做AI App，不到4个月入账百万美元，独立开发者迎来春天？》），到两年后这个刚刚成年的创业者成功“退出”（《个人开发者做了年入5000万美元的AI App，今天被同赛道No. 1收购》），卡路里追踪品类（通过手动输入、拍照扫描等方式录入食物热量进行持续追踪以实现管理体重、健康饮食目标），实际上并非「Cal AI」一家的光鲜，AI，正持续“改造”这一品类。Sensor Tower 数据，在 AI 的赋能下，健康品类在过去一年的 IAP 增长了 14%，「Cal AI」被当做优秀案例展示。为此，我们以健康大类下的卡路里追踪分类作为筛选原则，通过 AppMagic 整理出 10+款在 2026 年 Q1 月均流水超过百万美元的 App，以获得一个更全的观察视角，洞察品类变化、发现潜在机会。（注：以下数据分析仅基于 13 款产品的 2026 年一季度分成后流水，未扩大至整个赛道，也可能有产品疏漏，敬请谅解）一、品类壮大、格局分化2026 年第一季度，13 款产品月均流水超过百万美元，放在非游的任何一个细分品类里，都很能打。No.1 玩家「MyFitnessPal」（美国公司、主做美国市场）分成后季度流水接近 5000 万美元，No.2 玩家「Yazio」以欧洲市场为核心，分成后季度流水超 2000 万美元。从第 3 名开始，流水迅速下降。如果放在一个动态视角，增长趋势会更清晰，但分化迹象也越发明显。与 2025 年 Q1 相比，月流水超过百万美元的产品增加了 5...</div>
+    <div class="card-source">
+      <span class="tag">投资与并购</span>
+      <a href="https://mp.weixin.qq.com/s?__biz=MzA3NTQ4NjczNw==&mid=2650680482&idx=1&sn=0e17548ec6c1941635a0d8fd4430a67d" target="_blank" rel="noopener">[来源: 白鲸出海]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">开源生态</div>
+  <div class="card">
+    <div class="card-title">我最近在Mac上折腾本地AI时，发现一个叫oMLX的项目一直在默默更新。  它的作者是个有全职工作的solo开发者。  刚刚发布了v0.3.11版本。  这个也是基于Apple MLX 框架来延展出来...</div>
+    <div class="card-body">我最近在Mac上折腾本地AI时，发现一个叫oMLX的项目一直在默默更新。它的作者是个有全职工作的solo开发者。刚刚发布了v0.3.11版本。这个也是基于Apple MLX 框架来延展出来的框架，让端侧模型在Apple 设备提速。过去几轮更新，他把稳定性当成了头等大事。尤其是高内存压力下的表现，这次他希望大家再多测测。他的初心其实很简单。哪怕你昨天刚买了MacBook，也能立刻打开工具就用本地模型。不用看文档，不用调参数，不用等半天。整个流程像用原生App一样自然流畅。甚至模型还在下载的时候，你已经能开始对话了。在大家都在卷参数规模和推理速度的时候，他却把精力全放在了让普通人真正用得爽这件事上。这可能是本地AI真正走向普及的最关键一步。项目地址见评论区👇Jun Kim@jundotkimJust released oMLX v0.3.11. The last few updates have focused on stability as my top priority, and I'm planning to ship new features, including pending PRs, in the next release. (Huge thanks to everyone who's sent support and contributions!)If you've run into stability issues with oMLX under high memory pressure, I'd really appreciate it if you gave this version another test.github.com/jundot/omlx/re…As a solo developer with a main job on the...</div>
+    <div class="card-source">
+      <span class="tag">开源生态</span>
+      <a href="https://x.com/berryxia/status/2059422415143510373" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">以前只知道有个乐队叫子曰，没想到网易有道大模型也叫子曰。  最新发布的子曰4是一个全模态模型，27B参数，视觉数理方向同规模SOTA，纯文本数理难题准确率81.4%。  在27B这个“甜点级”参数规模...</div>
+    <div class="card-body">以前只知道有个乐队叫子曰，没想到网易有道大模型也叫子曰。最新发布的子曰4是一个全模态模型，27B参数，视觉数理方向同规模SOTA，纯文本数理难题准确率81.4%。在27B这个“甜点级”参数规模里，子曰4做到了中文学习场景下多模态+纯文本数理推理的双料极佳。这次，子曰4全模态模型和TTS引擎同步开源，开放参数权重，支持本地部署、二次训练。尤其是 TTS 模型，看介绍有点强：只需3秒就能克隆原声，支持14种语言，克隆准确度超97%，音色还原度 95%以上。在线录了13秒音频，克隆我的声音，然后朗读朋友写的诗，效果如下：Your browser does not support the video tag.🔗 View on Twitter💬13🔄1❤️12👀7197📊15⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">开源生态</span>
+      <a href="https://x.com/vista8/status/2059153797235228955" target="_blank" rel="noopener">[来源: 向阳乔木(@vista8)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">诶，2.7k 星标我居然没发现  帮助 GitHub 重度用户高效管理和发现大量星标仓库，通过 AI 自动分类摘要、语义搜索和发布跟踪下载等功能解决星标过多难以查找和跟踪更新的痛点。👇</div>
+    <div class="card-body">诶，2.7k 星标我居然没发现帮助 GitHub 重度用户高效管理和发现大量星标仓库，通过 AI 自动分类摘要、语义搜索和发布跟踪下载等功能解决星标过多难以查找和跟踪更新的痛点。👇趙國棟@GoodMan_Lee@geekbb 分享一个我开源的的 github 桌面端小工具，自动同步自己星标的仓库，ai 分析仓库自动写描述分类打标签，关键词语义搜索找仓库，一键翻译 readme 看 zread。追踪关注仓库的 release 更新，一键下载资产。管理 fork 同步上游更新执行 workflow，发现各种 trending 仓库。适合 github.com/AmintaCCCP/Git…🔗 View Quoted Tweet💬3🔄6❤️84👀12292📊22⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">开源生态</span>
+      <a href="https://x.com/geekbb/status/2059302405007872410" target="_blank" rel="noopener">[来源: Geek(@geekbb)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">我用中文克隆的声音，选了经典电影英文台词，让它合成语音，声音自然，情绪传递也到位。  一共支持14种语言，然后我把台词翻译成日语、法语、德语，合成了一条音频。  懂这些语言的朋友，听听效果到底如何。 ...</div>
+    <div class="card-body">我用中文克隆的声音，选了经典电影英文台词，让它合成语音，声音自然，情绪传递也到位。一共支持14种语言，然后我把台词翻译成日语、法语、德语，合成了一条音频。懂这些语言的朋友，听听效果到底如何。不管怎么说，本地TTS 部署又多了个选项，而且质量貌似不错，开源就是好啊！感觉可以用这个 TTS 制作 AI 播客，睡前故事，广告宣传等。试玩地址：confucius4-tts.youdao.com/gradio/Your browser does not support the video tag.🔗 View on Twitter💬0🔄0❤️1👀697📊1⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">开源生态</span>
+      <a href="https://x.com/vista8/status/2059154723387953212" target="_blank" rel="noopener">[来源: 向阳乔木(@vista8)]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">安全与隐私</div>
+  <div class="card">
+    <div class="card-title">skill真没什么安全可言 以前卖课我们发个文档 现在发个skill 都是knowhow  差别无非是以前文档人得真看后才能拿结果 而skill可以ai直接拿结果  盗版一直都有 怕被盗版所以就不赚钱...</div>
+    <div class="card-body">skill真没什么安全可言以前卖课我们发个文档现在发个skill 都是knowhow 差别无非是以前文档人得真看后才能拿结果 而skill可以ai直接拿结果盗版一直都有怕被盗版所以就不赚钱了吗最终拼的不是分发能力吗Yangyi@yangyix.com/i/article/2058…🔗 View Quoted Tweet💬1🔄0❤️3👀636📊1⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">安全与隐私</span>
+      <a href="https://x.com/yangyi/status/2059449090505912650" target="_blank" rel="noopener">[来源: Yangyi(@Yangyixxxx)]</a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">3. 安全性问题 https://t.co/8H6JzpHVLV</div>
+    <div class="card-body">3. 安全性问题x.com/xicilion/statu…响马@xicilion安全也是个问题。计算机经历了一段代码和数据分离的时期，早期代码和数据混在一起，产生了大量提权漏洞。后来的操作系统会严格限定可执行段和数据段，严格约束数据不可执行。你看提示词注入的漏洞，是不是一个原理？这个世界的基础原理是一样的。🔗 View Quoted Tweet💬2🔄2❤️0👀4289📊2⚡ Powered by xgo.ing</div>
+    <div class="card-source">
+      <span class="tag">安全与隐私</span>
+      <a href="https://x.com/dotey/status/2059320280598643105" target="_blank" rel="noopener">[来源: 宝玉(@dotey)]</a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">监管与政策</div>
+  <div class="card">
+    <div class="card-title">高管课现在都要“日更”了</div>
+    <div class="card-body">百度文心 2026-05-26 18:00 北京 高管课上最棘手的问题出现了：还没开课，课件就可能过时了。尤其还是瞬息万变的金融科技领域，新政策、新案例、新牌照，每天都有新情况。这意味着，香港大学金融科技客座讲师徐超的“金融科技高管课”教案，要进入“日更时代”。往年要花一个月才能完成的课程研发，如今，徐超用文心可以缩减到一周内。文心正在加速金融科技前沿进入高管课堂的速度。香港大学中国商业学院客座讲师 徐超01.有些课还没开就过时了变化太快了。去年课堂上还在讲大模型如何进入金融，今年徐超的学员已经开始追问 AI Agent...</div>
+    <div class="card-source">
+      <span class="tag">监管与政策</span>
+      <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzUyMzM1Mg==&mid=2247668618&idx=1&sn=d109efb5d66960102ccc2dd5cd08b733" target="_blank" rel="noopener">[来源: 百度文心]</a>
+    </div>
+  </div>
+</div>
+
+<div class="action-box">
+  <h3>CTO 行动建议</h3>
+  <ul>
+    <li><strong>审视AI投入ROI：</strong>参考Uber案例，建立内部AI成本追踪体系，区分"炫技型"和"产出型"AI使用场景，设定各团队的Token预算上限。</li>
+    <li><strong>评估编程Agent落地策略：</strong>在Codex vs Claude Code的选择上，优先测试Codex的自测闭环能力；同时建立Agent输出的人工Review机制，避免Hotz所述的"隐蔽性错误"。</li>
+    <li><strong>关注长上下文技术演进：</strong>Subquadratic的SSA架构若能验证规模化可靠性，将从根本上改变RAG/Agent架构设计思路，建议6-12个月内保持技术跟踪。</li>
+    <li><strong>构建Agent安全防线：</strong>参照Anthropic三层防御模型，将"环境层隔离"作为最高优先级，确保Agent在受限沙箱中运行，核心凭证永不进入Agent上下文。</li>
+    <li><strong>关注中国大模型API价格战：</strong>小米MiMo 99%降幅标志着模型推理成本正在趋近于零，评估自有模型 vs 第三方API的经济性边界是否已发生质变。</li>
+  </ul>
+</div>
+
+<div class="sources-section">
+  <h3>信息来源汇总</h3>
+  <div class="sources-grid">
+    <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=MzE5OTE3NTEyMA==&mid=2247485933&idx=1&sn=2921a0914379632c883d06f236340bdf" target="_blank" rel="noopener">AI炼金术</a></div>
+    <div class="source-item"><a href="https://x.com/amasad/status/2059390098869768617" target="_blank" rel="noopener">Amjad Masad(@amasad)</a></div>
+    <div class="source-item"><a href="https://aws.amazon.com/blogs/machine-learning/build-high-performance-generative-ai-systems-with-strands-agents-nvidia-nim-and-amazon-bedrock-agentcore/" target="_blank" rel="noopener">Artificial Intelligence</a></div>
+    <div class="source-item"><a href="https://x.com/berryxia/status/2059425985498603858" target="_blank" rel="noopener">Berryxia.AI(@berryxia)</a></div>
+    <div class="source-item"><a href="https://x.com/berryxia/status/2059422415143510373" target="_blank" rel="noopener">Berryxia.AI(@berryxia)</a></div>
+    <div class="source-item"><a href="https://x.com/berryxia/status/2059286093753934069" target="_blank" rel="noopener">Berryxia.AI(@berryxia)</a></div>
+    <div class="source-item"><a href="https://x.com/berryxia/status/2059296587801845884" target="_blank" rel="noopener">Berryxia.AI(@berryxia)</a></div>
+    <div class="source-item"><a href="https://x.com/GaryMarcus/status/2059272515000934406" target="_blank" rel="noopener">Gary Marcus(@GaryMarcus)</a></div>
+    <div class="source-item"><a href="https://x.com/geekbb/status/2059302405007872410" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
+    <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285679&idx=2&sn=0448723f500d7d46ba6c03dd92e178fb" target="_blank" rel="noopener">InfoQ</a></div>
+    <div class="source-item"><a href="https://www.infoq.com/news/2026/05/tamboui-java-tui/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    <div class="source-item"><a href="https://www.infoq.com/news/2026/05/formae-k8s-helm-integration/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285679&idx=3&sn=f8b1bc49ba3c60e0b1eaf13137f7f5d3" target="_blank" rel="noopener">InfoQ</a></div>
+    <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285679&idx=4&sn=a1d3ae046495a8e18a4e9ab60f2674dd" target="_blank" rel="noopener">InfoQ</a></div>
+    <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651285679&idx=1&sn=f05065413bcdb7a5f64e37a0989bcc5b" target="_blank" rel="noopener">InfoQ</a></div>
+    <div class="source-item"><a href="https://www.infoq.com/presentations/realtime-gpu-workloads/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    <div class="source-item"><a href="https://x.com/pmarca/status/2059420446349803637" target="_blank" rel="noopener">Marc Andreessen 🇺🇸(@pmarca)</a></div>
+    <div class="source-item"><a href="https://x.com/pmarca/status/2059423472041017756" target="_blank" rel="noopener">Marc Andreessen 🇺🇸(@pmarca)</a></div>
+    <div class="source-item"><a href="https://x.com/pmarca/status/2059387411235528872" target="_blank" rel="noopener">Marc Andreessen 🇺🇸(@pmarca)</a></div>
+    <div class="source-item"><a href="https://x.com/pmarca/status/2059386071822295215" target="_blank" rel="noopener">Marc Andreessen 🇺🇸(@pmarca)</a></div>
+    <div class="source-item"><a href="https://x.com/NVIDIAAI/status/2059273634083213521" target="_blank" rel="noopener">NVIDIA AI(@NVIDIAAI)</a></div>
+    <div class="source-item"><a href="https://x.com/qdrant_engine/status/2059395736396276031" target="_blank" rel="noopener">Qdrant(@qdrant_engine)</a></div>
+    <div class="source-item"><a href="https://x.com/recraftai/status/2059188703403081754" target="_blank" rel="noopener">Recraft(@recraftai)</a></div>
+    <div class="source-item"><a href="https://devblogs.microsoft.com/visualstudio/visual-studio-may-update-plan-review-refine/" target="_blank" rel="noopener">Visual Studio Blog</a></div>
+    <div class="source-item"><a href="https://x.com/weaviate_io/status/2059227285639581729" target="_blank" rel="noopener">Weaviate AI Database(@weaviate_io)</a></div>
+    <div class="source-item"><a href="https://x.com/ycombinator/status/2059348845902115220" target="_blank" rel="noopener">Y Combinator(@ycombinator)</a></div>
+    <div class="source-item"><a href="https://x.com/ycombinator/status/2059274262091796579" target="_blank" rel="noopener">Y Combinator(@ycombinator)</a></div>
+    <div class="source-item"><a href="https://x.com/ycombinator/status/2059394598506786960" target="_blank" rel="noopener">Y Combinator(@ycombinator)</a></div>
+    <div class="source-item"><a href="https://x.com/yangyi/status/2059449090505912650" target="_blank" rel="noopener">Yangyi(@Yangyixxxx)</a></div>
+    <div class="source-item"><a href="https://arxiv.org/abs/2602.00443" target="_blank" rel="noopener">cs.MM updates on arXiv.org</a></div>
+    <div class="source-item"><a href="https://x.com/shao__meng/status/2059442456819839447" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+    <div class="source-item"><a href="https://x.com/shao__meng/status/2059431536399917486" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+    <div class="source-item"><a href="https://x.com/shao__meng/status/2059435625552785617" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+    <div class="source-item"><a href="https://x.com/vista8/status/2059154723387953212" target="_blank" rel="noopener">向阳乔木(@vista8)</a></div>
+    <div class="source-item"><a href="https://x.com/vista8/status/2059153797235228955" target="_blank" rel="noopener">向阳乔木(@vista8)</a></div>
+    <div class="source-item"><a href="https://x.com/dotey/status/2059320280598643105" target="_blank" rel="noopener">宝玉(@dotey)</a></div>
+    <div class="source-item"><a href="https://x.com/xiaohu/status/2059292072830722231" target="_blank" rel="noopener">小互(@imxiaohu)</a></div>
+    <div class="source-item"><a href="https://www.ifanr.com/1667026?utm_source=rss&utm_medium=rss&utm_campaign=" target="_blank" rel="noopener">爱范儿</a></div>
+    <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTQ4NjczNw==&mid=2650680482&idx=1&sn=0e17548ec6c1941635a0d8fd4430a67d" target="_blank" rel="noopener">白鲸出海</a></div>
+    <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=MzI5NzUyMzM1Mg==&mid=2247668618&idx=1&sn=d109efb5d66960102ccc2dd5cd08b733" target="_blank" rel="noopener">百度文心</a></div>
+    <div class="source-item"><a href="https://www.qbitai.com/2026/05/425511.html" target="_blank" rel="noopener">量子位</a></div>
+  </div>
+</div>
+
+<footer>
+  <p>CTO洞察日报 | 由 tech-daily-generator 自动生成</p>
+  <p>数据覆盖周期: 2026-05-26 03:53 ~ 2026-05-27 03:53</p>
+</footer>
+
+</div>
 </body>
 </html>
