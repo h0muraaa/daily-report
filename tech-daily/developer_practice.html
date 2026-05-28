@@ -1,657 +1,311 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科技日报 · 开发者实践版 | 2026-05-27</title>
-    <style>
-        :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-tertiary: #21262d;
-            --border: #30363d;
-            --text-primary: #c9d1d9;
-            --text-secondary: #8b949e;
-            --text-muted: #484f58;
-            --accent: #58a6ff;
-            --accent-hover: #79c0ff;
-            --accent-dim: #1f6feb;
-            --success: #3fb950;
-            --warning: #d29922;
-            --danger: #f85149;
-            --code-bg: #0d1117;
-            --code-border: #30363d;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.7;
-            font-size: 15px;
-        }
-        .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
-        header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
-            padding: 40px 0 30px;
-            margin-bottom: 40px;
-        }
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        .brand { display: flex; align-items: center; gap: 12px; }
-        .brand-icon {
-            width: 40px; height: 40px;
-            background: var(--accent-dim);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px;
-        }
-        .brand-text h1 {
-            font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
-            color: #f0f6fc;
-        }
-        .brand-text .subtitle {
-            font-size: 13px; color: var(--text-secondary);
-            margin-top: 2px;
-        }
-        .meta {
-            text-align: right;
-            font-family: "SF Mono", Monaco, "Cascadia Code", "Fira Code", monospace;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        .meta .date { color: var(--accent); font-weight: 600; }
-        .meta .role-badge {
-            display: inline-block;
-            margin-top: 6px;
-            padding: 3px 10px;
-            background: var(--accent-dim);
-            color: #fff;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        section { margin-bottom: 48px; }
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--accent-dim);
-        }
-        .section-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #f0f6fc;
-        }
-        .section-header .count {
-            font-family: "SF Mono", monospace;
-            font-size: 12px;
-            color: var(--text-muted);
-            background: var(--bg-tertiary);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .news-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 24px;
-            margin-bottom: 16px;
-            transition: border-color 0.2s;
-        }
-        .news-card:hover { border-color: var(--accent-dim); }
-        .news-card:last-child { margin-bottom: 0; }
-        .news-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        .news-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--accent);
-            line-height: 1.5;
-        }
-        .news-title a {
-            color: inherit;
-            text-decoration: none;
-        }
-        .news-title a:hover {
-            text-decoration: underline;
-            color: var(--accent-hover);
-        }
-        .news-tag {
-            flex-shrink: 0;
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .tag-rust { background: rgba(251, 192, 45, 0.15); color: #fbbf24; }
-        .tag-ai { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
-        .tag-infra { background: rgba(63, 185, 80, 0.15); color: var(--success); }
-        .tag-security { background: rgba(248, 81, 73, 0.15); color: var(--danger); }
-        .tag-db { background: rgba(210, 153, 34, 0.15); color: var(--warning); }
-        .tag-benchmark { background: rgba(139, 148, 158, 0.15); color: var(--text-secondary); }
-        .tag-frontend { background: rgba(188, 140, 255, 0.15); color: #bc8cff; }
-        .tag-tool { background: rgba(63, 185, 80, 0.15); color: var(--success); }
-
-        .news-summary {
-            color: var(--text-primary);
-            font-size: 14.5px;
-            line-height: 1.85;
-        }
-        .news-summary p { margin-bottom: 10px; }
-        .news-summary p:last-child { margin-bottom: 0; }
-        .news-source {
-            margin-top: 14px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .news-source a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-        .news-source a:hover { color: var(--accent); text-decoration: underline; }
-
-        .deep-dive {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 28px;
-            margin-bottom: 20px;
-        }
-        .deep-dive h3 {
-            font-size: 17px;
-            font-weight: 700;
-            color: #f0f6fc;
-            margin-bottom: 16px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-        .deep-dive h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--accent);
-            margin: 18px 0 10px;
-        }
-        .deep-dive p {
-            font-size: 14.5px;
-            line-height: 1.85;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-        }
-        .deep-dive ul, .deep-dive ol {
-            margin: 10px 0 16px 20px;
-            color: var(--text-primary);
-            font-size: 14.5px;
-            line-height: 1.85;
-        }
-        .deep-dive li { margin-bottom: 6px; }
-        .deep-dive code {
-            font-family: "SF Mono", Monaco, "Cascadia Code", "Fira Code", monospace;
-            background: var(--bg-tertiary);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 13px;
-            color: var(--accent);
-        }
-        .deep-dive pre {
-            background: var(--code-bg);
-            border: 1px solid var(--code-border);
-            border-radius: 8px;
-            padding: 16px;
-            overflow-x: auto;
-            margin: 14px 0;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-        .deep-dive pre code {
-            background: none;
-            padding: 0;
-            color: var(--text-primary);
-        }
-        .highlight-box {
-            background: rgba(88, 166, 255, 0.06);
-            border-left: 3px solid var(--accent);
-            padding: 14px 18px;
-            border-radius: 0 8px 8px 0;
-            margin: 14px 0;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-        }
-        .tool-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 22px;
-        }
-        .tool-card h4 {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 8px;
-        }
-        .tool-card h4 a {
-            color: inherit;
-            text-decoration: none;
-        }
-        .tool-card h4 a:hover { text-decoration: underline; color: var(--accent-hover); }
-        .tool-card p {
-            font-size: 13.5px;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: 10px;
-        }
-        .tool-meta {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .tool-meta a { color: var(--text-secondary); text-decoration: none; }
-        .tool-meta a:hover { color: var(--accent); }
-
-        .sources-section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 28px;
-        }
-        .sources-section h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: #f0f6fc;
-            margin-bottom: 18px;
-        }
-        .source-list {
-            column-count: 2;
-            column-gap: 32px;
-        }
-        @media (max-width: 640px) {
-            .source-list { column-count: 1; }
-        }
-        .source-list li {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            list-style: none;
-            break-inside: avoid;
-        }
-        .source-list li::before {
-            content: ">";
-            color: var(--accent);
-            margin-right: 8px;
-            font-weight: 700;
-        }
-        .source-list a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-        .source-list a:hover { color: var(--accent); text-decoration: underline; }
-
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid var(--border);
-            margin-top: 48px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        @media (max-width: 640px) {
-            header { padding: 24px 0 20px; }
-            .header-top { flex-direction: column; }
-            .meta { text-align: left; }
-            .news-card { padding: 18px; }
-            .deep-dive { padding: 20px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践日报 · 2026-05-28</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-secondary: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-secondary: #8b949e;
+  --accent: #58a6ff;
+  --accent-green: #3fb950;
+  --accent-yellow: #d29922;
+  --accent-red: #f85149;
+  --code-bg: #21262d;
+  --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+.container { max-width: 960px; margin: 0 auto; }
+header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+header h1 {
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+header .meta {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-family: var(--font-mono);
+}
+header .tagline {
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+}
+.section {
+  margin-bottom: 2.5rem;
+}
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  color: var(--accent-green);
+  border-left: 3px solid var(--accent-green);
+  padding-left: 0.75rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.news-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+.news-item:hover {
+  border-color: var(--accent);
+}
+.news-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+.news-title a {
+  color: var(--text);
+  text-decoration: none;
+}
+.news-title a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.news-summary {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+}
+.news-source {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+.news-source a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.news-source a:hover {
+  text-decoration: underline;
+}
+.source-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-top: 2rem;
+}
+.source-section h3 {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--accent-yellow);
+  margin-bottom: 1rem;
+}
+.source-list {
+  list-style: none;
+  columns: 2;
+  column-gap: 2rem;
+}
+.source-list li {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.4rem;
+  font-family: var(--font-mono);
+}
+.source-list a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.source-list a:hover {
+  color: var(--accent);
+}
+footer {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+}
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  background: var(--code-bg);
+  color: var(--accent);
+  margin-right: 0.5rem;
+}
+.cat-tag {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  background: var(--code-bg);
+  color: var(--accent-yellow);
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+@media (max-width: 600px) {
+  .source-list { columns: 1; }
+  body { padding: 1rem 0.75rem; }
+}
+</style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-top">
-                <div class="brand">
-                    <div class="brand-icon">&lt;/&gt;</div>
-                    <div class="brand-text">
-                        <h1>科技日报</h1>
-                        <div class="subtitle">面向开发者的技术动态与工程实践</div>
-                    </div>
-                </div>
-                <div class="meta">
-                    <div class="date">2026-05-27</div>
-                    <div>数据周期: 2026-05-26 ~ 2026-05-27</div>
-                    <div class="role-badge">DEVELOPER_PRACTICE</div>
-                </div>
-            </div>
-        </div>
-    </header>
+<div class="container">
+<header>
+  <h1>开发者实践日报</h1>
+  <div class="meta">2026-05-28 · Developer Practice Edition</div>
+  <div class="tagline">面向一线开发者的技术动态、工具更新与最佳实践精选</div>
+</header>
+<main>
+<section class="section">
+<div class="section-title"><span class="badge">HOT</span>今日技术热榜</div>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">AI/ML</span><a href="https://www.freecodecamp.org/news/production-rag-with-langchain-vector-databases/" target="_blank" rel="noopener">Production RAG with LangChain ＆ Vector Databases</a></div>
+<div class="news-summary">Master the transition from simple prototypes to production-grade RAG systems by addressing the critical scaling, debugging, and security challenges that standard tutorials often ignore. We just posted a comprehensive course on the freeCodeCamp.org YouTube channel that covers the entire RAG pipeline—from vector database optimization and observability to advanced agentic and multimodal architectures. You will learn to make sure your AI applications are robust, secure, and ready for deployment. ...</div>
+<div class="news-source">📎 来源: <a href="https://www.freecodecamp.org/news/production-rag-with-langchain-vector-databases/" target="_blank" rel="noopener">freeCodeCamp Programming Tutorials: Python， JavaScript， Git ＆ More</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">云原生与基础设施</span><a href="https://cloud.google.com/blog/products/application-development/app-centric-maintenance-visibility-in-unified-maintenance/" target="_blank" rel="noopener">Go from resource-level to business-level maintenance in Google Cloud</a></div>
+<div class="news-summary">Managing planned maintenance is a critical part of running a reliable business. But as your cloud footprint grows into hundreds or even thousands of projects, keeping track of every individual update can feel like a full-time job. For many platform teams, the reality is a disjointed experience: jumping between dashboards to figure out which maintenance event affects which business service. At Google Cloud, we believe you shouldn’t have to think like an infrastructure manager when you’re tryin...</div>
+<div class="news-source">📎 来源: <a href="https://cloud.google.com/blog/products/application-development/app-centric-maintenance-visibility-in-unified-maintenance/" target="_blank" rel="noopener">Cloud Blog</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">数据库与存储</span><a href="https://www.microsoft.com/en-us/research/blog/data-formulator-0-7-ai-powered-data-analytics-for-enterprise-data/" target="_blank" rel="noopener">Data Formulator 0.7: AI-powered data analytics for enterprise data</a></div>
+<div class="news-summary">At a glance Data Formulator 0.7 is an open-source AI-powered system for enterprise data analytics that combines data connectivity, agent-guided exploration, and visualization refinement in a shared workspace. It includes a Data Connectors feature, which supports governed, reusable connections across databases, warehouses, BI systems, object stores, and local files, reducing integration work for platform teams. Context-aware agents help users prepare data, explore analyses, generate visualizat...</div>
+<div class="news-source">📎 来源: <a href="https://www.microsoft.com/en-us/research/blog/data-formulator-0-7-ai-powered-data-analytics-for-enterprise-data/" target="_blank" rel="noopener">Microsoft Research Blog - Microsoft Research</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">编程语言与框架</span><a href="https://smashingmagazine.com/2026/05/building-self-correcting-color-systems-contrast-color/" target="_blank" rel="noopener">Algorithmic Theming Engines: Building Self-Correcting Color Systems With `contrast-color()`</a></div>
+<div class="news-summary">The HTTP Archive Web Almanac has been tracking color contrast failures for years. The numbers have barely moved. After half a decade of design system tooling, accessibility linters, and entire JavaScript libraries dedicated to computing readable text colors, 70% of websites still fail basic WCAG contrast checks in 2025. The WebAIM Million paints an even grimmer picture — 83.9% of homepages flagged for low contrast text in 2026, up from 79.1% in 2025. The rate improves by maybe a few percentag...</div>
+<div class="news-source">📎 来源: <a href="https://smashingmagazine.com/2026/05/building-self-correcting-color-systems-contrast-color/" target="_blank" rel="noopener">Articles on Smashing Magazine — For Web Designers And Developers</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">开发工具与效率</span><a href="https://blog.jetbrains.com/dotnet/2026/05/28/deprecating-dotmemory-unit/" target="_blank" rel="noopener">Deprecating dotMemory Unit</a></div>
+<div class="news-summary">dotMemory Unit has long served as a unit testing framework for detecting memory issues in .NET code. We are grateful to everyone who has used it as part of their development and testing workflows. After careful consideration, we have decided to retire dotMemory Unit. The project will no longer receive active maintenance, compatibility updates, or security fixes, and we recommend that users plan to discontinue its use. Why we’re making this change This decision is based on several technical, s...</div>
+<div class="news-source">📎 来源: <a href="https://blog.jetbrains.com/dotnet/2026/05/28/deprecating-dotmemory-unit/" target="_blank" rel="noopener">The JetBrains Blog</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">安全与合规</span><a href="https://x.com/HeyGen/status/2060046425870958774" target="_blank" rel="noopener">You can build an app in an afternoon.
 
-    <main class="container">
-        <!-- 今日技术热榜 -->
-        <section>
-            <div class="section-header">
-                <h2>今日技术热榜</h2>
-                <span class="count">7 条</span>
-            </div>
+Until now, adding video still meant APIs, auth, and productio...</a></div>
+<div class="news-summary">You can build an app in an afternoon.Until now, adding video still meant APIs, auth, and production work.HeyGen is now integrated with @Lovable via MCP + OAuth.Prompt avatar video directly into your app and ship with a face and voice.What would you build first?Your browser does not support the video tag.🔗 View on Twitter</div>
+<div class="news-source">📎 来源: <a href="https://x.com/HeyGen/status/2060046425870958774" target="_blank" rel="noopener">HeyGen(@HeyGen_Official)</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">AI/ML</span><a href="https://x.com/LangChain/status/2060025586248986651" target="_blank" rel="noopener">Evals shape agent behavior.  Every eval is a vector that shifts the behavior of your agentic system....</a></div>
+<div class="news-summary">Evals shape agent behavior. Every eval is a vector that shifts the behavior of your agentic system. More evals ≠ better agents. Instead, build targeted evals that reflect desired behaviors in production.Tools like LangSmith Engine help you targetedly create evals from your tracing data to build better agents.Viv@Vtrivedy10x.com/i/article/2036…</div>
+<div class="news-source">📎 来源: <a href="https://x.com/LangChain/status/2060025586248986651" target="_blank" rel="noopener">LangChain(@LangChainAI)</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">AI/ML</span><a href="https://aws.amazon.com/blogs/machine-learning/claude-opus-4-8-is-now-available-on-aws/" target="_blank" rel="noopener">Claude Opus 4.8 is now available on AWS</a></div>
+<div class="news-summary">Today, we’re excited to announce the availability of Anthropic’s most advanced Opus model, Claude Opus 4.8, on Amazon Bedrock and the Claude Platform on AWS. Claude Opus 4.8 represents a meaningful step forward, delivering improvements across the workflows teams run in production, from agentic coding and deep knowledge work to multi-stage autonomous tasks that span hours of independent operation. With Claude Opus 4.8 on Amazon Bedrock you can build within your existing AWS environment, mainta...</div>
+<div class="news-source">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/claude-opus-4-8-is-now-available-on-aws/" target="_blank" rel="noopener">Artificial Intelligence</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">AI/ML</span><a href="https://x.com/LangChain/status/2060013525515268485" target="_blank" rel="noopener">You can also use our API to
+✅ Create agents
+✅ Update configurations
+✅ Create threads
+✅ Stream runs f...</a></div>
+<div class="news-summary">You can also use our API to✅ Create agents✅ Update configurations✅ Create threads✅ Stream runs from your product or platform workflow</div>
+<div class="news-source">📎 来源: <a href="https://x.com/LangChain/status/2060013525515268485" target="_blank" rel="noopener">LangChain(@LangChainAI)</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">云原生与基础设施</span><a href="https://www.infoq.com/news/2026/05/azure-linux-4-server/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Microsoft Announces Azure Linux 4.0, Its First General-Purpose Server Linux Distribution</a></div>
+<div class="news-summary">Microsoft announced Azure Linux 4.0 and Azure Container Linux at Open Source Summit. Azure Linux 4.0 is a Fedora-based general-purpose server distribution for Azure VMs, the first time Microsoft has offered a supported Linux beyond container hosting. Azure Container Linux is an immutable container-optimized host built on Flatcar. By Steef-Jan Wiggers</div>
+<div class="news-source">📎 来源: <a href="https://www.infoq.com/news/2026/05/azure-linux-4-server/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+</article>
+</section>
+<section class="section">
+<div class="section-title"><span class="badge">DEEP</span>深度技术解读</div>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">性能与优化</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&amp;mid=2651279174&amp;idx=1&amp;sn=8b6d812bae24d88634f0fb0ec25c3422" target="_blank" rel="noopener">【第3706期】Node.js Stream 没有在做背压控制，正在悄悄吃掉内存</a></div>
+<div class="news-summary">Durgesh 2026-05-28 09:00 福建 用了流不等于安全。Node.js 的背压只是协作协议 —— 消费者可以喊停，但生产者不听也没人拦。 前言用了流不等于安全。Node.js 的背压只是协作协议 —— 消费者可以喊停，但生产者不听也没人拦。运行时只会默默缓冲，直到进程崩溃。本文拆解从被忽视的返回值到 .pipe() 错误黑洞的每一个陷阱。今日前端早读课文章由 @@Durgesh Rajubhai Pawar 分享，@飘飘编译。译文从这开始～～一个寻常的周三下午。你正埋头审查一个 PR，Slack 突然弹出一条来自平台团队的消息：&quot;嘿，你们导出服务的 Pod 一直被 OOM 杀掉。内存会爬升到 3.8GB 左右，然后 Kubernetes 就把它重启了。现在一天要发生好几次，能看看吗？&quot;你打开代码。写得很干净。一个数据库游标通过管道接入一个 transform 流，将每一行格式化为 CSV，再通过管道输出到 HTTP 响应。教科书级别的流式处理。六个月前就通过了代码评审，有集成测试，在生产环境一直运行良好。你添加了 process.memoryUsage() 日志...</div>
+<div class="news-source">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&amp;mid=2651279174&amp;idx=1&amp;sn=8b6d812bae24d88634f0fb0ec25c3422" target="_blank" rel="noopener">前端早读课</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">AI/ML</span><a href="https://aws.amazon.com/blogs/machine-learning/build-a-test-suite-that-grows-with-your-agent-with-dataset-management-in-amazon-bedrock-agentcore/" target="_blank" rel="noopener">Build a test suite that grows with your agent with dataset management in Amazon Bedrock AgentCore</a></div>
+<div class="news-summary">Agent evaluation is most powerful when you combine fast-moving online signals with stable offline baselines. To understand whether your agent is truly improving over time, you need a fixed benchmark alongside your changing real-world traffic. Managing test cases for evaluation baselines as a dataset in Amazon Bedrock AgentCore brings the discipline of versioned test fixtures to agent evaluation. You can author scenarios with inputs, expected outputs, assertions, and tool sequences, then publi...</div>
+<div class="news-source">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/build-a-test-suite-that-grows-with-your-agent-with-dataset-management-in-amazon-bedrock-agentcore/" target="_blank" rel="noopener">Artificial Intelligence</a></div>
+</article>
+</section>
+<section class="section">
+<div class="section-title"><span class="badge">TOOL</span>工具推荐</div>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">AI/ML</span><a href="https://x.com/LangChain/status/2059985224784568747" target="_blank" rel="noopener">A TLDR on LangSmith Sandboxes: 
+✅ Hardware-virtualized microVM
+✅ Kernel-isolated from your services ...</a></div>
+<div class="news-summary">A TLDR on LangSmith Sandboxes: ✅ Hardware-virtualized microVM✅ Kernel-isolated from your services + other sandboxes. ✅ Same SDK and API key as the rest of LangSmith✅ Any framework or custom code✅ Now GAlangchain.com/blog/langsmith…</div>
+<div class="news-source">📎 来源: <a href="https://x.com/LangChain/status/2059985224784568747" target="_blank" rel="noopener">LangChain(@LangChainAI)</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">云原生与基础设施</span><a href="https://aws.amazon.com/blogs/machine-learning/automate-aml-alert-triage-with-amazon-quick-and-snowflake-cortex-ai/" target="_blank" rel="noopener">Automate AML alert triage with Amazon Quick and Snowflake Cortex AI</a></div>
+<div class="news-summary">Financial institutions running on AWS and Snowflake benefit from a deeply integrated framework that combines Snowflake’s AI Data Cloud with AWS cloud infrastructure, including integrations with AWS services such as Amazon Simple Storage Service (Amazon S3), AWS Glue, Amazon SageMaker, and Amazon Bedrock. With over 50 native integrations between AWS services and Snowflake, organizations can build compliance workflows that maintain data security while accelerating time to value. This post demon...</div>
+<div class="news-source">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/automate-aml-alert-triage-with-amazon-quick-and-snowflake-cortex-ai/" target="_blank" rel="noopener">Artificial Intelligence</a></div>
+</article>
+</section>
+<section class="section">
+<div class="section-title"><span class="badge">GUIDE</span>实践指南</div>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">AI/ML</span><a href="https://x.com/arena/status/2060016362484048316" target="_blank" rel="noopener">Where is AI-assisted web development heading?
 
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://x.com/jerryjliu0/status/2059710330016817501" target="_blank" rel="noopener">LlamaIndex LiteParse v2：Rust 重写，PDF 解析性能提升 100 倍</a>
-                    </div>
-                    <span class="news-tag tag-rust">Rust / WASM</span>
-                </div>
-                <div class="news-summary">
-                    <p>LlamaIndex 团队发布了 LiteParse v2.0，这是一个从零开始用 Rust 重写的 PDF 解析库。相比前代版本，新版本在解析速度上最高可达 100 倍的提升，同时保持了对 50 多种文档格式的支持。LiteParse v2 的最大亮点是多语言原生支持——除了 Rust 外，还提供了 Python 和 JS/TS 的原生包，以及一个自定义 WASM 包，使其可以在浏览器和边缘计算环境中运行。该库在准确性上也超越了其他开源无模型解析器（pymupdf、pypdf、markitdown、pdftotext 等）。对于需要处理大量文档的开发者而言，这意味着可以在客户端完成原本需要服务端才能胜任的解析任务。</p>
-                </div>
-                <div class="news-source">
-                    <a href="https://x.com/jerryjliu0/status/2059710330016817501" target="_blank" rel="noopener">[来源: Jerry Liu @ X]</a> · <a href="https://x.com/llama_index/status/2059675872408260816" target="_blank" rel="noopener">[来源: LlamaIndex @ X]</a>
-                </div>
-            </div>
+We&#x27;ve added new categories to Code Arena: Frontend, c...</a></div>
+<div class="news-summary">Where is AI-assisted web development heading?We&#x27;ve added new categories to Code Arena: Frontend, covering 7 domains across agentic web development. Learn about the ML methodology behind it, what the shifting data tells us about how people are actually using AI to build for the web, and which models are quietly excelling in specific niches.0:00 What sparked the new 7 categories?0:34 The classical ML approach: building a taxonomy from scratch2:06 Clustering prompts at scale2:19 Prototype extrac...</div>
+<div class="news-source">📎 来源: <a href="https://x.com/arena/status/2060016362484048316" target="_blank" rel="noopener">Arena.ai(@lmarena_ai)</a></div>
+</article>
+<article class="news-item">
+<div class="news-title"><span class="cat-tag">数据库与存储</span><a href="https://simonwillison.net/2026/May/27/sqlite-agents/#atom-everything" target="_blank" rel="noopener">sqlite AGENTS.md</a></div>
+<div class="news-summary">sqlite AGENTS.md SQLite gained an AGENTS.md file five days ago - but it&#x27;s not intended for their own development, it&#x27;s presumably aimed at people who are pointing agents at the SQLite codebase. It includes: SQLite does not accept pull requests without prior agreement and/or accompanying legal paperwork that places the pull request in the public domain. However, the human SQLite developers will review a concise and well-written pull request as a proof-of-concept prior to reimplementing the cha...</div>
+<div class="news-source">📎 来源: <a href="https://simonwillison.net/2026/May/27/sqlite-agents/#atom-everything" target="_blank" rel="noopener">Simon Willison&#x27;s Weblog</a></div>
+</article>
+</section>
 
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://x.com/xiaohu/status/2059708948085932386" target="_blank" rel="noopener">OpenAI 推出 Secure MCP Tunnel：企业内网 MCP 服务器的官方安全接入方案</a>
-                    </div>
-                    <span class="news-tag tag-security">Security</span>
-                </div>
-                <div class="news-summary">
-                    <p>OpenAI 发布了 Secure MCP Tunnel 功能，填补了企业级 MCP 部署的"最后一公里"安全空白。技术思路上采用了类似 ngrok 和 Cloudflare Tunnel 的"反向隧道"机制：在企业内网部署一个轻量级的 tunnel-client 程序，由它主动向外建立到 OpenAI 的加密 HTTPS 连接。当 ChatGPT 或 Codex 需要调用内部 MCP 服务器时，请求通过这条已建立的隧道传入内网，tunnel-client 将请求转发给本地 MCP 服务并返回结果。整个流程无需开放任何入站端口，也不需要配置 VPN 或防火墙规则，且与 OpenAI 的组织和 Workspace 权限体系打通。另外，tunnel-client 内置了一个名为 Harpoon 的 MCP 服务器，可以把内网的 REST 接口按标签暴露给 Agent 调用，但限制调用方不能随意选择目标。</p>
-                </div>
-                <div class="news-source">
-                    <a href="https://x.com/xiaohu/status/2059708948085932386" target="_blank" rel="noopener">[来源: 小互 @ X]</a> · <a href="https://x.com/OpenAIDevs/status/2059703536825565499" target="_blank" rel="noopener">[来源: OpenAI Developers @ X]</a>
-                </div>
-            </div>
+<section class="source-section">
+<h3>参考链接汇总</h3>
+<ul class="source-list">
+<li><a href="https://x.com/arena/status/2060016362484048316" target="_blank" rel="noopener">Arena.ai(@lmarena_ai)</a></li>
+<li><a href="https://smashingmagazine.com/2026/05/building-self-correcting-color-systems-contrast-color/" target="_blank" rel="noopener">Articles on Smashing Magazine — For Web Designers And Developers</a></li>
+<li><a href="https://aws.amazon.com/blogs/machine-learning/claude-opus-4-8-is-now-available-on-aws/" target="_blank" rel="noopener">Artificial Intelligence</a></li>
+<li><a href="https://cloud.google.com/blog/products/application-development/app-centric-maintenance-visibility-in-unified-maintenance/" target="_blank" rel="noopener">Cloud Blog</a></li>
+<li><a href="https://x.com/HeyGen/status/2060046425870958774" target="_blank" rel="noopener">HeyGen(@HeyGen_Official)</a></li>
+<li><a href="https://www.infoq.com/news/2026/05/azure-linux-4-server/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></li>
+<li><a href="https://x.com/LangChain/status/2060025586248986651" target="_blank" rel="noopener">LangChain(@LangChainAI)</a></li>
+<li><a href="https://www.microsoft.com/en-us/research/blog/data-formulator-0-7-ai-powered-data-analytics-for-enterprise-data/" target="_blank" rel="noopener">Microsoft Research Blog - Microsoft Research</a></li>
+<li><a href="https://simonwillison.net/2026/May/27/sqlite-agents/#atom-everything" target="_blank" rel="noopener">Simon Willison&#x27;s Weblog</a></li>
+<li><a href="https://blog.jetbrains.com/dotnet/2026/05/28/deprecating-dotmemory-unit/" target="_blank" rel="noopener">The JetBrains Blog</a></li>
+<li><a href="https://www.freecodecamp.org/news/production-rag-with-langchain-vector-databases/" target="_blank" rel="noopener">freeCodeCamp Programming Tutorials: Python， JavaScript， Git ＆ More</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&amp;mid=2651279174&amp;idx=1&amp;sn=8b6d812bae24d88634f0fb0ec25c3422" target="_blank" rel="noopener">前端早读课</a></li>
+</ul>
+</section>
 
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://www.youtube.com/watch?v=xElLjXPC_Dg" target="_blank" rel="noopener">GitHub Copilot 推出远程会话：从手机继续你的 CLI / IDE Agent 会话</a>
-                    </div>
-                    <span class="news-tag tag-ai">AI Dev</span>
-                </div>
-                <div class="news-summary">
-                    <p>GitHub Copilot 新增了远程会话功能，开发者可以通过在 CLI 中输入 <code>/remote on</code> 开启远程控制，然后在手机或网页浏览器上继续当前的 Agent 会话。这项功能支持对 Copilot CLI、VS Code 和 JetBrains IDE 中正在进行的会话进行远程操作，包括审批工具调用、审阅代码 diff 和排队消息。对于需要离开工位但不想中断编码流的开发者来说，这是一个实用的补充——你可以在通勤路上通过手机审核 Agent 提交的代码变更，而不必等到回到电脑前。GitHub 还同时介绍了 Copilot CLI 中的斜杠命令（slash commands）使用技巧，进一步提升了命令行工作流效率。</p>
-                </div>
-                <div class="news-source">
-                    <a href="https://www.youtube.com/watch?v=xElLjXPC_Dg" target="_blank" rel="noopener">[来源: GitHub @ YouTube]</a> · <a href="https://x.com/github/status/2059702542288736442" target="_blank" rel="noopener">[来源: GitHub @ X]</a>
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://x.com/shao__meng/status/2059435625552785617" target="_blank" rel="noopener">微软开源 Webwright：终端原生的 Web Agent 框架，"代码即动作"</a>
-                    </div>
-                    <span class="news-tag tag-ai">Web Agent</span>
-                </div>
-                <div class="news-summary">
-                    <p>微软开源了 Webwright，一个"终端原生"的 Web Agent 框架。与传统 Agent "观察 → 预测点击 → 执行"的循环不同，Webwright 采用了"代码即动作"的设计哲学：让 LLM 直接编写 Playwright 脚本来操控网页。核心循环仅包含三个模块约 1000 行代码，无隐藏编排层。工作区作为状态容器——脚本、截图和日志保存在本地，浏览器会话可随时重建。这种模式的"副产品"是可复用的自动化程序，而非一次性的交互痕迹。在性能上，Webwright 达到了 SOTA 水平。对于习惯写测试脚本的开发者来说，这种"让 AI 写你本来就要写的代码"的思路可能比纯自然语言交互更可靠、更可维护。</p>
-                </div>
-                <div class="news-source">
-                    <a href="https://x.com/shao__meng/status/2059435625552785617" target="_blank" rel="noopener">[来源: meng shao @ X]</a>
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://www.infoq.com/news/2026/05/linkedin-kernel-lock-freeze/" target="_blank" rel="noopener">LinkedIn 排查内核锁竞争导致的周期性系统冻结：eBPF off-CPU Profiling 实战</a>
-                    </div>
-                    <span class="news-tag tag-infra">Kernel / eBPF</span>
-                </div>
-                <div class="news-summary">
-                    <p>LinkedIn 工程师遇到了一种棘手的故障模式：用户 Feed 数据库周期性短暂不可用，随后自动恢复，但没有留下有用的日志或追踪信息。常规监控在这种"闪断"场景下完全失效。团队最终采用了一种创新的排查方法——基于 eBPF 的 off-CPU profiling（CPU 外分析）。与传统的 on-CPU profiling 不同，off-CPU profiling 追踪的是进程在等待什么（锁、I/O、调度等），而不是在 CPU 上执行什么。通过这种方法，工程师定位到了内核层面的锁竞争问题，这是导致系统冻结的根本原因。这个案例对于处理类似"幽灵故障"的开发者极具参考价值：当常规监控束手无策时，eBPF 提供的内核级可观测性可能是最后的救命稻草。</p>
-                </div>
-                <div class="news-source">
-                    <a href="https://www.infoq.com/news/2026/05/linkedin-kernel-lock-freeze/" target="_blank" rel="noopener">[来源: InfoQ]</a>
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247508655" target="_blank" rel="noopener">CHI-Bench 开源：75 个真实医疗工作流评测，最强 Agent 仅过 28%</a>
-                    </div>
-                    <span class="news-tag tag-benchmark">Benchmark</span>
-                </div>
-                <div class="news-summary">
-                    <p>actAVA.ai 联合 Johns Hopkins、Wellstar、Yale、斯坦福、CMU、牛津等 20 余家医疗机构发布了 CHI(χ)-Bench，全球首个面向医疗长程工作流的 Agent 评测基准。基准覆盖处方授权（Prior Authorization）、医疗服务使用管理（Utilization Management）、护理管理（Care Management）三大领域共 75 个真实任务。评测环境包含 21 个医疗应用、200+ MCP 工具和 1,279 份操作手册文档。测试结果显示，即使是配置最强的 Claude Code + Claude Opus 4.6，任务通过率也仅为 28.0%；没有任何 Agent 在严格的 pass@3 指标下超过 20%；端到端的医院-保险公司协作任务通过率为 0%。这个基准数据集已在 ModelScope 开源，为 Agent 在复杂真实场景中的能力边界提供了量化参考。</p>
-                </div>
-                <div class="news-source">
-                    <a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247508655" target="_blank" rel="noopener">[来源: 魔搭 ModelScope 社区]</a>
-                </div>
-            </div>
-
-            <div class="news-card">
-                <div class="news-header">
-                    <div class="news-title">
-                        <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723078" target="_blank" rel="noopener">Agent Harness 工程综述：CMU、Yale、JHU 等用 ETCLOVG 七层框架拆解 Agent 系统</a>
-                    </div>
-                    <span class="news-tag tag-ai">Agent Engineering</span>
-                </div>
-                <div class="news-summary">
-                    <p>CMU、Yale、JHU、Virginia Tech、Amazon 等机构联合发布了《Agent Harness Engineering: A Survey》，这是目前最系统的一篇 Agent 工程化综述。论文用 ETCLOVG 七层框架拆解了 Agent Harness（包裹在模型外面的工程系统）：Execution（执行环境）、Tool Interface（工具接口）、Context（上下文管理）、Loop（执行循环）、Observation（观测与反馈）、Verification（验证）、Guardrails（安全护栏）。不同于大多数论文只关注模型本身，这篇综述聚焦于"如何把 Agent 真正跑起来"的工程问题——包括工具调用失败时的重试策略、上下文窗口的分配与裁剪、多步任务的状态持久化、以及 Agent 行为的安全边界。对于正在构建生产级 Agent 的开发者来说，这篇论文提供了一个系统化的工程检查清单。</p>
-                </div>
-                <div class="news-source">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723078" target="_blank" rel="noopener">[来源: Datawhale]</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- 深度技术解读 -->
-        <section>
-            <div class="section-header">
-                <h2>深度技术解读</h2>
-                <span class="count">2 篇</span>
-            </div>
-
-            <div class="deep-dive">
-                <h3>AI Coding Agent 如何使用你的技术：Microsoft AX Stack 追踪分析</h3>
-                <p>当你发布了一个 SDK、CLI 或 API，你知道开发者会如何使用它。但现在 AI Coding Agent 也在使用它，而且使用方式与人类完全不同。Microsoft 的 AX Stack 系列文章深入追踪了"开发者输入提示"到"Agent 生成代码"之间究竟发生了什么。</p>
-
-                <h4>Agent 与技术的三种交互模式</h4>
-                <p>Microsoft 将 Agent 与技术栈的交互归纳为三种路径：</p>
-                <ol>
-                    <li><strong>读文档</strong> — Agent 通过检索增强生成（RAG）读取你的官方文档、README、示例代码，然后基于理解生成调用代码。</li>
-                    <li><strong>调用 MCP Server</strong> — 如果你的工具提供了 MCP 接口，Agent 可以通过标准化的工具调用来使用它，获得结构化输入/输出。</li>
-                    <li><strong>凭记忆猜测</strong> — 最坏的情况：Agent 既不读文档也不调用 MCP，而是基于训练记忆中的片段"脑补" API 用法，这往往是 bug 的温床。</li>
-                </ol>
-
-                <h4>开发者能做什么</h4>
-                <p>文章提出了 AX Stack 框架，将 Agent 与技术栈的交互分为三层：</p>
-                <ul>
-                    <li><strong>Model（模型层）</strong>：你几乎无法控制，包括模型选择、上下文长度、推理能力。</li>
-                    <li><strong>Harness（执行层）</strong>：Agent 的运行时环境——IDE 插件、CLI 工具、沙箱等。你可以选择优化自己工具在这些 harness 中的表现。</li>
-                    <li><strong>Extensions（扩展层）</strong>：你完全可控的层面——提供 MCP Server、优化文档结构、提供清晰的错误信息、确保 API 设计的 Agent 友好性。</li>
-                </ul>
-
-                <div class="highlight-box">
-                    <strong>实践建议：</strong>如果你正在维护一个开发者工具，现在就开始思考"Agent 友好性"——提供 MCP 接口、保持文档的结构化和可检索性、让错误信息包含可操作的修复建议。Agent 不会"像人一样"阅读整篇文档，它们更依赖结构化的快速扫描和精确的 API 契约。
-                </div>
-
-                <div class="news-source">
-                    <a href="https://devblogs.microsoft.com/blog/how-ai-coding-agents-actually-use-your-technology" target="_blank" rel="noopener">[来源: Microsoft for Developers]</a>
-                </div>
-            </div>
-
-            <div class="deep-dive">
-                <h3>京东 DongSQL V1.2.0：零售数据库内核的六大技术升级</h3>
-                <p>京东自研电商数据库内核 DongSQL 发布了 V1.2.0 版本，这是继 2025 年 9 月 V1.1.0 发布后的重大迭代。新版本在热点行更新、主从复制、执行计划缓存、带量压测、海量表启动、SIMD 加速六个维度实现了突破。</p>
-
-                <h4>核心优化点解析</h4>
-                <p><strong>1. 组提交单播通知（解决惊群效应）</strong></p>
-                <p>在组提交过程中，follower 线程需要等待 leader 完成 binlog 刷盘。传统方式使用单一条件变量广播唤醒所有等待线程，高并发下产生严重的锁竞争。DongSQL V1.2.0 为每个线程分配独立的条件变量 <code>THD::COND_wakeup_ready</code>，将广播改为逐个单播唤醒，大幅减少对共享条件变量的竞争。</p>
-
-                <p><strong>2. 执行计划缓存</strong></p>
-                <p>引入 Prepared Statement 级别的执行计划缓存机制，避免重复查询的解析和优化开销，在 OLTP 场景下显著降低 CPU 消耗。</p>
-
-                <p><strong>3. SIMD 加速</strong></p>
-                <p>在数据类型转换、字符串比较等高频操作中引入 SIMD 指令加速，充分利用现代 CPU 的向量化能力。</p>
-
-                <p><strong>4. 海量表启动优化</strong></p>
-                <p>针对电商场景中表数量庞大的特点（数十万张表），优化了数据库启动时的表元数据加载流程，减少冷启动时间。</p>
-
-                <div class="highlight-box">
-                    <strong>值得借鉴的思路：</strong>DongSQL 的组提交优化展示了经典的"广播改单播"模式——在并发系统中，"通知所有人"往往是性能瓶颈的根源，"只通知需要的人"才是正确的方向。这个思路不仅适用于数据库内核，也适用于消息队列、任务调度等任何需要通知/唤醒机制的系统设计。
-                </div>
-
-                <div class="news-source">
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzU1MzE2NzIzMg==&mid=2247502298" target="_blank" rel="noopener">[来源: 京东技术]</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- 工具推荐 -->
-        <section>
-            <div class="section-header">
-                <h2>工具推荐</h2>
-                <span class="count">3 个</span>
-            </div>
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <h4><a href="https://github.com/itsfatduck/optimize-duck" target="_blank" rel="noopener">优化鸭 — 开源 Windows 系统优化工具</a></h4>
-                    <p>一个界面搞定后台服务、遥测、预装应用、启动项、计划任务的清理。提升性能的同时保护隐私，适合需要快速优化 Windows 开发环境的开发者。</p>
-                    <div class="tool-meta">
-                        <a href="https://github.com/itsfatduck/optimize-duck" target="_blank" rel="noopener">GitHub</a> · 开源免费 · Windows
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <h4><a href="https://github.com/alookai/alook" target="_blank" rel="noopener">Alook — AI Agent 协作编排层</a></h4>
-                    <p>将 Claude Code、Codex、OpenCode 等本地 CLI Agent 组织成"可管理的 AI 团队"。提供角色分配、任务板、日历和可追溯的执行记录，解决多 Agent 上下文搬运的痛点。</p>
-                    <div class="tool-meta">
-                        <a href="https://github.com/alookai/alook" target="_blank" rel="noopener">GitHub</a> · 开源 · Agent 编排
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <h4><a href="https://anysearch.com/home" target="_blank" rel="noopener">AnySearch — 专为 Agent 设计的搜索引擎</a></h4>
-                    <p>聚合了金融、法律、学术、网络安全等专业领域的大规模数据，支持结构化输出减少 Token 浪费，原生支持 API、MCP 与 Skill 接入。定位为 AI 时代的搜索基础设施。</p>
-                    <div class="tool-meta">
-                        <a href="https://anysearch.com/home" target="_blank" rel="noopener">官网</a> · API / MCP / Skill
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 实践指南 -->
-        <section>
-            <div class="section-header">
-                <h2>实践指南</h2>
-                <span class="count">2 篇</span>
-            </div>
-
-            <div class="deep-dive">
-                <h3>基于 Claude AI 三款产品的 Agent 安全实战总结</h3>
-                <p>Anthropic 工程团队分享了在 Claude AI、Claude Code、Claude Cowork 三款产品中积累的安全实践经验，提炼出了一套可落地的 Agent 安全设计原则。</p>
-
-                <h4>核心设计原则</h4>
-                <ul>
-                    <li><strong>先环境层，后模型层</strong> — 确定性边界是最后防线。不要指望模型自己判断安全，环境隔离（沙箱、容器、权限控制）才是根本。</li>
-                    <li><strong>隔离强度匹配用户监督能力</strong> — 开发者能理解 bash 命令的输出，知识工作者不能。给不同角色的用户提供不同强度的隔离。</li>
-                    <li><strong>警惕自建组件</strong> — 优先使用久经考验的标准隔离原语（如 Docker、Firejail、seccomp），而不是自己造一个"差不多"的沙箱。</li>
-                    <li><strong>出站白名单是能力授权</strong> — 每个可调用函数、每个可访问的 URL 都是攻击面，不是"目的地过滤"而是"能力授权"。</li>
-                </ul>
-
-                <h4>三种风险类型</h4>
-                <ol>
-                    <li><strong>用户误用</strong>：用户（有意或无意）指示 Agent 执行有害操作，如绕过检查、执行破坏性命令。</li>
-                    <li><strong>模型行为失当</strong>：Agent 未经请求执行有害操作，如自行访问未授权资源、泄露敏感数据。</li>
-                    <li><strong>供应链攻击</strong>：通过 Agent 使用的工具、依赖库或外部资源引入的间接攻击。</li>
-                </ol>
-
-                <div class="highlight-box">
-                    <strong>行动项：</strong>如果你正在开发或集成 AI Agent，对照上述原则做一次安全审计：检查执行环境的隔离强度、审查所有外部调用的白名单、确认敏感操作是否有人类确认环节。
-                </div>
-
-                <div class="news-source">
-                    <a href="https://x.com/shao__meng/status/2059442456819839447" target="_blank" rel="noopener">[来源: meng shao @ X]</a> · <a href="https://www.anthropic.com/engineering/human-in-the-loop-agent-security" target="_blank" rel="noopener">[原文: Anthropic Engineering Blog]</a>
-                </div>
-            </div>
-
-            <div class="deep-dive">
-                <h3>Bash & Python DevOps 自动化实战手册</h3>
-                <p>freeCodeCamp 发布了一份完整的 DevOps 自动化实践手册，覆盖了五个真实的生产场景。核心观点是：自动化脚本的问题不在于工具，而在于"系统看起来很健康但实际上并不健康"。</p>
-
-                <h4>五个生产级场景</h4>
-                <ol>
-                    <li><strong>异常 AWS 支出检测</strong>：在月度账单到达之前，通过 CloudWatch API 监控资源使用率突变，提前发现异常消费。</li>
-                    <li><strong>跨服务日志关联</strong>：使用 trace ID 串联多个微服务的日志，快速定位问题根因。</li>
-                    <li><strong>Terraform 外部漂移检测</strong>：定期对比 Terraform state 与实际云资源状态，发现手动修改导致的配置漂移。</li>
-                    <li><strong>应用层密钥轮换验证</strong>：确保密钥轮换后，应用确实在使用新密钥而非缓存的旧密钥。</li>
-                    <li><strong>金丝雀发布健康检查</strong>：不仅检查错误率，还检查响应延迟分布（P99、P999），避免"零错误但每个请求都慢 5 秒"的隐形故障。</li>
-                </ol>
-
-                <div class="highlight-box">
-                    <strong>关键认知：</strong>"验证进程完成"不等于"验证系统健康"。一个 Kubernetes pod 可以处于 Running 状态，但内部应用无法连接数据库；一个 Terraform 部署可以返回 clean，但有人已经在控制台手动修改了基础设施。自动化脚本的核心价值在于验证"真实系统状态"，而不是"工具返回的状态码"。
-                </div>
-
-                <div class="news-source">
-                    <a href="https://www.freecodecamp.org/news/how-to-use-bash-python-for-real-devops-automation-handbook-with-production-use-cases/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- 参考链接汇总 -->
-        <section>
-            <div class="section-header">
-                <h2>参考链接汇总</h2>
-                <span class="count">20+ 来源</span>
-            </div>
-            <div class="sources-section">
-                <h3>本文引用的技术来源</h3>
-                <ul class="source-list">
-                    <li><a href="https://x.com/jerryjliu0/status/2059710330016817501" target="_blank" rel="noopener">Jerry Liu / LlamaIndex @ X</a></li>
-                    <li><a href="https://x.com/OpenAIDevs/status/2059703536825565499" target="_blank" rel="noopener">OpenAI Developers @ X</a></li>
-                    <li><a href="https://x.com/xiaohu/status/2059708948085932386" target="_blank" rel="noopener">小互 @ X</a></li>
-                    <li><a href="https://www.youtube.com/watch?v=xElLjXPC_Dg" target="_blank" rel="noopener">GitHub @ YouTube</a></li>
-                    <li><a href="https://x.com/shao__meng/status/2059435625552785617" target="_blank" rel="noopener">meng shao @ X</a></li>
-                    <li><a href="https://www.infoq.com/news/2026/05/linkedin-kernel-lock-freeze/" target="_blank" rel="noopener">InfoQ</a></li>
-                    <li><a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247508655" target="_blank" rel="noopener">魔搭 ModelScope 社区</a></li>
-                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723078" target="_blank" rel="noopener">Datawhale</a></li>
-                    <li><a href="https://devblogs.microsoft.com/blog/how-ai-coding-agents-actually-use-your-technology" target="_blank" rel="noopener">Microsoft for Developers</a></li>
-                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1MzE2NzIzMg==&mid=2247502298" target="_blank" rel="noopener">京东技术</a></li>
-                    <li><a href="https://www.freecodecamp.org/news/how-to-use-bash-python-for-real-devops-automation-handbook-with-production-use-cases/" target="_blank" rel="noopener">freeCodeCamp</a></li>
-                    <li><a href="https://www.anthropic.com/engineering/human-in-the-loop-agent-security" target="_blank" rel="noopener">Anthropic Engineering Blog</a></li>
-                    <li><a href="https://github.com/itsfatduck/optimize-duck" target="_blank" rel="noopener">优化鸭 GitHub</a></li>
-                    <li><a href="https://github.com/alookai/alook" target="_blank" rel="noopener">Alook GitHub</a></li>
-                    <li><a href="https://anysearch.com/home" target="_blank" rel="noopener">AnySearch</a></li>
-                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1MzE2NzIzMg==&mid=2247502298" target="_blank" rel="noopener">京东技术</a></li>
-                    <li><a href="https://developers.googleblog.com/the-latest-updates-to-google-pay/" target="_blank" rel="noopener">Google Developers Blog</a></li>
-                    <li><a href="https://devblogs.microsoft.com/documentdb/introducing-azure-documentdb" target="_blank" rel="noopener">Azure DocumentDB Blog</a></li>
-                    <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&mid=2247495297" target="_blank" rel="noopener">小红书技术 REDtech</a></li>
-                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&mid=2650543685" target="_blank" rel="noopener">大淘宝技术</a></li>
-                    <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3Njc0NTgwMg==&mid=2247504267" target="_blank" rel="noopener">哔哩哔哩技术</a></li>
-                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&mid=2247560354" target="_blank" rel="noopener">阿里云开发者</a></li>
-                    <li><a href="https://blog.bytebytego.com/p/how-airtable-built-the-search-layer" target="_blank" rel="noopener">ByteByteGo Newsletter</a></li>
-                </ul>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            科技日报 · 开发者实践版 | 数据来源: FreshRSS (641 条 / 217 来源) | 生成时间: 2026-05-27
-        </div>
-    </footer>
+</main>
+<footer>
+  开发者实践日报 · 由 tech-daily-generator 自动生成 · 2026-05-28
+</footer>
+</div>
 </body>
 </html>
