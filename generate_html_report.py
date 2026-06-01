@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+#!/usr/bin/env python3
+"""
+生成CTO洞察版科技日报HTML
+"""
+
+html_content = '''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -474,3 +479,9 @@
     </div>
 </body>
 </html>
+'''
+
+with open('/home/runner/work/daily-report/daily-report/tech-daily/cto_insight.html', 'w', encoding='utf-8') as f:
+    f.write(html_content)
+
+print("✅ CTO洞察版日报已生成: ./tech-daily/cto_insight.html")
