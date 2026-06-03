@@ -3,490 +3,673 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>开发者实践日报 - 2026-06-01</title>
+    <title>开发者实践日报 - 2026-06-03</title>
     <style>
         :root {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --bg-card: #0f3460;
-            --text-primary: #e94560;
-            --text-secondary: #eaeaea;
-            --text-muted: #a0a0a0;
-            --accent: #e94560;
-            --border: #2a2a4a;
-            --code-bg: #0d1117;
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-green: #3fb950;
+            --accent-blue: #58a6ff;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --code-bg: #1e2530;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
-            background: var(--bg-primary);
-            color: var(--text-secondary);
+            font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.7;
+            font-size: 14px;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        header {
-            text-align: center;
-            padding: 40px 20px;
-            border-bottom: 2px solid var(--accent);
-            margin-bottom: 30px;
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
         }
-        header h1 {
-            font-size: 2.2em;
-            color: var(--accent);
-            margin-bottom: 10px;
+
+        .header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
         }
-        header .meta {
+
+        .header-badge {
+            display: inline-block;
+            background: var(--bg-tertiary);
+            color: var(--accent-blue);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .header-meta {
             color: var(--text-muted);
-            font-size: 0.9em;
+            font-size: 13px;
         }
+
+        .header-meta span {
+            margin-right: 16px;
+        }
+
         .section {
             margin-bottom: 40px;
         }
+
         .section-title {
-            font-size: 1.4em;
-            color: var(--accent);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-green);
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
+
+        .section-title::before {
+            content: '>';
+            color: var(--accent-green);
+        }
+
         .news-item {
             background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 16px;
-            border-left: 3px solid var(--accent);
-            transition: transform 0.2s;
+            transition: border-color 0.2s;
         }
+
         .news-item:hover {
-            transform: translateX(4px);
+            border-color: var(--accent-blue);
         }
+
         .news-title {
-            font-size: 1.15em;
-            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent-blue);
             margin-bottom: 10px;
-            font-weight: bold;
+            line-height: 1.5;
         }
-        .news-summary {
+
+        .news-title a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .news-title a:hover {
+            text-decoration: underline;
+        }
+
+        .news-meta {
+            font-size: 12px;
             color: var(--text-muted);
             margin-bottom: 12px;
+        }
+
+        .news-meta .source-tag {
+            display: inline-block;
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-right: 8px;
+            color: var(--text-secondary);
+        }
+
+        .news-summary {
+            color: var(--text-secondary);
             line-height: 1.8;
         }
-        .news-source {
-            font-size: 0.85em;
-            color: var(--text-muted);
+
+        .news-summary p {
+            margin-bottom: 10px;
         }
-        .news-source a {
-            color: var(--accent);
-            text-decoration: none;
+
+        .news-summary p:last-child {
+            margin-bottom: 0;
         }
-        .news-source a:hover { text-decoration: underline; }
-        .tag {
-            display: inline-block;
-            background: var(--bg-card);
-            color: var(--accent);
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
+
         .highlight-box {
-            background: var(--bg-card);
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        .highlight-box h3 {
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
-        .code-block {
             background: var(--code-bg);
-            border-radius: 6px;
+            border-left: 3px solid var(--accent-purple);
             padding: 16px;
             margin: 12px 0;
-            overflow-x: auto;
-            font-size: 0.9em;
-            border: 1px solid var(--border);
+            border-radius: 0 6px 6px 0;
         }
-        footer {
-            text-align: center;
-            padding: 30px;
-            border-top: 1px solid var(--border);
+
+        .highlight-box.green {
+            border-left-color: var(--accent-green);
+        }
+
+        .highlight-box.orange {
+            border-left-color: var(--accent-orange);
+        }
+
+        .highlight-box.red {
+            border-left-color: var(--accent-red);
+        }
+
+        .source-link {
+            display: inline-block;
+            font-size: 12px;
             color: var(--text-muted);
-            font-size: 0.85em;
+            margin-top: 12px;
         }
-        .source-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .source-item {
-            background: var(--bg-secondary);
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 0.9em;
-        }
-        .source-item a {
-            color: var(--accent);
+
+        .source-link a {
+            color: var(--accent-blue);
             text-decoration: none;
         }
-        .source-item a:hover { text-decoration: underline; }
-        @media (max-width: 600px) {
-            header h1 { font-size: 1.6em; }
-            .news-item { padding: 15px; }
+
+        .source-link a:hover {
+            text-decoration: underline;
+        }
+
+        .sources-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .sources-section h3 {
+            color: var(--accent-yellow);
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .source-list {
+            list-style: none;
+            columns: 2;
+            column-gap: 24px;
+        }
+
+        .source-list li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            break-inside: avoid;
+        }
+
+        .source-list li a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .source-list li a:hover {
+            text-decoration: underline;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-right: 6px;
+            font-weight: 500;
+        }
+
+        .tag-tool {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+
+        .tag-lang {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .tag-ai {
+            background: rgba(163, 113, 247, 0.15);
+            color: var(--accent-purple);
+        }
+
+        .tag-ops {
+            background: rgba(240, 136, 62, 0.15);
+            color: var(--accent-orange);
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 13px;
+            color: var(--accent-orange);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .source-list {
+                columns: 1;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <header class="header">
+            <div class="header-badge">Developer Practice</div>
             <h1>开发者实践日报</h1>
-            <p class="meta">2026-06-01 | 面向一线开发者的技术精选</p>
+            <div class="header-meta">
+                <span>2026-06-03</span>
+                <span>633 articles analyzed</span>
+                <span>424 sources</span>
+            </div>
         </header>
 
-        <!-- 今日技术热榜 -->
         <section class="section">
-            <h2 class="section-title">// 今日技术热榜</h2>
+            <h2 class="section-title">今日技术热榜</h2>
 
-            <div class="news-item">
-                <div class="news-title">MiniMax M3 开源：国产首个同时具备前沿 Coding + 1M 上下文 + 原生多模态的模型</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.123" target="_blank" rel="noopener">Visual Studio Code 1.123 发布</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">Microsoft for Developers</span>
+                    <span class="tag tag-tool">Editor</span>
+                </div>
                 <div class="news-summary">
-                    MiniMax M3 今日正式发布，这是国内第一个同时齐备前沿 Coding 能力、1M 超长上下文和原生多模态的开源模型。在 SWE-Bench Pro 上，M3 超过 GPT-5.5 和 Gemini 3.1 Pro，接近 Opus 4.7；在 SVG-Bench 上超过 Opus 4.7；在端到端 Agent 评测框架 Claw-Eval 上获得最高分。核心技术亮点是 MSA（MiniMax Sparse Attention）稀疏注意力架构，实现了 1M 上下文窗口，且计算复杂度不再是平方级增长。模型权重将在约 10 天后上架 Hugging Face，API 和 Token Plan 已可用。
+                    <p>VS Code 最新版本带来了多项开发者期待已久的改进。虽然本次更新以安全补丁和稳定性修复为主，但作为全球使用最广泛的代码编辑器之一，每一次版本迭代都值得关注。建议开发者及时更新以获取最新的安全修复，特别是运行在企业环境或处理敏感代码的团队。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">开源模型</span>
-                    <span class="tag">Coding Agent</span>
-                    <span class="tag">多模态</span>
-                    <br>
-                    <a href="https://x.com/MiniMax_AI/status/2061506641120641494" target="_blank" rel="noopener">[来源: MiniMax 官方]</a>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzE5MTA3NzcxMQ==&mid=2247488528" target="_blank" rel="noopener">[来源: MiniMax 稀宇科技]</a>
+                <div class="source-link">
+                    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.123" target="_blank" rel="noopener">[来源: Microsoft for Developers]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">JetBrains 开源 Mellum2：12B MoE 模型，专为 AI 工作流基础设施设计</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://blog.jetbrains.com/kotlin/2026/06/kotlin-2-4-0-released/" target="_blank" rel="noopener">Kotlin 2.4.0 正式发布：Context Parameters 稳定、Wasm Component Model 支持</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">The JetBrains Blog</span>
+                    <span class="tag tag-lang">Language</span>
+                </div>
                 <div class="news-summary">
-                    JetBrains 将 Mellum2 开源，这是一个 12B 参数的 Mixture-of-Experts 模型，采用 Apache 2.0 许可证。与专注于代码补全的第一代不同，Mellum2 被设计用于生产 AI 系统的路由、Q&A、子 Agent 和中间推理步骤。JetBrains 强调它解决了生产 AI 中最困难的三个问题：延迟、吞吐量和成本。从训练开始就是为实际部署而设计，支持私有部署和微调，适合需要在自己的基础设施上运行小型高性能模型的团队。
+                    <p>Kotlin 2.4.0 是一次重大版本更新，带来多个平台的关键改进。语言层面，Context Parameters 终于进入稳定状态，配合显式 backing fields 和注解 use-site targets 的增强，让 Kotlin 的表达能力更上一层楼。</p>
+                    <p>跨平台方面值得关注的是：Kotlin/Wasm 默认启用增量编译并支持 WebAssembly Component Model；Kotlin/Native 新增 Swift packages 依赖支持；Kotlin/JVM 跟进 Java 26 支持。标准库中 UUID API 也已稳定，并新增 sorted order 检查能力。Gradle 兼容性提升至 9.5.0，Maven 则实现了 Java 与 JVM target 版本的自动对齐。</p>
+                    <div class="highlight-box">
+                        <strong>升级建议：</strong>如果你在使用 Kotlin Multiplatform 或 Wasm 项目，这次更新值得优先升级。Context Parameters 的稳定意味着库作者可以开始放心地在公开 API 中使用这一特性。
+                    </div>
                 </div>
-                <div class="news-source">
-                    <span class="tag">开源</span>
-                    <span class="tag">JetBrains</span>
-                    <span class="tag">MoE</span>
-                    <br>
-                    <a href="https://blog.jetbrains.com/ai/2026/06/mellum2-goes-open-source-a-fast-model-for-ai-workflows/" target="_blank" rel="noopener">[来源: The JetBrains Blog]</a>
-                    <a href="https://huggingface.co/blog/JetBrains/mellum2-launch" target="_blank" rel="noopener">[来源: Hugging Face Blog]</a>
+                <div class="source-link">
+                    <a href="https://blog.jetbrains.com/kotlin/2026/06/kotlin-2-4-0-released/" target="_blank" rel="noopener">[来源: The JetBrains Blog]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">Node.js 26.3.0 (Current) 正式发布</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://www.infoq.com/news/2026/06/nodejs-release-changes/" target="_blank" rel="noopener">Node.js 调整发布节奏：从每年两版改为每年一版，全部进入 LTS</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">InfoQ</span>
+                    <span class="tag tag-lang">Runtime</span>
+                </div>
                 <div class="news-summary">
-                    Node.js 发布了 26.3.0 版本。作为 Current 版本线的更新，建议关注 Node.js 官网的完整 changelog 了解新特性、性能改进和 bug 修复。对于使用 Node.js 26.x 的开发者，保持更新到最新 patch 版本是推荐做法。
+                    <p>Node.js 将从 2026 年 10 月的 Node 27 开始改变发布策略：由每年两个大版本缩减为一个，且所有发布版本都将获得 Long-Term Support (LTS)。这意味着奇偶版本的区别将消失，开发者不再需要纠结该用偶数版还是奇数版。同时还会引入 Alpha 通道供早期测试。</p>
+                    <p>这一调整的背后是维护团队面临的真实挑战——频繁的发布节奏导致维护负担过重，而用户实际需求更倾向于稳定的长期支持版本。对于企业团队来说，这是一个好消息：更少的版本迁移、更长的支持周期、更清晰的升级路径。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">Node.js</span>
-                    <span class="tag">Release</span>
-                    <br>
-                    <a href="https://nodejs.org/en/blog/release/v26.3.0" target="_blank" rel="noopener">[来源: Node.js Blog]</a>
+                <div class="source-link">
+                    <a href="https://www.infoq.com/news/2026/06/nodejs-release-changes/" target="_blank" rel="noopener">[来源: InfoQ]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">Shopify GraphQL Cardinal：用广度优先执行替代深度优先，字段执行速度提升 15 倍</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://developers.googleblog.com/gemma-4-12b-the-developer-guide/" target="_blank" rel="noopener">Gemma 4 12B 发布：无编码器的本地多模态模型，16GB 内存即可运行</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">Google Developers Blog</span>
+                    <span class="tag tag-ai">LLM</span>
+                </div>
                 <div class="news-summary">
-                    Shopify 推出了 GraphQL Cardinal，一个全新的执行引擎，将传统的深度优先遍历替换为广度优先执行。这一重新设计在大规模 GraphQL 查询场景中表现卓越：字段执行速度最高提升 15 倍，GC 开销降低 6 倍，P50 延迟改善超过 4 秒。核心优化在于执行层效率和批量 resolver 处理，特别针对高基数电商查询场景。对于处理复杂 GraphQL 查询的后端开发者，这是一个值得深入研究的方向。
+                    <p>Google DeepMind 发布了 Gemma 4 12B，这是一款面向消费级设备的高性能本地多模态模型。它的最大亮点是采用了全新的 encoder-free 架构——传统视觉和音频编码器被完全绕过，多模态数据直接输入 LLM 主干网络。</p>
+                    <p>该模型兼容 llama.cpp、MLX、LM Studio、vLLM、Ollama、UnslothAI 和 SGLang 等主流推理框架，已在 Kaggle 和 HuggingFace 上开放下载。对开发者而言，这意味着可以用一台普通笔记本部署具备视觉理解和音频处理能力的 AI 应用，无需依赖云端 API。</p>
+                    <div class="highlight-box green">
+                        <strong>本地部署路径：</strong>Google AI Edge Gallery 支持 macOS 上的动态 Python 代码执行和可视化；Google AI Edge Eloquent 提供完全离线的语音听写和文本编辑。LiteRT-LM CLI 新增的 <code>serve</code> 命令可创建兼容 OpenAI API 格式的本地端点。
+                    </div>
                 </div>
-                <div class="news-source">
-                    <span class="tag">GraphQL</span>
-                    <span class="tag">性能优化</span>
-                    <span class="tag">Shopify</span>
-                    <br>
-                    <a href="https://www.infoq.com/news/2026/06/shopify-graphql-cardinal-bfs/" target="_blank" rel="noopener">[来源: InfoQ]</a>
+                <div class="source-link">
+                    <a href="https://developers.googleblog.com/gemma-4-12b-the-developer-guide/" target="_blank" rel="noopener">[来源: Google Developers Blog]</a>
+                    <a href="https://developers.googleblog.com/bringing-gemma-4-12b-to-your-laptop-unlocking-local-agentic-workflows-with-google-ai-edge/" target="_blank" rel="noopener">[来源: Google Developers Blog - 本地部署指南]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">BadHost 漏洞：Starlette 认证绕过影响 AI Agent 基础设施</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://blog.jetbrains.com/dotnet/2026/06/03/wpf-hot-reload-in-jetbrains-rider/" target="_blank" rel="noopener">WPF Hot Reload 正式登陆 JetBrains Rider</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">The JetBrains Blog</span>
+                    <span class="tag tag-tool">IDE</span>
+                </div>
                 <div class="news-summary">
-                    一个高危认证绕过漏洞 BadHost 被发现存在于广泛使用的 Python Web 框架 Starlette 中（每周 3.25 亿次下载）。攻击者可通过构造畸形的 HTTP Host 头来绕过基于路径的访问控制，访问敏感的 AI Agent 基础设施。该漏洞的深层原因是 HTTP API 的贪婪路由匹配与授权层之间的路径规范化不匹配。同类漏洞也出现在 gRPC-Go 中（CVE-2026-33186）。如果你在生产环境中使用 Starlette 构建 AI 服务，请立即检查并升级。
+                    <p>这是 Rider 历史上被投票最多的 issue 之一终于落地的时刻。从 2026.2 EAP 2 开始，Rider 支持在调试运行中的 WPF 应用时直接编辑 XAML 并即时看到界面变化——无需重新编译、无需重启应用、不会丢失当前应用状态。</p>
+                    <p>配合 Rider 已有的 C# Hot Reload 支持，这补全了 WPF 开发者的 Edit and Continue 工作流。JetBrains 坦承这是一个 beta 功能，WPF 的表面区域很大，部分场景尚未覆盖。但如果你在做 WPF 开发，现在就可以下载 EAP 版本体验。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">安全</span>
-                    <span class="tag">Python</span>
-                    <span class="tag">Starlette</span>
-                    <br>
-                    <a href="https://www.infoq.com/news/2026/06/badhost-ai-systems-vulnerability/" target="_blank" rel="noopener">[来源: InfoQ]</a>
+                <div class="source-link">
+                    <a href="https://blog.jetbrains.com/dotnet/2026/06/03/wpf-hot-reload-in-jetbrains-rider/" target="_blank" rel="noopener">[来源: The JetBrains Blog]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">Claude Opus 4.8 发布：Anthropic 42 天内连续迭代</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653108109&idx=1&sn=ff1f65ed9d003253f306990a0df538fd" target="_blank" rel="noopener">MiniMax M3：国产首个集齐 Frontier 三件套的开源模型，49元/月起</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">极客公园</span>
+                    <span class="tag tag-ai">LLM</span>
+                </div>
                 <div class="news-summary">
-                    Anthropic 在 Opus 4.7 发布仅 42 天后推出 4.8 版本，主要改进包括长文档分析速度提升、跨领域多步推理能力增强、判断力和诚实度提高。ClaudeDevs 同时重置了所有 Pro 和 Max 用户的速率限制（因修复了 Claude Code 会话意外产生过多并行子 Agent 的问题）。Every 团队评测认为这次改进足以让离开的用户重新考虑 Claude。建议 Claude 用户测试新版本的计划制定和系统设计能力，这些是 4.8 相比前代最显著的改进领域。
+                    <p>MiniMax 发布了第三代旗舰模型 M3，是国内首个同时集齐 Coding/Agentic 能力、百万 token 级超长上下文、原生多模态三项能力的开源模型。此前能同时做到这三点的只有 Claude Opus 4.7、Gemini 3.1 Pro 和 GPT-5.5 等海外闭源模型。</p>
+                    <p>价格方面，个人开发者套餐分为三档：Plus 49元/月(6亿 token)、Max 119元/月(18亿 token)、Ultra 469元/月(55亿 token)。Max 档在相近价格下约等于 Claude 订阅的 15 倍用量。M3 还引入了 MiniMax Sparse Attention (MSA)，在 1M token 上下文下解码速度提升 15.6 倍。模型权重将在后续开源。</p>
+                    <div class="highlight-box orange">
+                        <strong>实践意义：</strong>Agent 时代一次任务可能触发几十到几百次模型调用，成本控制成为落地瓶颈。M3 的定价策略直接瞄准了这个痛点——对需要高频调用模型的开发者来说，这可能就是 AI 真正走向落地的临门一脚。
+                    </div>
                 </div>
-                <div class="news-source">
-                    <span class="tag">LLM</span>
-                    <span class="tag">Anthropic</span>
-                    <span class="tag">Agent</span>
-                    <br>
-                    <a href="https://x.com/ClaudeDevs/status/2061507315690279135" target="_blank" rel="noopener">[来源: ClaudeDevs]</a>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&mid=2247487800" target="_blank" rel="noopener">[来源: 晚点再听 / Every]</a>
+                <div class="source-link">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653108109&idx=1&sn=ff1f65ed9d003253f306990a0df538fd" target="_blank" rel="noopener">[来源: 极客公园]</a>
+                    <a href="https://x.com/FireworksAI_HQ/status/2062187803476111405" target="_blank" rel="noopener">[来源: Fireworks AI]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">Spring 发布安全补丁：多个项目需紧急升级</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://x.com/firecrawl/status/2062205481028861966" target="_blank" rel="noopener">Firecrawl Workflows 发布：可安装的技能工作流，支持深度研究、SEO 审计和网站克隆</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">Firecrawl</span>
+                    <span class="tag tag-tool">CLI</span>
+                </div>
                 <div class="news-summary">
-                    Spring 官方宣布 5 月发布列车调整至 6 月 8-14 日，其中包含重要的安全补丁更新。Spring 团队强烈建议尽快升级到最新补丁版本。此次更新涉及 Spring 生态中大部分项目。对于使用 Spring Boot、Spring Security 等框架的生产系统，建议关注 calendar.spring.io 的具体发布时间表，提前规划升级窗口。文章还讨论了生成式 AI 对开源世界的影响，以及 Spring 团队如何在 AI 时代重新思考安全和开发实践。
+                    <p>Firecrawl 推出了 Workflows 功能，将可重复的网络任务封装为可安装的技能。目前已经上线了 10+ 个工作流，包括深度研究、SEO 审计和网站设计克隆。通过 Firecrawl CLI 可以直接安装：<code>npx -y firecrawl-cli init --all --browser</code>。</p>
+                    <p>Workflows 的设计思路是将常见的网页抓取和数据处理模式标准化，开发者不需要每次都从零编写抓取逻辑。比如网站设计克隆工作流可以从单个 URL 提取视觉风格，配合 Grok Build 生成对应设计。项目已开源在 GitHub 上。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">Java</span>
-                    <span class="tag">Spring</span>
-                    <span class="tag">安全</span>
-                    <br>
-                    <a href="https://spring.io/blog/2026/06/01/spring_and_security_in_the_times_of_ai" target="_blank" rel="noopener">[来源: Spring Blog]</a>
-                    <a href="https://spring.io/blog/2026/06/01/may-train-shift" target="_blank" rel="noopener">[来源: Spring Blog - 发布计划]</a>
+                <div class="source-link">
+                    <a href="https://x.com/firecrawl/status/2062205481028861966" target="_blank" rel="noopener">[来源: Firecrawl]</a>
                 </div>
-            </div>
+            </article>
         </section>
 
-        <!-- 深度技术解读 -->
         <section class="section">
-            <h2 class="section-title">// 深度技术解读</h2>
+            <h2 class="section-title">深度技术解读</h2>
 
-            <div class="news-item">
-                <div class="news-title">Cloudflare 核心启动优化实战：从 4 小时到分钟级</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&mid=2247544879&idx=1&sn=4d1a92199b785d5d3d3de1758545adba" target="_blank" rel="noopener">得物技术：用 LLM Agent 重构告警排查流程，中位数耗时从 20 分钟降到 4.4 分钟</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">得物技术</span>
+                    <span class="tag tag-ai">Agent</span>
+                    <span class="tag tag-ops">SRE</span>
+                </div>
                 <div class="news-summary">
-                    Cloudflare 分享了一个真实的生产优化案例：一次常规固件更新后，部分核心服务器从原本的几分钟启动时间变成了 4 小时。这篇文章详细拆解了排查过程——从 UEFI 固件初始化到操作系统移交的每一步。问题的根本在于固件更新引入了超时机制变化，而新节点在首次启动时要经历完整的超时流程。Cloudflare 团队通过分析 UEFI 启动序列、PCIe 设备枚举、以及内核参数调优，最终将启动时间恢复到分钟级别。对于运维裸金属服务器或处理启动性能问题的开发者，这是一篇极具参考价值的实战记录。
+                    <p>得物技术团队开源了 Troubleshooter——一个用 LLM Agent 自动完成告警数据采集、根因分析和处置建议生成的系统。上线后覆盖 11 个服务和 10+ 种告警类型，将中位数排查耗时从 20 分钟压缩到 4.4 分钟。</p>
+                    <p>这套系统的核心设计值得仔细研究。整体采用分层架构，告警接入与排查执行解耦：接入层只负责接收和持久化，排查由独立调度器异步触发。技术栈选用 Spring AI，Agent 核心采用 ReAct 模式，包含 SupervisorAgent 做动态策略组装，以及四个专用排查工具（日志查询、APM 指标、链路追踪、知识库）。</p>
+                    <p>几个工程实践亮点：</p>
+                    <p><strong>1. 工具超时隔离：</strong>每个工具调用都有独立的超时控制，避免单个慢查询阻塞整个排查流程。</p>
+                    <p><strong>2. AI 权限安全：</strong>所有工具调用都在受限沙箱中执行，敏感操作需要人工确认，防止 Agent 误操作。</p>
+                    <p><strong>3. 幻觉控制：</strong>通过多轮验证和结论置信度评分，在输出最终结论前进行交叉校验。</p>
+                    <p><strong>4. 可观测性：</strong>完整的文件系统日志和内存进度追踪，让排查过程完全透明可审计。</p>
+                    <div class="highlight-box">
+                        <strong>踩坑经验：</strong>环境统一映射是早期最大的挑战——不同告警来源的环境标识不一致，需要建立标准化的映射层。LLM 调用采用 Round-Robin 多 Key 策略来避免单 Key 限流导致排查中断。
+                    </div>
                 </div>
-                <div class="news-source">
-                    <span class="tag">基础设施</span>
-                    <span class="tag">UEFI</span>
-                    <span class="tag">性能优化</span>
-                    <br>
-                    <a href="https://blog.cloudflare.com/optimizing-core-unit-boot-time/" target="_blank" rel="noopener">[来源: The Cloudflare Blog]</a>
+                <div class="source-link">
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&mid=2247544879&idx=1&sn=4d1a92199b785d5d3d3de1758545adba" target="_blank" rel="noopener">[来源: 得物技术]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">Perplexity Search as Code：AI Agent 的搜索架构重构</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://mp.weixin.qq.com/s?__biz=Mzg4NTczNzg2OA==&mid=2247509639&idx=1&sn=bac09af0c76f4383f03c0d96cb48bd0a" target="_blank" rel="noopener">阿里技术：重新思考研发基础设施——当 Agent 成为第一公民</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">阿里技术</span>
+                    <span class="tag tag-ai">Agent</span>
+                    <span class="tag tag-ops">Infra</span>
+                </div>
                 <div class="news-summary">
-                    Perplexity 推出了全新的 "Search as Code" 搜索架构，专为 AI Agent 设计。传统方法是 Agent 通过函数调用循环逐个查询，而新架构让 Agent 直接编写 Python 代码调用 Perplexity 的搜索栈。在内部基准 WANDR（模拟真实专业研究工作负载）上，Search as Code 得分 0.386，是次优系统的 0.152 的两倍多。这意味着 Agent 可以并行执行多个搜索、处理中间结果、然后继续推理，而不是一次只能做一件事。该功能已在 Perplexity Agent API 中可用，并且是 Computer 的默认搜索方式。
+                    <p>阿里巴巴研发基础设施负责人许晓斌分享了一个有趣的观察：他最近用 Agent 构建了一个周报系统，这个系统的构成方式让他重新思考了研发基础设施的演进方向。</p>
+                    <p>系统的架构是：connector 打通异构系统（代码托管、项目管理、数据平台、IM）-> 规范化成统一活动流 -> 用一份 SKILL.md 意图描述驱动聚合与排版 -> 生成单文件 HTML -> 推送到内部 Pages。Agent 直接 push 并触发 CI 部署，作者几乎不需要关心 CI 配置或部署流程。</p>
+                    <p>核心洞察有三点：</p>
+                    <p><strong>1. 代码生命周期正在变短：</strong>大部分代码是 Agent 每次运行时按需生成的，生命周期很短，与传统的人工编写、长期维护的代码形成对比。</p>
+                    <p><strong>2. 意图是活物：</strong>SKILL.md 用自然语言描述"要产出什么"，一轮迭代里可能改多次——加模块、调顺序、改标题。这种"活意图"模式比传统冻结需求文档更灵活。</p>
+                    <p><strong>3. Infra 正在"不可见化"：</strong>当 Agent 能够自主连接各类基础设施、自主部署、自主迭代时，底层基础设施对开发者的显性操作需求在减少。</p>
+                    <div class="highlight-box orange">
+                        <strong>思考：</strong>这篇文章提出的核心问题是——当 Agent 成为研发流程的第一公民时，我们的工具链、CI/CD、权限模型、代码审查流程是否做好了准备？还是仍停留在"人写代码、人做部署"的旧范式里？
+                    </div>
                 </div>
-                <div class="news-source">
-                    <span class="tag">AI Agent</span>
-                    <span class="tag">搜索架构</span>
-                    <span class="tag">API</span>
-                    <br>
-                    <a href="https://x.com/perplexity_ai/status/2061506359326384319" target="_blank" rel="noopener">[来源: Perplexity]</a>
-                    <a href="https://docs.perplexity.ai/docs/agent-api" target="_blank" rel="noopener">[来源: Perplexity Agent API Docs]</a>
+                <div class="source-link">
+                    <a href="https://mp.weixin.qq.com/s?__biz=Mzg4NTczNzg2OA==&mid=2247509639&idx=1&sn=bac09af0c76f4383f03c0d96cb48bd0a" target="_blank" rel="noopener">[来源: 阿里技术]</a>
                 </div>
-            </div>
-
-            <div class="news-item">
-                <div class="news-title">LangSmith Sandboxes GA：Agent 的安全代码执行环境</div>
-                <div class="news-summary">
-                    LangChain 的 LangSmith Sandboxes 正式发布（GA），为 Agent 提供了一个完整的运行时环境：文件系统、shell、包管理器、持久化状态和网络边界控制。每个 Sandbox 运行在硬件虚拟化的 microVM 中，与你的服务和其他 Sandbox 完全隔离。Agent 可以在其中编写代码、安装依赖、运行测试、检查失败、并在长会话中继续工作。这对于运行模型生成的代码、外部依赖或用户提供脚本的场景尤为重要。接入方式与现有 LangSmith SDK 和 API key 兼容，无需自建运行时层。
-                </div>
-                <div class="news-source">
-                    <span class="tag">Agent</span>
-                    <span class="tag">安全</span>
-                    <span class="tag">Sandbox</span>
-                    <br>
-                    <a href="https://x.com/hwchase17/status/2061496556608504043" target="_blank" rel="noopener">[来源: Harrison Chase]</a>
-                    <a href="https://www.youtube.com/watch?v=IIchUA5T3gs" target="_blank" rel="noopener">[来源: LangChain - Interrupt 26 Keynote]</a>
-                </div>
-            </div>
-
-            <div class="news-item">
-                <div class="news-title">Claude Code Dynamic Workflows：并行 Agent 协调的新范式</div>
-                <div class="news-summary">
-                    Anthropic 为 Claude Code 引入了 Dynamic Workflows 能力，专为复杂软件工程任务设计。新特性允许 Claude 动态创建编排脚本、将工作分解为子任务、并行运行它们、并在呈现最终答案前验证结果。这意味着 Claude Code 可以像一个真正的技术 lead 一样，把大任务拆分给多个 "虚拟开发者"（子 Agent），各自完成后汇总验证。InfoQ 的报道称，这对于大型重构、跨模块修改等需要协调多个并行工作的场景，可能显著提升效率。
-                </div>
-                <div class="news-source">
-                    <span class="tag">Claude Code</span>
-                    <span class="tag">并行计算</span>
-                    <span class="tag">工作流</span>
-                    <br>
-                    <a href="https://www.infoq.com/news/2026/06/dynamic-workflows-claude-code/" target="_blank" rel="noopener">[来源: InfoQ]</a>
-                </div>
-            </div>
+            </article>
         </section>
 
-        <!-- 工具推荐 -->
         <section class="section">
-            <h2 class="section-title">// 工具推荐</h2>
+            <h2 class="section-title">工具推荐</h2>
 
-            <div class="news-item">
-                <div class="news-title">shadcn 推出 Registry：任何 GitHub 仓库都能变成组件注册表</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://x.com/xiaohu/status/2062112308126761353" target="_blank" rel="noopener">OpenSquilla：开源 AI Agent Harness，智能路由让成本降低 89%</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">开源项目</span>
+                    <span class="tag tag-ai">Agent</span>
+                    <span class="tag tag-tool">Open Source</span>
+                </div>
                 <div class="news-summary">
-                    shadcn 发布了一个重大更新：现在任何 GitHub 仓库都可以变成 Registry。只需添加一个 registry.json 文件，定义你的组件项，然后通过 CLI 安装。这不仅限于 UI 组件——还可以分发 utilities、配置、文档、规则、设计系统、工作流、Agent 和 Skills 等。Guillermo Rauch（Vercel CEO）评论："Git is all you need. Always has been"。对于希望标准化团队内部组件复用、或者想开源自己工具集的开发者，这个机制大大降低了分发门槛。
+                    <p>OpenSquilla 是国内团队开源的 AI Agent Harness，用 Python 重写了类似 OpenClaw 的能力，但解决了三个核心痛点：token 消耗过高、不按照规则执行、以及安全风险。</p>
+                    <p>它的智能路由机制值得细看：每个请求先经过本地小模型做向量化分析，判断任务复杂度后分配给最合适的模型——简单任务走便宜模型，复杂任务才用顶级模型。官方测试显示，25 个任务纯用 Claude Opus 4.7 总成本 6.2 美元，用 OpenSquilla 路由后仅需 0.68 美元，效果几乎一致。</p>
+                    <p>其他亮点包括 MetaSkill（Skill 的 Skill，自动编排原子 Skill 的执行顺序）、meta-skill-creator（一句话需求自动生成新的 meta-skill）、以及渐进式 Skill 披露（只注入与当前对话语义最匹配的 Skill，避免上下文污染）。安全方面重构了权限模型，不可信来源的敏感指令直接拒绝，高风险操作进沙箱执行。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">工具</span>
-                    <span class="tag">组件化</span>
-                    <span class="tag">开源</span>
-                    <br>
-                    <a href="https://x.com/rauchg/status/2061533151676293430" target="_blank" rel="noopener">[来源: Guillermo Rauch]</a>
+                <div class="source-link">
+                    <a href="https://x.com/xiaohu/status/2062112308126761353" target="_blank" rel="noopener">[来源: 小互]</a>
+                    <a href="https://x.com/Yuancheng/status/2062174145505525926" target="_blank" rel="noopener">[来源: koji]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">FastClaw：OpenClaw 的轻量级替代，运营成本降至 1/6</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://x.com/vikingmute/status/2062160945909293171" target="_blank" rel="noopener">Velopack：跨平台桌面应用自动更新框架，Rust 编写，支持 Delta 差分更新</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">开源项目</span>
+                    <span class="tag tag-tool">Desktop</span>
+                    <span class="tag tag-lang">Rust</span>
+                </div>
                 <div class="news-summary">
-                    开发者 idoubi 开源了 FastClaw，一个专为云原生多租户场景设计的 Agent 运行框架。相比 OpenClaw，FastClaw 的代码体积约为 1/40，运行资源占用约为 1/7，采用单二进制分发无环境依赖，gateway 秒级启动（OpenClaw 约 15 秒）。通过存算分离架构，Agent 无需常驻内存，收到请求时动态挂载 sandbox 提供服务。实际案例：某托管服务从 18 台 4c16g 服务器降至 3 台，月运营成本从近 5000 美元大幅下降。适合想自建 Agent 托管服务但觉得 OpenClaw 太重的开发者。
+                    <p>如果你在做桌面应用开发，Velopack 值得关注。这是一个专攻桌面应用打包、分发和自动更新的开源框架，用 Rust 编写，跨平台支持 Windows、macOS 和 Linux。它提供 C#、C++、Rust、JavaScript 等多种语言的统一更新 API。</p>
+                    <p>核心特性包括 Delta 差分包（只下载修改部分，大幅减少更新体积）、支持 Electron 和 Tauri 等主流桌面框架、以及简洁的集成方式。对于需要自建更新通道、又不想依赖第三方应用商店发布的团队来说，这是一个轻量且功能完备的选择。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">开源</span>
-                    <span class="tag">Agent 框架</span>
-                    <span class="tag">云原生</span>
-                    <br>
-                    <a href="https://x.com/idoubicc/status/2061405448356741364" target="_blank" rel="noopener">[来源: idoubi]</a>
-                    <a href="https://github.com/fastclaw-ai/fastclaw" target="_blank" rel="noopener">[来源: GitHub]</a>
+                <div class="source-link">
+                    <a href="https://x.com/vikingmute/status/2062160945909293171" target="_blank" rel="noopener">[来源: Viking]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">CodePilot 0.55：支持 Codex 作为 Agent 引擎的客户端重构版</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://x.com/v0/status/2062195681947971840" target="_blank" rel="noopener">v0 Snowflake 集成进入公测：AI 生成数据面板</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">v0</span>
+                    <span class="tag tag-tool">AI</span>
+                    <span class="tag tag-ops">Data</span>
+                </div>
                 <div class="news-summary">
-                    歸藏发布了 CodePilot 0.55.0-preview.5，进行了大量内容优化和 UI 整体重构。新版本支持将 Codex 作为 Agent 引擎，既可以使用 Codex 内置模型，也可以自定义模型。CodePilot 定位为 Codex/Claude Code 等工具的客户端增强，提供更友好的交互界面。目前处于测试版本，适合想尝试 Codex Agent 但希望有更好 UI 体验的开发者。
+                    <p>Vercel 的 AI 生成工具 v0 现在支持直接连接 Snowflake 数据仓库。开发者只需要用自然语言描述需求、连接 Snowflake 账户，v0 就能自动生成精美的数据仪表盘。这降低了数据可视化的门槛，让不擅长前端开发的数据分析师也能快速产出专业级面板。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">工具</span>
-                    <span class="tag">Codex</span>
-                    <span class="tag">客户端</span>
-                    <br>
-                    <a href="https://x.com/op7418/status/2061426771267125649" target="_blank" rel="noopener">[来源: 歸藏(guizang.ai)]</a>
-                    <a href="https://github.com/op7418/CodePilot" target="_blank" rel="noopener">[来源: GitHub]</a>
+                <div class="source-link">
+                    <a href="https://x.com/v0/status/2062195681947971840" target="_blank" rel="noopener">[来源: v0]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">Vercel 弹性构建机器新增 OOM 自动保护</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://x.com/Replit/status/2062211978563887498" target="_blank" rel="noopener">Replit SEO Agent：应用发布后的自动 SEO 审计和修复</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">Replit</span>
+                    <span class="tag tag-tool">AI</span>
+                    <span class="tag tag-ops">SEO</span>
+                </div>
                 <div class="news-summary">
-                    Vercel 的 Elastic Build Machines 现在可以监控构建内存使用情况并自动调整以防止 OOM 失败：如果构建快但内存密集，不会降级到更小的机器；如果构建接近内存耗尽，自动升级到更高规格；如果构建因 OOM 失败，下次部署自动运行在更高层级。阈值设置保守，平衡了部署可靠性和成本。只需在团队设置或项目设置中启用 elastic builds。
+                    <p>Replit 推出了 SEO Agent，解决一个被很多开发者忽视的问题：应用写好了，但没人能找到它。Agent 会自动扫描应用的可爬取性、索引状态等 SEO 指标，给出修复建议，并可以直接应用修复后重新发布。</p>
+                    <p>使用路径很简单：在应用的 Growth 仪表盘中点击 "Run scan with Agent"，审计完成后可以直接用 Agent 应用修复。建议随着应用功能迭代定期重新扫描。这是一个典型的"AI 填补开发者知识盲区"的场景——很多全栈开发者对 SEO 并不熟悉，Agent 提供了一个零门槛的解决方案。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">CI/CD</span>
-                    <span class="tag">Vercel</span>
-                    <span class="tag">DevOps</span>
-                    <br>
-                    <a href="https://vercel.com/changelog/elastic-build-machines-now-protect-against-out-of-memory-builds" target="_blank" rel="noopener">[来源: Vercel News]</a>
+                <div class="source-link">
+                    <a href="https://x.com/Replit/status/2062211978563887498" target="_blank" rel="noopener">[来源: Replit]</a>
                 </div>
-            </div>
+            </article>
         </section>
 
-        <!-- 实践指南 -->
         <section class="section">
-            <h2 class="section-title">// 实践指南</h2>
+            <h2 class="section-title">实践指南</h2>
 
-            <div class="news-item">
-                <div class="news-title">百度贴吧 AI Code Review 规模化落地：10 周 bug 密度下降 66.87%</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://www.freecodecamp.org/news/stop-trusting-ai-code-blindly-a-react-code-refactoring-case-study/" target="_blank" rel="noopener">别盲目信任 AI 代码：一个 React 重构的真实案例研究</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">freeCodeCamp</span>
+                    <span class="tag tag-lang">React</span>
+                    <span class="tag tag-ai">Best Practice</span>
+                </div>
                 <div class="news-summary">
-                    百度贴吧 Server 团队分享了将 AI CR（代码评审）规模化落地的完整实践。10 周内，评审占比从 33% 提升至 84%，评审 icafe 数量从每周 3 次增长到峰值 85 次，bug 密度从 0.332 降至 0.11（下降 66.87%）。小码哥（iCode AI CR）只做代码评审不参与编写，核心价值是把重复性、规范性的检查交给 AI，让人工评审者聚焦架构设计和业务逻辑。文章详细分享了推广策略、卡点解决、团队阻力克服和质量兜底机制，是一套可直接迁移的方法论。
+                    <p>这篇文章的核心论点是：Vibe Coding 很强大，但不应该盲目信任 AI 生成的每一行代码。作者通过一个真实的 React 重构案例展示了 AI 代码的常见问题——过度工程化、引入不必要的依赖、忽略边缘情况、以及破坏现有测试。</p>
+                    <p>关键建议：把 AI 当作加速工具而非替代工具。让它处理重复劳动和样板代码，但核心逻辑、架构决策和边界条件处理仍需要人工审查。特别要注意 AI 在重构时可能会"为了改而改"，引入原本不存在的复杂度。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">最佳实践</span>
-                    <span class="tag">AI CR</span>
-                    <span class="tag">工程效率</span>
-                    <br>
-                    <a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247606943&idx=1" target="_blank" rel="noopener">[来源: 百度 Geek 说]</a>
+                <div class="source-link">
+                    <a href="https://www.freecodecamp.org/news/stop-trusting-ai-code-blindly-a-react-code-refactoring-case-study/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">用 Dart + Shelf 构建并部署生产级 REST API（Flutter 开发者后端指南）</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://www.infoq.com/articles/spark-oom-kubernetes-misconfigurations/" target="_blank" rel="noopener">两个配置错误如何导致 Spark 在 Kubernetes 上反复 OOM</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">InfoQ</span>
+                    <span class="tag tag-ops">Spark</span>
+                    <span class="tag tag-ops">Kubernetes</span>
+                </div>
                 <div class="news-summary">
-                    这篇 freeCodeCamp 教程面向 Flutter 开发者，教你用已有的 Dart 技能构建完整后端。内容覆盖：用 Dart 和 Shelf 框架构建 User/Profile Management REST API、连接 Docker 中的 PostgreSQL、JWT 认证、请求验证、错误处理和部署。核心观点是：Flutter 工程师已经掌握了 async/await、models、repositories 和 clean architecture，后端开发只需要理解 "没有 widget tree、没有 BuildContext" 的 Dart 运行方式。对于不想学习新语言就能覆盖全栈的 Flutter 开发者，这是一份很实用的指南。
+                    <p>这是一篇来自生产环境的踩坑记录。Pranav Bhasker 分享了将 Spark 管道迁移到 Azure Kubernetes Service 后遇到的棘手问题：两个看似无害的基础设施设置发生了破坏性交互。</p>
+                    <p>问题组合是：<code>spark.kubernetes.local.dirs.tmpfs=true</code> 将 shuffle spill 从磁盘转向了 RAM，而一条硬性的 podAffinity 规则又强制所有 executor 挤在同一个节点上。结果就是 RAM 被 shuffle 数据迅速耗尽，触发 OOM Killer——但这个问题在标准诊断中几乎不可见，因为错误看起来像是普通的内存不足。</p>
+                    <div class="highlight-box red">
+                        <strong>教训：</strong>tmpfs 配置和调度策略的交互是容易被忽视的。迁移到 K8s 时，不要假设每个配置都是独立工作的——需要审视配置之间的组合效应。
+                    </div>
                 </div>
-                <div class="news-source">
-                    <span class="tag">教程</span>
-                    <span class="tag">Dart</span>
-                    <span class="tag">Flutter</span>
-                    <br>
-                    <a href="https://www.freecodecamp.org/news/how-to-build-and-ship-production-rest-apis-with-dart-and-shelf/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
+                <div class="source-link">
+                    <a href="https://www.infoq.com/articles/spark-oom-kubernetes-misconfigurations/" target="_blank" rel="noopener">[来源: InfoQ]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">在 staging 服务器自建 S3 兼容对象存储：MinIO + Traefik 完整指南</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://www.freecodecamp.org/news/how-to-automate-pdf-data-extraction-using-python/" target="_blank" rel="noopener">如何用 Python 自动化 PDF 数据提取</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">freeCodeCamp</span>
+                    <span class="tag tag-lang">Python</span>
+                    <span class="tag tag-tool">Tutorial</span>
+                </div>
                 <div class="news-summary">
-                    一份可直接复制粘贴的完整指南：用 MinIO 在 staging 环境自建 S3 兼容对象存储，配合 Traefik 实现 HTTPS、自定义域名和预签名 URL。生产环境继续使用托管 S3/R2/Hetzner，staging 的上传下载全部走自己的服务器免费处理。涵盖 Docker Compose 配置、DNS 设置、HTTPS 暴露、Bucket 和 Access Key 创建、应用配置切换、三种上传方式和预签名 URL 生成。对于想降低 staging 环境存储成本的团队，这是立即可用的方案。
+                    <p>PDF 是业务文档的主要格式，但它的设计目标是展示而非结构化分析。手动复制到表格的方式在大批量场景下完全不现实。这篇教程详细介绍了如何用 Python 构建自动化的 PDF 数据提取流水线，适合需要处理发票、合同、报告等文档的团队。</p>
                 </div>
-                <div class="news-source">
-                    <span class="tag">教程</span>
-                    <span class="tag">MinIO</span>
-                    <span class="tag">DevOps</span>
-                    <br>
-                    <a href="https://www.freecodecamp.org/news/how-to-self-host-an-s3-compatible-object-store-with-minio-on-your-staging-server/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
+                <div class="source-link">
+                    <a href="https://www.freecodecamp.org/news/how-to-automate-pdf-data-extraction-using-python/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a>
                 </div>
-            </div>
+            </article>
 
-            <div class="news-item">
-                <div class="news-title">JetBrains IDE 插件 OAuth2 登录：告别粘贴 Token</div>
+            <article class="news-item">
+                <div class="news-title">
+                    <a href="https://simonwillison.net/2026/Jun/3/uber-caps-usage/" target="_blank" rel="noopener">Uber 给 AI 编码工具设限：每人每月每工具 1500 美元</a>
+                </div>
+                <div class="news-meta">
+                    <span class="source-tag">Simon Willison's Weblog</span>
+                    <span class="tag tag-ai">Cost</span>
+                    <span class="tag tag-ops">Management</span>
+                </div>
                 <div class="news-summary">
-                    JetBrains 官方分享了 IDE 插件的 OAuth2 登录实现方案。传统的 PAT（个人访问令牌）方式需要用户创建令牌、粘贴到设置中，存在泄漏风险。新方案：用户点击 Login -> 浏览器打开授权页面 -> IDE 接收回调 -> 插件用 PKCE 交换授权码 -> 存储 access token 到 PasswordSafe。文章以 GitHub 为例，但同样的流程适用于其他 OAuth2 提供商。对于开发 IDE 插件或需要集成第三方认证的开发者，这是一份可直接参考的实现指南。
+                    <p>Uber 最近给员工的 AI 编码工具设了上限：每人每月每工具 1500 美元 token 额度。Bloomberg 报道这个限制只针对 Agentic 编码软件如 Cursor 和 Claude Code，不同工具之间的额度互不占用。</p>
+                    <p>这背后的背景是 Uber 的 2026 年 AI 预算在 4 个月内就用完了——毕竟预算是在 2025 年制定的，没人预料到 coding agent 会如此迅速地消耗 token。1500 美元/月/工具的限额在实际操作中其实相当宽松，但它传递了一个明确信号：Agent 时代的成本控制需要被纳入日常管理。</p>
+                    <div class="highlight-box">
+                        <strong>给团队的启示：</strong>如果你所在的公司还没有为 AI 工具设置预算上限，现在就该开始规划了。不要等账单出来才行动——Agent 的调用频率远超传统的 Chatbot 交互，成本曲线完全不同。
+                    </div>
                 </div>
-                <div class="news-source">
-                    <span class="tag">安全</span>
-                    <span class="tag">OAuth2</span>
-                    <span class="tag">插件开发</span>
-                    <br>
-                    <a href="https://blog.jetbrains.com/platform/2026/06/stop-pasting-tokens-oauth2-login-for-jetbrains-ide-plugins/" target="_blank" rel="noopener">[来源: The JetBrains Blog]</a>
+                <div class="source-link">
+                    <a href="https://simonwillison.net/2026/Jun/3/uber-caps-usage/" target="_blank" rel="noopener">[来源: Simon Willison's Weblog]</a>
                 </div>
-            </div>
-
-            <div class="news-item">
-                <div class="news-title">智能体引擎优化（AEO）：让文档对 AI 可发现、可解析</div>
-                <div class="news-summary">
-                    Addy Osmani 提出 Agent Engine Optimization（AEO）概念——AI 编程智能体消费文档的方式与人类截然不同：单次请求、零交互，传统分析对此完全失明。文章提供了从访问控制到能力信号的完整实操框架，包括：llms.txt 的合理使用、结构化文档设计、token 效率优化、能力声明（capabilities signaling）等。Chrome 的 Lighthouse 团队已推出实验性的 llms.txt 检测功能。如果你的文档面向开发者且可能被 AI 工具消费，这篇文章值得仔细阅读。
-                </div>
-                <div class="news-source">
-                    <span class="tag">文档</span>
-                    <span class="tag">AI 智能体</span>
-                    <span class="tag">开发者体验</span>
-                    <br>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651279185&idx=1" target="_blank" rel="noopener">[来源: 前端早读课 / Addy Osmani]</a>
-                </div>
-            </div>
+            </article>
         </section>
 
-        <!-- 参考链接汇总 -->
         <section class="section">
-            <h2 class="section-title">// 参考链接汇总</h2>
-            <div class="source-list">
-                <div class="source-item"><a href="https://x.com/MiniMax_AI" target="_blank" rel="noopener">MiniMax 官方</a></div>
-                <div class="source-item"><a href="https://blog.jetbrains.com/ai/" target="_blank" rel="noopener">The JetBrains Blog</a></div>
-                <div class="source-item"><a href="https://nodejs.org/en/blog/" target="_blank" rel="noopener">Node.js Blog</a></div>
-                <div class="source-item"><a href="https://www.infoq.com/" target="_blank" rel="noopener">InfoQ</a></div>
-                <div class="source-item"><a href="https://blog.cloudflare.com/" target="_blank" rel="noopener">The Cloudflare Blog</a></div>
-                <div class="source-item"><a href="https://spring.io/blog" target="_blank" rel="noopener">Spring Blog</a></div>
-                <div class="source-item"><a href="https://vercel.com/changelog" target="_blank" rel="noopener">Vercel News</a></div>
-                <div class="source-item"><a href="https://www.freecodecamp.org/news/" target="_blank" rel="noopener">freeCodeCamp</a></div>
-                <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==" target="_blank" rel="noopener">百度 Geek 说</a></div>
-                <div class="source-item"><a href="https://docs.perplexity.ai/" target="_blank" rel="noopener">Perplexity Docs</a></div>
-                <div class="source-item"><a href="https://langchain.com/blog" target="_blank" rel="noopener">LangChain Blog</a></div>
-                <div class="source-item"><a href="https://github.com/shadcn" target="_blank" rel="noopener">shadcn (GitHub)</a></div>
-                <div class="source-item"><a href="https://github.com/fastclaw-ai/fastclaw" target="_blank" rel="noopener">FastClaw (GitHub)</a></div>
-                <div class="source-item"><a href="https://github.com/op7418/CodePilot" target="_blank" rel="noopener">CodePilot (GitHub)</a></div>
-                <div class="source-item"><a href="https://x.com/ClaudeDevs" target="_blank" rel="noopener">ClaudeDevs</a></div>
-                <div class="source-item"><a href="https://huggingface.co/blog" target="_blank" rel="noopener">Hugging Face Blog</a></div>
-                <div class="source-item"><a href="https://aws.amazon.com/blogs/machine-learning/" target="_blank" rel="noopener">AWS AI Blog</a></div>
-                <div class="source-item"><a href="https://cloud.google.com/blog" target="_blank" rel="noopener">Google Cloud Blog</a></div>
-                <div class="source-item"><a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==" target="_blank" rel="noopener">前端早读课</a></div>
-                <div class="source-item"><a href="https://simonwillison.net/" target="_blank" rel="noopener">Simon Willison's Weblog</a></div>
+            <div class="sources-section">
+                <h3>参考链接汇总</h3>
+                <ul class="source-list">
+                    <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.123" target="_blank" rel="noopener">Visual Studio Code 1.123</a></li>
+                    <li><a href="https://blog.jetbrains.com/kotlin/2026/06/kotlin-2-4-0-released/" target="_blank" rel="noopener">Kotlin 2.4.0 Release</a></li>
+                    <li><a href="https://www.infoq.com/news/2026/06/nodejs-release-changes/" target="_blank" rel="noopener">Node.js Release Changes</a></li>
+                    <li><a href="https://developers.googleblog.com/gemma-4-12b-the-developer-guide/" target="_blank" rel="noopener">Gemma 4 12B Developer Guide</a></li>
+                    <li><a href="https://developers.googleblog.com/bringing-gemma-4-12b-to-your-laptop-unlocking-local-agentic-workflows-with-google-ai-edge/" target="_blank" rel="noopener">Gemma 4 on Laptop</a></li>
+                    <li><a href="https://blog.jetbrains.com/dotnet/2026/06/03/wpf-hot-reload-in-jetbrains-rider/" target="_blank" rel="noopener">WPF Hot Reload in Rider</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653108109&idx=1&sn=ff1f65ed9d003253f306990a0df538fd" target="_blank" rel="noopener">MiniMax M3 (极客公园)</a></li>
+                    <li><a href="https://x.com/FireworksAI_HQ/status/2062187803476111405" target="_blank" rel="noopener">Fireworks AI - MiniMax M3</a></li>
+                    <li><a href="https://x.com/firecrawl/status/2062205481028861966" target="_blank" rel="noopener">Firecrawl Workflows</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&mid=2247544879&idx=1&sn=4d1a92199b785d5d3d3de1758545adba" target="_blank" rel="noopener">得物技术 - Troubleshooter</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg4NTczNzg2OA==&mid=2247509639&idx=1&sn=bac09af0c76f4383f03c0d96cb48bd0a" target="_blank" rel="noopener">阿里技术 - Agent Infra</a></li>
+                    <li><a href="https://x.com/xiaohu/status/2062112308126761353" target="_blank" rel="noopener">OpenSquilla (小互)</a></li>
+                    <li><a href="https://x.com/Yuancheng/status/2062174145505525926" target="_blank" rel="noopener">OpenSquilla 架构分析 (koji)</a></li>
+                    <li><a href="https://x.com/vikingmute/status/2062160945909293171" target="_blank" rel="noopener">Velopack</a></li>
+                    <li><a href="https://x.com/v0/status/2062195681947971840" target="_blank" rel="noopener">v0 Snowflake Integration</a></li>
+                    <li><a href="https://x.com/Replit/status/2062211978563887498" target="_blank" rel="noopener">Replit SEO Agent</a></li>
+                    <li><a href="https://www.freecodecamp.org/news/stop-trusting-ai-code-blindly-a-react-code-refactoring-case-study/" target="_blank" rel="noopener">Stop Trusting AI Code Blindly</a></li>
+                    <li><a href="https://www.infoq.com/articles/spark-oom-kubernetes-misconfigurations/" target="_blank" rel="noopener">Spark OOM on Kubernetes</a></li>
+                    <li><a href="https://www.freecodecamp.org/news/how-to-automate-pdf-data-extraction-using-python/" target="_blank" rel="noopener">Python PDF Extraction</a></li>
+                    <li><a href="https://simonwillison.net/2026/Jun/3/uber-caps-usage/" target="_blank" rel="noopener">Uber AI Cost Caps</a></li>
+                    <li><a href="https://www.infoq.com/news/2026/06/google-fleet-ab-experimentation/" target="_blank" rel="noopener">Google Fleet A/B Testing</a></li>
+                    <li><a href="https://blog.bytebytego.com/p/how-openai-built-its-data-agent" target="_blank" rel="noopener">OpenAI Data Agent</a></li>
+                    <li><a href="https://blog.jetbrains.com/rust/2026/06/03/rustrover-at-rustweek-2026/" target="_blank" rel="noopener">RustWeek 2026</a></li>
+                    <li><a href="https://blog.jetbrains.com/idea/2026/06/intellij-idea-2025-3-6/" target="_blank" rel="noopener">IntelliJ IDEA 2025.3.6</a></li>
+                    <li><a href="https://x.com/DeepLearningAI/status/2062195395342504178" target="_blank" rel="noopener">vLLM Course (DeepLearning.AI)</a></li>
+                    <li><a href="https://x.com/omarsar0/status/2062204469538881988" target="_blank" rel="noopener">Microsoft SkillOpt Paper</a></li>
+                </ul>
             </div>
         </section>
-
-        <footer>
-            <p>开发者实践日报 | 数据来源: freshRSS 24h 聚合 | 生成时间: 2026-06-01</p>
-            <p style="margin-top:8px; color: #555;">本日报由 AI 自动筛选生成，内容仅代表作者观点</p>
-        </footer>
     </div>
 </body>
 </html>
