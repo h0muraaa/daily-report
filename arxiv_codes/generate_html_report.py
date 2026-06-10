@@ -3,8 +3,8 @@
 生成 arXiv 日报 HTML 页面（横屏单栏布局版）
 
 特性：
-- 展示最新的 12 篇论文（不限制日期）
-- 每行一篇论文，共12行（单卡片全宽布局）
+- 展示最新的 15 篇论文（不限制日期）
+- 每行一篇论文，共15行（单卡片全宽布局）
 - 横屏图片优化显示
 - 使用论文原始摘要
 """
@@ -59,7 +59,7 @@ def generate_html():
         print(f"没有已完成的论文，跳过生成")
         return False
 
-    # 按处理日期排序，去重保留每篇论文最新版本，取最新的 12 篇
+    # 按处理日期排序，去重保留每篇论文最新版本，取最新的 15 篇
     papers.sort(key=lambda x: x.get('processed_date', ''), reverse=True)
 
     # 去重：保留每篇论文（按 arxiv_id）的最新版本
@@ -71,7 +71,7 @@ def generate_html():
             seen_ids.add(arxiv_id)
             unique_papers.append(p)
 
-    papers = unique_papers[:12]
+    papers = unique_papers[:15]
 
     today = datetime.now().strftime('%Y-%m-%d')
 
