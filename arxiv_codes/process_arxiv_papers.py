@@ -126,7 +126,18 @@ def create_notebook(notebook_name):
     if result.returncode != 0:
         return None
 
-    for line in result.stdout.strip().splitlines():
+    stdout = result.stdout.strip()
+
+    # nlm 0.7.2+ returns JSON with notebook_id
+    try:
+        data = json.loads(stdout)
+        if isinstance(data, dict) and "notebook_id" in data:
+            return data["notebook_id"]
+    except json.JSONDecodeError:
+        pass
+
+    # fallback: old text format "ID: xxx"
+    for line in stdout.splitlines():
         if "ID:" in line:
             return line.split("ID:")[-1].strip()
     return None
