@@ -1,321 +1,262 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>科技日报 · 开发者实践版 · 2026-06-14</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>开发者日报 · 2026-06-15</title>
   <style>
     :root {
       --bg: #0d1117;
       --surface: #161b22;
-      --surface-2: #21262d;
+      --surface-2: #1f2937;
       --border: #30363d;
       --text: #c9d1d9;
-      --text-secondary: #8b949e;
+      --text-dim: #8b949e;
       --accent: #58a6ff;
       --accent-2: #3fb950;
-      --accent-3: #f0883e;
-      --danger: #f85149;
-      --code-bg: #1f2937;
-      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-      --font-mono: "SF Mono", "Fira Code", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+      --code-bg: #0d1117;
+      --code-text: #e6edf3;
+      --link: #79c0ff;
+      --link-hover: #a5d6ff;
+      --tag-bg: #21262d;
+      --tag-text: #58a6ff;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-body);
+      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
       line-height: 1.7;
     }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { color: var(--link-hover); text-decoration: underline; }
     header {
       border-bottom: 1px solid var(--border);
-      padding-bottom: 24px;
-      margin-bottom: 32px;
+      background: var(--surface);
+      padding: 2rem 1rem;
+      text-align: center;
     }
-    .tag {
-      display: inline-block;
-      background: var(--surface-2);
-      color: var(--accent);
-      font-family: var(--font-mono);
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 12px;
-      border: 1px solid var(--border);
-    }
-    h1 { margin: 0 0 8px; font-size: 32px; letter-spacing: -0.5px; }
-    .subtitle { color: var(--text-secondary); font-size: 15px; }
+    header h1 { margin: 0 0 .5rem; font-size: 1.8rem; color: var(--accent); }
+    header time { color: var(--text-dim); font-size: .9rem; }
+    main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+    section { margin-bottom: 3rem; }
     h2 {
-      font-size: 22px;
-      margin: 40px 0 18px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      color: var(--accent-2);
+      border-left: 4px solid var(--accent-2);
+      padding-left: .75rem;
+      font-size: 1.35rem;
+      margin-bottom: 1.25rem;
     }
-    h3 { font-size: 17px; margin: 24px 0 10px; color: var(--accent-2); }
+    h3 { color: var(--accent); font-size: 1.1rem; margin: 1.5rem 0 .5rem; }
+    .intro { color: var(--text-dim); margin-bottom: 2rem; }
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 18px;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
     }
-    .card p { margin: 0 0 12px; }
-    .card p:last-child { margin-bottom: 0; }
-    .source {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-family: var(--font-mono);
+    .card p { margin: .6rem 0; }
+    .source { display: block; margin-top: .75rem; font-size: .85rem; color: var(--text-dim); }
+    .tag {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      margin-right: .4rem;
     }
-    .source a {
-      color: var(--accent-3);
-      word-break: break-all;
-    }
-    .hot-list { counter-reset: item; }
-    .hot-item {
-      position: relative;
-      padding-left: 42px;
-    }
-    .hot-item::before {
-      counter-increment: item;
-      content: counter(item, decimal-leading-zero);
-      position: absolute;
-      left: 0;
-      top: 22px;
-      font-family: var(--font-mono);
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--surface-2);
-      width: 32px;
-      height: 32px;
-      line-height: 32px;
-      text-align: center;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 16px;
-    }
-    .tool-grid .card { margin-bottom: 0; }
-    code, pre {
-      font-family: var(--font-mono);
-      background: var(--code-bg);
-      border-radius: 6px;
-    }
-    code { padding: 2px 6px; font-size: 14px; }
     pre {
-      padding: 16px;
-      overflow-x: auto;
-      font-size: 14px;
+      background: var(--code-bg);
       border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      color: var(--code-text);
     }
-    .tip {
-      background: rgba(88, 166, 255, 0.08);
-      border-left: 3px solid var(--accent);
-      padding: 14px 18px;
-      border-radius: 0 8px 8px 0;
-      margin: 14px 0;
+    code {
+      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
+      font-size: .9em;
     }
-    .tip strong { color: var(--accent); }
+    .ref-list {
+      list-style: none;
+      padding: 0;
+    }
+    .ref-list li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .6rem .9rem;
+      margin-bottom: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .ref-list li::before {
+      content: "→";
+      color: var(--accent-2);
+    }
     footer {
-      margin-top: 48px;
-      padding-top: 24px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: .85rem;
+      padding: 2rem 1rem;
       border-top: 1px solid var(--border);
-      color: var(--text-secondary);
-      font-size: 13px;
-    }
-    .ref-list { columns: 1; }
-    .ref-list li { margin-bottom: 8px; word-break: break-all; }
-    @media (max-width: 640px) {
-      .tool-grid { grid-template-columns: 1fr; }
-      h1 { font-size: 26px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="tag">developer_practice</div>
-      <h1>开发者实践日报</h1>
-      <div class="subtitle">2026-06-14 · 面向一线工程师的技术动态、工具更新与实践建议</div>
-    </header>
+  <header>
+    <h1>开发者日报 · 2026-06-15</h1>
+    <time>2026-06-15</time>
+    <p>全栈技术实践版：聚焦可落地的工具、框架与工程方案</p>
+  </header>
+
+  <main>
+    <p class="intro">
+      今天的候选集中，我优先保留了带架构细节、可直接用于生产或本地开发的更新：开源模型上架、Serverless 运行时扩展、Agent 工具链重构、可观测性 SDK，以及能立刻复制到 CI/CD 和治理流程里的实践。
+    </p>
 
     <section>
-      <h2><span>🔥</span>今日技术热榜</h2>
-      <div class="hot-list">
-        <article class="card hot-item">
-          <h3>Vercel 将 Hobby 用户 Blob Store 上限从 5 个提升到 100 个</h3>
-          <p>对于用 Vercel Hobby 方案做 side project 的开发者来说，存储组织一直是个小痛点：原本最多只能建 5 个 Blob store，项目一多就要把不同环境或不同业务的数据挤在一起。现在上限直接放宽到 100 个，意味着可以按项目、环境或区域更细粒度地拆分数据。需要注意的是，存储容量、操作次数和流量限制仍然保持不变，只是 store 数量变多了。</p>
-          <p class="source">来源：<a href="https://vercel.com/changelog/increased-blob-store-limit-for-hobby-users" target="_blank" rel="noopener">Vercel News</a></p>
-        </article>
-
-        <article class="card hot-item">
-          <h3>shadcn 开源 /improve skill：把「最强模型做计划、便宜模型执行」落地成代码</h3>
-          <p>shadcn 发布了 <code>improve</code> skill，核心思路是只做「计划层」：用最强的模型深入理解代码库、发现问题并产出高质量改进方案，但 skill 本身不直接改代码，具体执行交给更便宜的模型或工具。这个思路把「智力当作可借用的资源」——趁前沿模型可用时榨取高质量计划，等到它不可用或涨价时，再用低成本方式执行。</p>
-          <p>对日常开发来说，这相当于给代码库配了一个永不疲倦的架构审查员：它先输出可执行的任务清单，你再决定让哪个 agent 或模型去改。四天拿到 3.7K star 也说明开发者对这种「plan-first」模式很买账。</p>
-          <p class="source">来源：<a href="https://github.com/shadcn/improve" target="_blank" rel="noopener">GitHub: shadcn/improve</a> · 参考 <a href="https://x.com/vikingmute/status/2066064405499150714" target="_blank" rel="noopener">Viking 的推文</a></p>
-        </article>
-
-        <article class="card hot-item">
-          <h3>Browser Use 插件正式接入 Claude Code</h3>
-          <p>Browser Use 现在可以通过 Claude Code 的插件市场安装，命令是 <code>claude plugin marketplace add browser-use/plugins</code>。这意味着 Claude Code 里的 agent 可以直接获得更结构化的浏览器操作能力，比如把任意网页转成干净的 Markdown 或 JSON、渲染 JavaScript、绕过 Cloudflare 和机器人拦截，并支持批量抓取。</p>
-          <p>对于需要频繁从网页提取数据或做自动化测试的开发者，这减少了写一次性 scraper 的成本；同时 Browser Use 也发布了 <code>fetch-use</code>，一个 curl 风格的 API，可以把任意 URL 转成 clean JSON。</p>
-          <p class="source">来源：<a href="https://x.com/browser_use/status/2065984185148624904" target="_blank" rel="noopener">Browser Use</a> · <a href="https://browser-use.com/posts/fetch-use" target="_blank" rel="noopener">fetch-use 文档</a></p>
-        </article>
-
-        <article class="card hot-item">
-          <h3>华为昇腾 950DT 与 DeepSeek V4 协同设计：国产芯片开始主动定义模型推理路径</h3>
-          <p>SemiAnalysis 对华为昇腾 950DT 做了 Trace 级拆解，发现 DeepSeek V4 的部分架构是「为华为昇腾推理进行协同设计」的。这不是简单的适配，而是芯片、模型推理路径和软件栈一起打磨。报告认为，这可能会成为 DeepSeek 从英伟达底座迁移到国产昇腾底座的关键节点。</p>
-          <p>对开发者来说，这件事的意义在于：国产 AI 芯片正在从「能不能跑大模型」转向「能不能支撑顶级模型的低成本、高并发推理」。如果你在做国产算力部署或推理优化，950DT + DeepSeek V4 的组合值得持续跟踪。</p>
-          <p class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651286966&idx=1&sn=33044df3c1d2b3664baf784d61cca573" target="_blank" rel="noopener">InfoQ</a></p>
-        </article>
-
-        <article class="card hot-item">
-          <h3>Uber 用批处理把单个账户更新能力提升到每秒 30+ 次</h3>
-          <p>Uber 的财务账本平台采用复式记账，天然要求同一账户的更新严格串行。当大量调账、对账或运营修正集中落到同一个热点账户时，传统的「一次请求一次事务」会很快触顶。新方案把多次更新批量合并：先聚合请求、再做一次统一的校验和余额计算、最后持久化。</p>
-          <p>结果是在保持严格一致性和审计可追溯的前提下，单账户每秒处理超过 30 次更新。这对任何需要高并发写入同一账户或同一实体的系统——比如支付、钱包、积分、库存——都有参考价值：热点账户问题的解法不一定是分片，也可以是更聪明的批处理。</p>
-          <p class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651286966&idx=4&sn=f895b338df56a0a3bce75d7b866eeaec" target="_blank" rel="noopener">InfoQ</a></p>
-        </article>
-
-        <article class="card hot-item">
-          <h3>Pyodide 轮子可以直接发布到 PyPI 了</h3>
-          <p>Pyodide 314.0 支持把为 WebAssembly 编译的 Python 扩展（C/C++/Rust 等）打包成 wheel，直接上传到 PyPI，运行时再安装。这意味着浏览器端的 Python 生态不再依赖 Pyodide 维护者手动审核和构建那 300 多个包，普通包的维护者可以像发 Linux/macOS/Windows 轮子一样发 WASM 轮子。</p>
-          <p>对想做浏览器端数据工具、教育应用或无服务端 Python 交互体验的开发者，这是一个重要的基础设施变化。Simon Willison 已经做了 <code>luau-wasm</code> 的示例发布，完整流程见他的博客。</p>
-          <p class="source">来源：<a href="https://simonwillison.net/2026/Jun/13/publishing-wasm-wheels/" target="_blank" rel="noopener">Simon Willison's Weblog</a> · 参考 <a href="https://x.com/simonw/status/2065949364187807818" target="_blank" rel="noopener">Simon Willison 推文</a></p>
-        </article>
-
-        <article class="card hot-item">
-          <h3>鸿蒙 HarmonyOS 向 Agent 架构演进，小艺成为「长在系统里的智能体」</h3>
-          <p>在 HDC 2026 上，华为展示了小艺的新能力：用户一句话就能跨日程、地图、时钟、网约车等多个应用完成复杂任务。背后是 HarmonyOS 向 Agent 架构的整体演进，基于鸿蒙智能体框架 2.0，小艺从「语音助手」变成了系统智慧大脑。</p>
-          <p>这对移动开发者有直接启示：未来的交互入口可能从「用户找应用」变成「意图即服务」。如果你的应用还没有把核心能力拆成可被系统 Agent 调用的原子化服务，未来可能会失去被调用的机会。</p>
-          <p class="source">来源：<a href="https://www.ifanr.com/1668931?utm_source=rss&utm_medium=rss&utm_campaign=" target="_blank" rel="noopener">爱范儿</a></p>
-        </article>
-
-        <article class="card hot-item">
-          <h3>Ponytail：让 AI coding agent 像「最懒的高级开发」一样写代码</h3>
-          <p>Ponytail 是一个给 AI coding agent 用的插件/工作流，核心逻辑是六层 YAGNI 检查：真的需要写吗？标准库有吗？平台原生支持吗？依赖里有吗？能一行搞定吗？最后才写最小代码。据分享者给出的数据，这种模式能让 agent 产出 80–94% 更少的代码、47–77% 更便宜、3–6 倍更快。</p>
-          <p>例子很直观：agent 本来要写一个完整 date picker + wrapper + 逻辑，Ponytail 会直接让它用 <code>&lt;input type="date"&gt;</code>。这其实是把「 senior review 」的价值观编码成 agent 的默认行为，对减少 AI slop 代码很有效。</p>
-          <p class="source">来源：<a href="https://github.com/DietrichGebert/ponytail" target="_blank" rel="noopener">GitHub: Ponytail</a> · 参考 <a href="https://x.com/yangyi/status/2066061965383143611" target="_blank" rel="noopener">Yangyi 的推文</a></p>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <h2><span>🔍</span>深度技术解读</h2>
+      <h2>今日技术热榜</h2>
 
       <article class="card">
-        <h3>Claude Fable 5 被禁：开发者应如何看待「基础设施风险」</h3>
-        <p>6 月 9 日发布的 Claude Fable 5，在 6 月 12 日因美国政府出口管制指令被全面禁用，连美国境内的外籍人士和 Anthropic 自己的外籍员工都无法访问。这不是一次普通的 API 调整，而是前沿模型首次因国家安全理由被国家级召回。</p>
-        <p>对开发者最直接的教训是：不要把关键链路完全绑定在单一闭源 API 上。Fable 5 很强，但当访问权限可以被行政指令瞬间收回时，它就不是稳定的基础设施。更务实的做法是：把闭源模型当作「能力加速器」——趁可用时提取高质量计划、设计、测试用例，然后用开源模型或自有部署完成执行。shadcn 的 <code>/improve</code> 思路、baoyu-design 用 skill 把 Claude Design 移植到其他模型上，都是这种「智力借用」策略的具体实践。</p>
-        <p>另一个值得关注的替代是智谱 GLM-5.2，它承诺下周开源、MIT 协议、支持 1M 上下文。虽然性能还需要实测，但它至少提供了一条「不会被单方面收回」的路径。对正在选型或做架构设计的团队，现在正是评估多模型备份和本地/私有部署方案的时候。</p>
-        <p class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzIzNjE2NTI3NQ==&mid=2247492081&idx=1&sn=e726dbfb12655d492755c56e5e14a74d" target="_blank" rel="noopener">浮之静</a> · <a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&mid=2691569275&idx=1&sn=2571e7fae2c253884d142b0ee2a6e3d7" target="_blank" rel="noopener">腾讯科技</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651038961&idx=1&sn=b49409abeb35035bb799b1b0417cd7b1" target="_blank" rel="noopener">机器之心</a></p>
+        <h3>Gemma 4 系列正式上架 Amazon Bedrock</h3>
+        <p>Google DeepMind 的 Gemma 4 现已可在 Amazon Bedrock 调用，采用 Apache 2.0 开源权重，提供 31B Dense 以及 26B-A4B / E2B MoE 三种指令微调版本。它们支持内置推理、原生 Function Calling 以及文本+图像多模态输入，MoE 变体每次请求只激活部分参数。</p>
+        <p>对开发者来说，这意味着无需自己部署 GPU 集群，就能通过现有 Bedrock API 调用开源权重的前沿模型；在成本敏感场景下，MoE 也能提供更具性价比的推理路径。</p>
+        <a class="source" href="https://aws.amazon.com/blogs/machine-learning/introducing-gemma-4-models-on-amazon-bedrock/" target="_blank" rel="noopener">[来源: Artificial Intelligence]</a>
       </article>
 
       <article class="card">
-        <h3>模型层 vs Harness 层：为什么 Codex 还没有「Claude Design」</h3>
-        <p>宝玉在推文中把 AI 产品拆成了两层：模型层（Claude Opus 4.8、GPT-5.5 等）和 Harness 层（Codex、Claude Design 等产品形态，包括提示词、工具链、UI 流程）。同一个 Harness，换不同模型，效果可能完全不同。Claude Design 的技术门槛不在 Harness，而在模型能否生成高精度、可交互的原型。</p>
-        <p>这个框架对开发者选型很有帮助。很多人看到 Claude Design 效果好，就以为「prompt + 工具」可以复制到任意模型；但实际上如果底层模型对空间布局、状态交互、视觉细节的理解不够，再好的 Harness 也做不出可用原型。反过来说，如果你自己的模型能力足够，完全可以复刻类似的 Harness。宝玉已经做了 <code>baoyu-design</code> 的概念验证，把 Claude Design 的 skill 逻辑迁移到其他模型。</p>
-        <p class="source">来源：<a href="https://x.com/dotey/status/2065874894563463660" target="_blank" rel="noopener">宝玉(@dotey)</a></p>
+        <h3>Vercel Functions 最长运行时间延长至 30 分钟</h3>
+        <p>Vercel 将 Node.js 与 Python Runtime 的 Function 最大执行时长从 800 秒提升到 30 分钟，Pro 与 Enterprise 团队可立即使用。这覆盖了长时 LLM 推理、文档/媒体处理、OCR、浏览器自动化以及复杂的 Queue/Workflow 步骤。</p>
+        <p>背后是 Vercel 自研的 Fluid Compute：代码执行时按活跃 CPU 计费，I/O 等待时暂停计费；开发者只需在 <code>maxDuration</code> 中显式开启即可。</p>
+        <a class="source" href="https://vercel.com/changelog/vercel-functions-can-now-run-up-to-30-minutes" target="_blank" rel="noopener">[来源: Vercel News]</a>
+      </article>
+
+      <article class="card">
+        <h3>GitHub 发布多语言仓库开源数据集</h3>
+        <p>GitHub 推出了 GitHub Multilingual Repositories Dataset，包含仓库级元数据，用于识别 README、Issue、PR 中包含非英语自然语言内容的公共仓库。数据集显示不同协作面的语言分布差异很大，例如韩语在 Issue 与 PR 中的占比高于 README。</p>
+        <p>这对训练更懂多语言开发者协作的模型、构建本地化代码助手，以及研究全球开源社区的语言习惯都有直接帮助。</p>
+        <a class="source" href="https://github.blog/ai-and-ml/llms/accelerating-researchers-and-developers-building-multilingual-ai-with-a-new-open-dataset/" target="_blank" rel="noopener">[来源: The GitHub Blog]</a>
+      </article>
+
+      <article class="card">
+        <h3>AWS Strands Evals SDK 支持 Agent 故障自动定位</h3>
+        <p>AWS 在 Strands Evals SDK 中新增了 Detectors，可自动扫描 Agent 执行轨迹并输出失败根因，把人工逐条看 trace 的诊断时间从小时级降到分钟级。输出是结构化结果，能指出具体失败组件和修复方向。</p>
+        <p>对运行大量 Agent 的团队来说，这提供了一条“eval + 可观测性”结合的落地路径：不仅知道分数掉了，还能快速定位是工具调用、规划还是上下文理解出了问题。</p>
+        <a class="source" href="https://aws.amazon.com/blogs/machine-learning/ai-agent-failure-detection-and-root-cause-analysis-with-strands-evals/" target="_blank" rel="noopener">[来源: Artificial Intelligence]</a>
+      </article>
+
+      <article class="card">
+        <h3>“推理 GPU 最多用三年”可能是个误传</h3>
+        <p>这篇文章追溯了“高负载下推理 GPU 最多三年寿命”说法的来源，发现它来自一条匿名推文，并无公开数据支撑。作者认为现代数据中心 GPU 的设计寿命远长于此，当前 AI 基础设施的经济性比看空者假设的更持久。</p>
+        <p>对平台工程师和做 TCO 规划的同学，这提供了一个更理性的硬件折旧假设：不必默认三年就要整体翻新集群。</p>
+        <a class="source" href="https://seangoedecke.com/ai-gpus-live-longer-than-three-years/" target="_blank" rel="noopener">[来源: seangoedecke.com RSS feed]</a>
+      </article>
+
+      <article class="card">
+        <h3>Anthropic 发布又暂停 Claude Fable 5</h3>
+        <p>Anthropic 于 6 月 9 日发布面向长程任务的 Claude Fable 5，但随后因美国政府出口指令暂停访问。它与 Claude Mythos 5 共享架构，并对数据保留提出强制要求，这已影响与 Microsoft 等合作伙伴的部署。</p>
+        <p>对开发者而言，这件事提醒：前沿模型 availability 可能在一夜之间被政策改变；在架构选型时需要考虑模型来源、合规与可替代方案。</p>
+        <a class="source" href="https://www.infoq.com/news/2026/06/claude-5-release/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
       </article>
     </section>
 
     <section>
-      <h2><span>🛠️</span>工具推荐</h2>
-      <div class="tool-grid">
-        <article class="card">
-          <h3>DeepSeek API 余额监控小工具</h3>
-          <p>Windows 上的托盘小工具，实时监控 DeepSeek API 余额和用量，适合本地跑大量请求时防止账单失控。</p>
-          <p class="source">来源：<a href="https://x.com/geekbb/status/2066184637970567258" target="_blank" rel="noopener">Geek(@geekbb)</a></p>
-        </article>
-
-        <article class="card">
-          <h3>Archify：自然语言生成架构图</h3>
-          <p>不需要生图模型。流程是：LLM 把自然语言描述转成结构化 JSON，Node.js 渲染器用纯几何算法生成 SVG，最后注入自包含 HTML。适合在技术文档、README 或博客里快速插入架构图。</p>
-          <p class="source">来源：<a href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener">GitHub: archify</a> · 参考 <a href="https://x.com/geekbb/status/2065963576419029438" target="_blank" rel="noopener">Geek 推文</a></p>
-        </article>
-
-        <article class="card">
-          <h3>Pi Studio：Pi 编码代理的 Codex 风格客户端</h3>
-          <p>从 Tau 分出来的分支，把 Pi 运行时打包进桌面应用，装完即用，不需要额外装命令行工具。如果你在用 Pi agent 但嫌 CLI 麻烦，可以试试这个客户端。</p>
-          <p class="source">来源：<a href="https://github.com/shixin-guo/pi-studio" target="_blank" rel="noopener">GitHub: pi-studio</a> · 参考 <a href="https://x.com/geekbb/status/2065979536471417341" target="_blank" rel="noopener">Geek 推文</a></p>
-        </article>
-
-        <article class="card">
-          <h3>Agnes AI 免费模型接入 Claude Code</h3>
-          <p>Agnes AI 从 6 月 1 日起免费开放文本、图片、视频三个核心模型 API。文本模型 Agnes-2.0-Flash 在 Claw-Eval 智能体榜单进入 Top 10。可以通过 cc-switch 配置接入 Claude Code，零成本扩展可用模型池。</p>
-          <p class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247534527&idx=1&sn=63980e0d2e1a81599c85b53e681629b6" target="_blank" rel="noopener">逛逛GitHub</a></p>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <h2><span>📋</span>实践指南</h2>
+      <h2>深度技术解读</h2>
 
       <article class="card">
-        <h3>给 Agent 的任务必须包含「验收标准」</h3>
-        <p>宝玉分享了一个一旦养成就很难改回去的习惯：给 agent 交代任务时，把「怎么验证这个结果是对的」一起说清楚。做法是先把 coding plan 写出来，反复确认后汇总成 task 列表，再进入编程阶段，并让 agent 逐项标记完成。</p>
-        <div class="tip">
-          <strong>实践建议：</strong>在 prompt 里加入「完成标准」小节，列出可检查的输出物或测试命令。agent 会自己把中间结果对齐到这些标准，你不需要逐行盯进度。
-        </div>
-        <p class="source">来源：<a href="https://x.com/dotey/status/2065948642301685829" target="_blank" rel="noopener">宝玉(@dotey)</a></p>
+        <h3>Spring AI 2.0：把工具调用从模型私有循环变成可组合的 Advisor 链</h3>
+        <p>在 1.x 中，每个 Chat Model 实现都内置了自己的工具执行循环，功能可用但不可观测、无法拦截，也不能与其他行为组合。Spring AI 2.0 将工具循环提升到 Advisor Chain 中，成为一等可组合组件；<code>ChatClient</code> 的请求会依次经过 Advisor 链，并支持循环重入。</p>
+        <p>这意味着你可以像拼装中间件一样拼装工具调用：加日志、权限检查、重试、路由、人类确认，全部可插拔。模型特有的工具循环被拆成可替换实现，Agent 的“思考-调用-观察”流程第一次成为显式的架构层。</p>
+        <pre><code>ChatClient chatClient = ChatClient.builder(model)
+    .defaultAdvisors(
+        new ToolCallingAdvisor(toolCallbackResolver),
+        new LoggingAdvisor(),
+        new RetryAdvisor()
+    )
+    .build();</code></pre>
+        <p>建议：如果你正在用 Spring Boot 构建 Agent，现在就该把工具调用从 Service 层抽出来，放到 Advisor 层统一治理，这样后续加 eval 和审计会容易得多。</p>
+        <a class="source" href="https://spring.io/blog/2026/06/15/spring-ai-composable-tool-calling" target="_blank" rel="noopener">[来源: Spring]</a>
       </article>
 
       <article class="card">
-        <h3>2026 年建网站，什么比技术栈更重要</h3>
-        <p>freeCodeCamp 的一篇文章指出，React、Vue、Svelte、Laravel、Django 这些框架之间的争论已经没那么关键了。现代网站用任何成熟框架都能跑得不错，真正决定成败的是：可发现性（SEO / AI 搜索可见性）、性能、基础设施、结构化数据和用户信任。</p>
-        <div class="tip">
-          <strong>实践建议：</strong>新项目选型时，优先选团队最熟悉的成熟框架，把省下的时间投入到 Core Web Vitals、结构化数据、语义化 HTML 和 AI 搜索可抓取性上。
-        </div>
-        <p class="source">来源：<a href="https://www.freecodecamp.org/news/building-a-website-what-matters-more-than-your-tech-stack/" target="_blank" rel="noopener">freeCodeCamp</a></p>
-      </article>
-
-      <article class="card">
-        <h3>长时运行 coding agent 的经验</h3>
-        <p>elvis 在一场关于自主长时运行 coding agent 的讨论中总结了几个关键点：目标要极度清晰、要有验证器（verifier）防止 reward hacking、用 <code>/goal</code> 和 <code>/loop</code> 这类命令把长期目标拆成可检查的短期目标、允许动态工作流而不是硬编码 pipeline。</p>
-        <div class="tip">
-          <strong>实践建议：</strong>不要让 agent 一次性跑完一个宏大任务。先让它生成可验证的里程碑，每个里程碑完成后做一次人工或自动验收，再继续下一步。
-        </div>
-        <p class="source">来源：<a href="https://x.com/omarsar0/status/2065881740095246552" target="_blank" rel="noopener">elvis(@omarsar0)</a></p>
+        <h3>Samsung 用 AWS Lambda Response Streaming 实现电商实时定价</h3>
+        <p>Samsung.com 的高流量电商页面需要从多个后端聚合实时价格，传统同步调用在高并发下产生架构性延迟，导致“加入购物车时价格已变”的信任问题。他们用 AWS Lambda Response Streaming 配合 Amazon CloudFront，把聚合结果以流式方式返回给前端。</p>
+        <p>这篇案例详细讲了遗留架构痛点、无状态流式方案、关键实现模式以及性能结果。核心启示：当 API 需要聚合多个慢后端时，与其等所有数据到齐再返回，不如先返回可缓存/可预测的部分，再流式补齐动态字段。</p>
+        <p>可复用的模式：CloudFront 做边缘缓存与连接保持 → Lambda 流式响应 → 后端并行调用 + 超时降级 → 前端按 chunk 渲染。如果你的系统也有“多源聚合 + 高并发 + 低延迟”诉求，这个模式值得直接抄。</p>
+        <a class="source" href="https://aws.amazon.com/blogs/architecture/how-samsung-achieved-real-time-pricing-with-aws-lambda-response-streaming/" target="_blank" rel="noopener">[来源: AWS Architecture Blog]</a>
       </article>
     </section>
 
     <section>
-      <h2><span>🔗</span>参考链接汇总</h2>
-      <div class="card">
-        <ul class="ref-list">
-          <li>Vercel News: <a href="https://vercel.com/changelog/increased-blob-store-limit-for-hobby-users" target="_blank" rel="noopener">Increased Blob store limit for Hobby users</a></li>
-          <li>GitHub: <a href="https://github.com/shadcn/improve" target="_blank" rel="noopener">shadcn/improve</a> · 推文 <a href="https://x.com/vikingmute/status/2066064405499150714" target="_blank" rel="noopener">Viking</a></li>
-          <li>Browser Use: <a href="https://x.com/browser_use/status/2065984185148624904" target="_blank" rel="noopener">Claude Code plugins</a> · <a href="https://browser-use.com/posts/fetch-use" target="_blank" rel="noopener">fetch-use</a></li>
-          <li>InfoQ: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651286966&idx=1&sn=33044df3c1d2b3664baf784d61cca573" target="_blank" rel="noopener">华为昇腾 950DT 与 DeepSeek V4</a></li>
-          <li>InfoQ: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651286966&idx=4&sn=f895b338df56a0a3bce75d7b866eeaec" target="_blank" rel="noopener">Uber 高吞吐量账本批处理</a></li>
-          <li>Simon Willison: <a href="https://simonwillison.net/2026/Jun/13/publishing-wasm-wheels/" target="_blank" rel="noopener">Publishing WASM wheels to PyPI</a></li>
-          <li>爱范儿: <a href="https://www.ifanr.com/1668931?utm_source=rss&utm_medium=rss&utm_campaign=" target="_blank" rel="noopener">HDC 2026 鸿蒙 Agent 架构</a></li>
-          <li>GitHub: <a href="https://github.com/DietrichGebert/ponytail" target="_blank" rel="noopener">Ponytail</a> · 推文 <a href="https://x.com/yangyi/status/2066061965383143611" target="_blank" rel="noopener">Yangyi</a></li>
-          <li>浮之静: <a href="https://mp.weixin.qq.com/s?__biz=MzIzNjE2NTI3NQ==&mid=2247492081&idx=1&sn=e726dbfb12655d492755c56e5e14a74d" target="_blank" rel="noopener">Claude Fable 被封，不是开源的胜利</a></li>
-          <li>腾讯科技: <a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&mid=2691569275&idx=1&sn=2571e7fae2c253884d142b0ee2a6e3d7" target="_blank" rel="noopener">Fable 5 的 72 小时</a></li>
-          <li>机器之心: <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651038961&idx=1&sn=b49409abeb35035bb799b1b0417cd7b1" target="_blank" rel="noopener">Fable 5 被禁幕后</a></li>
-          <li>宝玉: <a href="https://x.com/dotey/status/2065874894563463660" target="_blank" rel="noopener">模型层 vs Harness 层</a></li>
-          <li>GitHub: <a href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener">archify</a></li>
-          <li>GitHub: <a href="https://github.com/shixin-guo/pi-studio" target="_blank" rel="noopener">pi-studio</a></li>
-          <li>逛逛GitHub: <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247534527&idx=1&sn=63980e0d2e1a81599c85b53e681629b6" target="_blank" rel="noopener">Agnes AI 接入 Claude Code</a></li>
-          <li>freeCodeCamp: <a href="https://www.freecodecamp.org/news/building-a-website-what-matters-more-than-your-tech-stack/" target="_blank" rel="noopener">Building a Website in 2026</a></li>
-          <li>elvis: <a href="https://x.com/omarsar0/status/2065881740095246552" target="_blank" rel="noopener">长时运行 coding agent 笔记</a></li>
-        </ul>
-      </div>
+      <h2>工具推荐</h2>
+
+      <article class="card">
+        <h3>GitHub Copilot CLI 常用 Slash 命令速查</h3>
+        <p>GitHub Copilot CLI 支持通过 Slash 命令直接在终端里切换模型、查看 token 消耗、恢复历史会话等。对习惯在 shell 里工作的开发者来说，这减少了在 IDE 与终端之间来回切换的上下文断裂。</p>
+        <p>建议先把 <code>/model</code>、<code>/usage</code>、<code>/resume</code> 三个命令设成熟练操作；非交互模式下配合这些命令可以写出更可预测的自动化脚本。</p>
+        <a class="source" href="https://github.blog/ai-and-ml/github-copilot/github-copilot-cli-for-beginners-overview-of-common-slash-commands/" target="_blank" rel="noopener">[来源: The GitHub Blog]</a>
+      </article>
+
+      <article class="card">
+        <h3>Spring Tools 5.2.0 发布，新增 Claude Code 实验插件</h3>
+        <p>新版 Spring Tools 支持 VS Code、Cursor、Eclipse、Theia 和 Claude Code，其中最值得关注的是实验性的 Claude Code 插件。它内嵌了一个 MCP Server，会把 Spring 项目的静态分析、索引信息、常见问题与修复建议暴露给 LLM。</p>
+        <p>同时提供的 Skills 能在验证与 Quick Fix 场景引导 LLM 如何使用这些信息。用 Spring + Claude Code 的同学可以先用起来，把“项目上下文喂给 Agent”这件事从手动粘贴变成自动暴露。</p>
+        <a class="source" href="https://spring.io/blog/2026/06/15/spring-tools-5-2-0-released" target="_blank" rel="noopener">[来源: Spring]</a>
+      </article>
+
+      <article class="card">
+        <h3>Auth0 入驻 Vercel Marketplace</h3>
+        <p>现在可以在 Vercel Marketplace 一键为项目开通 Auth0，自动创建应用并与 Vercel 项目关联。它自带 Auth0 Next.js SDK、托管用户管理、会话与角色管理，还能在 Development / Preview / Production 环境间同步认证配置。</p>
+        <p>对 Next.js 开发者来说，这省掉了手工创建租户、配置回调地址、同步环境变量等重复劳动，是“身份即基础设施”的又一便利集成。</p>
+        <a class="source" href="https://vercel.com/changelog/auth0-joins-the-vercel-marketplace" target="_blank" rel="noopener">[来源: Vercel News]</a>
+      </article>
     </section>
 
-    <footer>
-      本日报基于 2026-06-14 19:04:37 导出的 FreshRSS 24h 数据生成 · 开发者实践版
-    </footer>
-  </div>
+    <section>
+      <h2>实践指南</h2>
+
+      <article class="card">
+        <h3>用 AI 构建自愈型 CI/CD Pipeline</h3>
+        <p>freeCodeCamp 发布了一门实战课程，教你把 GitHub Actions、OpenAI 与 n8n 串起来：当 CI/CD 失败时，自动分析日志、生成 patch 并发起 Pull Request。课程覆盖 Node.js/Express 应用搭建、AI 日志分析系统、GitHub Token 安全加固与反馈闭环。</p>
+        <p>落地建议：先选一个长期 flaky 的测试或构建失败做试点，让 Agent 只负责“定位 + 生成候选修复”，人类 Review 后再合并；等准确率稳定后再完全自动化。</p>
+        <a class="source" href="https://www.freecodecamp.org/news/build-a-self-healing-cicd-pipeline-with-ai/" target="_blank" rel="noopener">[来源: freeCodeCamp Programming Tutorials]</a>
+      </article>
+
+      <article class="card">
+        <h3>云中 AI 治理：给架构师的实用指南</h3>
+        <p>InfoQ 文章提出了一套可落地的 AI 治理框架：发现 Shadow AI、在数据创建时分类、通过 IAM 强制执行、用 Policy-as-Code 把规则嵌入交付流水线，并辅以运营控制。目标是在安全、合规与开发者效率之间取得平衡，而不是靠人工审批拖慢交付。</p>
+        <p>关键实践：把模型调用、训练数据访问、密钥使用全部纳入现有云 IAM 与成本标签体系；在 CI 阶段扫描是否引用了未批准的模型或外部 API，做到“事前阻断”而非“事后审计”。</p>
+        <a class="source" href="https://www.infoq.com/articles/governing-ai-cloud-guide/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
+      </article>
+    </section>
+
+    <section>
+      <h2>参考链接汇总</h2>
+      <ul class="ref-list">
+        <li><a href="https://aws.amazon.com/blogs/machine-learning/introducing-gemma-4-models-on-amazon-bedrock/" target="_blank" rel="noopener">Artificial Intelligence</a></li>
+        <li><a href="https://vercel.com/changelog/vercel-functions-can-now-run-up-to-30-minutes" target="_blank" rel="noopener">Vercel News</a></li>
+        <li><a href="https://github.blog/ai-and-ml/llms/accelerating-researchers-and-developers-building-multilingual-ai-with-a-new-open-dataset/" target="_blank" rel="noopener">The GitHub Blog</a></li>
+        <li><a href="https://aws.amazon.com/blogs/machine-learning/ai-agent-failure-detection-and-root-cause-analysis-with-strands-evals/" target="_blank" rel="noopener">Artificial Intelligence</a></li>
+        <li><a href="https://seangoedecke.com/ai-gpus-live-longer-than-three-years/" target="_blank" rel="noopener">seangoedecke.com RSS feed</a></li>
+        <li><a href="https://www.infoq.com/news/2026/06/claude-5-release/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></li>
+        <li><a href="https://spring.io/blog/2026/06/15/spring-ai-composable-tool-calling" target="_blank" rel="noopener">Spring</a></li>
+        <li><a href="https://aws.amazon.com/blogs/architecture/how-samsung-achieved-real-time-pricing-with-aws-lambda-response-streaming/" target="_blank" rel="noopener">AWS Architecture Blog</a></li>
+        <li><a href="https://github.blog/ai-and-ml/github-copilot/github-copilot-cli-for-beginners-overview-of-common-slash-commands/" target="_blank" rel="noopener">The GitHub Blog</a></li>
+        <li><a href="https://spring.io/blog/2026/06/15/spring-tools-5-2-0-released" target="_blank" rel="noopener">Spring</a></li>
+        <li><a href="https://vercel.com/changelog/auth0-joins-the-vercel-marketplace" target="_blank" rel="noopener">Vercel News</a></li>
+        <li><a href="https://www.freecodecamp.org/news/build-a-self-healing-cicd-pipeline-with-ai/" target="_blank" rel="noopener">freeCodeCamp Programming Tutorials</a></li>
+        <li><a href="https://www.infoq.com/articles/governing-ai-cloud-guide/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>精选自 90 条候选 · 只保留能落地、有代码/架构细节的技术内容</p>
+  </footer>
 </body>
 </html>
