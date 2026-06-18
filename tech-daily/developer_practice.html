@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>开发者日报 · 2026-06-15</title>
+  <title>开发者实践日报 · 2026-06-18</title>
   <style>
     :root {
       --bg: #0d1117;
@@ -14,6 +14,8 @@
       --text-dim: #8b949e;
       --accent: #58a6ff;
       --accent-2: #3fb950;
+      --accent-purple: #a371f7;
+      --accent-orange: #f0883e;
       --code-bg: #0d1117;
       --code-text: #e6edf3;
       --link: #79c0ff;
@@ -21,13 +23,14 @@
       --tag-bg: #21262d;
       --tag-text: #58a6ff;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
       font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
       line-height: 1.7;
+      font-size: 15px;
     }
     a { color: var(--link); text-decoration: none; }
     a:hover { color: var(--link-hover); text-decoration: underline; }
@@ -39,6 +42,8 @@
     }
     header h1 { margin: 0 0 .5rem; font-size: 1.8rem; color: var(--accent); }
     header time { color: var(--text-dim); font-size: .9rem; }
+    header .meta { color: var(--text-dim); font-size: .85rem; margin-top: .5rem; }
+    header .meta span { margin: 0 .6rem; }
     main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
     section { margin-bottom: 3rem; }
     h2 {
@@ -57,17 +62,27 @@
       padding: 1.25rem;
       margin-bottom: 1.25rem;
     }
-    .card p { margin: .6rem 0; }
-    .source { display: block; margin-top: .75rem; font-size: .85rem; color: var(--text-dim); }
+    .card:hover { border-color: var(--accent); }
+    .card p { margin: .6rem 0; line-height: 1.8; }
+    .source { display: block; margin-top: .75rem; font-size: .85rem; color: var(--text-dim); font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace; }
+    .source a { color: var(--link); }
+    .source a:hover { color: var(--link-hover); }
     .tag {
       display: inline-block;
-      background: var(--tag-bg);
-      color: var(--tag-text);
-      padding: .15rem .5rem;
-      border-radius: 999px;
+      padding: 2px 10px;
+      border-radius: 12px;
       font-size: .75rem;
+      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
+      font-weight: 500;
       margin-right: .4rem;
+      margin-bottom: .5rem;
     }
+    .tag-new { background: rgba(63, 185, 80, 0.15); color: var(--accent-2); }
+    .tag-tool { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+    .tag-deep { background: rgba(163, 113, 247, 0.15); color: var(--accent-purple); }
+    .tag-practice { background: rgba(240, 136, 62, 0.15); color: var(--accent-orange); }
+    .deep-card { border-left: 3px solid var(--accent-purple); }
+    .deep-card h3 { color: var(--accent-purple); }
     pre {
       background: var(--code-bg);
       border: 1px solid var(--border);
@@ -75,188 +90,397 @@
       padding: 1rem;
       overflow-x: auto;
       color: var(--code-text);
+      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
+      font-size: .85em;
+      line-height: 1.6;
+      margin: .75rem 0;
     }
     code {
       font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
       font-size: .9em;
     }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .tool-card h4 {
+      font-size: 1em;
+      color: var(--accent-2);
+      margin-bottom: .5rem;
+      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
+    }
+    .tool-card p { color: var(--text-dim); font-size: .9em; line-height: 1.7; }
+    .practice-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .practice-box h4 { color: var(--accent-orange); font-size: 1.05em; margin-bottom: .75rem; }
+    .practice-box ul { list-style: none; padding: 0; }
+    .practice-box ul li {
+      padding: .4rem 0 .4rem 1.5rem;
+      position: relative;
+      color: var(--text-dim);
+      font-size: .95em;
+      line-height: 1.7;
+    }
+    .practice-box ul li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--accent-orange);
+      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
+    }
+    .ref-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
     .ref-list {
       list-style: none;
       padding: 0;
+      column-count: 2;
+      column-gap: 2rem;
     }
     .ref-list li {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: .6rem .9rem;
-      margin-bottom: .5rem;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
+      padding: .3rem 0;
+      font-size: .85em;
+      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
+      break-inside: avoid;
     }
-    .ref-list li::before {
-      content: "→";
-      color: var(--accent-2);
-    }
+    .ref-list li a { color: var(--text-dim); }
+    .ref-list li a:hover { color: var(--link); }
     footer {
       text-align: center;
       color: var(--text-dim);
       font-size: .85rem;
       padding: 2rem 1rem;
       border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    @media (max-width: 640px) {
+      .ref-list { column-count: 1; }
+      .tool-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>开发者日报 · 2026-06-15</h1>
-    <time>2026-06-15</time>
-    <p>全栈技术实践版：聚焦可落地的工具、框架与工程方案</p>
+    <h1>开发者实践日报 · 2026-06-18</h1>
+    <time>2026-06-18</time>
+    <p>全栈技术视角：聚焦可落地的工具、框架、代码与工程方案</p>
+    <p class="meta">
+      <span>586 条技术动态</span>
+      <span>424 个信息源</span>
+      <span>24h 滚动更新</span>
+    </p>
   </header>
 
   <main>
     <p class="intro">
-      今天的候选集中，我优先保留了带架构细节、可直接用于生产或本地开发的更新：开源模型上架、Serverless 运行时扩展、Agent 工具链重构、可观测性 SDK，以及能立刻复制到 CI/CD 和治理流程里的实践。
+      今日从 586 条技术动态中，优先筛选了可落地的技术方案、代码示例、踩坑经验与新工具发布。排除纯商业新闻、融资信息、人事变动。内容覆盖开源 VCS、大模型上下文优化、Agent 框架、IDE 增强、安全审查与 RAG 工程实践。
     </p>
 
+    <!-- 今日技术热榜 -->
     <section>
       <h2>今日技术热榜</h2>
 
       <article class="card">
-        <h3>Gemma 4 系列正式上架 Amazon Bedrock</h3>
-        <p>Google DeepMind 的 Gemma 4 现已可在 Amazon Bedrock 调用，采用 Apache 2.0 开源权重，提供 31B Dense 以及 26B-A4B / E2B MoE 三种指令微调版本。它们支持内置推理、原生 Function Calling 以及文本+图像多模态输入，MoE 变体每次请求只激活部分参数。</p>
-        <p>对开发者来说，这意味着无需自己部署 GPU 集群，就能通过现有 Bedrock API 调用开源权重的前沿模型；在成本敏感场景下，MoE 也能提供更具性价比的推理路径。</p>
-        <a class="source" href="https://aws.amazon.com/blogs/machine-learning/introducing-gemma-4-models-on-amazon-bedrock/" target="_blank" rel="noopener">[来源: Artificial Intelligence]</a>
+        <span class="tag tag-new">NEW</span>
+        <h3>Epic 开源版本控制系统 Lore：专为游戏开发大规模二进制资产设计</h3>
+        <p>Epic Games 正式开源从零打造的版本控制系统 Lore，采用 MIT 协议。核心目标是解决游戏开发中 Git 处理海量二进制资产卡顿、Perforce 又太重太贵的痛点。Lore 把可扩展性和性能作为第一天优先级，所有源码、数据格式和协议文档全部开放。</p>
+        <p>游戏项目动辄几十上百 GB 资产，传统 VCS 很容易成为瓶颈。Lore 针对这些场景原生优化，未来可能蚕食 Perforce 在游戏行业的份额。大厂把造好的轮子直接开源，对整个生态都是利好。</p>
+        <span class="source">
+          <a href="https://x.com/berryxia/status/2067407315129774287" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a>
+          <a href="https://supertechfans.com/cn/post/2026-06-18-HackerNews/" target="_blank" rel="noopener">[来源: HackerNews每日摘要 on SuperTechFans]</a>
+        </span>
       </article>
 
       <article class="card">
-        <h3>Vercel Functions 最长运行时间延长至 30 分钟</h3>
-        <p>Vercel 将 Node.js 与 Python Runtime 的 Function 最大执行时长从 800 秒提升到 30 分钟，Pro 与 Enterprise 团队可立即使用。这覆盖了长时 LLM 推理、文档/媒体处理、OCR、浏览器自动化以及复杂的 Queue/Workflow 步骤。</p>
-        <p>背后是 Vercel 自研的 Fluid Compute：代码执行时按活跃 CPU 计费，I/O 等待时暂停计费；开发者只需在 <code>maxDuration</code> 中显式开启即可。</p>
-        <a class="source" href="https://vercel.com/changelog/vercel-functions-can-now-run-up-to-30-minutes" target="_blank" rel="noopener">[来源: Vercel News]</a>
+        <span class="tag tag-new">NEW</span>
+        <h3>智谱 GLM-5.2 开源：753B 参数 MoE 模型，1M 上下文窗口登顶开源榜</h3>
+        <p>智谱 Z.ai 发布 GLM-5.2，753B 总参数、40B 激活参数的 MoE 架构，上下文窗口从 20 万扩展到 100 万 token。在 Artificial Analysis 独立评测中，GLM-5.2 成为新的开源权重模型领导者，Code Arena 前端盲测全球可用模型第一。</p>
+        <p>实测要点：在 Claude Code 中启用需把模型名设为带 [1m] 后缀的版本，否则默认走普通上下文。1M 上下文的真正价值不在窗口大小，而在如何组织信息——让模型能从头到尾完成复杂任务而不跑偏。Datawhale 已放出完整实测攻略。</p>
+        <span class="source">
+          <a href="https://simonwillison.net/2026/Jun/17/glm-52/#atom-everything" target="_blank" rel="noopener">[来源: Simon Willison's Weblog]</a>
+          <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723560&idx=1&sn=f82183c00b95dc2b76e98c407b7d9776" target="_blank" rel="noopener">[来源: Datawhale]</a>
+          <a href="https://x.com/omarsar0/status/2067344437810803052" target="_blank" rel="noopener">[来源: elvis(@omarsar0)]</a>
+        </span>
       </article>
 
       <article class="card">
-        <h3>GitHub 发布多语言仓库开源数据集</h3>
-        <p>GitHub 推出了 GitHub Multilingual Repositories Dataset，包含仓库级元数据，用于识别 README、Issue、PR 中包含非英语自然语言内容的公共仓库。数据集显示不同协作面的语言分布差异很大，例如韩语在 Issue 与 PR 中的占比高于 README。</p>
-        <p>这对训练更懂多语言开发者协作的模型、构建本地化代码助手，以及研究全球开源社区的语言习惯都有直接帮助。</p>
-        <a class="source" href="https://github.blog/ai-and-ml/llms/accelerating-researchers-and-developers-building-multilingual-ai-with-a-new-open-dataset/" target="_blank" rel="noopener">[来源: The GitHub Blog]</a>
+        <span class="tag tag-tool">TOOL</span>
+        <h3>Vercel 开源 Agent 框架 Eve：生产级能力开箱即用</h3>
+        <p>Vercel 把内部反复出现的 Agent 形态抽象成框架开源。核心设计是"Agent 即目录"：agent.ts 放模型配置、instructions.md 放系统提示、tools/ 放可执行能力、skills/ 放领域知识、subagents/ 放子 Agent 委托。</p>
+        <p>内置生产能力包括：持久会话（可 checkpoint 的 durable workflow）、沙箱隔离（代码与主应用隔离）、Human-in-the-loop（审批后从断点继续）、多 Channel 支持（HTTP/Slack/Discord/Teams 统一服务）、OpenTelemetry 标准 trace。开发者只写"做什么"，框架处理"怎么跑起来"。</p>
+        <span class="source">
+          <a href="https://x.com/shao__meng/status/2067405750646055226" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
+          <a href="https://vercel.com/blog/introducing-eve" target="_blank" rel="noopener">[来源: Vercel Blog]</a>
+        </span>
       </article>
 
       <article class="card">
-        <h3>AWS Strands Evals SDK 支持 Agent 故障自动定位</h3>
-        <p>AWS 在 Strands Evals SDK 中新增了 Detectors，可自动扫描 Agent 执行轨迹并输出失败根因，把人工逐条看 trace 的诊断时间从小时级降到分钟级。输出是结构化结果，能指出具体失败组件和修复方向。</p>
-        <p>对运行大量 Agent 的团队来说，这提供了一条“eval + 可观测性”结合的落地路径：不仅知道分数掉了，还能快速定位是工具调用、规划还是上下文理解出了问题。</p>
-        <a class="source" href="https://aws.amazon.com/blogs/machine-learning/ai-agent-failure-detection-and-root-cause-analysis-with-strands-evals/" target="_blank" rel="noopener">[来源: Artificial Intelligence]</a>
+        <span class="tag tag-tool">TOOL</span>
+        <h3>Claude Code 新增 Artifacts：会话产物可部署为 HTML 站点并分享</h3>
+        <p>Anthropic 在 Claude Code 中推出 Artifacts 功能，可以把会话中的交互页面（PR 审查、项目仪表盘、架构文档）生成私有链接分享给团队。Artifacts 会随会话持续更新，共享者始终看到最新版本。</p>
+        <p>它基于完整会话上下文（代码库、插件、skills、连接工具）生成，在 Team 和 Enterprise 计划中可用。Mike Krieger 提到，随着 Claude 工作越来越深入独立，用 Artifacts 让它解释自己的思考和输出变得非常有价值。</p>
+        <span class="source">
+          <a href="https://x.com/claudeai/status/2067671912038240487" target="_blank" rel="noopener">[来源: Claude(@claudeai)]</a>
+          <a href="https://x.com/mikeyk/status/2067674333502427620" target="_blank" rel="noopener">[来源: Mike Krieger(@mikeyk)]</a>
+        </span>
       </article>
 
       <article class="card">
-        <h3>“推理 GPU 最多用三年”可能是个误传</h3>
-        <p>这篇文章追溯了“高负载下推理 GPU 最多三年寿命”说法的来源，发现它来自一条匿名推文，并无公开数据支撑。作者认为现代数据中心 GPU 的设计寿命远长于此，当前 AI 基础设施的经济性比看空者假设的更持久。</p>
-        <p>对平台工程师和做 TCO 规划的同学，这提供了一个更理性的硬件折旧假设：不必默认三年就要整体翻新集群。</p>
-        <a class="source" href="https://seangoedecke.com/ai-gpus-live-longer-than-three-years/" target="_blank" rel="noopener">[来源: seangoedecke.com RSS feed]</a>
+        <span class="tag tag-new">NEW</span>
+        <h3>Cursor 推出 /in-cloud 子 Agent：云端 VM 隔离长时任务</h3>
+        <p>Cursor 新增 /in-cloud 命令，可以在独立云 VM 中启动子 Agent。特别适用于隔离长时间运行或并行任务，保持本地工作区干净和响应。手机端也能触发 Agent，笔记本合上后云端继续工作。</p>
+        <p>这是 Cursor 从本地编辑器向"云端+本地"混合开发模式的关键一步。对开发者来说，意味着可以把编译、测试、大规模重构等重任务丢到云端，本地只保留轻量交互。</p>
+        <span class="source">
+          <a href="https://x.com/cursor_ai/status/2067366343817805899" target="_blank" rel="noopener">[来源: Cursor(@cursor_ai)]</a>
+          <a href="https://cursor.com/changelog/cloud" target="_blank" rel="noopener">[来源: Cursor Changelog]</a>
+        </span>
       </article>
 
       <article class="card">
-        <h3>Anthropic 发布又暂停 Claude Fable 5</h3>
-        <p>Anthropic 于 6 月 9 日发布面向长程任务的 Claude Fable 5，但随后因美国政府出口指令暂停访问。它与 Claude Mythos 5 共享架构，并对数据保留提出强制要求，这已影响与 Microsoft 等合作伙伴的部署。</p>
-        <p>对开发者而言，这件事提醒：前沿模型 availability 可能在一夜之间被政策改变；在架构选型时需要考虑模型来源、合规与可替代方案。</p>
-        <a class="source" href="https://www.infoq.com/news/2026/06/claude-5-release/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
+        <span class="tag tag-practice">PRACTICE</span>
+        <h3>GitHub 推出 PR 数量限制：治理开源贡献噪音</h3>
+        <p>GitHub 引入 pull request limits 功能，允许仓库设置非写入用户同时打开 PR 的最大数量。达到上限后必须关闭或合并一个才能再开。这直接回应了维护者最头疼的问题：PR 太多、低质量噪音太多、管理手段太少。</p>
+        <p>Copilot 或 bot 打开的 PR 可以单独设置不同限制。这是开源治理的基础设施改进，对大型项目维护者来说是刚需功能，能有效过滤"刷存在感"式的低质量贡献。</p>
+        <span class="source">
+          <a href="https://github.blog/open-source/maintainers/how-pull-request-limits-are-cutting-down-the-noise/" target="_blank" rel="noopener">[来源: The GitHub Blog]</a>
+        </span>
+      </article>
+
+      <article class="card">
+        <span class="tag tag-new">NEW</span>
+        <h3>Spring Security 7 发布：MFA、OAuth2 增强、MCP 集成</h3>
+        <p>Spring Security 7 在 Spring I/O 2026 上正式发布，最大亮点是期盼十多年的多因素认证（MFA）原生支持。同时包含 OAuth2 现代授权流增强、AI agent 通过 Model Context Protocol 集成、更安全的默认配置、Jackson 3 支持。</p>
+        <p>Session 详细展示了新 MFA API 的用法和 OAuth2 特性，讨论了迁移路径。对 Spring 生态开发者来说，这是安全栈的重大升级，建议评估现有项目的版本 6 迁移计划。</p>
+        <span class="source">
+          <a href="https://www.youtube.com/watch?v=zO-bktrLju8" target="_blank" rel="noopener">[来源: Spring I/O]</a>
+        </span>
+      </article>
+
+      <article class="card">
+        <span class="tag tag-new">NEW</span>
+        <h3>Devin Review 集成安全扫描：自动发现漏洞并生成修复 PR</h3>
+        <p>Cognition 的 Devin Review 现在把安全审查作为每个 PR 的默认环节。打开 PR 后 Devin 自动发现传统扫描器遗漏的漏洞，逐条解释并起草修复代码。每个发现按严重度排序，标记 CWE ID，修复以可合并的 PR 形式呈现。</p>
+        <p>对开发团队来说，这意味着安全审查可以跟上发版速度，不再是发布前的阻塞环节。自动审查 + 人工复核的混合模式，可能是安全左移的最佳实践。</p>
+        <span class="source">
+          <a href="https://x.com/cognition/status/2067649690921820212" target="_blank" rel="noopener">[来源: Cognition(@cognition_labs)]</a>
+          <a href="https://devin.ai/blog/security-review" target="_blank" rel="noopener">[来源: Devin Blog]</a>
+        </span>
       </article>
     </section>
 
+    <!-- 深度技术解读 -->
     <section>
       <h2>深度技术解读</h2>
 
-      <article class="card">
-        <h3>Spring AI 2.0：把工具调用从模型私有循环变成可组合的 Advisor 链</h3>
-        <p>在 1.x 中，每个 Chat Model 实现都内置了自己的工具执行循环，功能可用但不可观测、无法拦截，也不能与其他行为组合。Spring AI 2.0 将工具循环提升到 Advisor Chain 中，成为一等可组合组件；<code>ChatClient</code> 的请求会依次经过 Advisor 链，并支持循环重入。</p>
-        <p>这意味着你可以像拼装中间件一样拼装工具调用：加日志、权限检查、重试、路由、人类确认，全部可插拔。模型特有的工具循环被拆成可替换实现，Agent 的“思考-调用-观察”流程第一次成为显式的架构层。</p>
-        <pre><code>ChatClient chatClient = ChatClient.builder(model)
-    .defaultAdvisors(
-        new ToolCallingAdvisor(toolCallbackResolver),
-        new LoggingAdvisor(),
-        new RetryAdvisor()
-    )
-    .build();</code></pre>
-        <p>建议：如果你正在用 Spring Boot 构建 Agent，现在就该把工具调用从 Service 层抽出来，放到 Advisor 层统一治理，这样后续加 eval 和审计会容易得多。</p>
-        <a class="source" href="https://spring.io/blog/2026/06/15/spring-ai-composable-tool-calling" target="_blank" rel="noopener">[来源: Spring]</a>
+      <article class="card deep-card">
+        <span class="tag tag-deep">DEEP DIVE</span>
+        <h3>解读一：RAG 系统的上下文管理——大窗口不是万能药</h3>
+        <p>freeCodeCamp 发布了一篇关于 RAG 系统上下文窗口管理的实战文章。核心观点：更大的上下文窗口不能替代良好的上下文管理。就像在未优化的图形上堆 GPU 性能——额外容量可以暂时掩盖低效，但解决不了根本优化问题。</p>
+        <p>作者分享了在消费级硬件上遇到的真实瓶颈：小窗口迫使你做 chunking、重排序、摘要，这些看似麻烦的步骤实际上是在训练你设计更健壮的系统。建议策略：1) 分层检索——先粗筛再精排；2) 动态压缩——根据问题复杂度调整送入 LLM 的上下文量；3) 缓存热点——高频查询的检索结果本地缓存；4) 评估驱动——用真实问答对测试不同窗口配置的效果。</p>
+        <pre><code># 分层检索示例：先向量检索粗筛，再 BM25 精排
+def hybrid_retrieve(query, top_k=20, final_k=5):
+    candidates = vector_search(query, top_k=top_k)  # 语义粗筛
+    ranked = bm25_rerank(query, candidates)         # 关键词精排
+    return ranked[:final_k]</code></pre>
+        <span class="source">
+          <a href="https://www.freecodecamp.org/news/how-to-handle-small-context-window-limits-in-rag-systems/" target="_blank" rel="noopener">[来源: freeCodeCamp Programming Tutorials]</a>
+        </span>
       </article>
 
-      <article class="card">
-        <h3>Samsung 用 AWS Lambda Response Streaming 实现电商实时定价</h3>
-        <p>Samsung.com 的高流量电商页面需要从多个后端聚合实时价格，传统同步调用在高并发下产生架构性延迟，导致“加入购物车时价格已变”的信任问题。他们用 AWS Lambda Response Streaming 配合 Amazon CloudFront，把聚合结果以流式方式返回给前端。</p>
-        <p>这篇案例详细讲了遗留架构痛点、无状态流式方案、关键实现模式以及性能结果。核心启示：当 API 需要聚合多个慢后端时，与其等所有数据到齐再返回，不如先返回可缓存/可预测的部分，再流式补齐动态字段。</p>
-        <p>可复用的模式：CloudFront 做边缘缓存与连接保持 → Lambda 流式响应 → 后端并行调用 + 超时降级 → 前端按 chunk 渲染。如果你的系统也有“多源聚合 + 高并发 + 低延迟”诉求，这个模式值得直接抄。</p>
-        <a class="source" href="https://aws.amazon.com/blogs/architecture/how-samsung-achieved-real-time-pricing-with-aws-lambda-response-streaming/" target="_blank" rel="noopener">[来源: AWS Architecture Blog]</a>
+      <article class="card deep-card">
+        <span class="tag tag-deep">DEEP DIVE</span>
+        <h3>解读二：向量数据库选型与召回评估的实战陷阱</h3>
+        <p>Milvus 和 Weaviate 今天都发布了向量数据库最佳实践。一个容易被忽视的陷阱：平均 Recall@5 达到 85% 看起来很健康，但按查询类型拆分后，精确匹配查询（产品型号、API 名称、合同 ID）可能只有 40%。其他类别把平均值拉高了，掩盖了真实失败点。</p>
+        <p>Weaviate 分享了数据接入的最佳实践：server-side batch.stream 让服务器动态处理导入速率；确定性 UUID 保证重跑不重复计费；blobHash 只保留 embedding 丢弃超大对象（10TB 缩到几 GB）；PDF 不用 OCR，直接用多模态模型嵌入页面图像。这些细节决定了从 pilot 到 production 的成败。</p>
+        <span class="source">
+          <a href="https://x.com/milvusio/status/2067630919070929350" target="_blank" rel="noopener">[来源: Milvus(@milvusio)]</a>
+          <a href="https://x.com/weaviate_io/status/2067623500932661726" target="_blank" rel="noopener">[来源: Weaviate AI Database(@weaviate_io)]</a>
+          <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636739&idx=1&sn=25c04590b9604ca58b4c69bd6c7de666" target="_blank" rel="noopener">[来源: dbaplus社群]</a>
+        </span>
       </article>
     </section>
 
+    <!-- 工具推荐 -->
     <section>
       <h2>工具推荐</h2>
+      <div class="tool-grid">
 
-      <article class="card">
-        <h3>GitHub Copilot CLI 常用 Slash 命令速查</h3>
-        <p>GitHub Copilot CLI 支持通过 Slash 命令直接在终端里切换模型、查看 token 消耗、恢复历史会话等。对习惯在 shell 里工作的开发者来说，这减少了在 IDE 与终端之间来回切换的上下文断裂。</p>
-        <p>建议先把 <code>/model</code>、<code>/usage</code>、<code>/resume</code> 三个命令设成熟练操作；非交互模式下配合这些命令可以写出更可预测的自动化脚本。</p>
-        <a class="source" href="https://github.blog/ai-and-ml/github-copilot/github-copilot-cli-for-beginners-overview-of-common-slash-commands/" target="_blank" rel="noopener">[来源: The GitHub Blog]</a>
-      </article>
+        <div class="tool-card">
+          <h4>Ky 2.0</h4>
+          <p>基于 Fetch API 的轻量 HTTP 客户端，2.0 版本整合了 hook 处理、增强超时管理、内置 schema 验证。从 axios 迁移的轻量替代方案，TypeScript 友好。</p>
+          <span class="source">
+            <a href="https://www.infoq.com/news/2026/06/ky-2-revamp-axios/" target="_blank" rel="noopener">[来源: InfoQ]</a>
+          </span>
+        </div>
 
-      <article class="card">
-        <h3>Spring Tools 5.2.0 发布，新增 Claude Code 实验插件</h3>
-        <p>新版 Spring Tools 支持 VS Code、Cursor、Eclipse、Theia 和 Claude Code，其中最值得关注的是实验性的 Claude Code 插件。它内嵌了一个 MCP Server，会把 Spring 项目的静态分析、索引信息、常见问题与修复建议暴露给 LLM。</p>
-        <p>同时提供的 Skills 能在验证与 Quick Fix 场景引导 LLM 如何使用这些信息。用 Spring + Claude Code 的同学可以先用起来，把“项目上下文喂给 Agent”这件事从手动粘贴变成自动暴露。</p>
-        <a class="source" href="https://spring.io/blog/2026/06/15/spring-tools-5-2-0-released" target="_blank" rel="noopener">[来源: Spring]</a>
-      </article>
+        <div class="tool-card">
+          <h4>LlamaIndex LiteParse v2.1</h4>
+          <p>完全无 LLM、纯规则驱动的 Markdown 解析器，在三个基准数据集上击败所有其他无模型竞品。适合需要快速、低成本文档预处理的场景。</p>
+          <span class="source">
+            <a href="https://x.com/llama_index/status/2067657865200824560" target="_blank" rel="noopener">[来源: LlamaIndex 🦙(@llama_index)]</a>
+          </span>
+        </div>
 
-      <article class="card">
-        <h3>Auth0 入驻 Vercel Marketplace</h3>
-        <p>现在可以在 Vercel Marketplace 一键为项目开通 Auth0，自动创建应用并与 Vercel 项目关联。它自带 Auth0 Next.js SDK、托管用户管理、会话与角色管理，还能在 Development / Preview / Production 环境间同步认证配置。</p>
-        <p>对 Next.js 开发者来说，这省掉了手工创建租户、配置回调地址、同步环境变量等重复劳动，是“身份即基础设施”的又一便利集成。</p>
-        <a class="source" href="https://vercel.com/changelog/auth0-joins-the-vercel-marketplace" target="_blank" rel="noopener">[来源: Vercel News]</a>
-      </article>
+        <div class="tool-card">
+          <h4>handoff (dazuiba)</h4>
+          <p>在 Claude Code / Codex 会话中直接委托任务给 DeepSeek 或其他模型。典型用法：Claude 负责规划和审阅，DeepSeek 负责执行，省钱同时不损失战力。</p>
+          <span class="source">
+            <a href="https://x.com/geekbb/status/2067632679776895405" target="_blank" rel="noopener">[来源: Geek(@geekbb)]</a>
+            <a href="https://github.com/dazuiba/handoff" target="_blank" rel="noopener">[GitHub]</a>
+          </span>
+        </div>
+
+        <div class="tool-card">
+          <h4>Agent Roles Manager</h4>
+          <p>原生桌面应用，用于浏览、安装和管理 AI 编程工具的 Agent 角色。解决多 Agent 环境下角色配置分散的问题，统一管理不同工具的 persona。</p>
+          <span class="source">
+            <a href="https://x.com/geekbb/status/2067572029952270415" target="_blank" rel="noopener">[来源: Geek(@geekbb)]</a>
+            <a href="https://github.com/msitarzewski/agent-roles" target="_blank" rel="noopener">[GitHub]</a>
+          </span>
+        </div>
+
+        <div class="tool-card">
+          <h4>LangSmith Sandboxes</h4>
+          <p>LangChain 推出的 Agent 运行沙箱环境，支持长时间运行（小时甚至天），无时间限制。与 harbor 框架集成，支持运行有状态 Agent 评估。</p>
+          <span class="source">
+            <a href="https://x.com/LangChain/status/2067684162610282771" target="_blank" rel="noopener">[来源: LangChain(@LangChainAI)]</a>
+            <a href="https://x.com/hwchase17/status/2067343633406414942" target="_blank" rel="noopener">[来源: Harrison Chase(@hwchase17)]</a>
+          </span>
+        </div>
+
+        <div class="tool-card">
+          <h4>JetBrains Qodana</h4>
+          <p>JetBrains 的代码质量与安全扫描工具，入围 2026 CODiE Awards 最佳 DevOps 工具。在 CI 早期运行深度静态分析，结果直接显示在 PR 和 IDE 中。</p>
+          <span class="source">
+            <a href="https://blog.jetbrains.com/qodana/2026/06/qodana-is-a-finalist-in-the-2026-codie-awards-for-best-devops-tool/" target="_blank" rel="noopener">[来源: The JetBrains Blog]</a>
+          </span>
+        </div>
+
+      </div>
     </section>
 
+    <!-- 实践指南 -->
     <section>
       <h2>实践指南</h2>
 
-      <article class="card">
-        <h3>用 AI 构建自愈型 CI/CD Pipeline</h3>
-        <p>freeCodeCamp 发布了一门实战课程，教你把 GitHub Actions、OpenAI 与 n8n 串起来：当 CI/CD 失败时，自动分析日志、生成 patch 并发起 Pull Request。课程覆盖 Node.js/Express 应用搭建、AI 日志分析系统、GitHub Token 安全加固与反馈闭环。</p>
-        <p>落地建议：先选一个长期 flaky 的测试或构建失败做试点，让 Agent 只负责“定位 + 生成候选修复”，人类 Review 后再合并；等准确率稳定后再完全自动化。</p>
-        <a class="source" href="https://www.freecodecamp.org/news/build-a-self-healing-cicd-pipeline-with-ai/" target="_blank" rel="noopener">[来源: freeCodeCamp Programming Tutorials]</a>
-      </article>
+      <div class="practice-box">
+        <h4>指南一：在 Claude Code 中配置 GLM-5.2 的 1M 上下文模式</h4>
+        <ul>
+          <li>修改 .claude/settings.json，将 ANTHROPIC_BASE_URL 指向智谱的 anthropic 兼容接口</li>
+          <li>模型名必须带 [1m] 后缀，否则默认走普通上下文长度</li>
+          <li>配置后用 /status 确认走的是 1M 线路</li>
+          <li>1M 的价值不在"能塞多少"，而在"能不能把整件事从头做到尾不跑偏"</li>
+          <li>建议把任务拆成可验证的子步骤，每完成一步让模型自我检查</li>
+        </ul>
+        <span class="source">
+          <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723560&idx=1&sn=f82183c00b95dc2b76e98c407b7d9776" target="_blank" rel="noopener">[来源: Datawhale]</a>
+        </span>
+      </div>
 
-      <article class="card">
-        <h3>云中 AI 治理：给架构师的实用指南</h3>
-        <p>InfoQ 文章提出了一套可落地的 AI 治理框架：发现 Shadow AI、在数据创建时分类、通过 IAM 强制执行、用 Policy-as-Code 把规则嵌入交付流水线，并辅以运营控制。目标是在安全、合规与开发者效率之间取得平衡，而不是靠人工审批拖慢交付。</p>
-        <p>关键实践：把模型调用、训练数据访问、密钥使用全部纳入现有云 IAM 与成本标签体系；在 CI 阶段扫描是否引用了未批准的模型或外部 API，做到“事前阻断”而非“事后审计”。</p>
-        <a class="source" href="https://www.infoq.com/articles/governing-ai-cloud-guide/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a>
-      </article>
+      <div class="practice-box">
+        <h4>指南二：构建个人 AI Advisor Skill 的方法论</h4>
+        <ul>
+          <li>保持 SKILL.md 简洁可分享，定义角色、上下文文件、建议方式、学习保存规则</li>
+          <li>个人上下文放在独立文件：plan.md（目标与原则）、learnings.md（历史模式）、eval.md（检查清单）</li>
+          <li>上下文越多，建议越不 generic——这是对抗 AI 建议同质化的核心策略</li>
+          <li>定期让 Advisor 根据新对话更新 learnings.md，形成持续进化的个人知识库</li>
+          <li>把 Skill 和上下文文件放在 Git 仓库里，跨设备同步</li>
+        </ul>
+        <span class="source">
+          <a href="https://x.com/petergyang/status/2067612053293191515" target="_blank" rel="noopener">[来源: Peter Yang(@petergyang)]</a>
+        </span>
+      </div>
+
+      <div class="practice-box">
+        <h4>指南三：企业级 Agent 部署的五大支柱</h4>
+        <ul>
+          <li><strong>评估先行</strong>：在写代码前用数值定义成功标准，否则无法判断模型是否"够好"</li>
+          <li><strong>可观测性</strong>：追踪每个 Agent 决策，欧洲监管已要求此能力</li>
+          <li><strong>数据管道</strong>：新文档必须自动重新嵌入，否则 Agent 会提供过期答案</li>
+          <li><strong>回退机制</strong>：模型失效时优雅降级，不阻塞用户流程</li>
+          <li><strong>持续测量</strong>：上线后监控用户满意度与业务指标，而非仅监控 token 消耗</li>
+        </ul>
+        <span class="source">
+          <a href="https://www.youtube.com/watch?v=ObTPqBGsEbA" target="_blank" rel="noopener">[来源: AI Engineer - Databricks]</a>
+        </span>
+      </div>
+
+      <div class="practice-box">
+        <h4>指南四：Vibe Coding 项目的成本核算与 MVP 策略</h4>
+        <ul>
+          <li>一个完整研发排期工具的实际成本：token 费用 24.9 元 + 云服务器 59.9 元/3个月 = 不到 85 元</li>
+          <li>8 小时完成传统团队数万元的开发流程，关键是把需求拆到 AI 能单步完成的粒度</li>
+          <li>AI 幻觉和不可控性确实存在，但时间/人力/机会/沉没成本被压到了最低</li>
+          <li>产品经理喊了多年的 MVP 策略，直到 AI 辅助开发才真正可行</li>
+          <li>建议记录每个项目的实际开销和耗时，建立自己的"AI 开发成本基准库"</li>
+        </ul>
+        <span class="source">
+          <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651928177&idx=3&sn=feb7097a0febfdd4f95087ae34d6f1c2" target="_blank" rel="noopener">[来源: 人人都是产品经理]</a>
+        </span>
+      </div>
     </section>
 
+    <!-- 参考链接汇总 -->
     <section>
       <h2>参考链接汇总</h2>
-      <ul class="ref-list">
-        <li><a href="https://aws.amazon.com/blogs/machine-learning/introducing-gemma-4-models-on-amazon-bedrock/" target="_blank" rel="noopener">Artificial Intelligence</a></li>
-        <li><a href="https://vercel.com/changelog/vercel-functions-can-now-run-up-to-30-minutes" target="_blank" rel="noopener">Vercel News</a></li>
-        <li><a href="https://github.blog/ai-and-ml/llms/accelerating-researchers-and-developers-building-multilingual-ai-with-a-new-open-dataset/" target="_blank" rel="noopener">The GitHub Blog</a></li>
-        <li><a href="https://aws.amazon.com/blogs/machine-learning/ai-agent-failure-detection-and-root-cause-analysis-with-strands-evals/" target="_blank" rel="noopener">Artificial Intelligence</a></li>
-        <li><a href="https://seangoedecke.com/ai-gpus-live-longer-than-three-years/" target="_blank" rel="noopener">seangoedecke.com RSS feed</a></li>
-        <li><a href="https://www.infoq.com/news/2026/06/claude-5-release/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></li>
-        <li><a href="https://spring.io/blog/2026/06/15/spring-ai-composable-tool-calling" target="_blank" rel="noopener">Spring</a></li>
-        <li><a href="https://aws.amazon.com/blogs/architecture/how-samsung-achieved-real-time-pricing-with-aws-lambda-response-streaming/" target="_blank" rel="noopener">AWS Architecture Blog</a></li>
-        <li><a href="https://github.blog/ai-and-ml/github-copilot/github-copilot-cli-for-beginners-overview-of-common-slash-commands/" target="_blank" rel="noopener">The GitHub Blog</a></li>
-        <li><a href="https://spring.io/blog/2026/06/15/spring-tools-5-2-0-released" target="_blank" rel="noopener">Spring</a></li>
-        <li><a href="https://vercel.com/changelog/auth0-joins-the-vercel-marketplace" target="_blank" rel="noopener">Vercel News</a></li>
-        <li><a href="https://www.freecodecamp.org/news/build-a-self-healing-cicd-pipeline-with-ai/" target="_blank" rel="noopener">freeCodeCamp Programming Tutorials</a></li>
-        <li><a href="https://www.infoq.com/articles/governing-ai-cloud-guide/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></li>
-      </ul>
+      <div class="ref-section">
+        <ul class="ref-list">
+          <li><a href="https://x.com/berryxia/status/2067407315129774287" target="_blank" rel="noopener">Epic Lore VCS 开源</a></li>
+          <li><a href="https://simonwillison.net/2026/Jun/17/glm-52/#atom-everything" target="_blank" rel="noopener">GLM-5.2 技术解析</a></li>
+          <li><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723560&idx=1&sn=f82183c00b95dc2b76e98c407b7d9776" target="_blank" rel="noopener">GLM-5.2 实测攻略</a></li>
+          <li><a href="https://vercel.com/blog/introducing-eve" target="_blank" rel="noopener">Vercel Eve 框架</a></li>
+          <li><a href="https://x.com/claudeai/status/2067671912038240487" target="_blank" rel="noopener">Claude Code Artifacts</a></li>
+          <li><a href="https://cursor.com/changelog/cloud" target="_blank" rel="noopener">Cursor Cloud 子 Agent</a></li>
+          <li><a href="https://github.blog/open-source/maintainers/how-pull-request-limits-are-cutting-down-the-noise/" target="_blank" rel="noopener">GitHub PR Limits</a></li>
+          <li><a href="https://www.youtube.com/watch?v=zO-bktrLju8" target="_blank" rel="noopener">Spring Security 7</a></li>
+          <li><a href="https://x.com/cognition/status/2067649690921820212" target="_blank" rel="noopener">Devin Security Review</a></li>
+          <li><a href="https://devin.ai/blog/security-review" target="_blank" rel="noopener">Devin Security Blog</a></li>
+          <li><a href="https://www.freecodecamp.org/news/how-to-handle-small-context-window-limits-in-rag-systems/" target="_blank" rel="noopener">RAG 上下文管理</a></li>
+          <li><a href="https://x.com/milvusio/status/2067630919070929350" target="_blank" rel="noopener">Milvus 召回评估</a></li>
+          <li><a href="https://x.com/weaviate_io/status/2067623500932661726" target="_blank" rel="noopener">Weaviate 数据接入</a></li>
+          <li><a href="https://www.infoq.com/news/2026/06/ky-2-revamp-axios/" target="_blank" rel="noopener">Ky 2.0 HTTP 客户端</a></li>
+          <li><a href="https://x.com/llama_index/status/2067657865200824560" target="_blank" rel="noopener">LiteParse v2.1</a></li>
+          <li><a href="https://github.com/dazuiba/handoff" target="_blank" rel="noopener">handoff 模型委托</a></li>
+          <li><a href="https://github.com/msitarzewski/agent-roles" target="_blank" rel="noopener">Agent Roles Manager</a></li>
+          <li><a href="https://x.com/hwchase17/status/2067343633406414942" target="_blank" rel="noopener">LangSmith Sandboxes</a></li>
+          <li><a href="https://blog.jetbrains.com/qodana/2026/06/qodana-is-a-finalist-in-the-2026-codie-awards-for-best-devops-tool/" target="_blank" rel="noopener">JetBrains Qodana</a></li>
+          <li><a href="https://x.com/petergyang/status/2067612053293191515" target="_blank" rel="noopener">AI Advisor Skill 方法论</a></li>
+          <li><a href="https://www.youtube.com/watch?v=ObTPqBGsEbA" target="_blank" rel="noopener">企业 Agent 部署五大支柱</a></li>
+          <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651928177&idx=3&sn=feb7097a0febfdd4f95087ae34d6f1c2" target="_blank" rel="noopener">Vibe Coding 成本核算</a></li>
+          <li><a href="https://x.com/shao__meng/status/2067405750646055226" target="_blank" rel="noopener">Vercel Eve 架构</a></li>
+          <li><a href="https://x.com/mikeyk/status/2067674333502427620" target="_blank" rel="noopener">Artifacts 设计思路</a></li>
+          <li><a href="https://x.com/omarsar0/status/2067344437810803052" target="_blank" rel="noopener">GLM-5.2 设计能力</a></li>
+          <li><a href="https://supertechfans.com/cn/post/2026-06-18-HackerNews/" target="_blank" rel="noopener">HackerNews 每日摘要</a></li>
+          <li><a href="https://x.com/omarsar0/status/2067351358206820370" target="_blank" rel="noopener">Block Builderbot 实践</a></li>
+          <li><a href="https://block.xyz/inside/block-research/builderbot" target="_blank" rel="noopener">Block Builderbot 详情</a></li>
+          <li><a href="https://x.com/petergyang/status/2067351624834781277" target="_blank" rel="noopener">设计师转 principal engineer 工作流</a></li>
+          <li><a href="https://x.com/omarsar0/status/2067618845926510770" target="_blank" rel="noopener">SkillWeaver 组合技能路由</a></li>
+          <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636739&idx=1&sn=25c04590b9604ca58b4c69bd6c7de666" target="_blank" rel="noopener">向量数据库面试题</a></li>
+          <li><a href="https://x.com/geekbb/status/2067602480649711694" target="_blank" rel="noopener">文章配图生成工具</a></li>
+          <li><a href="https://github.com/yangchuansheng/ai-image-generator" target="_blank" rel="noopener">ai-image-generator GitHub</a></li>
+        </ul>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>精选自 90 条候选 · 只保留能落地、有代码/架构细节的技术内容</p>
+    <p>开发者实践日报 · 2026-06-18 · 基于 586 条技术动态精选</p>
+    <p style="margin-top:6px;">筛选原则：优先可落地的技术方案、代码示例、踩坑经验、新工具发布 · 排除纯商业新闻、融资信息、人事变动</p>
   </footer>
 </body>
 </html>
