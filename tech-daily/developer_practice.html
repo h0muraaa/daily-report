@@ -1,486 +1,715 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>开发者实践日报 · 2026-06-18</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --surface-2: #1f2937;
-      --border: #30363d;
-      --text: #c9d1d9;
-      --text-dim: #8b949e;
-      --accent: #58a6ff;
-      --accent-2: #3fb950;
-      --accent-purple: #a371f7;
-      --accent-orange: #f0883e;
-      --code-bg: #0d1117;
-      --code-text: #e6edf3;
-      --link: #79c0ff;
-      --link-hover: #a5d6ff;
-      --tag-bg: #21262d;
-      --tag-text: #58a6ff;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
-      line-height: 1.7;
-      font-size: 15px;
-    }
-    a { color: var(--link); text-decoration: none; }
-    a:hover { color: var(--link-hover); text-decoration: underline; }
-    header {
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      padding: 2rem 1rem;
-      text-align: center;
-    }
-    header h1 { margin: 0 0 .5rem; font-size: 1.8rem; color: var(--accent); }
-    header time { color: var(--text-dim); font-size: .9rem; }
-    header .meta { color: var(--text-dim); font-size: .85rem; margin-top: .5rem; }
-    header .meta span { margin: 0 .6rem; }
-    main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
-    section { margin-bottom: 3rem; }
-    h2 {
-      color: var(--accent-2);
-      border-left: 4px solid var(--accent-2);
-      padding-left: .75rem;
-      font-size: 1.35rem;
-      margin-bottom: 1.25rem;
-    }
-    h3 { color: var(--accent); font-size: 1.1rem; margin: 1.5rem 0 .5rem; }
-    .intro { color: var(--text-dim); margin-bottom: 2rem; }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    .card:hover { border-color: var(--accent); }
-    .card p { margin: .6rem 0; line-height: 1.8; }
-    .source { display: block; margin-top: .75rem; font-size: .85rem; color: var(--text-dim); font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace; }
-    .source a { color: var(--link); }
-    .source a:hover { color: var(--link-hover); }
-    .tag {
-      display: inline-block;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-size: .75rem;
-      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
-      font-weight: 500;
-      margin-right: .4rem;
-      margin-bottom: .5rem;
-    }
-    .tag-new { background: rgba(63, 185, 80, 0.15); color: var(--accent-2); }
-    .tag-tool { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
-    .tag-deep { background: rgba(163, 113, 247, 0.15); color: var(--accent-purple); }
-    .tag-practice { background: rgba(240, 136, 62, 0.15); color: var(--accent-orange); }
-    .deep-card { border-left: 3px solid var(--accent-purple); }
-    .deep-card h3 { color: var(--accent-purple); }
-    pre {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem;
-      overflow-x: auto;
-      color: var(--code-text);
-      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
-      font-size: .85em;
-      line-height: 1.6;
-      margin: .75rem 0;
-    }
-    code {
-      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
-      font-size: .9em;
-    }
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-    .tool-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-    }
-    .tool-card h4 {
-      font-size: 1em;
-      color: var(--accent-2);
-      margin-bottom: .5rem;
-      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
-    }
-    .tool-card p { color: var(--text-dim); font-size: .9em; line-height: 1.7; }
-    .practice-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    .practice-box h4 { color: var(--accent-orange); font-size: 1.05em; margin-bottom: .75rem; }
-    .practice-box ul { list-style: none; padding: 0; }
-    .practice-box ul li {
-      padding: .4rem 0 .4rem 1.5rem;
-      position: relative;
-      color: var(--text-dim);
-      font-size: .95em;
-      line-height: 1.7;
-    }
-    .practice-box ul li::before {
-      content: "→";
-      position: absolute;
-      left: 0;
-      color: var(--accent-orange);
-      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
-    }
-    .ref-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-    }
-    .ref-list {
-      list-style: none;
-      padding: 0;
-      column-count: 2;
-      column-gap: 2rem;
-    }
-    .ref-list li {
-      padding: .3rem 0;
-      font-size: .85em;
-      font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Monaco, "Courier New", monospace;
-      break-inside: avoid;
-    }
-    .ref-list li a { color: var(--text-dim); }
-    .ref-list li a:hover { color: var(--link); }
-    footer {
-      text-align: center;
-      color: var(--text-dim);
-      font-size: .85rem;
-      padding: 2rem 1rem;
-      border-top: 1px solid var(--border);
-      margin-top: 2rem;
-    }
-    @media (max-width: 640px) {
-      .ref-list { column-count: 1; }
-      .tool-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践日报</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-hover: #21262d;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-yellow: #d29922;
+            --accent-red: #f85149;
+            --accent-purple: #a371f7;
+            --code-font: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Cascadia Code', Consolas, Monaco, 'Courier New', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--code-font);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, #1a2332 100%);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-green), var(--accent-yellow));
+        }
+
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .header-title::before {
+            content: '</>';
+            color: var(--accent-green);
+            font-size: 1.25rem;
+        }
+
+        .header-date {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .header-date .separator {
+            color: var(--text-muted);
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            margin-top: 0.75rem;
+        }
+
+        .header-badge::before {
+            content: '●';
+            color: var(--accent-green);
+            font-size: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Section title */
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '//';
+            color: var(--accent-purple);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: transparent;
+            border-radius: 12px 12px 0 0;
+            transition: background 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover::before {
+            background: var(--accent-blue);
+        }
+
+        .card-number {
+            position: absolute;
+            top: -1px;
+            right: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-right: 3rem;
+            line-height: 1.4;
+        }
+
+        .card-section {
+            margin-bottom: 0.875rem;
+        }
+
+        .card-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-yellow);
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .card-label::before {
+            content: '>';
+            color: var(--accent-green);
+            font-size: 0.625rem;
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.7;
+        }
+
+        .card-text strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Source link */
+        .source-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.8125rem;
+            transition: all 0.2s ease;
+        }
+
+        .source-link:hover {
+            background: var(--accent-blue);
+            color: var(--bg-primary);
+            border-color: var(--accent-blue);
+        }
+
+        .source-link::after {
+            content: '↗';
+            font-size: 0.75rem;
+        }
+
+        /* References section */
+        .references {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .references-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .references-title::before {
+            content: '#';
+            color: var(--accent-purple);
+        }
+
+        .references-list {
+            list-style: none;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .references-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .references-list li:hover {
+            border-color: var(--accent-green);
+            background: var(--bg-hover);
+        }
+
+        .references-list li::before {
+            content: counter(item, decimal-leading-zero);
+            counter-increment: item;
+            color: var(--accent-green);
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 1.5rem;
+        }
+
+        .references-list {
+            counter-reset: item;
+        }
+
+        .references-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .references-list a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-title {
+                font-size: 1.375rem;
+            }
+
+            .header-date {
+                font-size: 0.8125rem;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .header-date .separator {
+                display: none;
+            }
+
+            .card {
+                padding: 1.25rem;
+            }
+
+            .card-title {
+                font-size: 1rem;
+                padding-right: 2.5rem;
+            }
+
+            .container {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 5px;
+            border: 2px solid var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--accent-blue);
+            color: var(--bg-primary);
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>开发者实践日报 · 2026-06-18</h1>
-    <time>2026-06-18</time>
-    <p>全栈技术视角：聚焦可落地的工具、框架、代码与工程方案</p>
-    <p class="meta">
-      <span>586 条技术动态</span>
-      <span>424 个信息源</span>
-      <span>24h 滚动更新</span>
-    </p>
-  </header>
-
-  <main>
-    <p class="intro">
-      今日从 586 条技术动态中，优先筛选了可落地的技术方案、代码示例、踩坑经验与新工具发布。排除纯商业新闻、融资信息、人事变动。内容覆盖开源 VCS、大模型上下文优化、Agent 框架、IDE 增强、安全审查与 RAG 工程实践。
-    </p>
-
-    <!-- 今日技术热榜 -->
-    <section>
-      <h2>今日技术热榜</h2>
-
-      <article class="card">
-        <span class="tag tag-new">NEW</span>
-        <h3>Epic 开源版本控制系统 Lore：专为游戏开发大规模二进制资产设计</h3>
-        <p>Epic Games 正式开源从零打造的版本控制系统 Lore，采用 MIT 协议。核心目标是解决游戏开发中 Git 处理海量二进制资产卡顿、Perforce 又太重太贵的痛点。Lore 把可扩展性和性能作为第一天优先级，所有源码、数据格式和协议文档全部开放。</p>
-        <p>游戏项目动辄几十上百 GB 资产，传统 VCS 很容易成为瓶颈。Lore 针对这些场景原生优化，未来可能蚕食 Perforce 在游戏行业的份额。大厂把造好的轮子直接开源，对整个生态都是利好。</p>
-        <span class="source">
-          <a href="https://x.com/berryxia/status/2067407315129774287" target="_blank" rel="noopener">[来源: Berryxia.AI(@berryxia)]</a>
-          <a href="https://supertechfans.com/cn/post/2026-06-18-HackerNews/" target="_blank" rel="noopener">[来源: HackerNews每日摘要 on SuperTechFans]</a>
-        </span>
-      </article>
-
-      <article class="card">
-        <span class="tag tag-new">NEW</span>
-        <h3>智谱 GLM-5.2 开源：753B 参数 MoE 模型，1M 上下文窗口登顶开源榜</h3>
-        <p>智谱 Z.ai 发布 GLM-5.2，753B 总参数、40B 激活参数的 MoE 架构，上下文窗口从 20 万扩展到 100 万 token。在 Artificial Analysis 独立评测中，GLM-5.2 成为新的开源权重模型领导者，Code Arena 前端盲测全球可用模型第一。</p>
-        <p>实测要点：在 Claude Code 中启用需把模型名设为带 [1m] 后缀的版本，否则默认走普通上下文。1M 上下文的真正价值不在窗口大小，而在如何组织信息——让模型能从头到尾完成复杂任务而不跑偏。Datawhale 已放出完整实测攻略。</p>
-        <span class="source">
-          <a href="https://simonwillison.net/2026/Jun/17/glm-52/#atom-everything" target="_blank" rel="noopener">[来源: Simon Willison's Weblog]</a>
-          <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723560&idx=1&sn=f82183c00b95dc2b76e98c407b7d9776" target="_blank" rel="noopener">[来源: Datawhale]</a>
-          <a href="https://x.com/omarsar0/status/2067344437810803052" target="_blank" rel="noopener">[来源: elvis(@omarsar0)]</a>
-        </span>
-      </article>
-
-      <article class="card">
-        <span class="tag tag-tool">TOOL</span>
-        <h3>Vercel 开源 Agent 框架 Eve：生产级能力开箱即用</h3>
-        <p>Vercel 把内部反复出现的 Agent 形态抽象成框架开源。核心设计是"Agent 即目录"：agent.ts 放模型配置、instructions.md 放系统提示、tools/ 放可执行能力、skills/ 放领域知识、subagents/ 放子 Agent 委托。</p>
-        <p>内置生产能力包括：持久会话（可 checkpoint 的 durable workflow）、沙箱隔离（代码与主应用隔离）、Human-in-the-loop（审批后从断点继续）、多 Channel 支持（HTTP/Slack/Discord/Teams 统一服务）、OpenTelemetry 标准 trace。开发者只写"做什么"，框架处理"怎么跑起来"。</p>
-        <span class="source">
-          <a href="https://x.com/shao__meng/status/2067405750646055226" target="_blank" rel="noopener">[来源: meng shao(@shao__meng)]</a>
-          <a href="https://vercel.com/blog/introducing-eve" target="_blank" rel="noopener">[来源: Vercel Blog]</a>
-        </span>
-      </article>
-
-      <article class="card">
-        <span class="tag tag-tool">TOOL</span>
-        <h3>Claude Code 新增 Artifacts：会话产物可部署为 HTML 站点并分享</h3>
-        <p>Anthropic 在 Claude Code 中推出 Artifacts 功能，可以把会话中的交互页面（PR 审查、项目仪表盘、架构文档）生成私有链接分享给团队。Artifacts 会随会话持续更新，共享者始终看到最新版本。</p>
-        <p>它基于完整会话上下文（代码库、插件、skills、连接工具）生成，在 Team 和 Enterprise 计划中可用。Mike Krieger 提到，随着 Claude 工作越来越深入独立，用 Artifacts 让它解释自己的思考和输出变得非常有价值。</p>
-        <span class="source">
-          <a href="https://x.com/claudeai/status/2067671912038240487" target="_blank" rel="noopener">[来源: Claude(@claudeai)]</a>
-          <a href="https://x.com/mikeyk/status/2067674333502427620" target="_blank" rel="noopener">[来源: Mike Krieger(@mikeyk)]</a>
-        </span>
-      </article>
-
-      <article class="card">
-        <span class="tag tag-new">NEW</span>
-        <h3>Cursor 推出 /in-cloud 子 Agent：云端 VM 隔离长时任务</h3>
-        <p>Cursor 新增 /in-cloud 命令，可以在独立云 VM 中启动子 Agent。特别适用于隔离长时间运行或并行任务，保持本地工作区干净和响应。手机端也能触发 Agent，笔记本合上后云端继续工作。</p>
-        <p>这是 Cursor 从本地编辑器向"云端+本地"混合开发模式的关键一步。对开发者来说，意味着可以把编译、测试、大规模重构等重任务丢到云端，本地只保留轻量交互。</p>
-        <span class="source">
-          <a href="https://x.com/cursor_ai/status/2067366343817805899" target="_blank" rel="noopener">[来源: Cursor(@cursor_ai)]</a>
-          <a href="https://cursor.com/changelog/cloud" target="_blank" rel="noopener">[来源: Cursor Changelog]</a>
-        </span>
-      </article>
-
-      <article class="card">
-        <span class="tag tag-practice">PRACTICE</span>
-        <h3>GitHub 推出 PR 数量限制：治理开源贡献噪音</h3>
-        <p>GitHub 引入 pull request limits 功能，允许仓库设置非写入用户同时打开 PR 的最大数量。达到上限后必须关闭或合并一个才能再开。这直接回应了维护者最头疼的问题：PR 太多、低质量噪音太多、管理手段太少。</p>
-        <p>Copilot 或 bot 打开的 PR 可以单独设置不同限制。这是开源治理的基础设施改进，对大型项目维护者来说是刚需功能，能有效过滤"刷存在感"式的低质量贡献。</p>
-        <span class="source">
-          <a href="https://github.blog/open-source/maintainers/how-pull-request-limits-are-cutting-down-the-noise/" target="_blank" rel="noopener">[来源: The GitHub Blog]</a>
-        </span>
-      </article>
-
-      <article class="card">
-        <span class="tag tag-new">NEW</span>
-        <h3>Spring Security 7 发布：MFA、OAuth2 增强、MCP 集成</h3>
-        <p>Spring Security 7 在 Spring I/O 2026 上正式发布，最大亮点是期盼十多年的多因素认证（MFA）原生支持。同时包含 OAuth2 现代授权流增强、AI agent 通过 Model Context Protocol 集成、更安全的默认配置、Jackson 3 支持。</p>
-        <p>Session 详细展示了新 MFA API 的用法和 OAuth2 特性，讨论了迁移路径。对 Spring 生态开发者来说，这是安全栈的重大升级，建议评估现有项目的版本 6 迁移计划。</p>
-        <span class="source">
-          <a href="https://www.youtube.com/watch?v=zO-bktrLju8" target="_blank" rel="noopener">[来源: Spring I/O]</a>
-        </span>
-      </article>
-
-      <article class="card">
-        <span class="tag tag-new">NEW</span>
-        <h3>Devin Review 集成安全扫描：自动发现漏洞并生成修复 PR</h3>
-        <p>Cognition 的 Devin Review 现在把安全审查作为每个 PR 的默认环节。打开 PR 后 Devin 自动发现传统扫描器遗漏的漏洞，逐条解释并起草修复代码。每个发现按严重度排序，标记 CWE ID，修复以可合并的 PR 形式呈现。</p>
-        <p>对开发团队来说，这意味着安全审查可以跟上发版速度，不再是发布前的阻塞环节。自动审查 + 人工复核的混合模式，可能是安全左移的最佳实践。</p>
-        <span class="source">
-          <a href="https://x.com/cognition/status/2067649690921820212" target="_blank" rel="noopener">[来源: Cognition(@cognition_labs)]</a>
-          <a href="https://devin.ai/blog/security-review" target="_blank" rel="noopener">[来源: Devin Blog]</a>
-        </span>
-      </article>
-    </section>
-
-    <!-- 深度技术解读 -->
-    <section>
-      <h2>深度技术解读</h2>
-
-      <article class="card deep-card">
-        <span class="tag tag-deep">DEEP DIVE</span>
-        <h3>解读一：RAG 系统的上下文管理——大窗口不是万能药</h3>
-        <p>freeCodeCamp 发布了一篇关于 RAG 系统上下文窗口管理的实战文章。核心观点：更大的上下文窗口不能替代良好的上下文管理。就像在未优化的图形上堆 GPU 性能——额外容量可以暂时掩盖低效，但解决不了根本优化问题。</p>
-        <p>作者分享了在消费级硬件上遇到的真实瓶颈：小窗口迫使你做 chunking、重排序、摘要，这些看似麻烦的步骤实际上是在训练你设计更健壮的系统。建议策略：1) 分层检索——先粗筛再精排；2) 动态压缩——根据问题复杂度调整送入 LLM 的上下文量；3) 缓存热点——高频查询的检索结果本地缓存；4) 评估驱动——用真实问答对测试不同窗口配置的效果。</p>
-        <pre><code># 分层检索示例：先向量检索粗筛，再 BM25 精排
-def hybrid_retrieve(query, top_k=20, final_k=5):
-    candidates = vector_search(query, top_k=top_k)  # 语义粗筛
-    ranked = bm25_rerank(query, candidates)         # 关键词精排
-    return ranked[:final_k]</code></pre>
-        <span class="source">
-          <a href="https://www.freecodecamp.org/news/how-to-handle-small-context-window-limits-in-rag-systems/" target="_blank" rel="noopener">[来源: freeCodeCamp Programming Tutorials]</a>
-        </span>
-      </article>
-
-      <article class="card deep-card">
-        <span class="tag tag-deep">DEEP DIVE</span>
-        <h3>解读二：向量数据库选型与召回评估的实战陷阱</h3>
-        <p>Milvus 和 Weaviate 今天都发布了向量数据库最佳实践。一个容易被忽视的陷阱：平均 Recall@5 达到 85% 看起来很健康，但按查询类型拆分后，精确匹配查询（产品型号、API 名称、合同 ID）可能只有 40%。其他类别把平均值拉高了，掩盖了真实失败点。</p>
-        <p>Weaviate 分享了数据接入的最佳实践：server-side batch.stream 让服务器动态处理导入速率；确定性 UUID 保证重跑不重复计费；blobHash 只保留 embedding 丢弃超大对象（10TB 缩到几 GB）；PDF 不用 OCR，直接用多模态模型嵌入页面图像。这些细节决定了从 pilot 到 production 的成败。</p>
-        <span class="source">
-          <a href="https://x.com/milvusio/status/2067630919070929350" target="_blank" rel="noopener">[来源: Milvus(@milvusio)]</a>
-          <a href="https://x.com/weaviate_io/status/2067623500932661726" target="_blank" rel="noopener">[来源: Weaviate AI Database(@weaviate_io)]</a>
-          <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636739&idx=1&sn=25c04590b9604ca58b4c69bd6c7de666" target="_blank" rel="noopener">[来源: dbaplus社群]</a>
-        </span>
-      </article>
-    </section>
-
-    <!-- 工具推荐 -->
-    <section>
-      <h2>工具推荐</h2>
-      <div class="tool-grid">
-
-        <div class="tool-card">
-          <h4>Ky 2.0</h4>
-          <p>基于 Fetch API 的轻量 HTTP 客户端，2.0 版本整合了 hook 处理、增强超时管理、内置 schema 验证。从 axios 迁移的轻量替代方案，TypeScript 友好。</p>
-          <span class="source">
-            <a href="https://www.infoq.com/news/2026/06/ky-2-revamp-axios/" target="_blank" rel="noopener">[来源: InfoQ]</a>
-          </span>
+    <header class="header">
+        <h1 class="header-title">开发者实践日报</h1>
+        <div class="header-date">
+            <span>2026-06-18 19:21:44</span>
+            <span class="separator">→</span>
+            <span>2026-06-19 19:21:44</span>
         </div>
+        <div class="header-badge">15 条精选技术资讯</div>
+    </header>
 
-        <div class="tool-card">
-          <h4>LlamaIndex LiteParse v2.1</h4>
-          <p>完全无 LLM、纯规则驱动的 Markdown 解析器，在三个基准数据集上击败所有其他无模型竞品。适合需要快速、低成本文档预处理的场景。</p>
-          <span class="source">
-            <a href="https://x.com/llama_index/status/2067657865200824560" target="_blank" rel="noopener">[来源: LlamaIndex 🦙(@llama_index)]</a>
-          </span>
-        </div>
+    <main class="container">
+        <div class="section-title">技术动态</div>
 
-        <div class="tool-card">
-          <h4>handoff (dazuiba)</h4>
-          <p>在 Claude Code / Codex 会话中直接委托任务给 DeepSeek 或其他模型。典型用法：Claude 负责规划和审阅，DeepSeek 负责执行，省钱同时不损失战力。</p>
-          <span class="source">
-            <a href="https://x.com/geekbb/status/2067632679776895405" target="_blank" rel="noopener">[来源: Geek(@geekbb)]</a>
-            <a href="https://github.com/dazuiba/handoff" target="_blank" rel="noopener">[GitHub]</a>
-          </span>
-        </div>
+        <!-- Card 1 -->
+        <article class="card">
+            <span class="card-number">01</span>
+            <h2 class="card-title">VS Code 1.126 发布</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">Visual Studio Code 最新版本发布，包含多项新功能和改进。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">作为最主流的代码编辑器，VS Code 的每次更新都直接影响数百万开发者的日常工作效率。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">版本号 1.126（Insiders 渠道），具体新特性需查看完整发布说明。</p>
+            </div>
+            <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.126" class="source-link" target="_blank" rel="noopener">[来源: Microsoft for Developers]</a>
+        </article>
 
-        <div class="tool-card">
-          <h4>Agent Roles Manager</h4>
-          <p>原生桌面应用，用于浏览、安装和管理 AI 编程工具的 Agent 角色。解决多 Agent 环境下角色配置分散的问题，统一管理不同工具的 persona。</p>
-          <span class="source">
-            <a href="https://x.com/geekbb/status/2067572029952270415" target="_blank" rel="noopener">[来源: Geek(@geekbb)]</a>
-            <a href="https://github.com/msitarzewski/agent-roles" target="_blank" rel="noopener">[GitHub]</a>
-          </span>
-        </div>
+        <!-- Card 2 -->
+        <article class="card">
+            <span class="card-number">02</span>
+            <h2 class="card-title">OpenAI Codex 发布 Record & Replay 功能：演示一次即可生成可复用 Skill</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">Codex 新增"录制与回放"能力，开发者在 Mac 上演示一次重复性操作流程，Codex 自动观察并生成可编辑、可复用的 Skill 文件。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">这是 AI 编程工具从"写提示词"到"做给它看"的关键跨越，大幅降低自动化工作流的构建门槛，特别适合报销、发视频、填表等难以用文字精确描述的隐性流程。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">仅支持 macOS，需开启 Computer Use；欧盟暂不可用；生成的 Skill 包含触发条件、输入参数、执行步骤和验证方式，可人工编辑；结合浏览器操作和插件完成任务。</p>
+            </div>
+            <a href="https://www.ifanr.com/1669204?utm_source=rss&utm_medium=rss&utm_campaign=" class="source-link" target="_blank" rel="noopener">[来源: 爱范儿]</a>
+        </article>
 
-        <div class="tool-card">
-          <h4>LangSmith Sandboxes</h4>
-          <p>LangChain 推出的 Agent 运行沙箱环境，支持长时间运行（小时甚至天），无时间限制。与 harbor 框架集成，支持运行有状态 Agent 评估。</p>
-          <span class="source">
-            <a href="https://x.com/LangChain/status/2067684162610282771" target="_blank" rel="noopener">[来源: LangChain(@LangChainAI)]</a>
-            <a href="https://x.com/hwchase17/status/2067343633406414942" target="_blank" rel="noopener">[来源: Harrison Chase(@hwchase17)]</a>
-          </span>
-        </div>
+        <!-- Card 3 -->
+        <article class="card">
+            <span class="card-number">03</span>
+            <h2 class="card-title">Claude Code 推出 Artifacts 功能：终端输出变为实时协作网页</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">Claude Code 新增 Artifacts 能力，可将终端会话中的工作成果（PR 走查、系统架构图、调试时间线、发布清单等）生成为实时更新的可分享网页。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">解决了 AI 编程最大的协作痛点——agent 在终端里做了大量工作但只有自己能看到。现在团队成员可通过私有链接实时查看进展，无需手动截图或复制粘贴。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">使用会话完整上下文（代码库、外部工具、对话内容）；页面随会话自动刷新，历史版本可回溯；默认私有，仅组织内成员可见；目前 Team 和 Enterprise 计划的 Beta 版可用。</p>
+            </div>
+            <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651040113&idx=1&sn=65f4eb89a20d986bd4a0f3e8a8f337d7" class="source-link" target="_blank" rel="noopener">[来源: 机器之心]</a>
+        </article>
 
-        <div class="tool-card">
-          <h4>JetBrains Qodana</h4>
-          <p>JetBrains 的代码质量与安全扫描工具，入围 2026 CODiE Awards 最佳 DevOps 工具。在 CI 早期运行深度静态分析，结果直接显示在 PR 和 IDE 中。</p>
-          <span class="source">
-            <a href="https://blog.jetbrains.com/qodana/2026/06/qodana-is-a-finalist-in-the-2026-codie-awards-for-best-devops-tool/" target="_blank" rel="noopener">[来源: The JetBrains Blog]</a>
-          </span>
-        </div>
+        <!-- Card 4 -->
+        <article class="card">
+            <span class="card-number">04</span>
+            <h2 class="card-title">GLM-5.2 开源发布：性能对标 Claude Opus 4.8，成本仅 1/10</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">智谱 AI 发布最新开源模型 GLM-5.2，在 Code Arena 等基准测试中超越 Claude Opus 4.7/4.8，推理速度 300 tokens/秒，全权重开源。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">在美国对 Anthropic Fable 5 实施出口管制后，GLM-5.2 成为开发者可自由获取的顶级开源替代方案，且 Hugging Face 提供 6 小时免费算力支持，降低了体验和部署门槛。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">BridgeBench 推理榜全球第一（42.8 分）；成本约为美国前沿模型的 1/10；Hugging Face 史无前例地为国产模型提供免费算力；马斯克预测中国 2027 Q1 追平 Fable，智谱创始人唐杰回应"不用那么久"。</p>
+            </div>
+            <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651040113&idx=2&sn=ab7df9774cba0f0bbebd41cc7feaeddb" class="source-link" target="_blank" rel="noopener">[来源: 机器之心]</a>
+        </article>
 
-      </div>
-    </section>
+        <!-- Card 5 -->
+        <article class="card">
+            <span class="card-number">05</span>
+            <h2 class="card-title">GitHub 推出 Pull Request 数量限制功能</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">GitHub 新增 PR 限制功能，维护者可设置无写权限贡献者的最大 open PR 数量，并设置信任贡献者的白名单。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">解决 AI 辅助编程时代 PR 数量激增但审查人力有限的痛点，帮助维护者减少噪音、聚焦高质量贡献，是开源治理的重要工具更新。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">可设置具体数量上限；支持 bypass list 信任机制；已集成到现有权限体系。</p>
+            </div>
+            <a href="https://x.com/github/status/2067751695514542329" class="source-link" target="_blank" rel="noopener">[来源: GitHub]</a>
+        </article>
 
-    <!-- 实践指南 -->
-    <section>
-      <h2>实践指南</h2>
+        <!-- Card 6 -->
+        <article class="card">
+            <span class="card-number">06</span>
+            <h2 class="card-title">CircleCI 推出 Chunk Sidecars：将 CI 验证嵌入 AI 编码工作流</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">CircleCI 发布 Chunk Sidecars，一种将 CI 风格验证直接集成到 AI 编码 agent 内部开发循环的新能力。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">AI 生成代码的速度远超人类审查能力，将 CI 验证前置到 agent 的"内循环"可在代码提交前自动捕获问题，是 AI 原生开发流程的关键基础设施。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">与 AI coding agent 深度集成；实时验证而非事后检查；减少无效 PR 和审查负担。</p>
+            </div>
+            <a href="https://www.infoq.com/news/2026/06/circleci-chunk-sidecars/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" class="source-link" target="_blank" rel="noopener">[来源: InfoQ]</a>
+        </article>
 
-      <div class="practice-box">
-        <h4>指南一：在 Claude Code 中配置 GLM-5.2 的 1M 上下文模式</h4>
-        <ul>
-          <li>修改 .claude/settings.json，将 ANTHROPIC_BASE_URL 指向智谱的 anthropic 兼容接口</li>
-          <li>模型名必须带 [1m] 后缀，否则默认走普通上下文长度</li>
-          <li>配置后用 /status 确认走的是 1M 线路</li>
-          <li>1M 的价值不在"能塞多少"，而在"能不能把整件事从头做到尾不跑偏"</li>
-          <li>建议把任务拆成可验证的子步骤，每完成一步让模型自我检查</li>
-        </ul>
-        <span class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723560&idx=1&sn=f82183c00b95dc2b76e98c407b7d9776" target="_blank" rel="noopener">[来源: Datawhale]</a>
-        </span>
-      </div>
+        <!-- Card 7 -->
+        <article class="card">
+            <span class="card-number">07</span>
+            <h2 class="card-title">Block 迁移 450 个 JVM 仓库至 Monorepo：依赖漂移治理实践</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">Block（Cash App 和 Square 母公司）将约 450 个 JVM 仓库迁移到 monorepo，以解决依赖漂移和跨服务协调问题。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">大规模微服务架构下的依赖管理是行业难题，Block 的实践提供了可量化的解决方案和迁移经验，特别适合面临类似挑战的中大型技术团队。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">支持 ~8,800 周构建；p90 CI 时间约 10 分钟；基于依赖图的构建、选择性 CI、自定义 IDE 工具；改善跨服务变更和构建可见性。</p>
+            </div>
+            <a href="https://www.infoq.com/news/2026/06/block-450-jvm-monorepo-migration/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" class="source-link" target="_blank" rel="noopener">[来源: InfoQ]</a>
+        </article>
 
-      <div class="practice-box">
-        <h4>指南二：构建个人 AI Advisor Skill 的方法论</h4>
-        <ul>
-          <li>保持 SKILL.md 简洁可分享，定义角色、上下文文件、建议方式、学习保存规则</li>
-          <li>个人上下文放在独立文件：plan.md（目标与原则）、learnings.md（历史模式）、eval.md（检查清单）</li>
-          <li>上下文越多，建议越不 generic——这是对抗 AI 建议同质化的核心策略</li>
-          <li>定期让 Advisor 根据新对话更新 learnings.md，形成持续进化的个人知识库</li>
-          <li>把 Skill 和上下文文件放在 Git 仓库里，跨设备同步</li>
-        </ul>
-        <span class="source">
-          <a href="https://x.com/petergyang/status/2067612053293191515" target="_blank" rel="noopener">[来源: Peter Yang(@petergyang)]</a>
-        </span>
-      </div>
+        <!-- Card 8 -->
+        <article class="card">
+            <span class="card-number">08</span>
+            <h2 class="card-title">GitHub 内部数据 analytics agent Qubot 实践公开</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">GitHub 公开其内部 AI 数据分析 agent Qubot 的构建经验，基于 GitHub Copilot 为全公司员工提供自助式数据分析能力。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">数据民主化是数十年未解的难题，Qubot 展示了如何用 AI agent 解决"找哪个数据模型、什么粒度、什么过滤条件、怎么写查询并验证"的完整链条。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">覆盖 600+ PB 数据；使用 MCP 克服上下文窗口限制；自动化代码爬取和 RAG；基于 AST 的 LLM 评分构建回归无关的评估流水线；利用 scoped semantic memory 实现自学习。</p>
+            </div>
+            <a href="https://github.blog/ai-and-ml/github-copilot/how-we-built-an-internal-data-analytics-agent/" class="source-link" target="_blank" rel="noopener">[来源: The GitHub Blog]</a>
+        </article>
 
-      <div class="practice-box">
-        <h4>指南三：企业级 Agent 部署的五大支柱</h4>
-        <ul>
-          <li><strong>评估先行</strong>：在写代码前用数值定义成功标准，否则无法判断模型是否"够好"</li>
-          <li><strong>可观测性</strong>：追踪每个 Agent 决策，欧洲监管已要求此能力</li>
-          <li><strong>数据管道</strong>：新文档必须自动重新嵌入，否则 Agent 会提供过期答案</li>
-          <li><strong>回退机制</strong>：模型失效时优雅降级，不阻塞用户流程</li>
-          <li><strong>持续测量</strong>：上线后监控用户满意度与业务指标，而非仅监控 token 消耗</li>
-        </ul>
-        <span class="source">
-          <a href="https://www.youtube.com/watch?v=ObTPqBGsEbA" target="_blank" rel="noopener">[来源: AI Engineer - Databricks]</a>
-        </span>
-      </div>
+        <!-- Card 9 -->
+        <article class="card">
+            <span class="card-number">09</span>
+            <h2 class="card-title">Azure Functions 发布 Serverless Agents Runtime 公共预览</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">微软在 Build 2026 发布 Azure Functions 的无服务器 agent 运行时，支持用 .agent.md 文件定义 agent，集成 MCP 服务器、1,400+ 连接器和沙箱执行。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">这是云厂商首次将 agent 运行时作为无服务器基础设施提供，意味着开发者可以像部署函数一样部署 agent，无需管理底层资源。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">使用 YAML 触发器；确认无冷启动开销；无额外计费溢价，按标准 Flex Consumption 计费；沙箱化执行保障安全。</p>
+            </div>
+            <a href="https://www.infoq.com/news/2026/06/azure-functions-serverless-agent/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" class="source-link" target="_blank" rel="noopener">[来源: InfoQ]</a>
+        </article>
 
-      <div class="practice-box">
-        <h4>指南四：Vibe Coding 项目的成本核算与 MVP 策略</h4>
-        <ul>
-          <li>一个完整研发排期工具的实际成本：token 费用 24.9 元 + 云服务器 59.9 元/3个月 = 不到 85 元</li>
-          <li>8 小时完成传统团队数万元的开发流程，关键是把需求拆到 AI 能单步完成的粒度</li>
-          <li>AI 幻觉和不可控性确实存在，但时间/人力/机会/沉没成本被压到了最低</li>
-          <li>产品经理喊了多年的 MVP 策略，直到 AI 辅助开发才真正可行</li>
-          <li>建议记录每个项目的实际开销和耗时，建立自己的"AI 开发成本基准库"</li>
-        </ul>
-        <span class="source">
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651928177&idx=3&sn=feb7097a0febfdd4f95087ae34d6f1c2" target="_blank" rel="noopener">[来源: 人人都是产品经理]</a>
-        </span>
-      </div>
-    </section>
+        <!-- Card 10 -->
+        <article class="card">
+            <span class="card-number">10</span>
+            <h2 class="card-title">Cloudflare 推出 Temporary Accounts for AI Agents</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">Cloudflare 发布面向 AI agent 的临时账户，任何 agent 可无需注册直接部署 Worker，`wrangler deploy --temporary` 即可生效 60 分钟。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">解决了 AI agent 部署的最大摩擦点——身份验证流程（OAuth、点击 dashboard、复制 API token、MFA）对自动化 agent 是硬阻断。这是为"无人值守"的 agent 设计的原生基础设施。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">临时部署存活 60 分钟；期间可认领为永久账户；支持网站、API 和 agent 部署；完全消除人机交互的注册流程。</p>
+            </div>
+            <a href="https://blog.cloudflare.com/temporary-accounts/" class="source-link" target="_blank" rel="noopener">[来源: The Cloudflare Blog]</a>
+        </article>
 
-    <!-- 参考链接汇总 -->
-    <section>
-      <h2>参考链接汇总</h2>
-      <div class="ref-section">
-        <ul class="ref-list">
-          <li><a href="https://x.com/berryxia/status/2067407315129774287" target="_blank" rel="noopener">Epic Lore VCS 开源</a></li>
-          <li><a href="https://simonwillison.net/2026/Jun/17/glm-52/#atom-everything" target="_blank" rel="noopener">GLM-5.2 技术解析</a></li>
-          <li><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247723560&idx=1&sn=f82183c00b95dc2b76e98c407b7d9776" target="_blank" rel="noopener">GLM-5.2 实测攻略</a></li>
-          <li><a href="https://vercel.com/blog/introducing-eve" target="_blank" rel="noopener">Vercel Eve 框架</a></li>
-          <li><a href="https://x.com/claudeai/status/2067671912038240487" target="_blank" rel="noopener">Claude Code Artifacts</a></li>
-          <li><a href="https://cursor.com/changelog/cloud" target="_blank" rel="noopener">Cursor Cloud 子 Agent</a></li>
-          <li><a href="https://github.blog/open-source/maintainers/how-pull-request-limits-are-cutting-down-the-noise/" target="_blank" rel="noopener">GitHub PR Limits</a></li>
-          <li><a href="https://www.youtube.com/watch?v=zO-bktrLju8" target="_blank" rel="noopener">Spring Security 7</a></li>
-          <li><a href="https://x.com/cognition/status/2067649690921820212" target="_blank" rel="noopener">Devin Security Review</a></li>
-          <li><a href="https://devin.ai/blog/security-review" target="_blank" rel="noopener">Devin Security Blog</a></li>
-          <li><a href="https://www.freecodecamp.org/news/how-to-handle-small-context-window-limits-in-rag-systems/" target="_blank" rel="noopener">RAG 上下文管理</a></li>
-          <li><a href="https://x.com/milvusio/status/2067630919070929350" target="_blank" rel="noopener">Milvus 召回评估</a></li>
-          <li><a href="https://x.com/weaviate_io/status/2067623500932661726" target="_blank" rel="noopener">Weaviate 数据接入</a></li>
-          <li><a href="https://www.infoq.com/news/2026/06/ky-2-revamp-axios/" target="_blank" rel="noopener">Ky 2.0 HTTP 客户端</a></li>
-          <li><a href="https://x.com/llama_index/status/2067657865200824560" target="_blank" rel="noopener">LiteParse v2.1</a></li>
-          <li><a href="https://github.com/dazuiba/handoff" target="_blank" rel="noopener">handoff 模型委托</a></li>
-          <li><a href="https://github.com/msitarzewski/agent-roles" target="_blank" rel="noopener">Agent Roles Manager</a></li>
-          <li><a href="https://x.com/hwchase17/status/2067343633406414942" target="_blank" rel="noopener">LangSmith Sandboxes</a></li>
-          <li><a href="https://blog.jetbrains.com/qodana/2026/06/qodana-is-a-finalist-in-the-2026-codie-awards-for-best-devops-tool/" target="_blank" rel="noopener">JetBrains Qodana</a></li>
-          <li><a href="https://x.com/petergyang/status/2067612053293191515" target="_blank" rel="noopener">AI Advisor Skill 方法论</a></li>
-          <li><a href="https://www.youtube.com/watch?v=ObTPqBGsEbA" target="_blank" rel="noopener">企业 Agent 部署五大支柱</a></li>
-          <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651928177&idx=3&sn=feb7097a0febfdd4f95087ae34d6f1c2" target="_blank" rel="noopener">Vibe Coding 成本核算</a></li>
-          <li><a href="https://x.com/shao__meng/status/2067405750646055226" target="_blank" rel="noopener">Vercel Eve 架构</a></li>
-          <li><a href="https://x.com/mikeyk/status/2067674333502427620" target="_blank" rel="noopener">Artifacts 设计思路</a></li>
-          <li><a href="https://x.com/omarsar0/status/2067344437810803052" target="_blank" rel="noopener">GLM-5.2 设计能力</a></li>
-          <li><a href="https://supertechfans.com/cn/post/2026-06-18-HackerNews/" target="_blank" rel="noopener">HackerNews 每日摘要</a></li>
-          <li><a href="https://x.com/omarsar0/status/2067351358206820370" target="_blank" rel="noopener">Block Builderbot 实践</a></li>
-          <li><a href="https://block.xyz/inside/block-research/builderbot" target="_blank" rel="noopener">Block Builderbot 详情</a></li>
-          <li><a href="https://x.com/petergyang/status/2067351624834781277" target="_blank" rel="noopener">设计师转 principal engineer 工作流</a></li>
-          <li><a href="https://x.com/omarsar0/status/2067618845926510770" target="_blank" rel="noopener">SkillWeaver 组合技能路由</a></li>
-          <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247636739&idx=1&sn=25c04590b9604ca58b4c69bd6c7de666" target="_blank" rel="noopener">向量数据库面试题</a></li>
-          <li><a href="https://x.com/geekbb/status/2067602480649711694" target="_blank" rel="noopener">文章配图生成工具</a></li>
-          <li><a href="https://github.com/yangchuansheng/ai-image-generator" target="_blank" rel="noopener">ai-image-generator GitHub</a></li>
-        </ul>
-      </div>
-    </section>
-  </main>
+        <!-- Card 11 -->
+        <article class="card">
+            <span class="card-number">11</span>
+            <h2 class="card-title">GitLab 19.0 将 Agentic AI 嵌入安全、合并请求和供应链</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">GitLab 19.0 将 AI agent 能力从代码生成扩展到凭证安全、变更审查合并、依赖扫描，新增 Secrets Manager 公测、完整 MR Developer Flow、基于用量的 Duo 计费和 SBOM 依赖扫描 GA。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">展示了 AI 在 DevSecOps 全生命周期的落地路径，不仅是写代码，更是保障代码安全、加速审查、管理供应链风险。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">Secrets Manager 公测；完整 MR Developer Flow；用量计费模式；SBOM 依赖扫描 GA。</p>
+            </div>
+            <a href="https://www.infoq.com/news/2026/06/gitlab-19-agentic-ai/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" class="source-link" target="_blank" rel="noopener">[来源: InfoQ]</a>
+        </article>
 
-  <footer>
-    <p>开发者实践日报 · 2026-06-18 · 基于 586 条技术动态精选</p>
-    <p style="margin-top:6px;">筛选原则：优先可落地的技术方案、代码示例、踩坑经验、新工具发布 · 排除纯商业新闻、融资信息、人事变动</p>
-  </footer>
+        <!-- Card 12 -->
+        <article class="card">
+            <span class="card-number">12</span>
+            <h2 class="card-title">.NET 11 Preview 5 发布：文件应用改进、C# 新特性、Blazor 验证</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">微软发布 .NET 11 第五个预览版，涵盖 SDK、C#、ASP.NET Core、MAUI 和 EF Core 的多项更新。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">对于 .NET 生态开发者，这是年度大版本的关键迭代节点，特别是 C# 的 closed classes 和 unions 是语言层面的重要演进。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">文件应用（file-based apps）改进；C# closed classes 和 unions；Blazor 验证 wave；MAUI 可靠性大汇总；EF Core 默认 SQL Server 2022 兼容级别。</p>
+            </div>
+            <a href="https://www.infoq.com/news/2026/06/dotnet-11-preview-5/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" class="source-link" target="_blank" rel="noopener">[来源: InfoQ]</a>
+        </article>
+
+        <!-- Card 13 -->
+        <article class="card">
+            <span class="card-number">13</span>
+            <h2 class="card-title">LiteParse：纯代码实现的最快 PDF 转 Markdown 解析器</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">LlamaIndex 团队开源 LiteParse，一个不使用任何 VLM 或 AI/OCR 的纯代码 PDF 解析器，在 ParseBench 上超越 Qwen 3.5-9B、GLM-OCR 等模型方案。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">在 AI 一切化的趋势中，证明了精心编写的纯代码方案在特定任务上仍可比大模型更快、更便宜、更可控，为文档处理提供了"去 AI 化"的务实选择。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">完全开源免费；ParseBench 上超越多个开源模型方案；文本/表格密集型文档上与 Gemma 4、PaddleOCR-VL 差距快速缩小；GitHub: run-llama/liteparse。</p>
+            </div>
+            <a href="https://x.com/jerryjliu0/status/2068005414369906856" class="source-link" target="_blank" rel="noopener">[来源: Jerry Liu]</a>
+        </article>
+
+        <!-- Card 14 -->
+        <article class="card">
+            <span class="card-number">14</span>
+            <h2 class="card-title">TSRX：框架无关的 JSX 替代方案</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">Dominic Gannaway（React 核心团队校友）开发的 TSRX，一个 TypeScript 语言扩展，以框架无关的方式构建声明式 UI，单文件编译到多种运行时目标。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">在 React、Vue、Svelte 等框架各据一方的格局下，TSRX 尝试提供统一的声明式 UI 层，同时支持 scoped styles 和声明式错误处理，是前端架构的新实验。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">Alpha 阶段；MIT 开源；单 .tsrx 文件编译到多目标；支持 scoped styles 和声明式错误处理。</p>
+            </div>
+            <a href="https://www.infoq.com/news/2026/06/tsrx-alternative-jsx/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" class="source-link" target="_blank" rel="noopener">[来源: InfoQ]</a>
+        </article>
+
+        <!-- Card 15 -->
+        <article class="card">
+            <span class="card-number">15</span>
+            <h2 class="card-title">小米开源全屋智能 AI 方案 Miloco 2.0</h2>
+            <div class="card-section">
+                <div class="card-label">What it is</div>
+                <p class="card-text">小米发布并开源 Xiaomi Miloco 2.0，一套面向未来的全屋智能 AI 方案，让 Agent 可以主动服务、拥有家庭记忆。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Why it matters</div>
+                <p class="card-text">这是业内首个实现 AI 主动服务和家庭记忆的智能家居解决方案，将大模型 Agent 与米家设备生态打通，为"AI 进家"提供了关键系统层。</p>
+            </div>
+            <div class="card-section">
+                <div class="card-label">Key details</div>
+                <p class="card-text">米家设备作为全模态感知入口；AI 主动服务（非被动响应）；家庭记忆系统；为全家人建立专属档案；已开源至 GitHub。</p>
+            </div>
+            <a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&mid=2652805448&idx=1&sn=8a8a28300bfce92bdc4859821a197efb" class="source-link" target="_blank" rel="noopener">[来源: 智东西]</a>
+        </article>
+
+        <!-- References Section -->
+        <section class="references">
+            <h2 class="references-title">参考链接汇总</h2>
+            <ul class="references-list">
+                <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.126" target="_blank" rel="noopener">Microsoft for Developers</a></li>
+                <li><a href="https://www.ifanr.com/1669204?utm_source=rss&utm_medium=rss&utm_campaign=" target="_blank" rel="noopener">爱范儿</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651040113&idx=1&sn=65f4eb89a20d986bd4a0f3e8a8f337d7" target="_blank" rel="noopener">机器之心</a></li>
+                <li><a href="https://x.com/github/status/2067751695514542329" target="_blank" rel="noopener">GitHub</a></li>
+                <li><a href="https://www.infoq.com/news/2026/06/circleci-chunk-sidecars/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></li>
+                <li><a href="https://github.blog/ai-and-ml/github-copilot/how-we-built-an-internal-data-analytics-agent/" target="_blank" rel="noopener">The GitHub Blog</a></li>
+                <li><a href="https://blog.cloudflare.com/temporary-accounts/" target="_blank" rel="noopener">The Cloudflare Blog</a></li>
+                <li><a href="https://x.com/jerryjliu0/status/2068005414369906856" target="_blank" rel="noopener">Jerry Liu (@jerryjliu0)</a></li>
+                <li><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&mid=2652805448&idx=1&sn=8a8a28300bfce92bdc4859821a197efb" target="_blank" rel="noopener">智东西</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>开发者实践日报 · 每日精选技术资讯</p>
+        <p style="margin-top: 0.5rem;">Generated with &lt;code&gt; and ☕</p>
+    </footer>
 </body>
 </html>
