@@ -18,41 +18,60 @@ def load_prompt(role: str) -> str:
     return prompt_path.read_text(encoding="utf-8")
 
 
-def select_articles(articles: list[dict], max_articles: int = 35) -> list[dict]:
-    """Heuristic scoring for developer-relevant articles."""
-    dev_keywords = [
-        "code", "coding", "programming", "developer", "engineer", "software",
-        "github", "git", "api", "framework", "library", "tool", "tools", "ide",
-        "visual studio", "vscode", "cli", "command line", "rust", "python",
-        "javascript", "typescript", "go ", "golang", "java", "kotlin", "swift",
-        "wasm", "webassembly", "docker", "kubernetes", "k8s", "container",
-        "database", "sql", "postgres", "mysql", "redis", "mongodb",
-        "testing", "test", "ci/cd", "devops", "deployment", "release",
-        "version", "update", "bug", "fix", "patch", "security", "vulnerability",
-        "performance", "optimization", "optimize", "benchmark", "latency",
-        "architecture", "microservice", "serverless", "cloud", "aws", "azure",
-        "llm", "machine learning", "open source", "open-source", "tutorial",
-        "guide", "how to", "best practice", "lesson", "learn", "build",
-        "package", "npm", "pip", "crate", "module", "dependency",
-        "linux", "kernel", "browser", "frontend", "backend", "full stack",
-    ]
-    exclude_keywords = [
-        "stock", "stocks", "invest", "investment", "market", "fund", "vc",
-        "startup funding", "acquired", "acquisition", "ipo", "earnings",
-        "ceo", "diary of a ceo", "political", "trump", "musk", "tesla",
-        "youtube short", "sell your", "bubble",
-    ]
-
-    def score(a: dict) -> int:
-        text = f"{a.get('title', '')} {a.get('summary', '')} {a.get('feed_title', '')}".lower()
-        s = sum(1 for kw in dev_keywords if kw in text)
-        s -= sum(3 for kw in exclude_keywords if kw in text)
-        tech_sources = [
+def select_articles(articles: list[dict], role: str, max_articles: int = 25) -> list[dict]:
+    """Heuristic scoring for role-relevant articles."""
+    if role == "investment_analysis":
+        include_keywords = [
+            "funding", "raised", "million", "billion", "series", "seed", "venture",
+            "acquire", "acquisition", "merge", "ipo", "public", "valuation",
+            "invest", "investment", "investor", "market", "revenue", "profit",
+            "startup", "unicorn", "round", "backed", "financial",
+            "growth", "scaling", "expansion", "partnership", "strategic",
+            "saas", "enterprise", "commercial", "business model", "pricing",
+            "llm", "ai agent", "agentic", "generative ai", "openai", "anthropic",
+        ]
+        exclude_keywords = [
+            "diary of a ceo", "political", "trump", "musk", "tesla",
+            "youtube short", "sell your", "bubble", "stock tip",
+        ]
+        preferred_sources = [
+            "techcrunch", "the information", "reuters", "bloomberg", "ft alphaville",
+            "pitchbook", "crunchbase", "vc", "bessemer", "a16z",
+        ]
+    else:
+        include_keywords = [
+            "code", "coding", "programming", "developer", "engineer", "software",
+            "github", "git", "api", "framework", "library", "tool", "tools", "ide",
+            "visual studio", "vscode", "cli", "command line", "rust", "python",
+            "javascript", "typescript", "go ", "golang", "java", "kotlin", "swift",
+            "wasm", "webassembly", "docker", "kubernetes", "k8s", "container",
+            "database", "sql", "postgres", "mysql", "redis", "mongodb",
+            "testing", "test", "ci/cd", "devops", "deployment", "release",
+            "version", "update", "bug", "fix", "patch", "security", "vulnerability",
+            "performance", "optimization", "optimize", "benchmark", "latency",
+            "architecture", "microservice", "serverless", "cloud", "aws", "azure",
+            "llm", "machine learning", "open source", "open-source", "tutorial",
+            "guide", "how to", "best practice", "lesson", "learn", "build",
+            "package", "npm", "pip", "crate", "module", "dependency",
+            "linux", "kernel", "browser", "frontend", "backend", "full stack",
+        ]
+        exclude_keywords = [
+            "stock", "stocks", "invest", "investment", "market", "fund", "vc",
+            "startup funding", "acquired", "acquisition", "ipo", "earnings",
+            "ceo", "diary of a ceo", "political", "trump", "musk", "tesla",
+            "youtube short", "sell your", "bubble",
+        ]
+        preferred_sources = [
             "infoq", "microsoft for developers", "github", "hacker news",
             "simon willison", "openrouter", "vercel", "cloudflare",
             "freecodecamp", "jetbrains", "google ai developers",
         ]
-        if any(src in a.get("feed_title", "").lower() for src in tech_sources):
+
+    def score(a: dict) -> int:
+        text = f"{a.get('title', '')} {a.get('summary', '')} {a.get('feed_title', '')}".lower()
+        s = sum(1 for kw in include_keywords if kw in text)
+        s -= sum(3 for kw in exclude_keywords if kw in text)
+        if any(src in a.get("feed_title", "").lower() for src in preferred_sources):
             s += 2
         return s
 
@@ -61,7 +80,7 @@ def select_articles(articles: list[dict], max_articles: int = 35) -> list[dict]:
     return [a for _, a in scored[:max_articles] if _ > 0]
 
 
-def build_prompt(role_prompt: str, articles: list[dict]) -> str:
+def build_prompt(role: str, role_prompt: str, articles: list[dict]) -> str:
     parts = [role_prompt, "\n\n## 输入新闻数据\n\n"]
     for i, a in enumerate(articles, 1):
         title = a.get("title", "")
@@ -70,16 +89,26 @@ def build_prompt(role_prompt: str, articles: list[dict]) -> str:
         feed = a.get("feed_title", "")
         # Strip HTML tags from summary for cleaner prompt
         summary_plain = re.sub(r"<[^>]+>", " ", summary)
-        summary_plain = re.sub(r"\s+", " ", summary_plain).strip()[:1200]
+        summary_plain = re.sub(r"\s+", " ", summary_plain).strip()[:800]
         parts.append(f"### 新闻 {i}\n")
         parts.append(f"标题: {title}\n")
         parts.append(f"来源: {feed}\n")
         parts.append(f"链接: {link}\n")
         parts.append(f"摘要: {summary_plain}\n\n")
+
+    role_names = {
+        "cto_insight": "CTO洞察版",
+        "developer_practice": "开发者实践版",
+        "tech_enthusiast": "科技爱好者版",
+        "investment_analysis": "投资分析版",
+        "academic_research": "学术研究员版",
+        "user_research": "用户研究版",
+    }
+    role_name = role_names.get(role, role)
     parts.append(
-        "\n\n请基于以上新闻，严格按照开发者实践版人设和日报结构，生成一份完整的HTML科技日报。"
-        "必须包含：今日技术热榜、深度技术解读、工具推荐、实践指南、参考链接汇总。"
+        f"\n\n请基于以上新闻，严格按照{role_name}人设和日报结构，生成一份完整的HTML科技日报。"
         "每条新闻必须有2-3句话的完整总结，并标注可点击的来源链接。"
+        "控制内容长度，确保输出在token限制内完整结束，必须包含正确的HTML闭合标签（</body></html>），不要截断。"
         "只输出完整HTML文档，不要输出其他说明文字。"
     )
     return "".join(parts)
@@ -122,11 +151,20 @@ def main():
     data = json.load(open(args.input, encoding="utf-8"))
     articles = data.get("articles", [])
     role_prompt = load_prompt(args.role)
-    selected = select_articles(articles)
-    prompt = build_prompt(role_prompt, selected)
+    selected = select_articles(articles, args.role)
+    prompt = build_prompt(args.role, role_prompt, selected)
 
     print(f"Selected {len(selected)} articles out of {len(articles)}")
     html = call_anthropic(prompt)
+
+    # Strip Markdown code fences if the model wrapped the HTML
+    html = html.strip()
+    if html.startswith("```html"):
+        html = html[7:].strip()
+    elif html.startswith("```"):
+        html = html[3:].strip()
+    if html.endswith("```"):
+        html = html[:-3].strip()
 
     out_dir = Path(args.output)
     out_dir.mkdir(parents=True, exist_ok=True)
