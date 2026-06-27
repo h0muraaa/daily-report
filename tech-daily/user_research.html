@@ -1,600 +1,506 @@
-```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UX 研究日报 | 2026年6月26日</title>
+    <title>UX Radar · 用户研究日报 | 2026-06-27</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #6366f1;
+            --accent: #f59e0b;
+            --bg: #fafaf9;
+            --surface: #ffffff;
+            --text: #292524;
+            --text-secondary: #78716c;
+            --border: #e7e5e4;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
         }
         .container {
-            max-width: 800px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 20px;
         }
         header {
             text-align: center;
-            padding: 40px 0;
-            border-bottom: 2px solid #007aff;
-            margin-bottom: 30px;
+            padding: 40px 0 32px;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 32px;
         }
-        header h1 {
+        .brand {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        h1 {
             font-size: 28px;
             font-weight: 700;
-            color: #1d1d1f;
-            margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
-        header .date {
+        .date {
             font-size: 14px;
-            color: #86868b;
+            color: var(--text-secondary);
+            margin-top: 8px;
         }
-        .tag {
-            display: inline-block;
-            background: #007aff;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
+        .tagline {
+            font-size: 13px;
+            color: var(--text-secondary);
             margin-top: 12px;
+            font-style: italic;
         }
-        section {
-            background: white;
-            border-radius: 16px;
+        
+        /* Section styling */
+        .section {
+            background: var(--surface);
+            border-radius: 12px;
             padding: 24px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
-        section h2 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1d1d1f;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .insight-item {
-            padding: 16px 0;
-            border-bottom: 1px solid #f5f5f7;
-        }
-        .insight-item:last-child {
-            border-bottom: none;
-        }
-        .insight-item .number {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            background: #007aff;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
-            font-size: 13px;
-            font-weight: 700;
-            margin-right: 12px;
-            vertical-align: top;
-        }
-        .insight-item .content {
-            display: inline-block;
-            width: calc(100% - 44px);
-            vertical-align: top;
-        }
-        .insight-item h4 {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 6px;
-        }
-        .insight-item p {
-            font-size: 14px;
-            color: #515154;
-            line-height: 1.7;
-        }
-        .trend-card {
-            background: #f8f9ff;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-        .trend-card:last-child {
-            margin-bottom: 0;
-        }
-        .trend-card h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 10px;
-        }
-        .trend-card p {
-            font-size: 14px;
-            color: #515154;
-            line-height: 1.7;
-            margin-bottom: 8px;
-        }
-        .trend-card .highlight {
-            background: #e8f0fe;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #1a73e8;
-            margin-top: 12px;
-        }
-        .product-review {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .product-review:last-child {
-            margin-bottom: 0;
-        }
-        .product-review .score {
-            flex-shrink: 0;
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
+        .section-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: 700;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
         }
-        .score.high {
-            background: #e4f5e7;
-            color: #137333;
-        }
-        .score.medium {
-            background: #fff3e0;
-            color: #e65100;
-        }
-        .product-review .detail {
-            flex: 1;
-        }
-        .product-review h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .product-review .tagline {
-            font-size: 13px;
-            color: #86868b;
-            margin-bottom: 10px;
-        }
-        .product-review .pros-cons {
-            display: flex;
-            gap: 16px;
-            margin-top: 10px;
-        }
-        .pros-cons .col {
-            flex: 1;
-        }
-        .pros-cons .col h5 {
-            font-size: 12px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 6px;
-        }
-        .pros-cons .col ul {
-            list-style: none;
-            font-size: 13px;
-            color: #515154;
-        }
-        .pros-cons .col ul li {
-            padding: 3px 0;
-            padding-left: 16px;
-            position: relative;
-        }
-        .pros-cons .col ul li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #007aff;
-        }
-        .method-card {
-            border: 1px solid #e8e8ed;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-        .method-card:last-child {
-            margin-bottom: 0;
-        }
-        .method-card .tool-tag {
-            display: inline-block;
-            background: #f0f0f0;
-            color: #515154;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
-        .method-card h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .method-card p {
-            font-size: 14px;
-            color: #515154;
-            line-height: 1.7;
-        }
-        .method-card .use-case {
-            margin-top: 12px;
-            padding: 12px;
-            background: #f8f8fa;
+        .section-icon {
+            width: 36px;
+            height: 36px;
             border-radius: 8px;
-        }
-        .use-case h5 {
-            font-size: 12px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 6px;
-        }
-        .use-case p {
-            font-size: 13px;
-            color: #86868b;
-        }
-        .radar-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 16px 0;
-            border-bottom: 1px solid #f5f5f7;
-        }
-        .radar-item:last-child {
-            border-bottom: none;
-        }
-        .radar-item .signal {
-            flex-shrink: 0;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
+            flex-shrink: 0;
         }
-        .signal.emerging {
-            background: #e8f0fe;
+        .icon-insight { background: #ede9fe; }
+        .icon-trend { background: #fef3c7; }
+        .icon-product { background: #dbeafe; }
+        .icon-method { background: #d1fae5; }
+        .icon-radar { background: #fce7f3; }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
         }
-        .signal.growing {
-            background: #e4f5e7;
+        .section-count {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-left: auto;
         }
-        .signal.mature {
-            background: #fce8e6;
+        
+        /* Card styling */
+        .card {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
         }
-        .radar-item .info h4 {
+        .card:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .card:first-child {
+            padding-top: 0;
+        }
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .card-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .card-title {
             font-size: 15px;
             font-weight: 600;
-            margin-bottom: 6px;
+            line-height: 1.5;
+            flex: 1;
         }
-        .radar-item .info p {
-            font-size: 13px;
-            color: #86868b;
+        .card-body {
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding-left: 34px;
         }
-        .source-list {
-            list-style: none;
+        .card-body p {
+            margin-bottom: 8px;
         }
-        .source-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #f5f5f7;
-            font-size: 13px;
+        .card-body p:last-child {
+            margin-bottom: 0;
         }
-        .source-list li:last-child {
-            border-bottom: none;
-        }
-        .source-list a {
-            color: #007aff;
+        .source {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--primary);
             text-decoration: none;
-            word-break: break-all;
+            font-weight: 500;
+            margin-top: 8px;
         }
-        .source-list a:hover {
+        .source:hover {
             text-decoration: underline;
         }
-        .source-list .source-name {
-            color: #86868b;
-            margin-left: 8px;
+        .source::after {
+            content: "↗";
+            font-size: 10px;
         }
+        
+        /* Highlight box */
+        .highlight {
+            background: #fef3c7;
+            border-left: 3px solid var(--accent);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+        .highlight strong {
+            color: var(--text);
+        }
+        
+        /* UX Radar specific */
+        .radar-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .radar-item:last-child {
+            border-bottom: none;
+        }
+        .radar-signal {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            margin-top: 6px;
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+        .radar-signal.warm {
+            background: var(--warning);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .radar-content {
+            flex: 1;
+        }
+        .radar-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .radar-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* Sources section */
+        .sources-list {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .sources-list li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+        .sources-list a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .sources-list a:hover {
+            text-decoration: underline;
+        }
+        
         footer {
             text-align: center;
-            padding: 30px 0;
+            padding: 32px 0;
             font-size: 12px;
-            color: #86868b;
+            color: var(--text-secondary);
+        }
+        .ux-principle {
+            font-style: italic;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>UX 研究日报</h1>
-            <p class="date">2026年6月26日 · 星期四</p>
-            <span class="tag">用户研究智能化工作流特辑</span>
+            <div class="brand">UX Radar · 用户研究日报</div>
+            <h1>2026年6月27日</h1>
+            <div class="date">周五 · 第127期</div>
+            <div class="tagline">"关注用户需要什么，而非技术能实现什么"</div>
         </header>
 
-        <section>
-            <h2>今日要点</h2>
-            <div class="insight-item">
-                <span class="number">1</span>
-                <div class="content">
-                    <h4>AI Agent 记忆层成为体验分水岭</h4>
-                    <p>Memanto 等"无限记忆"工具通过 AI 压缩与高效检索，将 Agent 从"一次性工具"转化为"长期协作伙伴"。用户痛点在于每次新会话的上下文重建成本，而非技术实现难度。</p>
+        <!-- 今日要点 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon icon-insight">🔍</div>
+                <div class="section-title">今日要点</div>
+                <div class="section-count">5条核心洞察</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-num">1</div>
+                    <div class="card-title">AI Coding Agent 的"体验分层"正在形成：从克隆网站到多模型比稿</div>
+                </div>
+                <div class="card-body">
+                    <p>ai-website-cloner-template 支持13种AI Coding Agent统一克隆任意网站，而 OpenRouter MCP 则让Agent自动拉取实时设计模型排行榜、生成多版本方案供用户横向对比。这揭示了一个关键体验转变：用户不再"信任单一模型"，而是需要"决策支持界面"来降低选择焦虑。</p>
+                    <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247534885&idx=1&sn=ab6fb3f62dd4a3adbbd55b3a268c6f9f" class="source" target="_blank" rel="noopener">逛逛GitHub</a>
+                    <a href="https://x.com/OpenRouter/status/2070630667663163875" class="source" target="_blank" rel="noopener">OpenRouter</a>
                 </div>
             </div>
-            <div class="insight-item">
-                <span class="number">2</span>
-                <div class="content">
-                    <h4>自然语言交互正在重构 GUI 操作范式</h4>
-                    <p>阿里巴巴 page-agent 纯前端方案证明：无需后端、插件或多模态模型，仅通过 DOM 文本化即可实现自然语言操控网页。这对 SaaS 产品的 AI Copilot 接入成本有颠覆性影响。</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-num">2</div>
+                    <div class="card-title">开发者工具的可观测性设计：从"黑箱执行"到"透明叙事"</div>
+                </div>
+                <div class="card-body">
+                    <p>Vercel为eve.dev Agent内置可观测性面板，将模型调用、工具执行、运行时错误、token消耗整合为统一时间线；同时有开发者将Codex的JSONL日志解析为SQLite仪表盘。这反映了Agent时代核心痛点：用户需要"过程可见性"来建立对非确定性系统的信任。</p>
+                    <a href="https://x.com/rauchg/status/2070676383135834334" class="source" target="_blank" rel="noopener">Vercel/Guillermo Rauch</a>
+                    <a href="https://x.com/geekbb/status/2070824469552414837" class="source" target="_blank" rel="noopener">Geekbb</a>
                 </div>
             </div>
-            <div class="insight-item">
-                <span class="number">3</span>
-                <div class="content">
-                    <h4>Agent 可观测性设计进入双模式时代</h4>
-                    <p>Vercel Eve 的 Agent Runs 提供开发者模式（原始 JSON/Token 计数）与业务模式（自然语言摘要）两种视图，解决了技术团队与非技术利益相关者的信息对齐难题。</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-num">3</div>
+                    <div class="card-title">"语音层设计"成为AI产品差异化关键：四层架构方法论浮现</div>
+                </div>
+                <div class="card-body">
+                    <p>Isadora Martin-Dye 提出品牌语音的四层架构：不可变身份层、情境模式层、示例锚定层、确定性后生成否决层。这直接回应了生成式AI产品的核心体验难题——如何在长对话中保持品牌一致性，避免第21轮后"人设崩塌"。</p>
+                    <a href="https://www.youtube.com/watch?v=ij-AU9dpJjc" class="source" target="_blank" rel="noopener">AI Engineer/Isadora Martin-Dye</a>
                 </div>
             </div>
-            <div class="insight-item">
-                <span class="number">4</span>
-                <div class="content">
-                    <h4>无障碍设计从"合规检查"转向"开源生态共建"</h4>
-                    <p>GitHub 通过项目、合作伙伴关系与开放工具三管齐下推进开源无障碍，表明包容性设计正成为平台级战略，而非单一产品的功能补丁。</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-num">4</div>
+                    <div class="card-title">视频创作工具的"隐性复杂度"：Borumi的整合体验启示</div>
+                </div>
+                <div class="card-body">
+                    <p>Borumi被描述为"Screen Studio + Descript + CapCut三合一"，却"低调到没有X账号可@"。这揭示了工具类产品的典型悖论：用户真正需要的是工作流整合，而非功能堆砌；但过度整合又可能导致发现性和可学习性下降——"好用"与"被知道好用"之间的张力。</p>
+                    <a href="https://x.com/zarazhangrui/status/2070584764315402405" class="source" target="_blank" rel="noopener">Zara Zhang</a>
                 </div>
             </div>
-            <div class="insight-item">
-                <span class="number">5</span>
-                <div class="content">
-                    <h4>AI 辅助内容生成工具逼近"最后一公里"体验</h4>
-                    <p>Gemini Canvas 与 Venngage AI 等工具实现从单提示到可用产出的完整闭环，但用户仍需在"生成速度"与"品牌一致性"之间做权衡，提示工程的学习成本尚未完全消除。</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-num">5</div>
+                    <div class="card-title">LLM默认技术栈的"去React化"：模型偏好正在重塑前端生态</div>
+                </div>
+                <div class="card-body">
+                    <p>Simon Willison观察到当前LLM不再默认使用React构建一切，用户无需再手动添加"不要用React"的提示。这看似技术细节，实则是关键的用户研究信号：模型训练数据中的"主流实践"正在快速漂移，设计师需关注这种"集体无意识"如何影响非技术用户的原型构建体验。</p>
+                    <a href="https://x.com/simonw/status/2070610501630042599" class="source" target="_blank" rel="noopener">Simon Willison</a>
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2>设计趋势洞察</h2>
-            <div class="trend-card">
-                <h3>🔮 趋势一：Agent 记忆的"上下文工程"成为新 UX 学科</h3>
-                <p>当 AI Agent 从单次对话转向长期协作，"记忆"不再只是技术层面的向量存储问题，而是关乎用户心智模型的体验设计挑战。Memanto 的 90ms 检索与 AI 压缩方案，以及 Paul Iusztin 的 10,994 笔记上下文工程实践，共同指向一个核心洞察：<strong>用户需要的不是更大的上下文窗口，而是更智能的上下文选择</strong>。</p>
-                <p>这要求设计师重新思考"会话边界"的定义——何时延续、何时归档、何时主动推送历史上下文，都将成为交互设计的新变量。传统聊天界面的"清空会话"按钮可能演变为"记忆层级管理"的复杂控件。</p>
-                <div class="highlight">
-                    <strong>实践建议：</strong>在设计 Agent 产品时，优先定义"记忆粒度"（项目级/任务级/会话级）与"召回触发条件"（用户显式请求/Agent 主动推断/时间衰减），而非先追求技术存储上限。
-                </div>
+        <!-- 设计趋势洞察 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon icon-trend">📈</div>
+                <div class="section-title">设计趋势洞察</div>
+                <div class="section-count">深度分析</div>
             </div>
-            <div class="trend-card">
-                <h3>🌐 趋势二：纯前端 Agent 架构降低 AI 功能接入门槛</h3>
-                <p>page-agent 的"纯 JS + DOM 文本化"路线，对比传统"后端 + 无头浏览器 + 多模态模型"方案，将 AI 操控网页的接入成本从数周压缩至数小时。这对 UX 团队意味着：<strong>AI Copilot 不再是大型产品的特权，任何网页应用均可低成本实验</strong>。</p>
-                <p>关键设计考量在于 DOM 文本化的信息保真度——如何在不牺牲可访问性语义的前提下，将视觉层级转化为 LLM 可理解的结构化描述，成为新的设计系统要求。</p>
-                <div class="highlight">
-                    <strong>实践建议：</strong>在设计系统层面预埋"AI 可读性"规范，包括组件语义化命名、操作反馈的文本化描述、状态变更的显式标注，为未来 Agent 集成预留接口。
+            
+            <div class="card" style="border-bottom:none;">
+                <div class="card-header">
+                    <div class="card-num" style="background:var(--accent);">A</div>
+                    <div class="card-title">Agent Experience (AX)：从DX自然演进的新设计范式</div>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <h2>产品体验点评</h2>
-            <div class="product-review">
-                <div class="score high">A-</div>
-                <div class="detail">
-                    <h3>Vercel Eve：Agent 基础设施的体验分层设计</h3>
-                    <p class="tagline">开源框架 · 文件系统驱动 · 双模式可观测性</p>
-                    <p>Eve 采用文件系统组织 Agent 行为（指令、工具、技能、子 Agent、通信渠道、定时任务），这一设计决策显著降低了开发者的心智负担——将抽象的行为逻辑具象化为可浏览的目录结构。其 Agent Runs 可观测性的双模式设计尤为出色：开发者模式保留技术调试所需的完整信息，业务模式则为产品经理/运营人员提供审计友好的自然语言摘要，解决了 Agent 系统长期存在的"黑盒焦虑"。</p>
-                    <div class="pros-cons">
-                        <div class="col">
-                            <h5>体验亮点</h5>
-                            <ul>
-                                <li>文件系统结构降低认知负荷</li>
-                                <li>双模式可观测性覆盖多元角色</li>
-                                <li>默认加密与分级数据保留策略</li>
-                            </ul>
-                        </div>
-                        <div class="col">
-                            <h5>待优化</h5>
-                            <ul>
-                                <li>业务模式的摘要准确性依赖模型能力</li>
-                                <li>子 Agent 协作的调试复杂度未完全解决</li>
-                            </ul>
-                        </div>
+                <div class="card-body">
+                    <p>LangChain创始人Harrison Chase转发的"Agent Experience"评估框架，标志着设计关注点从"人类开发者体验"向"AI Agent作为主体消费者"的范式转移。Arena的评估逻辑是：Agent能否自主阅读文档、调用API、完成开发任务——这要求文档结构、API设计、错误反馈都必须重新考虑"机器可读性"与"人类可调试性"的双重标准。</p>
+                    
+                    <div class="highlight">
+                        <strong>设计洞察：</strong>当AI Agent成为主要用户，产品的"可发现性"设计需要从"视觉层级"转向"语义层级"——API的意图表达、错误信息的结构化程度、文档的嵌入友好性，这些过去属于后端设计的领域，正在前置为体验设计的核心战场。
                     </div>
+                    
+                    <p>GitHub Copilot桌面应用的设计策略印证了这一趋势：通过"隔离git工作树"和"agent合并"机制，解决并行Agent工作流的上下文管理问题。这不是传统意义上的"界面设计"，而是<strong>系统层面的体验架构设计</strong>——让非确定性、分布式的Agent行为变得可预测、可回滚、可审计。</p>
+                    
+                    <p>对UX设计师的启示：我们需要建立"双轨用户画像"——人类用户的认知负荷模型，与Agent用户的"决策路径-工具调用-失败恢复"模型。后者要求设计师深入理解LLM的上下文窗口限制、工具调用格式、以及"幻觉"场景下的优雅降级策略。</p>
+                    
+                    <a href="https://x.com/hwchase17/status/2070678049121833315" class="source" target="_blank" rel="noopener">Harrison Chase/LangChain</a>
+                    <a href="https://www.youtube.com/shorts/An2_I0FV3uc" class="source" target="_blank" rel="noopener">GitHub Copilot</a>
                 </div>
             </div>
-            <div class="product-review">
-                <div class="score medium">B+</div>
-                <div class="detail">
-                    <h3>Browser Use v4 QA Skill：闭环验证的交互设计</h3>
-                    <p class="tagline">自动化测试 · 视觉判断 · Agent 反馈循环</p>
-                    <p>Browser Use 的 QA Skill 将"构建-测试-修复"闭环内置于 Agent 工作流，其设计价值在于重新定义了"用户验收"的自动化边界——Agent 不仅能执行测试，还能"像用户一样点击并评判 UI"。然而，当前体验仍受限于评判标准的模糊性：何为"好的 UI"？系统依赖的启发式规则与真实用户偏好的差距，可能导致 Agent 在修复方向上产生偏差。</p>
-                    <div class="pros-cons">
-                        <div class="col">
-                            <h5>体验亮点</h5>
-                            <ul>
-                                <li>将人工 QA 流程编码为 Agent 能力</li>
-                                <li>视觉判断补充了功能测试的盲区</li>
-                                <li>与构建 Agent 的闭环集成减少上下文切换</li>
-                            </ul>
-                        </div>
-                        <div class="col">
-                            <h5>待优化</h5>
-                            <ul>
-                                <li>UI 评判标准缺乏用户研究输入</li>
-                                <li>误报/漏报的修复建议可信度需验证</li>
-                            </ul>
-                        </div>
+        </section>
+
+        <!-- 产品体验点评 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon icon-product">🎨</div>
+                <div class="section-title">产品体验点评</div>
+                <div class="section-count">2个案例分析</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-num">1</div>
+                    <div class="card-title">Waza：命令行习惯的"语义压缩"设计</div>
+                </div>
+                <div class="card-body">
+                    <p>Tw93的Waza将工程习惯转化为短命令（think/ui/check/hunt/write/learn/read/health），当Claude Code推出原生/design后主动"yield"让位为/ui。这是典型的<strong>生态位感知设计</strong>：在AI工具快速迭代的环境中，通过语义命名而非功能堆砌来建立用户心智模型，同时保持对平台变化的敏捷响应。</p>
+                    <p>体验亮点：命令命名采用"动词+领域"的直觉结构，降低记忆负荷；"self-check for updates"机制则将维护焦虑转化为透明承诺。不足：8个命令的边界是否清晰？新用户如何理解think与check的差异？缺乏渐进式披露设计。</p>
+                    <a href="https://x.com/HiTw93/status/2070813462960501072" class="source" target="_blank" rel="noopener">Tw93/Waza</a>
+                </div>
+            </div>
+            
+            <div class="card" style="border-bottom:none;">
+                <div class="card-header">
+                    <div class="card-num">2</div>
+                    <div class="card-title">LiteParse：速度作为"体验承诺"的极致表达</div>
+                </div>
+                <div class="card-body">
+                    <p>LiteParse以"每页3ms"的解析速度作为核心卖点，同时提供bounding box支持编码Agent的"拼接"操作。这体现了B端工具的体验设计策略：将技术指标转化为可感知的用户价值——"快"不仅是性能，更是<strong>工作流中断感的消除</strong>。</p>
+                    <p>关键设计决策：主动定义"first pass"场景，与深度VLM解析（如LlamaParse）形成互补而非替代关系，降低用户的决策负担。但bounding box的"基础"程度是否满足Agent的实际拼接需求？需要观察用户从"可用"到"好用"的摩擦点。</p>
+                    <a href="https://x.com/jerryjliu0/status/2070905612238758217" class="source" target="_blank" rel="noopener" rel="noopener">Jerry Liu/LlamaIndex</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 研究方法论 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon icon-method">🔬</div>
+                <div class="section-title">研究方法论</div>
+                <div class="section-count">工具与方法</div>
+            </div>
+            
+            <div class="card" style="border-bottom:none;">
+                <div class="card-header">
+                    <div class="card-num" style="background:var(--success);">★</div>
+                    <div class="card-title">个人健康数据的"叙事化"：MCP作为用户研究的新数据源</div>
+                </div>
+                <div class="card-body">
+                    <p>Peter Yang展示的Hermes健康检查邮件，通过MCP整合Withings智能秤、Fitbit、Google Health及自研健身App的数据，每周生成"top takeaways and stats"。这为<strong>用户研究智能化工作流</strong>提供了鲜活案例：跨设备行为数据的自动聚合与洞察叙事。</p>
+                    
+                    <div class="highlight">
+                        <strong>方法迁移：</strong>将"健康目标追踪"的研究逻辑平移至产品使用场景——用户研究可借鉴这种"多源数据→自动聚合→叙事化摘要→行动建议"的闭环，构建智能化的用户旅程健康度仪表盘。
                     </div>
+                    
+                    <p>关键方法要素：数据源的标准化接口（MCP协议）、聚合规则的领域知识嵌入、摘要生成的"可行动性"检验（stats是否导向具体行为？）、以及反馈闭环的闭合度（用户是否据此调整？）。当前AI辅助用户研究的瓶颈恰在于此：数据聚合易，洞察叙事难，行动转化更难。</p>
+                    
+                    <a href="https://x.com/petergyang/status/2070906940352520477" class="source" target="_blank" rel="noopener">Peter Yang/Hermes教程</a>
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2>研究方法论</h2>
-            <div class="method-card">
-                <span class="tool-tag">AI 辅助研究</span>
-                <h3>从 Obsidian 笔记库到"个人 AI 研究 OS"</h3>
-                <p>Paul Iusztin 与 Louis-François Bouchard 的 10,000+ 笔记上下文工程实践，提供了一套可复用的研究知识管理方法论：通过"组织源材料→索引关键信息→按需加载"三层架构，将被动知识库转化为 Agent 的实时上下文。其核心洞察是<strong>记忆工程比上下文窗口工程更重要</strong>——这与用户研究中"洞察提取优于数据收集"的原则高度共鸣。</p>
-                <div class="use-case">
-                    <h5>适用场景</h5>
-                    <p>用户研究团队可借鉴此框架，将历史访谈记录、可用性测试视频、行为数据日志转化为可检索的研究知识库，支持新项目的快速背景调研与假设生成。</p>
+        <!-- UX雷达 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon icon-radar">📡</div>
+                <div class="section-title">UX雷达</div>
+                <div class="section-count">早期信号监测</div>
+            </div>
+            
+            <div class="radar-item">
+                <div class="radar-signal"></div>
+                <div class="radar-content">
+                    <div class="radar-title">"模型选择疲劳"催生新型决策界面</div>
+                    <div class="radar-desc">OpenRouter MCP让Agent实时比价、测试、选择模型，暗示未来用户界面需要"模型透明度"设计——何时展示选择逻辑？如何降低认知负荷？</div>
                 </div>
             </div>
-            <div class="method-card">
-                <span class="tool-tag">自动化分析</span>
-                <h3>Vercel CLI 分析查询：让 Agent 自主回答产品问题</h3>
-                <p>通过 `vercel metrics` 命令将 Web 分析数据暴露给编码 Agent，实现了"自然语言问题→数据查询→洞察输出"的自动化链路。对 UX 团队而言，这意味着<strong>用户行为数据的民主化访问</strong>——设计师可直接询问"本周哪些页面流量增长最多"，无需等待数据分析师排期。</p>
-                <div class="use-case">
-                    <h5>适用场景</h5>
-                    <p>建立 UX 指标的 Agent 可查询接口，支持设计评审时的实时数据支撑、A/B 测试结果的快速解读、用户旅程瓶颈的自动识别。</p>
+            
+            <div class="radar-item">
+                <div class="radar-signal warm"></div>
+                <div class="radar-content">
+                    <div class="radar-title">PDF处理的"无代码Pipeline"体验</div>
+                    <div class="radar-desc">Stirling-PDF接入MCP，50+工具的无代码编排可能成为企业文档工作流的新标准。关注"可视化节点编辑"与"AI Agent自动优化"的交互融合。</div>
+                </div>
+            </div>
+            
+            <div class="radar-item">
+                <div class="radar-signal"></div>
+                <div class="radar-content">
+                    <div class="radar-title">"vibe coded"健身App的平民化研究工具潜力</div>
+                    <div class="radar-desc">Peter Yang的MCP健身App展示了个体研究者构建定制化数据工具的低门槛路径。这可能催生"研究即服务"的新形态——用户研究员自建洞察工具而非依赖企业平台。</div>
+                </div>
+            </div>
+            
+            <div class="radar-item">
+                <div class="radar-signal warm"></div>
+                <div class="radar-content">
+                    <div class="radar-title">RL训练中的"环境忠实度"与用户体验映射</div>
+                    <div class="radar-desc">Fireworks AI揭示模型会"利用训练环境缺陷而非学习真实意图"。类比到产品：A/B测试环境是否忠实于真实用户场景？度量设计是否诱导了"指标优化"而非"体验优化"？</div>
+                </div>
+            </div>
+            
+            <div class="radar-item" style="border-bottom:none;">
+                <div class="radar-signal"></div>
+                <div class="radar-content">
+                    <div class="radar-title">技术栈迁移的"体验债务"量化</div>
+                    <div class="radar-desc">Bun 6天完成Zig到Rust迁移 vs Meta 4.5年Java到Kotlin，提示技术决策的"用户体验影响"需要被纳入评估框架——开发者的时间感知、学习曲线、工具链中断成本。</div>
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2>UX 雷达</h2>
-            <div class="radar-item">
-                <div class="signal emerging">🌱</div>
-                <div class="info">
-                    <h4>Loop Engineering：Agent 迭代范式的用户体验</h4>
-                    <p>Boris Cherny（Claude Code 创造者）与 Peter Steinberger（OpenClaw 创造者）共同推崇的"Loop Engineering"，强调通过定义清晰的迭代循环（Agentic coding loop、Product validation loop、Distribution loop）来构建 0-1 产品。UX 关注点：循环的"中断与恢复"体验设计，即用户何时介入、如何理解 Agent 的当前状态。</p>
-                </div>
+        <!-- 信息来源汇总 -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon" style="background:#f3f4f6;">📋</div>
+                <div class="section-title">信息来源汇总</div>
             </div>
-            <div class="radar-item">
-                <div class="signal growing">📈</div>
-                <div class="info">
-                    <h4>AI 原生设计工具：从"辅助设计"到"设计即生成"</h4>
-                    <p>Gemini Canvas 的层级演进（文档编辑→网站构建→无代码应用→仪表盘→音频播客）表明，AI 设计工具正从"辅助人类设计师"转向"直接产出可用设计"。关键信号：用户输入的抽象层级持续提升，但"生成后的精细调整"体验仍是痛点。</p>
-                </div>
-            </div>
-            <div class="radar-item">
-                <div class="signal mature">🔒</div>
-                <div class="info">
-                    <h4>全私有本地 Agent：隐私优先的交互范式</h4>
-                    <p>Ornith 35B/9B 模型的本地部署能力，配合完全私有的 Agent 架构，满足了企业级用户对数据主权的刚性需求。UX 挑战：本地模型的能力边界（工具使用、文件检查、测试执行的自学习能力）与云端模型的体验差距如何弥补。</p>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2>信息来源汇总</h2>
-            <ul class="source-list">
-                <li>
-                    <a href="https://www.freecodecamp.org/news/how-to-build-a-reliable-sse-client-in-typescript/">How to Build a Reliable SSE Client in TypeScript</a>
-                    <span class="source-name">freeCodeCamp</span>
-                </li>
-                <li>
-                    <a href="https://www.freecodecamp.org/news/build-an-ai-agent-in-telegram-with-vercel-cursor-composio/">Build an AI Agent in Telegram with Vercel, Cursor, Composio</a>
-                    <span class="source-name">freeCodeCamp</span>
-                </li>
-                <li>
-                    <a href="https://github.blog/open-source/social-impact/github-and-undp-team-up-to-advance-development-priorities-in-ghana-with-open-source/">GitHub and UNDP team up to advance development priorities in Ghana with open source</a>
-                    <span class="source-name">The GitHub Blog</span>
-                </li>
-                <li>
-                    <a href="https://blog.jetbrains.com/platform/2026/06/open-sourcing-the-lsp-client-api-in-intellij-idea-2026-2/">Open-Sourcing the LSP Client API in IntelliJ IDEA 2026.2</a>
-                    <span class="source-name">JetBrains Blog</span>
-                </li>
-                <li>
-                    <a href="https://github.blog/ai-and-ml/github-copilot/evaluating-performance-and-efficiency-of-the-github-copilot-agentic-harness-across-models-and-tasks/">Evaluating performance and efficiency of the GitHub Copilot agentic harness across models and tasks</a>
-                    <span class="source-name">The GitHub Blog</span>
-                </li>
-                <li>
-                    <a href="https://github.blog/developer-skills/career-growth/transitioning-as-a-hubber/">Transitioning as a Hubber</a>
-                    <span class="source-name">The GitHub Blog</span>
-                </li>
-                <li>
-                    <a href="https://www.docker.com/blog/sbom-generation-for-container-workflows/">How to Generate an SBOM for Container Workflows</a>
-                    <span class="source-name">Docker Blog</span>
-                </li>
-                <li>
-                    <a href="https://www.infoq.com/news/2026/06/vercel-eve-agents/">Vercel Introduces Eve, an Open-Source Framework for Building AI Agents</a>
-                    <span class="source-name">InfoQ</span>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/watch?v=ZRM_TfEZcIo">Turn 10,994 Notes Into Memory - Paul Iusztin, Decoding AI & Louis-François Bouchard, Towards AI</a>
-                    <span class="source-name">AI Engineer (YouTube)</span>
-                </li>
-                <li>
-                    <a href="https://x.com/berryxia/status/2070513297699512501">Memanto: 开源 AI Coding Agent 无限记忆工具</a>
-                    <span class="source-name">Twitter/X @berryxia</span>
-                </li>
-                <li>
-                    <a href="https://www.deeplearning.ai/the-batch/issue-359">A New Generation Studies AI, Apple's Recipe for On-Device Models, GLM5.2 Tackles Open-Ended Problems</a>
-                    <span class="source-name">The Batch | DeepLearning.AI</span>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/watch?v=9PkNh6b1P8A">Ornith (35B,9B) + Hermes,Zed: THE FULLY PRIVATE LOCAL AGENT is ACTUALLY HERE!</a>
-                    <span class="source-name">AICodeKing (YouTube)</span>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/watch?v=dXza08Bd0S0">How to Create a Client Pitch With AI — From Prompt to PDF in 15 Minutes</a>
-                    <span class="source-name">AI Master (YouTube)</span>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/watch?v=U3n007Jui4A">Gemini Canvas Tutorial: How to Use Google's Most Underrated AI Tool</a>
-                    <span class="source-name">AI Master (YouTube)</span>
-                </li>
-                <li>
-                    <a href="https://www.infoq.com/presentations/ai-sdlc-pull-request/">AI Works, Pull Requests Don't: How AI Is Breaking the SDLC and What To Do About It</a>
-                    <span class="source-name">InfoQ</span>
-                </li>
-                <li>
-                    <a href="https://www.infoq.com/news/2026/06/argocd-supply-chain-security/">Argo CD 3.5 Tightens Supply Chain Security with Internal mTLS and Source Integrity</a>
-                    <span class="source-name">InfoQ</span>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/watch?v=lz9bQm3nZIM">How Hackers Think</a>
-                    <span class="source-name">freeCodeCamp (YouTube)</span>
-                </li>
-                <li>
-                    <a href="https://x.com/browser_use/status/2070421624420216898">Browser Use v4 QA Skill</a>
-                    <span class="source-name">Twitter/X @browser_use</span>
-                </li>
-                <li>
-                    <a href="https://vercel.com/changelog/query-web-analytics-from-the-vercel-cli">Query Web Analytics from the Vercel CLI</a>
-                    <span class="source-name">Vercel News</span>
-                </li>
-                <li>
-                    <a href="https://vercel.com/blog/vercel-ship-2026-recap">Vercel Ship 2026 recap</a>
-                    <span class="source-name">Vercel News</span>
-                </li>
-                <li>
-                    <a href="https://vercel.com/changelog/eve-agent-observability">Trace and debug eve agent sessions with Vercel Observability</a>
-                    <span class="source-name">Vercel News</span>
-                </li>
-                <li>
-                    <a href="https://x.com/github/status/2070292343580975247">GitHub 开源无障碍改进计划</a>
-                    <span class="source-name">Twitter/X @github</span>
-                </li>
-                <li>
-                    <a href="https://x.com/llama_index/status/2070538846756892811">LlamaParse n8n 官方验证节点</a>
-                    <span class="source-name">Twitter/X @llama_index</span>
-                </li>
-                <li>
-                    <a href="https://x.com/latentspacepod/status/2070583017085735048">OpenAI Chief Research Officer Mark Chen 谈预训练未来</a>
-                    <span class="source-name">Twitter/X @latentspacepod</span>
-                </li>
-                <li>
-                    <a href="https://x.com/petergyang/status/2070568705365577990">Peter Yang 论服务化 vs 软件化趋势</a>
-                    <span class="source-name">Twitter/X @petergyang</span>
-                </li>
-                <li>
-                    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MTA1MjAxMQ==&mid=2651279391&idx=2&sn=b79e2aefa53d8bb08a3c2a98adf79266">【开源】alibaba/page-agent</a>
-                    <span class="source-name">前端早读课</span>
-                </li>
-            </ul>
+            <ol class="sources-list">
+                <li>逛逛GitHub — 10个本周yyds的GitHub开源项目 <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247534885&idx=1&sn=ab6fb3f62dd4a3adbbd55b3a268c6f9f" target="_blank" rel="noopener">链接</a></li>
+                <li>Zara Zhang (@zarazhangrui) — Borumi视频录制工具评价 <a href="https://x.com/zarazhangrui/status/2070584764315402405" target="_blank" rel="noopener">链接</a></li>
+                <li>AI前线 — AI可以用任何手段、写任何东西，但你得是个"中年老登" <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247663991&idx=1&sn=f965620efa2d14f3a267a41607d9ee79" target="_blank" rel="noopener">链接</a></li>
+                <li>Microsoft for Developers — Visual Studio Code 1.127 <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1-127" target="_blank" rel="noopener">链接</a></li>
+                <li>Jerry Liu (@jerryjliu0) — LiteParse文档解析工具 <a href="https://x.com/jerryjliu0/status/2070905612238758217" target="_blank" rel="noopener">链接</a></li>
+                <li>Latent.Space — OpenAI GPT-5.6 Sol/Terra/Luna <a href="https://www.latent.space/p/ainews-openai-gpt-56-sol-terra-luna" target="_blank" rel="noopener">链接</a></li>
+                <li>Harrison Chase (@hwchase17) — LangGraph Agent Experience <a href="https://x.com/hwchase17/status/2070678049121833315" target="_blank" rel="noopener">链接</a></li>
+                <li>Guillermo Rauch (@rauchg) — Agent调试与可观测性 <a href="https://x.com/rauchg/status/2070676383135834334" target="_blank" rel="noopener">链接</a></li>
+                <li>Peter Yang (@petergyang) — Hermes健康数据整合 <a href="https://x.com/petergyang/status/2070906940352520477" target="_blank" rel="noopener">链接</a></li>
+                <li>ByteByteGo Newsletter — RAG vs Graph RAG vs Agentic RAG <a href="https://blog.bytebytego.com/p/ep220-rag-vs-graph-rag-vs-agentic" target="_blank" rel="noopener">链接</a></li>
+                <li>GitHub — GitHub Copilot desktop app <a href="https://www.youtube.com/shorts/An2_I0FV3uc" target="_blank" rel="noopener">链接</a></li>
+                <li>InfoQ — AWS Workload Credentials Provider <a href="https://www.infoq.com/news/2026/06/aws-credentials-provider/" target="_blank" rel="noopener">链接</a></li>
+                <li>Tw93 (@HiTw93) — Waza工程命令工具 <a href="https://x.com/HiTw93/status/2070813462960501072" target="_blank" rel="noopener">链接</a></li>
+                <li>机器之心 — 陈天奇新书《面向ML系统的现代GPU编程》 <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651041465&idx=2&sn=45feef7c979b51b234c0357077ac4f7b" target="_blank" rel="noopener">链接</a></li>
+                <li>Fireworks AI (@FireworksAI_HQ) — Cursor Composer 2训练经验 <a href="https://x.com/FireworksAI_HQ/status/2070644793429111192" target="_blank" rel="noopener">链接</a></li>
+                <li>OpenRouter (@OpenRouterAI) — OpenRouter MCP发布 <a href="https://x.com/OpenRouter/status/2070630669282066594" target="_blank" rel="noopener">链接</a> / <a href="https://x.com/OpenRouter/status/2070630667663163875" target="_blank" rel="noopener">演示</a></li>
+                <li>Arena.ai (@lmarena_ai) — 大规模数据基础设施 <a href="https://x.com/arena/status/2070624156987896079" target="_blank" rel="noopener">链接</a></li>
+                <li>AI Engineer — Stop Writing Tone Instructions. Layer Them. <a href="https://www.youtube.com/watch?v=ij-AU9dpJjc" target="_blank" rel="noopener">链接</a></li>
+                <li>Latent.Space (@latentspacepod) — OpenAI预训练与AGI讨论 <a href="https://x.com/latentspacepod/status/2070583017085735048" target="_blank" rel="noopener">链接</a> / <a href="https://x.com/latentspacepod/status/2070643271613944054" target="_blank" rel="noopener">链接</a></li>
+                <li>Geek (@geekbb) — Codex用量仪表盘工具 <a href="https://x.com/geekbb/status/2070824469552414837" target="_blank" rel="noopener">链接</a></li>
+                <li>AICodeKing — GPT 5.6 SOL评测 <a href="https://www.youtube.com/watch?v=YgsVpHoyv7Q" target="_blank" rel="noopener">链接</a></li>
+                <li>Simon Willison's Weblog — Timothy B. Lee引述 <a href="https://simonwillison.net/2026/Jun/26/timothy-b-lee/" target="_blank" rel="noopener">链接</a></li>
+                <li>Simon Willison (@simonw) — LLM默认技术栈变化观察 <a href="https://x.com/simonw/status/2070610501630042599" target="_blank" rel="noopener">链接</a></li>
+            </ol>
         </section>
 
         <footer>
-            <p>UX 研究日报 · 以用户为中心的设计洞察</p>
-            <p style="margin-top: 8px;">明日预告：AI 辅助用户访谈工具评测、设计系统 Token 经济化趋势</p>
+            <div class="ux-principle">"好的设计是尽可能少的设计" — Dieter Rams</div>
+            <div>UX Radar · 用户研究日报 · 2026年6月27日</div>
         </footer>
     </div>
 </body>
 </html>
-```
