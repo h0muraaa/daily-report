@@ -138,7 +138,10 @@ def call_anthropic(prompt: str, timeout: int = 600) -> str:
     )
     response.raise_for_status()
     data = response.json()
-    return data["content"][0]["text"]
+    for block in data.get("content", []):
+        if block.get("type") == "text":
+            return block["text"]
+    raise RuntimeError(f"No text block in response: {data}")
 
 
 def main():
@@ -151,20 +154,29 @@ def main():
     data = json.load(open(args.input, encoding="utf-8"))
     articles = data.get("articles", [])
     role_prompt = load_prompt(args.role)
-    selected = select_articles(articles, args.role)
-    prompt = build_prompt(args.role, role_prompt, selected)
 
-    print(f"Selected {len(selected)} articles out of {len(articles)}")
-    html = call_anthropic(prompt)
+    max_articles = 25
+    while max_articles >= 10:
+        selected = select_articles(articles, args.role, max_articles=max_articles)
+        prompt = build_prompt(args.role, role_prompt, selected)
+        print(f"Selected {len(selected)} articles out of {len(articles)} (max_articles={max_articles})")
+        html = call_anthropic(prompt)
 
-    # Strip Markdown code fences if the model wrapped the HTML
-    html = html.strip()
-    if html.startswith("```html"):
-        html = html[7:].strip()
-    elif html.startswith("```"):
-        html = html[3:].strip()
-    if html.endswith("```"):
-        html = html[:-3].strip()
+        # Strip Markdown code fences if the model wrapped the HTML
+        html = html.strip()
+        if html.startswith("```html"):
+            html = html[7:].strip()
+        elif html.startswith("```"):
+            html = html[3:].strip()
+        if html.endswith("```"):
+            html = html[:-3].strip()
+
+        if html.rstrip().endswith("</html>"):
+            break
+        print("Warning: HTML appears truncated, retrying with fewer articles...")
+        max_articles -= 5
+    else:
+        raise RuntimeError("Unable to generate complete HTML after multiple attempts")
 
     out_dir = Path(args.output)
     out_dir.mkdir(parents=True, exist_ok=True)
