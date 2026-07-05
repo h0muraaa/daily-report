@@ -126,8 +126,8 @@ def call_anthropic(prompt: str, timeout: int = 600) -> str:
         "content-type": "application/json",
     }
     payload = {
-        "model": "claude-sonnet-4-6",
-        "max_tokens": 8192,
+        "model": "claude-opus-4-7",
+        "max_tokens": 16384,
         "messages": [{"role": "user", "content": prompt}],
     }
     response = requests.post(
