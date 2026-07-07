@@ -1,104 +1,472 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UX Daily · 用户研究科技日报</title>
-<style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.7; color: #222; max-width: 760px; margin: 0 auto; padding: 2rem 1rem; background: #f8f9fa; }
-  h1 { text-align: center; font-size: 1.8rem; margin-bottom: 0.3rem; }
-  .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
-  h2 { font-size: 1.3rem; margin-top: 2.5rem; border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
-  h3 { font-size: 1.05rem; margin-top: 1.5rem; color: #333; }
-  .card { background: #fff; border-radius: 12px; padding: 1.2rem; margin: 1rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-  ul { padding-left: 1.2rem; }
-  li { margin: 0.6rem 0; }
-  a { color: #1a73e8; text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .source { font-size: 0.85rem; color: #555; display: block; margin-top: 0.5rem; }
-  .tag { display: inline-block; background: #eef2ff; color: #3b5bdb; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-right: 0.5rem; }
-  .footer { margin-top: 3rem; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd; padding-top: 1rem; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技日报 · 用户研究版 | 2026-07-07</title>
+    <style>
+        :root {
+            --coral: #ff7b6b;
+            --coral-light: #fff0ee;
+            --violet: #7c6bff;
+            --violet-light: #f3f1ff;
+            --amber: #ffb347;
+            --teal: #4ecdc4;
+            --slate: #2d3142;
+            --slate-light: #5a6078;
+            --bg-cream: #fffaf7;
+            --bg-gradient: linear-gradient(135deg, #fff6f3 0%, #f8f5ff 50%, #fffdf5 100%);
+            --card-shadow: 0 8px 24px rgba(45, 49, 66, 0.08);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg-gradient);
+            color: var(--slate);
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        header {
+            text-align: center;
+            padding: 56px 32px;
+            background: linear-gradient(135deg, rgba(255, 123, 107, 0.12), rgba(124, 107, 255, 0.12));
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(255, 179, 71, 0.25), transparent 70%);
+            border-radius: 50%;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(124, 107, 255, 0.2), transparent 70%);
+            border-radius: 50%;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            background: linear-gradient(135deg, var(--coral), var(--violet));
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 999px;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            color: var(--slate-light);
+            font-size: 17px;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .date-line {
+            margin-top: 18px;
+            font-size: 14px;
+            color: var(--slate-light);
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, var(--coral), var(--violet)) 1;
+            display: inline-block;
+        }
+
+        .intro {
+            background: #fff;
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            font-size: 16px;
+            color: var(--slate-light);
+            border-left: 4px solid var(--coral);
+        }
+
+        .highlight-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .highlight-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--coral), var(--amber));
+        }
+
+        .highlight-card h3 {
+            margin: 0 0 10px;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--slate);
+        }
+
+        .highlight-card p {
+            margin: 0;
+            color: var(--slate-light);
+            font-size: 15px;
+        }
+
+        .article {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .article h3 {
+            margin: 0 0 12px;
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 1.45;
+            color: var(--slate);
+        }
+
+        .article p {
+            margin: 0 0 14px;
+            color: var(--slate-light);
+            font-size: 15.5px;
+        }
+
+        .article p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .source {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--violet);
+            font-weight: 500;
+        }
+
+        .source a {
+            color: var(--violet);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(124, 107, 255, 0.3);
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .source a:hover {
+            color: var(--coral);
+            border-color: var(--coral);
+        }
+
+        .insight-box {
+            background: var(--violet-light);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-top: 18px;
+        }
+
+        .insight-box strong {
+            color: var(--violet);
+            font-weight: 700;
+        }
+
+        .radar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .radar-item {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            border-top: 4px solid var(--amber);
+        }
+
+        .radar-item h4 {
+            margin: 0 0 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--slate);
+        }
+
+        .radar-item p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--slate-light);
+        }
+
+        .refs {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .refs h2 {
+            margin-bottom: 18px;
+        }
+
+        .refs ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .refs li {
+            margin-bottom: 10px;
+            font-size: 14.5px;
+            color: var(--slate-light);
+        }
+
+        .refs a {
+            color: var(--violet);
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .refs a:hover {
+            color: var(--coral);
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 32px;
+            color: var(--slate-light);
+            font-size: 13px;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            header {
+                padding: 40px 20px;
+            }
+
+            .article {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>UX Daily · 用户研究科技日报</h1>
-<p class="subtitle">2026-07-07 · 聚焦用户体验、AI 设计工具与设计系统</p>
+    <div class="container">
+        <header>
+            <div class="role-badge">USER RESEARCH</div>
+            <h1>科技日报 · 用户研究版</h1>
+            <p class="subtitle">以用户为中心，追踪体验设计、研究方法与产品创新的交叉信号</p>
+            <p class="date-line">2026-07-07 · 覆盖 2026-07-06 至 2026-07-07 的 601 条科技资讯</p>
+        </header>
 
-<h2>1. 今日要点</h2>
-<div class="card">
-<ul>
-<li><strong>AI 设计工具正从“代码生成”跃迁到“产品生成”</strong>：VISTA 首个 Visual Spec-to-App Benchmark 表明，Coding Agent 的下一步考核是从 Figma 稿与 PRD 中交付完整、可交互的 Web 应用，而非仅修复 Issue。</li>
-<li><strong>设计系统进入“合规+性能+无障碍”三重权衡期</strong>：Lucide 1.0 移除品牌图标、压缩包体积、默认 aria-hidden，显示开源组件库必须在视觉一致性、法律风险与可访问性之间重新取舍。</li>
-<li><strong>对话式 AI 的成果沉淀体验仍是短板</strong>：Claude 目前没有原生的单会话 PDF 导出，用户被迫使用浏览器打印、Artifacts 或第三方工具，暴露了知识归档与协作分享场景的体验断层。</li>
-<li><strong>开发者对 AI 的“心理委托程度”决定工具上限</strong>：OpenAI Codex 团队指出，多数工程师仍把 AI 当作结对编程助手，而非可闭环委托的执行者；产品体验需要跨越从“辅助”到“委托”的信任门槛。</li>
-<li><strong>无 JavaScript 的深色模式成为包容性设计新实践</strong>：利用 CSS :has() 与变量实现主题切换，可降低对脚本依赖、提升弱网、低性能设备与辅助技术用户的体验。</li>
-</ul>
-</div>
+        <section>
+            <div class="intro">
+                今日核心观察：AI 正在重塑设计者与研究者的工作身份。Figma 最新报告显示设计师与开发者的职能边界持续模糊；而 Lenny Rachitsky 的大规模调研则揭示，用户研究员与设计师正承受最高的 AI 焦虑与职业不确定感。产品层面，Claude、NotebookLM、Recraft、Runway 等机构同时转向"更低摩擦、更自然"的交互形态，提示我们：下一个 UX 竞争焦点，不再是功能多少，而是人与 AI 协作时的心理安全感与掌控感。
+            </div>
+        </section>
 
-<h2>2. 设计趋势洞察</h2>
-<div class="card">
-<h3>2.1 从“代码生成”到“产品生成”：AI 设计工具重塑交付链</h3>
-<p>随着 VISTA 这类端到端评测基准的出现，AI Coding Agent 的能力衡量标准正在从修复 GitHub Issue 转向“看懂 Figma、理解 PRD、交付可运行产品”。这意味着设计师产出的设计稿、组件库和设计 token 将直接成为 AI 的输入，设计系统不再是静态规范，而是可执行的生成约束。同时，Claude Fable 与 Paper 这类“Agent Native 设计画布”让非专业用户也能用自然语言生成视觉物料，设计工具的入口从面板操作变为语义表达。产品团队需要重新思考：当设计可被 AI 直接实现时，设计系统的语义化、可测量性和版本控制将成为核心竞争力。</p>
-<p class="source">相关来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651042743&idx=3&sn=f4ee3a607d462954f404a1414f41cb9c" target="_blank">机器之心</a>、<a href="https://www.youtube.com/watch?v=COh_cjrDOzc" target="_blank">Riley Brown (YouTube)</a></p>
-</div>
-<div class="card">
-<h3>2.2 开源设计资产面临合规、性能与无障碍的再平衡</h3>
-<p>Lucide 1.0 的发布具有标志性意义：它主动切除了品牌图标以规避法律风险，并建议用户使用 Simple Icons 承载商标标识；同时通过移除 UMD 构建、仅保留 ESM/CJS 将包体积缩减 32.3%。这背后是开源设计系统在“视觉一致性”与“法律/性能风险”之间的取舍。另一个值得关注的信号是默认将 aria-hidden 设为 true，虽然能减少辅助技术噪音，但也可能让开发者忽略语义化标签。对于用户研究团队而言，组件升级需要配合可用性测试，确保性能优化不会牺牲屏幕阅读器用户与认知障碍用户的理解成本。</p>
-<p class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288289&idx=4&sn=112c4c4ed5fd6808bcf36e1c977c1d1a" target="_blank">InfoQ</a></p>
-</div>
+        <section>
+            <h2>今日要点</h2>
+            <div class="highlight-grid">
+                <div class="highlight-card">
+                    <h3>设计师与研究员的 AI 焦虑达到峰值</h3>
+                    <p>Lenny Rachitsky 的 2026 年科技从业者调研显示，63% 的设计师感到"被变化速度淹没"，51% 的用户研究员担忧工作稳定性，36% 担心被 AI 取代。从业者当下仍热爱自己的工作，却不愿向新人推荐入行。</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>设计师正在写代码，开发者正在做设计</h3>
+                    <p>Figma 2026 AI 报告指出，过去一年参与开发的设计师比例翻倍至 41%，做设计工作的开发者从 44% 上升至 60%。画布正在成为跨职能协作的默认工作界面。</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>Claude 统一 Chat 与 Cowork 体验</h3>
+                    <p>Anthropic 将对话与任务委托合并为单一首页、单一侧边栏与统一搜索。 handing a task 的体验被设计成与开启一段对话一样自然，降低了从"聊天"到"委托"的心理切换成本。</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>NotebookLM 全面推送短视频概览</h3>
+                    <p>Google 的 NotebookLM 已向英语用户全量上线 Short Video Overviews，并主动征集用户反馈以决定下一步功能方向，体现了 AI 产品以用户共创驱动功能迭代的设计思路。</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>AI 设计工具从"生成"走向"精修"</h3>
+                    <p>Recraft 推出 Vector Editor，支持逐点、逐曲线、逐颜色调整；Runway 则允许用户用自然语言生成精美幻灯片。两者共同指向：AI 创作工具正在补齐"可控编辑"这一关键体验缺口。</p>
+                </div>
+            </div>
+        </section>
 
-<h2>3. 产品体验点评</h2>
-<div class="card">
-<h3>3.1 Claude 单会话 PDF 导出：功能缺位背后的知识管理痛点</h3>
-<p>Claude 目前仅支持账号级数据归档，无法直接导出单个会话为 PDF，用户在写报告、做文档或分享结论时只能依赖浏览器打印、Artifacts 或第三方工具。这一缺口暴露了 AI 对话产品在“成果沉淀”与“组织知识共享”场景下的体验断层：用户需要的不是原始聊天记录，而是可搜索、可格式化、可合并摘要的文档。建议 Claude 在导出功能上提供结构化会话摘要、代码块高亮、可编辑格式以及权限控制，让 AI 产出真正融入企业工作流。</p>
-<p class="source">来源：<a href="https://www.freecodecamp.org/news/export-a-claude-conversation-as-pdf-complete-guide/" target="_blank">freeCodeCamp</a></p>
-</div>
-<div class="card">
-<h3>3.2 Claude Fable × Paper：自然语言设计画布的低门槛与可控性挑战</h3>
-<p>Claude Fable 与 Paper 画布的结合，让用户可以通过对话生成 YouTube 封面、Instagram 图文和演示文稿，并一键发布为网站。这种“语义驱动设计”显著降低了视觉创作门槛，尤其适合内容创作者和小团队。但从用户体验角度看，设计工作流对精度、对齐、品牌一致性和设计 token 控制要求极高，AI 生成结果的可预测性、撤销路径和协作版本管理仍是关键挑战。产品若要真正替代传统设计工具，必须在“自然交互”与“专业控制”之间建立可伸缩的反馈机制。</p>
-<p class="source">来源：<a href="https://www.youtube.com/watch?v=COh_cjrDOzc" target="_blank">Riley Brown (YouTube)</a></p>
-</div>
-<div class="card">
-<h3>3.3 OpenAI Codex：从“结对编程”到“闭环委托”的心理门槛</h3>
-<p>OpenAI Codex 团队观察到，只有少数前沿工程师会最大化利用 Codex 的闭环委托能力，大多数开发者仍停留在结对编程和轻量辅助模式。这揭示了 AI 编码工具的用户心智尚未从“辅助我”跨越到“替我完成”。产品体验必须通过明确的任务边界、进度透明和可回滚机制，帮助用户建立信任并逐步扩大委托范围。</p>
-<p class="source">来源：<a href="https://x.com/petergyang/status/2074165284852941041" target="_blank">Peter Yang (X)</a></p>
-</div>
+        <section>
+            <h2>设计趋势洞察</h2>
 
-<h2>4. 研究方法论</h2>
-<div class="card">
-<h3>借助 VISTA 基准与 AI 辅助还原度测试，量化“设计稿→产品”的体验落差</h3>
-<p>传统可用性测试多关注已上线产品的交互路径，而随着 AI 能从 Figma 稿直接生成应用，研究团队需要将测试前移，评估“AI 对设计意图的还原度”。VISTA 提供了首个面向 Visual Spec-to-App 的公开评测框架，涵盖布局、组件、交互和可访问性等维度。研究团队可以借鉴其思路：抽取真实项目的 PRD 与 Figma 文件，让 AI 生成应用后，通过视觉对比工具、无障碍扫描和任务走查，自动量化设计与实现之间的差异。对于用户研究智能化工作流，这类测试可以进一步结合大模型进行设计规范一致性审查、自动化缺陷聚类和用户任务成功率分析，从而把“设计交付”转化为可度量的体验指标。</p>
-<p class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651042743&idx=3&sn=f4ee3a607d462954f404a1414f41cb9c" target="_blank">机器之心</a></p>
-</div>
+            <article class="article">
+                <h3>职能融合加速：画布成为产品团队的通用语言</h3>
+                <p>Figma 发布的 2026 AI 报告揭示了一个显著趋势：设计师与开发者之间的传统边界正在瓦解。过去一年，参与开发工作的设计师比例从约 20% 跃升至 41%，而从事设计工作的开发者比例则从 44% 上升至 60%。更值得注意的是，76% 的受访者表示他们至少有一半的工作是在画布（canvas）上完成的。这意味着画布不再只是设计稿的展示空间，而是正在演变为产品构思、原型、代码协作与决策的共享场所。</p>
+                <p>对于用户研究员和产品设计师而言，这一变化既是机会也是挑战。机会在于，研究团队可以更早、更深入地介入产品创造过程，直接在画布上验证概念、标注用户痛点、共创解决方案；挑战则在于，设计师需要掌握更多跨领域能力，而研究者则需要证明自己在"AI 能做设计"的时代里，对用户深层动机和行为模式的洞察依然不可替代。建议团队重新思考设计评审、用户测试与研发冲刺的衔接方式，让画布成为连接用户证据与产品决策的枢纽，而非各自为政的输出物。</p>
+                <div class="source">
+                    📎 来源：<a href="https://x.com/figma/status/2074520080952459309" target="_blank" rel="noopener">Figma on X</a>
+                </div>
+            </article>
 
-<h2>5. UX 雷达</h2>
-<div class="card">
-<ul>
-<li><span class="tag">无障碍</span><strong>CSS :has() 驱动的无 JS 主题切换</strong>：利用 CSS :has() 选择器和 CSS 变量，在无需 JavaScript 的情况下实现深浅色模式切换。减少脚本依赖意味着弱网环境、低性能设备和依赖辅助技术的用户都能更稳定地使用主题切换，是一种以渐进增强和包容性为核心的轻量设计实践。<br>
-<span class="source">来源：<a href="https://www.freecodecamp.org/news/how-to-build-a-dark-mode-toggle-without-javascript/" target="_blank">freeCodeCamp</a></span></li>
-<li><span class="tag">AI 设计</span><strong>Visual Spec-to-App 成为新评测维度</strong>：VISTA 和 Claude Fable 的兴起表明，设计工具与开发工具的边界正在模糊，研究团队应关注“设计语义可执行性”这一新指标。<br>
-<span class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651042743&idx=3&sn=f4ee3a607d462954f404a1414f41cb9c" target="_blank">机器之心</a></span></li>
-<li><span class="tag">组件库</span><strong>图标库的合规与瘦身</strong>：Lucide 1.0 移除品牌图标、压缩体积，预示着设计资产库需要在品牌法务、性能与可维护性之间做出更审慎的决策。<br>
-<span class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288289&idx=4&sn=112c4c4ed5fd6808bcf36e1c977c1d1a" target="_blank">InfoQ</a></span></li>
-<li><span class="tag">开发者体验</span><strong>从“结对编程”到“任务委托”的心理模型跨越</strong>：Codex 团队指出大多数开发者尚未习惯将工作闭环交给 AI，未来工具需要更明确的信任边界、进度透明和回滚机制。<br>
-<span class="source">来源：<a href="https://x.com/petergyang/status/2074165284852941041" target="_blank">Peter Yang (X)</a></span></li>
-</ul>
-</div>
+            <article class="article">
+                <h3>AI 创作工具的下一战场：从"一键生成"到"可控精修"</h3>
+                <p>过去两年，AI 设计工具的核心卖点是"输入文字，输出图像"。但本周 Recraft 推出 Vector Editor，明确回应了专业设计师的长期痛点：生成结果无法像传统矢量工具一样逐点、逐曲线、逐颜色地微调。新功能允许用户在 AI 生成的基础上进行像素级编辑，并直接导出可用素材。几乎同时，Runway 推出基于自然语言的幻灯片生成功能，让用户跳过模板，直接描述想要的视觉风格即可获得精美幻灯片。</p>
+                <p>这两个更新共同说明，AI 工具的 UX 演进正进入第二阶段：第一阶段降低的是"从零开始"的门槛，第二阶段则要解决"生成后如何打磨"的控制感问题。用户并不满足于概率性输出，他们需要可预测、可回溯、可协作的编辑体验。对于产品设计团队，这意味着在引入 AI 功能时，必须同时规划"生成后的编辑闭环"——包括版本管理、细粒度调整、品牌一致性约束和团队协作权限，否则再强的生成能力也可能因失控感而被专业用户弃用。</p>
+                <div class="source">
+                    📎 来源：<a href="https://x.com/recraftai/status/2074531127801401790" target="_blank" rel="noopener">Recraft on X</a>、<a href="https://x.com/runwayml/status/2074521596560031949" target="_blank" rel="noopener">Runway on X</a>
+                </div>
+            </article>
+        </section>
 
-<h2>6. 信息来源汇总</h2>
-<div class="card">
-<ul>
-<li><a href="https://www.freecodecamp.org/news/export-a-claude-conversation-as-pdf-complete-guide/" target="_blank">How to Export a Claude Conversation as a PDF — freeCodeCamp</a></li>
-<li><a href="https://www.freecodecamp.org/news/how-to-build-a-dark-mode-toggle-without-javascript/" target="_blank">How to Build a Dark Mode Toggle Without JavaScript — freeCodeCamp</a></li>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288289&idx=4&sn=112c4c4ed5fd6808bcf36e1c977c1d1a" target="_blank">Lucide 1.0 发布 — InfoQ</a></li>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651042743&idx=3&sn=f4ee3a607d462954f404a1414f41cb9c" target="_blank">VISTA: Visual Spec-to-App Benchmark — 机器之心</a></li>
-<li><a href="https://www.youtube.com/watch?v=COh_cjrDOzc" target="_blank">How to Design With Claude Fable — Riley Brown (YouTube)</a></li>
-<li><a href="https://x.com/petergyang/status/2074165284852941041" target="_blank">Codex 的用户心理模型观察 — Peter Yang (X)</a></li>
-</ul>
-</div>
+        <section>
+            <h2>产品体验点评</h2>
 
-<div class="footer">
-<p>本期日报从用户体验视角筛选 AI 设计工具、设计系统、无障碍实践与开发者体验相关资讯。祝阅读愉快。</p>
-</div>
+            <article class="article">
+                <h3>Claude Cowork：当"委托任务"变得像"聊天"一样简单</h3>
+                <p>Anthropic 本周开始面向 Web 和移动端推出 Claude Cowork，并将 Chat 与 Cowork 合并到同一个首页、同一个侧边栏和统一的搜索入口中。用户 handing a task 的操作路径被设计成与开启一段对话完全相同：没有新的界面模式需要学习，没有显式的"创建项目"或"提交工单"步骤。此外，Claude Cowork 支持跨设备续作——用户在桌面发起任务后，可以在手机上查看结果，关闭电脑后任务仍会继续运行。</p>
+                <p>这一设计值得关注的 UX 启示在于：它削弱了"聊天"与"工作流"之间的形式差异。很多 AI 产品在"对话式"与"任务式"之间做了明显的功能分区，反而增加了用户的认知负担。Anthropic 的做法暗示，未来的 AI 助手可能不再需要用户选择"我要聊天"还是"我要自动化"，而是通过上下文判断用户意图，并以合适的方式响应。对于研究者来说，这提出了一个可观测的问题：用户是否会因此混淆"即时问答"与"异步委托"的边界？他们如何建立对长时间运行任务的信任感？这些都是后续可用性测试中可以重点验证的方向。</p>
+                <div class="source">
+                    📎 来源：<a href="https://x.com/claudeai/status/2074525815820169320" target="_blank" rel="noopener">Claude on X</a>、<a href="https://x.com/mikeyk/status/2074531605537046953" target="_blank" rel="noopener">Mike Krieger on X</a>
+                </div>
+            </article>
+
+            <article class="article">
+                <h3>NotebookLM 短视频概览：用用户反馈驱动功能路线图</h3>
+                <p>Google NotebookLM 宣布 Short Video Overviews 已向所有英语用户全面上线，覆盖移动端与 Web 端。这项功能可以将笔记、文档或链接转化为竖屏短视频，帮助用户以更轻松的方式消化复杂信息。发布帖文中特别强调了"你的意见对我们至关重要"，并邀请用户分享创作内容、提出下一步功能需求。</p>
+                <p>从用户体验视角看，NotebookLM 的更新有两层价值。第一层是内容消费形态的扩展：从文本摘要、播客式音频概览，再到短视频，产品正在覆盖不同认知偏好的用户群体。第二层更值得研究者关注：Google 选择在一个功能全量上线的节点公开征集反馈，而不是仅依赖内部指标。这种做法体现了"以用户证据迭代"的产品文化——当 AI 功能的不确定性较高时，用户的真实使用场景和创作内容往往比点击率更能揭示功能价值。对于研究实践，这也提醒我们：在 AI 产品快速迭代期，建立轻量、持续的反馈通道比一次性大型调研更有效。</p>
+                <div class="source">
+                    📎 来源：<a href="https://x.com/NotebookLM/status/2074551227594264799" target="_blank" rel="noopener">NotebookLM on X</a>、<a href="https://www.youtube.com/shorts/IJ3ABUE27Gc" target="_blank" rel="noopener">Google on YouTube</a>
+                </div>
+            </article>
+        </section>
+
+        <section>
+            <h2>研究方法论</h2>
+
+            <article class="article">
+                <h3>用表情符号解读脑电情绪：一种更人性化的用户研究测量思路</h3>
+                <p>一篇来自 arXiv 的研究提出"Facial Emoji Proxy Modeling"方法，将高维 EEG（脑电波）信号转化为匿名的面部表情表情符号。传统的情绪识别模型往往是黑箱：它们能输出"积极"或"消极"标签，但难以解释这些分类与用户真实情绪状态之间的关系。新框架通过神经科学与面部表情的关联，把抽象的神经网络特征锚定在人类可观察的面部动态上，从而提升可解释性。</p>
+                <p>对于用户研究和产品设计，这项技术的启示超出了脑机接口领域。它代表了一种"以人为中心的数据表达"趋势：在收集和呈现生理或行为数据时，研究者应当优先选择用户自己能够理解、共鸣和反馈的表征形式。表情符号作为一种跨文化、低门槛的视觉语言，可能比复杂的图表或数值更适合向用户反馈洞察。未来在可穿戴设备、车载系统、健康类 App 等场景中，类似的"语义可视化"方法可以帮助产品团队更自然地获取用户情绪反馈，同时降低用户对被"监测"的抵触感。</p>
+                <div class="source">
+                    📎 来源：<a href="https://arxiv.org/abs/2607.02912" target="_blank" rel="noopener">arXiv:2607.02912</a>
+                </div>
+            </article>
+        </section>
+
+        <section>
+            <h2>UX 雷达 · 值得关注的早期信号</h2>
+            <div class="radar-grid">
+                <div class="radar-item">
+                    <h4>AI 面试官与流程体验</h4>
+                    <p>DeepSeek 的面试流程因反馈慢、轮次冗余被公开批评。提示我们：即便是顶尖技术公司，招聘体验中的等待时间与沟通透明度也会直接影响人才漏斗与雇主品牌。</p>
+                </div>
+                <div class="radar-item">
+                    <h4>设计师的"作品集危机"</h4>
+                    <p>中文设计社区讨论指出，招聘方 increasingly 通过细节追问检验设计师的真实决策能力，而非只看完整项目包装。作品集正从"叙事展示"转向"可辩护的设计证据"。</p>
+                </div>
+                <div class="radar-item">
+                    <h4>自然语言驱动幻灯片</h4>
+                    <p>Runway 的文本生成幻灯片功能，预示着演示工具可能从"模板选择"转向"意图表达"。需要关注的是：用户是否愿意放弃对版式的细粒度控制？</p>
+                </div>
+                <div class="radar-item">
+                    <h4>UI 动画实时调试工具</h4>
+                    <p>Transitions Refine 允许开发者在 Cursor / Codex / Claude Code 中直接调优 UI 过渡动画。AI 辅助的微交互打磨，可能成为提升产品质感的新杠杆。</p>
+                </div>
+                <div class="radar-item">
+                    <h4>"AI 首席幕僚"类产品</h4>
+                    <p>Notion 员工案例展示如何用 AI 自动化每日简报、周度上下文更新与组织摘要。个人知识管理与组织信息过载，正在成为 AI 助手的高价值切入点。</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="refs">
+                <h2>参考来源</h2>
+                <ul>
+                    <li><a href="https://x.com/figma/status/2074520080952459309" target="_blank" rel="noopener">Figma 2026 AI Report — Figma on X</a></li>
+                    <li><a href="https://x.com/lennysan/status/2074535407983931852" target="_blank" rel="noopener">Designers and researchers are at the epicenter of AI anxiety — Lenny Rachitsky on X</a></li>
+                    <li><a href="https://x.com/lennysan/status/2074520165296078964" target="_blank" rel="noopener">The tech workforce is splitting in two — Lenny Rachitsky on X</a></li>
+                    <li><a href="https://x.com/claudeai/status/2074525815820169320" target="_blank" rel="noopener">Claude Cowork is coming to mobile and web — Claude on X</a></li>
+                    <li><a href="https://x.com/mikeyk/status/2074531605537046953" target="_blank" rel="noopener">Chat and Cowork share one home — Mike Krieger on X</a></li>
+                    <li><a href="https://x.com/NotebookLM/status/2074551227594264799" target="_blank" rel="noopener">Short Video Overviews rolled out — NotebookLM on X</a></li>
+                    <li><a href="https://www.youtube.com/shorts/IJ3ABUE27Gc" target="_blank" rel="noopener">NotebookLM Short Video Overviews — Google on YouTube</a></li>
+                    <li><a href="https://x.com/recraftai/status/2074531127801401790" target="_blank" rel="noopener">Recraft Vector Editor — Recraft on X</a></li>
+                    <li><a href="https://x.com/runwayml/status/2074521596560031949" target="_blank" rel="noopener">Runway text-to-slide generation — Runway on X</a></li>
+                    <li><a href="https://arxiv.org/abs/2607.02912" target="_blank" rel="noopener">See the Emotion: Facial Emoji Proxy Modeling for EEG Emotion Recognition — arXiv</a></li>
+                    <li><a href="https://www.freecodecamp.org/news/how-to-build-production-ready-card-components-with-shadcn-ui/" target="_blank" rel="noopener">How to Build Production-Ready Card Components with shadcn/ui — freeCodeCamp</a></li>
+                    <li><a href="https://x.com/dingyi/status/2074457780401152235" target="_blank" rel="noopener">Transitions Refine — Ding on X</a></li>
+                    <li><a href="https://smashingmagazine.com/2026/07/kirki-wordpress-visual-builder-infinite-canvas/" target="_blank" rel="noopener">Kirki: WordPress's First Visual Builder With An Infinite Canvas — Smashing Magazine</a></li>
+                    <li><a href="https://x.com/NotionHQ/status/2074248355287588924" target="_blank" rel="noopener">AI Chief of Staff at Notion — Notion on X</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MzI0Njc5NzM5OQ==&mid=2247507063&idx=1&sn=b1eb78eaafa7045cc97bc21a6a8b03ae" target="_blank" rel="noopener">实例分享｜作品集被频繁找茬的原因所在 — 超人的电话亭</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>本日报由 tech-daily-generator 自动生成 · 角色：用户研究版</p>
+        </footer>
+    </div>
 </body>
 </html>
