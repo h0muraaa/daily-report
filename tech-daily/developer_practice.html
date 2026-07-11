@@ -1,280 +1,312 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>开发者日报 | 技术动态、工具与实践</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #222; max-width: 880px; margin: 0 auto; padding: 24px; }
-    h1 { font-size: 1.7rem; margin-bottom: 0.2rem; }
-    h2 { font-size: 1.25rem; margin-top: 2rem; border-bottom: 2px solid #eee; padding-bottom: 0.4rem; }
-    h3 { font-size: 1.05rem; margin: 1.2rem 0 0.3rem; }
-    .date { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
-    a { color: #0066cc; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .news-list { list-style: none; padding: 0; }
-    .news-list li { padding: 1rem 0; border-bottom: 1px solid #f0f0f0; }
-    .news-list li:last-child { border-bottom: none; }
-    .source { font-size: 0.85rem; color: #555; }
-    .tag { display: inline-block; padding: 0.1rem 0.4rem; background: #eef; border-radius: 4px; font-size: 0.75rem; margin-right: 0.3rem; color: #334; }
-    .section { margin-top: 1.5rem; }
-    .callout { background: #f8f9fa; border-left: 4px solid #0066cc; padding: 0.8rem 1rem; margin: 1rem 0; }
-    code { background: #f4f4f4; padding: 0.15rem 0.35rem; border-radius: 4px; font-family: Consolas, Monaco, monospace; }
-    pre { background: #f4f4f4; padding: 0.8rem; border-radius: 6px; overflow-x: auto; }
-    .sources a { display: block; margin: 0.25rem 0; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践日报 · 2026-07-11</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --purple: #bc8cff;
+    --red: #f85149;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "SF Mono", "JetBrains Mono", "Fira Code", Consolas, Menlo, monospace;
+    line-height: 1.7;
+    padding: 24px;
+  }
+  .container { max-width: 920px; margin: 0 auto; }
+  header {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+    padding: 32px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: "$ ./daily-report --role developer_practice";
+    display: block;
+    color: var(--green);
+    font-size: 13px;
+    margin-bottom: 14px;
+    opacity: 0.85;
+  }
+  header h1 { font-size: 28px; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
+  header h1 .prompt { color: var(--green); }
+  header .meta { color: var(--muted); font-size: 13px; }
+  header .meta span { color: var(--accent); }
+
+  section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+  }
+  h2 {
+    font-size: 18px;
+    color: var(--accent);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2::before { content: "##"; color: var(--muted); }
+  h2 .tag {
+    font-size: 11px;
+    background: rgba(88,166,255,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(88,166,255,0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: normal;
+  }
+
+  .item { margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px dotted #21262d; }
+  .item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .item h3 {
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .item h3 .num { color: var(--orange); font-weight: bold; flex-shrink: 0; }
+  .item p { font-size: 13.5px; color: var(--text); margin-bottom: 6px; }
+  .item p.why { color: var(--muted); }
+  .item p.why::before { content: "// "; color: var(--green); }
+  .src { font-size: 12px; margin-top: 8px; }
+  .src a {
+    color: var(--purple);
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(188,140,255,0.4);
+  }
+  .src a:hover { color: #fff; border-bottom-color: #fff; }
+
+  code, .inline {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--green);
+    font-size: 12.5px;
+  }
+
+  ul.practice { list-style: none; }
+  ul.practice li {
+    padding: 10px 0 10px 24px;
+    position: relative;
+    font-size: 13.5px;
+    border-bottom: 1px dotted #21262d;
+  }
+  ul.practice li:last-child { border-bottom: none; }
+  ul.practice li::before {
+    content: "▸";
+    position: absolute;
+    left: 4px;
+    color: var(--orange);
+  }
+  ul.practice li b { color: #fff; }
+  ul.practice li a { color: var(--purple); text-decoration: none; }
+
+  .sources ol { padding-left: 22px; }
+  .sources li { font-size: 12.5px; margin-bottom: 6px; color: var(--muted); }
+  .sources a { color: var(--accent); text-decoration: none; }
+  .sources a:hover { text-decoration: underline; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 20px 0 8px;
+  }
+</style>
 </head>
 <body>
+<div class="container">
 
-  <h1>开发者日报</h1>
-  <p class="date">日期：2026-07-08 · 视角：一线开发者</p>
+<header>
+  <h1><span class="prompt">❯</span> 开发者实践日报</h1>
+  <div class="meta">日期: <span>2026-07-11</span> · 角色: <span>developer_practice</span> · 数据源: <span>FreshRSS 24h compact (325 条)</span></div>
+</header>
 
-  <h2>1. 今日技术热榜</h2>
-  <ol class="news-list">
+<section>
+  <h2>今日技术热榜 <span class="tag">top picks</span></h2>
 
-    <li>
-      <h3><span class="tag">K8s 安全</span> <a href="https://www.freecodecamp.org/news/implement-zero-trust-workload-identity-in-kubernetes-with-spiffe-spire-and-cilium/">如何用 SPIFFE、SPIRE 和 Cilium 在 Kubernetes 中实现零信任工作负载身份</a></h3>
-      <p>Kubernetes 的网络策略基于 IP 地址，但 Pod 滚动升级后 IP 会变化，导致安全策略被“静默绕过”。SPIFFE/SPIRE 为每个工作负载颁发加密身份，Cilium 则根据身份而非 IP 执行策略。这是解决 K8s 动态环境中“位置不等于身份”问题的核心方案。</p>
-      <p class="source">来源：freeCodeCamp</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">01</span> Cursor 重磅更新：Side Chats、Agent 历史搜索与 Cloud Agent Hooks</h3>
+    <p>Cursor 发布一组围绕 Agent 工作流的更新：<b>Side Chats</b> 允许在不打断主对话的情况下开一条持久的支线会话，用来提问、探索想法，并且可以通过 @-mention 把支线上下文带回主线程；<b>Agent Transcript Search</b> 在本地建立搜索索引，可在数千条历史 Agent 对话中快速检索；同时简化了 project/repo 选择器，并新增 cloud agent hooks。对每天用 Agent 写代码的人来说，支线会话解决了"想问个小问题又怕污染主上下文"的老痛点。</p>
+    <p class="why">实践建议：把探索性提问（"这个库怎么设计鉴权的？"）放进 side chat，主线程只保留执行任务，能显著降低上下文噪声。</p>
+    <div class="src">📎 <a href="https://x.com/cursor_ai/status/2075686268113916023" target="_blank" rel="noopener">[来源: Cursor - side chats]</a> · <a href="https://x.com/cursor_ai/status/2075686269825220960" target="_blank" rel="noopener">[来源: Cursor - transcript search]</a> · <a href="https://x.com/cursor_ai/status/2075686273231036801" target="_blank" rel="noopener">[来源: Cursor changelog]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">AI 工程</span> <a href="https://www.freecodecamp.org/news/how-to-build-your-own-local-ai-agent-with-tool-calling-and-memory/">构建带工具调用与记忆的本地 AI Agent</a></h3>
-      <p>教程使用 LangChain v1、Ollama、Qwen 和 Python 构建完全本地运行的 Agent，无需调用外部 API。Agent 能自主决定何时调用工具，并保留短期记忆以支持多轮追问。适合想兼顾隐私和零成本的开发者入门。</p>
-      <p class="source">来源：freeCodeCamp</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">02</span> Claude Code 桌面版内置浏览器，Claude 可直接读文档、点页面</h3>
+    <p>Claude Code 桌面应用新增 sandboxed 的应用内浏览器：Claude 可以拉取文档、设计稿或任意网站，像操作本地构建产物一样阅读、点击、交互，且行为可配置。这意味着让 Agent 对照官方文档写代码、核对设计稿还原度这类场景，不再需要手动复制粘贴内容进上下文。Tw93 同时提醒：可以顺手跑一次 <code>/doctor</code> 命令做环境体检和清理。</p>
+    <p class="why">有桌面版的开发者值得升级体验——"让 Agent 自己查最新文档"比喂它可能过期的训练知识可靠得多。</p>
+    <div class="src">📎 <a href="https://x.com/adocomplete/status/2075659182855123225" target="_blank" rel="noopener">[来源: Ado]</a> · <a href="https://x.com/HiTw93/status/2075773027363746147" target="_blank" rel="noopener">[来源: Tw93 - /doctor]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">AI 记忆</span> <a href="https://devblogs.microsoft.com/cosmosdb/cosmos-db-agent-memory/">基于 Vercel Eve + Azure Cosmos DB 构建“有记忆”的 Agent</a></h3>
-      <p>多数 Agent 演示在进程退出后丢失上下文，这篇文章用 Vercel Eve 的文件系统优先 Agent 平台配合 Azure Cosmos DB 实现持久化语义记忆。Agent 在写 Next.js 博客时能通过向量语义召回相关上下文。展示了让 Agent 从“玩具”走向“可用”的关键一步。</p>
-      <p class="source">来源：Microsoft Developer Blog</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">03</span> Google AI Studio 支持直接导入 GitHub 仓库，整个 repo 进上下文窗口</h3>
+    <p>Google AI Studio 上线 direct GitHub imports，可以把整个仓库直接载入上下文窗口开始构建。对于想做"全仓库级"问答、重构或代码审查的开发者，这省去了自己写脚本拼装上下文的工作，配合 Gemini 的长上下文窗口，适合快速摸清一个陌生代码库的结构。</p>
+    <p class="why">接手新项目的第一天，用它生成架构导览比自己翻目录树快得多。</p>
+    <div class="src">📎 <a href="https://x.com/googleaidevs/status/2075655769547247658" target="_blank" rel="noopener">[来源: Google AI Developers]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">SRE</span> <a href="https://www.freecodecamp.org/news/why-does-the-internet-keep-breaking-a-deep-dive-into-aws-us-east-1/">为什么互联网总在崩溃？AWS US-East-1 深度解析</a></h3>
-      <p>这支 freeCodeCamp 视频论文梳理了 AWS US-East-1 从 2011 年网络升级事故到 2025 年 DNS 记录缺失引发的大规模故障历史。它指出超大规模系统往往不是按预期的方式失败，而是按“我们忘记检查的方式”失败。对设计跨区域容灾的 SRE 和架构师很有启发。</p>
-      <p class="source">来源：freeCodeCamp</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">04</span> LangChain 发布 OpenWiki 0.1.0：给 Agent 装上"主动记忆"</h3>
+    <p>OpenWiki 能连接 Gmail、Notion、Git 仓库、Twitter/X、Hacker News、网页搜索六类信源，把信息整理成本地 Markdown wiki 供 Agent 随时调用。设计上刻意不走常驻服务进程，而是用本地定时任务到点拉取、跑完即退，保持 wiki 常新的同时机器上零额外负担——数据全部存在自己机器上，隐私可控。这是 Agent 长期记忆从"云端黑盒"走向"本地文件系统"的一个务实方案。</p>
+    <div class="src">📎 <a href="https://x.com/xiaohu/status/2075883734600146993" target="_blank" rel="noopener">[来源: 小互]</a> · <a href="https://x.com/xiaohu/status/2075883736970006600" target="_blank" rel="noopener">[来源: 小互 - 刷新机制]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">前端</span> <a href="https://www.youtube.com/watch?v=aJP1AbZSqz8">TypeScript in React 完整教程</a></h3>
-      <p>课程从 <code>useState</code> 类型、组件 props、JSX 元素到函数 props 全面讲解 React + TypeScript。每个知识点都配有动手挑战，而不是只看视频。适合已有 React 基础、想系统引入 TypeScript 的开发者。</p>
-      <p class="source">来源：freeCodeCamp / Scrimba</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">05</span> Elastic 开源 Atlas：基于认知科学的 Agent 三层记忆系统</h3>
+    <p>Elastic 开源了构建在 Elasticsearch 之上的 Atlas，通过 MCP 与 Agent 集成，并按认知科学划分三类记忆分别建索引：<b>情景记忆</b>（发生了什么）、<b>语义记忆</b>（什么是真实的）、<b>程序性记忆</b>（什么有效）。用户记忆相互隔离，问答评估 Recall@10 达 0.89。其核心观点是：100 万 token 的上下文窗口只是"临时记事本"，把全部历史塞进 prompt 在成本、延迟和"中间遗忘"效应上都不划算，真正的解法是跨会话、可按内容/时间/用户检索的持久化记忆。用户输入先作为情景事件存储，再由 LLM 整合沉淀为持久事实。</p>
+    <p class="why">如果你在做需要长期用户记忆的 Agent 产品，这套"三类记忆 + 独立索引 + 衰减整合"的架构值得直接参考。</p>
+    <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288603&idx=4&sn=c2f996400a034c7ffc05016f9eac0b0f" target="_blank" rel="noopener">[来源: InfoQ]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">AI 评估</span> <a href="https://blog.jetbrains.com/kotlin/2026/07/introducing-the-kotlin-benchmark-evaluate-ai-coding-agents-on-real-world-kotlin-tasks/">JetBrains 发布 Kotlin AI 编码 Agent 基准测试</a></h3>
-      <p>这是 JetBrains 官方推出的 Kotlin 任务基准，用于评估 AI 编码 Agent 在真实 Kotlin 工程任务上的端到端能力。配套 GitHub 资源和公开排行榜，让开发者能横向对比不同 Agent。对 Kotlin 团队选型 AI 工具是重要参考。</p>
-      <p class="source">来源：The JetBrains Blog</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">06</span> GPT-5.6 模型选择指南：Sol Medium 成为编码新默认</h3>
+    <p>Simon Willison 指出 GPT-5.6 最令人困惑的问题是"该用哪个模型、配哪个 reasoning effort"。OpenAI 内部人员的口径是：<b>5.6 Sol medium 已优于 5.5 xhigh</b>，可作为编码任务的新默认；继续调高 reasoning level 性能会到"疯狂"水平，但额度消耗同样剧烈。OpenAI 官方也展示了 GPT-5.6 为 Snorkel AI 独立完成近 1000 行复杂编码任务、无需反复提示的案例。</p>
+    <p class="why">实操建议：日常编码用 Sol medium；遇到硬骨头再升档，并盯紧额度重置节奏。</p>
+    <div class="src">📎 <a href="https://x.com/simonw/status/2075663372323008755" target="_blank" rel="noopener">[来源: Simon Willison]</a> · <a href="https://x.com/OpenAIDevs/status/2075657031844028615" target="_blank" rel="noopener">[来源: OpenAI Developers]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">TypeScript</span> <a href="https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/">TypeScript 7.0 发布：原生 Go 移植，10 倍更快</a></h3>
-      <p>TypeScript 团队发布了用 Go 重写的原生版本，目标是让整个工具链快一个数量级。移植尽量保持原代码结构和逻辑一致，以兼顾兼容性与现代硬件利用率。大型项目升级前建议先在 CI 中跑对比验证。</p>
-      <p class="source">来源：Microsoft TypeScript Blog</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">07</span> 一文讲清 ChatGPT、Codex、Work 的区别与额度</h3>
+    <p>宝玉根据 OpenAI 官方文档整理了一份 Q&amp;A：<b>Chat 回答问题，Work 帮你干活，Codex 帮你写代码</b>。Work 是能跨 Slack/Gmail/Drive/CRM 等应用（通过 plugins 接入，提示词里用 @ 指定数据源）拉取信息并交付文档/表格/网页应用等成品的 Agent；Codex 则主要操作代码仓库——读文件、改代码、跑测试、提 PR。文中还澄清了大家关心的额度是否共享等细节，适合作为团队内科普材料。</p>
+    <div class="src">📎 <a href="https://x.com/dotey/status/2075652538058109385" target="_blank" rel="noopener">[来源: 宝玉]</a> · <a href="https://baoyu.io/blog/chatgpt-work-codex-guide" target="_blank" rel="noopener">[来源: 宝玉的分享 - 博客全文]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">Agent 工具链</span> <a href="https://www.youtube.com/watch?v=ofS-4RRw9zw">用 Claude SDK 构建自定义 AI Harness</a></h3>
-      <p>视频演示了“Harness”到底是什么：一个基于 Claude Agent SDK 和 Ink 终端 UI 的 Sentry 调试工作流。它自动收集证据、做根因分析、并生成后续任务（Linear/GitHub/Vercel）。适合把重复、结构化工作流交给 Agent 的开发者借鉴。</p>
-      <p class="source">来源：How I AI</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">08</span> GitHub 开源多语言仓库数据集：40M+ 仓库、80M+ 分类行</h3>
+    <p>GitHub 发布 Multilingual Repositories Dataset，覆盖 4000 万+ 仓库和 8000 万+ 分类行，标注了非英语 README、issue、PR 的分布——韩语在 issue 文本中居首，葡萄牙语在 README 中居首（300 万+ 仓库）。对做代码语料分析、多语言 NLP 或开发者生态研究的人来说，这是一个可直接使用的开源数据集。</p>
+    <div class="src">📎 <a href="https://x.com/github/status/2075703025977725327" target="_blank" rel="noopener">[来源: GitHub]</a></div>
+  </div>
+</section>
 
-    <li>
-      <h3><span class="tag">数据库</span> <a href="https://www.infoq.com/news/2026/07/momentic-postgres-clickhouse/">从 PostgreSQL 切换到 ClickHouse 提升性能与扩展性</a></h3>
-      <p>Momentic 将缓存系统从 PostgreSQL 迁移到 ClickHouse，支撑每天 200 万次查询、200 亿条记录，平均响应约 250ms。列式存储在大量聚合分析场景下明显优于行式 PG。如果 workload 以读为主、需要快速扫描，值得做 PoC。</p>
-      <p class="source">来源：InfoQ</p>
-    </li>
+<section>
+  <h2>深度技术解读 <span class="tag">deep dive</span></h2>
 
-    <li>
-      <h3><span class="tag">DevOps / GitHub</span> <a href="https://github.blog/ai-and-ml/github-copilot/how-github-copilot-enables-zero-dns-configuration-for-github-pages/">GitHub Copilot 实现 GitHub Pages 零 DNS 配置</a></h3>
-      <p>作者通过 GitHub Copilot CLI 和 Namecheap API Skill，在约 14 分钟内完成了从空仓库到 HTTPS 自定义域名站点的全流程。无需手动编辑 A/CNAME 记录，DNS 和验证由 CLI 自动驱动。是自动化域名+静态站点部署的实战范例。</p>
-      <p class="source">来源：The GitHub Blog</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">A</span> rsync 算法的死锁与破局：不传输文件，如何找出两个文件的差异？</h3>
+    <p>dbaplus 这篇长文从第一性原理拆解 rsync 的核心难题：要在北京和上海两台服务器之间只传差异，按理需要先把两个文件放在一起比对——但比对本身就需要把文件传过来，形成"要省带宽先花带宽"的死锁。rsync 的破局思路是把文件切成定长块，对每块计算<b>弱校验（滚动校验和）+ 强校验（MD5 类哈希）</b>两层指纹，只把指纹清单发给对方；接收方用滚动校验和在本地文件上滑动窗口快速定位匹配的块（弱校验 O(1) 增量更新，命中后再用强校验确认），最终只传输真正不匹配的字节和块的拼装指令。10GB 文件秒级同步的"魔法"就来自这套分块指纹 + 双校验的设计。</p>
+    <p class="why">这是"用计算换带宽"的经典范例，同样的思想出现在增量备份、代码分发和数据同步协议里，值得每个后端工程师完整推演一遍。</p>
+    <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247637087&idx=1&sn=cc04951894e6681e6009fb255836ad97" target="_blank" rel="noopener">[来源: dbaplus社群]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">Agent 架构</span> <a href="https://blog.bytebytego.com/p/the-agent-loop-how-ai-goes-from-answering">The Agent Loop：AI 从回答到做事的关键机制</a></h3>
-      <p>文章把 Agent 的本质概括为“被放入循环的 LLM”：计划、调用工具、观察结果、再计划。理解这个循环是设计可靠自治系统的前提。推荐阅读给刚开始做 Agent 架构的工程师。</p>
-      <p class="source">来源：ByteByteGo Newsletter</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">B</span> 长上下文稀疏注意力的工程陷阱：数据依赖的块选择如何摧毁内存访问</h3>
+    <p>Fireworks AI 揭示了长上下文稀疏注意力在 GPU 上的真实瓶颈：块选择是数据依赖的，导致内存访问模式完全被打乱，理论上的计算节省被访存延迟吃掉。他们为 MiniMax M3 在 Blackwell 上实现的 kernel 采用 <b>KV-stationary</b> 策略——每个 KV block 只读一次，把不规则访问规整为顺序流式读取，最终在 B200 上跑到约 980 TFLOP/s。对于做推理优化的工程师，这篇文章的价值在于提醒：稀疏化的纸面 FLOPs 收益，必须经过内存墙的实际检验，数据布局（layout）往往比算法本身更决定性能。</p>
+    <div class="src">📎 <a href="https://x.com/FireworksAI_HQ/status/2075722128784245124" target="_blank" rel="noopener">[来源: Fireworks AI]</a></div>
+  </div>
+</section>
 
-    <li>
-      <h3><span class="tag">K8s 配置</span> <a href="https://www.infoq.com/news/2026/07/sitar-agent-sidecar-config/">Airbnb 开源 Sitar-Agent：K8s 动态配置 Sidecar 架构</a></h3>
-      <p>Sitar-agent 是 Airbnb 为上万 Pod 提供动态配置下发的 Sidecar，每分钟多次更新。新版本改用 Java、基于 Amazon S3 快照启动，并将存储从 Sparkey 替换为 SQLite，以提升可靠性和启动速度。是大规模配置分发架构的生动案例。</p>
-      <p class="source">来源：InfoQ</p>
-    </li>
+<section>
+  <h2>工具推荐 <span class="tag">tools</span></h2>
 
-    <li>
-      <h3><span class="tag">AI 工程</span> <a href="https://www.infoq.com/presentations/multi-agent-ai-architecture/">多 Agent 方法：构建可靠、可控的软件开发自动化</a></h3>
-      <p>Itamar Friedman 分享了如何用自适应多 Agent 系统突破 AI 生产力天花板。涵盖自主测试、智能代码审查和仲裁机制。适合正在规划 Agent 化 SDLC 的架构师和工程负责人。</p>
-      <p class="source">来源：InfoQ</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">⌘</span> rico-bookmarks：浏览器书签整理 → 本地可搜索导航站</h3>
+    <p>既是 Claude Code 的 skill，也是零依赖的 Python CLI。把导出的书签自动分类、去重、查死链，生成一个可搜索的本地导航页，还能导回浏览器。书签攒了上千条没整理过的人可以一试。</p>
+    <div class="src">📎 <a href="https://x.com/geekbb/status/2075946461133688887" target="_blank" rel="noopener">[来源: Geek] github.com/ricocc/rico-bookmarks</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">Python / SQLite</span> <a href="https://simonwillison.net/2026/Jul/7/sqlite-utils-4/">sqlite-utils 4.0 发布，支持数据库模式迁移</a></h3>
-      <p>Simon Willison 发布 sqlite-utils 4.0，新增数据库模式迁移、嵌套事务（<code>db.atomic()</code>）和复合外键支持。迁移用 Python 文件定义，配合 <code>table.transform()</code> 实现强大的 alter 能力。Python + SQLite 工作流的核心工具再次升级。</p>
-      <p class="source">来源：Simon Willison's Weblog</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">⌘</span> Caveman：给 AI Agent 的输出"脱水"，平均省 65% token</h3>
+    <p>给 Claude Code、Codex 等 Agent 加一层表达压缩，砍掉寒暄铺垫、保留代码/命令/错误信息等关键技术内容，官方 benchmark 平均减少 65% 输出 token。提供 lite/full/ultra/wenyan 多档压缩和 <code>/caveman-review</code>、<code>/caveman-commit</code>、<code>/caveman-stats</code> 等命令。同文还推荐了 OpenAI 官方开源的 <b>codex-plugin-cc</b>——在 Claude Code 里直接调用本机 Codex 做代码审查（<code>/codex:review</code>）和对抗式 review（<code>/codex:adversarial-review</code>），不用切换工具。</p>
+    <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247535310&idx=1&sn=e016368353ec4c72adc3b06078b3f66e" target="_blank" rel="noopener">[来源: 逛逛GitHub]</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">Agent 框架</span> <a href="https://devblogs.microsoft.com/agent-framework/agent-frameworks-orchestration-patterns-reach-1-0/">Microsoft Agent Framework 编排模式达到 1.0</a></h3>
-      <p>Python 版 <code>agent-framework-orchestrations</code> 包进入 1.0，与 .NET 版共同支持顺序、并发、群聊、交接和 Magentic 编排。Magentic 模式只需给出目标、Manager 和专家 Agent，由 Manager 自行决定协作方式。让开发者按问题选模式，而不是按 SDK 成熟度选模式。</p>
-      <p class="source">来源：Microsoft Developer Blog</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">⌘</span> riptide：打磨精致的 Go TUI 网速测试/带宽监控</h3>
+    <p>Go 写的终端 UI 工具，启动后菜单可选 Speed Test 或实时带宽监控，界面完成度高，适合作为 TUI 开发参考或日常网络排障小工具。</p>
+    <div class="src">📎 <a href="https://x.com/geekbb/status/2075751426064556319" target="_blank" rel="noopener">[来源: Geek] github.com/Foxemsx/riptide</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">AI 模型</span> <a href="https://www.youtube.com/watch?v=KWy45krGDxg">Fable 5 vs Opus 4.8 vs GLM 5.2：GLM 5.2 能赢吗？</a></h3>
-      <p>视频对比了 Claude Fable 5 等前沿模型，并介绍了 ZenMux 免费端点和 OpenAI/Anthropic 兼容 API。学生和开发者可以通过免费试用 + BYOK 在不付费的情况下测试这些模型。适合快速体验新模型并接入现有工具链。</p>
-      <p class="source">来源：AICodeKing</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">⌘</span> Edge 笔记：Cloudflare 上的开源自托管 Evernote 替代</h3>
+    <p>无服务器、免费、AI 原生，跑在 Cloudflare 上，保留经典三栏笔记体验，开放 API 与 MCP 接口——意味着你的笔记库可以直接被 Agent 读写。想自托管笔记且不想维护服务器的人值得关注。</p>
+    <div class="src">📎 <a href="https://x.com/geekbb/status/2075894116420898972" target="_blank" rel="noopener">[来源: Geek] github.com/tianma-if/edge</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">AI 安全</span> <a href="https://www.youtube.com/watch?v=IQkVMvXQKLY">LLM 欺骗监控的修复在于训练数据</a></h3>
-      <p>演讲者指出行为测试和跨模型联合特征难以发现“沉睡后门”攻击。通过比较基础模型与微调模型的激活差异，并用稀疏自编码器追踪，可以在受控 SQL 注入后门实验中实现 40 倍信号、零误报。为 LLM 安全监测提供了新的思路。</p>
-      <p class="source">来源：AI Engineer</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">⌘</span> DevAgent：FastAPI + LangGraph + React 多 Agent 研发工作台</h3>
+    <p>开源的多 Agent 研发工作台，主打项目理解、流程追踪、风险识别、知识沉淀和评测治理，是观察"多 Agent 工程化落地"的一个完整参考实现，技术栈也是当下主流的 FastAPI + LangGraph + React 组合。</p>
+    <div class="src">📎 <a href="https://x.com/geekbb/status/2075804525928030236" target="_blank" rel="noopener">[来源: Geek] github.com/biheto/DevAgent</a></div>
+  </div>
 
-    <li>
-      <h3><span class="tag">AI 音频</span> <a href="https://arxiv.org/abs/2601.10547">HeartMuLa：开源音乐基础模型家族</a></h3>
-      <p>该论文发布了一套开源音乐基础模型，包括音频-文本对齐、歌词识别、低帧率高保真音乐编解码器和基于 LLM 的歌曲生成模型。支持文本可控的丰富音乐生成。为音乐生成与理解应用提供了新的开源基础。</p>
-      <p class="source">来源：arXiv</p>
-    </li>
+  <div class="item">
+    <h3><span class="num">⌘</span> 其他速览</h3>
+    <p>· <b>Three.js 雕塑插件</b>：Codex 插件，输入物体图片，经分阶段"雕塑"流程生成纯代码、可动画的 Three.js 模型。<br>
+    · <b>LxgwSeal</b>：开源小篆字体，兼容 Unicode 18.0 小篆字符，设计/书法爱好者向。<br>
+    · <b>Flutter 里程表数字组件</b>：数字变化时每位像里程表滚动，带本地化格式、iOS 弹簧曲线和运动模糊。</p>
+    <div class="src">📎 <a href="https://x.com/geekbb/status/2075839254845153586" target="_blank" rel="noopener">[来源: Geek - Three.js]</a> · <a href="https://x.com/geekbb/status/2075931110215688408" target="_blank" rel="noopener">[来源: Geek - 小篆字体]</a> · <a href="https://x.com/geekbb/status/2075914752283615593" target="_blank" rel="noopener">[来源: Geek - Flutter]</a></div>
+  </div>
+</section>
 
-    <li>
-      <h3><span class="tag">Vercel</span> <a href="https://vercel.com/changelog/update-project-settings-from-the-vercel-cli">Vercel CLI 支持更新项目设置</a></h3>
-      <p>新增 <code>vercel project update</code> 命令，可直接在 CLI 修改框架预设、构建命令、输出目录等。JSON 输出便于自动化脚本和 Agent 解析。对 CI/CD 或 Agent 自动修复配置错误非常实用。</p>
-      <p class="source">来源：Vercel News</p>
-    </li>
+<section>
+  <h2>实践指南 <span class="tag">best practices</span></h2>
+  <ul class="practice">
+    <li><b>Agent 也需要 CI/CD。</b> AI Engineer 演讲指出：独自做 Agent 的人迟早会重新发明（更差版本的）回归测试、定时监控、契约测试、版本控制和预发布环境。最危险的失败不是明显错误，而是"看起来 ready 但违反生产契约"的产出。建议：给 Agent 的输出定义 schema 契约，变更 skill 接口时跑下游回归。 <a href="https://www.youtube.com/watch?v=WLXxTaPagA8" target="_blank" rel="noopener">[视频]</a></li>
+    <li><b>理解力是新瓶颈。</b> Notion 的 Geoffrey Litt 在 AI Engineer 主旨演讲中主张：即使 Agent 写了代码，理解这些代码仍然重要——大多数 Agentic 任务仍需人类判断，光验证正确性不够，要真正理解 Agent 在做什么，并分享了结合教育/认知科学的"高效建立理解"技巧。 <a href="https://www.youtube.com/watch?v=WkBPX-oDMnA" target="_blank" rel="noopener">[视频]</a> · <a href="https://x.com/aiDotEngineer/status/2075706238554534338" target="_blank" rel="noopener">[推文]</a></li>
+    <li><b>大代码库不必完全理解。</b> Sean Goedecke 为"不理解整个 codebase"辩护：小代码库低流动团队（如 Redis）可以做到完全理解，但大型高流动代码库（如 Google 搜索后端）没人能全懂，这是两种本质不同的编程方式、各有方法与文化——关键是在局部区域做到最好，而非为"不理解全貌"感到羞愧。 <a href="https://seangoedecke.com/in-defense-of-not-understanding-your-codebase/" target="_blank" rel="noopener">[原文]</a></li>
+    <li><b>用软链接管理全局 Skills。</b> Yangyi 分享了 Skill 管理优化：不再为每个工作区 fork 副本，改为全局统一管理 + 软链接分发；禁用时把 skill 文件移到 disable 目录，避免冗余 skill 占用上下文导致指令调用不精确；配合 skill-guard 做安全查杀，过滤有供应链风险的 skill。这套模式对任何维护多套 Agent 配置的开发者都可复用。 <a href="https://x.com/yangyi/status/2075763477197779334" target="_blank" rel="noopener">[推文]</a></li>
+    <li><b>把 Agentic Coding 当 IT 部门用。</b> Andrew Chen 的私房用法：用 coding agent 修 hermes/openclaw 集成、加固 homelab、调试本地 AI 环境——这类"读陌生 GitHub 项目排错"的杂活，Agent 已能省下上百小时。 <a href="https://x.com/andrewchen/status/2075696493156257867" target="_blank" rel="noopener">[推文]</a></li>
+    <li><b>找产品灵感：让 Codex 读公共 API 仓库。</b> 向阳乔木的方法：不知道用 AI 开发什么时，把 GitHub 上的开源公共 API 仓库丢给 Codex，让它基于可用 API 生成产品点子（他本周分享的 IMDB Top250 网站就是这么来的）。 <a href="https://x.com/vista8/status/2075755623325794545" target="_blank" rel="noopener">[推文]</a></li>
+    <li><b>AI 信任设计模式。</b> Upside.tech 的 Alex Bauer 分享生产环境模式：每个 Agent 行动前咨询一个 "librarian" 组件；对单次 pass 不可信的高风险问题采用 jury-and-judge（多模型评审 + 裁判）；并学会识别"这个任务模型就是太笨做不了"的边界。幻觉没有消失，只是长大了——错的数字看起来和对的一模一样。 <a href="https://www.youtube.com/watch?v=YZQsWVeN3rE" target="_blank" rel="noopener">[视频]</a></li>
+  </ul>
+</section>
 
-    <li>
-      <h3><span class="tag">Vercel</span> <a href="https://vercel.com/changelog/chat-sdk-vercel-connect">Chat SDK 支持 Vercel Connect</a></h3>
-      <p>现在可用 Vercel Connect 管理 Chat SDK 机器人的凭证，无需自行存储或轮换 token。出站调用使用短期 token，入站触发通过 OIDC token 验证。显著降低了 Slack/GitHub/Linear 机器人集成的安全维护成本。</p>
-      <p class="source">来源：Vercel News</p>
-    </li>
-
-    <li>
-      <h3><span class="tag">GitHub</span> <a href="https://x.com/github/status/2074574687942946819">GitHub Copilot 应用已向所有 Copilot 计划开放</a></h3>
-      <p>GitHub Copilot 应用现已覆盖所有 Copilot 计划，没有订阅的用户也可以 Bring Your Own Key 使用。这意味着更多开发者可以按自己的 API key 接入 Copilot 体验。对团队和个人都是扩大可及性的更新。</p>
-      <p class="source">来源：GitHub on X</p>
-    </li>
-
-    <li>
-      <h3><span class="tag">AI 编码</span> <a href="https://www.youtube.com/watch?v=MxgUMBGeF14">LangChain dcode + Nemotron 3 Ultra 实战</a></h3>
-      <p>视频演示了 LangChain 开源编码 Agent dcode 配合 Nemotron 3 Ultra 和 Baseten 的完整流程。包括安装、模型选择、LangSmith 追踪和新的 <code>/goal</code> 功能。最后还提到 NVIDIA NemoClaw Deep Agents Blueprint 用于企业安全治理场景。</p>
-      <p class="source">来源：LangChain</p>
-    </li>
-
-    <li>
-      <h3><span class="tag">编辑器</span> <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.129-(insiders)">Visual Studio Code 1.129 Insiders</a></h3>
-      <p>VS Code 发布 1.129 Insiders 版本，具体新功能可在官方博客中查看。建议关注编辑器性能、调试或 Copilot 相关改进。Insiders 用户可提前体验并反馈。</p>
-      <p class="source">来源：Microsoft VS Code Blog</p>
-    </li>
-
-    <li>
-      <h3><span class="tag">AI 辅助开发</span> <a href="https://x.com/gdb/status/2074889855704973388">GPT-5.6-Sol 在 Next.js 开发中表现出色</a></h3>
-      <p>Next.js 团队负责人 Tim Neutkens 表示已测试 GPT-5.6-Sol 两个多月，它理解架构权衡、能深入调查复杂 issue、在修复 bug 时考虑代码库其他区域。Vercel 已将一些大型服务端重构交由其实现端到端。体现了前沿模型在大型框架维护中的潜力。</p>
-      <p class="source">来源：Greg Brockman on X</p>
-    </li>
-
-    <li>
-      <h3><span class="tag">AI 工具链</span> <a href="https://x.com/hwchase17/status/2074874140776169485">LangChain × NVIDIA 推出 NemoClaw Deep Agents Blueprint</a></h3>
-      <p>LangChain 与 NVIDIA 合作推出完全开源的 Agent Harness，针对开源模型做了性能调优。它提供可私有化部署的完整栈、领先的基准测试表现，并将推理成本降低 10 倍以上。适合企业构建可控、低成本的 Agent 系统。</p>
-      <p class="source">来源：Harrison Chase on X</p>
-    </li>
-
+<section class="sources">
+  <h2>参考链接汇总 <span class="tag">sources</span></h2>
+  <ol>
+    <li>Cursor — Side Chats / Transcript Search / Changelog: <a href="https://x.com/cursor_ai/status/2075686268113916023" target="_blank" rel="noopener">x.com/cursor_ai/...8113916023</a> · <a href="https://x.com/cursor_ai/status/2075686269825220960" target="_blank" rel="noopener">...9825220960</a> · <a href="https://x.com/cursor_ai/status/2075686273231036801" target="_blank" rel="noopener">...3231036801</a></li>
+    <li>Ado — Claude Code 桌面版内置浏览器: <a href="https://x.com/adocomplete/status/2075659182855123225" target="_blank" rel="noopener">x.com/adocomplete/...</a></li>
+    <li>Tw93 — Claude Code /doctor: <a href="https://x.com/HiTw93/status/2075773027363746147" target="_blank" rel="noopener">x.com/HiTw93/...</a></li>
+    <li>Google AI Developers — AI Studio GitHub 导入: <a href="https://x.com/googleaidevs/status/2075655769547247658" target="_blank" rel="noopener">x.com/googleaidevs/...</a></li>
+    <li>小互 — LangChain OpenWiki 0.1.0: <a href="https://x.com/xiaohu/status/2075883734600146993" target="_blank" rel="noopener">x.com/xiaohu/...0146993</a> · <a href="https://x.com/xiaohu/status/2075883736970006600" target="_blank" rel="noopener">...0006600</a></li>
+    <li>InfoQ — Elastic Atlas Agent Memory: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288603&idx=4&sn=c2f996400a034c7ffc05016f9eac0b0f" target="_blank" rel="noopener">mp.weixin.qq.com/...</a></li>
+    <li>Simon Willison — GPT-5.6 模型选择: <a href="https://x.com/simonw/status/2075663372323008755" target="_blank" rel="noopener">x.com/simonw/...</a></li>
+    <li>OpenAI Developers — GPT-5.6 千行编码案例: <a href="https://x.com/OpenAIDevs/status/2075657031844028615" target="_blank" rel="noopener">x.com/OpenAIDevs/...</a></li>
+    <li>宝玉 — ChatGPT/Codex/Work 区别: <a href="https://x.com/dotey/status/2075652538058109385" target="_blank" rel="noopener">x.com/dotey/...</a> · <a href="https://baoyu.io/blog/chatgpt-work-codex-guide" target="_blank" rel="noopener">baoyu.io/blog/...</a></li>
+    <li>GitHub — Multilingual Repositories Dataset: <a href="https://x.com/github/status/2075703025977725327" target="_blank" rel="noopener">x.com/github/...</a></li>
+    <li>dbaplus社群 — rsync 算法原理: <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247637087&idx=1&sn=cc04951894e6681e6009fb255836ad97" target="_blank" rel="noopener">mp.weixin.qq.com/...</a></li>
+    <li>Fireworks AI — 稀疏注意力 kernel: <a href="https://x.com/FireworksAI_HQ/status/2075722128784245124" target="_blank" rel="noopener">x.com/FireworksAI_HQ/...</a></li>
+    <li>Geek — rico-bookmarks / riptide / Edge笔记 / DevAgent / Three.js插件 / 小篆字体 / Flutter组件: <a href="https://x.com/geekbb/status/2075946461133688887" target="_blank" rel="noopener">bookmarks</a> · <a href="https://x.com/geekbb/status/2075751426064556319" target="_blank" rel="noopener">riptide</a> · <a href="https://x.com/geekbb/status/2075894116420898972" target="_blank" rel="noopener">edge</a> · <a href="https://x.com/geekbb/status/2075804525928030236" target="_blank" rel="noopener">DevAgent</a> · <a href="https://x.com/geekbb/status/2075839254845153586" target="_blank" rel="noopener">three.js</a> · <a href="https://x.com/geekbb/status/2075931110215688408" target="_blank" rel="noopener">font</a> · <a href="https://x.com/geekbb/status/2075914752283615593" target="_blank" rel="noopener">flutter</a></li>
+    <li>逛逛GitHub — Caveman / codex-plugin-cc 等 6 个本周项目: <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247535310&idx=1&sn=e016368353ec4c72adc3b06078b3f66e" target="_blank" rel="noopener">mp.weixin.qq.com/...</a></li>
+    <li>AI Engineer — Solo Agent 与 CI/CD: <a href="https://www.youtube.com/watch?v=WLXxTaPagA8" target="_blank" rel="noopener">youtube.com/watch?v=WLXxTaPagA8</a></li>
+    <li>AI Engineer — Understanding is the new bottleneck (Geoffrey Litt): <a href="https://www.youtube.com/watch?v=WkBPX-oDMnA" target="_blank" rel="noopener">youtube.com/watch?v=WkBPX-oDMnA</a></li>
+    <li>AI Engineer — Design Patterns for AI Trust (Alex Bauer): <a href="https://www.youtube.com/watch?v=YZQsWVeN3rE" target="_blank" rel="noopener">youtube.com/watch?v=YZQsWVeN3rE</a></li>
+    <li>seangoedecke.com — In defense of not understanding your codebase: <a href="https://seangoedecke.com/in-defense-of-not-understanding-your-codebase/" target="_blank" rel="noopener">seangoedecke.com/...</a></li>
+    <li>Yangyi — Skill 软链接全局管理: <a href="https://x.com/yangyi/status/2075763477197779334" target="_blank" rel="noopener">x.com/yangyi/...</a></li>
+    <li>andrew chen — Agentic coding 当 IT 用: <a href="https://x.com/andrewchen/status/2075696493156257867" target="_blank" rel="noopener">x.com/andrewchen/...</a></li>
+    <li>向阳乔木 — 公共 API 仓库找产品灵感: <a href="https://x.com/vista8/status/2075755623325794545" target="_blank" rel="noopener">x.com/vista8/...</a></li>
+    <li>AI前线 — Ralph Loop 创造者 Geoffrey Huntley 访谈: <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247664697&idx=1&sn=46e3b8fb240a34a75cf91e14f34f0b05" target="_blank" rel="noopener">mp.weixin.qq.com/...</a></li>
   </ol>
+</section>
 
-  <h2>2. 深度技术解读</h2>
+<footer>
+  // generated by tech-daily-generator · role=developer_practice · 2026-07-11<br>
+  // source: freshrss_24h_compact_20260711_184103.json (325 articles → 22 selected)
+</footer>
 
-  <div class="section">
-    <h3>2.1 TypeScript 7.0：用 Go 重写，让类型工具“快一个数量级”</h3>
-    <p>TypeScript 7.0 的最大变化不是语法，而是底层实现：整个编译器从 JavaScript/TypeScript 移植为 Go 原生代码。Go 的并发模型和内存管理让 TypeScript 能够充分利用现代多核 CPU，官方目标是将“整个工具链”提速 10 倍。</p>
-    <p>为了降低迁移风险，团队选择<strong>保真移植</strong>：保持原有代码结构和逻辑，先确保结果一致、兼容，再逐步优化。这意味着短期内现有项目升级大概率不会有行为差异，但构建时间会明显下降。对大仓库和 monorepo 来说，这是最具成本收益的升级。</p>
-    <div class="callout">
-      <strong>实践建议：</strong>在升级 TypeScript 7.0 前，先在 CI 中并行跑新旧版本做 diff 校验；同时关注 Go 二进制是否影响自定义 compiler API 和构建插件。
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>2.2 Kubernetes 中的“工作负载身份”问题：为什么 IP 不是身份</h3>
-    <p>Kubernetes 的 NetworkPolicy 通常基于 Pod IP，但 Pod 重启、调度、滚动升级后 IP 会变化。昨天的“支付服务”IP 可能今天属于“日志代理”，安全策略却在静默放行。</p>
-    <p><strong>SPIFFE/SPIRE</strong> 解决了这个问题：它为每个工作负载颁发短期可撤销的加密身份（X.509-SVID），身份与生命周期绑定，而不是与 IP 绑定。<strong>Cilium</strong> 则能在内核 eBPF 层根据这个身份做访问控制，避免传统 iptables 的 IP 策略漂移。</p>
-    <div class="callout">
-      <strong>实践建议：</strong>如果你正在使用 K8s 网络策略，且工作负载频繁滚动，建议评估 SPIFFE + SPIRE + Cilium 的零信任方案；先从非关键命名空间试点，逐步替换基于 IP 的 allow 规则。
-    </div>
-  </div>
-
-  <div class="section">
-    <h3>2.3 Agent 的“记忆”与编排：从单轮到多 Agent 协作</h3>
-    <p>Agent 的真正价值不在于单次回答，而在于持续完成任务。短期记忆（如 LangChain 的 conversation buffer）让 Agent 能处理多轮对话，长期记忆（如 Eve + Cosmos DB 的向量存储）让 Agent 在进程重启后仍能召回上下文。</p>
-    <p>当任务复杂到一个人搞不定时，就需要多 Agent 编排。Microsoft Agent Framework 1.0 提供了顺序、并发、群聊、交接和 Magentic 等稳定模式，让开发者按业务场景选择协作方式。对真实业务来说，先跑通单 Agent 循环，再按需引入多 Agent 与持久化记忆，是更稳妥的路径。</p>
-  </div>
-
-  <h2>3. 工具推荐</h2>
-
-  <div class="section">
-    <h3>3.1 sqlite-utils 4.0</h3>
-    <p>Python 开发者处理 SQLite 的必备工具。4.0 新增模式迁移、嵌套事务和复合外键，配合 <code>table.transform()</code> 可以优雅地完成 alter table 操作。</p>
-    <p class="source"><a href="https://simonwillison.net/2026/Jul/7/sqlite-utils-4/">Simon Willison's Weblog</a></p>
-  </div>
-
-  <div class="section">
-    <h3>3.2 GitHub Copilot CLI + GitHub Pages + Namecheap API</h3>
-    <p>这套组合让静态站点从仓库到 HTTPS 自定义域名在十几分钟内自动化完成。核心思路是：用 Copilot CLI 的 Skill 调用域名注册商 API，自动完成 DNS 配置与验证。</p>
-    <p class="source"><a href="https://github.blog/ai-and-ml/github-copilot/how-github-copilot-enables-zero-dns-configuration-for-github-pages/">The GitHub Blog</a></p>
-  </div>
-
-  <div class="section">
-    <h3>3.3 Vercel CLI 的 <code>vercel project update</code></h3>
-    <p>现在可以命令行修改项目的框架预设、构建命令和输出目录，并输出 JSON 供脚本或 Agent 解析。对自动化修复构建错误非常友好。</p>
-    <p class="source"><a href="https://vercel.com/changelog/update-project-settings-from-the-vercel-cli">Vercel News</a></p>
-  </div>
-
-  <h2>4. 实践指南</h2>
-
-  <div class="section">
-    <h3>4.1 本地 AI Agent 最小可用方案</h3>
-    <p>如果你不想支付 API 费用或担心数据外流，可以先用 <strong>Ollama + Qwen + LangChain v1</strong> 跑通本地 Agent。步骤：安装 Ollama 并拉取模型；用 Python 安装 <code>langchain</code> 相关依赖；定义工具函数；在 Agent 中启用记忆模块。关键是让 Agent 自己决定何时调用工具，而不是把工具调用硬编码在提示词里。</p>
-  </div>
-
-  <div class="section">
-    <h3>4.2 什么时候考虑 PostgreSQL → ClickHouse</h3>
-    <p>PostgreSQL 是万能型数据库，但在超大规模聚合查询场景下，行式存储会成为瓶颈。如果满足以下三个条件，可以考虑 ClickHouse 或类似列式引擎：读远大于写、查询以聚合/扫描为主、数据量大到单表数十亿行。迁移时建议先把 ClickHouse 作为只读分析副本，验证延迟和查询模式后再切换主路径。</p>
-  </div>
-
-  <div class="section">
-    <h3>4.3 大规模 K8s 配置下发：Sidecar 模式要点</h3>
-    <p>Airbnb 的 Sitar-agent 展示了动态配置 Sidecar 的典型演进：从依赖本地文件到用 S3 快照做启动加速，从 Sparkey 到 SQLite 做存储。如果你的服务需要频繁更新配置又不想重启应用，建议采用 Sidecar 拉取 + 本地文件挂载的方案，并确保配置版本一致性（checksum + 版本号）和回滚能力。</p>
-  </div>
-
-  <h2>5. 信息来源汇总</h2>
-  <div class="sources">
-    <a href="https://www.freecodecamp.org/news/implement-zero-trust-workload-identity-in-kubernetes-with-spiffe-spire-and-cilium/">freeCodeCamp — Zero-Trust Workload Identity in Kubernetes</a>
-    <a href="https://www.freecodecamp.org/news/how-to-build-your-own-local-ai-agent-with-tool-calling-and-memory/">freeCodeCamp — Build Your Own Local AI Agent</a>
-    <a href="https://devblogs.microsoft.com/cosmosdb/cosmos-db-agent-memory">Microsoft — Cosmos DB Agent Memory</a>
-    <a href="https://www.freecodecamp.org/news/why-does-the-internet-keep-breaking-a-deep-dive-into-aws-us-east-1/">freeCodeCamp — AWS US-East-1 Deep Dive</a>
-    <a href="https://www.youtube.com/watch?v=aJP1AbZSqz8">freeCodeCamp — TypeScript in React Full Tutorial</a>
-    <a href="https://blog.jetbrains.com/kotlin/2026/07/introducing-the-kotlin-benchmark-evaluate-ai-coding-agents-on-real-world-kotlin-tasks/">JetBrains — Kotlin Benchmark for AI Coding Agents</a>
-    <a href="https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/">Microsoft — Announcing TypeScript 7.0</a>
-    <a href="https://www.youtube.com/watch?v=ofS-4RRw9zw">How I AI — Custom AI Harness with Claude SDK</a>
-    <a href="https://www.infoq.com/news/2026/07/momentic-postgres-clickhouse/">InfoQ — PostgreSQL to ClickHouse</a>
-    <a href="https://github.blog/ai-and-ml/github-copilot/how-github-copilot-enables-zero-dns-configuration-for-github-pages/">GitHub Blog — Zero DNS Configuration for GitHub Pages</a>
-    <a href="https://blog.bytebytego.com/p/the-agent-loop-how-ai-goes-from-answering">ByteByteGo — The Agent Loop</a>
-    <a href="https://www.infoq.com/news/2026/07/sitar-agent-sidecar-config/">InfoQ — Airbnb Sitar-Agent Sidecar</a>
-    <a href="https://www.infoq.com/presentations/multi-agent-ai-architecture/">InfoQ — Multi-Agent Approach</a>
-    <a href="https://simonwillison.net/2026/Jul/7/sqlite-utils-4/">Simon Willison — sqlite-utils 4.0</a>
-    <a href="https://devblogs.microsoft.com/agent-framework/agent-frameworks-orchestration-patterns-reach-1-0/">Microsoft — Agent Framework Orchestration Patterns 1.0</a>
-    <a href="https://www.youtube.com/watch?v=KWy45krGDxg">AICodeKing — Fable 5 vs Opus 4.8 vs GLM 5.2</a>
-    <a href="https://www.youtube.com/watch?v=IQkVMvXQKLY">AI Engineer — LLM Deception Monitor</a>
-    <a href="https://arxiv.org/abs/2601.10547">arXiv — HeartMuLa Music Foundation Models</a>
-    <a href="https://vercel.com/changelog/update-project-settings-from-the-vercel-cli">Vercel — Update Project Settings from CLI</a>
-    <a href="https://vercel.com/changelog/chat-sdk-vercel-connect">Vercel — Chat SDK supports Vercel Connect</a>
-    <a href="https://x.com/github/status/2074574687942946819">GitHub on X — Copilot app available</a>
-    <a href="https://www.youtube.com/watch?v=MxgUMBGeF14">LangChain — dcode + Nemotron 3 Ultra</a>
-    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.129-(insiders)">Microsoft — VS Code 1.129 Insiders</a>
-    <a href="https://x.com/gdb/status/2074889855704973388">Greg Brockman on X — GPT-5.6-Sol for Next.js</a>
-    <a href="https://x.com/hwchase17/status/2074874140776169485">Harrison Chase on X — NemoClaw Deep Agents Blueprint</a>
-  </div>
-
+</div>
 </body>
 </html>
