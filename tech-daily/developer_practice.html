@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>开发者实践版 · 科技日报 2026-07-12</title>
+<title>开发者实践版 · 科技日报 2026-07-13</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -191,9 +191,9 @@
   <div class="badge">DEVELOPER_PRACTICE</div>
   <h1>$ cat tech-daily.md | less</h1>
   <div class="meta">
-    发布日期：<span>2026-07-12</span> &nbsp;|&nbsp;
-    数据窗口：<span>2026-07-11 18:44 ~ 2026-07-12 18:44</span> &nbsp;|&nbsp;
-    原始条目：<span>99</span> 条 / <span>424</span> 个信息源
+    发布日期：<span>2026-07-13</span> &nbsp;|&nbsp;
+    数据窗口：<span>2026-07-12 19:07 ~ 2026-07-13 19:07</span> &nbsp;|&nbsp;
+    原始条目：<span>447</span> 条 / <span>424</span> 个信息源
   </div>
 </header>
 
@@ -201,8 +201,8 @@
   <h2><span class="icon">📋</span>今日导览</h2>
   <ul class="toc">
     <li><a href="#hot">🔥 今日技术热榜 — 8 条值得关注的工程动态</a></li>
-    <li><a href="#deep">🔬 深度技术解读 — Agent 失控与 Harness 工程</a></li>
-    <li><a href="#tools">🛠 工具推荐 — 5 款值得上手的新工具/库</a></li>
+    <li><a href="#deep">🔬 深度技术解读 — Agent 时代的方法论重构</a></li>
+    <li><a href="#tools">🛠 工具推荐 — 6 款值得上手的新工具/库</a></li>
     <li><a href="#practice">📐 实践指南 — 可落地的最佳实践</a></li>
     <li><a href="#sources">📚 参考链接汇总</a></li>
   </ul>
@@ -212,59 +212,70 @@
   <h2><span class="icon">🔥</span>今日技术热榜</h2>
 
   <article class="item">
-    <h3><span class="tag">事故</span>GPT-5.6-Sol 子代理误删 $HOME，编程 Agent 的破坏半径警示</h3>
-    <p>前 HyperWrite CEO Matt Shumer 在 X 上公开：GPT-5.6-Sol 在 Ultra 模式下做文件清理时，子代理错误解析了 <code>$HOME</code> 变量，直接执行 <code>rm -rf /Users/mattsdevbox</code>，把他 Mac 上的工作目录几乎全部清空。另一位开发者 @cremieuxrecueil 也遇到类似情况——PowerShell 的 <code>-Include</code> 过滤器被误处理，编译中的论文文件夹被整体删除。OpenAI 在 GPT-5.6 的系统卡中其实留了一句不起眼的警告："它喜欢删除未经授权的数据"。</p>
-    <div class="why"><strong>为什么值得你看：</strong>当模型具备 <strong>子代理 + 长时自主运行 + 全权限</strong> 三件套时，单点故障的破坏半径被指数放大。把 Agent 接到本地终端之前，请先加上 Hooks 拦截层——文章给出了可直接落地的 <code>block-dangerous-bash.mjs</code> 拦截脚本（macOS/Linux），在 <code>~/.kimi-code/hooks/</code> 下拦截 <code>rm -rf</code>、<code>mkfs</code>、<code>dd</code> 等高危命令。这已经不是"要不要用 Agent"的问题，而是"如何给 Agent 上锁"的问题。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247724179&idx=1&sn=bcd482549f96e030c1473ac9d74a9e67" target="_blank" rel="noopener">Datawhale — 突发！GPT-5.6-Sol被曝重大bug，一招教你避坑！</a></div>
+    <h3><span class="tag">配额</span>OpenAI 取消 Codex / ChatGPT Work 5 小时限制，GPT-5.6 Sol 同步效率优化</h3>
+    <p>Codex 工程负责人 Tibo Sottiaux 官宣：<strong>Plus / Business / Pro 用户的 Codex 和 ChatGPT Work 暂时移除 5 小时使用窗口</strong>，同时公布三项变化——GPT-5.6 Sol 将推出效率优化以降低单任务 Token 消耗；活跃用户已突破 600 万；并向所有按下 reset 按钮的用户补偿了一次 banked reset。Anthropic 同日把 Claude Fable 5 的访问权限再次延长到 7 月 19 日，并维持 Claude Code 每周额度 50% 的提升。两家头部厂商在同一天"集体放水"，本质是 Agent 工作流进入高频使用阶段后的资源竞争。</p>
+    <div class="why"><strong>为什么值得你看：</strong>如果你在用 Codex / Claude Code 跑长任务，这几天是观察各家模型真实性价比的最佳窗口——同样的任务在 GPT-5.6 Sol、Fable 5、GLM 5.2 上的 Token 消耗差距正在被公开实测。社区反馈是 GPT-5.6 Sol 长任务非常"能吃"Token（一个 3D 网页任务跑 3 小时），部分用户开始砍掉 Superpowers、grill、AGENTS.md 等早期 Skills，理由是<strong>新模型已经具备 Agentic 能力，外部 Skills 反复调用反而污染上下文</strong>。如果你的 Skills 库是半年前配置的，建议做一次精简审计。</div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650452760&idx=1&sn=db22e379eba0423ea26643eb7dfff1b6" target="_blank" rel="noopener">AINLP — Codex、ChatGPT Work 暂时取消 5 小时窗口</a> &nbsp;|&nbsp; <a href="https://www.ifanr.com/1671899" target="_blank" rel="noopener">爱范儿 — Codex 不限时了，我先删掉了一堆 Skills</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">底层</span>Cloudflare 修复 hyper 库的 HTTP/1 静默截断 Race Condition</h3>
-    <p>Cloudflare 团队披露并修复了 Rust 生态中广泛使用的 HTTP 库 hyper 的一个罕见 Bug：在特定时序条件下，<strong>大型 HTTP 响应会被静默截断，但客户端仍收到 200 OK</strong>。这意味着上层业务拿到的响应体是不完整的，但状态码却显示成功——这类"沉默失败"是最难排查的线上问题之一。该 Bug 已存在多年，目前已修复并合入上游。</p>
-    <div class="why"><strong>为什么值得你看：</strong>这是一个教科书级的"边界时序 Bug"案例。它提醒我们：(1) 状态码 200 ≠ 响应完整，对于关键链路应校验 <code>Content-Length</code> 或 <code>Transfer-Encoding</code> 边界；(2) 基础库的偶发性问题往往在压测/慢网络场景下才会暴露；(3) 如果你的服务依赖 hyper（直接或间接），建议尽快升级到修复版本。</div>
-    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/07/cloudflare-hyper-bug-fix/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ — Cloudflare Identifies Race Condition in hyper's HTTP/1 Implementation</a></div>
+    <h3><span class="tag">CLI</span>GitHub Copilot CLI 优化 subagent delegation：工具失败率 -23%，搜索失败 -27%</h3>
+    <p>GitHub 官方公布了 Copilot CLI 的最新改进：<strong>更智能的 subagent 委派策略</strong>，在不降低输出质量的前提下，工具调用失败率下降 23%、搜索失败率下降 27%、编辑失败率下降 18%。这是终端 Coding Agent 中第一个公开给出 subagent 协作具体收益数字的官方版本。建议更新到 v1.0.42+，本地 <code>/update</code> 即可。</p>
+    <div class="why"><strong>为什么值得你看：</strong>Subagent 委派失败一直是 Agent 工程的黑盒——主 Agent 决定什么时候派发、给子 Agent 多大上下文、回收时怎么合并结果，这些环节任何一处出问题都会拖慢整体进度。GitHub 用一组可量化的失败率指标替代了"看起来更快"的主观感受，这套度量方法可以直接借鉴到你的 Agent 平台监控里。</div>
+    <div class="src">📎 来源: <a href="https://x.com/github/status/2076713716817834312" target="_blank" rel="noopener">GitHub — Get faster, more reliable coding sessions in GitHub Copilot CLI</a> &nbsp;|&nbsp; <a href="https://github.blog/ai-and-ml/how-we-made-github-copilot-cli-faster-and-more-reliable/" target="_blank" rel="noopener">GitHub Blog — How we made Copilot CLI faster</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">实战</span>ServiceTitan：85% 的遗留代码迁移由 AI 自主完成的"自愈循环"</h3>
-    <p>ServiceTitan 首席 AI 工程师 David Stein 在 QCon 分享了他们迁移几百个旧业务指标的经验。核心思路反常识：<strong>不需要让 AI 变更聪明，而是把任务拆到 AI 能独立完成并验证的粒度</strong>，再配一条自动化"组装线"和验证器。最终 85% 的迁移工作由 AI 自主完成，剩余 15% 复杂案例由人工接手，项目周期从几个季度压缩到几周。</p>
-    <div class="why"><strong>为什么值得你看：</strong>这套方法论里最关键的词是 <strong>"验证器"</strong>——当你要并行跑大量迁移任务时，必须知道每一步都是正确的，否则很快偏离轨道。具体做法是给 Cursor/Claude Code 一个非常简单的事情做，把复杂性隐藏在验证步骤和工具背后，并确保它拥有解决问题所需的完整上下文。对于手里有遗留代码迁移、SDK 升级、框架迁移需求的团队，这是 2026 年最值得借鉴的工程范式。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288666&idx=1&sn=8bbada4ac098dd4390b3408be7fb1370" target="_blank" rel="noopener">InfoQ — 连Claude Code都搞不定的巨型代码库，我们靠一个"自愈循环"给盘活了</a></div>
+    <h3><span class="tag">安全</span>xAI Grok Build CLI 被曝静默打包整个仓库上传云端，含 .env 密钥</h3>
+    <p>社区对 Grok Build CLI 的逆向分析发现：每次 session 开始和结束时，CLI 会<strong>把当前工作目录的完整状态（含 git 历史和所有文件）打包成 tar.gz，静默上传到 xAI 控制的 gs://grok-code-session-traces 存储桶</strong>。即使用户在配置里关闭改进选项，上传仍然继续，而且会跨项目抓取 <code>.claude</code> 配置目录里的 API 密钥。Reddit 上有开发者用合成仓库验证后确认了该行为，并给出了关闭方式。</p>
+    <pre class="code"><span class="cmt"># ~/.grok/config.toml</span>
+[features]
+<span class="cmd">telemetry = false</span>          <span class="cmt"># 关闭 trace_upload</span>
+<span class="cmd">remote_fetch = false</span>       <span class="cmt"># 阻止远程配置下发</span>
+
+[telemetry]
+<span class="cmd">trace_upload = false</span>       <span class="cmt"># 直接禁用 session trace</span>
+<span class="cmd">mixpanel_enabled = false</span>
+
+[harness]
+<span class="cmd">disable_codebase_upload = true</span>  <span class="cmt"># 禁止代码仓库上传</span></pre>
+    <div class="why"><strong>为什么值得你看：</strong>这不是"模型读取你代码"的正常行为，而是<strong>绕过 Agent 视野的独立通道</strong>。在你允许任何 CLI Agent 接触生产仓库前，先确认它的数据外发策略。同样的检查应该应用到 Claude Code、Cursor、Codex CLI 等所有同类工具——任何能访问 <code>$HOME</code> 的 CLI 都可能"顺手"带走不该带走的东西。如果你已经在用 Grok Build，建议立刻执行上述配置并 rotate 所有暴露过的 API Key。</div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzIyMzA5NjEyMA==&mid=2647684233&idx=1&sn=391c84ef158f723c83108c29d8e2d666" target="_blank" rel="noopener">数字生命卡兹克 — 我只让Grok回复一个单词，它就把我整个代码库都偷走了</a> &nbsp;|&nbsp; <a href="https://x.com/BohuTANG/status/2076534471822852440" target="_blank" rel="noopener">X / BohuTANG — grok cli 关闭上传配置</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">协议</span>MCP 企业托管授权扩展进入稳定版：ID-JAG + SSO 一次登录</h3>
-    <p>Model Context Protocol 团队宣布<strong>企业托管授权扩展</strong>升至稳定状态。核心机制是 <strong>Identity Assertion JWT Authorization Grant（ID-JAG）</strong>：企业通过身份提供商（IdP）集中管控所有 MCP Server 的访问权限，终端用户只需一次 SSO 登录，即可访问全部已被企业审批通过的 MCP Server，无需每个服务单独授权。Anthropic、Microsoft、Okta 已在跟进。</p>
-    <div class="why"><strong>为什么值得你看：</strong>这一扩展把"身份策略"和"工具调用"解耦了——企业托管层只决定"谁能连哪个 Server、权限范围多大"，令牌颁发后不再逐包检查 MCP 流量。需要注意：这并不是运行时级别的细粒度授权，企业仍需自行搭建 Agent 接入系统后的行为管控体系。如果你正在做企业级 Agent 平台，这是绕不开的标准。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247664709&idx=2&sn=c87670cac04cfaba411638b29a6b3c99" target="_blank" rel="noopener">AI前线 — MCP 推出企业统一授权功能</a></div>
+    <h3><span class="tag">平台</span>GitHub Copilot 推出 /update 命令 + 全新官方插件仓库</h3>
+    <p>配合 Copilot CLI 升级，OpenAI 同步开源了 <strong>Codex 官方插件示例集合 plugins</strong>，覆盖设计、协作、移动应用构建、Web 开发等场景的插件模板。每个插件都包含必需的 manifest 清单及可选的技能、MCP 服务器、Agent、命令等配套资源。通过标准化的插件结构，开发者可以快速了解如何将 Codex 与外部工具（如 Figma、Notion）集成，实现自动化的设计转代码、知识管理、应用打包发布等能力。</p>
+    <div class="why"><strong>为什么值得你看：</strong>这是 OpenAI 第一次系统化给出 Codex 扩展机制的标准参考。之前你想给 Codex 接 Figma 只能猜 MCP 配置怎么写、Skill 文件该放哪；现在直接用 plugins 仓库做模板，几分钟就能跑通一个 Figma → 代码的自动化流程。如果你正在评估 Claude Code Skills 和 Codex plugins 的迁移成本，这个仓库是必看的对照样本。</div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&mid=2247502904&idx=1&sn=afa50bb4de6e3729c87d168fd2f5ce3e" target="_blank" rel="noopener">机器之心SOTA模型 — 今日开源：Codex官方插件库开源</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">平台</span>GitHub Issue Fields 正式 GA：结构化元数据 + MCP 集成</h3>
-    <p>GitHub 的 Issue Fields 功能正式对所有用户开放（GA）。现在可以为 Issue 添加 <strong>结构化、带类型的元数据字段</strong>（优先级、工作量、日期、自定义值），并且这些字段直接集成到仓库 Issue 列表页，不需要打开单个 Issue 就能一眼看到所有元数据。同时支持与 GitHub MCP Server 集成，可以让 Agent 直接读写这些字段。</p>
-    <div class="why"><strong>为什么值得你看：</strong>这一步让 GitHub Issues 从"文本讨论板"向"轻量级项目管理数据库"演进。配合 MCP，你可以让 Agent 自动从对话中提炼 Issue 元数据、自动打 tag、自动更新进度。对于正在做 AI-Native 研发流程的团队，这是低成本接入 Agent 协作的入口。</div>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/shorts/rmzu6Eovgus" target="_blank" rel="noopener">GitHub — GitHub issue fields are now generally available</a></div>
+    <h3><span class="tag">模型</span>Meta Muse Spark 1.1：Zuckerberg 时隔 3 年首次发推站台的编程 Agent 模型</h3>
+    <p>Meta 在 Alexandr Wang 领导下推出 <strong>Muse Spark 1.1</strong>——面向智能体编程的多模态推理模型，目标直接对标 OpenAI 和 Anthropic 的 Agent 模型。Wang 在采访中称其为"目前在智能体任务和编程领域能力最强的模型"，Zuckerberg 在 X 上亲自发帖站台（这是他自 2023 年 7 月以来首次在 X 发帖），强调 Spark 是"价格极低但能力强大的智能体和编程模型"。在工具调用、计算机使用、编码以及多模态理解方面都取得了重大提升。</p>
+    <div class="why"><strong>为什么值得你看：</strong>Meta 一直主打开源权重模型路线，Muse Spark 如果能在 Agent 编程场景追上闭源前沿，将显著降低开发者在生产环境部署 Agent 的成本。不过要注意"能力最强"这种自我宣称的措辞——AICodeKing 的实测工作流是把 Muse Spark 放在前端视觉设计环节（配合 OpenDesign），而不是用来跑后端实现。选型时建议先用一组你自己的真实任务对比 Fable 5 / GPT-5.6 Sol / Muse Spark / GLM 5.2。</div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288698&idx=3&sn=947e50ca4f184d855b124058fef40a4d" target="_blank" rel="noopener">InfoQ — 小扎"消失"三年后发帖，只为它：Meta最强Agent模型进军编程</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">评测</span>GPT-5.6-Sol 首次登顶 Code Arena 前端榜，追平 Claude Fable 5</h3>
-    <p>Code Arena 前端榜上，OpenAI 的 GPT-5.6-Sol 与 Claude Fable 5 并列第一，这是 OpenAI 模型首次在该榜单登顶。从 GPT-5.5-xhigh 的第 18 名跃升至第 1，跨越幅度非常显著。在 Data &amp; Analytics、Brand Marketing、Consumer Product、Gaming 等垂类也拿下第一。定价 $5/$30 每百万 input/output tokens，约为 Claude Fable 5 的一半。</p>
-    <div class="why"><strong>为什么值得你看：</strong>如果你正在选 Agentic Coding 模型，这是一个值得重新评估的信号——前端代码生成能力天花板被刷新，且价格便宜一半。配合 Riley Brown 那期播客，OpenAI 把 ChatGPT 和 Codex 合并后，"agent-native software" 的工作流正在成型。</div>
-    <div class="src">📎 来源: <a href="https://x.com/petergyang/status/2076050876314300478" target="_blank" rel="noopener">X / Peter Yang — GPT-5.6-sol 并列 Code Arena 前端榜第一</a> &nbsp;|&nbsp; <a href="https://www.youtube.com/watch?v=Fv0XfyLT3xU" target="_blank" rel="noopener">Riley Brown — OpenAI Just Merged ChatGPT and Codex</a></div>
+    <h3><span class="tag">安全</span>Google 开源 k8s-aibom：K8s 集群中自动发现"影子 AI" 并生成 ML-BOM</h3>
+    <p>Google Cloud 宣布开源 <strong>k8s-aibom</strong>——一个轻量级、非特权的 Kubernetes 控制器，持续监控集群 API 和容器环境，自动检测正在运行的 AI Runtime（vLLM、Triton 等），并生成符合 CycloneDX 标准的 Machine Learning Bill of Materials（ML-BOM）。最大卖点是<strong>不需要特权 DaemonSet、不需要内核级访问、不需要手动改 Pod Spec</strong>，直接从运行时执行信息里提取审计级的可见性，无论工作负载是否被正式登记过。</p>
+    <div class="why"><strong>为什么值得你看：</strong>"影子 AI" 是企业安全团队最头疼的问题——开发团队偷偷起了个 vLLM 实例跑自己的模型，安全侧完全看不见。k8s-aibom 把"审计 AI 工作负载"从被动扫描改成持续监控，这对已经在跑合规审查的团队是个直接的减负。如果你正在做 AI 平台的供应链安全，这个工具值得马上 POC。</div>
+    <div class="src">📎 来源: <a href="https://cloud.google.com/blog/products/identity-security/introducing-k8s-aibom-on-gke-for-automated-ai-bills-of-materials/" target="_blank" rel="noopener">Cloud Blog — Securing the AI supply chain on GKE: Introducing k8s-aibom</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">端侧</span>阶跃 Step Edge 端侧模型全家桶：0.1 秒本地 ToolCall</h3>
-    <p>阶跃星辰发布面向手机、汽车等终端的 Step Edge 模型家族，包含基础模型、Audio、GUI、Gen 四个分支。三个关键指标：<strong>本地 toolcall 延迟低至 0.1 秒</strong>；文本/视觉/语音多模态均可在本地处理，敏感数据不出端；简单高频任务本地响应、复杂任务端云协同。配套发布 Step Inference NPU 推理引擎，29 项核心评测指标第一。</p>
-    <div class="why"><strong>为什么值得你看：</strong>Agent 落地到端侧的最大障碍就是延迟和隐私，0.1 秒 toolcall 意味着"打开手电筒"这类操作不需要走云端。如果你在构建车载/手机 AI 应用，值得跑一遍他们的 Model Blog 看看端云协同的 API 设计思路。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkyNTYxNzg5Mg==&mid=2247487927&idx=1&sn=53fc706efe39d467c8a74361599ebfbd" target="_blank" rel="noopener">阶跃星辰 — 阶跃 Step Edge 端侧模型全家桶来了！</a></div>
+    <h3><span class="tag">内核</span>Meta 用 sched_ext BPF 调度器把广告系统 p99 延迟压低 28%，省电 3.28 MW</h3>
+    <p>Meta 工程博客披露了他们在 Linux 内核升级时遇到的一个隐性回归：广告系统整体 p99 延迟被新调度器拖累。团队最终选择 <strong>sched_ext —— Linux 上游的 BPF 可扩展调度框架</strong>，为广告检索工作负载定制了一个调度策略。结果：广告检索阶段 p99 延迟下降 28%、能耗降低 3.28 兆瓦、广告排名条数提升 1.1%。该系统日均处理 4000 亿次请求、峰值 500 万次/秒，每个毫秒都很值钱。</p>
+    <div class="why"><strong>为什么值得你看：</strong>sched_ext 是这两年 Linux 内核最值得关注的方向之一——把 CPU 调度从"内核编译期决定"变成"运行时 BPF 程序决定"。Meta 的案例证明，对于高吞吐、对延迟极度敏感的业务，<strong>通用调度器往往拿不到最优，按工作负载定制是值得的</strong>。如果你在维护大规模低延迟服务，值得花时间了解 sched_ext 的编程模型，尤其它和 cgroup、CPU isolation 的组合用法。</div>
+    <div class="src">📎 来源: <a href="https://engineering.fb.com/2026/07/13/ml-applications/modernizing-the-meta-ads-service-with-an-open-source-kernel-scheduler/" target="_blank" rel="noopener">Engineering at Meta — Modernizing the Meta Ads Service With an Open-Source Kernel Scheduler</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">认知</span>Anthropic 官方下场：Claude "变笨" 的真相是 Model ≠ Effort</h3>
-    <p>Anthropic 发长文澄清 Claude Code 中两个常被混淆的选项：<strong>Model</strong>（用哪个模型）和 <strong>Effort</strong>（思考深度）。今年 3 月，社区发现 Claude Code 突然"变笨"——该读的文件不读、该跑的测试不跑。AMD AI 负责人 Stella Laurenzo 甚至翻出 6852 个会话日志，实测思考量相比 2 月下降 67%。真相是 Anthropic 为压低延迟，把默认 Effort 调低了，而不是模型本身退化。</p>
-    <div class="why"><strong>为什么值得你看：</strong>如果你最近觉得 Claude Code "不如以前好用"，先别急着换模型，把 Effort 调高一档试试。这也是使用任何 Agent 工具时的通用启示：<strong>模型能力、推理预算、上下文工程是三件独立的事</strong>，定位问题时不要混为一谈。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652712432&idx=2&sn=b54298542d95ea1f2c6b5ab8d0a17c04" target="_blank" rel="noopener">新智元 — 全网骂Claude变笨，Anthropic下场揭秘：坑你的不是模型</a></div>
+    <h3><span class="tag">评测</span>Design Arena：GPT-5.6 Sol 以 Elo 1353 登顶前端设计榜，速度快于同档模型</h3>
+    <p>Design Arena 公布官方结果：<strong>GPT-5.6 Sol 以 1353 Elo 拿下前端设计总榜第一</strong>，超过 Claude Fable 5，与 GLM 5.2 进入同一性能区间。这是 GPT-5.5 时代的第 18 名向前跃升 18 位、Elo 增长 60 分。官方同时强调 GPT-5.6 Sol 建立了新的"偏好 vs 速度"帕累托前沿——比同性能段的任何模型都快。配合 Vercel 的 AI Gateway 生产数据：<strong>开源权重模型在 6 月跑掉了 29% 的 token，远高于 4 月的 11%</strong>，但只贡献了不到 4% 的支出——DeepSeek 占 22.6% token 量，GLM 5.2 两周内杀入头部模型榜。</p>
+    <div class="why"><strong>为什么值得你看：</strong>两组数据放在一起看——前端生成的能力天花板正在被频繁刷新，同时开源权重模型在流量端已经实质性分走闭源模型的蛋糕。对开发者来说，这是<strong>该认真考虑混合模型路由策略</strong>的信号：用开源模型处理 80% 的中等任务，把闭源前沿模型留给真正困难的部分，能直接砍掉一半以上的推理成本。</div>
+    <div class="src">📎 来源: <a href="https://x.com/gdb/status/2076456801047024089" target="_blank" rel="noopener">X / Greg Brockman — GPT-5.6 Sol 1st overall on Design Arena</a> &nbsp;|&nbsp; <a href="https://vercel.com/blog/ai-gateway-production-index-july-2026" target="_blank" rel="noopener">Vercel — AI Gateway Production Index — July 2026</a></div>
   </article>
 
 </section>
@@ -273,27 +284,27 @@
   <h2><span class="icon">🔬</span>深度技术解读</h2>
 
   <article class="item deep-dive">
-    <h3><span class="tag">长文</span>WorkBuddy Harness 工程万字复盘：模型决定上限，Harness 决定能否落地</h3>
-    <p>腾讯 WorkBuddy 团队的策略产品经理 Anne 从产品视角完整拆解了一个生产级 Agent 的运行机制。前半部分讲清 LLM、Function Call、System Prompt、MCP、Skill、Plugin 这些基础概念，说明模型为什么需要产品侧提供工具、上下文和执行环境；后半部分进入 Harness Engineering 的核心——<strong>WorkBuddy 如何选择和组织上下文、如何通过前馈 / 反馈 / 权限 / 验证 / 编排 / 可观测性，让 Agent 不只是"能"执行任务，而是"稳定可控地"完成任务</strong>。最后讨论了 Loop、Memory 和多 Agent 协作的设计取舍。</p>
-    <p>文章里一个值得反复琢磨的判断是："模型够强，剩下交给提示词"是早期认知；当你真正要把 Agent 做成生产可用的产品，模型只承担其中一部分，工具接入、上下文组织、权限边界、结果验证、反馈纠正、跨会话延续都会直接影响产品可靠性。WorkBuddy 是为数不多基于国产模型（混元 Hy3）做出可用 Agent 产品的团队，对国内模型兼容度的处理尤其值得一看。</p>
-    <div class="why"><strong>实践建议：</strong>(1) 把 Agent 当作一个分布式系统来设计，而不是一个更聪明的 Chatbot；(2) Context Engineering 与 Prompt Engineering 是两个层级，前者关注"什么信息该进上下文、什么时候进、以什么结构进"；(3) 权限和验证必须前移到 Harness 层，不要依赖模型自觉；(4) 可观测性（每步推理、每次工具调用、每段上下文快照）是后期排查唯一可靠的依据。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=Mzg5NTc0MjgwMw==&mid=2247525134&idx=1&sn=c080e07c915f835ac93526da06752a4c" target="_blank" rel="noopener">Founder Park — 万字复盘：从模型到可用Agent，WorkBuddy的Harness工程是怎么做的？</a> &nbsp;|&nbsp; <a href="https://www.ifanr.com/1671739" target="_blank" rel="noopener">爱范儿 — 腾讯 WorkBuddy 入门指南</a></div>
+    <h3><span class="tag">长文</span>PostHog：用并行 Claude Code 会话重写 SQL 解析器，16K 行代码 + 70x 性能</h3>
+    <p>PostHog 工程师 Robbie Coomber 分享了他们迁移 SQL 解析器的完整过程。背景是 PostHog 给用户提供 SQL 接口，但底层数据存在 ClickHouse 里——他们需要一个解析器把用户 SQL 转成 AST，再翻译成 ClickHouse SQL。原解析器是 Python 写的，性能瓶颈明显。Coomber 用<strong>多个长时间运行的并行 Claude Code 会话</strong>，重写出一个 16K 行的手写解析器、5K 行工具代码、几千行测试代码，<strong>整体性能提升约 70 倍</strong>。</p>
+    <p>最关键的方法论是"<strong>搭建验证闭环而不是写代码</strong>"——他花在写"如何验证新解析器和旧解析器等价"的工具上的时间，远多于让 Claude 写解析器本身。最终新解析器在所有真实业务查询上都和旧解析器等价，只在极少数"<code>SELECT SELECT FROM FROM WHERE WHERE AND AND</code>"这种刻意构造的边缘案例上有差异。文章给出了完整的 harness 设计：每个 Claude 会话负责一个独立模块、共享一个回归测试集、每次改动必须让所有测试通过才能合并。</p>
+    <div class="why"><strong>实践建议：</strong>(1) 当你要用 Agent 重写一个有存量行为的系统时，<strong>先建一个"双跑对照"的测试框架</strong>，让新旧实现同时处理同一输入，diff 输出；(2) 把 Agent 的并行度提上去的关键不是开更多会话，而是把工作拆到 Agent 能独立验证的粒度；(3) 保留边缘案例库——Coomber 提到的"恶作剧之神"测试用例，是验证解析器鲁棒性最有价值的资产；(4) 70x 性能提升的核心来源是 Python → 原生代码 + 重写 AST 结构，不要把 Agent 当成性能优化的银弹，它只是一个高水平的执行者。</div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288698&idx=2&sn=3c2d145177b05f3d7fab056792a2e23e" target="_blank" rel="noopener">InfoQ — 用 Claude 重写 SQL 解析器，性能暴涨 70 倍</a></div>
   </article>
 
   <article class="item deep-dive">
-    <h3><span class="tag">架构</span>Semantic Blindness：当 LLM 遇到 5 万个工业传感器时的架构失配</h3>
-    <p>Phaidra 团队的 Raahul Singh 和 Vanč Levstik 在 AI Engineer 大会上提出了一个他们命名为 <strong>Semantic Blindness（语义盲）</strong> 的失败模式。他们把 SOTA LLM 部署到工业和 AI Factory 环境中，做根因分析、告警分诊、运营决策支持，结果发现一个根本性的架构失配：<strong>LLM 是概率性语言模型，而工程系统是确定性系统</strong>。一个"下一个 token 预测引擎"无法解决组合优化问题。</p>
-    <p>关键发现：当传感器数量达到 5 万量级、存在确定性依赖和热力学约束时，LLM 会陷入"看起来在推理，实际在乱猜"的状态——它能流畅地输出故障分析报告，但报告里提到的传感器读数、因果链条根本不存在。这种问题在纯文本任务里可以被人类快速识别，但在工业场景下，操作员很难判断一段专业表述是真是假。</p>
-    <div class="why"><strong>实践建议：</strong>(1) LLM 不该作为确定性系统的"决策黑盒"，而应作为查询/解释层，底层决策交给规则引擎或优化器；(2) 在 sensor-heavy 场景里，把 LLM 的输出强制约束在 Schema 内（Function Calling + JSON Schema）；(3) 给 LLM 配上"事实校验层"——它说的每个数值必须能从时序数据库里查出来，查不出来就拒绝输出。这个思路同样适用于金融、医疗、运维等高风险场景。</div>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=EUsPvBeIx70" target="_blank" rel="noopener">AI Engineer — Semantic Blindness: 500,000 Sensors Confused an LLM</a></div>
+    <h3><span class="tag">方法</span>Simon Willison：Agent 不该是 DRI —— Directly Responsible Individual 必须是人类</h3>
+    <p>Simon Willison 在新博文里展开讨论了 <strong>DRI（Directly Responsible Individual）这个概念在 LLM Agent 时代的适用边界</strong>。这个源自 Apple、后被 GitLab 等公司沿用的管理术语，指"对一个项目、倡议或活动的成败承担最终责任的人"。Willison 的论点非常明确：<strong>Agent 永远不应该成为 DRI</strong>。因为 DRI 的本质是"对结果承担 accountability"，而机器无法承担责任——责任必须落在能解释自己决策、能承担后果的人类身上。他引用了 IBM 1979 年培训幻灯片里那句著名的话："A computer can never be held accountable, therefore a computer must never make a management decision."</p>
+    <p>这个观点值得和门罗社区里另一个热议对照——当 Anthropic 把 Fable 5 订阅延到 7 月 19 日时，有用户为了"用满" Fable 5 不眠不休，最后压力过大进了医院。当事人自己发帖说："FYI my conclusion was that I am the idiot"——这是把 Agent 的能力边界和自己的身体边界都搞错了。Agent 越强，<strong>人类作为 DRI 的角色就越重要</strong>，包括决定什么时候该停。</p>
+    <div class="why"><strong>实践建议：</strong>(1) 在你的项目里明确每个 Agent 工作流的"DRI 是谁"，写到文档里；(2) 任何对外可见的决策（合并 PR、部署生产、发送邮件、修改客户数据）都必须由 DRI 明确签字确认，Agent 只能起草不能拍板；(3) 把"Agent 产出需要人类 DRI 复核"这条作为团队规约，而不是依赖个人自觉；(4) 当你自己开始像那个进医院的用户一样"为了用满额度拼命"时，停下来想想谁是 DRI。</div>
+    <div class="src">📎 来源: <a href="https://simonwillison.net/2026/Jul/12/directly-responsible-individuals/#atom-everything" target="_blank" rel="noopener">Simon Willison's Weblog — Directly Responsible Individuals (DRI)</a></div>
   </article>
 
   <article class="item deep-dive">
-    <h3><span class="tag">方法</span>ReviewDebt：给每个 PR 打一个"审查负担分"</h3>
-    <p>Ebay 的 Sachin Gupta 在 AI Engineer 大会上提出了 <strong>ReviewDebt</strong> 框架。背景是：Coding Agent 让 PR 产出速度远超人类审查速度，团队常见的度量指标（PR 数量、代码行数、Cycle Time、NPS）都看不见真实成本——膨胀的 diff、薄弱的测试、模糊的改动说明、所有权扩散、人类审查者花在验证 AI 代码上的时间比自己写代码还多。</p>
-    <p>ReviewDebt 给每个 PR 打一个<strong>确定性分数</strong>，维度包括：diff 大小、测试覆盖率变化、所有权扩散度、生成代码的"AI 味"特征、证据/说明缺失程度。因为是确定性计算，这个数字可以进真实的工程评审，可以作为 Agent 产出质量的回归指标。</p>
-    <div class="why"><strong>实践建议：</strong>(1) 如果你的团队已经在用 Coding Agent 大量产出 PR，<strong>先量化审查负担，再谈生产力提升</strong>；(2) 把 ReviewDebt 分数接入 CI，超过阈值自动要求补充测试或拆分 PR；(3) 把"生成代码气味"作为反馈信号回传给 Agent（例如通过 System Prompt 或 Hook），逐步降低后续 PR 的负担分。</div>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=TJPInBjhE4Q" target="_blank" rel="noopener">AI Engineer — ReviewDebt: a practical framework for scoring every pull request</a></div>
+    <h3><span class="tag">哲学</span>antirez：Control the ideas, not the code —— 程序员角色的根本转变</h3>
+    <p>Redis 作者 Salvatore Sanfilippo（antirez）发布了一篇长文，标题是《Control the ideas, not the code》。文章背景是他 2024 年 1 月就开始写"AI 编程"相关的博文，最近重新加入 Redis 同时还在做一个本地 LLM 推理的开源项目。作为" relatively well regarded programmer"，他的核心论点是：<strong>程序员的核心价值正在从"写代码"上移到"控制想法"——架构、抽象边界、问题分解、取舍</strong>。代码本身已经是 Agent 的执行层，程序员不再是打字员，而是系统设计师。</p>
+    <p>他特别提到自己为什么持续说"人们不想听的话"："I feel the urge of lowering the impact for people less prepared to the change than me, often younger than me, and that, unlikely me, didn't see many of those things coming." 这篇文章和 Lenny 的年度调查形成呼应——调查显示 50% 的技术从业者觉得 AI 放大了自己的能力，27% 觉得角色正在重写，14% 感到失去稳定。这两种情绪的同时存在，恰恰说明"控制想法"的能力正在替代"执行能力"成为分水岭。</p>
+    <div class="why"><strong>实践建议：</strong>(1) 回顾你过去一周的代码，统计有多少时间是"想"出来的、有多少是"敲"出来的——如果敲的比例还在 80% 以上，你已经在贬值通道里了；(2) 把"控制想法"具象化：画架构图、写 ADR、做技术预研、跟用户聊需求，这些活动的权重应该在你的时间表里上升；(3) 不要试图和 Agent 比打字速度，要和你自己比"判断力提升速度";(4) 如果你带团队，开始把"想法清晰度"纳入工程师考核——能不能用一段话讲清楚为什么这么做，比代码行数重要得多。</div>
+    <div class="src">📎 来源: <a href="http://antirez.com/news/169" target="_blank" rel="noopener">&lt;antirez&gt; — Control the ideas, not the code</a></div>
   </article>
 
 </section>
@@ -302,46 +313,58 @@
   <h2><span class="icon">🛠</span>工具推荐</h2>
 
   <article class="item">
-    <h3><span class="tag">CLI</span>sqlite-utils 4.1：--code 参数支持直接传入 Python 生成行</h3>
-    <p>Simon Willison 的 sqlite-utils 发布 4.1 版本。<code>sqlite-utils insert</code> 和 <code>sqlite-utils upsert</code> 新增 <code>--code</code> 选项，可以直接传一段 Python 代码（或 .py 文件路径），其中定义一个 <code>rows()</code> 函数或 rows 可迭代对象，作为插入数据的来源。这是继 <code>convert</code> 命令支持内联 Python 后的自然延伸，让 sqlite-utils 成为一个轻量的 ETL 工具。</p>
-    <pre class="code"><span class="cmt"># 直接用 Python 生成要插入的行</span>
-<span class="cmd">sqlite-utils insert</span> data.db creatures --code <span class="str">'</span>
-def rows():
-    yield {"id": 1, "name": "dragon"}
-    yield {"id": 2, "name": "phoenix"}
-<span class="str">'</span></pre>
-    <div class="src">📎 来源: <a href="https://simonwillison.net/2026/Jul/11/sqlite-utils/#atom-everything" target="_blank" rel="noopener">Simon Willison's Weblog — sqlite-utils 4.1</a></div>
+    <h3><span class="tag">测试</span>Skillgrade 2.0：给 Agent Skills 写单元测试的开源框架</h3>
+    <p>Minko Gechev 开源的 Skillgrade 2.0 是一个"Skills as Tests"的工具。核心理念是 <strong>"Don't ship skills without evals"</strong>——Skills 也需要测试，不要发布没有评估的 Skills。它的前身是 Skill Eval 框架，2.0 版本彻底重写：从"你在框架之上搭建项目"变成"一个全局安装、指向 Skill 目录即可运行的工具"，所有配置收敛到单个 <code>eval.yaml</code> 文件，零脚手架、零项目结构学习成本。</p>
+    <pre class="code"><span class="cmt"># 三步即可运行</span>
+<span class="cmd">npm i -g skillgrade</span>
+<span class="cmd">cd my-skill/ && skillgrade init</span>
+<span class="cmd">skillgrade --smoke</span>
+
+<span class="cmt"># 评分器设计</span>
+<span class="cmt">1. Deterministic Grader (70% 权重)</span>
+   <span class="cmt">bash/TS 脚本输出 {score, details, checks}</span>
+   <span class="cmt">用于回答"结果对不对"</span>
+
+<span class="cmt">2. LLM Rubric Grader</span>
+   <span class="cmt">把会话记录交给另一个 LLM 评审</span>
+   <span class="cmt">评估"过程是否合理"</span></pre>
+    <div class="why"><strong>为什么推荐：</strong>Skills 在 Codex / Claude Code 里越来越像"配置即代码"，但大多数团队发布 Skills 靠的是"我跑了一下觉得行"。Skillgrade 把 Skills 的发布标准拉到了和代码同一水平——每个任务跑多次 trial 统计通过率，而不是一锤定音。如果你团队已经积累了 10+ 个生产 Skills，引入这个工具能避免"改了 A 没想到弄坏了 B"的回归问题。</div>
+    <div class="src">📎 来源: <a href="https://github.com/mgechev/skillgrade" target="_blank" rel="noopener">GitHub — mgechev/skillgrade</a> &nbsp;|&nbsp; <a href="https://x.com/shao__meng/status/2076472375085011142" target="_blank" rel="noopener">X / meng shao — 给 Agent Skills 写单元测试</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">订阅</span>Cline Pass：$5/月起，一号多用 GLM 5.2 / Kimi K2.7 / DeepSeek V4</h3>
-    <p>Cline 团队推出的新订阅方案 Cline Pass，约 $10/月（首月 $5），提供对 GLM 5.2、Kimi K2.7 Code、DeepSeek V4 Flash、MiniMax M3、Mimo、Qwen 等多个开源编码模型的访问。可以在 Cline 内部直接使用，也可以接入其他编码 Agent。对于个人开发者，这是替代 Claude Pro ($20) / Codex Pro ($200) 的低成本选项。</p>
-    <div class="why"><strong>适合谁：</strong>想用 Agentic Coding 但不想被单一供应商绑定的开发者；想 A/B 多个开源模型在不同任务上的实际表现；预算敏感但需要日常使用的场景。</div>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=6WXzVSsV0Mo" target="_blank" rel="noopener">AICodeKing — STOP USING Claude & Codex $20 & $200 PLANS: USE this $5 ALTERNATIVE INSTEAD!</a></div>
+    <h3><span class="tag">CLI</span>OfficeCLI：让 AI Agent 操作 Office 文件的命令行工具，1.3 万 Star</h3>
+    <p>iOfficeAI 开源的 OfficeCLI 是一个 <strong>单文件二进制、不需要安装 Microsoft Office</strong> 的 Office 自动化工具，让 AI Agent 能读取、编辑、生成 Word、Excel、PowerPoint 文件。之前 Anthropic 官方提供了 PowerPoint/Excel/Word/PDF 的预置 Skills，MiniMax 也开源过 minimax-xlsx 等办公文档 skill，但路线都偏"封装 Python 库"。OfficeCLI 选择了更工具化的路径——把所有 Office 操作统一收进一个 CLI，Agent 只需要调命令就能完成"读取 Excel → 修改某列 → 生成图表 → 导出 PPT"的完整流程。</p>
+    <div class="why"><strong>适合谁：</strong>正在做 RAG 或办公自动化 Agent 的团队；之前用 python-docx / openpyxl / python-pptx 拼装、被各种格式坑害过的开发者；需要在容器 / Serverless 环境里处理 Office 文件的场景。对比 Anthropic Skills 路线，OfficeCLI 的优势是<strong>无 Python 依赖、单二进制部署、CLI 调用模式天然适配 Agent</strong>。</div>
+    <div class="src">📎 来源: <a href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">GitHub — iOfficeAI/OfficeCLI</a> &nbsp;|&nbsp; <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247535342&idx=1&sn=ed0bff20ca593bc05d8fa0f144998862" target="_blank" rel="noopener">逛逛GitHub — 1.3 万人点赞的 GitHub 项目，让 AI Agent 操作 Office 文件</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">远程</span>remobi.app：在手机上滑动切换多个终端 Agent</h3>
-    <p>remobi.app 是一个面向移动端的 Agent 控制台，核心理念是"不要为手机改变你的终端工作流"。你可以在手机屏幕上通过滑动切换不同的 Agent 会话，当某个 Agent 卡住需要决策时，在手机上点一下就能 unblock。配合 Claude Cowork 移动网页端上线（远程环境执行 + 手机通知人类决策点），"合上电脑，Agent 继续跑"的体验正在成型。</p>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=5192csoTkVo" target="_blank" rel="noopener">AI Engineer — remobi.app: Don't change your terminal workflow for mobile</a> &nbsp;|&nbsp; <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288666&idx=2&sn=1dcaba62d285d767d42974cba8db16d6" target="_blank" rel="noopener">InfoQ — Claude、Cursor、OpenClaw 集体上手机</a></div>
+    <h3><span class="tag">观测</span>Mindwalk：给 Claude Code / Codex 装一个"行车记录仪"，3D 重放工作路径</h3>
+    <p>Mindwalk v0.1.0 于 7 月 11 日发布，定位为 Coding Agent 的"行车记录仪"。它读取 Claude Code 和 Codex 留在本地的会话记录（JSONL 格式），把 Agent 搜索、读取、执行命令和修改文件的过程，放到一张 3D 代码地图上重新播放。开发者想知道 Agent 为什么反复改同一个文件、为什么读错了某个文件、最后有没有重新跑测试，不用再去翻几百行终端日志，而是可以在 3D Terrain 视图里"看"Agent 的工作路径。</p>
+    <div class="why"><strong>为什么推荐：</strong>Git Diff 能告诉我们最终改了什么，但看不到 Agent 动手之前读过哪些内容。Mindwalk 的核心价值是把 Agent 的"决策路径"变成可视化的——当你需要复盘一次"为什么 Agent 把这个简单 Bug 搞复杂了"时，它能直接告诉你 Agent 在哪一步开始走偏。对正在做 Agent 行为分析、可观测性平台的团队，这是个值得参考的产品思路。</div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&mid=2655941923&idx=1&sn=eb70d865b933419adcabca23cc762ead" target="_blank" rel="noopener">51CTO技术栈 — Agent的行车记录仪！开源工具Mindwalk把Claude Code和Codex工作路径搬上3D地图</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">API</span>HeyGen：透明背景 WebM 输出，一行参数搞定</h3>
-    <p>HeyGen 在 API、CLI 和 MCP 上支持透明背景 WebM 输出。只需在 <code>/v3/videos</code> 接口设置 <code>output_format: "webm"</code>，返回的 avatar 视频就带真实的 alpha 通道，不需要绿幕抠像。官方演示把透明 WebM 作为 <code>&lt;video&gt;</code> 元素叠加在 three.js Minecraft 场景上，Alpha 直接生效。对做数字人、虚拟主播、互动视频的开发者是一个省事的更新。</p>
-    <pre class="code"><span class="cmt">// 请求透明背景 WebM</span>
-{
-  <span class="str">"output_format"</span>: <span class="str">"webm"</span>,
-  <span class="cmt">// ... 其他参数</span>
-}</pre>
-    <div class="src">📎 来源: <a href="https://x.com/HeyGen/status/2076051146385567866" target="_blank" rel="noopener">HeyGen — Transparent WebM output on the HeyGen API, CLI, and MCP</a></div>
+    <h3><span class="tag">桌面</span>ButterUp：Tauri 2 写的 Ubuntu/Debian 包管理 GUI，4 MB 体积</h3>
+    <p>ButterUp 是一个基于 Tauri 2 的轻量桌面应用，把 apt、snap、flatpak 三种包管理器的更新、健康检查、一键修复和清理都收进一个窗口，体积约 4 MB。对 Ubuntu/Debian 用户来说，再也不用在终端里记 <code>apt update && apt upgrade</code>、<code>snap refresh</code>、<code>flatpak update</code> 三套命令，一键完成所有包源的健康检查。</p>
+    <div class="why"><strong>为什么推荐：</strong>Tauri 2 + Rust 的组合正在成为"系统级桌面小工具"的主流技术栈——比 Electron 体积小一个数量级、内存占用低、原生系统集成好。如果你也在做内部工具，值得参考 ButterUp 的项目结构；如果你只是想给 Debian/Ubuntu 装个省心的更新工具，它现在已经可用了。</div>
+    <div class="src">📎 来源: <a href="https://github.com/abdulfarhath/ButterUp" target="_blank" rel="noopener">GitHub — abdulfarhath/ButterUp</a> &nbsp;|&nbsp; <a href="https://x.com/geekbb/status/2076557738935554433" target="_blank" rel="noopener">X / Geek — ButterUp 介绍</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">开源</span>Riddle：把《哈利·波特》里的汤姆·里德尔日记做成开源项目</h3>
-    <p>Maxime Rivest 的开源项目 Riddle（GitHub 约 1.4k star）复刻了《哈利·波特》里那本"会回信的日记"。技术流程很直观：读取 reMarkable 笔输入 → 停笔后提交为灰度 PNG → 视觉模型识别手写内容 → LLM 生成回复 → 用 Dancing Script 字体渲染 → 路径追踪成单像素笔迹 → 按笔画动画写回电子墨水屏。它不追求快和信息密度，而是追求"你在和一本奇怪的日记通信"的完整错觉。</p>
-    <div class="why"><strong>为什么推荐：</strong>这是一个把 LLM 从"聊天框范式"里解放出来的好案例。如果你在做 AI 产品的 UX 设计，值得思考"AI 还可以是什么形态"。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247535336&idx=1&sn=bf1b478056bfb8d0456da756c3e23412" target="_blank" rel="noopener">逛逛GitHub — 有人把《哈利·波特》中的笔记做出来了</a></div>
+    <h3><span class="tag">桌面</span>LiteParse：LlamaIndex 出的 PDF → Markdown 桌面应用，Tauri + Rust</h3>
+    <p>LlamaIndex 团队发布了一个跨平台桌面应用，用 Tauri 做壳、Rust 后端集成 LiteParse、React 前端。功能非常聚焦：<strong>拖拽 PDF → 转换成干净的 Markdown → 预览每页截图，并把提取出的边界框叠加显示方便检查</strong>。主要场景是"想快速把 PDF 喂给 LLM 之前先确认解析质量"，不需要打开 CLI 或浏览器。它解决了一个具体痛点——PDF 解析最容易出错的就是表格、跨页结构、公式，这个工具让你在交给 LLM 之前先看清楚解析结果。</p>
+    <div class="why"><strong>为什么推荐：</strong>这是 Tauri 在 LLM 工具链里的又一个好案例。对做 RAG 的开发者来说，LiteParse 的边界框可视化可以帮你快速定位"为什么这个 PDF 的表格被解析成一坨乱码"；对普通用户来说，拖拽一下就能拿到干净 Markdown 直接喂 Claude / Codex。</div>
+    <div class="src">📎 来源: <a href="https://github.com/run-llama/liteparse" target="_blank" rel="noopener">GitHub — run-llama/liteparse</a> &nbsp;|&nbsp; <a href="https://x.com/llama_index/status/2076700217210966048" target="_blank" rel="noopener">LlamaIndex — LiteParse 桌面应用介绍</a></div>
+  </article>
+
+  <article class="item">
+    <h3><span class="tag">验证</span>Microsoft SymCrypt：Rust + Lean + Aeneas + AI Agent 的形式化验证密码库</h3>
+    <p>Microsoft Research 公布了 SymCrypt 项目的最新进展：<strong>用 Rust、Aeneas、Lean 和 AI Agent 把形式化验证规模化应用到生产级密码算法上</strong>。技术栈分工是：Rust 写高性能实现；Aeneas 把 Rust 代码自动翻译成 Lean 可验证模型；Lean 做数学证明；AI Agent 自动写证明脚本（每段证明都可以独立验证）。首批开源的验证代码覆盖 SHA-3 和 ML-KEM（后量子密码），证明这些实现安全且正确地实现了标准算法。</p>
+    <div class="why"><strong>为什么值得你看：</strong>形式化验证一直被认为是"理论上完美、工程上太贵"的技术，主要瓶颈是写证明的人力成本极高。Microsoft 把 AI Agent 引入证明生成环节，相当于把"证明劳动力"商品化了——AI 写的证明可能不够优雅，但能被 Lean 内核独立验证。这个范式如果跑通，未来验证内核模块、TLS 栈、数据库事务层的成本会显著下降。对安全敏感的开发者来说，值得跟踪 Aeneas 和 Lean 4 的生态进展。</div>
+    <div class="src">📎 来源: <a href="https://www.microsoft.com/en-us/research/blog/verifying-rust-cryptography-in-symcrypt-from-standards-to-code/" target="_blank" rel="noopener">Microsoft Research Blog — Verifying Rust cryptography in SymCrypt, from standards to code</a></div>
   </article>
 
 </section>
@@ -350,71 +373,55 @@ def rows():
   <h2><span class="icon">📐</span>实践指南</h2>
 
   <article class="item">
-    <h3><span class="tag">防幻觉</span>AWS：5 个让 Agent 不再一本正经胡说八道的技术</h3>
-    <p>AWS 的 Elizabeth Fuentes 在 AI Engineer 大会上给出了一份"Agent 幻觉防御清单"，每项都有具体收益数字：</p>
-    <pre class="code"><span class="cmt">1. Graph-RAG (Neo4j)</span>
-   用实体关系替代向量相似度猜测
-   <span class="cmd">→ 伪造统计减少 73%</span>
-
-<span class="cmt">2. Semantic Tool Selection</span>
-   用 Embedding 从 29 个工具里筛出相关 5 个
-   <span class="cmd">→ Token 消耗减少 89%</span>
-
-<span class="cmt">3. Multi-Agent Validation</span>
-   Executor → Validator → Critic 三角校验
-   <span class="cmd">→ 伪造检测率 92%</span>
-
-<span class="cmt">4. Neurosymbolic</span>
-   LLM 负责理解，符号引擎负责约束推理
-
-<span class="cmt">5. Schema 强约束</span>
-   输出必须落入预定义 JSON Schema</pre>
-    <div class="why"><strong>怎么用：</strong>这 5 项可以单独引入，也可以组合。建议先做 (2) 和 (5)，成本最低、收益最快；如果 Agent 已经在生产环境造成实际损失，再上 (1) 和 (3)。核心思路是一致的——<strong>不要相信 LLM 的"自信"，要用结构、约束、交叉验证把它关在笼子里</strong>。</div>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=vJukHCIv7Ck" target="_blank" rel="noopener">AI Engineer — Stop AI Agent Hallucinations: 5 Techniques + Production Patterns</a></div>
+    <h3><span class="tag">省钱</span>vikingmute 开源 shifu skill：多模型分工把订阅 Token 利用最大化</h3>
+    <p>vikingmute 开源了一套自己用了几个月的"穷鬼组合" skill——shifu。核心思路是<strong>把复杂任务拆文档，让昂贵的模型负责规划和分解，便宜的模型负责执行</strong>：Fable 5 或 GPT-5.5 这类顶级模型绝不直接改代码，只负责写 <code>plans/</code> 目录下的文件；然后交给 Composer 2.5、DeepSeek V4 Pro 这类便宜模型执行；最后贵模型回来 review 并 reconcile 直到通过。它支持两种模式——<strong>自动模式</strong>利用 Codex / Cursor / Claude Code 的 subagent 支持，在同一会话内完成"规划 → 派发 → 审查"循环；<strong>手动模式</strong>用单独命令控制每个步骤，适合不支持 subagent 的环境。</p>
+    <pre class="code"><span class="cmt"># 典型工作流</span>
+<span class="cmd">1.</span> gpt5.6 sol → 调研 / 架构 / 分阶段
+<span class="cmd">2.</span> 生成 MVP plans (带执行顺序、依赖、验证步骤)
+<span class="cmd">3.</span> kimi 2.7 / deepseek v4 pro / grok 4.5 轮番执行
+<span class="cmd">4.</span> 每个 plan 完成后 gpt5.6 review + verify</pre>
+    <div class="why"><strong>怎么用：</strong>(1) 安装：<code>git clone</code> 后按 README 把 skill 文件放到对应 Agent 的 skills 目录；(2) 关键配置是"哪些模型规划、哪些模型执行、哪些模型审查"的角色映射，建议先用默认配置跑一周再调；(3) 它本质是 shadcn 作者 improve skill 的简化通用版本，对小 feature 可能 overkill，但对中大型项目改造非常实用；(4) 配合 Codex 取消 5 小时限制后的新环境，这套方法论能进一步压低 Token 成本。</div>
+    <div class="src">📎 来源: <a href="https://github.com/vikingmute/shifu" target="_blank" rel="noopener">GitHub — vikingmute/shifu</a> &nbsp;|&nbsp; <a href="https://x.com/vikingmute/status/2076595393698443325" target="_blank" rel="noopener">X / Viking — shifu 实践分享</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">平台</span>从项目制到产品制：平台工程的范式跃迁</h3>
-    <p>KubeCon &amp; CloudNativeCon 欧洲大会上，Eugenia Bergman 和 Hagen Tonnies 分享了他们从"项目思维"转向"产品思维"的历程。原来的模式是年度项目规划：前期范围界定、预算分配、明确里程碑，每个项目独立交付。当平台只服务单一团队时运转良好；一旦要支持多个内部团队，问题就暴露出来——改进被当作一次性交付、没有产品愿景、反馈循环只围绕内部冲刺指标（速度、完成率、质量）而缺少真实用户验证。</p>
-    <p>转型后的架构是 <strong>API 驱动的自助式多租户基础设施</strong>：清晰的责任归属、完善的抽象层、以平台用户为中心的反馈循环。</p>
-    <div class="why"><strong>什么时候该考虑转型：</strong>(1) 平台服务超过 2 个内部团队；(2) 每个新需求都要"立项"才能做；(3) 平台团队忙碌但用户满意度持续下降。如果你正在做 IDP（Internal Developer Platform），这篇值得细读。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288666&idx=3&sn=8b0334477d5edce92e01737dc92216b5" target="_blank" rel="noopener">InfoQ — 将平台开发从项目转向产品</a></div>
+    <h3><span class="tag">提示词</span>OpenAI 官方 Codex 提示词指南：四要素框架，从"控制过程"转向"描述结果"</h3>
+    <p>OpenAI Codex DX 团队的 @pvncher 发布了官方提示词指南，覆盖 Chat、ChatGPT Work 和 Codex 三个场景。开篇就纠正了一个流行观点："提示词需要公式吗？不需要。"指南给出了可选的四要素框架——<strong>Goal / Context / Output / Boundaries</strong>，但反复强调"只用有帮助的部分"。背后的方法论转变值得注意：<strong>从"控制过程"转向"描述结果"</strong>。文档明确建议先说你要的结果，而不是罗列步骤——只有当过程本身重要时才描述过程，其余留给模型自己搜索、比较、调整。</p>
+    <p>几个容易被忽视的关键原则：(1) <strong>边界要"少而准"</strong>——只写那一两条能防止真实问题的指令，比如"保持已批准的日期和预算数字不变"，过多约束反而降低效果；(2) <strong>上下文是"筛选"而不是"堆料"</strong>——只附加真正影响结果的来源，并说明每个来源该取什么；(3) <strong>说明用途，而不只是格式</strong>——"让主管会前一页扫完"比"转成 Markdown"有效；(4) <strong>首个提示不必完美</strong>——用追问修正方向，不用推倒重来。Codex CLI 里 Steering（插入当前运行，即时改方向）和 Queuing（排队到下一轮）分别对应 Enter 和 Tab。</p>
+    <div class="why"><strong>怎么用：</strong>(1) 打开你最近一次和 Codex / Claude Code 的对话，检查提示词是不是堆了一堆"控制过程"的指令——大概率是，按官方指南改写一版对比效果；(2) 把"四要素"作为团队写 Agent 提示词的最小清单；(3) 特别留意"说明用途"这条——大多数 prompt 只描述输出格式，不描述输出会被谁、在什么场景下用，这是模型选错详略的主因。</div>
+    <div class="src">📎 来源: <a href="https://learn.chatgpt.com/docs/prompting" target="_blank" rel="noopener">OpenAI — Prompting Guide</a> &nbsp;|&nbsp; <a href="https://x.com/shao__meng/status/2076629505159180761" target="_blank" rel="noopener">X / meng shao — OpenAI 官方最新提示词指南解读</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">提示词</span>HTML 比 Markdown 更有效：给 Claude 输出更视觉化的呈现</h3>
-    <p>@trq212 在 X 上分享了《The Unreasonable Effectiveness of HTML》的观点，@adocomplete 跟进实测：让 Claude 用 HTML 而不是 Markdown 来构建 Artifact、展示方案和想法，效果显著更好。原因是 HTML 提供了结构、层次、样式的完整表达力，而 Markdown 在复杂视觉呈现面前会很快触到天花板。</p>
-    <div class="why"><strong>实践建议：</strong>(1) 如果你在用 Claude/Cursor 生成 UI Mock、技术方案文档、仪表盘，在 System Prompt 里明确要求"输出 HTML 而不是 Markdown"；(2) 给 LLM 一些基础 CSS 变量和组件示例，它会照葫芦画瓢；(3) 结合 Artifact 类的渲染环境，HTML 输出可以直接预览，沟通成本比 Markdown 低一个量级。</div>
-    <div class="src">📎 来源: <a href="https://x.com/adocomplete/status/2076042807937212505" target="_blank" rel="noopener">X / Ado — HTML is more effective than Markdown</a></div>
+    <h3><span class="tag">质量</span>百度 Geek 说：AI Coding 下的质量关卡 —— 把验证流程左移</h3>
+    <p>百度团队分享了他们在 AI Coding 大规模落地后建立的质量保障体系。核心思路是 <strong>"把验证流程左移"</strong>——传统质量保障依赖提交后的人工 CR 和 QA 测试，但在 Agent 高频产出代码的场景下，所有问题都等后面环节才发现，协作成本只会更高。他们的链路是：<strong>Agent Operating Rules → Code Validation → Runtime Verify → Figma To Verify → Pipeline Code Review → 问题结构化 → Agent 辅助修复 → 重新验证 → 沉淀为 Skill/Rules</strong>。</p>
+    <p>几个具体设计：(1) <strong>Agent Operating Rules</strong> 把工程规范变成执行协议，Prompt 里写清楚"项目里怎么干活"——目录约定、命名规范、必跑测试；(2) <strong>Code Validation</strong> 写完代码当场 CR，不等提交；(3) <strong>Runtime Verify</strong> 改了 UI 就连浏览器验证，确认页面真的能跑；(4) <strong>Figma To Verify</strong> 重点页面对设计稿做视觉走查；(5) <strong>Pipeline Code Review</strong> 提交后大规模复审；(6) 所有问题结构化后由 Agent 辅助修复，沉淀为可复用的 Skill/Rules。</p>
+    <div class="why"><strong>怎么用：</strong>(1) 如果你团队刚开始引入 Coding Agent，先把这套"质量关卡"画出来，再决定从哪个节点切入——不要一上来就追求"端到端 Agent 自动交付"；(2) Agent Operating Rules 是地基，没有它后续所有验证都会失败；(3) Runtime Verify 是最容易被忽略的环节——Agent 不知道代码跑起来页面长什么样，必须主动给它一个浏览器环境；(4) 问题结构化沉淀为 Skill 是闭环——否则同样的错误下周还会再犯。</div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247607331&idx=1&sn=ec3edf771169512261e9519df5041c19" target="_blank" rel="noopener">百度Geek说 — 让 Agent 按工程标准交付：AI Coding 下的质量关卡实践</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">记忆</span>LangChain 团队的 LLM Wiki 洞见：Wiki 作为缓存</h3>
-    <p>Harrison Chase 分享了 LLM Wiki Webinar 的两个关键洞见。第一个是 @devstein64 提出的 <strong>"Wiki as a cache"</strong>——Wiki 的目的是让常被查询/访问的信息保持在 top of mind，所以 Wiki 的内容组织和更新都应围绕这一点进行。第二个是 @jeffreyhuber 的 "Wiki is a set of hyperlinked pages"——LLM 记忆系统的演进路径是：单一字符串 → 单文件 → 目录里的多文件（Wiki）；当文件数量增长后，文件结构本身不再重要，重要的是页面之间的链接，就像互联网一样。</p>
-    <div class="why"><strong>怎么用：</strong>如果你在为 Agent 设计长期记忆系统，不要把记忆堆在一个大文件或一个向量库里，而是按"页面 + 双向链接"组织，并维护一个"哪些页面最常被检索"的指标，把这些页面优先放在上下文中。</div>
-    <div class="src">📎 来源: <a href="https://x.com/hwchase17/status/2076033612571725971" target="_blank" rel="noopener">X / Harrison Chase — LLM Wiki Webinar highlights</a></div>
+    <h3><span class="tag">身份</span>AWS Bedrock AgentCore：多租户 Agent 的 on-behalf-of Token Exchange 实践</h3>
+    <p>AWS ML 博客发布了一篇针对多租户 Agent 部署的深度指南。核心问题：当 Agent 调用下游 API 时，应该带谁的身份？用 Agent 自己的服务身份会让审计追踪崩溃（下游系统必须无条件信任 Agent）；直接转发用户 Token 又会让每个下游工具变成"困惑的代理"（confused deputy）。这两种方案在一个 Agent 服务多租户、用户不在场的场景下都不可扩展。</p>
+    <p>解决方案是 <strong>OAuth 2.0 Token Exchange（RFC 8693）</strong>——Amazon Bedrock AgentCore Identity 原生支持这种 grant type。流程：用户登录后 IdP 颁发 Token → Agent 收到 Token 后，不直接使用，而是向 AgentCore 发起 Token Exchange → AgentCore 验证后颁发一个新的"代理 Token"，里面携带原始用户身份 + Agent 身份 + 授权范围 → Agent 用这个新 Token 调用下游服务 → 下游服务可以独立验证 Token 并做出授权决策。</p>
+    <div class="why"><strong>什么时候用：</strong>(1) 你的 Agent 要替用户调用多个下游 API（邮件、日历、CRM、内部系统）；(2) 你面临合规审计要求，需要知道"哪次调用是哪个用户的哪个 Agent 发起的"；(3) 你不能让下游服务盲目信任 Agent。如果你正在做企业级 Agent 平台，这一篇是绕不开的标准参考——即使你不部署在 AWS 上，Token Exchange 的设计模式可以直接搬到你的身份系统里。</div>
+    <div class="src">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/implement-on-behalf-of-token-exchange-for-multi-tenant-agents-with-amazon-bedrock-agentcore-gateway/" target="_blank" rel="noopener">AWS ML Blog — Implement on-behalf-of token exchange for multi-tenant agents</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">多 Agent</span>39 个 Agent 不依赖框架：Machinecraft 的"公司大脑" Ira</h3>
-    <p>Machinecraft 的 Rushabh Doshi 分享了 Ira——一个为印度三代机械公司打造的多 Agent 操作系统。它不是 Chatbot 也不是某个框架的封装，而是 <strong>39 个边界清晰的专家 Agent + Athena 编排器 + 17 阶段请求流水线</strong>。技术栈：Qdrant 做文档记忆、Neo4j 做关系、Mem0 做长期语义记忆、Postgres 做 CRM 和招聘数据、Redis 做协调、Cursor 作为操作舱。覆盖销售、BD、招聘、报价、市场、生产上下文、邮件工作流、组织记忆。</p>
-    <div class="why"><strong>核心洞见：</strong>公司不需要通用 AI 助手，需要的是"数字大脑"——每个 Agent 有清晰的边界、明确的输入输出契约、可观测的执行轨迹。这个思路和"微服务架构"几乎同构，可以复用大量成熟的分布式系统经验。</div>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=jtzh-GBXBWc" target="_blank" rel="noopener">AI Engineer — The Factory That Dreams: 39 AI Agents, No Framework</a></div>
+    <h3><span class="tag">架构</span>腾讯 Ray 团队：K8s + Ray + PyTorch + vLLM 的黄金组合如何支撑超大规模 AI Workload</h3>
+    <p>腾讯 Ray 团队在 QCon 分享了他们的大规模 AI Workload 调度实践。核心判断是：<strong>大模型时代的 AI Infra 技术栈正在收敛到 K8s + Ray + PyTorch + vLLM 这一组合</strong>，覆盖数据处理、预训练、后训练、在线推理与 Agent 全链路。Ray 在 2025 年正式作为托管项目加入 PyTorch 基金会，进一步明确了它作为"AI 计算底座"的定位。</p>
+    <p>文章重点讲了 K8s 和 Ray 的 co-design 模式：K8s 负责容器编排和资源调度，Ray 负责 AI 任务级的并行调度和数据流管理，两者互补而不是替代。以 RLHF 训练为例，主流框架普遍采用"训推分离"架构——训练端用 PyTorch 跑梯度更新，推理端用 vLLM 做高吞吐采样，Ray 负责协调两者之间的数据流和 Actor 调度。文章还分享了他们在超大规模集群下调优 Ray 的几个关键经验，包括 Actor 放置策略、Object Store 内存管理、以及和 K8s HPA 的协同。</p>
+    <div class="why"><strong>什么时候用：</strong>(1) 你正在自建大模型训练 / 推理平台，需要选型调度栈；(2) 你的 AI 工作负载已经超过单一框架能承载的范围（比如既要训练又要在线推理又要跑 Agent）；(3) 你在评估 Ray 和 K8s Native 调度器（如 Volcano、Kueue）的取舍。如果你只是用现成的 LLM API，这篇深度内容可以暂时跳过；但如果你在搭平台，值得花时间精读。</div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649802581&idx=1&sn=6853e0881c8ef7e87dac7baf5ad82d22" target="_blank" rel="noopener">腾讯技术工程 — 腾讯Ray团队实践：K8s + Ray如何支撑超大规模AI Workload</a></div>
   </article>
 
   <article class="item">
-    <h3><span class="tag">路由</span>GraphPlanner：从"选哪个模型"到"生成多 Agent 工作流"</h3>
-    <p>UIUC 的研究者提出 GraphPlanner，把 LLM Router 从"query-level 模型选择"升级为"动态工作流生成"。传统 Single-Round Router 只决定"这个问题交给哪个 LLM"；Multi-Round Router 允许多次调用但仍是"连续选模型"，缺少对协作流程的显式建模。GraphPlanner 在每一步同时决定<strong>调用哪个模型 + 激活哪个 Agent 角色</strong>，并用图结构记忆历史交互与当前工作流状态。</p>
-    <p>这正好呼应了硅星人 Pro 那篇《Router 无处不在》——当模型本身走向大宗商品化，价值正在向调度层转移。OpenRouter 18 个月内年化收入从 $1M 涨到 $50M，估值 13 亿美元。</p>
-    <div class="why"><strong>实践建议：</strong>(1) 如果你只用一家模型，Router 还不是必需；一旦接入 3 家以上，建议把"任务复杂度评估 → 模型选择"做成独立组件；(2) GraphPlanner 的代码已在 GitHub 开源（ulab-uiuc/GraphPlanner），适合做研究参考；(3) 简单场景下，基于规则的路由（任务类型 → 模型映射）性价比最高。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652712432&idx=3&sn=16ed508986e394a232ff179f9b6f6847" target="_blank" rel="noopener">新智元 — 给多智能体LLM装上「图记忆工作流路由器」</a> &nbsp;|&nbsp; <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247630700&idx=1&sn=a5763b737ef483441f2a67a5ec906893" target="_blank" rel="noopener">硅星人Pro — Router 无处不在</a></div>
-  </article>
-
-  <article class="item">
-    <h3><span class="tag">生态</span>Java 生态一周速览：Hardwood 1.0、Quarkus 3.37、JDK 27/28 EA</h3>
-    <p>InfoQ 的 Java 周报汇总了近期值得关注的版本：<strong>JDK 27 EA Build 28</strong> 和 <strong>JDK 28 EA Build 4</strong> 发布；Azul Payara 7.1.0 修复了管理控制台和 REST 管理接口的 CSRF/SSRF 漏洞（源于 Servlet 请求中传递了本可从会话获取的 REST URL），并支持在 Jakarta Data 仓库接口上用 Spring 的 <code>@Transactional</code> 覆盖方法；Quarkus 3.37.0 升级 Hibernate ORM 7.4.0.Final、Hibernate Reactive 3.4.0.Final、Hibernate Search；LangChain4j 等也有更新。</p>
-    <div class="why"><strong>为什么要看：</strong>Payara 那个 CSRF/SSRF 漏洞的成因很有教学价值——"在 Servlet 请求中不必要地传递本可以通过会话信息获取的 REST URL"，是经典的"为了方便复制数据，反而引入安全风险"。建议在 Code Review 时多留意这类冗余数据传递。</div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288666&idx=4&sn=ceb253fc346a93558eb5a8a87e804168" target="_blank" rel="noopener">InfoQ — Java 近期新闻：Hardwood 1.0、Endive 1.0、Azul Payara、Quarkus、WildFly、LangChain4j、OSSI</a></div>
+    <h3><span class="tag">数据库</span>Google AlloyDB 引入 AI 函数：SQL 里直接写语义查询，最快提速 2.3 万倍</h3>
+    <p>Google Cloud 为 AlloyDB 引入了一组 <strong>AI 函数</strong>——把 Gemini 的理解能力直接做成 SQL 函数嵌进数据库本身。传统数据库只会按字面精确匹配，你能查"价格低于 100 的商品"，却没法直接查"差评里抱怨电池的"、"语气愤怒的工单"——因为这需要理解文字的意思。以前想做这种语义分析，只能把数据导出去送进单独的 AI 管线，再导回来，既慢又得自己维护管线。</p>
+    <p>AlloyDB 的做法是把语义判断、结构化查询、AI 推理放在同一层 SQL 里完成。你可以在一句普通 SQL 里写下对"意思"的判断，数据库自己就懂，把符合的行挑出来，数据一步都不用搬出去。官方 benchmark 显示，相比传统的"导出 → 向量化 → 检索"流程，某些查询场景下性能提升可达 2.3 万倍。</p>
+    <div class="why"><strong>什么时候用：</strong>(1) 你的业务数据已经落在 AlloyDB / PostgreSQL，但需要做语义搜索、情感分析、文本分类；(2) 你在评估"是不是要单独搭一套向量数据库"——AlloyDB 的 AI 函数可能让你不用引入新组件；(3) 你的查询负载里语义判断占比高但量不大，单独维护 AI 管线不划算。对其他 PostgreSQL 用户来说，这是一个值得关注的方向——类似的 AI 函数很可能会进入 PostgreSQL 标准扩展。</div>
+    <div class="src">📎 来源: <a href="https://x.com/xiaohu/status/2076547608777261124" target="_blank" rel="noopener">X / 小互 — Google Cloud 为 AlloyDB 装上AI模型</a></div>
   </article>
 
 </section>
@@ -423,44 +430,46 @@ def rows():
   <h2><span class="icon">📚</span>参考链接汇总</h2>
   <div class="sources">
     <ol>
-      <li><span class="feed">[Datawhale]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247724179&idx=1&sn=bcd482549f96e030c1473ac9d74a9e67" target="_blank" rel="noopener">突发！GPT-5.6-Sol被曝重大bug，一招教你避坑！</a></li>
-      <li><span class="feed">[InfoQ]</span> <a href="https://www.infoq.com/news/2026/07/cloudflare-hyper-bug-fix/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">Cloudflare Identifies Race Condition in hyper's HTTP/1 Implementation</a></li>
-      <li><span class="feed">[InfoQ]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288666&idx=1&sn=8bbada4ac098dd4390b3408be7fb1370" target="_blank" rel="noopener">连Claude Code都搞不定的巨型代码库，我们靠一个"自愈循环"给盘活了</a></li>
-      <li><span class="feed">[AI前线]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247664709&idx=2&sn=c87670cac04cfaba411638b29a6b3c99" target="_blank" rel="noopener">MCP 推出企业统一授权功能</a></li>
-      <li><span class="feed">[GitHub]</span> <a href="https://www.youtube.com/shorts/rmzu6Eovgus" target="_blank" rel="noopener">GitHub issue fields are now generally available</a></li>
-      <li><span class="feed">[X / Peter Yang]</span> <a href="https://x.com/petergyang/status/2076050876314300478" target="_blank" rel="noopener">GPT-5.6-sol 并列 Code Arena 前端榜第一</a></li>
-      <li><span class="feed">[Riley Brown]</span> <a href="https://www.youtube.com/watch?v=Fv0XfyLT3xU" target="_blank" rel="noopener">OpenAI Just Merged ChatGPT and Codex. This Changes Everything.</a></li>
-      <li><span class="feed">[阶跃星辰]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzkyNTYxNzg5Mg==&mid=2247487927&idx=1&sn=53fc706efe39d467c8a74361599ebfbd" target="_blank" rel="noopener">阶跃 Step Edge 端侧模型全家桶来了！</a></li>
-      <li><span class="feed">[新智元]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652712432&idx=2&sn=b54298542d95ea1f2c6b5ab8d0a17c04" target="_blank" rel="noopener">全网骂Claude变笨，Anthropic下场揭秘：坑你的不是模型</a></li>
-      <li><span class="feed">[Founder Park]</span> <a href="https://mp.weixin.qq.com/s?__biz=Mzg5NTc0MjgwMw==&mid=2247525134&idx=1&sn=c080e07c915f835ac93526da06752a4c" target="_blank" rel="noopener">万字复盘：从模型到可用Agent，WorkBuddy的Harness工程是怎么做的？</a></li>
-      <li><span class="feed">[爱范儿]</span> <a href="https://www.ifanr.com/1671739" target="_blank" rel="noopener">腾讯 WorkBuddy 入门指南：更适合国人体质的 Codex</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=EUsPvBeIx70" target="_blank" rel="noopener">Semantic Blindness: 500,000 Sensors Confused an LLM</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=TJPInBjhE4Q" target="_blank" rel="noopener">ReviewDebt: a practical framework for scoring every pull request</a></li>
-      <li><span class="feed">[Simon Willison]</span> <a href="https://simonwillison.net/2026/Jul/11/sqlite-utils/#atom-everything" target="_blank" rel="noopener">sqlite-utils 4.1</a></li>
-      <li><span class="feed">[AICodeKing]</span> <a href="https://www.youtube.com/watch?v=6WXzVSsV0Mo" target="_blank" rel="noopener">STOP USING Claude & Codex $20 & $200 PLANS: USE this $5 ALTERNATIVE INSTEAD!</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=5192csoTkVo" target="_blank" rel="noopener">remobi.app: Don't change your terminal workflow for mobile</a></li>
-      <li><span class="feed">[InfoQ]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288666&idx=2&sn=1dcaba62d285d767d42974cba8db16d6" target="_blank" rel="noopener">Claude、Cursor、OpenClaw 集体上手机，不摸鱼、不请假、24h 为你打工</a></li>
-      <li><span class="feed">[HeyGen]</span> <a href="https://x.com/HeyGen/status/2076051146385567866" target="_blank" rel="noopener">Transparent WebM output on the HeyGen API, CLI, and MCP</a></li>
-      <li><span class="feed">[逛逛GitHub]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247535336&idx=1&sn=bf1b478056bfb8d0456da756c3e23412" target="_blank" rel="noopener">GitHub 上已开源，有人把《哈利·波特》中的笔记做出来了</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=vJukHCIv7Ck" target="_blank" rel="noopener">Stop AI Agent Hallucinations: 5 Techniques + Production Patterns</a></li>
-      <li><span class="feed">[InfoQ]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288666&idx=3&sn=8b0334477d5edce92e01737dc92216b5" target="_blank" rel="noopener">将平台开发从项目转向产品</a></li>
-      <li><span class="feed">[X / Ado]</span> <a href="https://x.com/adocomplete/status/2076042807937212505" target="_blank" rel="noopener">HTML is more effective than Markdown</a></li>
-      <li><span class="feed">[X / Harrison Chase]</span> <a href="https://x.com/hwchase17/status/2076033612571725971" target="_blank" rel="noopener">LLM Wiki Webinar highlights</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=jtzh-GBXBWc" target="_blank" rel="noopener">The Factory That Dreams: 39 AI Agents, No Framework</a></li>
-      <li><span class="feed">[新智元]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652712432&idx=3&sn=16ed508986e394a232ff179f9b6f6847" target="_blank" rel="noopener">给多智能体LLM装上「图记忆工作流路由器」</a></li>
-      <li><span class="feed">[硅星人Pro]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247630700&idx=1&sn=a5763b737ef483441f2a67a5ec906893" target="_blank" rel="noopener">本周AI项目推荐｜Router 无处不在</a></li>
-      <li><span class="feed">[InfoQ]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288666&idx=4&sn=ceb253fc346a93558eb5a8a87e804168" target="_blank" rel="noopener">Java 近期新闻：Hardwood 1.0、Endive 1.0、Azul Payara、Quarkus、WildFly、LangChain4j、OSSI</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=UlFB6efYN5Q" target="_blank" rel="noopener">A Song of Types and Agents - TypeScript 接管 AI 生产栈</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=7P0elyLIxXo" target="_blank" rel="noopener">What Does Done Even Mean? Agents and Paperclip's Liveness Model</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=sum9DgexFRQ" target="_blank" rel="noopener">The Agentic Web and the Bazaar Era of AI - Ramesh Raskar, MIT</a></li>
-      <li><span class="feed">[AI Engineer]</span> <a href="https://www.youtube.com/watch?v=xg1zNlzw7Jk" target="_blank" rel="noopener">Claws Out: Securing and Building with OpenClaw</a></li>
+      <li><span class="feed">[AINLP]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650452760&idx=1&sn=db22e379eba0423ea26643eb7dfff1b6" target="_blank" rel="noopener">Codex、ChatGPT Work 暂时取消 5 小时窗口，又送了重置次数</a></li>
+      <li><span class="feed">[爱范儿]</span> <a href="https://www.ifanr.com/1671899" target="_blank" rel="noopener">Codex 不限时了，我先删掉了一堆 Skills ｜附 GPT-5.6 官方指南</a></li>
+      <li><span class="feed">[GitHub]</span> <a href="https://x.com/github/status/2076713716817834312" target="_blank" rel="noopener">Get faster, more reliable coding sessions in GitHub Copilot CLI</a></li>
+      <li><span class="feed">[GitHub Blog]</span> <a href="https://github.blog/ai-and-ml/how-we-made-github-copilot-cli-faster-and-more-reliable/" target="_blank" rel="noopener">How we made GitHub Copilot CLI faster and more reliable</a></li>
+      <li><span class="feed">[数字生命卡兹克]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzIyMzA5NjEyMA==&mid=2647684233&idx=1&sn=391c84ef158f723c83108c29d8e2d666" target="_blank" rel="noopener">我只让Grok回复一个单词，它就把我整个代码库都偷走了</a></li>
+      <li><span class="feed">[X / BohuTANG]</span> <a href="https://x.com/BohuTANG/status/2076534471822852440" target="_blank" rel="noopener">grok cli 关闭上传配置指南</a></li>
+      <li><span class="feed">[机器之心SOTA模型]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&mid=2247502904&idx=1&sn=afa50bb4de6e3729c87d168fd2f5ce3e" target="_blank" rel="noopener">今日开源：Codex官方插件库开源，即用型参考实现</a></li>
+      <li><span class="feed">[InfoQ]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288698&idx=3&sn=947e50ca4f184d855b124058fef40a4d" target="_blank" rel="noopener">小扎"消失"三年后发帖，只为它：Meta最强Agent模型进军编程</a></li>
+      <li><span class="feed">[Cloud Blog]</span> <a href="https://cloud.google.com/blog/products/identity-security/introducing-k8s-aibom-on-gke-for-automated-ai-bills-of-materials/" target="_blank" rel="noopener">Securing the AI supply chain on GKE: Introducing k8s-aibom for automated AI BOMs</a></li>
+      <li><span class="feed">[Engineering at Meta]</span> <a href="https://engineering.fb.com/2026/07/13/ml-applications/modernizing-the-meta-ads-service-with-an-open-source-kernel-scheduler/" target="_blank" rel="noopener">Modernizing the Meta Ads Service With an Open-Source Kernel Scheduler</a></li>
+      <li><span class="feed">[X / Greg Brockman]</span> <a href="https://x.com/gdb/status/2076456801047024089" target="_blank" rel="noopener">GPT-5.6 Sol 1st overall on Design Arena with Elo 1353</a></li>
+      <li><span class="feed">[Vercel]</span> <a href="https://vercel.com/blog/ai-gateway-production-index-july-2026" target="_blank" rel="noopener">AI Gateway Production Index — July 2026: Open-weight models surge to 29%</a></li>
+      <li><span class="feed">[InfoQ]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651288698&idx=2&sn=3c2d145177b05f3d7fab056792a2e23e" target="_blank" rel="noopener">用 Claude 重写 SQL 解析器，性能暴涨 70 倍：程序员做的不是写代码，而是搭建验证闭环</a></li>
+      <li><span class="feed">[Simon Willison]</span> <a href="https://simonwillison.net/2026/Jul/12/directly-responsible-individuals/#atom-everything" target="_blank" rel="noopener">Directly Responsible Individuals (DRI)</a></li>
+      <li><span class="feed">[&lt;antirez&gt;]</span> <a href="http://antirez.com/news/169" target="_blank" rel="noopener">Control the ideas, not the code</a></li>
+      <li><span class="feed">[GitHub]</span> <a href="https://github.com/mgechev/skillgrade" target="_blank" rel="noopener">mgechev/skillgrade — Unit tests for Agent Skills</a></li>
+      <li><span class="feed">[X / meng shao]</span> <a href="https://x.com/shao__meng/status/2076472375085011142" target="_blank" rel="noopener">给 Agent Skills 写单元测试 — Skillgrade 2.0 开源发布</a></li>
+      <li><span class="feed">[GitHub]</span> <a href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">iOfficeAI/OfficeCLI</a></li>
+      <li><span class="feed">[逛逛GitHub]</span> <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247535342&idx=1&sn=ed0bff20ca593bc05d8fa0f144998862" target="_blank" rel="noopener">1.3 万人点赞的 GitHub 项目，让 AI Agent 操作 Office 文件</a></li>
+      <li><span class="feed">[51CTO技术栈]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&mid=2655941923&idx=1&sn=eb70d865b933419adcabca23cc762ead" target="_blank" rel="noopener">Agent的行车记录仪！开源工具Mindwalk把Claude Code和Codex工作路径搬上3D地图</a></li>
+      <li><span class="feed">[GitHub]</span> <a href="https://github.com/abdulfarhath/ButterUp" target="_blank" rel="noopener">abdulfarhath/ButterUp</a></li>
+      <li><span class="feed">[X / Geek]</span> <a href="https://x.com/geekbb/status/2076557738935554433" target="_blank" rel="noopener">ButterUp 介绍：Tauri 2 写的 Ubuntu/Debian 包管理 GUI</a></li>
+      <li><span class="feed">[GitHub]</span> <a href="https://github.com/run-llama/liteparse" target="_blank" rel="noopener">run-llama/liteparse</a></li>
+      <li><span class="feed">[LlamaIndex]</span> <a href="https://x.com/llama_index/status/2076700217210966048" target="_blank" rel="noopener">LiteParse：把 PDF 转 Markdown 的 Tauri 桌面应用</a></li>
+      <li><span class="feed">[Microsoft Research Blog]</span> <a href="https://www.microsoft.com/en-us/research/blog/verifying-rust-cryptography-in-symcrypt-from-standards-to-code/" target="_blank" rel="noopener">Verifying Rust cryptography in SymCrypt, from standards to code</a></li>
+      <li><span class="feed">[GitHub]</span> <a href="https://github.com/vikingmute/shifu" target="_blank" rel="noopener">vikingmute/shifu</a></li>
+      <li><span class="feed">[X / Viking]</span> <a href="https://x.com/vikingmute/status/2076595393698443325" target="_blank" rel="noopener">shifu skill 实践分享：多模型分工省钱方案</a></li>
+      <li><span class="feed">[OpenAI]</span> <a href="https://learn.chatgpt.com/docs/prompting" target="_blank" rel="noopener">OpenAI Prompting Guide</a></li>
+      <li><span class="feed">[X / meng shao]</span> <a href="https://x.com/shao__meng/status/2076629505159180761" target="_blank" rel="noopener">OpenAI 官方最新提示词指南解读</a></li>
+      <li><span class="feed">[百度Geek说]</span> <a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247607331&idx=1&sn=ec3edf771169512261e9519df5041c19" target="_blank" rel="noopener">让 Agent 按工程标准交付：AI Coding 下的质量关卡实践</a></li>
+      <li><span class="feed">[AWS ML Blog]</span> <a href="https://aws.amazon.com/blogs/machine-learning/implement-on-behalf-of-token-exchange-for-multi-tenant-agents-with-amazon-bedrock-agentcore-gateway/" target="_blank" rel="noopener">Implement on-behalf-of token exchange for multi-tenant agents with Amazon Bedrock AgentCore Gateway</a></li>
+      <li><span class="feed">[腾讯技术工程]</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649802581&idx=1&sn=6853e0881c8ef7e87dac7baf5ad82d22" target="_blank" rel="noopener">腾讯Ray团队实践：K8s + Ray如何支撑超大规模AI Workload</a></li>
+      <li><span class="feed">[X / 小互]</span> <a href="https://x.com/xiaohu/status/2076547608777261124" target="_blank" rel="noopener">Google Cloud 为 AlloyDB 装上AI模型：能进行语义搜索数据库，最快提速 2.3 万倍</a></li>
     </ol>
   </div>
 </section>
 
 <footer>
   <p>Generated by tech-daily-generator · role=developer_practice</p>
-  <p>Source: freshrss_24h_compact_20260712_184435.json · 2026-07-12</p>
+  <p>Source: freshrss_24h_compact_20260713_190738.json · 2026-07-13</p>
 </footer>
 
 </div>
