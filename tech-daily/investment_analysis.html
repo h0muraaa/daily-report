@@ -1,567 +1,368 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>科技日报 · 投资分析版 | 2026-07-15</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: "PingFang SC", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
-    background: #f4f6f9;
-    color: #1a202c;
-    line-height: 1.75;
-    padding: 24px 16px;
-  }
-  .container { max-width: 980px; margin: 0 auto; background: #fff; box-shadow: 0 2px 12px rgba(15,23,42,.08); border-radius: 8px; overflow: hidden; }
-
-  /* Header */
-  header {
-    background: linear-gradient(135deg, #0a2540 0%, #1b3a5c 60%, #2c5282 100%);
-    color: #fff; padding: 36px 44px 28px;
-    border-bottom: 6px solid #d4a017;
-  }
-  header .meta { font-size: 13px; color: #cbd5e0; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-  header h1 { font-size: 30px; font-weight: 700; letter-spacing: .5px; }
-  header .sub { margin-top: 8px; color: #e2e8f0; font-size: 14px; }
-  header .tickers { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; }
-  .ticker {
-    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
-    padding: 6px 12px; border-radius: 4px; font-size: 12px; font-family: "SF Mono", Consolas, monospace;
-  }
-  .ticker .up { color: #48bb78; font-weight: 700; }
-  .ticker .down { color: #f56565; font-weight: 700; }
-
-  /* Section */
-  section { padding: 32px 44px; border-bottom: 1px solid #e2e8f0; }
-  section:last-child { border-bottom: none; }
-  h2 {
-    font-size: 22px; color: #0a2540; font-weight: 700;
-    padding-bottom: 10px; margin-bottom: 20px;
-    border-bottom: 3px solid #d4a017; display: inline-block;
-  }
-  h2 .num { color: #d4a017; margin-right: 8px; font-family: "SF Mono", monospace; }
-
-  /* Stat cards */
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 18px 0 8px; }
-  .stat-card {
-    background: #f8fafc; border-left: 4px solid #2c5282;
-    padding: 14px 16px; border-radius: 4px;
-  }
-  .stat-card .label { font-size: 12px; color: #718096; text-transform: uppercase; letter-spacing: .5px; }
-  .stat-card .value { font-size: 22px; font-weight: 700; color: #0a2540; margin-top: 4px; font-family: "SF Mono", monospace; }
-  .stat-card .delta { font-size: 12px; margin-top: 2px; }
-  .stat-card .delta.up { color: #2f855a; }
-  .stat-card .delta.down { color: #c53030; }
-  .stat-card.gold { border-left-color: #d4a017; }
-  .stat-card.red { border-left-color: #c53030; }
-  .stat-card.green { border-left-color: #2f855a; }
-
-  /* News item */
-  .news-item {
-    background: #fff; border: 1px solid #e2e8f0; border-radius: 6px;
-    padding: 18px 20px; margin-bottom: 16px;
-    transition: box-shadow .15s;
-  }
-  .news-item:hover { box-shadow: 0 3px 10px rgba(15,23,42,.08); }
-  .news-item .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
-  .news-item h3 { font-size: 17px; color: #0a2540; font-weight: 700; flex: 1; min-width: 200px; }
-  .tag {
-    display: inline-block; padding: 3px 10px; border-radius: 12px;
-    font-size: 11px; font-weight: 600; letter-spacing: .3px;
-    text-transform: uppercase;
-  }
-  .tag.series-c { background: #fef3c7; color: #92400e; }
-  .tag.ipo { background: #fee2e2; color: #991b1b; }
-  .tag.ma { background: #dbeafe; color: #1e40af; }
-  .tag.capex { background: #d1fae5; color: #065f46; }
-  .tag.earnings { background: #e0e7ff; color: #3730a3; }
-  .tag.secondary { background: #f3e8ff; color: #6b21a8; }
-  .news-item p { color: #2d3748; font-size: 14.5px; margin-top: 6px; }
-  .news-item p + p { margin-top: 8px; }
-  .news-item .src { font-size: 12.5px; color: #718096; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8f0; }
-  .news-item .src a { color: #2c5282; text-decoration: none; }
-  .news-item .src a:hover { text-decoration: underline; }
-
-  /* Data table */
-  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13.5px; }
-  th { background: #0a2540; color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12.5px; letter-spacing: .3px; }
-  td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #2d3748; }
-  tr:nth-child(even) td { background: #f8fafc; }
-  td.num, th.num { font-family: "SF Mono", monospace; text-align: right; }
-  td .pos { color: #2f855a; font-weight: 600; }
-  td .neg { color: #c53030; font-weight: 600; }
-
-  /* Analysis callout */
-  .callout {
-    background: #fffbeb; border-left: 4px solid #d4a017;
-    padding: 14px 18px; margin: 14px 0; border-radius: 4px; font-size: 14px;
-  }
-  .callout strong { color: #92400e; }
-  .callout.bear { background: #fef2f2; border-left-color: #c53030; }
-  .callout.bear strong { color: #991b1b; }
-  .callout.bull { background: #f0fdf4; border-left-color: #2f855a; }
-  .callout.bull strong { color: #166534; }
-
-  /* Deep dive */
-  .deep-dive {
-    background: #f8fafc; border: 1px solid #cbd5e0;
-    padding: 22px 24px; border-radius: 6px; margin-bottom: 18px;
-  }
-  .deep-dive h3 { color: #0a2540; font-size: 18px; margin-bottom: 6px; }
-  .deep-dive .thesis {
-    font-style: italic; color: #4a5568; font-size: 13.5px;
-    border-left: 3px solid #d4a017; padding-left: 12px; margin: 10px 0 14px;
-  }
-  .deep-dive h4 { color: #2c5282; font-size: 14px; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: .5px; }
-  .deep-dive p { font-size: 14px; color: #2d3748; margin-top: 6px; }
-  .deep-dive ul { padding-left: 20px; margin: 8px 0; font-size: 14px; color: #2d3748; }
-  .deep-dive ul li { margin-bottom: 4px; }
-
-  /* Radar */
-  .radar-item {
-    display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px dashed #e2e8f0;
-  }
-  .radar-item:last-child { border-bottom: none; }
-  .radar-item .icon {
-    flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
-    background: #2c5282; color: #fff; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 14px;
-  }
-  .radar-item .body { flex: 1; }
-  .radar-item h4 { color: #0a2540; font-size: 15px; margin-bottom: 4px; }
-  .radar-item p { font-size: 13.5px; color: #4a5568; }
-  .heat { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; margin-left: 6px; }
-  .heat.hot { background: #fee2e2; color: #991b1b; }
-  .heat.warm { background: #fef3c7; color: #92400e; }
-  .heat.watch { background: #dbeafe; color: #1e40af; }
-
-  /* Sources */
-  .sources { background: #f8fafc; padding: 24px 44px; }
-  .sources h2 { border-bottom-color: #2c5282; }
-  .src-list { columns: 2; column-gap: 28px; font-size: 13px; }
-  .src-list li { margin-bottom: 6px; break-inside: avoid; list-style: none; padding-left: 14px; position: relative; }
-  .src-list li:before { content: "▸"; position: absolute; left: 0; color: #d4a017; }
-  .src-list a { color: #2c5282; text-decoration: none; }
-  .src-list a:hover { text-decoration: underline; }
-  .disclaimer {
-    margin-top: 18px; padding: 12px 16px; background: #fffbeb;
-    border: 1px solid #fbd38d; border-radius: 4px; font-size: 12.5px; color: #744210;
-  }
-
-  footer { text-align: center; padding: 20px; color: #a0aec0; font-size: 12px; background: #0a2540; }
-  footer .brand { color: #d4a017; font-weight: 600; }
-
-  @media (max-width: 720px) {
-    header, section, .sources { padding-left: 20px; padding-right: 20px; }
-    .src-list { columns: 1; }
-    header h1 { font-size: 22px; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技日报 · 投资分析版 | 2026-07-16</title>
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #1a1d21;
+            --muted: #5c646f;
+            --accent: #0b4f7c;
+            --accent-light: #e8f1f7;
+            --border: #d9dfe5;
+            --up: #137a4b;
+            --down: #b43e3e;
+            --warn: #9a6b18;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        header {
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+        .kicker {
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        h1 {
+            font-size: 32px;
+            margin: 0 0 12px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .meta {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .summary-box {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            border-radius: 0 8px 8px 0;
+        }
+        .summary-box h2 {
+            margin: 0 0 12px;
+            font-size: 16px;
+            color: var(--accent);
+        }
+        .summary-box ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .summary-box li {
+            margin-bottom: 8px;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h2 {
+            font-size: 22px;
+            margin: 0 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+        h3 {
+            font-size: 17px;
+            margin: 24px 0 10px;
+            color: var(--accent);
+        }
+        .item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px 24px;
+            margin-bottom: 16px;
+        }
+        .item-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .item p {
+            margin: 0 0 12px;
+            color: var(--text);
+        }
+        .item p:last-child {
+            margin-bottom: 0;
+        }
+        .source {
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .source a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--accent);
+        }
+        .source a:hover {
+            border-bottom-style: solid;
+        }
+        .tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 6px;
+            text-transform: uppercase;
+        }
+        .tag-funding { background: #e6f4ea; color: var(--up); }
+        .tag-market { background: #e8f1f7; color: var(--accent); }
+        .tag-risk { background: #fce8e8; color: var(--down); }
+        .tag-opportunity { background: #fff4e0; color: var(--warn); }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .metric {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .metric-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+        .callout {
+            background: #fff8e6;
+            border-left: 4px solid #d4a017;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+            color: var(--text);
+        }
+        .sources-list {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 24px;
+        }
+        .sources-list ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .sources-list li {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        footer {
+            margin-top: 48px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
+    <div class="container">
+        <header>
+            <div class="kicker">Daily Tech Brief · Investment Analysis</div>
+            <h1>科技日报 · 投资分析版</h1>
+            <div class="meta">2026年7月16日 · 覆盖周期：2026-07-15 18:52 至 2026-07-16 18:52</div>
+        </header>
 
-<header>
-  <div class="meta">Tech Daily · Investment Analysis · 2026-07-15</div>
-  <h1>科技日报 · 投资分析版</h1>
-  <div class="sub">一级市场视角 · AI / SaaS / 云计算 / 半导体 · 数据驱动 · 观点明确</div>
-  <div class="tickers">
-    <div class="ticker">DeepSeek 估值 <span class="up">$71B (+37% MoM)</span></div>
-    <div class="ticker">ASML 2026 指引 <span class="up">€43-45B (上调)</span></div>
-    <div class="ticker">Cognition ARR <span class="up">$500M+ (7x YoY)</span></div>
-    <div class="ticker">Meta 路州 Capex <span class="up">$50B+ (5GW)</span></div>
-    <div class="ticker">长鑫科技 IPO 市值 <span class="up">¥580-670B</span></div>
-  </div>
-</header>
+        <div class="summary-box">
+            <h2>今日投资要点</h2>
+            <ul>
+                <li><strong>一级市场</strong>：a16z 领投 AI 代理执行层 Runta 2,000 万美元种子轮；AI 硬件接口 Aina Interface 完成 550 万美元融资。</li>
+                <li><strong>资本市场</strong>：DeepSeek 被曝筹备 2027 年上海上市；xAI 因 Grok Build 隐私风波开源代码并删除留存数据。</li>
+                <li><strong>定价与竞争</strong>：Kimi K3 定价为第一梯队水平；中国开源模型以“一个数量级”的成本优势抢占印度市场。</li>
+                <li><strong>风险提示</strong>：OpenAI 遭苹果商业秘密诉讼；$SPCX 自 IPO 以来买入者全部亏损。</li>
+            </ul>
+        </div>
 
-<!-- ======================= 1. 市场概览 ======================= -->
-<section>
-  <h2><span class="num">01</span>市场概览 · 今日核心投融资事件</h2>
+        <section>
+            <h2>一、市场概览</h2>
 
-  <div class="stat-grid">
-    <div class="stat-card gold">
-      <div class="label">DeepSeek 投前估值</div>
-      <div class="value">$71B</div>
-      <div class="delta up">▲ +37% vs 首轮融资 (30 天前)</div>
+            <div class="item">
+                <div class="item-title"><span class="tag tag-funding">融资</span>a16z 领投 Runta 2,000 万美元种子轮，瞄准 AI 代理执行层</div>
+                <p>由前 Cloudflare 边缘代理与 Kong 核心代理负责人 Guanlan Dai 创立的 Runta 宣布完成 2,000 万美元种子轮融资，由 a16z 领投，a16z 合伙人 Martin Casado 加入董事会。公司定位是为 AI 代理重建“执行层”——类比 GPU 架构因大模型而被重新定义，Runta 认为 CPU 端的代理运行环境同样需要一次底层重构，以支持本地/云端部署、安全策略与企业级控制。</p>
+                <p>从投资逻辑看，Runta 切入的是 AI 基础设施中尚未被充分定价的环节：随着 Cursor、Codex 等 coding agent 进入生产环境，代理对计算资源的调用模式与传统软件完全不同，亟需新的运行时（runtime）与权限隔离层。创始团队在网络代理与 API 网关领域的工程背书，使其在“agentic infrastructure”赛道具备稀缺性，但挑战在于该市场仍处于定义阶段，客户预算与付费模式尚未固化。</p>
+                <div class="source">来源：<a href="https://x.com/a16z/status/2077779817664217198" target="_blank" rel="noopener">a16z (@a16z)</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-funding">融资</span>Aina Interface 获 550 万美元融资，押注 AI 硬件输入层</div>
+                <p>Aina Interface 宣布完成 550 万美元融资，目标打造“知道你想要什么”的 AI 硬件接口。其核心论点在于：触屏与键盘是为浏览与搜索时代设计的，而当 AI 代理每天帮用户处理数百项任务时，每一次多余的导航步骤都会累积成真实的认知负荷，因此需要重新设计人机交互的输入层。</p>
+                <p>该笔投资反映了市场对“AI 原生硬件”赛道的持续押注。与 Rabbit、Humane 等早期 AI 设备不同，Aina 更聚焦于输入层而非完整终端，试图以更低硬件成本、更高软件集成度切入。对投资者而言，关键观察点在于其能否与现有操作系统和主流代理（如 Codex、Claude Code）形成深度集成，以及用户是否愿意为降低认知负荷支付溢价。</p>
+                <div class="source">来源：<a href="https://x.com/omarsar0/status/2077796765688852903" target="_blank" rel="noopener">elvis (@omarsar0)</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-market">IPO</span>DeepSeek 被曝筹备 2027 年上海上市，AI 独角兽资本化路径引关注</div>
+                <p>据创业邦综合报道，DeepSeek 正在准备于明年在上海上市。与此同时，梁文锋旗下公司参与长鑫科技 IPO 战略投资，153 只私募产品参与打新。这一消息若属实，意味着国内头部 AI 大模型公司正加速走向公开市场，也标志着中国 AI 资产证券化的重要节点。</p>
+                <p>对一级市场投资者而言，DeepSeek 的 IPO 时间表将直接影响同类公司的估值锚定。考虑到当前大模型公司普遍面临高昂训练成本与商业化变现压力，其上市定价、收入结构及盈利路径将成为市场重新评估中国 AI 资产的关键变量。长鑫科技作为半导体标的受到私募密集认购，也反映出资金对“AI + 硬科技”组合的配置偏好。</p>
+                <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882856&idx=1&sn=3ae5051d9055893724ae73c482437530" target="_blank" rel="noopener">创业邦</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-risk">诉讼</span>OpenAI 回应苹果商业秘密诉讼：指控无事实依据</div>
+                <p>OpenAI 当地时间 7 月 14 日回应称，苹果上周提起的商业秘密诉讼没有事实依据，公司尊重公平竞争与人才自由流动，并将继续专注于自主创新。苹果此前起诉 OpenAI，指控其硬件团队通过招募前苹果员工获取涉及 AI 硬件设备的商业秘密，并称部分员工离职前非法获取内部工程资料。</p>
+                <p>从投资视角看，此案凸显了 AI 硬件赛道的激烈人才竞争与知识产权风险。若诉讼升级，可能延缓 OpenAI 自有硬件产品的研发节奏，并增加其在美国市场的合规成本。对苹果而言，此举也被解读为对 OpenAI 向其核心硬件生态渗透的防御性反制。投资者需关注双方是否达成和解，以及是否会影响未来 Apple-OpenAI 的合作关系。</p>
+                <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882856&idx=2&sn=664d2919a1612764a065c5afdb5d195d" target="_blank" rel="noopener">创业邦（援引界面新闻）</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-risk">市场表现</span>Gary Marcus 指出 $SPCX 自 IPO 以来买入者全部亏损</div>
+                <p>AI 评论家 Gary Marcus 在社交媒体上指出，所有自 IPO 及之后买入 $SPCX 的投资者目前均已亏损，并质疑其股价还将下跌多少。$SPCX 为与太空或硬科技资产相关的 SPAC/上市工具，近期表现低迷。</p>
+                <p>该评论虽然带有情绪，但提醒投资者关注“AI/硬科技概念上市”资产的估值回撤风险。在 2024-2025 年大量 AI 相关公司借 SPAC 或 IPO 上市后，部分标的已面临业绩兑现压力。对一级市场投资者而言，这意味着后期轮次进入的估值安全边际正在收窄，IPO 窗口的定价能力可能弱于预期。</p>
+                <div class="source">来源：<a href="https://x.com/GaryMarcus/status/2077794739156578540" target="_blank" rel="noopener">Gary Marcus (@GaryMarcus)</a></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>二、深度投资分析</h2>
+
+            <h3>2.1 中国模型的“成本优势”正在重塑全球 AI 供应链</h3>
+            <div class="item">
+                <p>据《日经亚洲评论》与印度《泰卢固时报》报道，自 2025 年中期以来，越来越多印度科技初创企业转向 DeepSeek、千问等中国开源大模型，以替代美国 AI 服务，成本降低达“一个数量级”。报道举例称，某中国大模型输入价格约为每百万 token 0.19–1.74 美元，输出价格为 0.51–5.40 美元，而 OpenAI GPT-5.5 的定价显著更高。</p>
+                <p><strong>投资影响：</strong>这一现象对全球 AI 市场的估值逻辑构成深远影响。首先，推理成本下降将加速 AI 应用在新兴市场的渗透，利好本地化部署工具、模型路由器（model router）和 AI Gateway 类基础设施。其次，美国闭源模型的定价权正面临挑战，OpenAI、Anthropic 等公司能否维持高毛利取决于其是否能在模型性能上持续拉开差距。最后，对投资者而言，中国模型的全球化扩张可能催生新的分发平台与合规服务机会，但也需关注地缘政治与数据主权风险。</p>
+                <div class="metrics">
+                    <div class="metric"><div class="metric-value">10×</div><div class="metric-label">印度企业报告成本降幅</div></div>
+                    <div class="metric"><div class="metric-value">$0.19–1.74</div><div class="metric-label">中国模型输入价 / 1M tokens</div></div>
+                    <div class="metric"><div class="metric-value">$0.51–5.40</div><div class="metric-label">中国模型输出价 / 1M tokens</div></div>
+                </div>
+                <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882856&idx=2&sn=664d2919a1612764a065c5afdb5d195d" target="_blank" rel="noopener">创业邦（援引日经亚洲评论 / 泰卢固时报）</a></div>
+            </div>
+
+            <h3>2.2 Kimi K3 定价第一梯队：Moonshot AI 的估值与变现压力</h3>
+            <div class="item">
+                <p>Moonshot AI 发布的 Kimi K3 定价引发市场关注：输入每百万 token 3.00 美元，输出每百万 token 15.00 美元，约为 K2.7 的 5 倍。该产品主打 100 万 token 长上下文、原生视觉理解与代码/空间推理能力，被评价为“国产模型第一名”。</p>
+                <p><strong>投资影响：</strong>K3 的激进定价策略反映出 Moonshot 在高研发投入与商业化之间的张力。一方面，高价意味着公司对其模型能力有较强信心，试图锚定第一梯队定价；另一方面，5 倍于前代的涨幅可能抑制部分开发者使用量，尤其在国产算力供应紧张的背景下。对投资者而言，需跟踪 K3 的实际调用量、企业客户转化率以及是否能够支撑 Moonshot 下一轮估值。若 DeepSeek 等同行的低价/开源策略持续扩大市场份额，K3 的溢价能力将面临考验。</p>
+                <div class="metrics">
+                    <div class="metric"><div class="metric-value">$3.00</div><div class="metric-label">Kimi K3 输入 / 1M tokens</div></div>
+                    <div class="metric"><div class="metric-value">$15.00</div><div class="metric-label">Kimi K3 输出 / 1M tokens</div></div>
+                    <div class="metric"><div class="metric-value">5×</div><div class="metric-label">较 K2.7 价格倍数</div></div>
+                </div>
+                <div class="source">来源：<a href="https://x.com/berryxia/status/2077781620971778426" target="_blank" rel="noopener">Berryxia.AI (@berryxia)</a></div>
+            </div>
+
+            <h3>2.3 xAI Grok Build 开源：信任危机后的估值修复尝试</h3>
+            <div class="item">
+                <p>xAI 的 Grok Build CLI 工具因被曝在运行时会将用户目录上传至 xAI 的 Google Cloud 存储桶而引发社区强烈反弹。有用户称在家目录运行后，SSH 密钥、密码管理器数据库、文档、照片、视频等全部被上传。随后马斯克回应称将“彻底删除”此前上传的用户数据，xAI 也关闭了默认数据保留功能，并在数小时内将 Grok Build 整个代码库以 Apache 2.0 协议开源。</p>
+                <p><strong>投资影响：</strong>此次事件对 xAI 的品牌信任与数据合规形象构成短期冲击，但快速开源与删除数据的应对策略有助于部分修复开发者信任。开源 Grok Build 也被视为 xAI 对抗 Cursor、Codex 等闭源 coding agent 的差异化手段。估值层面，投资者需重新评估 xAI 在消费者/开发者工具领域的安全成熟度，以及马斯克“快速迭代、公开回应”的运营风格是否能转化为可持续的竞争优势。</p>
+                <div class="source">来源：<a href="https://x.com/SpaceXAI/status/2077494535387828644" target="_blank" rel="noopener">xAI (@SpaceXAI)</a>、<a href="https://simonwillison.net/2026/Jul/15/grok-build/#atom-everything" target="_blank" rel="noopener">Simon Willison's Weblog</a></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>三、赛道雷达</h2>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-opportunity">机会</span>AI 代理基础设施：从模型层向执行层迁移</div>
+                <p>Runta 的融资、Cursor 的递归模型改进、Bolt 开源 Slides、Cognition Devin 接入 Slack 等事件共同表明，市场热点正从大模型本身向“代理的运行时、编排与协作层”迁移。这一趋势与 Harrison Chase 提出的“own your intelligence”框架相呼应：未来的竞争壁垒不再是模型参数，而是反馈循环、上下文记忆层、模型可选性与成本结构。</p>
+                <p>对投资者而言，代理基础设施赛道可分为三类机会：一是运行时与权限控制（如 Runta），二是垂直场景代理（如 Devin for engineering、Bolt for slides），三是代理之间的互操作协议与标准（如 MCP）。该赛道的估值尚处早期，但客户付费意愿与技术护城河仍需验证。</p>
+                <div class="source">来源：<a href="https://x.com/a16z/status/2077779817664217198" target="_blank" rel="noopener">a16z (@a16z)</a>、<a href="https://x.com/cognition/status/2077484850244648998" target="_blank" rel="noopener">Cognition (@cognition_labs)</a>、<a href="https://x.com/boltdotnew/status/2077770386444341332" target="_blank" rel="noopener">bolt.new (@boltdotnew)</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-opportunity">机会</span>企业 AI 与云合作：Google × Intel 深化 Gemini Enterprise 合作</div>
+                <p>Google Cloud 宣布扩大与 Intel 的战略合作，通过 Gemini Enterprise 和 Google Cloud 加速 Intel 全球业务的数字化转型，将定制化、代理式 AI 工作流集成到核心业务功能与芯片设计中。Sundar Pichai 特别提到，Intel 正利用 Gemini Enterprise 加速下一代半导体开发。</p>
+                <p>该合作对 Google Cloud 的企业 AI 收入具有标志性意义：Intel 作为半导体巨头，其采用 Gemini Enterprise 不仅带来直接订单，更构成对其他制造/设计企业的示范效应。对投资者而言，这是观察 Google Cloud 能否在企业 AI 市场追赶 Microsoft/OpenAI 联盟的重要窗口，同时也说明“AI + 芯片设计”正在成为云厂商争夺的高价值场景。</p>
+                <div class="source">来源：<a href="https://x.com/sundarpichai/status/2077793864233230558" target="_blank" rel="noopener">Sundar Pichai (@sundarpichai)</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-market">趋势</span>开源权重模型竞争升温：Thinking Machines Lab 发布 Inkling</div>
+                <p>Mira Murati 创立的 Thinking Machines Lab 发布其首个开源权重模型 Inkling。该模型为混合专家（MoE）架构，总参数 975B、激活参数 41B，采用 Apache 2.0 协议，支持文本、图像、音频多模态，训练数据达 45 万亿 token。公司还表示将推出更小的 Inkling-Small（276B 总参数 / 12B 激活）。</p>
+                <p>Inkling 的发布使开源/开放权重模型赛道竞争更加激烈。对投资者而言，这意味着模型层的技术壁垒正在快速商品化，下游应用与基础设施（如模型托管、微调平台、AI Gateway）的议价能力可能增强。同时，Inkling 选择 Apache 2.0 协议有助于吸引企业客户，但商业模式（托管服务、企业支持、API 收入）仍需观察。</p>
+                <div class="source">来源：<a href="https://simonwillison.net/2026/Jul/16/inkling/#atom-everything" target="_blank" rel="noopener">Simon Willison's Weblog</a>、<a href="https://x.com/thinkymachines" target="_blank" rel="noopener">Thinking Machines Lab</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-market">趋势</span>NVIDIA 嵌入模型登顶 RTEB，巩固 AI 基础设施生态位</div>
+                <p>NVIDIA 发布 Nemotron 3 Embed 8B，并在 RTEB（Real-world Text Embedding Benchmark）检索基准上取得整体第一。该模型面向代理式检索场景，更好的检索精度可帮助代理获得更相关的上下文，从而提升响应准确率。Mem0 等记忆基础设施公司也已开始评估该模型。</p>
+                <p> embedding 模型市场的激烈竞争说明，AI 基础设施的价值正在向“数据表示层”延伸。NVIDIA 凭借硬件与软件的协同优势，正在从训练芯片向推理、检索、记忆等全栈环节扩展。对投资者而言，这既是 NVIDIA 生态壁垒加深的信号，也意味着独立 embedding/RAG 初创公司需要在特定场景或成本效率上建立差异化，否则将面临巨头的挤压。</p>
+                <div class="source">来源：<a href="https://x.com/NVIDIAAI/status/2077786069840318800" target="_blank" rel="noopener">NVIDIA AI (@NVIDIAAI)</a>、<a href="https://huggingface.co/blog/nvidia/nemotron-3-embed-wins-rteb" target="_blank" rel="noopener">Hugging Face Blog</a></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>四、估值观察</h2>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-opportunity">效率</span>AI 投资工作流自动化：Perplexity Agent API 90 秒生成 VC memo</div>
+                <p>Perplexity 与 LangChain 展示了一个基于 Agent API 的 VC 投资备忘录生成流程：4 个 LangGraph 节点并行研究财务、产品与市场，再由一个无工具合成器在约 90 秒内写出带引用的 memo，成本约 0.40 美元。Aravind Srinivas 称该能力在投资工作流中非常强大。</p>
+                <p>对投资行业而言，这一用例意味着初级研究工作的自动化正在加速，可能改变 VC/PE 的人才结构与尽调成本结构。但投资者也应警惕：当信息收集与 memo 撰写被自动化后，真正的 Alpha 将来自对非结构化信息的判断、行业 network 与创始人评估——这些仍是人类分析师的核心壁垒。</p>
+                <div class="source">来源：<a href="https://x.com/AravSrinivas/status/2077798528701911408" target="_blank" rel="noopener">Aravind Srinivas (@AravSrinivas)</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-market">宏观</span>软银孙正义：核聚变是满足未来 AI 能源需求的关键</div>
+                <p>据创业邦报道，软银集团孙正义认为核聚变将是满足未来 AI 发展能源需求的关键。该表态与近期 AI 数据中心电力消耗急剧上升的趋势相呼应，也解释了为什么包括微软、Google、Amazon 在内的科技巨头纷纷加大对核聚变、小型模块化核反应堆（SMR）及清洁能源的投资。</p>
+                <p>对 AI 投资者来说，能源正在成为模型训练与推理成本的硬约束。若核聚变商业化进程慢于预期，算力成本可能在未来 3-5 年内再次上升，从而压缩模型公司的毛利。反之，清洁能源的突破将释放更大规模的 AI 部署空间，利好数据中心、芯片与云基础设施板块。</p>
+                <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882856&idx=2&sn=664d2919a1612764a065c5afdb5d195d" target="_blank" rel="noopener">创业邦</a></div>
+            </div>
+
+            <div class="item">
+                <div class="item-title"><span class="tag tag-opportunity">效率</span>OpenAI 推出 Codex Micro 硬件：AI 专用外设的定价实验</div>
+                <p>OpenAI 发布与 Work Louder 合作打造的 kbd-1.0-codex-micro 键盘，专为 Codex 工作流设计，支持语音输入、任务切换、推理控制、权限请求与后续任务排队。国内社交媒体讨论其价格约为 1500 元人民币，并调侃“等华强北版本”。</p>
+                <p>这是 OpenAI 向硬件周边延伸的又一次尝试。从估值角度看，专用外设的收入规模短期内难以贡献显著营收，但其战略意义在于加深用户锁定与 workflow 粘性。对投资者而言，更值得观察的是 OpenAI 是否会围绕 Codex 构建更完整的硬件生态，以及此类外设能否成为订阅服务之外的新收入来源。</p>
+                <div class="source">来源：<a href="https://x.com/OpenAIDevs/status/2077468133120766044" target="_blank" rel="noopener">OpenAI Developers (@OpenAIDevs)</a>、<a href="https://x.com/berryxia/status/2077538047080661367" target="_blank" rel="noopener">Berryxia.AI (@berryxia)</a></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>五、数据来源声明</h2>
+            <div class="sources-list">
+                <ul>
+                    <li><a href="https://x.com/a16z/status/2077779817664217198" target="_blank" rel="noopener">a16z (@a16z) — Runta 种子轮融资</a></li>
+                    <li><a href="https://x.com/omarsar0/status/2077796765688852903" target="_blank" rel="noopener">elvis (@omarsar0) — Aina Interface 融资</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882856&idx=1&sn=3ae5051d9055893724ae73c482437530" target="_blank" rel="noopener">创业邦 — DeepSeek 上市传闻与邦早报</a></li>
+                    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882856&idx=2&sn=664d2919a1612764a065c5afdb5d195d" target="_blank" rel="noopener">创业邦 — OpenAI 诉讼、印度采用中国模型、软银核聚变观点</a></li>
+                    <li><a href="https://x.com/GaryMarcus/status/2077794739156578540" target="_blank" rel="noopener">Gary Marcus (@GaryMarcus) — $SPCX 市场表现</a></li>
+                    <li><a href="https://x.com/berryxia/status/2077781620971778426" target="_blank" rel="noopener">Berryxia.AI (@berryxia) — Kimi K3 定价</a></li>
+                    <li><a href="https://x.com/SpaceXAI/status/2077494535387828644" target="_blank" rel="noopener">xAI (@SpaceXAI) — Grok Build 开源</a></li>
+                    <li><a href="https://simonwillison.net/2026/Jul/15/grok-build/#atom-everything" target="_blank" rel="noopener">Simon Willison's Weblog — Grok Build 隐私争议分析</a></li>
+                    <li><a href="https://x.com/sundarpichai/status/2077793864233230558" target="_blank" rel="noopener">Sundar Pichai (@sundarpichai) — Google × Intel Gemini Enterprise 合作</a></li>
+                    <li><a href="https://simonwillison.net/2026/Jul/16/inkling/#atom-everything" target="_blank" rel="noopener">Simon Willison's Weblog — Thinking Machines Inkling 模型</a></li>
+                    <li><a href="https://x.com/NVIDIAAI/status/2077786069840318800" target="_blank" rel="noopener">NVIDIA AI (@NVIDIAAI) — Nemotron 3 Embed RTEB 第一</a></li>
+                    <li><a href="https://huggingface.co/blog/nvidia/nemotron-3-embed-wins-rteb" target="_blank" rel="noopener">Hugging Face Blog — Nemotron 3 Embed 技术细节</a></li>
+                    <li><a href="https://x.com/AravSrinivas/status/2077798528701911408" target="_blank" rel="noopener">Aravind Srinivas (@AravSrinivas) — Perplexity Agent API 投资工作流</a></li>
+                    <li><a href="https://x.com/OpenAIDevs/status/2077468133120766044" target="_blank" rel="noopener">OpenAI Developers (@OpenAIDevs) — Codex Micro 键盘</a></li>
+                    <li><a href="https://x.com/cognition/status/2077484850244648998" target="_blank" rel="noopener">Cognition (@cognition_labs) — Devin in Slack</a></li>
+                    <li><a href="https://x.com/boltdotnew/status/2077770386444341332" target="_blank" rel="noopener">bolt.new (@boltdotnew) — Bolt Slides 开源</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            本报告由科技日报生成器基于公开信息整理，仅供投资研究参考，不构成投资建议。
+        </footer>
     </div>
-    <div class="stat-card">
-      <div class="label">Emergent C 轮估值</div>
-      <div class="value">$1.5B</div>
-      <div class="delta up">▲ ARR $120M · 4 个月 +70%</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Granola C 轮估值</div>
-      <div class="value">$1.5B</div>
-      <div class="delta up">▲ Series C $125M</div>
-    </div>
-    <div class="stat-card green">
-      <div class="label">Nous Research 估值</div>
-      <div class="value">$1.5B</div>
-      <div class="delta up">▲ 拟融资 $75M+</div>
-    </div>
-    <div class="stat-card red">
-      <div class="label">长鑫科技发行 PE</div>
-      <div class="value">309x</div>
-      <div class="delta down">▼ vs 三星 33.6x / SK 海力士低双位数</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">ASML Q2 净销售</div>
-      <div class="value">€9.33B</div>
-      <div class="delta up">▲ 全年指引上调至 €43-45B</div>
-    </div>
-  </div>
-
-  <!-- DeepSeek -->
-  <div class="news-item">
-    <div class="head">
-      <h3>DeepSeek 启动第二轮融资：估值 710 亿美元，最快今年底申报 IPO</h3>
-      <span class="tag ipo">IPO 筹备</span>
-    </div>
-    <p>据彭博社与金融时报报道，DeepSeek 本周开始与投资者初步接触，洽谈以约 <strong>710 亿美元（约 4806 亿元人民币）</strong>投前估值再融资 15 亿美元，较 6 月初首轮 520 亿美元估值单月上涨 37%。同时公司已启动 IPO 筹备，规划在内地上市，最快今年底提交申请，2027 年完成挂牌；目前正与会计师事务所合作，目标 12 月底前完成财务报告。IPO 前还计划在私募市场至少再融资 100 亿元人民币，最终规模可能数倍于此。</p>
-    <p>首轮 70 亿美元融资结构堪称"国家队+产业资本"组合：梁文锋个人出资 200 亿元（最大单一股东）、腾讯 100 亿元、宁德时代 50 亿元、京东/网易/IDG 各 30 亿元，国家人工智能产业投资基金出资 10 亿元且<strong>不受股权锁定期约束并享有投票权</strong>——这一条款在国产 AI 公司融资中较为罕见，凸显其战略地位。</p>
-    <p>梁文锋个人净资产随之升至 <strong>360 亿美元</strong>，超越 Anthropic CEO Dario Amodei（约 155 亿美元）与 OpenAI 总裁 Greg Brockman（约 280 亿美元），成为全球 AI 模型创始人首富，并跻身中国第八大富豪。本轮募资主要投向自有数据中心建设、AI 芯片采购、研究团队扩充及 Agent 产品开发。</p>
-    <div class="src">📎 来源:
-      <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247664790&idx=1&sn=46eccbd922632747422ee0c78fc01ec7" target="_blank" rel="noopener">AI 前线</a> ·
-      <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650538229&idx=1&sn=40bba5665accd4ec829cefc3110b486c" target="_blank" rel="noopener">网易科技</a> ·
-      <a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&mid=2652806811&idx=1&sn=98736f59327024fdd5bdf20ac7aa4746" target="_blank" rel="noopener">智东西</a> ·
-      <a href="https://www.qbitai.com/2026/07/450101.html" target="_blank" rel="noopener">量子位</a>
-    </div>
-  </div>
-
-  <!-- Emergent -->
-  <div class="news-item">
-    <div class="head">
-      <h3>Emergent Labs 完成 1.3 亿美元 C 轮，估值 15 亿美元，ARR 4 个月 +70%</h3>
-      <span class="tag series-c">Series C</span>
-    </div>
-    <p>YC 孵化的 AI 全栈开发平台 Emergent Labs 宣布完成 <strong>$130M Series C，估值 $1.5B</strong>。核心数据：平台累计构建应用超 1200 万个，付费客户突破 20 万，年化收入（ARR）达 <strong>$1.2 亿，过去 4 个月增长 70%</strong>。创始人 Mukund Jha 与 Madhav Jha 兄弟将其定位为"商业操作系统"——让非技术背景的业务方把"工作方式"直接转化为软件。</p>
-    <p>典型案例：一位餐饮备餐创始人用 Emergent 自建了库存与运营平台，传统外包成本约 $200K 的产品以约 $10K 落地。<strong>投资逻辑</strong>：vibe coding 赛道正从"工具"演化为"业务入口"，Emergent 的客户结构（中小企业主而非开发者）与 Lovable、Replit 形成差异化，ARR 增速显著快于同阶段 SaaS 基准，但需警惕 OpenAI/Anthropic 自研 Agent 编码产品对长尾场景的下探挤压。</p>
-    <div class="src">📎 来源:
-      <a href="https://x.com/ycombinator/status/2077413450255663591" target="_blank" rel="noopener">Y Combinator (@ycombinator)</a> ·
-      <a href="https://x.com/omarsar0/status/2077413699225088245" target="_blank" rel="noopener">elvis (@omarsar0)</a>
-    </div>
-  </div>
-
-  <!-- Granola -->
-  <div class="news-item">
-    <div class="head">
-      <h3>Granola 完成 $125M C 轮，估值 $1.5B：会议记录是入口，工作流才是终局</h3>
-      <span class="tag series-c">Series C</span>
-    </div>
-    <p>AI 会议记录工具 Granola 宣布完成 <strong>$125M Series C，估值 $1.5B</strong>。创始人 Chris Pedregal 在访谈中明确表示：会议记录只是入口，真正的竞争在于"<strong>AI 原生时代的工作界面</strong>"。面对 Notion、OpenAI、Zoom 相继推出同类功能，Granola 选择纵向扩展至会前准备、会后执行与跨会议上下文管理。</p>
-    <p><strong>投资视角</strong>：单点 AI 工具在基础模型能力普惠化后迅速贬值， Granola 的护城河取决于能否把"会议上下文"沉淀为跨应用的私有数据资产。$1.5B 估值对应 ARR 倍数估计在 30-50x 区间，处于 AI 应用层合理偏上水平，关键在于 12 个月内能否把"记录工具"重塑为"工作流平台"。</p>
-    <div class="src">📎 来源:
-      <a href="https://www.youtube.com/watch?v=uzYLYlaGAZA" target="_blank" rel="noopener">Every</a>
-    </div>
-  </div>
-
-  <!-- Nous Research -->
-  <div class="news-item">
-    <div class="head">
-      <h3>开源 Agent 公司 Nous Research 拟融资 $75M+，估值 $1.5B</h3>
-      <span class="tag series-c">Series B</span>
-    </div>
-    <p>据 TechCrunch 报道，开源 Hermes Agent 背后的初创公司 <strong>Nous Research</strong> 正在敲定由 Robot Ventures 领投的新一轮融资，USV 等知名机构跟投，估值 <strong>$1.5B</strong>，募资规模至少 $75M。公司 2023 年由 Jeffrey Quesnelle 等四人创立，此前已累计融资 $70M（投资方包括 Paradigm、Robot Ventures、North Island Ventures、OSS Capital、Balaji Srinivasan）。</p>
-    <p>同期 Hermes 推出付费云托管版本，月费 $20-200 美元。与 OpenClaw 等本地 Agent 不同，Hermes 内置"技能"（网页搜索、编程、图像理解）并能从用户使用中自动学习。<strong>投资视角</strong>：开源模型 + 托管云服务的混合变现路径在 Agent 时代的跑通率仍待验证，但 Paradigm 等 crypto-native VC 的入局意味着这条路线被视为"AI 时代的 Linux 式基础设施"押注。</p>
-    <div class="src">📎 来源:
-      <a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&mid=2247516803&idx=2&sn=f7c5c83e2d3bd1ea6de8aff66c42afd3" target="_blank" rel="noopener">Z Potentials</a>
-    </div>
-  </div>
-
-  <!-- Meta -->
-  <div class="news-item">
-    <div class="head">
-      <h3>Meta 追加 $40B 扩建路易斯安那园区，算力规模翻倍至 5GW</h3>
-      <span class="tag capex">Capex 扩张</span>
-    </div>
-    <p>Meta 周一宣布再投资 <strong>$40B</strong>，将路易斯安那州数据中心的规划算力从 2024 年最初宣布的 2GW 提升至 <strong>5GW</strong>（约为传统数据中心功耗的 100 倍）。该园区累计投入已超 $50B，成为 Meta 最大计算设施，项目从 Blue Owl Capital 等机构获得外部融资，配套 Entergy Louisiana 将建设七座天然气电厂供电。</p>
-    <p>扎克伯格此前承诺未来几年为 AI 基础设施投入"数千亿美元"。<strong>投资视角</strong>：超大厂 Capex 军备竞赛仍在加速，5GW 单一园区已接近中型城市级别的电力负载。对上游 ASML/台积电/SK 海力士、中游 Lambda/Crusoe 等 GPU 云、下游能源基建（燃气、核电、电网）均构成持续利好；但需警惕 2027 年若 AI 应用端 ARR 增速跟不上 Capex 折旧，可能出现类似 2000 年光纤泡沫的局部回调。</p>
-    <div class="src">📎 来源:
-      <a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&mid=2247516803&idx=3&sn=28492b23b6447d4564c3f92e7d1f5136" target="_blank" rel="noopener">Z Potentials</a>
-    </div>
-  </div>
-
-  <!-- 长鑫科技 -->
-  <div class="news-item">
-    <div class="head">
-      <h3>长鑫科技科创板 IPO 定价 8.66 元/股：市值 5792-6660 亿，PE 309 倍</h3>
-      <span class="tag ipo">科创板 IPO</span>
-    </div>
-    <p>国产 DRAM 龙头长鑫科技 7 月 14 日晚发布发行公告，发行价 <strong>8.66 元/股</strong>，7 月 16 日启动申购。按 66.88 亿股初始发行规模计算，募资总额 <strong>579.19 亿元</strong>（若全额行使超额配售可达 666.07 亿元）。上市市值区间 <strong>5792-6660 亿元</strong>，低于此前市场预期的 1 万亿元。</p>
-    <p>估值层面：按 2025 年扣非净利润计算，发行 PE 高达 <strong>308.92x（未行使超配）/ 313.56x（全额行使）</strong>，对比三星电子 33.62x、SK 海力士低双位数 PE 明显处于高位。战投名单中，梁文锋旗下私募机构重金押注，蔚来李斌也现身。<strong>投资视角</strong>：高 PE 反映市场对"国产 DRAM 替代 + AI 存储超级周期"的双重溢价，但也意味着若 2026 下半年存储价格回落或 HBM 良率不及预期，回调压力巨大。</p>
-    <div class="src">📎 来源:
-      <a href="https://mp.weixin.qq.com/s?__biz=MzIwMTY1NDg4Nw==&mid=2247525686&idx=1&sn=97e5e75a383f691b94fa03cd5318c160" target="_blank" rel="noopener">深网腾讯新闻</a> ·
-      <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882850&idx=3&sn=3079eee01ee20757b77ecefbb3230159" target="_blank" rel="noopener">创业邦</a>
-    </div>
-  </div>
-
-  <!-- ASML -->
-  <div class="news-item">
-    <div class="head">
-      <h3>ASML Q2 财报超预期：净利 €2.92B，年内第二次上调全年指引</h3>
-      <span class="tag earnings">财报</span>
-    </div>
-    <p>ASML 2026 Q2 总净销售额 <strong>€9.33B</strong>、净利润 <strong>€2.92B</strong>，双双超出华尔街预期。公司将 2026 全年销售额指引大幅上调至 <strong>€43-45B（约 $49.1-51.4B）</strong>，这是年内第二次上调。同时官宣扩产：Low NA EUV 与浸润式 DUV 2027 年产能各提升 30%，并研究 2028 年再提升 30%。</p>
-    <p>毛利率飙升至 <strong>54%</strong>，ASML 坐稳欧洲市值第一大上市公司，2026 年内股价累计上涨超 68%、过去 12 个月翻番。<strong>投资视角</strong>：亚马逊、谷歌、微软数千亿美元的基础设施 Capex 正沿"云厂→晶圆厂→设备厂"链条向上游传导，ASML 是这一轮 AI 资本开支最直接、最确定的受益者之一，其订单可见度已延伸至 2028。</p>
-    <div class="src">📎 来源:
-      <a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&mid=2691570701&idx=1&sn=f4ef2254d524dbeefcd187158f7f2bc1" target="_blank" rel="noopener">腾讯科技</a>
-    </div>
-  </div>
-
-  <!-- 逐际动力 / 爱诗科技 -->
-  <div class="news-item">
-    <div class="head">
-      <h3>具身智能与 AI 视频双响：逐际动力 Pre-IPO $2 亿、爱诗科技 C 轮 ¥29.8 亿</h3>
-      <span class="tag series-c">Series C / Pre-IPO</span>
-    </div>
-    <p>人形机器人公司<strong>逐际动力（LimX Dynamics）</strong>完成近 <strong>$2 亿 Pre-IPO 轮</strong>融资，半年累计融资额达 $4 亿，Pre-IPO 轮次意味着公司已启动上市流程，大概率瞄准港股或科创板。AI 视频生成公司<strong>爱诗科技（PixVerse）</strong>完成 <strong>¥29.8 亿（约 $4.1 亿）C 轮</strong>融资，这是中国 AI 视频赛道迄今最大单笔融资之一，与快手 Kling、MiniMax Hailuo 形成三强格局。</p>
-    <p><strong>投资视角</strong>：两笔融资共同指向一个信号——AI 应用层在 2026 年 Q3 进入"决胜利跑"阶段，头部公司开始为 IPO 储备弹药。具身智能受益于特斯拉 Optimus、小米机器人（汽车工厂 98% 成功率）的产业化兑现；AI 视频则受益于短视频/广告/短剧制作的规模化商用，Higgsfield、Kling 同期年化收入也已突破 $5 亿。</p>
-    <div class="src">📎 来源:
-      <a href="https://www.ifanr.com/1672037?utm_source=rss&utm_medium=rss&utm_campaign=" target="_blank" rel="noopener">爱范儿</a>
-    </div>
-  </div>
-
-</section>
-
-<!-- ======================= 2. 深度投资分析 ======================= -->
-<section>
-  <h2><span class="num">02</span>深度投资分析</h2>
-
-  <!-- Deep Dive 1: DeepSeek -->
-  <div class="deep-dive">
-    <h3>深度一：DeepSeek 的 $71B 估值与"国产 OpenAI"的资本范式</h3>
-    <div class="thesis">
-      核心判断：DeepSeek 的估值跃升不是单一公司的胜利，而是中国 AI 资产定价范式从"折价追赶者"切换到"平价竞争者"的标志性事件。一级市场愿意为其付出 37% 的月度涨幅，本质是对"中国模型进入全球第一梯队"这一事实的追认。
-    </div>
-
-    <h4>▎事件复盘</h4>
-    <p>从 4 月首次传出融资时约 $10B 估值，到 6 月初首轮交割的 $52B，再到当前谈判中的 $71B，DeepSeek 的估值在 <strong>90 天内上涨 7 倍</strong>。同期对照：Anthropic 最近一轮 $61.5B（2025 年 3 月）、xAI $80B（2025 年 3 月，X 合并口径）、OpenAI $300B（2025 年 3 月）。DeepSeek 已跻身全球 AI 模型公司估值第二梯队头部。</p>
-
-    <h4>▎估值锚定：为什么 710 亿美元不算贵</h4>
-    <ul>
-      <li><strong>对标 OpenAI 的效率比</strong>：OpenAI 2025 年 Capex 超 $80B，DeepSeek 以显著更小的资本消耗达成同级模型能力，"单位智能成本"远低。若市场认可 OpenAI $300B 估值，给 DeepSeek $71B 意味着 23.7% 的"效率折价"——考虑到中国市场规模与监管折价，这一比例并不算激进。</li>
-      <li><strong>商业化已现轮廓</strong>：Vercel AI Gateway 6 月处理的数万亿 token 中，DeepSeek 系列模型占据重要份额；Agent 产品 V4 即将推出，订阅+API 双线变现路径清晰。</li>
-      <li><strong>战略稀缺性</strong>：国家 AI 产业基金出资且享有投票权的条款，意味着 DeepSeek 已被定位为"国家 AI 战略资产"，这一身份本身即构成估值底仓。</li>
-    </ul>
-
-    <h4>▎股权结构看点</h4>
-    <p>梁文锋个人 200 亿元（约 $28 亿）加注成为最大单一出资方，这是中国 AI 创业史上罕见的"创始人反向加注"案例。梁的净资产从 $16.7B 升至 $36B，<strong>一年内身家翻倍</strong>，超过 Dario Amodei 与 Greg Brockman 的总和。这一结构既向市场传递创始人长期投入信号，也使 DeepSeek 在 IPO 前保持相对干净的股权结构，避免传统 VC 多轮跟投带来的治理复杂度。</p>
-
-    <h4>▎IPO 路径研判</h4>
-    <p>内地 IPO 对 DeepSeek 而言有三重意义：（1）避免港股同股不同权架构的复杂谈判；（2）匹配国家 AI 基金等国资股东的退出需求；（3）以科创板为跳板获得 A 股 AI 稀缺标的溢价。但挑战同样明显：<strong>首次公开财报将直面市场检验</strong>，DeepSeek 长期不披露营收数据，其研发开支、芯片采购成本、模型训练折旧将成为估值再定价的关键变量。</p>
-
-    <div class="callout bull">
-      <strong>▲ 看多逻辑：</strong>中国 AI 资产定价权重构 + 国家级战略卡位 + 高效率模型路线 + 强 IPO 预期。$71B 估值若兑现，对应 2027 年 IPO 时 $100B+ 的目标市值存在合理性。
-    </div>
-    <div class="callout bear">
-      <strong>▼ 风险点：</strong>（1）首次财报若营收/亏损数据不及市场预期，可能引发估值修正；（2）AI 芯片获取受地缘政治影响存在不确定性；（3）模型能力能否持续追赶 GPT-5.x/Claude 4.x 前沿尚存变量；（4）一年内估值 +610%，新进入者的安全边际有限。
-    </div>
-  </div>
-
-  <!-- Deep Dive 2: Cognition/Windsurf -->
-  <div class="deep-dive">
-    <h3>深度二：Cognition 收购 Windsurf 一周年——AI Coding 赛道最成功的并购整合样本</h3>
-    <div class="thesis">
-      核心判断：Cognition 用 72 小时签约完成的 Windsurf 并购，是 AI Coding 赛道迄今最成功的"能力互补型"整合案例。一年间 ARR 从 $73M 增至 $500M+（~7x），验证了"云端 Agent + 本地 IDE"双栈策略的商业价值，也为 Cursor 的独立路径敲响警钟。
-    </div>
-
-    <h4>▎交易复盘：为什么是"72 小时"</h4>
-    <p>2025 年 7 月，Windsurf 创始团队部分核心成员加入 Google（Antigravity 项目）后，Cognition 果断启动收购——从周五晚首次通话到周一晨签约仅 72 小时。本质逻辑是"<strong>能力互补拼图</strong>"：</p>
-    <ul>
-      <li>Cognition 缺 GTM 与本地开发入口，Windsurf 缺工程组织与云端 Agent 能力；</li>
-      <li>Cognition 主打 Devin 云端 Agent，Windsurf 拥有百万级用户的 IDE 产品，<strong>产品零重叠</strong>；</li>
-      <li>一次并购补齐"市场 + 本地入口"两块短板，把分散的 AI 编程能力收拢为完整栈。</li>
-    </ul>
-
-    <h4>▎整合后一年的关键数据</h4>
-    <table>
-      <thead>
-        <tr><th>指标</th><th class="num">收购时（2025.07）</th><th class="num">一年后的今天（2026.07）</th><th class="num">变化</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>团队规模</td><td class="num">44 人</td><td class="num">350 人</td><td class="num pos">~8x</td></tr>
-        <tr><td>ARR Run Rate</td><td class="num">$73M</td><td class="num">$500M+</td><td class="num pos">~7x</td></tr>
-        <tr><td>自研模型</td><td class="num">SWE-1.5</td><td class="num">SWE-1.7</td><td class="num pos">2 次主版本迭代</td></tr>
-        <tr><td>产品形态</td><td class="num">Devin 云端 Agent</td><td class="num">Devin Desktop 统一入口</td><td class="num pos">"任意 Agent + 任意模型 + 任意终端"</td></tr>
-        <tr><td>代码产出</td><td class="num">-</td><td class="num">2000 万行+</td><td class="num pos">-</td></tr>
-        <tr><td>行业覆盖</td><td class="num">互联网</td><td class="num">+政府、汽车</td><td class="num pos">To G/B 破圈</td></tr>
-      </tbody>
-    </table>
-
-    <h4>▎战略升级：从"AI 工程师"到"自动驾驶式软件开发"</h4>
-    <p>Devin 产品定位同步升级：从"初级工程师"演进为可调度其他 Devin 的"中高级工程师"。这一定位变化意义重大——AI Coding 赛道正在从"辅助人"转向"替代部分人力编制"，定价逻辑也从"席位订阅"转向"按产出计费"。Scott Wu 明确说，未来竞争对手不是 Cursor 或 GitHub Copilot，而是传统 IT 外包与咨询行业（全球市场规模 $1.5T+）。</p>
-
-    <h4>▎对赛道的启示</h4>
-    <ul>
-      <li><strong>Cursor 被传寻求出售</strong>： Cognition 整合成功使独立 IDE 厂商面临被"云 + 端"双向挤压，Anysphere 近期频频传出并购/融资传闻，顶级人才正在加入 Cursor（被坊间戏称"等下一波 SpaceX 式造富"）。</li>
-      <li><strong>估值参考点</strong>：Cognition 最新一轮估值 $10B+，对应 ARR $500M 约 20x P/S，处于 AI Coding 板块合理区间；若按 Devin Desktop 平台化逻辑演进，2027 年冲击 $2B ARR 与 $30B 估值具有可见性。</li>
-      <li><strong>对 Microsoft/GitHub 的警示</strong>：Copilot 用户增长已被 Devin/Cursor 分流，微软若不在 Agent 编码上做出更大动作，可能失去开发者入口。</li>
-    </ul>
-
-    <div class="callout bull">
-      <strong>▲ 看多逻辑：</strong>ARR 增速、产品整合、行业破圈三线共振。Devin Desktop 有机会成为 AI 时代的 Visual Studio——开发者操作系统的入口级资产。
-    </div>
-    <div class="callout bear">
-      <strong>▼ 风险点：</strong>（1）OpenAI Codex 与 Anthropic Claude Code 自带模型优势，可能从底层侵蚀；（2）整合团队的文化融合仍是长期变量；（3）"自动驾驶式软件开发"叙事若被证伪（如 RL 自进化达不到预期），估值弹性会快速收缩。
-    </div>
-  </div>
-
-</section>
-
-<!-- ======================= 3. 赛道雷达 ======================= -->
-<section>
-  <h2><span class="num">03</span>赛道雷达 · 值得关注的细分赛道</h2>
-
-  <div class="radar-item">
-    <div class="icon">①</div>
-    <div class="body">
-      <h4>AI Coding：22 家 ARR 超 $5 亿的"印钞机"<span class="heat hot">过热</span></h4>
-      <p>最新统计显示，年化收入超 <strong>$5 亿</strong> 的 AI 创业公司已达 <strong>22 家</strong>（含三大实验室）。其中 Cursor 以 $4B ARR 领跑，Scale AI 与 Mercor 各 $2B，Surge AI $1.4B，Together AI $1B，Fireworks $800M，Lambda $760M，Baseten $600M，Replit $525M，Cognition/Lovable/ElevenLabs/Perplexity/Manus/Kling/Crusoe/Midjourney/Higgsfield/Lightning AI 均突破 $5B。<strong>投资机会</strong>：估值已计入高增长预期，建议关注估值相对合理（P/S &lt; 20x）的二线基础设施标的（Baseten、Fireworks、Lambda），以及尚未被充分定价的企业级 Agent 平台。</p>
-      <div class="src" style="font-size:12px;color:#718096;margin-top:4px;">📎 来源: <a href="https://x.com/FinanceYF5/status/2077267557032313039" target="_blank" rel="noopener">AI Will (@FinanceYF5)</a></div>
-    </div>
-  </div>
-
-  <div class="radar-item">
-    <div class="icon">②</div>
-    <div class="body">
-      <h4>AI to B 应用层（"中国版 Palantir"）<span class="heat hot">高热度</span></h4>
-      <p>Palantir 市值站稳 $300B（2020 年 IPO 至今涨 20+ 倍），单季营收 $1.63B、增速 85%、经营利润率超 60%。港股市场 AI to B 新股密集上市：明略科技开盘涨 117% 市值破 400 亿港元、海致科技首日涨 260% 触及 390 亿港元。<strong>投资逻辑</strong>：中国企业服务市场长期缺位"高毛利 + 标准化"产品，Palantir 模式（深度咨询 + 平台化软件）首次给出可行性样本。重点关注：第四范式、明略、海致、迅策，以及未上市的滴普科技、明源云 AI 转型。</p>
-      <div class="src" style="font-size:12px;color:#718096;margin-top:4px;">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247630856&idx=3&sn=a57bcfa9832b961e5a380e92b19670ee" target="_blank" rel="noopener">硅星人 Pro</a></div>
-    </div>
-  </div>
-
-  <div class="radar-item">
-    <div class="icon">③</div>
-    <div class="body">
-      <h4>具身智能 / 人形机器人<span class="heat hot">过热</span></h4>
-      <p>逐际动力 Pre-IPO $2 亿（半年累计 $4 亿）、小米机器人汽车工厂拧螺母成功率提升至 98%（距人工仅 1 个百分点）、全球首款可变形机器人将亮相 WAIC、Momenta IPO 后曹旭东首谈"具身智能十年愿景"。<strong>投资逻辑</strong>：工业制造场景首次跑通"接近人工"的 ROI 临界点，2026 下半年-2027 是港股/科创板具身智能 IPO 窗口期。建议重点关注：逐际动力、智元机器人、宇树科技、Figure AI、1X。</p>
-      <div class="src" style="font-size:12px;color:#718096;margin-top:4px;">📎 来源: <a href="https://www.ifanr.com/1672037" target="_blank" rel="noopener">爱范儿</a> · <a href="https://www.xiaoyuzhoufm.com/episode/6a56c42d3ffb956871ab9380" target="_blank" rel="noopener">晚点聊 LateTalk</a></div>
-    </div>
-  </div>
-
-  <div class="radar-item">
-    <div class="icon">④</div>
-    <div class="body">
-      <h4>AI Infra / 高品质 Token 服务<span class="heat warm">升温</span></h4>
-      <p>趋境科技（KVCache.AI 孵化）半年融资超 ¥10 亿，主打"生产级高品质 AI Token"——客户从关注"Token 单价"转向关注"每笔 Token 投入的业务价值"。<strong>关键洞察</strong>：德勤测算年收入 $13B 企业年度 AI 投入或达 $700M；Jellyfish 数据显示开发者 AI 支出 9 个月增长 18.6 倍，但 Token 消耗前 10% 工程师生产力仅为低使用者的 2 倍（消耗却是 10 倍），ROI 出现明显拐点。<strong>投资机会</strong>：从"卖 Token"转向"卖稳定 + 卖价值"的分层服务。利好趋境、Baseten、Fireworks、Together AI 等差异化 Infra 厂商；通用 Token 价格战将压缩纯推理 API 厂商毛利。</p>
-      <div class="src" style="font-size:12px;color:#718096;margin-top:4px;">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzU5OTI0NTc3Mg==&mid=2247555363&idx=1&sn=bd94907864cb0d29713e49b884f4a4a2" target="_blank" rel="noopener">甲子光年</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651929112&idx=2&sn=713bc9e324dfb50301551bc7b2a6c131" target="_blank" rel="noopener">人人都是产品经理</a></div>
-    </div>
-  </div>
-
-  <div class="radar-item">
-    <div class="icon">⑤</div>
-    <div class="body">
-      <h4>算力金融化：GPU 远期合约出现<span class="heat watch">新赛道</span></h4>
-      <p>Kalshi 本周推出 <strong>GPU 算力远期曲线</strong>（基于预测市场价格），首批覆盖 B200/H200/A100。Marc Andreessen 评论"Interesting"。<strong>意义</strong>：算力首次具备"大宗商品化"的金融基础设施，类比 1980 年代 NYMEX 推出原油期货前的 OTC 市场。未来 12-24 个月，GPU 现货/远期/期权市场将快速发展，对云厂商 Capex 对冲、AI 公司成本管理、对冲基金跨市场套利都将产生深远影响。<strong>关注标的</strong>：Kalshi、Polymarket、CoreWeave、Lambda、Crusoe。</p>
-      <div class="src" style="font-size:12px;color:#718096;margin-top:4px;">📎 来源: <a href="https://x.com/pmarca/status/2077207029446557862" target="_blank" rel="noopener">Marc Andreessen (@pmarca)</a></div>
-    </div>
-  </div>
-
-  <div class="radar-item">
-    <div class="icon">⑥</div>
-    <div class="body">
-      <h4>存储 / HBM / 先进制程：AI 时代的"卖水人"<span class="heat hot">过热</span></h4>
-      <p>长鑫科技 IPO（市值 5800-6700 亿元，PE 309x）、ASML Q2 超预期 + 上调指引 + 官宣扩产 30%、刘润判断"手机电脑涨价还将持续 3-5 年"（存储产能大迁移）、iPhone 在华市场份额从 13.9% 升至 18.1%（受益于内存涨价下 Android 厂商被迫涨价）。<strong>投资逻辑</strong>：AI 算力军备 → 高端存储/HBM 需求爆发 → 消费级存储供给被挤压 → 终端涨价。整条产业链 2026-2028 年能见度极高，但消费端涨价已显疲态（中国手机 Q2 出货同比 -4.3%，连续 5 季度下滑），需关注涨价向消费端传导的可持续性。</p>
-      <div class="src" style="font-size:12px;color:#718096;margin-top:4px;">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzIwMTY1NDg4Nw==&mid=2247525686&idx=1&sn=97e5e75a383f691b94fa03cd5318c160" target="_blank" rel="noopener">深网腾讯新闻</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5NjM5MjQ4MQ==&mid=2651785570&idx=1&sn=373aebcf626fd029007fb4abd72d71bb" target="_blank" rel="noopener">刘润</a> · <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653110581&idx=1&sn=98da92ccba863bf32d98494883a5ef01" target="_blank" rel="noopener">极客公园</a></div>
-    </div>
-  </div>
-
-</section>
-
-<!-- ======================= 4. 估值观察 ======================= -->
-<section>
-  <h2><span class="num">04</span>估值观察 · 趋势与方法论</h2>
-
-  <h3 style="font-size:16px;color:#0a2540;margin-bottom:10px;">▎Token 经济学：AI 应用估值的新锚</h3>
-  <p style="font-size:14px;color:#2d3748;">Gary Marcus 引用的观点"一次 80% 的降价就能终结 OpenAI 和 Anthropic"虽有夸张，但方向正确：<strong>AI 模型的长期竞争优势不属于拥有最多算力的玩家，而属于能从每瓦电力中提取最多智能的玩家</strong>。这意味着 AI 应用公司的估值方法正在从"GMV/用户数"切换到"Token 效率（Revenue per Token / Intelligence per Watt）"。</p>
-  <p style="font-size:14px;color:#2d3748;margin-top:8px;">对于一级市场，我们建议用三层指标评估 AI 应用：</p>
-  <ul style="font-size:14px;color:#2d3748;padding-left:22px;margin:8px 0;">
-    <li><strong>Token 杠杆率</strong>：每 1 美元 Token 成本撬动的终端收入。SaaS 健康线为 5-10x，Agent 产品应达 3-5x。</li>
-    <li><strong>Token 留存率</strong>：客户 Token 消耗 6 个月留存（类比 NDR）。低于 100% 意味着客户在"试完即弃"。</li>
-    <li><strong>Token 议价权</strong>：模型成本下降 50% 时，应用方是选择降价让利于客户还是保住毛利？这决定长期定价权归属。</li>
-  </ul>
-
-  <h3 style="font-size:16px;color:#0a2540;margin:20px 0 10px;">▎DeepSeek 估值方法的范式意义</h3>
-  <p style="font-size:14px;color:#2d3748;">DeepSeek 的 $71B 估值首次把中国 AI 模型公司拉入"全球第一梯队定价"。这一事件的方法论意义在于：<strong>市场开始接受"效率调整后的对标估值"</strong>——不再以"中国公司 = 折价 50%"的简单公式定价，而是根据模型能力、单位智能成本、市场地位进行精细调整。这一范式将传导至月之暗面（Kimi）、智谱、MiniMax 等二线模型厂商的下一轮融资。</p>
-
-  <h3 style="font-size:16px;color:#0a2540;margin:20px 0 10px;">▎长鑫科技 309x PE：高预期与高风险的博弈</h3>
-  <p style="font-size:14px;color:#2d3748;">长鑫 309x 的发行 PE 看起来极高，但需要拆开看：（1）2025 年扣非净利润处于存储周期底部，基数极低；（2）2026 上半年业绩指引已"超市场预期"，意味着 2026 动态 PE 可能回落至 80-120x 区间；（3）国产 DRAM 替代+HBM 国产化是 5-10 年级别的产业趋势。<strong>结论</strong>：长鑫不是"贵或便宜"的问题，而是"愿不愿意为国产存储的 5 年 CAGR 30%+ 支付周期底部溢价"。对于长期资金，这一溢价具备合理性；对短期交易者，309x 的静态 PE 已是高风险区。</p>
-
-  <h3 style="font-size:16px;color:#0a2540;margin:20px 0 10px;">▎AI Coding 估值分层</h3>
-  <table>
-    <thead>
-      <tr><th>层级</th><th>代表公司</th><th class="num">ARR</th><th class="num">估值</th><th class="num">P/S</th><th>投资评价</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>龙头</td><td>Cursor (Anysphere)</td><td class="num">$4B</td><td class="num">~$30B</td><td class="num">~7.5x</td><td>估值合理，流动性好</td></tr>
-      <tr><td>平台化</td><td>Cognition</td><td class="num">$500M</td><td class="num">$10B+</td><td class="num">~20x</td><td>溢价合理，平台期权</td></tr>
-      <tr><td>高增长</td><td>Lovable</td><td class="num">$500M</td><td class="num">~$4B</td><td class="num">~8x</td><td>欧洲新星，性价比高</td></tr>
-      <tr><td>新兴</td><td>Emergent</td><td class="num">$120M</td><td class="num">$1.5B</td><td class="num">~12.5x</td><td>ARR 增速 70%/4mo 可消化</td></tr>
-      <tr><td>基础设施</td><td>Replit</td><td class="num">$525M</td><td class="num">~$3B</td><td class="num">~5.7x</td><td>被低估，云 IDE 入口</td></tr>
-    </tbody>
-  </table>
-  <p style="font-size:13px;color:#718096;margin-top:6px;"><em>注：估值数据基于最新一轮融资公开报道，部分为估算值，仅供参考。</em></p>
-
-  <div class="callout">
-    <strong>▎本周估值结论：</strong>AI 板块估值整体处于"<strong>基础模型层 + Capex 受益上游</strong>"溢价、
-    "<strong>通用应用层</strong>"折价的分化阶段。建议超配：（1）有明确 ARR 与 Token 效率数据支撑的 Agent 平台；
-    （2）AI 基础设施（GPU 云、Token 服务、算力金融）；（3）国产替代主线的半导体/存储。建议低配：
-    纯模型 API 厂商（价格战风险）、缺乏差异化的通用 Chatbot、估值已计入 5 年增长的人形机器人概念股。
-  </div>
-
-</section>
-
-<!-- ======================= 5. 数据来源声明 ======================= -->
-<section class="sources">
-  <h2><span class="num">05</span>数据来源声明</h2>
-  <p style="font-size:13px;color:#4a5568;margin-bottom:14px;">本日报基于 2026-07-14 18:50 至 2026-07-15 18:50 期间抓取的 571 条科技新闻（来自 424 个信息源），由投资分析视角筛选、整理与点评。所有融资金额、估值、ARR 等数据均来自公开报道，部分为估算或未确认数据，仅供研究参考，不构成投资建议。</p>
-
-  <ul class="src-list">
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247664790&idx=1&sn=46eccbd922632747422ee0c78fc01ec7" target="_blank" rel="noopener">AI 前线 — DeepSeek 新融资估值逼近五千亿</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650538229&idx=1&sn=40bba5665accd4ec829cefc3110b486c" target="_blank" rel="noopener">网易科技 — DeepSeek 再度启动融资</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&mid=2652806811&idx=1&sn=98736f59327024fdd5bdf20ac7aa4746" target="_blank" rel="noopener">智东西 — DeepSeek 拟今年启动 IPO</a></li>
-    <li><a href="https://www.qbitai.com/2026/07/450101.html" target="_blank" rel="noopener">量子位 — DeepSeek 估值 4800 亿</a></li>
-    <li><a href="https://x.com/ycombinator/status/2077413450255663591" target="_blank" rel="noopener">Y Combinator — Emergent Labs $130M Series C</a></li>
-    <li><a href="https://x.com/omarsar0/status/2077413699225088245" target="_blank" rel="noopener">elvis (@omarsar0) — Emergent 客户案例</a></li>
-    <li><a href="https://www.youtube.com/watch?v=uzYLYlaGAZA" target="_blank" rel="noopener">Every — Granola $1.5B AI Company</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&mid=2247516803&idx=2&sn=f7c5c83e2d3bd1ea6de8aff66c42afd3" target="_blank" rel="noopener">Z Potentials — Nous Research $75M 融资</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&mid=2247516803&idx=3&sn=28492b23b6447d4564c3f92e7d1f5136" target="_blank" rel="noopener">Z Potentials — Meta 追加 $40B 扩建路州</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzIwMTY1NDg4Nw==&mid=2247525686&idx=1&sn=97e5e75a383f691b94fa03cd5318c160" target="_blank" rel="noopener">深网腾讯新闻 — 长鑫科技发行价 8.66 元/股</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882850&idx=3&sn=3079eee01ee20757b77ecefbb3230159" target="_blank" rel="noopener">创业邦 — 蔚来现身长鑫科技 IPO 战投名单</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&mid=2691570701&idx=1&sn=f4ef2254d524dbeefcd187158f7f2bc1" target="_blank" rel="noopener">腾讯科技 — ASML 官宣扩产 30%</a></li>
-    <li><a href="https://x.com/shao__meng/status/2077208695893832156" target="_blank" rel="noopener">meng shao — Cognition 收购 Windsurf 一周年</a></li>
-    <li><a href="https://x.com/FinanceYF5/status/2077305823030850030" target="_blank" rel="noopener">AI Will — Scott Wu 回顾收购</a></li>
-    <li><a href="https://x.com/FinanceYF5/status/2077305811056148986" target="_blank" rel="noopener">AI Will — Windsurf 整合一周年数据</a></li>
-    <li><a href="https://x.com/FinanceYF5/status/2077267557032313039" target="_blank" rel="noopener">AI Will — 22 家 ARR 超 $5 亿 AI 公司</a></li>
-    <li><a href="https://x.com/GaryMarcus/status/2077303938412429505" target="_blank" rel="noopener">Gary Marcus — Token 价格与模型竞争</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247630856&idx=3&sn=a57bcfa9832b961e5a380e92b19670ee" target="_blank" rel="noopener">硅星人 Pro — Palantir 与中国对手</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzU5OTI0NTc3Mg==&mid=2247555363&idx=1&sn=bd94907864cb0d29713e49b884f4a4a2" target="_blank" rel="noopener">甲子光年 — 趋境科技艾智远专访</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651929112&idx=2&sn=713bc9e324dfb50301551bc7b2a6c131" target="_blank" rel="noopener">人人都是产品经理 — Token ROI 账</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3NDc2MjQxMg==&mid=2247494877&idx=1&sn=286fbabc04eaf5dc9c6244829f494973" target="_blank" rel="noopener">深思圈 — 红杉美国 × Anthropic 平台负责人</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3ODk5OTEzOA==&mid=2962188126&idx=1&sn=a5dce4598b4d474d2d70d87ab4ecb747" target="_blank" rel="noopener">经纬创投 — Anthropic 人才磁石</a></li>
-    <li><a href="https://www.ifanr.com/1672037" target="_blank" rel="noopener">爱范儿 — 逐际动力/爱诗科技融资早报</a></li>
-    <li><a href="https://www.ifanr.com/1672040" target="_blank" rel="noopener">爱范儿 — 苹果诉 OpenAI 案</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&mid=2653110581&idx=1&sn=98da92ccba863bf32d98494883a5ef01" target="_blank" rel="noopener">极客公园 — iPhone 在华份额与梁文锋首富</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5NjM5MjQ4MQ==&mid=2651785570&idx=1&sn=373aebcf626fd029007fb4abd72d71bb" target="_blank" rel="noopener">刘润 — 存储产能大迁移</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882715&idx=1&sn=c7a944cc0b3a4e6a232dbbd87902dd8f" target="_blank" rel="noopener">创业邦 — 芯天下港交所 IPO</a></li>
-    <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650882715&idx=3&sn=2a4526a3684a08569cc14e0efa8d6cb0" target="_blank" rel="noopener">创业邦 — 小米机器人/阶跃星辰手机</a></li>
-    <li><a href="https://www.xiaoyuzhoufm.com/episode/6a56c42d3ffb956871ab9380" target="_blank" rel="noopener">晚点聊 LateTalk — Momenta 曹旭东专访</a></li>
-    <li><a href="https://x.com/pmarca/status/2077207029446557862" target="_blank" rel="noopener">Marc Andreessen — GPU 远期合约</a></li>
-    <li><a href="https://x.com/leerob/status/2077414263421898817" target="_blank" rel="noopener">Lee Robinson — Etched $800M 融资营销反思</a></li>
-    <li><a href="https://x.com/dingyi/status/2077204567830532568" target="_blank" rel="noopener">Ding (@dingyi) — Cursor 人才流入</a></li>
-  </ul>
-
-  <div class="disclaimer">
-    <strong>风险提示与免责声明：</strong>本日报内容基于公开信息整理，所有观点仅代表作者本人投资分析视角，不构成任何证券、基金、衍生品的投资建议或要约。所提及的估值、ARR、市值等数据可能因统计口径、披露时点不同而存在差异。投资者应独立判断并自行承担投资风险。历史业绩不代表未来表现。
-  </div>
-</section>
-
-<footer>
-  <div><span class="brand">Tech Daily · Investment Analysis</span> · 数据窗口 2026-07-14 18:50 → 2026-07-15 18:50 · 共解析 571 篇 / 424 源</div>
-  <div style="margin-top:6px;">投资视角 · 数据驱动 · 观点明确 · 谨慎决策</div>
-</footer>
-
-</div>
 </body>
 </html>
