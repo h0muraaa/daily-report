@@ -38,6 +38,35 @@ def select_articles(articles: list[dict], role: str, max_articles: int = 25) -> 
             "techcrunch", "the information", "reuters", "bloomberg", "ft alphaville",
             "pitchbook", "crunchbase", "vc", "bessemer", "a16z",
         ]
+    elif role == "user_research":
+        include_keywords = [
+            "user experience", "ux", "ui", "user interface", "design", "designer",
+            "usability", "user research", "user study", "user testing", "usability testing",
+            "accessibility", "a11y", "inclusive design", "aging", "elderly",
+            "persona", "user journey", "customer journey", "journey map",
+            "wireframe", "prototype", "prototyping", "figma", "sketch", "framer",
+            "interaction design", "motion design", "animation", "microinteraction",
+            "design system", "component library", "design token", "design ops",
+            "information architecture", "content strategy", "copywriting",
+            "cognitive", "psychology", "behavior", "behaviour", "human factors",
+            "eye tracking", "sentiment", "emotion", "affective", "survey",
+            "interview", "ethnography", "field study", "diary study",
+            "product design", "service design", "design thinking",
+            "mobile layout", "responsive", "touch", "gesture", "voice interface",
+            "conversational ui", "chatbot", "agent", "assistant",
+            "visualization", "dashboard", "data visualization", "infographic",
+        ]
+        exclude_keywords = [
+            "stock", "stocks", "invest", "investment", "market", "fund", "vc",
+            "startup funding", "acquired", "acquisition", "ipo", "earnings",
+            "ceo", "diary of a ceo", "political", "trump", "musk", "tesla",
+            "youtube short", "sell your", "bubble",
+        ]
+        preferred_sources = [
+            "google design", "nielsen norman", "ux collective", "smashing magazine",
+            "interaction design foundation", "figma", "adobe", "apple human interface",
+            "material design", "the keyword", "microsoft design",
+        ]
     else:
         include_keywords = [
             "code", "coding", "programming", "developer", "engineer", "software",
