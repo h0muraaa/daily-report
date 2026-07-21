@@ -1,139 +1,383 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <title>开发者实践日报 | 2026-07-21</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
-    h1 { color: #1a1a1a; border-bottom: 3px solid #0366d6; padding-bottom: 10px; }
-    h2 { color: #0366d6; margin-top: 32px; }
-    h3 { color: #444; margin-top: 24px; }
-    .tag { display: inline-block; background: #e1f0ff; color: #0366d6; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 6px; }
-    .item { margin-bottom: 18px; }
-    .item p { margin: 4px 0; }
-    a { color: #0366d6; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    ul { padding-left: 20px; }
-    code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
-    .sources { font-size: 14px; }
-    .sources li { margin-bottom: 6px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践日报 · 2026-07-21</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --surface-2: #21262d;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-2: #3fb950;
+            --accent-3: #d2a8ff;
+            --warning: #f0883e;
+            --danger: #f85149;
+            --code-bg: #1e2530;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, "Courier New", monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-sans);
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+        .meta {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-family: var(--font-mono);
+        }
+        h1 {
+            font-size: 32px;
+            margin: 8px 0 12px;
+            color: #f0f6fc;
+            font-weight: 700;
+        }
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        h2 {
+            font-size: 22px;
+            color: #f0f6fc;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2 .icon { color: var(--accent); }
+        h3 {
+            font-size: 17px;
+            color: #f0f6fc;
+            margin: 24px 0 10px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+        .card:hover {
+            border-color: var(--accent);
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .source {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            margin-top: 12px;
+        }
+        .source a {
+            color: var(--accent-2);
+        }
+        .highlight {
+            background: var(--surface-2);
+            border-left: 3px solid var(--accent-3);
+            padding: 14px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+        }
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 14px 0;
+            color: #e6edf3;
+        }
+        .tip {
+            background: rgba(88, 166, 255, 0.08);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 14px 0;
+        }
+        .tip strong {
+            color: var(--accent);
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 6px 0;
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            h1 { font-size: 26px; }
+        }
+        .sources-list {
+            font-family: var(--font-mono);
+            font-size: 13px;
+        }
+        .sources-list li {
+            margin: 8px 0;
+        }
+        footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 13px;
+            text-align: center;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-family: var(--font-mono);
+            background: var(--surface-2);
+            color: var(--accent-3);
+            margin-right: 6px;
+            border: 1px solid var(--border);
+        }
+    </style>
 </head>
 <body>
-  <h1>开发者实践日报</h1>
-  <p><strong>日期：</strong>2026-07-21 &nbsp;|&nbsp; <strong>视角：</strong>一线开发者，关注"怎么用"和"为什么这样设计"</p>
+    <div class="container">
+        <header>
+            <div class="meta">2026-07-21 · 开发者实践版</div>
+            <h1>开发者实践日报</h1>
+            <div class="tagline">聚焦可落地的工具更新、工程实践与 AI 编程前沿</div>
+        </header>
 
-  <h2>1. 今日技术热榜</h2>
+        <section id="hot">
+            <h2><span class="icon">🔥</span> 今日技术热榜</h2>
 
-  <div class="item">
-    <h3>GitHub Code Quality 正式上线</h3>
-    <p>GitHub Code Quality 已 GA，将确定性 CodeQL 分析与 AI 辅助发现结合，能在代码进生产前捕获可靠性问题。Copilot Autofix 可直接在 PR 中提出修复建议，并支持通过 rulesets 在合并边界强制执行质量标准。</p>
-    <p><span class="tag">代码质量</span> <a href="https://www.youtube.com/watch?v=NNSghZ84GSU">来源：GitHub</a></p>
-  </div>
+            <article class="card">
+                <h3>Google 发布 Gemini 3.6 Flash、3.5 Flash-Lite 与 3.5 Flash Cyber</h3>
+                <p>Google 一天内连发三款 Gemini 新模型，核心目标非常明确：让生产级 AI Agent 跑得更快、更省、更可控。<strong>Gemini 3.6 Flash</strong> 是这次的主角，输出 Token 消耗比 3.5 Flash 降低约 17%，部分编程场景甚至减少 65%，定价为输入 $1.50/百万 Token、输出 $7.50/百万 Token。它在 DeepSWE 代码任务上的得分从 37% 提升到 49%，Computer Use（OSWorld）成功率达到 83%，并且更少出现乱改代码和死循环的问题。</p>
+                <p><strong>3.5 Flash-Lite</strong> 则是高吞吐场景的选择，输出速度接近 350 Token/秒，价格压到输入 $0.30/百万、输出 $2.50/百万，适合批量文档处理、并行子 Agent 等重复性工作。专门面向网络安全的 <strong>3.5 Flash Cyber</strong> 将通过 Google 的 CodeMender 平台提供，定位是自动发现与修补关键漏洞。三款模型已上线 Gemini API、Google AI Studio、Android Studio 和 GitHub Copilot。</p>
+                <div class="source">来源：<a href="https://deepmind.google/blog/introducing-gemini-36-flash-35-flash-lite-and-35-flash-cyber/" target="_blank" rel="noopener">[Google DeepMind News]</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/" target="_blank" rel="noopener">[The Keyword]</a> · <a href="https://x.com/GoogleDeepMind/status/2079589698490572961" target="_blank" rel="noopener">[@GoogleDeepMind]</a></div>
+            </article>
 
-  <div class="item">
-    <h3>用 Azure Key Vault 在 Node.js 中安全管密钥</h3>
-    <p>一份实战指南：别再提交 <code>.env</code>。IBM 2024 报告把平均数据泄露成本定为 488 万美元，而暴露凭证长期位列根因前列。文章展示了如何用 Azure Key Vault SDK 在运行时拉取密钥，并配合最小权限和轮换降低风险。</p>
-    <p><span class="tag">安全</span> <span class="tag">Node.js</span> <a href="https://www.freecodecamp.org/news/how-to-manage-secrets-securely-with-azure-key-vault-in-node-js/">来源：freeCodeCamp</a></p>
-  </div>
+            <article class="card">
+                <h3>Claude Code 团队自曝：系统提示词砍掉 80% 后反而更强</h3>
+                <p>Anthropic 的 Claude Code 负责人 Cat Wu 与工程师 Thariq Shihipar 在 AI Engineer World's Fair 上与 Simon Willison 对谈时透露，Claude Code 的系统提示词近期减少了 <strong>80%</strong>，而效果反而更好。他们总结了三条反直觉的提示工程经验。</p>
+                <p>第一，<strong>删掉 few-shot 示例</strong>。Thariq 直言，过去 Opus 4 时代需要大量示例，但现在模型比人类给的示例更有创造力，删除示例反而有效。第二，<strong>少用“不要做 X”的硬禁令</strong>。禁令对 Claude 是“很强的冲动”，一旦与后续用户指令冲突，模型会陷入困惑，方向应转向更多上下文、更少硬约束。第三，<strong>每条指令都要“100% 成立”</strong>。Cat 建议逐句审视提示词，问自己是否存在例外场景，把措辞软化到在任何善意误读下都成立为止。</p>
+                <p>这场对话还提到，Claude Tag（Slack 集成）已经承担了 Claude Code 团队 65% 的产品工程 PR，说明 Agent 工作流正在从实验走向真实研发主路径。</p>
+                <div class="source">来源：<a href="https://simonwillison.net/2026/Jul/21/cat-and-thariq/" target="_blank" rel="noopener">[Simon Willison's Weblog]</a> · <a href="https://x.com/simonw/status/2079553486568800405" target="_blank" rel="noopener">[@simonw]</a> · <a href="https://x.com/shao__meng/status/2079559716448125205" target="_blank" rel="noopener">[@meng shao]</a></div>
+            </article>
 
-  <div class="item">
-    <h3>AWS 开源 Loom：企业级 AI Agent 治理参考平台</h3>
-    <p>Loom 基于 Strands Agents 和 Bedrock AgentCore Runtime，提供 RFC 8693 token exchange 身份传递、配置驱动部署和强制标签。它定位为"参考示例"而非托管服务，适合想自建 Agent 治理体系的企业。</p>
-    <p><span class="tag">Agent</span> <span class="tag">治理</span> <a href="https://www.infoq.com/news/2026/07/loom-aws-agent-platform/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global">来源：InfoQ</a></p>
-  </div>
+            <article class="card">
+                <h3>RSPack 2.0 发布：纯 ESM 核心、更精简依赖、更快构建</h3>
+                <p>字节跳动开源的 RSPack 发布 2.0 版本，npm 周下载量已突破 500 万。这次更新的关键是 <strong>纯 ESM 核心</strong>、更精简的依赖树、更强的静态分析能力，以及对 React Server Components（RSC）的支持。性能基准测试显示构建时间有显著提升，对于仍在 Webpack 生态里做大型前端项目的团队，RSPack 2.0 提供了一个值得认真评估的迁移目标。</p>
+                <div class="source">来源：<a href="https://www.infoq.com/news/2026/07/rspack-2-release/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">[InfoQ]</a></div>
+            </article>
 
-  <div class="item">
-    <h3>Go 逃逸分析：栈与堆分配详解</h3>
-    <p>JetBrains 的新文章拆解了 Go 编译器如何决定变量留在栈还是逃到堆。理解逃逸分析（常见场景：返回指针、闭包、接口、大切片、channel 发送）是定位内存和 GC 性能瓶颈的关键第一步。</p>
-    <p><span class="tag">Go</span> <span class="tag">性能优化</span> <a href="https://blog.jetbrains.com/go/2026/07/20/escape-analysis/">来源：JetBrains Blog</a></p>
-  </div>
+            <article class="card">
+                <h3>JetBrains Context：给 coding agent 的代码库智能层</h3>
+                <p>JetBrains 推出 <strong>JetBrains Context</strong>，一个面向 coding agent 的仓库智能层（Repository Intelligence）。它把 JetBrains 长期积累的代码分析、导航与理解能力暴露给外部 Agent，目前已集成 Claude Code、Codex CLI 和 Junie CLI，支持 JetBrains IDE、Air、VS Code 等编辑器，早期访问阶段不额外收费。</p>
+                <p>同一天，JetBrains 还发布了 <strong>RubyMine 2026.2</strong>（Agentic Debugging、原生 GitHub Copilot、symbol-based code insight）和 <strong>PyCharm 2026.2</strong>（Rust 插件开发 Python 扩展、debugpy 默认调试器、uv/Poetry/Hatch workspace、Pyrefly 类型引擎、编辑器 minimap）。IDE 厂商的竞争焦点已经从“谁补全更好”转向“谁能帮 Agent 真正理解复杂代码库”。</p>
+                <div class="source">来源：<a href="https://blog.jetbrains.com/ai/2026/07/introducing-jetbrains-context-repository-intelligence-for-coding-agents/" target="_blank" rel="noopener">[The JetBrains Blog · JetBrains Context]</a> · <a href="https://blog.jetbrains.com/ruby/2026/07/rubymine-2026-2-agentic-debugging-native-github-copilot-integration-default-symbol-based-code-insight-and-more/" target="_blank" rel="noopener">[RubyMine 2026.2]</a> · <a href="https://blog.jetbrains.com/pycharm/2026/07/what-s-new-in-pycharm-2026-2/" target="_blank" rel="noopener">[PyCharm 2026.2]</a></div>
+            </article>
 
-  <div class="item">
-    <h3>JetBrains 实测 "rtk" 省 token 效果</h3>
-    <p>广告称 rtk（Rust Token Killer）能省 60-90% 的 Claude Code token；JetBrains 在 SkillsBench 上实测：低 reasoning effort 下反而多花 7.6%，高 effort 下基本持平。这提醒开发者对 agent 插件的省 token 宣传保持 skepticism，先用同样任务 A/B 验证。</p>
-    <p><span class="tag">AI Agent</span> <span class="tag">基准测试</span> <a href="https://blog.jetbrains.com/ai/2026/07/rtk-claude-code-token-savings/">来源：JetBrains Blog</a></p>
-  </div>
+            <article class="card">
+                <h3>GitHub Copilot Canvases：把对话做成交互式画布</h3>
+                <p>GitHub 官方发文介绍如何用 <strong>Copilot Canvases</strong> 构建交互式体验。思路很直接：有些任务（比如整理 backlog、可视化复杂信息、聚合多源数据）不适合纯对话流，画布能让我们直接拖拽、筛选、编辑信息，而不是在一长串 prompt/response 里来回找。</p>
+                <p>对开发者来说，这意味着 Agent 的输出形态正在从“文本流”扩展到“可交互界面”。如果你在做内部工具或 Agent 产品，值得思考：哪些场景给 user 一个 canvas 会比给一段回答更高效。</p>
+                <div class="source">来源：<a href="https://github.blog/ai-and-ml/github-copilot/how-to-build-interactive-experiences-with-canvases/" target="_blank" rel="noopener">[The GitHub Blog]</a></div>
+            </article>
 
-  <div class="item">
-    <h3>Coinbase 如何构建开发者支持 Agent</h3>
-    <p>一个小团队把零散的开发者支持变成可自我改进的 agent 系统：Discord AI Chat 带确定性护栏和 LLM-as-judge 评估；Slack Triage 把 Discord 信号同步到内部并关联 LangSmith trace；还有内部 Support Engineer Assistant 做案例管理。</p>
-    <p><span class="tag">Agent 工程</span> <span class="tag">案例</span> <a href="https://www.youtube.com/watch?v=py9d6zTl4Dc">来源：LangChain</a></p>
-  </div>
+            <article class="card">
+                <h3>Google Tunix：消除 TPU 空闲的 Agentic RL 训练框架</h3>
+                <p>Google 开源了 <strong>Tunix</strong>，一个面向多轮、工具调用型 LLM Agent 的后训练库。核心痛点很真实：训练 Agent 时，模型经常要等网络 I/O 或环境步骤，导致 TPU 大量空闲。Tunix 用 <strong>高并发异步 rollout + 解耦的生产者-消费者流水线</strong> 把 TPU 喂满，并提供即插即用的抽象和宏观级 profiling，方便集成自定义开源环境。</p>
+                <p>如果你在做 Agent 后训练或 RLHF，这类基础设施会是接下来“卷完模型卷工程”的关键战场。</p>
+                <div class="source">来源：<a href="https://developers.googleblog.com/scaling-agentic-rl-high-throughput-agentic-training-with-tunix/" target="_blank" rel="noopener">[Google Developers Blog]</a></div>
+            </article>
 
-  <div class="item">
-    <h3>Form3 把 Agent 放进生产后的供应链安全反思</h3>
-    <p>PatchPilot 自动给数千仓库打 CVE 补丁，一个 PR 曾改 7 万行代码。团队把架构拆成两部分：持有危险权限（GitHub 写权限、触发 CI）的确定性 Go 层，与只负责决策的 agent 层。核心结论：agent 一旦拥有仓库、凭证、CI 和 Docker socket，就应被视为供应链参与方。</p>
-    <p><span class="tag">安全</span> <span class="tag">供应链</span> <a href="https://www.youtube.com/watch?v=LqLoYksJ6do">来源：AI Engineer</a></p>
-  </div>
+            <article class="card">
+                <h3>AWS：用 Amazon Nova 做自蒸馏推理，降低 SFT 数据成本</h3>
+                <p>AWS 机器学习博客分享了如何用 <strong>Amazon Nova 2</strong> 做“自蒸馏推理”来生成 SFT 所需的 chain-of-thought（CoT）推理轨迹。传统上，给训练数据写高质量 CoT 又贵又慢，很多团队直接跳过推理步骤，但这样会损失模型在代码、数学等硬任务上的表现。</p>
+                <p>自蒸馏的思路是让模型自己生成、筛选并精炼 reasoning traces，再用这些轨迹做监督微调。对想在私有数据上复刻 o1 风格推理能力的团队，这是一条更可控、成本更低的路径。</p>
+                <div class="source">来源：<a href="https://aws.amazon.com/blogs/machine-learning/exploring-self-distilled-reasoning-for-supervised-fine-tuning-with-amazon-nova/" target="_blank" rel="noopener">[AWS Machine Learning Blog]</a></div>
+            </article>
 
-  <div class="item">
-    <h3>LangSmith Sandboxes：给 Agent 一个安全计算机</h3>
-    <p>LangSmith Sandboxes 为 agent 生成的代码提供临时、隔离的微 VM。Agent 在沙箱内有 root 权限，可以安装包、跑 Docker；p50 启动延迟低于 0.98 秒，支持 WebSocket 长会话和跨线程状态保持。</p>
-    <p><span class="tag">工具</span> <span class="tag">安全隔离</span> <a href="https://www.youtube.com/watch?v=YrQBRoo7uIY">来源：LangChain</a></p>
-  </div>
+            <article class="card">
+                <h3>Google CodeMender：托管式代码安全 Agent 进入预览</h3>
+                <p>Google Cloud 推出 <strong>CodeMender</strong> 预览版，定位是托管代码安全 Agent。它直接把代码扫描与自动修复能力接入 Gemini Enterprise Agent Platform，也支持作为 AI Threat Defense 的核心组件部署。CodeMender 采用多模型策略，可在成本、速度和深度扫描之间做选择，并计划年内支持第三方前沿模型。</p>
+                <p>对安全团队来说，这意味着“用 AI 对抗 AI 驱动的攻击”从口号进入产品化阶段；对开发者来说，自动修复安全漏洞的能力会进一步改变 PR review 的流程。</p>
+                <div class="source">来源：<a href="https://cloud.google.com/blog/products/identity-security/find-and-fix-software-vulnerabilities-with-codemender/" target="_blank" rel="noopener">[Google Cloud Blog]</a></div>
+            </article>
+        </section>
 
-  <h2>2. 深度技术解读</h2>
+        <section id="deep-dive">
+            <h2><span class="icon">🔍</span> 深度技术解读</h2>
 
-  <h3>Agent 安全架构：从"黑盒自动执行"到"可治理的供应链参与方"</h3>
-  <p>Form3、AWS Loom 和 Keycard 的近期分享都在讲同一件事：给 agent 代码库写权限、CI 触发权和长期 API key，本质上是把它当作 CI/CD 供应链的一部分。安全架构需要三件套：</p>
-  <ul>
-    <li><strong>权限最小化与短时效：</strong>用 RFC 8693 OAuth token exchange，每次工具调用 mint 一个只作用于该操作、短时有效、不存储的 token，替代"一把万能钥匙"。</li>
-    <li><strong>架构拆分：</strong>让确定性、可审计的层（如 Form3 的 Go 层）持有危险能力，LLM 只输出计划或建议，不能直连 GitHub/CI。</li>
-    <li><strong>隔离与可观测：</strong>用 LangSmith Sandboxes 等微 VM 执行生成的代码，并用 LangSmith traces、强制标签和治理平台（如 Loom）记录 agent 行为。</li>
-  </ul>
-  <p>实践建议：在引入 coding agent 前，先问自己"如果它今晚被攻破，最坏能做什么"，然后按供应链攻击面来设计权限边界。</p>
+            <article class="card">
+                <h3>React Server Components 的 Flight 协议安全边界</h3>
+                <p>React Server Components（RSC）不会把 HTML 或 JSON 发到浏览器，而是使用一种叫 <strong>Flight</strong> 的自定义流式协议。Smashing Magazine 的这篇深度文章指出，大多数 React 开发者从未打开 Network 面板看过 Flight payload——它是一系列 JSON 片段、$ 前缀引用和模块指针的混合体，由 React 运行时静默重组为客户端组件树。</p>
+                <p>文章的核心警示是：Flight 是一种带类型系统和引用解析的序列化协议，存在<strong>反序列化 sink</strong>。如果服务端渲染的输入能被攻击者污染，客户端可能在重组过程中执行恶意模块或构造危险对象。作者建议团队把 Flight payload 当作不可信输入来审计，而不是因为“框架处理了”就默认信任。</p>
+                <p>实践建议：审查 RSC 服务端渲染的数据来源、限制可序列化的模块范围、在边界处做输入校验，并在安全 review 中把 Flight 协议纳入攻击面分析。</p>
+                <div class="source">来源：<a href="https://smashingmagazine.com/2026/07/weaponizing-defending-react-flight-protocol/" target="_blank" rel="noopener">[Smashing Magazine]</a></div>
+            </article>
 
-  <h3>Go 逃逸分析：别让编译器默默把变量推上堆</h3>
-  <p>Go 自动管理内存，但"自动"不等于"最优"。逃逸分析决定变量生命周期是否超出函数栈帧——如果引用逃逸，就会分配到堆并由 GC 跟踪。常见导致逃逸的行为包括返回指针、把值赋给接口、闭包捕获、向 channel 发送指针、以及分配过大的栈对象。</p>
-  <p>排查方法：用 <code>go build -gcflags='-m'</code> 查看编译器的逃逸决策。优化时不要盲目避免所有堆分配：先 profile，再针对热点路径减少逃逸；过度使用栈可能反而导致栈扩容开销。</p>
+            <article class="card">
+                <h3>从“代码生成”到“验证与Harness工程”：Martin Fowler 的软件 Retreat 观察</h3>
+                <p>Martin Fowler 汇总了第二届 Future of Software Development Retreat 的五条核心发现，其中最扎眼的一条是：<strong>代码生成不再是瓶颈，验证才是</strong>。当 AI 能快速产出大量代码后，人类工程师的时间会越来越多地花在“这堆代码对不对、安不安全、能不能合入”上。</p>
+                <p>围绕这个变化，Fowler 提出了几个值得关注的趋势：</p>
+                <ul>
+                    <li><strong>Harness engineering</strong> 正在成为一个独立的工程学科——给 Agent 设计工具、约束、评估和回退机制。</li>
+                    <li><strong>学徒危机</strong>：初级岗位被 Agent 替代后，高级工程师从哪里来？</li>
+                    <li><strong>高管与工程师的预期鸿沟</strong>：C-suite 看到的生产力承诺与一线工程师遇到的验证成本之间存在真实差距。</li>
+                    <li><strong>遗留系统现代化</strong> 是最清晰、最可辩护的近期价值池。</li>
+                </ul>
+                <div class="source">来源：<a href="https://martinfowler.com/fragments/2026-07-21.html" target="_blank" rel="noopener">[Martin Fowler]</a></div>
+            </article>
+        </section>
 
-  <h2>3. 工具推荐</h2>
-  <ul>
-    <li><strong>OpenCode + NVIDIA NIM + Kimi K3 免费组合：</strong>想用开源终端 coding agent 又不想付费？OpenCode 支持直接接入 NVIDIA NIM preview 和 ZenMux 的 <code>moonshotai/kimi-k3-free</code>，适合长程 agentic 任务。<a href="https://www.youtube.com/watch?v=fMzVZvK9frI">来源：AICodeKing</a></li>
-    <li><strong>LangSmith Sandboxes：</strong>给 agent 的生成代码跑在临时微 VM 里，启动快、带 root、可长会话。如果你正在让 agent 执行任意代码，这是目前最顺手的隔离方案之一。<a href="https://www.youtube.com/watch?v=YrQBRoo7uIY">来源：LangChain</a></li>
-    <li><strong>VS Code 1.130 Insiders：</strong>想抢先体验新特性？最新 Insiders 版本已发布，可关注官方发布说明。<a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.130-(insiders)">来源：Microsoft</a></li>
-    <li><strong>Azure Key Vault：</strong>Node.js 项目可以把密钥、JWT 签名密钥、数据库密码迁到 Key Vault，结合 <code>@azure/identity</code> 的 DefaultAzureCredential 在本地和云环境无缝运行。<a href="https://www.freecodecamp.org/news/how-to-manage-secrets-securely-with-azure-key-vault-in-node-js/">来源：freeCodeCamp</a></li>
-  </ul>
+        <section id="tools">
+            <h2><span class="icon">🛠️</span> 工具推荐</h2>
 
-  <h2>4. 实践指南：把 Agent 当作供应链成员来防护</h2>
-  <ol>
-    <li><strong>先建"玻璃盒"再建 agent：</strong>在让 LLM 自动执行之前，先确保每条命令、每个工具调用、每次权限使用都可记录、可回放、可审计。</li>
-    <li><strong>用短时效、最小权限 token：</strong>参考 RFC 8693 token exchange，为每个动作生成一次性作用域 token，避免长期 API key 被 agent 在无人值守时滥用。</li>
-    <li><strong>架构拆分：</strong>把"能改代码、能触发 CI、能访问凭据"的能力放在确定性服务层；LLM 只负责生成计划或 diff，最终执行要经过策略检查和人工审批。</li>
-    <li><strong>运行隔离：</strong>agent 生成的代码必须在沙箱或临时容器中执行，禁止直接挂载宿主 Docker socket 或主生产集群。</li>
-    <li><strong>自动化评估先行：</strong>上线前用 10-20 条真实生产 prompt 做回归测试，加入负样本防止关键词误触发，并定期做 ablation 测试判断 skills 是否已过时。</li>
-    <li><strong>密钥管理闭环：</strong>禁止提交 <code>.env</code>；使用 GitHub secret scanning、git-secrets 等扫描；运行时通过 KMS/Key Vault 读取；定期轮换，降低泄露影响面。</li>
-  </ol>
+            <div class="two-col">
+                <article class="card">
+                    <h3>LangSmith：把 Cursor Agent 完整 trace 进统一视图</h3>
+                    <p>LangChain 发布了 Cursor 的 LangSmith tracing 插件，能把每一次 Agent turn、工具调用、嵌套子 Agent 和附件都结构化地记录下来。这和他们之前为 Claude Code、Codex 做的 tracing 共用同一套 schema，方便在统一视图里对比不同 coding agent 的行为。</p>
+                    <p>同日，LangChain 还宣布为 <strong>Pipecat、LiveKit、OpenAI Realtime、Google ADK（Gemini Live）</strong> 四种语音框架提供 LangSmith tracing。如果你在生产环境跑 voice agent，这是把黑盒变可观测的关键一步。</p>
+                    <div class="source">来源：<a href="https://x.com/LangChain/status/2079582169215717527" target="_blank" rel="noopener">[@LangChain · Cursor tracing]</a> · <a href="https://x.com/LangChain/status/2079608632887447889" target="_blank" rel="noopener">[@LangChain · Voice tracing]</a></div>
+                </article>
 
-  <h2>5. 信息来源汇总</h2>
-  <ol class="sources">
-    <li><a href="https://www.freecodecamp.org/news/from-manufacturing-to-microservices-universal-lessons-about-reliability/">From Manufacturing to Microservices: Universal Lessons About Reliability</a> — freeCodeCamp</li>
-    <li><a href="https://www.freecodecamp.org/news/how-to-manage-secrets-securely-with-azure-key-vault-in-node-js/">How to Manage Secrets Securely with Azure Key Vault in Node.js</a> — freeCodeCamp</li>
-    <li><a href="https://www.youtube.com/watch?v=NNSghZ84GSU">How to use GitHub Code Quality to ship reliable code</a> — GitHub</li>
-    <li><a href="https://www.youtube.com/watch?v=py9d6zTl4Dc">How Coinbase Builds Developer Support Agents | Interrupt 26</a> — LangChain</li>
-    <li><a href="https://blog.jetbrains.com/ai/2026/07/rtk-claude-code-token-savings/">Does “rtk” skill really cut agent tokens by 60–90%? We tested it</a> — JetBrains Blog</li>
-    <li><a href="https://www.youtube.com/watch?v=LC3-P7v3yoI">Skills are the New SDKs - Elvin Aghammadzada, DataRobot</a> — AI Engineer</li>
-    <li><a href="https://www.youtube.com/watch?v=LqLoYksJ6do">We Gave an Agent Production Code Access and Then Tried to Sleep at Night — Moritz Johner, Form3</a> — AI Engineer</li>
-    <li><a href="https://www.infoq.com/podcasts/strands-agents/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global">Podcast: Strands Agents with Clare Liguori</a> — InfoQ</li>
-    <li><a href="https://blog.jetbrains.com/go/2026/07/20/escape-analysis/">Escape Analysis in Go – Stack vs. Heap Allocations Explained</a> — JetBrains Blog</li>
-    <li><a href="https://www.youtube.com/watch?v=2xJoimgoqBg">Security Track Intro — Randall Degges, Snyk</a> — AI Engineer</li>
-    <li><a href="https://x.com/arena/status/2079253211077300736">Kimi K3 has landed at #4 on the Agent Arena leaderboard</a> — Arena.ai</li>
-    <li><a href="https://aws.amazon.com/blogs/machine-learning/how-couchbase-built-a-multi-model-ai-architecture-for-capella-iq-with-amazon-bedrock/">How Couchbase built a multi-model AI architecture for Capella iQ with Amazon Bedrock</a> — AWS Machine Learning Blog</li>
-    <li><a href="https://x.com/github/status/2079242961842233517">Apollo 11 guidance source code on GitHub</a> — GitHub</li>
-    <li><a href="https://www.infoq.com/news/2026/07/loom-aws-agent-platform/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global">AWS Releases Loom, an Open-Source Reference Platform for Governing AI Agents</a> — InfoQ</li>
-    <li><a href="https://www.youtube.com/watch?v=lIQHmhDcm1E">Last Week in AI #251</a> — Last Week in AI</li>
-    <li><a href="https://x.com/omarsar0/status/2078942362869395569">AI Papers of the Week Collection</a> — elvis</li>
-    <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.130-(insiders)">Visual Studio Code 1.130 (Insiders)</a> — Microsoft</li>
-    <li><a href="https://aws.amazon.com/blogs/machine-learning/custom-os-installation-now-available-on-aws-deepracer-devices/">Custom OS installation now available on AWS DeepRacer devices</a> — AWS Machine Learning Blog</li>
-    <li><a href="https://www.youtube.com/watch?v=I3znWC3MEXM">It's 10pm. Do You Know Where Your Agents Are? — Kim Maida, Keycard</a> — AI Engineer</li>
-    <li><a href="https://www.youtube.com/watch?v=YrQBRoo7uIY">LangSmith Sandboxes: A Secure Computer for Your Agent</a> — LangChain</li>
-    <li><a href="https://x.com/_philschmid/status/2079204690160677308">Why vibe-checking agent skills breaks in production</a> — Philipp Schmid</li>
-    <li><a href="https://www.infoq.com/news/2026/07/infoq-online-cohorts-2026/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global">InfoQ Certification Cohorts</a> — InfoQ</li>
-    <li><a href="https://www.youtube.com/watch?v=reDRM0tqhNs">Claude Certified Architect - Foundations</a> — freeCodeCamp</li>
-    <li><a href="https://www.youtube.com/watch?v=fMzVZvK9frI">OpenCode + FREE Kimi K3, GLM-5.2 API</a> — AICodeKing</li>
-    <li><a href="https://www.youtube.com/watch?v=fnLBmfsI_Fg">Your Voice Agent Doesn't Need a Frontier Model</a> — AI Engineer</li>
-  </ol>
+                <article class="card">
+                    <h3>Weaviate 向量搜索新增 per-query profiling</h3>
+                    <p>Weaviate 推出 <strong>per-query profiling</strong>，只需一个 opt-in 标志，就能把一次向量搜索的耗时拆成 filter evaluation、HNSW traversal、向量 rescoring、BM25 打分、对象 hydration 等阶段。协调节点会汇总所有参与 shard 和 node 的 profile，一次请求拿到集群级视图。</p>
+                    <p>这对调试 RAG 延迟非常有用：以前只知道“慢”，现在能定位到是磁盘 IO、HNSW 参数还是结果限制导致的慢。</p>
+                    <div class="source">来源：<a href="https://x.com/weaviate_io/status/2079597487497650675" target="_blank" rel="noopener">[@weaviate_io]</a></div>
+                </article>
 
+                <article class="card">
+                    <h3>AlloyDB 让 pgvector HNSW 搜索快 4 倍</h3>
+                    <p>Google Cloud 博客介绍 AlloyDB 如何通过优化 pgvector 的 HNSW 索引实现 <strong>4 倍向量搜索加速</strong>。对于用 PostgreSQL + pgvector 做 RAG 底座的团队，这是不迁移存储就能获得的性能红利。</p>
+                    <div class="source">来源：<a href="https://cloud.google.com/blog/products/databases/supercharge-pgvector-4x-faster-hnsw-with-alloydb/" target="_blank" rel="noopener">[Google Cloud Blog]</a></div>
+                </article>
+
+                <article class="card">
+                    <h3>Nativ：在 Mac 本地跑 AI 模型的桌面应用</h3>
+                    <p>MLX-VLM 的作者 Prince Canuma 推出了 <strong>Nativ</strong>，一个基于 MLX 的 macOS 桌面应用，类似 LM Studio，提供聊天界面和 localhost API 服务。它会自动识别 Hugging Face 缓存目录中已有的 MLX 模型，对已经在本地跑模型的 Mac 用户很友好。</p>
+                    <div class="source">来源：<a href="https://simonwillison.net/2026/Jul/21/nativ/" target="_blank" rel="noopener">[Simon Willison's Weblog]</a></div>
+                </article>
+
+                <article class="card">
+                    <h3>MiaoYan：本地优先的 Markdown 编辑器</h3>
+                    <p>Mac/iPhone 上的 <strong>MiaoYan</strong> 保持“笔记就是 Markdown 文件”的本地优先理念，无需账号、无锁入。新版 Mac 端优化了安全的笔记切换和智能粘贴，iPhone 端新增语法高亮、图片粘贴和云文件夹支持。适合想要把笔记留在文件系统里的开发者。</p>
+                    <div class="source">来源：<a href="https://x.com/HiTw93/status/2079590472574804066" target="_blank" rel="noopener">[@HiTw93]</a> · <a href="https://github.com/tw93/MiaoYan" target="_blank" rel="noopener">[GitHub]</a></div>
+                </article>
+
+                <article class="card">
+                    <h3>GitLab 19.2：用 Agent 清理安全 backlog</h3>
+                    <p>GitLab 19.2 把 AI Agent 的自动化能力对准了安全和 review 工作。新功能包括依赖扫描自动修复、Security Review Flow、GitLab Duo CLI 和 Custom Flows。在 AI coding 工具生成代码速度超过人工 review 能力的当下，这类“自动修已知类漏洞”的能力会越来越重要。</p>
+                    <div class="source">来源：<a href="https://www.infoq.com/news/2026/07/gitlab-19-2-ai-agents/" target="_blank" rel="noopener">[InfoQ]</a></div>
+                </article>
+            </div>
+        </section>
+
+        <section id="practice">
+            <h2><span class="icon">🚀</span> 实践指南</h2>
+
+            <article class="card">
+                <h3>12-Factor Companies：AI Native 团队的组织原则</h3>
+                <p>Chroma 创始人 Jeffrey Huber 提出的 <strong>12-Factor Companies</strong> 框架，把 AI 时代公司的核心假设从“人类执行力是瓶颈”切换为“人类品味与判断力是瓶颈”。关键原则包括：</p>
+                <ul>
+                    <li><strong>拥有上下文，租用智能</strong>：不要把核心数据交给“上下文吸血鬼”型供应商；同时保持模型供应商的可替换性。</li>
+                    <li><strong>自建工具，外购底座</strong>：承载业务上下文的内部工具应该自建；数据库、训练基础设施等通用底座应该买。</li>
+                    <li><strong>先招 Agent，再招人</strong>：任何新任务先尝试教会 Agent，教不会再招聘。</li>
+                    <li><strong>写下来的组织惯例</strong>：AI 时代逼迫企业把隐性知识文档化，让组织对人和 Agent 都可读。</li>
+                </ul>
+                <p>这套框架适合正在从“人写代码”转向“人指挥 Agent 写代码”的团队做组织设计参考。</p>
+                <div class="source">来源：<a href="https://x.com/shao__meng/status/2079555172146262086" target="_blank" rel="noopener">[@meng shao]</a></div>
+            </article>
+
+            <article class="card">
+                <h3>Gumroad 的 AI 客服实验：报 bug 奖 $25</h3>
+                <p>Sahil Lavingia 分享 Gumroad 的 AI 客服实践：用户报告 bug 并被修复后，自动获得 $25 账户积分，整个流程 100% 自治，每月预算上限 $5,000。他同时提到，2026 年 6 月是 Gumroad 首次 AI token 支出与人力工资支出持平的月份。</p>
+                <p>对开发者来说，这个案例展示了 AI 自动化的边界设计：给 Agent 明确的预算上限、把奖励机制与真实价值（修复 bug）挂钩、保留人类在异常场景的介入能力。不是“替代客服”，而是“把客服的反馈循环自动化”。</p>
+                <div class="source">来源：<a href="https://x.com/shl/status/2079559391528063415" target="_blank" rel="noopener">[@shl]</a></div>
+            </article>
+
+            <article class="card">
+                <h3>Andrej Karpathy：先掌握模型，再堆 Agent</h3>
+                <p>Andrej Karpathy 在一段被广泛转发的讨论中提醒开发者：<strong>现在 AI 领域最大的错误，是人们还没真正掌握底层模型，就开始强迫 Agent 工作。</strong>他回顾 2016 年 OpenAI 的类似错误，代价是五年时间。</p>
+                <p>他的三条建议很直接：第一，停止强迫 Agent 包办一切，先理解它背后的模型；第二，做 Demo 容易，做产品可能需要十年，自动驾驶已经证明跳过基础最终一切都会崩溃；第三，Agent 不是产品，底层模型才是，先把基础打牢，Agent 会自然涌现。</p>
+                <p>这条建议对当前“所有团队都在上 Agent”的风气是一剂冷却剂：在把 agentic 工作流铺到生产之前，先确保你对模型能力、失败模式和评估方式有扎实理解。</p>
+                <div class="source">来源：<a href="https://x.com/FinanceYF5/status/2079507275837051378" target="_blank" rel="noopener">[@AI Will / Andrej Karpathy]</a></div>
+            </article>
+        </section>
+
+        <section id="sources">
+            <h2><span class="icon">🔗</span> 参考链接汇总</h2>
+            <div class="card">
+                <ul class="sources-list">
+                    <li><a href="https://deepmind.google/blog/introducing-gemini-36-flash-35-flash-lite-and-35-flash-cyber/" target="_blank" rel="noopener">Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber</a> — Google DeepMind News</li>
+                    <li><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/" target="_blank" rel="noopener">Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber</a> — The Keyword</li>
+                    <li><a href="https://simonwillison.net/2026/Jul/21/cat-and-thariq/" target="_blank" rel="noopener">A Fireside Chat with Cat and Thariq from the Claude Code team</a> — Simon Willison's Weblog</li>
+                    <li><a href="https://www.infoq.com/news/2026/07/rspack-2-release/" target="_blank" rel="noopener">RSPack 2.0: Performance Gains, Leaner Dependencies and ESM Core</a> — InfoQ</li>
+                    <li><a href="https://blog.jetbrains.com/ai/2026/07/introducing-jetbrains-context-repository-intelligence-for-coding-agents/" target="_blank" rel="noopener">Introducing JetBrains Context: Repository Intelligence for Coding Agents</a> — The JetBrains Blog</li>
+                    <li><a href="https://blog.jetbrains.com/ruby/2026/07/rubymine-2026-2-agentic-debugging-native-github-copilot-integration-default-symbol-based-code-insight-and-more/" target="_blank" rel="noopener">RubyMine 2026.2</a> — The JetBrains Blog</li>
+                    <li><a href="https://blog.jetbrains.com/pycharm/2026/07/what-s-new-in-pycharm-2026-2/" target="_blank" rel="noopener">What's New in PyCharm 2026.2</a> — The JetBrains Blog</li>
+                    <li><a href="https://github.blog/ai-and-ml/github-copilot/how-to-build-interactive-experiences-with-canvases/" target="_blank" rel="noopener">How to build interactive experiences with canvases</a> — The GitHub Blog</li>
+                    <li><a href="https://developers.googleblog.com/scaling-agentic-rl-high-throughput-agentic-training-with-tunix/" target="_blank" rel="noopener">Scaling Agentic RL: High-Throughput Agentic Training with Tunix</a> — Google Developers Blog</li>
+                    <li><a href="https://aws.amazon.com/blogs/machine-learning/exploring-self-distilled-reasoning-for-supervised-fine-tuning-with-amazon-nova/" target="_blank" rel="noopener">Exploring self-distilled reasoning for supervised fine-tuning with Amazon Nova</a> — AWS Machine Learning Blog</li>
+                    <li><a href="https://cloud.google.com/blog/products/identity-security/find-and-fix-software-vulnerabilities-with-codemender/" target="_blank" rel="noopener">Find and fix software vulnerabilities with CodeMender</a> — Google Cloud Blog</li>
+                    <li><a href="https://smashingmagazine.com/2026/07/weaponizing-defending-react-flight-protocol/" target="_blank" rel="noopener">Weaponizing And Defending The React Flight Protocol</a> — Smashing Magazine</li>
+                    <li><a href="https://martinfowler.com/fragments/2026-07-21.html" target="_blank" rel="noopener">Fragments: July 21</a> — Martin Fowler</li>
+                    <li><a href="https://x.com/LangChain/status/2079582169215717527" target="_blank" rel="noopener">LangSmith Cursor tracing plugin</a> — @LangChain</li>
+                    <li><a href="https://x.com/LangChain/status/2079608632887447889" target="_blank" rel="noopener">LangSmith voice agent tracing</a> — @LangChain</li>
+                    <li><a href="https://x.com/weaviate_io/status/2079597487497650675" target="_blank" rel="noopener">Weaviate per-query profiling</a> — @weaviate_io</li>
+                    <li><a href="https://cloud.google.com/blog/products/databases/supercharge-pgvector-4x-faster-hnsw-with-alloydb/" target="_blank" rel="noopener">Supercharging pgvector: 4x faster HNSW vector search with AlloyDB</a> — Google Cloud Blog</li>
+                    <li><a href="https://simonwillison.net/2026/Jul/21/nativ/" target="_blank" rel="noopener">Nativ: Run AI models locally on your Mac</a> — Simon Willison's Weblog</li>
+                    <li><a href="https://github.com/tw93/MiaoYan" target="_blank" rel="noopener">MiaoYan</a> — GitHub</li>
+                    <li><a href="https://www.infoq.com/news/2026/07/gitlab-19-2-ai-agents/" target="_blank" rel="noopener">GitLab 19.2 Puts AI Agents to Work on the Security Backlog</a> — InfoQ</li>
+                    <li><a href="https://x.com/shao__meng/status/2079555172146262086" target="_blank" rel="noopener">12-Factor Companies 笔记</a> — @meng shao</li>
+                    <li><a href="https://x.com/shl/status/2079559391528063415" target="_blank" rel="noopener">Gumroad AI support / bug bounty</a> — @shl</li>
+                    <li><a href="https://x.com/FinanceYF5/status/2079507275837051378" target="_blank" rel="noopener">Andrej Karpathy on agents vs models</a> — @AI Will</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            生成时间：2026-07-21 · 数据来源：freshrss_24h_compact_20260721_190000.json · 角色：developer_practice
+        </footer>
+    </div>
 </body>
 </html>
