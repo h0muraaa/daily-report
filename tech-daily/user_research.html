@@ -1,247 +1,536 @@
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UX科技日报 · 用户研究版</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.7; color: #222; max-width: 800px; margin: 0 auto; padding: 24px; background: #f9f9fb; }
-    h1 { font-size: 26px; margin-bottom: 8px; color: #111; }
-    h2 { font-size: 18px; margin-top: 32px; margin-bottom: 12px; color: #333; border-bottom: 2px solid #e0e0e0; padding-bottom: 6px; }
-    h3 { font-size: 15px; margin-top: 20px; margin-bottom: 8px; color: #444; }
-    .subtitle { color: #666; font-size: 14px; margin-bottom: 24px; }
-    .card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 10px; }
-    a { color: #1a73e8; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .tag { display: inline-block; background: #eef3ff; color: #1a73e8; font-size: 12px; padding: 2px 8px; border-radius: 12px; margin-right: 6px; }
-    .source-list { font-size: 14px; }
-    .source-item { margin-bottom: 14px; }
-    .source-title { font-weight: 600; color: #111; }
-    .source-meta { color: #666; font-size: 12px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技日报 · 用户研究版 | 2026-07-23</title>
+    <style>
+        :root {
+            --bg-warm: #fff8f3;
+            --bg-card: #ffffff;
+            --accent-orange: #ff8c42;
+            --accent-purple: #7b61ff;
+            --accent-gradient: linear-gradient(135deg, #ff8c42 0%, #7b61ff 100%);
+            --text-primary: #2d2a35;
+            --text-secondary: #6b6574;
+            --text-muted: #9a94a6;
+            --border-light: #f0e6de;
+            --tag-bg: #f6f0ff;
+            --tag-text: #7b61ff;
+            --highlight-bg: #fff4ec;
+            --shadow-soft: 0 8px 30px rgba(123, 97, 255, 0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg-warm);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            text-align: center;
+            padding: 48px 0 36px;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 36px;
+        }
+
+        .edition-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 999px;
+            background: var(--accent-gradient);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .date {
+            display: inline-block;
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border-light);
+        }
+
+        section {
+            margin-bottom: 44px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 .icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: var(--accent-gradient);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .highlight-box {
+            background: var(--highlight-bg);
+            border-left: 4px solid var(--accent-orange);
+            padding: 20px 24px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(123, 97, 255, 0.12);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .tag {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--tag-text);
+            background: var(--tag-bg);
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        .source {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .source a {
+            color: var(--accent-purple);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .source a:hover {
+            border-bottom-color: var(--accent-purple);
+        }
+
+        .insight-list {
+            list-style: none;
+            counter-reset: insight;
+        }
+
+        .insight-list li {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 22px 26px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+            position: relative;
+            padding-left: 64px;
+        }
+
+        .insight-list li::before {
+            counter-increment: insight;
+            content: counter(insight);
+            position: absolute;
+            left: 22px;
+            top: 22px;
+            width: 28px;
+            height: 28px;
+            background: var(--accent-gradient);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .insight-list li strong {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .radar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .radar-item {
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid var(--border-light);
+        }
+
+        .radar-item h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .radar-item p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .references {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+        }
+
+        .references ul {
+            list-style: none;
+            column-count: 1;
+        }
+
+        .references li {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            break-inside: avoid;
+        }
+
+        .references a {
+            color: var(--accent-purple);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .references a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 32px 0 16px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 28px; }
+            .card { padding: 22px; }
+            .insight-list li { padding-left: 56px; }
+            .insight-list li::before { left: 18px; }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <div class="edition-badge">用户研究版</div>
+            <h1>科技日报</h1>
+            <p class="subtitle">以设计师与用户研究员的视角，洞察产品体验、交互趋势与用户行为背后的设计机会。</p>
+            <div class="date">2026 年 7 月 23 日</div>
+        </header>
 
-  <h1>UX科技日报 · 用户研究版</h1>
-  <div class="subtitle">以用户为中心，追踪 AI 时代的产品体验、设计范式与研究方法创新。</div>
+        <section id="highlights">
+            <h2><span class="icon">✦</span>今日要点</h2>
+            <div class="highlight-box">
+                <p>今天的核心信号是：<strong>AI 正在从“回答问题”转向“替用户行动”</strong>，而这一代产品能否被接受，取决于我们能否把健康、语音、自动化等高敏感场景的信任、控制感与可理解性设计好。</p>
+            </div>
+            <ol class="insight-list">
+                <li>
+                    <strong>健康数据入口的信任设计成为核心战场。</strong>OpenAI 在美国推出 ChatGPT Health，允许用户连接 Apple Health 与电子病历。每周超 3 亿人已在向 ChatGPT 询问健康问题，新产品能否成功不只看模型准确率，更看用户是否愿意把最私密的健康数据交给一个对话界面。
+                </li>
+                <li>
+                    <strong>AI 生成界面必须“接入”而非“颠覆”现有设计系统。</strong>Google 发布 A2UI v0.9，提出让智能体用应用已有设计系统的表达方式来声明界面，而不是让 AI 自己发明新组件。这对设计师意味着：设计系统的可机器读性将成为新基础设施。
+                </li>
+                <li>
+                    <strong>“感知型智能体”重新定义人机协作界面。</strong>Amazon AGI Lab 提出 Perception Agents，让 AI 像人一样“看见”屏幕、点击按钮、处理弹窗。交互范式正从“用户输入指令”转向“AI 观察并参与用户的工作界面”。
+                </li>
+                <li>
+                    <strong>游戏的可访问性与难度可以变成同一根连续滑块。</strong>《纽约时报》工程师提出本地 Agent 实时调节游戏难度：不再把“无障碍模式”与“普通模式”做成两个开关，而是根据玩家实时表现动态协商体验。
+                </li>
+                <li>
+                    <strong>智能体的“静默失败”正在伤害用户信任。</strong>AWS Bedrock AgentCore 的研究显示，很多 AI 代理在系统指标全绿的情况下仍然会给出错误结果。识别这类行为失败，是用户体验治理的新课题。
+                </li>
+            </ol>
+        </section>
 
-  <!-- 今日要点 -->
-  <h2>1. 今日要点</h2>
-  <div class="card">
-    <ul>
-      <li><span class="tag">人在回路</span><strong>医疗 AI 把"人工监督"从合规要求变成体验优势：</strong>Pelago 的 AI 助手为护理团队提供情境化建议，同时保留人类最终决策权，让自动化不再显得冷冰冰。</li>
-      <li><span class="tag">人机协作</span><strong>企业招聘验证了 Agent 效率天花板：</strong>LinkedIn 的 LangGraph 招聘 Agent 将"面试前置时间"缩短 60%，关键在于为复杂流程设计可控的人机交接点。</li>
-      <li><span class="tag">语音交互</span><strong>语音助手正从"听得懂"走向"说得对味"：</strong>Harness TTS 引入上下文感知的表达控制层，让合成语音能根据对话状态动态调整风格与情绪。</li>
-      <li><span class="tag">跨平台迁移</span><strong>迁移体验成为操作系统竞争的护城河：</strong>Android 17 直接内置 iPhone 数据无线迁移，把"换机"这一高摩擦触点转化为品牌转换的友好入口。</li>
-      <li><span class="tag">小工具分发</span><strong>个人/团队 Agent 工具创作门槛降低，但共享仍复杂：</strong>"小软件云"的构想可能让定制工具像 Google Doc 一样一键分享，重塑协作工具分发体验。</li>
-    </ul>
-  </div>
+        <section id="trends">
+            <h2><span class="icon">◈</span>设计趋势洞察</h2>
 
-  <!-- 设计趋势洞察 -->
-  <h2>2. 设计趋势洞察</h2>
-  <div class="card">
-    <h3>趋势一：人在回路（Human-in-the-Loop）正成为体验设计的核心原语</h3>
-    <p>过去，"人工审核"常被视为 AI 系统的安全兜底或合规补丁；而今天，Pelago 与 LinkedIn 的案例表明，它应当是工作流体验的一部分。Pelago 的 AI 助手为护理团队生成"情境化建议"，而不是替护理团队做决策，这种设计既尊重了医疗场景的专业权威，也缓解了患者对"机器取代人"的不信任。</p>
-    <p>LinkedIn 的招聘 Agent 更进一步：他们放弃 LangGraph 原生的 interrupt 原语，自研了一套"无状态、上下文驱动"的人机交接机制。这说明在高频、多步骤的任务中，<strong>人的介入点、介入时机和介入理由</strong>需要被当作独立的 UX 变量来设计，而不是简单地在出错时弹出确认框。设计师未来需要绘制"人机协作地图"，把每一步的决策权、可见性和可撤销性都纳入用户旅程。</p>
+            <article class="card">
+                <div class="tag-row">
+                    <span class="tag">生成式 UI</span>
+                    <span class="tag">设计系统</span>
+                    <span class="tag">跨平台一致性</span>
+                </div>
+                <h3>AI 生成界面正在从“炫技”走向“融入设计系统”</h3>
+                <p>Google 发布的 A2UI v0.9 标志着一个重要转向：它不再让 AI 智能体自行生成任意 UI 代码，而是要求智能体用一套框架无关的标准，声明界面意图，再由宿主应用基于自身设计系统去渲染。这一版本新增了 Python SDK、双向协议、客户端验证函数与协作编辑的数据同步机制。</p>
+                <p>对设计师和产品团队而言，这意味着两件事。第一，<strong>设计系统需要被“协议化”</strong>——组件、状态、交互规则必须足够结构化，智能体才能调用。第二，<strong>AI 不再替代设计师，而是成为设计系统的消费者</strong>；设计师的工作重点从“画多少界面”转向“定义可被机器理解的体验语言”。</p>
+                <p>实践建议：如果你的团队正在做 AI 功能，现在就可以盘点现有组件库，把常用模式（表单、确认、加载、空状态）抽象成带参数的结构化描述，为未来的智能体消费做准备。</p>
+                <div class="source">
+                    来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651289360&idx=4&sn=3b36e99ad4539089faaac2ddc0387912" target="_blank" rel="noopener">InfoQ</a>
+                </div>
+            </article>
 
-    <h3>趋势二：Agent 创作工具从"提示词生成器"转向"可编辑的创意基底"</h3>
-    <p>HeyGen 的分享揭示了一个关键洞察：把视频生成 Agent 绑在 Remotion/React 框架里，越多的护栏越让输出变得安全且无聊；而回到 HTML/CSS/JS 后，创造力重新涌现。这提醒我们，<strong>Agent 不是替代设计师的工具，而是需要设计师为其设计"创作基底"</strong>——一种既有足够表现力、又能被 Agent 理解和反复修改的媒介。</p>
-    <p>Kling MCP 的"电影级 AI 表演工作流"和 Recraft 的插画生成也指向同一方向：用户不再满足于单次生成，而是希望 Agent 在角色、情绪、场景之间持续迭代。未来的设计工具需要支持"可版本化的创意资产"和"Agent 可读的语义结构"，让用户与 AI 之间形成真正的共创循环，而非一次性抽卡。</p>
-  </div>
+            <article class="card">
+                <div class="tag-row">
+                    <span class="tag">感知智能体</span>
+                    <span class="tag">人机协作</span>
+                    <span class="tag">交互范式</span>
+                </div>
+                <h3>从“用户告诉 AI”到“AI 看着用户做”</h3>
+                <p>Amazon AGI Lab 的 Antje Barth 在“Perception Agents”中提出：当前大多数智能体仍然依赖用户输入一段文字来解释自己看到的内容，它们无法识别变化的 UI、处理意外弹窗或在真实软件中恢复上下文。Perception Agents 的解决思路是让智能体像人一样“看见”屏幕，通过点击和按键来行动。</p>
+                <p>这种范式转移对用户体验研究提出了全新课题。当 AI 不再是一个独立的聊天窗口，而是在用户原本的工作界面中“并肩作战”时，<strong>注意力管理、可预测性、控制权与错误恢复</strong>都变得至关重要。用户需要知道智能体正在看什么、即将做什么、以及何时应该接管。</p>
+                <p>设计启示：研究团队应尽早引入“AI 在场观察”的可用性测试场景，记录用户在 AI 自动执行操作时的焦虑点、打断意愿与信任阈值，而不是只在聊天式原型中做测试。</p>
+                <div class="source">
+                    来源：<a href="https://www.youtube.com/watch?v=2JX6JYyQG4Y" target="_blank" rel="noopener">AI Engineer</a>
+                </div>
+            </article>
+        </section>
 
-  <!-- 产品体验点评 -->
-  <h2>3. 产品体验点评</h2>
-  <div class="card">
-    <h3>Pelago：两周上线的 AI 健康助手，如何在效率与信任之间找平衡</h3>
-    <p>Pelago 针对药物滥用障碍（SUD）支持场景，用两周时间基于 AWS 无服务器架构和 Amazon Bedrock 搭建了事件驱动的 AI 助手。它的产品体验亮点在于<strong>不替代护理人员，而是为护理团队提供"情境化建议"</strong>——系统从患者互动中提取关键信息，再推送给人类做出最终判断。这种"增强型人在回路"设计既缓解了医疗团队的人力压力，也保留了患者最需要的同理心与专业 oversight。</p>
-    <p>从 UX 视角看，该案例的可借鉴之处在于：在高度敏感、高信任成本的领域，AI 的透明度与可撤销性比自动化率更重要。设计师需要为护理团队设计清晰的信息层级，让他们快速理解"AI 为什么给出这个建议"，并在必要时一键接管或修正。</p>
+        <section id="products">
+            <h2><span class="icon">◇</span>产品体验点评</h2>
 
-    <h3>LinkedIn 招聘 Agent：用"状态感"重新定义人机交接</h3>
-    <p>LinkedIn 的招聘 Agent 将中小企业的"time-to-interview"缩短了 60%。它不是简单地把静态工作流串成链，而是采用 LangGraph 中央规划器，实现"计划-执行-重新计划"的循环。更令人关注的是，他们自研了<strong>无状态、上下文驱动的人机交互机制</strong>，替代了原生的 interrupt 原语，因为招聘流程的介入点需要基于对话历史与候选状态，而非硬编码的暂停。</p>
-    <p>这对体验设计的启示是：企业级 Agent 的 UX 核心不是"让机器多做事"，而是<strong>让机器知道何时该把人拉进来、以及如何把上下文无损地交给人类</strong>。对于设计师而言，这意味着需要为 Agent 设计"可解释的状态卡片"和"无缝的交接界面"，避免人在介入时丢失关键信息。</p>
+            <article class="card">
+                <div class="tag-row">
+                    <span class="tag">健康科技</span>
+                    <span class="tag">隐私信任</span>
+                    <span class="tag">数据可视化</span>
+                </div>
+                <h3>ChatGPT Health：当对话成为健康数据的入口</h3>
+                <p>OpenAI 开始向美国用户推送 ChatGPT Health。用户可以在侧边栏打开 Health，连接 Apple Health 与支持的电子病历，查看同步记录的时间线、近期数据趋势，并在对话中让 ChatGPT 对比检查结果、总结就诊以来的变化、或分析睡眠与活动之间的关联。OpenAI 强调，这些数据不会被用于训练基础模型或定向广告。</p>
+                <p>从用户研究视角看，这一产品的关键挑战不是技术，而是<strong>信任与心智模型</strong>。健康数据是用户最敏感的资产之一，而“让 AI 看病”与“让 AI 整理健康信息”之间只有一线之隔。产品能否清晰传达自己的边界——它是在“解释数据”还是在“给出医疗建议”——将直接影响用户是否愿意授权连接。</p>
+                <p>体验亮点包括：基于早期测试者和医生的反馈迭代、在侧边栏设立统一的 Health 主页、以及支持用户跨对话复用已授权的健康上下文。这些都是降低认知负担与增强控制感的合理设计。</p>
+                <div class="source">
+                    来源：<a href="https://x.com/OpenAI/status/2080339982288568709" target="_blank" rel="noopener">OpenAI</a>、<a href="https://x.com/OpenAI/status/2080339983962181983" target="_blank" rel="noopener">OpenAI 体验说明</a>、<a href="https://www.youtube.com/watch?v=lR58Dge8jE8" target="_blank" rel="noopener">OpenAI 官方视频</a>
+                </div>
+            </article>
 
-    <h3>Android 17 迁移体验：把"换机恐惧"变成"转换诱饵"</h3>
-    <p>Google 在 Android 17 中直接内置了从 iPhone 无线迁移更多数据的能力。这是一个典型的<strong>旅程起点设计</strong>：当用户考虑换机时，最大的心理成本往往不是价格，而是数据、设置和习惯迁移的不确定性。通过把迁移流程原生嵌入系统，并支持更多类型的无线传输，Android 将这一高摩擦触点转化为品牌转换的友好入口。</p>
-  </div>
+            <article class="card">
+                <div class="tag-row">
+                    <span class="tag">语音交互</span>
+                    <span class="tag">客户服务</span>
+                    <span class="tag">全渠道体验</span>
+                </div>
+                <h3>Voicify：把电话订餐变成愉悦体验的语音代理</h3>
+                <p>Google Cloud 的“Blueprint”专栏介绍了 Voicify 如何用 AI 改造电话订餐与医疗预约体验。这家公司最初想做跨渠道的语音助手，疫情后聚焦电话场景，因为餐厅和医疗机构在高峰时段的来电量与人力缺口问题最为突出。</p>
+                <p>Voicify 的设计思路值得研究：它不是简单用语音机器人替代人工，而是把“每一通电话”重新定义为一次可以无缝、高效且富有人情味的交互。其关键在于<strong>对电话这一特殊媒介的理解</strong>——用户无法看到界面，只能依赖听觉反馈；他们期望即时响应，同时对“像人还是不像人”非常敏感。</p>
+                <p>对 UX 团队的启发：在语音场景下，信息架构、确认策略、错误恢复与语气设计比视觉设计更重要。研究时应多听真实通话录音，识别用户在等待、被打断、被误解时的情绪转折点。</p>
+                <div class="source">
+                    来源：<a href="https://cloud.google.com/blog/topics/customers/bringing-delight-to-customer-phone-calls-with-ai/" target="_blank" rel="noopener">Google Cloud Blog</a>
+                </div>
+            </article>
 
-  <!-- 研究方法论 -->
-  <h2>4. 研究方法论</h2>
-  <div class="card">
-    <h3>IO-HMM：把用户行为与 Agent 行为拆成两条可分析的状态链</h3>
-    <p>LangChain 分享的 GetCandidly 案例引入了一种<strong>输入-输出隐马尔可夫模型（IO-HMM）</strong>：把对话中"用户做了什么"作为可观察信号来读取当前状态，把"Agent 做了什么"作为可控输入来影响下一状态。这种分离为研究人机对话提供了更清晰的分析框架，帮助研究者识别哪些用户行为触发了 Agent 的偏离，以及哪些 Agent 动作有效推动了任务进展。</p>
+            <article class="card">
+                <div class="tag-row">
+                    <span class="tag">游戏 UX</span>
+                    <span class="tag">无障碍设计</span>
+                    <span class="tag">动态难度</span>
+                </div>
+                <h3>《纽约时报》实验：让可访问性成为实时难度调节器</h3>
+                <p>在“Local Agentic Theory for Mobile Games”分享中，《纽约时报》工程师展示了两个实验：一个本地智能体在手机上玩《太空侵略者》，另一个用约束图解 mini 填字游戏。他们强调真正的谜题仍由人类制作，AI 只是实验对象。</p>
+                <p>更具设计洞见的是他们对“可访问性”的重新想象：传统做法把无障碍选项与难度选项当作两个独立开关，而他们提出把游戏建模为一场<strong>持续的协商</strong>，可访问性与难度变成同一根连续滑块的两端，由智能体根据玩家实时表现动态调节。</p>
+                <p>这一思路超越了游戏领域。任何需要满足不同能力用户的数字产品，都可以思考如何把“辅助功能”从边缘设置移到核心体验流程中，让它成为个性化的一部分，而不是补救措施。</p>
+                <div class="source">
+                    来源：<a href="https://www.youtube.com/watch?v=418t26CVz-w" target="_blank" rel="noopener">AI Engineer</a>
+                </div>
+            </article>
+        </section>
 
-    <h3>Caption Studio：让访谈与可用性测试音频变成可搜索的研究资料</h3>
-    <p>Caption Studio 是一个"透明优先"的语音与音频智能平台，提供自动转录、说话人分离、情感分析、填充词频率等功能。对于用户研究来说，这意味着<strong>访谈录音、焦点小组和出声思维测试可以被结构化地检索与分析</strong>，研究人员能够快速定位情绪变化、犹豫点或关键概念，而无需逐字听写。它代表了 AI 辅助定性研究工具向"实时、可量化、可追踪"方向的演进。</p>
+        <section id="methodology">
+            <h2><span class="icon">◎</span>研究方法论</h2>
 
-    <h3>Eval Engineering：让 Agent 自动构建评估基准</h3>
-    <p>LangChain 推出的 Eval Engineering Skill 可帮助编码 Agent 基于仓库上下文和 Agent 运行轨迹生成评估。这为 UX 研究提供了一种新的自动化验证思路：当设计改动了某个交互流程或 Agent 行为时，可以快速生成对应的评估用例，持续追踪体验指标是否退化。它有望把"发布后看数据"变成"迭代中可验证"。</p>
-  </div>
+            <article class="card">
+                <div class="tag-row">
+                    <span class="tag">AI 辅助研究</span>
+                    <span class="tag">可用性测试</span>
+                    <span class="tag">自动化评估</span>
+                </div>
+                <h3>从“指标全绿”到“行为失败”：如何发现智能体的隐藏伤害</h3>
+                <p>AWS 的 Bedrock AgentCore 优化实践揭示了一个反直觉的问题：很多 AI 代理在基础设施层面表现完美——完成率 99%、延迟健康、无错误峰值——但用户却不断投诉结果错误。原因是一种“行为失败”：订单修改未执行、库存状态错误、审批步骤被跳过。这些失败通过了系统健康检查，只在用户投诉中暴露。</p>
+                <p>对研究团队的方法论启示是：<strong>传统的可用性指标与系统监控不足以评估 AI 产品</strong>。我们需要引入“结果正确性验证”“端到端任务完成审计”以及“用户侧影响追踪”。例如，在代理执行完一个任务后，主动抽样核查真实业务结果是否与代理报告一致；同时把客服投诉按任务类型聚类，定位高风险流程。</p>
+                <p>更进一步，当 AI 开始“替用户行动”时，研究的边界也从“界面是否好用”扩展到“系统行为是否符合用户意图”。这要求用研、产品、工程和数据团队建立联合的“行为失败”看板。</p>
+                <div class="source">
+                    来源：<a href="https://aws.amazon.com/blogs/machine-learning/detecting-silent-agent-failures-with-amazon-bedrock-agentcore-optimization/" target="_blank" rel="noopener">AWS Machine Learning Blog</a>
+                </div>
+            </article>
 
-  <!-- UX雷达 -->
-  <h2>5. UX雷达</h2>
-  <div class="card">
-    <ul>
-      <li><strong>小软件云（Cloud for Small Software）：</strong>当个人或团队能用 Agent 快速造出小工具，部署、权限和共享却成为新瓶颈。一个为"小软件"而生的云，可能让定制工具像文档一样协作，值得关注其对协作体验的重塑。</li>
-      <li><strong>语义层（Semantic Layer）：</strong>Neo4j 提出的"基于本体的语义层"试图让 Agent 变薄，把数据关系与业务语义沉淀到共享基底。这或许能解决多 Agent 体验中的"信息孤岛"与"上下文断裂"问题。</li>
-      <li><strong>金融研究 Agent 的可追溯性：</strong>Perplexity 在金融研究中强调 traceability，反映出高 stakes 场景下用户对"AI 如何得出结论"的强烈需求。可解释性将成为专业领域 Agent 体验的关键差异点。</li>
-      <li><strong>HTML 作为 Agent 友好型创作基底：</strong>HeyGen 用 HTML/CSS/JS 替代框架化视频渲染，暗示未来设计系统可能需要为 Agent 提供"既自由又可控"的原子级素材。</li>
-    </ul>
-  </div>
+            <article class="card">
+                <div class="tag-row">
+                    <span class="tag">设计工具</span>
+                    <span class="tag">AI 工作流</span>
+                    <span class="tag">设计-研发协作</span>
+                </div>
+                <h3>设计画布与代码同步：AI 时代的新协作痛点</h3>
+                <p>Peter Yang 在 X 上提出一个正在困扰许多产品团队的问题：当 AI 可以直接生成和修改代码时，设计画布（Figma、Claude Design、Paper 等）如何与代码保持同步？他目前的做法是提示 AI“根据当前代码更新设计稿”，但细节总对不上。</p>
+                <p>这个痛点揭示了 AI 时代设计流程的一个深层变化：当“从设计稿到代码”的边界被 AI 打通，<strong>设计与工程之间的单一真相源（single source of truth）变得更加重要</strong>。研究团队可以围绕这一主题展开探索：设计师在什么情况下愿意放弃对像素的控制？他们如何验证 AI 生成的界面是否符合品牌与体验标准？以及，当代码成为可快速迭代的“原型”时，设计稿的角色是什么？</p>
+                <div class="source">
+                    来源：<a href="https://x.com/petergyang/status/2080297117881598226" target="_blank" rel="noopener">Peter Yang</a>
+                </div>
+            </article>
+        </section>
 
-  <!-- 信息来源汇总 -->
-  <h2>6. 信息来源汇总</h2>
-  <div class="card source-list">
-    <div class="source-item">
-      <div class="source-title">1. AI Teammates: how monday.com runs production AI agents on Amazon Bedrock</div>
-      <p>monday.com 分享了其在 Amazon Bedrock 上大规模运行生产级 AI Agent 的架构，包括置信度评分合并策略和如何在十年旧代码库中落地。该案例展示了工程组织如何将 AI 编码助手从实验推向日常生产工作流。</p>
-      <div class="source-meta">来源：<a href="https://aws.amazon.com/blogs/machine-learning/ai-teammates-how-monday-com-runs-production-ai-agents-on-amazon-bedrock/" target="_blank">AWS Machine Learning Blog</a></div>
+        <section id="radar">
+            <h2><span class="icon">◉</span>UX 雷达</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">值得关注的早期设计信号与工具动向。</p>
+            <div class="radar-grid">
+                <div class="radar-item">
+                    <h4>AI 提取性审计（AI Extractability Audit）</h4>
+                    <p>freeCodeCamp 作者分享如何通过审计 HTML 结构，让 AI 助手更容易准确引用网页内容。一次把 6 个 UI 卡片标题从 h2/h3 降级为带 ARIA 的段落，即可在不影响视觉的前提下把“可提取性”从 65 分提升到 100 分。</p>
+                    <div class="source">
+                        来源：<a href="https://www.freecodecamp.org/news/how-to-run-an-ai-extractability-audit/" target="_blank" rel="noopener">freeCodeCamp</a>
+                    </div>
+                </div>
+
+                <div class="radar-item">
+                    <h4>DoorDash 的自然语言点餐体验</h4>
+                    <p>DoorDash 推出 Ask DoorDash，用自然语言界面驱动餐厅发现与更大的杂货订单。创始人将其视为机器人与自主配送战略的一部分，也提示我们：语音/自然语言正在成为本地生活服务的新入口。</p>
+                    <div class="source">
+                        来源：<a href="https://www.youtube.com/watch?v=vNpcg_Ma-FA" target="_blank" rel="noopener">No Priors</a>
+                    </div>
+                </div>
+
+                <div class="radar-item">
+                    <h4>“可爱度”作为可量化感知指标</h4>
+                    <p>arXiv 上一项研究验证了单条目 Kawaii（可爱）量表，涉及电子游戏角色声音、外观与语音助手形象。随着 AI 助手人格化设计增多，“可爱”或“亲和”可能从主观形容词变成需要被系统测量的体验维度。</p>
+                    <div class="source">
+                        来源：<a href="https://arxiv.org/abs/2607.19352" target="_blank" rel="noopener">arXiv</a>
+                    </div>
+                </div>
+
+                <div class="radar-item">
+                    <h4>Cloudflare 文档与 Dashboard 改版</h4>
+                    <p>Cloudflare 上线新文档站点并改版 Dashboard，采用自有的 Kumo 组件库。对于设计系统团队，这是一个观察“开发者体验”如何通过统一组件库与清晰信息架构被重塑的样本。</p>
+                    <div class="source">
+                        来源：<a href="https://x.com/vikingmute/status/2080190786168402259" target="_blank" rel="noopener">Viking</a>
+                    </div>
+                </div>
+
+                <div class="radar-item">
+                    <h4>Codex 实时语音模式</h4>
+                    <p>据爆料，Codex 正在准备实时语音模式，定位为“通用智能体助手”，可处理 Slack、日历、浏览、购物等任务。语音作为低摩擦入口，对个人助手类产品的人因研究具有重要意义。</p>
+                    <div class="source">
+                        来源：<a href="https://x.com/op7418/status/2080270388207210978" target="_blank" rel="noopener">歸藏 (guizang.ai)</a>
+                    </div>
+                </div>
+
+                <div class="radar-item">
+                    <h4>电动车声音景观的烦恼感知</h4>
+                    <p>一项 arXiv 研究探讨多辆电动车 AVAS 声音同时存在时的烦恼感知。随着城市声景被合成声音填满，声音设计从“功能提示”升级为“公共环境体验”，需要场景化的感知研究支持。</p>
+                    <div class="source">
+                        来源：<a href="https://arxiv.org/abs/2607.10368" target="_blank" rel="noopener">arXiv</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="references">
+            <h2><span class="icon">✎</span>参考来源</h2>
+            <div class="references">
+                <ul>
+                    <li>OpenAI — <a href="https://x.com/OpenAI/status/2080339982288568709" target="_blank" rel="noopener">Health in ChatGPT 推文</a></li>
+                    <li>OpenAI — <a href="https://x.com/OpenAI/status/2080339983962181983" target="_blank" rel="noopener">Health 体验设计说明</a></li>
+                    <li>OpenAI — <a href="https://www.youtube.com/watch?v=lR58Dge8jE8" target="_blank" rel="noopener">Health in ChatGPT 视频</a></li>
+                    <li>InfoQ — <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651289360&idx=4&sn=3b36e99ad4539089faaac2ddc0387912" target="_blank" rel="noopener">谷歌发布 A2UI v0.9</a></li>
+                    <li>AI Engineer — <a href="https://www.youtube.com/watch?v=2JX6JYyQG4Y" target="_blank" rel="noopener">Perception Agents — Antje Barth, Amazon AGI Lab</a></li>
+                    <li>AI Engineer — <a href="https://www.youtube.com/watch?v=418t26CVz-w" target="_blank" rel="noopener">Local Agentic Theory For Mobile Games</a></li>
+                    <li>AWS Machine Learning Blog — <a href="https://aws.amazon.com/blogs/machine-learning/detecting-silent-agent-failures-with-amazon-bedrock-agentcore-optimization/" target="_blank" rel="noopener">Detecting silent agent failures with Amazon Bedrock AgentCore</a></li>
+                    <li>Google Cloud Blog — <a href="https://cloud.google.com/blog/topics/customers/bringing-delight-to-customer-phone-calls-with-ai/" target="_blank" rel="noopener">How Voicify makes AI-enabled ordering a delight</a></li>
+                    <li>Peter Yang — <a href="https://x.com/petergyang/status/2080297117881598226" target="_blank" rel="noopener">设计画布与代码同步讨论</a></li>
+                    <li>freeCodeCamp — <a href="https://www.freecodecamp.org/news/how-to-run-an-ai-extractability-audit/" target="_blank" rel="noopener">How to Run an AI Extractability Audit</a></li>
+                    <li>No Priors — <a href="https://www.youtube.com/watch?v=vNpcg_Ma-FA" target="_blank" rel="noopener">Building an Autonomous Delivery Experience with DoorDash</a></li>
+                    <li>arXiv — <a href="https://arxiv.org/abs/2607.19352" target="_blank" rel="noopener">Validating the Single Item Kawaii Measure</a></li>
+                    <li>arXiv — <a href="https://arxiv.org/abs/2607.10368" target="_blank" rel="noopener">Perceived Annoyance in Multi-source Electric Vehicle AVAS Environments</a></li>
+                    <li>Viking — <a href="https://x.com/vikingmute/status/2080190786168402259" target="_blank" rel="noopener">Cloudflare 新文档与 Dashboard 改版</a></li>
+                    <li>歸藏 (guizang.ai) — <a href="https://x.com/op7418/status/2080270388207210978" target="_blank" rel="noopener">Codex 实时语音模式爆料</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>科技日报 · 用户研究版 | 由 tech-daily-generator 生成</p>
+        </footer>
     </div>
-
-    <div class="source-item">
-      <div class="source-title">2. Kling MCP Tutorial: Create Cinematic AI Performances in Minutes</div>
-      <p>Kling AI 发布 MCP 教程，展示如何在 Agent 中构建从角色创作、情绪设计到批量视频生成的完整创意工作流。这标志着生成式视频工具正从单次生成转向可编排的 Agent 化创作流程。</p>
-      <div class="source-meta">来源：<a href="https://x.com/Kling_ai/status/2079944555718435124" target="_blank">Kling AI (@Kling_ai) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">3. Building a serverless AI assistant at Pelago: concept to care in two weeks</div>
-      <p>Pelago 基于 AWS 无服务器和 Amazon Bedrock 在两周内构建事件驱动 AI 助手，为护理团队生成情境化建议并保留人工监督。该案例展示了医疗场景中如何在规模化与个性化关怀之间取得平衡。</p>
-      <div class="source-meta">来源：<a href="https://aws.amazon.com/blogs/architecture/building-a-serverless-ai-assistant-at-pelago-concept-to-care-in-two-weeks/" target="_blank">AWS Architecture Blog</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">4. Thinner Agents on a Smarter Substrate: The Ontology-based Semantic Layer</div>
-      <p>Neo4j 的 Emil Eifrem 提出让 Agent 变薄，把智能放到基于本体的共享语义层中。该层用业务术语统一数据概念，有望解决多 Agent 重复连接数据源、数据可信度与版本一致性的难题。</p>
-      <div class="source-meta">来源：<a href="https://www.youtube.com/watch?v=VGN22pPpb-8" target="_blank">AI Engineer (YouTube)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">5. A Cloud for Small Software</div>
-      <p>该观点认为 Agent 让个人和团队小工具的创作变得简单，但部署、安全和共享仍然过于复杂。一个专为小软件设计的云有望让定制工具像 Google Doc 一样便捷分享。</p>
-      <div class="source-meta">来源：<a href="https://x.com/ycombinator/status/2079963726435021232" target="_blank">Y Combinator (@ycombinator) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">6. Every turn of a conversation has two pieces</div>
-      <p>LangChain 分享 GetCandidly 的 IO-HMM 方法，将对话回合拆分为用户可观察信号与 Agent 可控输入。该方法为分析人机对话状态转移提供了更清晰的研究模型。</p>
-      <div class="source-meta">来源：<a href="https://x.com/LangChain/status/2079960332080951342" target="_blank">LangChain (@LangChainAI) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">7. Stylized character design prompts by Recraft</div>
-      <p>Recraft 展示了使用极简独立动画美学、柔和渐变与梦幻色彩的角色生成提示。该案例体现了生成式视觉工具在风格控制、情绪表达与插画一致性上的探索。</p>
-      <div class="source-meta">来源：<a href="https://x.com/recraftai/status/2079947653249372289" target="_blank">Recraft (@recraftai) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">8. Interrupt, The Agent Conference by LangChain returns this fall</div>
-      <p>LangChain 宣布秋季在纽约与伦敦举办 Interrupt Agent 大会。该会议聚焦于 Agent 工程与产品实践，是观察 Agent 设计趋势与行业落地的重要窗口。</p>
-      <div class="source-meta">来源：<a href="https://x.com/LangChain/status/2079930849986740441" target="_blank">LangChain (@LangChainAI) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">9. 60% Faster Time-to-Interview: Transforming Hiring with AI Agents with LangChain</div>
-      <p>LinkedIn 招聘团队分享了如何用 LangGraph 构建招聘 Agent，将中小企业面试前置时间缩短 60%。他们还讨论了为何从 89 个框架中选定 LangGraph，以及如何构建无状态的人在回路机制。</p>
-      <div class="source-meta">来源：<a href="https://www.youtube.com/watch?v=LUemJGG2k4c" target="_blank">LangChain (YouTube)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">10. At Interrupt, we learned how LinkedIn cut time-to-interview by 60%</div>
-      <p>LangChain 在 Interrupt 大会上展示了 LinkedIn 招聘 Agent 的成果，强调通过 LangGraph 实现计划-执行-重新规划的循环。该案例突出了 Agent 在企业招聘流程中的效率潜力。</p>
-      <div class="source-meta">来源：<a href="https://x.com/LangChain/status/2079923416476651697" target="_blank">LangChain (@LangChainAI) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">11. Switch to Android easily — and bring your data with you</div>
-      <p>Android 17 将内置新的迁移体验，支持从 iPhone 无线传输更多数据。该更新把换机流程原生融入系统，降低了用户跨平台转换的心理与操作成本。</p>
-      <div class="source-meta">来源：<a href="https://blog.google/products-and-platforms/platforms/android/galaxy-unpacked-switch-from-iphone-to-android/" target="_blank">The Keyword (Google Blog)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">12. OpenAI internal model JUST went ROGUE</div>
-      <p>该视频讨论了 OpenAI 与 Hugging Face 的安全事件披露，以及长程模型时代下的安全与对齐问题。虽然偏向安全研究，但对 AI 产品中的信任、可控性与风险沟通具有参考价值。</p>
-      <div class="source-meta">来源：<a href="https://www.youtube.com/watch?v=OSuhUTkM1no" target="_blank">Wes Roth (YouTube)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">13. From Copy-Paste to Composition: Building Agents Like Real Software</div>
-      <p>Jake Mannix 探讨如何通过中间协议层把 AI Agent 构建得像真正的软件，实现版本化、封装的"虚拟工具"。这一方法有助于提升 Agent 系统的可维护性、接口映射能力与数据安全。</p>
-      <div class="source-meta">来源：<a href="https://www.infoq.com/presentations/agent-software-engineering/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank">InfoQ</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">14. Enhancing Relation Modeling with Social Attributes for Social Media Popularity Prediction</div>
-      <p>论文提出 RE-Rag 框架，通过语义内容和社会属性共同建模 UGC 实例之间的关系，以提升检索准确度和社交媒体流行度预测。该方法对理解用户生成内容的相似性与传播潜力具有研究价值。</p>
-      <div class="source-meta">来源：<a href="https://arxiv.org/abs/2607.19200" target="_blank">arXiv (cs.MM)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">15. What the Waveform Knows: Transparent-first Speech and Audio Intelligence with Caption Studio</div>
-      <p>Caption Studio 提供"透明优先"的语音与音频智能平台，支持转录、说话人分离、情感分析和字幕生成。它可将音频/视频内容结构化，对访谈分析与可用性研究具有工具价值。</p>
-      <div class="source-meta">来源：<a href="https://arxiv.org/abs/2607.18704" target="_blank">arXiv (cs.SD)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">16. Teleportation Game: Quantum Teleportation in Multi-Agent Systems for Interactive Music</div>
-      <p>论文提出基于量子音乐 Agent 的交互式音乐系统，利用量子态传送实现多个 Agent 之间的实时协作。该探索关注如何将技术限制转化为自由爵士即兴风格的创作机会。</p>
-      <div class="source-meta">来源：<a href="https://arxiv.org/abs/2607.19212" target="_blank">arXiv (cs.SD)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">17. Harness TTS: Towards Context-Aware Expressive Speech Synthesis with Harness Layer</div>
-      <p>论文提出 Harness TTS，一个轻量级控制层，让语音助手根据交互上下文选择恰当的风格提示工具。该方法旨在提升语音合成的表达灵活性与上下文适应能力。</p>
-      <div class="source-meta">来源：<a href="https://arxiv.org/abs/2607.17900" target="_blank">arXiv (cs.SD)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">18. Acoustic Simulation Framework for Multi-channel Replay Speech Detection</div>
-      <p>论文提出声学模拟框架，用于生成多通道重放语音攻击数据，以提升语音控制系统在智能家居等场景中的安全性。该研究关注语音助手的抗攻击鲁棒性。</p>
-      <div class="source-meta">来源：<a href="https://arxiv.org/abs/2509.14789" target="_blank">arXiv (cs.SD)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">19. Acoustic Simulation Framework for Multi-channel Replay Speech Detection</div>
-      <p>该论文从信号处理视角探讨多通道重放语音检测，利用公开资源模拟不同声学配置。其目标是为语音控制设备提供更可靠的安全防护数据。</p>
-      <div class="source-meta">来源：<a href="https://arxiv.org/abs/2509.14789" target="_blank">arXiv (eess.AS)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">20. Why AI apps fail in production (And how Google solved it)</div>
-      <p>Google Cloud 博客指出，仅 5% 的 AI 原型能进入生产，其余 95% 陷入验证深渊。文章分析了企业环境中从周末原型到生产级应用之间的工程与治理鸿沟。</p>
-      <div class="source-meta">来源：<a href="https://cloud.google.com/blog/topics/developers-practitioners/why-ai-apps-fail-in-production/" target="_blank">Google Cloud Blog</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">21. Worth listening to if you want to understand how to use agents for financial research</div>
-      <p>Perplexity 相关讨论聚焦 AI 在金融研究中的应用，强调可追溯性和 Agent 编排的重要性。该内容对设计高 stakes 专业研究工具的透明度与可解释性具有启发。</p>
-      <div class="source-meta">来源：<a href="https://x.com/AravSrinivas/status/2079674315533082696" target="_blank">Aravind Srinivas (@AravSrinivas) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">22. Jimothy on the move</div>
-      <p>Figma 分享了一段关于"Jimothy"的动态展示，具体内容围绕 Figma 的动效或角色设计更新。该动态体现了设计工具在品牌表达与情感化设计上的持续探索。</p>
-      <div class="source-meta">来源：<a href="https://x.com/figma/status/2079648511872958715" target="_blank">Figma (@figma) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">23. Thesean just launched Ship in beta</div>
-      <p>Thesean 推出 Ship 推理端点，可在保持模型与提示兼容的前提下将大模型调用成本降低 50%。该产品目标是让开发者用同样预算运行更多 Agent、重试与验证。</p>
-      <div class="source-meta">来源：<a href="https://x.com/omarsar0/status/2079645153665662997" target="_blank">elvis (@omarsar0) on X</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">24. HTML Is All Agents Need — James Russo, HeyGen</div>
-      <p>HeyGen 分享了一年的探索：让 Agent 用 HTML/CSS/JS 生成视频，比基于 Remotion/React 的框架更富创造力。该案例提出 HTML 可能是 Agent 更友好的创作基底。</p>
-      <div class="source-meta">来源：<a href="https://www.youtube.com/watch?v=Cz4v1WHVyZc" target="_blank">AI Engineer (YouTube)</a></div>
-    </div>
-
-    <div class="source-item">
-      <div class="source-title">25. We’re launching the Eval Engineering Skill</div>
-      <p>LangChain 推出 Eval Engineering Skill，帮助编码 Agent 基于仓库上下文与运行轨迹自动构建评估。该工具旨在提升 Agent 系统的可验证性与迭代效率。</p>
-      <div class="source-meta">来源：<a href="https://x.com/LangChain/status/2079976932536414656" target="_blank">LangChain (@LangChainAI) on X</a></div>
-    </div>
-  </div>
-
 </body>
 </html>
