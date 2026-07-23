@@ -3,364 +3,315 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>开发者日报 2026-07-23 | 多 Agent 编程、AI 生产化与工程实践</title>
+  <title>开发者实践日报 · 2026-07-23</title>
   <style>
     :root {
-      --bg: #f7f9fc;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted: #4b5563;
-      --accent: #2563eb;
-      --accent-soft: #dbeafe;
-      --border: #e5e7eb;
-      --code-bg: #f3f4f6;
+      --bg: #0d1117;
+      --bg-elevated: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-2: #3fb950;
+      --warn: #d29922;
+      --danger: #f85149;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
       background: var(--bg);
       color: var(--text);
+      font-family: var(--sans);
       line-height: 1.7;
     }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-    header {
-      text-align: center;
-      padding: 32px 0;
-      border-bottom: 2px solid var(--border);
-      margin-bottom: 32px;
-    }
-    header h1 { margin: 0; font-size: 1.9rem; }
-    header p { margin: 8px 0 0; color: var(--muted); }
-    h2 {
-      font-size: 1.4rem;
-      border-left: 5px solid var(--accent);
-      padding-left: 12px;
-      margin-top: 40px;
-      margin-bottom: 20px;
-    }
-    h3 { font-size: 1.15rem; margin: 24px 0 10px; }
-    .card {
-      background: var(--card);
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      padding: 20px;
-      margin-bottom: 16px;
-      border: 1px solid var(--border);
-    }
-    .card h4 { margin: 0 0 8px; font-size: 1.05rem; }
-    .card .source { font-size: 0.85rem; color: var(--muted); margin-top: 10px; }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .tag {
-      display: inline-block;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-      margin-right: 6px;
-    }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 8px; }
     code, pre {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      background: var(--code-bg);
+      font-family: var(--mono);
+      background: rgba(110,118,129,0.15);
       border-radius: 6px;
-      font-size: 0.9em;
+      padding: 0.1em 0.4em;
+      font-size: 0.92em;
     }
-    code { padding: 2px 6px; }
-    pre { padding: 14px; overflow-x: auto; line-height: 1.5; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--card);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    pre {
+      padding: 1em;
+      overflow-x: auto;
       border: 1px solid var(--border);
     }
-    th, td {
-      padding: 12px 14px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
     }
-    th { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-    td:nth-child(1) { font-weight: 600; width: 28%; }
-    td:nth-child(2) { width: 62%; }
-    td:nth-child(3) { width: 10%; white-space: nowrap; }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .kicker {
+      color: var(--accent-2);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    h1 {
+      margin: 0.4rem 0 0.6rem;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+    .meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    h2 {
+      color: var(--accent);
+      font-size: 1.4rem;
+      margin-top: 2.8rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 {
+      font-size: 1.1rem;
+      margin: 1.6rem 0 0.5rem;
+      color: #e6edf3;
+    }
+    .card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .card p { margin: 0.6rem 0 0; }
+    .source {
+      display: inline-block;
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .source a {
+      color: var(--accent);
+      font-family: var(--mono);
+    }
+    .tag {
+      display: inline-block;
+      background: rgba(88,166,255,0.12);
+      color: var(--accent);
+      padding: 0.15em 0.55em;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-family: var(--mono);
+      margin-right: 0.4em;
+    }
+    .tag.green { background: rgba(63,185,80,0.12); color: var(--accent-2); }
+    .tag.warn { background: rgba(210,153,34,0.12); color: var(--warn); }
+    .insight {
+      border-left: 3px solid var(--accent-2);
+      padding-left: 1rem;
+      margin: 1rem 0;
+      color: #e6edf3;
+    }
+    .sources-list {
+      columns: 2;
+      column-gap: 2rem;
+    }
+    .sources-list li {
+      break-inside: avoid;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
     @media (max-width: 640px) {
-      table, thead, tbody, th, td, tr { display: block; }
-      td { width: 100%; border: none; padding: 8px 14px; }
-      td:nth-child(1) { padding-top: 14px; font-weight: 700; }
-      td:nth-child(3) { padding-bottom: 14px; }
+      .sources-list { columns: 1; }
+      h1 { font-size: 1.7rem; }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>开发者日报</h1>
-      <p>2026-07-23 · 全栈技术实践 · 多 Agent 编程、AI 生产化与工程工具</p>
+      <div class="kicker">Developer Practice Daily</div>
+      <h1>开发者实践日报</h1>
+      <div class="meta">2026-07-23 · 面向一线开发者 · 工具、实践与深度解读</div>
     </header>
 
     <section>
-      <h2>今日技术热榜</h2>
+      <h2>01 今日技术热榜</h2>
 
-      <div class="card">
-        <h4>GitHub Copilot 支持多 Agent 并行会话</h4>
-        <p>GitHub Copilot 应用现在允许同时启动多个并行的 AI 编码会话，每个 Agent 可以独立处理代码库的不同部分，例如一边修 Bug、一边写测试、一边开发新功能。关键在于这些并行会话不会互相覆盖彼此的修改，把 AI 编程从“单线程聊天”推向了真正的多任务协作。</p>
-        <div class="source"><span class="tag">AI 编程</span> <a href="https://www.youtube.com/shorts/w3lDhsZ1pfo" target="_blank" rel="noopener">来源：GitHub</a></div>
-      </div>
+      <article class="card">
+        <span class="tag">前端</span><span class="tag green">性能</span>
+        <h3>Meta 将 React Compiler 移植到 Rust，构建速度提升 50%</h3>
+        <p>Meta 已将 React Compiler 的核心实现从 JavaScript 迁移到 Rust，并集成进主仓库。官方数据显示编译速度最高提升 50%，同时保留了原有的公共 API，升级成本极低。这一迁移也标志着 Rust 在前端工具链中的渗透率继续加深，未来与基于 Rust 的打包、转译工具协同将成为主流。</p>
+        <div class="source">来源：<a href="https://www.infoq.com/news/2026/07/meta-react-compiler-rust/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+      </article>
 
-      <div class="card">
-        <h4>Rider 2026.2：把 IDE 的智能开放给 AI Agent</h4>
-        <p>JetBrains 将 Rider 自身的覆盖率、性能分析、重构引擎和 .NET 框架知识通过“Agent Skills”暴露给 AI 编码 Agent，同时原生集成 GitHub Copilot Agent。相比从文件和终端输出中重建上下文，Agent 现在能直接基于真实项目知识做更安全的改动，减少 token 浪费和猜错。</p>
-        <div class="source"><span class="tag">.NET / IDE</span> <a href="https://blog.jetbrains.com/dotnet/2026/07/22/rider-2026-2-release/" target="_blank" rel="noopener">来源：JetBrains Blog</a></div>
-      </div>
+      <article class="card">
+        <span class="tag">低代码</span><span class="tag">TypeScript</span>
+        <h3>Notion 推出 "Notion as code" Beta：用 TypeScript 定义整个工作区</h3>
+        <p>Notion 正在内测一项面向开发者的新能力：通过 TypeScript 脚本描述团队空间、数据库、自定义 Agent 等全部 workspace 结构，然后经 API 部署。这意味着你可以把 Notion 配置纳入 Git 版本控制，在 dev、staging、production 之间复用同一份脚本，也能让编码 Agent 直接参与 workspace 搭建。</p>
+        <div class="source">来源：<a href="https://x.com/NotionHQ/status/2080331924732850687" target="_blank" rel="noopener">Notion (@NotionHQ)</a></div>
+      </article>
 
-      <div class="card">
-        <h4>monday.com 揭秘 Amazon Bedrock 上生产级 AI Teammates 架构</h4>
-        <p>在拥有数百万用户、数百个微前端和微服务的十年老代码库中，monday.com 跑通了生产级 AI Agent。通过 Bedrock 驱动的 Agentic AI，90% 的 Builder 每月使用 AI 编码工具，人均 PR 吞吐量提升超过 50%。</p>
-        <div class="source"><span class="tag">生产架构</span> <a href="https://aws.amazon.com/blogs/machine-learning/ai-teammates-how-monday-com-runs-production-ai-agents-on-amazon-bedrock/" target="_blank" rel="noopener">来源：AWS</a></div>
-      </div>
+      <article class="card">
+        <span class="tag warn">安全</span><span class="tag">供应链</span>
+        <h3>GitHub 为 Dependabot 加入冷却期，抵御供应链投毒</h3>
+        <p>GitHub 宣布 Dependabot 在检测到新版依赖后不会立即发起 PR，而是引入一段冷却窗口。此举直接针对 2025 年 9 月 npm 供应链攻击：恶意版本上线仅两小时就被拉取，但自动化更新工具已足够在此期间把毒包推到开发者面前。冷却期为安全社区留出发现与撤回恶意版本的时间，是 CI/CD 安全策略里值得落地的调整。</p>
+        <div class="source">来源：<a href="https://github.blog/security/supply-chain-security/the-case-for-a-cooldown-why-dependabot-now-waits-before-issuing-version-updates/" target="_blank" rel="noopener">The GitHub Blog</a></div>
+      </article>
 
-      <div class="card">
-        <h4>GitHub Issues 重构后即时导航率从 4% 提升至 22%</h4>
-        <p>GitHub 通过结合 IndexedDB、内存缓存、Service Worker 与预测式预取，重新设计了 GitHub Issues 的客户端架构。这套方案显著降低了感知延迟，为大规模前端应用如何“用缓存换时间”提供了可落地的参考。</p>
-        <div class="source"><span class="tag">前端工程</span> <a href="https://www.infoq.com/news/2026/07/github-issues-navigation/" target="_blank" rel="noopener">来源：InfoQ</a></div>
-      </div>
+      <article class="card">
+        <span class="tag">安全</span><span class="tag green">开源</span>
+        <h3>OpenAI 重新推出 Codex Security 插件并开源</h3>
+        <p>Codex Security 插件现已回归，支持对代码库或 diff 进行威胁建模、攻击路径分析、漏洞验证、修复生成与测试，并可将结果导出为 SARIF、GitHub Issue、Jira 或 Linear。对需要在现有工作流中集成 AI 安全审查的团队来说，这是一个可以直接接入 CI 的实用工具。</p>
+        <div class="source">来源：<a href="https://x.com/gdb/status/2080149982359831017" target="_blank" rel="noopener">Greg Brockman (@gdb)</a></div>
+      </article>
 
-      <div class="card">
-        <h4>RustRover 2026.2：axum / reqwest 路由导航与 Ferrocene 支持</h4>
-        <p>RustRover 新增对 axum 和 reqwest 的端点发现、路由字符串解析与 handler 跳转，终于不用手动搜索路由入口了。同时引入对 Ferrocene 合格 Rust 工具链的支持，并改进了宏、结构体创建、benchmark 等日常体验。</p>
-        <div class="source"><span class="tag">Rust / IDE</span> <a href="https://blog.jetbrains.com/rust/2026/07/22/whats-new-in-rustrover-2026-2/" target="_blank" rel="noopener">来源：JetBrains Blog</a></div>
-      </div>
+      <article class="card">
+        <span class="tag">Rust</span><span class="tag">IDE</span>
+        <h3>RustRover 2026.2 新增 Axum 框架支持</h3>
+        <p>JetBrains 在 RustRover 2026.2 中加入了 Axum 框架的深度支持，包括路由导航、请求流理解和客户端代码生成。随着 Rust 在后端与分布式系统中的使用增长，IDE 对主流 Web 框架的一等支持能显著降低开发者的认知负担，减少在路由、handler 与中间件之间反复跳转的时间。</p>
+        <div class="source">来源：<a href="https://blog.jetbrains.com/rust/2026/07/23/axum-support-in-rustrover/" target="_blank" rel="noopener">The JetBrains Blog</a></div>
+      </article>
 
-      <div class="card">
-        <h4>Gemini 3.6 Flash 登陆 GitHub Copilot 与 VS Code</h4>
-        <p>Google 的 Gemini 3.6 Flash 已全面可用，并开始向 GitHub Copilot 和 VS Code 用户推出。该模型针对 Web / App 开发、编码和 Agentic 任务优化，在测试中的任务完成率和 token 效率均优于 Gemini 3.5 Flash。</p>
-        <div class="source"><span class="tag">模型</span> <a href="https://x.com/googleaidevs/status/2079673738929561883" target="_blank" rel="noopener">来源：Google AI Developers</a></div>
-      </div>
+      <article class="card">
+        <span class="tag">DevTool</span><span class="tag">AI 原生</span>
+        <h3>TRAE IDE 上线多智能体编码与部署课程</h3>
+        <p>freeCodeCamp 发布了围绕 TRAE IDE 的新课程，展示如何在 IDE 模式与 solo 模式之间切换：前者是带智能补全与重构的标准编辑器，后者允许用自然语言描述目标并委托完整实现阶段。课程从一句话需求出发，生成产品需求文档、结构化任务并最终完成部署，适合想体验 AI 原生开发流程的开发者。</p>
+        <div class="source">来源：<a href="https://www.freecodecamp.org/news/multi-agent-coding-deployment-with-trae-ide/" target="_blank" rel="noopener">freeCodeCamp</a></div>
+      </article>
 
-      <div class="card">
-        <h4>阿里发布 Qoder Security，为 AI 生成代码加固安全</h4>
-        <p>AI Coding 让代码变更粒度更小、速度更快，但也放大了 SSRF、命令注入、路径穿越等风险。Qoder Security 试图在代码生成、依赖构建和发布链路中增加多道安全防线，回应年初 Claude Code source map 泄露事件带来的警示。</p>
-        <div class="source"><span class="tag">安全</span> <a href="https://mp.weixin.qq.com/s?__biz=MzA5ODEzMjIyMA==&mid=2247739798&idx=1&sn=f00b87ffab7a8c35c481bb6c0e9e5b30" target="_blank" rel="noopener">来源：AI科技评论</a></div>
-      </div>
+      <article class="card">
+        <span class="tag">可观测性</span><span class="tag">本地优先</span>
+        <h3>LangSmith + Ollama：本地 AI Agent 的追踪与监控实践</h3>
+        <p>一篇实践教程展示了如何为本地 AI Agent 接入 LangSmith 追踪：Agent 本身运行在本地（LangChain v1 + Ollama + Qwen），无需支付模型 API 费用，仅 observability 层走 LangSmith。这种模式既保护了数据隐私，又能可视化模型调用、工具使用与请求延迟，是个人项目或小团队落地 Agent 的可行路径。</p>
+        <div class="source">来源：<a href="https://www.freecodecamp.org/news/how-to-trace-and-monitor-ai-agents-with-langsmith/" target="_blank" rel="noopener">freeCodeCamp</a></div>
+      </article>
 
-      <div class="card">
-        <h4>AWS CloudFormation 自定义资源多区域弹性架构</h4>
-        <p>CloudFormation 自定义资源本身没有内建多区域支持，本文提出了一套主动-主动架构来填补这一缺口。对于在 IaC 中依赖自定义资源的企业来说，这是提升跨区域容灾能力的重要实践。</p>
-        <div class="source"><span class="tag">基础设施</span> <a href="https://aws.amazon.com/blogs/architecture/building-multi-region-resiliency-for-aws-cloudformation-custom-resource-deployment/" target="_blank" rel="noopener">来源：AWS Architecture</a></div>
-      </div>
+      <article class="card">
+        <span class="tag">后端平台</span><span class="tag green">开源</span>
+        <h3>Supabase 成为 AI 编码智能体时代的默认后端之一</h3>
+        <p>Supabase 披露其开发者数已突破 1000 万，并被 Claude Code、Lovable、Bolt、Codex 等 AI 编码工具广泛用作后端。CEO Paul Copplestone 在 YC Startup School Paris 的分享解释了 Postgres + 完全开源策略如何帮助其在云巨头环伺下赢得开发者信任，以及 AI 生成应用如何给 devtool 带来第二波增长。</p>
+        <div class="source">来源：<a href="https://x.com/ycombinator/status/2080161562413953053" target="_blank" rel="noopener">Y Combinator (@ycombinator)</a> · 视频：<a href="https://www.youtube.com/watch?v=sG5aB79TE44" target="_blank" rel="noopener">YouTube</a></div>
+      </article>
     </section>
 
     <section>
-      <h2>深度技术解读</h2>
+      <h2>02 深度技术解读</h2>
 
-      <h3>1. 从“一个聊天框”到“多 Agent 协作”：多 Agent 编程正成为工程现实</h3>
-      <p>今年的主线已经很明显：AI 编程工具不再只是帮你补全一行代码，而是像一支小队一样分工处理整个代码库。GitHub Copilot 的并行会话、Rider / ReSharper 的 Agent Skills、Trae IDE 的 multi-agent 协作，都是为了让一个 Agent 做测试、一个做重构、一个写业务代码成为可能。</p>
-      <p><strong>为什么现在需要多 Agent？</strong> 单个大模型在长上下文、多任务切换时容易“顾此失彼”。把任务拆成多个专注的小 Agent，每个只负责一个子目标，能显著降低上下文噪声，也更容易做权限隔离。例如 monday.com 的实践中，每个 Agent 提交的 PR 都要进入统一的人类审核与置信度评分流程，最终靠“confidence-scored merge”逐步接近自治。</p>
-      <p><strong>对开发者的建议：</strong> 如果你的团队准备引入多 Agent，不要一开始就让它们直接提交主分支。建议先从以下三层落地：</p>
-      <ul>
-        <li><strong>任务拆分：</strong>用主 Agent 做需求拆解，子 Agent 负责测试、文档、重构或模块开发，避免所有改动堆在一个会话里。</li>
-        <li><strong>共享上下文：</strong>建立统一的工具注册表（Tool Registry）和项目知识库，避免每个 Agent 都重新“发现”数据源和 API 规范。</li>
-        <li><strong>人工守门：</strong>Agent 的输出必须经过 CI 流水线、代码审查和自动化测试，而不是“跑通就合并”。</li>
+      <article class="card">
+        <span class="tag">Kubernetes</span><span class="tag">网络</span>
+        <h3>从零手撸 Kubernetes CNI：理解容器网络的本质</h3>
+        <p>对于大多数开发者来说，CNI 是 Kubernetes 中最熟悉的陌生人：每天依赖它转发 Pod 间的每一个数据包，却很少拆开看过。freeCodeCamp 的这篇长文不依赖 Helm 安装 Cilium 或 Calico，而是直接用 Linux 网络原语（veth、bridge、路由表、iptables/nftables）一步步复现 CNI 的行为。</p>
+        <p>文章的价值在于建立准确的心智模型：Pod 网络命名空间如何创建、veth pair 如何桥接、SNAT/DNAT 在什么时候发生、为什么跨节点通信需要 overlay 或 underlay 路由。理解了这些，排查 "Pod 能 ping 通 IP 但 DNS 不通"、"Service 负载不均"、"网络策略不生效" 这类问题才会有的放矢。对于想在云原生基础设施上更进一步的开发者，这篇文章比直接背 CNI 配置清单更有效。</p>
+        <div class="insight"><strong>实践要点：</strong>不要只学 YAML 抽象；用 <code>ip netns</code>、<code>iptables -t nat -L</code> 和 <code>tcpdump</code> 在测试集群里手动复现一次 CNI 行为，网络排障能力会有质变。</div>
+        <div class="source">来源：<a href="https://www.freecodecamp.org/news/how-to-build-kubernetes-networking-without-kubernetes-do-what-the-cni-does-by-hand/" target="_blank" rel="noopener">freeCodeCamp</a></div>
+      </article>
+
+      <article class="card">
+        <span class="tag">RAG</span><span class="tag">检索</span>
+        <h3>HyDE：用"假设文档"弥合查询与文档之间的语义鸿沟</h3>
+        <p>标准 RAG 的流程是：把用户问题向量化，然后去向量数据库里找最相似的文档块。问题是，用户提问的方式和文档里的答案段落往往写法迥异。例如用户问 "为什么我的 AWS Glue job 变慢了"，而文档里对应的章节标题可能是 "Optimizing Spark executor memory"。直接嵌入问题会漏掉这些关键块。</p>
+        <p>HyDE（Hypothetical Document Embeddings）的做法是：先用 LLM 根据问题生成一段"假想的理想答案"，再用这段假想答案去检索，而不是用原始问题。这样查询向量会更接近目标文档的语义空间，从而显著提升召回率。文章还讨论了 HyDE 的适用场景与陷阱：在事实性要求高的领域，必须对生成的假设文档做后校验，防止幻觉答案污染检索结果。</p>
+        <div class="insight"><strong>落地建议：</strong>对于技术文档、FAQ 类 RAG，HyDE 是值得优先尝试的低成本优化；同时保留原始查询的并行检索链路，通过重排序把两者结果融合，能兼顾覆盖率和准确性。</div>
+        <div class="source">来源：<a href="https://www.freecodecamp.org/news/what-is-hyde-how-to-improve-rag-with-hypothetical-documents/" target="_blank" rel="noopener">freeCodeCamp</a></div>
+      </article>
+    </section>
+
+    <section>
+      <h2>03 工具推荐</h2>
+
+      <article class="card">
+        <span class="tag green">AI IDE</span>
+        <h3>TRAE IDE</h3>
+        <p>双模式 AI 原生 IDE：标准 IDE 模式提供智能补全与重构，solo 模式支持用自然语言委派完整实现阶段。适合快速把想法变成可部署产品，且能作为学习 AI 协作编程的入口。</p>
+        <div class="source">来源：<a href="https://www.freecodecamp.org/news/multi-agent-coding-deployment-with-trae-ide/" target="_blank" rel="noopener">freeCodeCamp</a></div>
+      </article>
+
+      <article class="card">
+        <span class="tag green">桌面化</span>
+        <h3>Pake</h3>
+        <p>用 Rust 把任意网页打包成轻量桌面应用，新增 <code>--json</code> 稳定输出、<code>--config</code> 应用描述、本地构建无需服务器，并可直接作为 Claude Code 的 skill 安装。适合把常用 Web 工具变成独立窗口应用。</p>
+        <div class="source">来源：<a href="https://x.com/HiTw93/status/2080066358381810130" target="_blank" rel="noopener">Tw93 (@HiTw93)</a> · GitHub：<a href="https://github.com/tw93/Pake" target="_blank" rel="noopener">tw93/Pake</a></div>
+      </article>
+
+      <article class="card">
+        <span class="tag green">向量数据库</span>
+        <h3>Milvus Vector Graph RAG</h3>
+        <p>Milvus 团队开源了 Vector Graph RAG 方案，用向量数据库本身实现多跳检索，无需额外引入 Neo4j 或图查询语言。其思路是把知识图谱中的关系也当作文本嵌入存储，从而把多跳推理问题转化为向量检索问题。</p>
+        <div class="source">来源：<a href="https://x.com/milvusio/status/2080306949439262868" target="_blank" rel="noopener">Milvus (@milvusio)</a></div>
+      </article>
+    </section>
+
+    <section>
+      <h2>04 实践指南</h2>
+
+      <article class="card">
+        <span class="tag warn">供应链安全</span>
+        <h3>Dependabot 冷却期：给自动更新加一道安全闸门</h3>
+        <p>依赖自动更新工具的核心假设是"新版本更安全"，但供应链攻击正在利用这一假设。GitHub 的应对方案是为 Dependabot 引入冷却期，让恶意版本在自动化流程进入你的仓库前有机会被社区发现并撤回。</p>
+        <p>对于使用其他依赖管理工具的团队，可以借鉴这一思路：在 CI 中延迟自动合并依赖更新 PR，或对新版本设置最小"存在时间"门槛；对核心依赖启用 lockfile 审计与签名验证；把依赖更新 PR 纳入代码审查流程，而不是完全交由机器人自动合并。</p>
+        <div class="source">来源：<a href="https://github.blog/security/supply-chain-security/the-case-for-a-cooldown-why-dependabot-now-waits-before-issuing-version-updates/" target="_blank" rel="noopener">The GitHub Blog</a></div>
+      </article>
+
+      <article class="card">
+        <span class="tag">SEO / AI 引用</span>
+        <h3>AI 可提取性审计：让大模型更愿意引用你的网站</h3>
+        <p>当 AI 助手回答问题时，它会从若干页面中抽取句子并标注引用。你的页面是否"可被提取"由 HTML 结构决定。作者通过实践发现，把仅用于 UI 卡片的 <code>&lt;h2&gt;</code> / <code>&lt;h3&gt;</code> 降级为保留 ARIA 语义的段落，能让首页可提取性评分从 65 提升到 100，且视觉和文案完全不变。</p>
+        <p>对技术博客、产品文档和开源项目主页来说，这意味着：用正确的标题层级表达文档结构、避免把装饰性文本塞进标题标签、保证关键信息出现在清晰的主题段落中。这些做法不仅服务 SEO，也服务 AI 摘要与引用。</p>
+        <div class="source">来源：<a href="https://www.freecodecamp.org/news/how-to-run-an-ai-extractability-audit/" target="_blank" rel="noopener">freeCodeCamp</a></div>
+      </article>
+
+      <article class="card">
+        <span class="tag">前端</span>
+        <h3>用 Vanilla JavaScript 把静态 HTML 变成可编辑页面</h3>
+        <p>维护他人的简历、单页作品集或可打印菜单时，真正拖慢进度的是"编辑循环"。一篇教程展示了如何在不引入 CMS 或框架的前提下，用原生 JS 让静态 HTML 直接在浏览器中可编辑，并把修改保存到本地。</p>
+        <p>这个方案适合内容固定、更新不频繁但又需要非技术人员偶尔修改的场景。它把"修改请求 → 开发者编辑 → 重新部署"的循环缩短为"直接在浏览器里改好，导出 HTML"。</p>
+        <div class="source">来源：<a href="https://www.freecodecamp.org/news/how-to-make-a-static-html-page-editable-in-the-browser-with-vanilla-javascript/" target="_blank" rel="noopener">freeCodeCamp</a></div>
+      </article>
+
+      <article class="card">
+        <span class="tag">Agent 工程</span>
+        <h3>Harness Handbook：让编码 Agent 自己找到该改哪些文件</h3>
+        <p>维护生产级 Agent 时，最大的痛点往往不是生成编辑本身，而是让 Agent 定位到与某个行为相关的所有文件。Harness Handbook 提出了一种三级映射：从运行时行为通过静态分析和 LLM 辅助结构定位到源码位置，再用 BGPD 工作流引导 Agent 从系统概览到相关阶段、函数和文件。</p>
+        <p>在 Codex 和 Terminus-2 的 60 个修改请求测试中，这种方法把规划胜率从 28.3% 提升到 38.3%，在另一组任务中从 26.7% 提升到 45.6%，同时减少了 planner token 消耗。对于正在构建或维护 Agent 框架的开发者，这提供了一套可复用的"行为到源码"定位思路。</p>
+        <div class="source">来源：<a href="https://x.com/omarsar0/status/2080296884187652381" target="_blank" rel="noopener">elvis (@omarsar0)</a></div>
+      </article>
+    </section>
+
+    <section>
+      <h2>05 参考链接汇总</h2>
+      <ul class="sources-list">
+        <li><a href="https://www.infoq.com/news/2026/07/meta-react-compiler-rust/" target="_blank" rel="noopener">Meta Ports React Compiler to Rust — InfoQ</a></li>
+        <li><a href="https://x.com/NotionHQ/status/2080331924732850687" target="_blank" rel="noopener">Notion as code Beta — Notion</a></li>
+        <li><a href="https://github.blog/security/supply-chain-security/the-case-for-a-cooldown-why-dependabot-now-waits-before-issuing-version-updates/" target="_blank" rel="noopener">Dependabot cooldown — GitHub Blog</a></li>
+        <li><a href="https://x.com/gdb/status/2080149982359831017" target="_blank" rel="noopener">Codex Security plugin — Greg Brockman</a></li>
+        <li><a href="https://blog.jetbrains.com/rust/2026/07/23/axum-support-in-rustrover/" target="_blank" rel="noopener">Axum support in RustRover — JetBrains</a></li>
+        <li><a href="https://www.freecodecamp.org/news/multi-agent-coding-deployment-with-trae-ide/" target="_blank" rel="noopener">TRAE IDE course — freeCodeCamp</a></li>
+        <li><a href="https://www.freecodecamp.org/news/how-to-trace-and-monitor-ai-agents-with-langsmith/" target="_blank" rel="noopener">LangSmith tracing tutorial — freeCodeCamp</a></li>
+        <li><a href="https://x.com/ycombinator/status/2080161562413953053" target="_blank" rel="noopener">Supabase growth — Y Combinator</a></li>
+        <li><a href="https://www.freecodecamp.org/news/how-to-build-kubernetes-networking-without-kubernetes-do-what-the-cni-does-by-hand/" target="_blank" rel="noopener">CNI from scratch — freeCodeCamp</a></li>
+        <li><a href="https://www.freecodecamp.org/news/what-is-hyde-how-to-improve-rag-with-hypothetical-documents/" target="_blank" rel="noopener">HyDE for RAG — freeCodeCamp</a></li>
+        <li><a href="https://x.com/HiTw93/status/2080066358381810130" target="_blank" rel="noopener">Pake desktop wrapper — Tw93</a></li>
+        <li><a href="https://x.com/milvusio/status/2080306949439262868" target="_blank" rel="noopener">Vector Graph RAG — Milvus</a></li>
+        <li><a href="https://www.freecodecamp.org/news/how-to-run-an-ai-extractability-audit/" target="_blank" rel="noopener">AI extractability audit — freeCodeCamp</a></li>
+        <li><a href="https://www.freecodecamp.org/news/how-to-make-a-static-html-page-editable-in-the-browser-with-vanilla-javascript/" target="_blank" rel="noopener">Editable static HTML — freeCodeCamp</a></li>
+        <li><a href="https://x.com/omarsar0/status/2080296884187652381" target="_blank" rel="noopener">Harness Handbook — elvis</a></li>
       </ul>
-      <p>InfoQ 演讲中提到的“virtual tools”和中间协议层也值得参考：把 Agent 的接口映射、schema 投影和运行时污点追踪（taint tracking）封装成可版本化的组件，可以在不拖慢速度的前提下降低数据泄露风险。</p>
-
-      <h3>2. 为什么 95% 的 AI 原型死在生产门口？</h3>
-      <p>Google 的文章指出， weekend AI 项目可以在几小时内从 0 到 1，但进入企业环境后却只有 5% 能真正上线。问题往往不是模型不够聪明，而是原型缺乏企业网络兼容性、错误处理、可观测性和治理机制。</p>
-      <p><strong>生产化的核心不是“让 AI 更聪明”，而是“让 AI 系统更可靠”。</strong> 以 Pelago 两周内上线的 serverless AI 助手为例，他们用 Amazon Bedrock + Lambda 构建事件驱动架构，并保留了 care team 的人类审核环节。 healthcare 场景下的 human-in-the-loop 不是妥协，而是对高风险的必要控制。</p>
-      <p>落到工程实践上，建议大家把 AI 应用当作分布式服务来管理：</p>
-      <ul>
-        <li><strong>可观测性：</strong>记录每个 Agent 的输入输出、工具调用、失败路径和 token 消耗，方便复盘和调优。</li>
-        <li><strong>护栏与重试：</strong>对工具调用、外部 API 和代码生成结果加输入校验、超时和重试策略，避免级联错误。</li>
-        <li><strong>评估流水线：</strong>把“任务完成率”作为 CI 指标，用真实数据集跑回归测试，而不是只看模型在本地跑不跑得通。</li>
-        <li><strong>安全左移：</strong>参考阿里 Qoder Security 的思路，在 Agent 生成代码、依赖构建和发布产物阶段分别做扫描，防止 source map 或敏感文件被误打包。</li>
-      </ul>
     </section>
 
-    <section>
-      <h2>工具推荐</h2>
-
-      <div class="card">
-        <h4>Databasus —— 开源统一数据库备份管理平台</h4>
-        <p>如果你还在用一堆 pg_dump 脚本和 cron 任务维护 PostgreSQL、MySQL、MongoDB 的备份，Databasus 值得一试。它提供 Web UI，支持多数据库、多存储后端（本地、S3、Google Drive）和加密存储，并能在任务完成后通过 Slack 通知团队。</p>
-        <p>相比“祖传脚本”，它的优势在于集中管理、权限控制、审计日志和点对点恢复。Go 后端也保证了较高的执行效率。适合中小团队把备份从“野生模式”升级为可审计的运维流程。</p>
-        <div class="source"><span class="tag">DevOps</span> <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247637182&idx=1&sn=c4df56aa1f60fc1c99eed2c4797cb008" target="_blank" rel="noopener">来源：dbaplus社群</a></div>
-      </div>
-
-      <div class="card">
-        <h4>Trae IDE —— 面向全栈的 AI 协作开发环境</h4>
-        <p>Trae IDE 把多 Agent 协作、智能补全和自动脚手架整合在一起，适合用 React + Node.js + PostgreSQL 快速交付全栈项目。freeCodeCamp 的教程展示了从需求规划、构建到部署的完整工作流，适合想体验“AI 作为协作者”的开发者。</p>
-        <div class="source"><span class="tag">AI IDE</span> <a href="https://www.youtube.com/watch?v=yVga-_gMfIM" target="_blank" rel="noopener">来源：freeCodeCamp.org</a></div>
-      </div>
-
-      <div class="card">
-        <h4>ReSharper 2026.2 —— Visual Studio 里的开放 AI 生态</h4>
-        <p>ReSharper 首次支持 ACP 协议的 Agent，预览版已接入 Junie，目标是让 .NET 开发者可以自由选择 Agent 和模型，不被锁定。对于在 Visual Studio 里深度使用 .NET 的团队，这是把 IDE 智能和开放 AI 生态结合的初步尝试。</p>
-        <div class="source"><span class="tag">.NET / 插件</span> <a href="https://blog.jetbrains.com/dotnet/2026/07/22/resharper-2026-2-release/" target="_blank" rel="noopener">来源：JetBrains Blog</a></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>实践指南</h2>
-
-      <h3>把 AI 原型稳定推向生产的 5 个步骤</h3>
-      <ol>
-        <li><strong>先定义“完成”：</strong>不只是功能跑通，而是明确任务完成率、延迟、错误率和人工介入比例。把这些指标写进需求文档。</li>
-        <li><strong>建立沙箱评估：</strong>用真实输入数据构建回归测试集，每次模型或 prompt 变更后都跑一遍，避免“本地 magic，线上 crash”。</li>
-        <li><strong>加入护栏代码：</strong>对 LLM 输出做结构化校验、敏感信息过滤、工具调用权限控制。例如：
-          <pre><code>const result = await agent.run(userQuery);
-// 验证输出 schema、过滤危险字符、限制可访问路径
-validateSchema(result);
-sanitizePaths(result.files);</code></pre>
-        </li>
-        <li><strong>人类审核渐进放权：</strong>初期所有 Agent 输出必须人工 review；当置信度评分和测试通过率稳定后，再逐步放开低风险操作。</li>
-        <li><strong>持续监控与回滚：</strong>把 Agent 的调用链接入现有的 tracing 和日志系统，保留快速回滚到上一版 prompt 或模型的能力。</li>
-      </ol>
-
-      <h3>多 Agent 项目的最小结构建议</h3>
-      <pre><code>project/
-├── agents/
-│   ├── planner-agent/      # 需求拆解
-│   ├── test-agent/         # 测试生成
-│   └── refactor-agent/     # 重构与优化
-├── shared/
-│   ├── tool-registry.json  # 可用工具及 schema
-│   └── context-store/      # 共享记忆与项目知识
-├── ci/
-│   └── agent-eval.yml      # Agent 输出评估流水线
-└── guardrails/
-    └── policy.ts           # 权限与输入输出策略</code></pre>
-      <p>这个结构不是唯一答案，但它体现了“把 Agent 当软件工程对象管理”的核心思路：拆分职责、共享上下文、统一治理、可评估、可回滚。</p>
-    </section>
-
-    <section>
-      <h2>信息来源汇总</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>标题</th>
-            <th>摘要</th>
-            <th>来源</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>How to run multiple AI coding agents in parallel</td>
-            <td>GitHub Copilot 应用支持同时启动多个 AI 编码会话，每个 Agent 可独立处理代码库的不同任务，并且彼此不会覆盖修改。这种方式把单线程聊天式 AI 编程扩展为真正的并行多任务协作。</td>
-            <td><a href="https://www.youtube.com/shorts/w3lDhsZ1pfo" target="_blank" rel="noopener">GitHub</a></td>
-          </tr>
-          <tr>
-            <td>AI-Assisted Development – Multi-Agent Coding ＆ Deployment with TRAE IDE</td>
-            <td>freeCodeCamp 的教程演示如何使用 Trae IDE 规划、构建和部署一个全栈习惯追踪应用，涵盖多 Agent 协作、智能补全和自动脚手架。技术栈覆盖 React、Node.js 和 PostgreSQL，适合想快速上手的开发者。</td>
-            <td><a href="https://www.youtube.com/watch?v=yVga-_gMfIM" target="_blank" rel="noopener">freeCodeCamp</a></td>
-          </tr>
-          <tr>
-            <td>Rider 2026.2: IDE Intelligence for AI Agents, Faster Performance, and Spectacular Game Dev Updates</td>
-            <td>Rider 2026.2 将 IDE 的覆盖率、性能分析、重构引擎和 .NET 框架知识通过 Agent Skills 暴露给 AI Agent，并原生集成 GitHub Copilot Agent。新版本同时带来 .NET 与游戏开发领域的性能提升。</td>
-            <td><a href="https://blog.jetbrains.com/dotnet/2026/07/22/rider-2026-2-release/" target="_blank" rel="noopener">JetBrains</a></td>
-          </tr>
-          <tr>
-            <td>Building a serverless AI assistant at Pelago: concept to care in two weeks</td>
-            <td>Pelago 团队在两周内用 Amazon Bedrock 和 AWS Lambda 构建了一个事件驱动的 serverless AI 助手，为医疗团队提供情境化的建议参考。系统保留了人类监督环节，兼顾了效率与医疗场景的安全要求。</td>
-            <td><a href="https://aws.amazon.com/blogs/architecture/building-a-serverless-ai-assistant-at-pelago-concept-to-care-in-two-weeks/" target="_blank" rel="noopener">AWS</a></td>
-          </tr>
-          <tr>
-            <td>AI Teammates: how monday.com runs production AI agents on Amazon Bedrock</td>
-            <td>monday.com 分享了在十年老代码库中运行生产级 AI Agent 的架构，90% 的 Builder 每月使用 AI 编码工具，人均 PR 吞吐量提升超过 50%。文章还介绍了为适应老旧代码库所做的改造和置信度评分合并机制。</td>
-            <td><a href="https://aws.amazon.com/blogs/machine-learning/ai-teammates-how-monday-com-runs-production-ai-agents-on-amazon-bedrock/" target="_blank" rel="noopener">AWS</a></td>
-          </tr>
-          <tr>
-            <td>Google AI Developers 推文：Gemini 3.6 Flash 在 GitHub Copilot 中全面推出</td>
-            <td>Google 的 Gemini 3.6 Flash 已全面可用，并开始向 GitHub Copilot 推出。该模型针对 Web / App 开发、编码和 Agentic 任务优化，在任务完成率和 token 效率上优于 Gemini 3.5 Flash。</td>
-            <td><a href="https://x.com/googleaidevs/status/2079673738929561883" target="_blank" rel="noopener">X</a></td>
-          </tr>
-          <tr>
-            <td>Thinner Agents on a Smarter Substrate: The Ontology-based Semantic Layer</td>
-            <td>Neo4j 的 Emil Eifrem 提出将 Agent 做得“薄”，把智能放到共享的本体语义层中。该层包括业务本体、数据图谱和访问策略，避免每个 Agent 都重复发现数据源，并在源数据移动时自动更新关联。</td>
-            <td><a href="https://www.youtube.com/watch?v=VGN22pPpb-8" target="_blank" rel="noopener">AI Engineer</a></td>
-          </tr>
-          <tr>
-            <td>Building multi-Region resiliency for AWS CloudFormation custom resource deployment</td>
-            <td>AWS CloudFormation 自定义资源没有内建多区域支持，文章提出了一套主动-主动架构来填补这一空白。该方案适合需要跨区域容灾的 IaC 部署场景。</td>
-            <td><a href="https://aws.amazon.com/blogs/architecture/building-multi-region-resiliency-for-aws-cloudformation-custom-resource-deployment/" target="_blank" rel="noopener">AWS</a></td>
-          </tr>
-          <tr>
-            <td>What’s New in RustRover 2026.2</td>
-            <td>RustRover 2026.2 新增 axum 和 reqwest 的端点发现、路由解析与 handler 导航，同时支持 Ferrocene 合格 Rust 工具链。此外，宏、结构体创建、benchmark 和 .env 文件的日常体验也有所改进。</td>
-            <td><a href="https://blog.jetbrains.com/rust/2026/07/22/whats-new-in-rustrover-2026-2/" target="_blank" rel="noopener">JetBrains</a></td>
-          </tr>
-          <tr>
-            <td>Presentation: From Copy-Paste to Composition: Building Agents Like Real Software</td>
-            <td>Jake Mannix 在 InfoQ 分享如何把 AI Agent 从混乱的“1970s BASIC”架构转向可版本化的封装软件。通过中间协议层实现接口映射、动态 schema 投影和运行时污点追踪，可在不降低速度的前提下减少数据泄露风险。</td>
-            <td><a href="https://www.infoq.com/presentations/agent-software-engineering/" target="_blank" rel="noopener">InfoQ</a></td>
-          </tr>
-          <tr>
-            <td>还手搓脚本？这款开源备份管理工具，主流数据库全搞定！</td>
-            <td>Databasus 是一款开源数据库备份管理平台，提供 Web UI 来集中管理 PostgreSQL、MySQL、MongoDB 等数据库的备份任务。它支持多存储后端、加密、定时备份和 Slack 通知，适合替代分散的脚本和 cron 任务。</td>
-            <td><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247637182&idx=1&sn=c4df56aa1f60fc1c99eed2c4797cb008" target="_blank" rel="noopener">dbaplus</a></td>
-          </tr>
-          <tr>
-            <td>Why AI apps fail in production (And how Google solved it)</td>
-            <td>Google 指出，只有 5% 的 AI 原型能进入生产，其余大多卡在验证阶段。失败原因通常不是模型能力，而是企业网络、错误处理、可观测性和治理机制的缺失。文章提供了从原型到生产的关键工程建议。</td>
-            <td><a href="https://cloud.google.com/blog/topics/developers-practitioners/why-ai-apps-fail-in-production/" target="_blank" rel="noopener">Google Cloud</a></td>
-          </tr>
-          <tr>
-            <td>Next chapter: Restructuring GitHub’s bug bounty program</td>
-            <td>GitHub 宣布对其漏洞赏金计划进行重大调整，以应对研究者数量增加和报告队列增长的问题。该计划旨在改善研究者体验，并继续保持对安全社区的吸引力。</td>
-            <td><a href="https://github.blog/security/next-chapter-restructuring-githubs-bug-bounty-program/" target="_blank" rel="noopener">GitHub</a></td>
-          </tr>
-          <tr>
-            <td>Not just development, distribution of software may change as well</td>
-            <td>antirez 讨论 AI 编程如何影响开源软件的分发方式。传统上软件发布遵循开发、冻结、测试、发版的固定流程，而 AI 生成代码的普及可能改变这一流程和软件版本的定义。</td>
-            <td><a href="http://antirez.com/news/170" target="_blank" rel="noopener">antirez</a></td>
-          </tr>
-          <tr>
-            <td>ReSharper 2026.2: AI Agent Freedom in Visual Studio, .NET Debugging for VS Code, and More</td>
-            <td>ReSharper 2026.2 开始支持 ACP 协议的 Agent，预览版接入 Junie，目标是构建开放的 .NET AI 生态。同时，其调试引擎扩展到 VS Code 兼容编辑器，并改进了 C# 分析和 Out-of-Process 工具支持。</td>
-            <td><a href="https://blog.jetbrains.com/dotnet/2026/07/22/resharper-2026-2-release/" target="_blank" rel="noopener">JetBrains</a></td>
-          </tr>
-          <tr>
-            <td>GitHub Increased Instant Navigation from 4% to 22% by Rethinking Client Side Architecture</td>
-            <td>GitHub 通过客户端缓存、预测式预取和 Service Worker 重构了 GitHub Issues 的导航，将即时导航比例从 4% 提升到 22%。该方案综合使用 IndexedDB 和内存缓存，为大型前端应用降低感知延迟提供了参考。</td>
-            <td><a href="https://www.infoq.com/news/2026/07/github-issues-navigation/" target="_blank" rel="noopener">InfoQ</a></td>
-          </tr>
-          <tr>
-            <td>阿里推出 Qoder Security，AI 代码终于多了几道安全防线</td>
-            <td>阿里发布 Qoder Security，试图在 AI 生成代码、依赖构建和发布链路中增加安全防线。产品背景包括 Claude Code source map 泄露事件以及 Agent 可能引入的 SSRF、命令注入等风险。</td>
-            <td><a href="https://mp.weixin.qq.com/s?__biz=MzA5ODEzMjIyMA==&mid=2247739798&idx=1&sn=f00b87ffab7a8c35c481bb6c0e9e5b30" target="_blank" rel="noopener">AI科技评论</a></td>
-          </tr>
-          <tr>
-            <td>Agent ＆ Coding：Tencent Hunyuan Hy3 在 Agent Arena 排名</td>
-            <td>腾讯混元 Hy3 在 Agent Arena 开源模型中排名第 5，在前端代码竞技场中排名第 2。其优势在于工具使用（如从 CLI 错误中恢复），但用户纠正时的可操控性仍是短板。</td>
-            <td><a href="https://x.com/TencentHunyuan/status/2079846253194805477" target="_blank" rel="noopener">Tencent HY</a></td>
-          </tr>
-          <tr>
-            <td>Google AI Developers 推文：Gemini 3.6 Flash 在 VS Code 中推出</td>
-            <td>Google 确认 Gemini 3.6 Flash 正在向 VS Code 的 GitHub Copilot 用户推出。开发者可以在 VS Code 中直接体验该模型带来的更快、更高效的代码补全和 Agentic 任务能力。</td>
-            <td><a href="https://x.com/googleaidevs/status/2079673740351426737" target="_blank" rel="noopener">X</a></td>
-          </tr>
-          <tr>
-            <td>Browser Use：Gemini 3.6 Flash 在浏览器 Agent 基准测试中表现优异</td>
-            <td>Browser Use 的测试显示，Gemini 3.6 Flash 在 BU Benchmark 上达到 68%，超过 GPT-5.6-sol 和 Sonnet 4.6，仅次于 Opus 4.8，但成本更低。对于浏览器自动化类 Agent，这是一个具有高性价比的选择。</td>
-            <td><a href="https://x.com/googleaidevs/status/2079673733070106635" target="_blank" rel="noopener">X</a></td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <footer style="text-align:center; padding: 32px 0; color: var(--muted); font-size: 0.9rem;">
-      <p>开发者日报 · 聚焦可落地的技术方案、工具与最佳实践</p>
+    <footer>
+      数据窗口：2026-07-22 18:55:53 ~ 2026-07-23 18:55:53 · 本报告由开发者实践视角自动生成 · 观点不代表原始来源立场
     </footer>
   </div>
 </body>
