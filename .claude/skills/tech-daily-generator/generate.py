@@ -67,6 +67,33 @@ def select_articles(articles: list[dict], role: str, max_articles: int = 25) -> 
             "interaction design foundation", "figma", "adobe", "apple human interface",
             "material design", "the keyword", "microsoft design",
         ]
+    elif role == "tech_enthusiast":
+        include_keywords = [
+            "product", "launch", "release", "new feature", "update", "app", "application",
+            "ai tool", "ai agent", "chatgpt", "claude", "copilot", "midjourney", "generative ai",
+            "smartphone", "phone", "laptop", "device", "gadget", "wearable", "headset",
+            "robot", "robotics", "drone", "car", "ev", "autonomous", "self-driving",
+            "smart home", "iot", "health tech", "fitness", "wellness",
+            "social media", "platform", "creator", "content", "video", "stream",
+            "game", "gaming", "vr", "ar", "xr", "metaverse", "spatial",
+            "science", "space", "discovery", "research", "breakthrough",
+            "fun", "cool", "weird", "amazing", "impressive", "viral",
+            "life", "daily", "lifestyle", "habit", "productivity",
+            "ethics", "privacy", "security", "safety", "bias",
+            "future", "trend", "prediction", "roadmap", "next generation",
+        ]
+        exclude_keywords = [
+            "stock", "stocks", "invest", "investment", "fund", "vc", "valuation",
+            "acquired", "acquisition", "ipo", "earnings", "revenue", "quarterly",
+            "ceo", "diary of a ceo", "political", "trump", "musk", "tesla",
+            "youtube short", "sell your", "bubble", "tutorial", "coding",
+            "programming", "developer", "api", "framework", "library",
+        ]
+        preferred_sources = [
+            "the verge", "wired", "techcrunch", "engadget", "cnet", "mashable",
+            "arstechnica", "digital trends", "android authority", "9to5google",
+            "ted", "youtube", "product hunt", "github",
+        ]
     else:
         include_keywords = [
             "code", "coding", "programming", "developer", "engineer", "software",
