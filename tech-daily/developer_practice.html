@@ -3,360 +3,503 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>开发者实践日报 · 2026-08-16</title>
+<title>开发者实践日报 · 2026-08-17</title>
 <style>
   :root {
     --bg: #0d1117;
-    --bg-card: #161b22;
-    --bg-code: #0a0e14;
+    --bg-panel: #161b22;
+    --bg-card: #1c2128;
     --border: #30363d;
-    --text: #c9d1d9;
+    --text: #e6edf3;
     --text-dim: #8b949e;
     --accent: #58a6ff;
-    --accent-2: #f78166;
-    --green: #3fb950;
-    --purple: #bc8cff;
-    --yellow: #d29922;
+    --accent-green: #3fb950;
+    --accent-purple: #bc8cff;
+    --accent-orange: #d29922;
+    --accent-red: #f85149;
+    --code-bg: #161b22;
+    --mono: "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+    --sans: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, 'Courier New', monospace;
+    font-family: var(--sans);
     line-height: 1.7;
-    padding: 32px 16px;
+    padding-bottom: 60px;
   }
-  .wrap { max-width: 860px; margin: 0 auto; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
   header {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: linear-gradient(180deg, #161b22, #0d1117);
-    padding: 32px;
+    border-bottom: 1px solid var(--border);
+    padding: 36px 0 24px;
     margin-bottom: 32px;
+    background: linear-gradient(180deg, rgba(88,166,255,0.06), transparent);
   }
-  header .tag {
-    display: inline-block;
+  .header-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badge {
+    font-family: var(--mono);
     font-size: 12px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
     color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 20px;
-    padding: 2px 12px;
-    margin-bottom: 14px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
   }
-  h1 { font-size: 26px; color: #f0f6fc; letter-spacing: 0.5px; }
-  header .meta { color: var(--text-dim); font-size: 13px; margin-top: 10px; }
-  header .meta .hl { color: var(--green); }
-  section { margin-bottom: 40px; }
-  h2 {
+  .badge.date { color: var(--text-dim); }
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 14px 0 8px;
+    font-family: var(--mono);
+    letter-spacing: -0.5px;
+  }
+  h1 .prompt { color: var(--accent-green); }
+  .subtitle { color: var(--text-dim); font-size: 14px; max-width: 720px; }
+  .subtitle code {
+    font-family: var(--mono);
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--accent-orange);
+  }
+  .subtitle strong { color: var(--accent-green); font-family: var(--mono); }
+
+  /* Section */
+  .section { margin-bottom: 44px; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
     font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
     color: var(--accent);
-    border-left: 4px solid var(--accent);
-    padding-left: 12px;
-    margin-bottom: 20px;
   }
-  h2::before { content: "# "; color: var(--text-dim); }
+  .section-title .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title.green { color: var(--accent-green); }
+  .section-title.green .num { background: var(--accent-green); }
+  .section-title.purple { color: var(--accent-purple); }
+  .section-title.purple .num { background: var(--accent-purple); }
+  .section-title.orange { color: var(--accent-orange); }
+  .section-title.orange .num { background: var(--accent-orange); }
+  .section-title.red { color: var(--accent-red); }
+  .section-title.red .num { background: var(--accent-red); }
+
+  /* News card */
   .card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px 22px;
-    margin-bottom: 16px;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: border-color 0.15s;
   }
-  .card h3 { font-size: 16px; color: #f0f6fc; margin-bottom: 10px; }
-  .card h3 .num { color: var(--accent-2); margin-right: 6px; }
-  .card p { font-size: 14px; margin-bottom: 10px; }
-  .card p:last-child { margin-bottom: 0; }
-  .card .highlight {
-    background: var(--bg-code);
+  .card:hover { border-color: #484f58; }
+  .card .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 14px;
-    font-size: 13px;
-    color: var(--green);
-    margin: 10px 0;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .card .dim { color: var(--text-dim); }
-  .src {
-    display: block;
-    font-size: 12px;
     color: var(--text-dim);
-    margin-top: 8px;
+    background: var(--bg-panel);
+  }
+  .tag.hot { color: var(--accent-red); border-color: rgba(248,81,73,0.4); }
+  .card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+  .card p { font-size: 14.5px; color: #c9d1d9; margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card code {
+    font-family: var(--mono);
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    color: var(--accent-orange);
+  }
+  .src {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    font-family: var(--mono);
     border-top: 1px dashed var(--border);
     padding-top: 8px;
+    margin-top: 10px;
+    word-break: break-all;
   }
-  .src a { color: var(--accent); text-decoration: none; }
+  .src a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
   .src a:hover { text-decoration: underline; }
-  .pill {
-    display: inline-block;
-    font-size: 11px;
-    border-radius: 4px;
-    padding: 1px 8px;
-    margin-right: 6px;
-  }
-  .pill.green { color: var(--green); border: 1px solid var(--green); }
-  .pill.purple { color: var(--purple); border: 1px solid var(--purple); }
-  .pill.yellow { color: var(--yellow); border: 1px solid var(--yellow); }
-  .pill.orange { color: var(--accent-2); border: 1px solid var(--accent-2); }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
-  .refs { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; }
-  .refs ul { list-style: none; }
-  .refs li { font-size: 13px; padding: 6px 0; border-bottom: 1px dashed #21262d; }
-  .refs li:last-child { border-bottom: none; }
-  .refs a { color: var(--accent); text-decoration: none; word-break: break-all; }
-  .refs a:hover { text-decoration: underline; }
-  .refs .fname { color: var(--text-dim); }
-  footer { text-align: center; color: var(--text-dim); font-size: 12px; margin-top: 32px; }
-  .kbd {
-    background: var(--bg-code);
+
+  /* Deep dive */
+  .deep {
+    background: linear-gradient(180deg, #161b22, #1a1f27);
     border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-purple);
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .deep h3 { font-size: 18px; margin-bottom: 12px; color: var(--accent-purple); font-family: var(--mono); }
+  .deep h4 {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    margin: 14px 0 6px;
+  }
+  .deep p { font-size: 14.5px; color: #c9d1d9; margin-bottom: 8px; }
+  .deep ul { margin: 6px 0 10px 22px; }
+  .deep li { font-size: 14.5px; color: #c9d1d9; margin-bottom: 4px; }
+  .deep code {
+    font-family: var(--mono);
+    background: #0d1117;
+    border: 1px solid var(--border);
+    padding: 1px 6px;
     border-radius: 4px;
-    padding: 0 6px;
-    font-size: 12px;
-    color: var(--yellow);
+    font-size: 12.5px;
+    color: var(--accent-orange);
+  }
+  .deep pre {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 10px 0;
+    color: #c9d1d9;
+  }
+  .callout {
+    background: rgba(210,153,34,0.08);
+    border: 1px solid rgba(210,153,34,0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: #d29922;
+  }
+  .callout strong { font-family: var(--mono); }
+
+  /* Tools grid */
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+  .tool {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .tool h3 { font-size: 15px; margin-bottom: 6px; }
+  .tool h3 code {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent-green);
+    background: rgba(63,185,80,0.08);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .tool p { font-size: 13.5px; color: #c9d1d9; margin-bottom: 8px; }
+  .tool .src { margin-top: 6px; padding-top: 6px; font-size: 12px; }
+
+  /* Footer / sources */
+  footer {
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+  footer h2 {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+  .src-list { list-style: none; }
+  .src-list li {
+    font-size: 13px;
+    color: var(--text-dim);
+    padding: 5px 0;
+    border-bottom: 1px dashed #21262d;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .src-list a { color: var(--accent); text-decoration: none; word-break: break-all; }
+  .src-list a:hover { text-decoration: underline; }
+  .src-list .feed { font-family: var(--mono); font-size: 11px; color: var(--accent-orange); flex-shrink: 0; }
+  .footer-note { margin-top: 16px; font-size: 12px; color: #484f58; font-family: var(--mono); }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 24px; }
+    .tools-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<div class="container">
 
 <header>
-  <span class="tag"># developer_practice</span>
-  <h1>开发者实践日报</h1>
-  <div class="meta">📅 2026-08-16 &nbsp;|&nbsp; 覆盖窗口 <span class="hl">2026-08-15 18:10 → 2026-08-16 18:10</span> &nbsp;|&nbsp; 今日共 191 条新闻，筛选 21 条</div>
-  <div class="meta" style="margin-top:4px;">视角：一线工程师 · 关注「怎么用」与「为什么这样设计」</div>
+  <div class="header-top">
+    <span class="badge"># developer_practice</span>
+    <span class="badge date">2026-08-17</span>
+    <span class="badge date">360 条新闻 · 24h 窗口</span>
+  </div>
+  <h1>开发者实践日报 <span class="prompt">$</span></h1>
+  <p class="subtitle">
+    面向一线开发者的技术日刊，聚焦 <code>工具 / 框架</code>、<code>最佳实践</code>、<code>底层原理</code> 与 <code>学习资源</code>。
+    本期核心主线：<strong>本地 Agent 模型与 Harness 工程化</strong>、<strong>上下文与缓存成本优化</strong>、<strong>AI Coding 驱动的重构实践</strong>。
+  </p>
 </header>
 
 <!-- ============ 今日技术热榜 ============ -->
-<section>
-  <h2>今日技术热榜</h2>
+<section class="section">
+  <h2 class="section-title red"><span class="num">1</span>今日技术热榜</h2>
 
   <div class="card">
-    <h3><span class="num">01</span>DeepSeek Harness 开源引爆 GitHub：两天拿下 10 万+ Star</h3>
-    <p>8 月 13 日 DeepSeek 发布智能体框架 DeepSeek Harness（DSH），核心理念是「一切皆插件」——模型、工具、技能、会话、沙箱、UI 全部可以像搭积木一样替换重组。发布不到两小时 Star 破万，12 小时超 5 万，两天后接近 9 万（随后突破 10 万），成为 GitHub 史上涨星最快的项目之一。运行时基于 Node.js，一条命令即可启动，支持 Windows / Mac / Linux。</p>
-    <div class="highlight">npx @deepseek-ai/dsh</div>
-    <p>值得玩味的是它的定位：DSH 故意做得「难用」——UI 工程师味、文档全是术语。因为 DeepSeek 想做的不是一个开箱即用的 Agent 产品，而是 Agent 时代的「操作系统」，甚至允许你用竞争对手的模型。</p>
-    <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzAwODIyOTQ4Mw==&mid=2649448074&idx=1&sn=c7d8c4f74d34acaa7ab94260c9b6c398" target="_blank" rel="noopener">向阳乔木推荐看</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651930237&idx=1&sn=4cdeebc146a39e77783b191a5bd808ea" target="_blank" rel="noopener">人人都是产品经理</a></span>
+    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">开源模型</span><span class="tag">本地部署</span></div>
+    <h3>Qwen3.8-27B 开源：27B 稠密多模态模型，编程与 Agent 任务跑赢大杯闭源模型</h3>
+    <p>阿里千问发布 Qwen3.8-27B，Apache 2.0 协议开源，27B 稠密参数、原生支持文本/图像/视频，量化后可在消费级 GPU、个人工作站甚至高配笔记本上运行。官方评测显示其在 Agentic Coding（SWE-bench Pro、DeepSWE 1.1）、竞争性编程（LiveCodeBench v6）、指令遵循（IFBench）以及多模态 Agent 任务（OSWorld-Verified、AndroidWorld、SWE-MM）上均高于 Claude Opus 4.6 Max。模型原生上下文 262,144 tokens，可通过 YaRN 扩展至 100 万。Simon Willison 在 128GB M5 Max MacBook Pro 和 DGX Spark 上用 17GB 的 Q4_K_M 量化版实测，称"这是很久以来玩得最开心的本地模型"。</p>
+    <p>不过要留意：模型默认思考档位是 <code>xhigh</code>，容易严重过度设计——Simon 举例说画一个"鹈鹕骑自行车"的 SVG，xhigh 档跑了 21 分钟、烧掉大量 reasoning token。日常编码建议显式降低 <code>reasoning_effort</code>，否则 token 消耗和 review/fix 循环会拖垮效率。</p>
+    <div class="src">📎 来源: <a href="https://simonwillison.net/2026/Aug/16/qwen-38-27b/" target="_blank" rel="noopener">Qwen 3.8 27B is excellent, but it defaults to wildly overthinking things — Simon Willison's Weblog</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247665805&idx=1&sn=18246876641d23cd07242e846510b84c" target="_blank" rel="noopener">海外开发者正在"榨干" Qwen3.8-27B — AI前线</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="num">02</span>MCP 发布以来最大更新：砍掉握手与粘性会话，走向无状态 HTTP</h3>
-    <p>MCP 官方口中的「发布以来最大一次更新」方向出人意料：<span class="pill orange">无状态化</span>移除初始化握手、废除会话粘滞，每个请求必须独立携带完整的上下文信息。这意味着远程 MCP 服务器从此可以像传统无状态 HTTP 服务那样运行，采用轮询调度即可，无需配置会话亲和性。</p>
-    <p>对运维来说这解决了运行远程 MCP 服务器时长期存在的会话管理痛点；但开发者社区意见分裂，有评价认为「刚从蹩脚的 SSE 迈向成熟的 WebSocket，又被拽回上古世界观」。AgentStatus 创始人直言：现代协议与旧版协议共存阶段会非常混乱，故障率可能更高。新旧协议共存是接下来要面对的迁移难题。</p>
-    <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247665770&idx=2&sn=207c47d8661784369f19694b6b2b81a0" target="_blank" rel="noopener">AI前线</a></span>
+    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">开源</span><span class="tag">Agent Harness</span></div>
+    <h3>DeepSeek Harness 开放开发者预览：MIT 协议，"一切皆插件"的 Agent 运行基础设施</h3>
+    <p>8月13日 DeepSeek 面向全球开发者开放 DeepSeek Harness 开发者预览版并 MIT 开源。区别于模型权重，这次开源的是模型之外的整套 Agent 运行层：模型适配器、工具注册表、会话日志、沙箱、存储、Agent 主循环、任务调度和 UI 全部可作为插件加载、卸载与替换。其核心是 Cordis 微内核——最初由开发者 Shigma 为聊天机器人框架 Koishi 编写、2022 年独立开源，DeepSeek 将作者与源码一并收入。配置按 Profile → Bundle → 运行时三层叠加组装，换模型提供方不用改源码、换沙箱后端不用重启、换 agent loop 也不动框架。DeepSeek 还单独开设公众号并以黑色鲸鱼作为 Harness 独立品牌标识，与蓝色鲸鱼模型产品区隔，明显是要长期经营开发者生态。</p>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTE0ODA2MQ==&mid=2650998369&idx=1&sn=6e02a963e465d53b1ae2fd3db16af115" target="_blank" rel="noopener">DeepSeek的Harness，为何是一头黑色鲸鱼？ — 腾讯研究院</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247725326&idx=1&sn=83f71af70806d679b72b480ed1e24691" target="_blank" rel="noopener">一文读懂 DeepSeek Harness 插件！ — Datawhale</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="num">03</span>AWS 开源 Dogwood：用「时序」策略治理 Agent 的连续工具调用</h3>
-    <p>AWS 开源了 Dogwood，一个扩展 Cedar 的策略语言，新增<span class="pill green">时序条件</span>，让策略规则可以基于 Agent 先前的工具调用历史做判断，而不只是孤立地看单次请求。覆盖审批、限流、累计配额等场景——比如「同一会话内连续调用超过 N 次某工具则拦截」。</p>
-    <p>协议为 Apache 2.0，已获 AgentCore Policy 支持；不过参考解释器（reference interpreter）尚未达到生产就绪。对正在构建 Agent 权限层的团队是一个值得跟进的方向。</p>
-    <span class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/aws-dogwood-agent-policy/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></span>
+    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">AI Coding</span><span class="tag">重构</span></div>
+    <h3>Bun 用 Claude 智能体 11 天从 Zig 重写为 Rust，耗资 16.5 万美元，Zig 创始人炮轰"没人把关的烂代码"</h3>
+    <p>Bun 创始人 Jarred Sumner 宣布，用一批并行运行的 Claude 智能体，仅用 11 天就把 Bun 从 Zig 移植到 Rust，按 API 定价约花费 16.5 万美元。这表明过去被认为"规模太大无法实施"的软件重构，如今借助 AI 已变得可行——Sumner 称此次移植势在必行，源于 Bun 用户发现的漏洞数量日益增多（包括一个与近期 Claude 源码泄露相关的漏洞）。但 Zig 创始人 Andrew Kelley 强烈回击：这与语言差异甚至 AI 使用无关，而是"两个项目截然不同的价值观体系"，他质疑"测试套件连 Zig 代码的 Bug 都无法完全发现，凭什么能发现 100 万行未经审核的粗制滥造代码里的 Bug"。</p>
+    <p>这场争论对一线团队是很好的提醒：AI 让大规模重写的执行成本骤降，但"谁来把关、用什么把关"才是真正的瓶颈。</p>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247665805&idx=2&sn=0dfedefb07c8ad576da6a1dfc31c634b" target="_blank" rel="noopener">Zig 创始人直言，Bun 靠 Claude 生成的 Rust 重构版是"没人把关的烂代码" — AI前线</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="num">04</span>DynamoDB 上线原生向量搜索，语义检索不再需要独立向量库</h3>
-    <p>Amazon DynamoDB 引入原生向量搜索：开发者可以直接把 embedding 与应用数据一起存储，直接在 DynamoDB 上执行近似最近邻（ANN）查询，无需再引入独立的向量数据库。</p>
-    <p>支持带过滤条件的相似度搜索，以及可配置的向量索引，适合做 RAG、语义检索等负载。对已有 DynamoDB 基础、想省去额外基础设施的团队是直接的架构简化选项。</p>
-    <span class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/aws-dynamodb-vector-search/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ</a></span>
+    <div class="tag-row"><span class="tag">Java</span><span class="tag">JDK 28</span></div>
+    <h3>JEP 540：JDK 28 将内置 Simple JSON API，无需外部依赖</h3>
+    <p>JEP 540（Simple JSON API）已推进到 Target 状态，计划落地 JDK 28。它提供一套紧凑的 JSON 解析与生成 API，无需任何外部依赖，核心聚焦"做基本事"：基于不可变值层次结构，支持简单遍历与转换，并强制执行严格语法规则。对 Java 开发者来说，轻量 JSON 场景终于有官方标准解，不必再为一个小接口拉进 Jackson/Gson。孵化期间收到的社区反馈将直接影响其最终 API 形态，建议提前关注并试用。</p>
+    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/java-native-json-api/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">JEP 540 Proposed to Target JDK 28 with a Simple JSON API — InfoQ</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="num">05</span>Qwen3.8-27B 开源即登顶 Hugging Face，量化版能跑 16GB MacBook</h3>
-    <p>阿里开源 Qwen3.8 系列，其中 Qwen3.8-27B 是原生多模态稠密（Dense）模型，仅 270 亿参数，整体水平超越 Qwen3.7-Plus，在编程与办公真实场景表现亮眼。社区量化版 AD-IQ3_S 已能在 16GB MacBook Air 上运行，且与 BF16 原版输出一致性达 92.4%。</p>
-    <p>目前 Qwen3.8-27B 已是 Hugging Face #1 trending；阿里开源模型近 6 个月全球累计下载超 30 亿次，位居全球第一。对想本地跑模型做私密编码辅助的开发者非常友好。</p>
-    <span class="src">📎 来源: <a href="https://x.com/Alibaba_Qwen/status/2088891548507492646" target="_blank" rel="noopener">Qwen(@Alibaba_Qwen)</a> · <a href="https://x.com/Alibaba_Qwen/status/2088876951041941792" target="_blank" rel="noopener">Qwen(@Alibaba_Qwen)</a> · <a href="https://x.com/Alibaba_Qwen/status/2088881015855182122" target="_blank" rel="noopener">Qwen(@Alibaba_Qwen)</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650886824&idx=2&sn=9a392650fd41164f4f1633eeae51f11a" target="_blank" rel="noopener">创业邦</a></span>
+    <div class="tag-row"><span class="tag">CI/CD</span><span class="tag">Cloudflare</span><span class="tag">TypeScript</span></div>
+    <h3>Cloudflare 把 CI 管道变成 TypeScript 工作流：cloudflare/ci SDK</h3>
+    <p>Cloudflare 发布 <code>cloudflare/ci</code>，一个定义在 Cloudflare Workflows 之上的 CI SDK，用 TypeScript 声明式地写管道。核心特性：每一步具备持久重试与重放（durable retries/replay）、默认并发的步骤、以及 Sandbox 快照缓存，运行在 Workers runtime 上。它依赖仍处于私有 beta 的 Artifacts，所以 InfoQ 的评价很中肯——可迁移的教训是"durable-step 模型"，而不是把它当成现成的 CI 替代品。对于研究 CI 如何从"脚本串行"走向"可恢复工作流"的团队，这值得精读。</p>
+    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/cloudflare-ci-code-workflows/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">Cloudflare Turns CI Pipelines into TypeScript Workflows — InfoQ</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="num">06</span>Codex 上线 GPT-5.6 多智能体 v2，ChatGPT 前端性能大优化</h3>
-    <p>Codex 上线 GPT-5.6「多智能体 v2」：主 Agent 可以把不同子任务自动委派给不同的模型，每个子 Agent 还能单独设置推理强度。OpenAI 总裁 Greg Brockman 表示这是「朝着告别手动选模型的方向前进」。</p>
-    <p>同步曝光的 ChatGPT 前端优化数据同样夸张：应用加载速度提升 94%、堆内存增长减少 87.8%、整体内存占用砍掉 41.2%、网络请求数暴降 98.2%、对话记录加载缩减 99.6%。一个 741 轮、231MB 的「怪物级」Agent 对话打开时间从 27.62 秒降到 1.66 秒——长会话卡顿问题被直接针对性地解决。</p>
-    <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652718320&idx=1&sn=4eaec3336d6f719c313a098630755389" target="_blank" rel="noopener">新智元</a></span>
+    <div class="tag-row"><span class="tag">可观测性</span><span class="tag">MCP</span><span class="tag">Agent</span></div>
+    <h3>Grafana gcx CLI 与 MCP Server 正式 GA：让编码 Agent 直接查可观测性数据</h3>
+    <p>Grafana Labs 宣布 gcx CLI 与 Grafana MCP Server 正式 GA。两者让 AI 编码 Agent 能在开发过程中实时拉取 Grafana Cloud 或自托管实例的 metrics、logs、traces、SLOs 和 Synthetic Monitoring 结果。也就是说，agent 写代码、排查问题时可以直接感知线上运行状态，而不是靠猜。"可观测性驱动开发"从口号变成了可接入的 MCP 能力，对做运维平台、SRE 工具的开发者是明确的生态信号。</p>
+    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/grafana-mcp-server-telemetry/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">Grafana's gcx and MCP Server Reach GA for Telemetry-Driven Agent Development — InfoQ</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="num">07</span>React 生态更新：TanStack Form v2 Alpha + React Native 0.87</h3>
-    <p>TanStack Form v2 Alpha 发布：这个无头表单库经过一年的 v1 反馈被彻底重建。最重要的变化在校验——不再为每个事件提供一个处理函数，而是改为「一组校验器组成的流水线」，每个校验器自行声明触发时机与条件；类型安全与 SSR 表现也获得提升。</p>
-    <p>React Native 0.87 正式发布：公开 JavaScript API 统一为 Strict TypeScript API（类型由 RN 源码直接生成），Metro 升级到更轻量的 v0.87，并为 iOS 实验性支持 Swift Package Manager。另有 GTKX 1.0——用 React 构建原生 Linux 桌面应用。</p>
-    <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247549207&idx=1&sn=0cb0f4218cdf2d93f1a30f23f8232862" target="_blank" rel="noopener">印记中文</a></span>
+    <div class="tag-row"><span class="tag">Cursor</span><span class="tag">代码托管</span><span class="tag">平台</span></div>
+    <h3>Cursor 上线 Origin 代码托管平台：快、易用、与 Cursor 深度集成，今日开启 Beta</h3>
+    <p>Cursor 正式发布 Origin 代码托管平台，定位"快、易用、与 Cursor 深度集成"，支持一键从 GitHub 同步仓库，并已与 Vercel、Buildkite、Depot 等头部 GitHub 集成服务达成合作，更多集成陆续上线。在 AI 编程工具普遍向上游代码托管、CI、部署延伸的趋势下，Origin 意味着 Cursor 正从"编辑器"扩张为完整的开发平台——对团队而言，是否迁移取决于对"AI 原生托管 + 仓库内模型上下文"工作流的判断，Beta 期值得体验一下。</p>
+    <div class="src">📎 来源: <a href="https://x.com/cursor_ai/status/2089399057659596847" target="_blank" rel="noopener">Origin, our code hosting platform, is now live — Cursor(@cursor_ai)</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="num">08</span>Claude Sonnet 5 永久降价：中端价格，接近旗舰能力</h3>
-    <p>Anthropic 宣布 Claude Sonnet 5 的首发定价<span class="pill green">永久保留</span>：输入每百万 token $2、输出每百万 token $10，而非原计划 8/31 后上调至 $3/$15（涨幅 50%）。</p>
-    <p>Sonnet 5 拥有 100 万 token 上下文、最大 128K 输出，SWE-bench Verified 得分 85.20%，部分任务性能已接近旗舰级 Opus 4.8——被 Anthropic 视为迄今最具 agentic 能力的 Sonnet 系列。定价直接低于 OpenAI 中端模型 GPT-5.6 Terra（$2.50/$15），对高频调用 API 的开发者意味着真金白银的边际成本下降。</p>
-    <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651290850&idx=2&sn=469d2172bf4f84c7f907d01f9bc3c969" target="_blank" rel="noopener">InfoQ</a></span>
+    <div class="tag-row"><span class="tag">OpenAI</span><span class="tag">上下文工程</span></div>
+    <h3>GPT-5.6 Sol 的"保留推理 + 压缩"：ARC-AGI-3 从 13.3% 提到 38.3%，输出 token 减少约 6 倍</h3>
+    <p>OpenAI 公布 GPT-5.6 Sol 配合 retained reasoning（保留推理痕迹）与 compaction（压缩）机制的效果：ARC-AGI-3 得分从 13.3% 提升到 38.3%，同时输出 token 减少约 6 倍。这是上下文工程价值的又一个实证——不是所有中间推理都要丢弃或全量重算，保留关键推理痕迹、压缩历史，就能显著提升效率与效果。对做长链路 Agent 的开发者，这直接关系到 compaction 策略与成本设计。</p>
+    <div class="src">📎 来源: <a href="https://x.com/OpenAIDevs/status/2089374232040132764" target="_blank" rel="noopener">With retained reasoning and compaction, GPT-5.6 Sol improved… — OpenAI Developers(@OpenAIDevs)</a></div>
   </div>
 </section>
 
 <!-- ============ 深度技术解读 ============ -->
-<section>
-  <h2>深度技术解读</h2>
+<section class="section">
+  <h2 class="section-title purple"><span class="num">2</span>深度技术解读</h2>
 
-  <div class="card">
-    <h3><span class="pill purple">深度 01</span> DeepSeek Harness：「一切皆插件」的 Agent 操作系统</h3>
-    <p><b>架构理念。</b>「Harness」原义是马具、缰绳，引申为让模型能当 Agent 干活的那套外壳。DSH 的设计核心是「一切皆插件」：模型、工具、技能、会话、沙箱、UI 全部可替换重组，插件甚至可以调用竞对模型。这与 Harrison Chase 描述 deepagents 的架构同源——agent 运行的「backend」只暴露文件系统类操作（read/write/edit/execute），backend 本身可以是数据库、对象存储或真文件系统；backend 与 agent loop 分离，实现「separate the brains from the hands」，并可经 MCP、A2A 等标准端点部署。</p>
-    <div class="highlight"># 安装（Node.js 运行时）
-npx @deepseek-ai/dsh
-
-# 常用插件示例（聚合站 dsh.so）
-dsh plugin --profile web add @liustack/modlens@latest        # 识图/读截图
-dsh plugin --profile web add github:dsh-external/dsh-at-file # @ 引用工作区文件
-dsh plugin --profile web add dsh-paste-input                 # Ctrl+V 粘贴文件
-dsh plugin --profile web add dsh-cc-tui                      # Claude Code 风格终端</div>
-    <p><b>插件生态爆发。</b>上线当天 dsh-plugin 话题下出现上千个插件仓库，贡献者里大量 B 站 UP 主——发布当天热榜第一的 colleague-skill、第三的 OpenBiliClaw 都出自 B 站创作者。生态周边也迅速跟上：DSH Desktop（MIT 协议社区桌面客户端，双击即用，支持 macOS/Windows）、Windows 启动器（用轻量 WebView2 小窗口代替浏览器）、一套 runtime 覆盖 Desktop/Web/TUI 三种体验、消息队列增强面板（编辑/删除/插话/排序，误删 10 秒内可撤销）。</p>
-    <p><b>对开发者的意义。</b>DSH 刻意不把「开箱即用」当作目标——它更像一个可组合的 agent 平台层。如果你正在做 Agent 相关产品，这套「模型 / 工具 / 技能 / 沙箱全可插拔」的分层值得借鉴；其插件生态的演进方式（聚合站 + 社区规范）本身就是一种分发模式的样本。</p>
-    <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzAwODIyOTQ4Mw==&mid=2649448074&idx=1&sn=c7d8c4f74d34acaa7ab94260c9b6c398" target="_blank" rel="noopener">向阳乔木推荐看</a> · <a href="https://x.com/hwchase17/status/2089029054611837324" target="_blank" rel="noopener">Harrison Chase(@hwchase17)</a> · <a href="https://x.com/vista8/status/2088815337815056885" target="_blank" rel="noopener">向阳乔木(@vista8)</a> · <a href="https://x.com/geekbb/status/2088787826246877352" target="_blank" rel="noopener">Geek(@geekbb)</a></span>
+  <div class="deep">
+    <h3># 上下文工程：压缩可能是个陷阱，提示词缓存才是成本主战场</h3>
+    <p>在一场面向开源 AI Tutor 项目的实测中，Towards AI 团队跑了 11 种上下文处理预设，结果出乎意料：<strong>"对上下文什么都不做"（原样保留历史）在召回、成本、延迟三项指标上同时打败了所有压缩技术</strong>，他们自己的生产默认配置甚至比"完全不动历史"更差。结论的关键在于提示词缓存。</p>
+    <h4>为什么压缩会"亏钱"</h4>
+    <ul>
+      <li>该场景下 <strong>97% 的 token 从缓存读取</strong>，而缓存 token 在某些 API 上价格便宜最多 <strong>50 倍</strong>。</li>
+      <li>只要对上下文做任何改写（summarize / compact / truncate），就会使请求前缀变化、<strong>缓存整段失效</strong>，下一轮全部按全价 prefill 计费。</li>
+      <li>因此压缩必须把上下文缩小超过约 50 倍才能覆盖缓存失效的成本——大多数场景根本做不到。Louis-François Bouchard 的结论很直接：<strong>summarization 可能是一个陷阱</strong>。</li>
+    </ul>
+    <h4>Claude Code 的成本模型（来自社区优化指南）</h4>
+    <ul>
+      <li>单 token 价格三大决定因素：<strong>模型</strong>（更大模型更贵）、<strong>输入 vs 输出</strong>（输出约为输入的 5 倍，thinking token 占大头且由 /effort 控制，可用 <code>MAX_THINKING_TOKENS=0</code> 关闭）、<strong>提示词缓存</strong>（读 0.1×，写最高 2×，写入只发生一次）。</li>
+      <li>以下行为会<strong>击穿缓存</strong>、导致整段会话重新全价 prefill：切换 <code>/model</code>、切换 <code>/effort</code>、开启 Fast mode、执行 <code>/compact</code>、缓存超时（订阅约 1 小时，API key 约 5 分钟，可设 <code>ENABLE_PROMPT_CACHING_1H=1</code> 延长）。</li>
+    </ul>
+    <div class="callout">
+      <strong>实践建议：</strong>常规体力活用小模型；保持会话前缀稳定、避免频繁切模型/切思考档位；轻易不要 compact；恢复旧会话基本必然全价 prefill；把"缓存友好"作为长会话的设计目标。
+    </div>
+    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=WP3hjUXd918" target="_blank" rel="noopener">Context Engineering in 2026 — AI Engineer / Towards AI</a> · <a href="https://x.com/shao__meng/status/2089234540565057788" target="_blank" rel="noopener">Claude Code 会话价值最大化指南 — meng shao(@shao__meng)</a></div>
   </div>
 
-  <div class="card">
-    <h3><span class="pill purple">深度 02</span> Claude 文本水印原理：不改变选词的「统计指纹」与社区反制</h3>
-    <p><b>机制。</b>Anthropic 发布官方技术说明，解释 Claude 文本水印的工作方式。方案并非自研：Claude 用的是 Google DeepMind 2024 年发表在《Nature》上的 <b>SynthID-Text</b>，可上溯至 Scott Aaronson 2022 年的提案。这一脉方案的共同特征，是在模型选词时用「密钥」改变随机数的来源，从而在输出中留下统计痕迹。</p>
-    <p>Anthropic 举的例子很直观：模型写到「今天天气很冷，而且___」，下一个词可能是「阴沉」也可能是「灰蒙蒙」，对读者意思差不多。正常情况下模型用随机数在这些候选里选；加水印后选词过程仍随机，但随机数的来源变成由密钥和前文共同决定——文本读起来完全一样，事后拿密钥核对选词序列，就能算出这段话出自 Claude 的概率。</p>
-    <p><b>两个关键设计。</b>① 水印不会让模型选它本来不会选的词（不会为了打标而硬塞「nubilous」这种生僻词），只在模型本就犹豫的选择上起作用；② Anthropic 内部测试未观察到对内容质量、创意水平或可读性的影响，并援引 Google 在 Gemini 上的数据佐证。</p>
-    <p><b>社区反应两极。</b>一篇 MIT 协议的「脱水平印」开源仓库在 Anthropic 公布技术细节后数天内冲上 10,000 stars，同时针对 Claude / SynthID-Text / OpenAI 标记以及图片 PDF 中的 C2PA / EXIF 元数据。另一边也有工程视角的文章冷静指出：AI 文本水印影响有限——文本质量无损、实践中并非那么容易检测、不侵犯隐私，且到 2027 年各厂商大概率都会这么做。</p>
-    <span class="src">📎 来源: <a href="https://x.com/dotey/status/2088803072084504812" target="_blank" rel="noopener">宝玉(@dotey)</a> · <a href="https://x.com/AiBreakfast/status/2089019039427543484" target="_blank" rel="noopener">AI Breakfast(@AiBreakfast)</a> · <a href="https://seangoedecke.com/ai-text-watermarking-is-not-a-big-deal/" target="_blank" rel="noopener">seangoedecke.com RSS feed</a></span>
+  <div class="deep">
+    <h3># Agent Harness 工程化：从"一切皆插件"到企业级 Skill 资产治理</h3>
+    <p>这一轮最值得关注的基础设施变化，是 Agent 运行层（Harness）从"个人玩具"走向"企业治理对象"。三篇国内一线实践可以连起来看。</p>
+    <h4>DeepSeek Harness：Cordis 微内核 + 三层组装</h4>
+    <ul>
+      <li>底层 Cordis 只管"插件何时加载/卸载、如何协作"；产品的每个部分都是插件，连驱动 Agent 的主循环本身也是。</li>
+      <li>中间三层组装：<strong>Profile</strong>（本地组装方案，列出要叠放的组合包与用户配置补丁）→ <strong>Bundle</strong>（组合包）→ 运行时叠加。换模型提供方不改源码、换沙箱后端不重启、换 agent loop 不动框架。</li>
+    </ul>
+    <h4>阿里技术：Skill 工程化，从 Prompt 工程到 Skill 工程</h4>
+    <ul>
+      <li>传统 Prompt 工程把领域知识全部塞进提示词，项目越复杂 Prompt 越臃肿、上下文被撑满、复用性差。</li>
+      <li>Agent Skill 把领域知识与工作流封装为<strong>可移植、可版本控制的文件夹</strong>（类比"新员工手册"），Agent 按需加载。文章结合真实工程化项目 trade-ab-skill，讲结构规范、触发机制与作用域优先级。</li>
+    </ul>
+    <h4>百度 Geek 说：商业客户端 Harness 资产治理</h4>
+    <ul>
+      <li>多产品线、多 Agent、多台 Mac 本地部署下，Rules / Skills / Hooks / MCP / 配置文件散落，配置漂移、规则冲突成为隐性技术债。</li>
+      <li>方案从"单文件同步"演进到"ACX 仓库整体插件化"：<strong>ACX 唯一事实源 + 三层资产治理 + 每日自动同步</strong>，为规模化落地 Agent 研发模式提供可复制的资产管理范式。</li>
+    </ul>
+    <p>一条主线：当团队把 Agent 当"一线生产力"时，<strong>资产的版本管理、分发、灰度、回滚</strong>会成为和代码资产同等重要的工程问题。</p>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=Mzg4NTczNzg2OA==&mid=2247511112&idx=1&sn=279ba391d62489b0226d94570388ac8d" target="_blank" rel="noopener">Harness 工程之道：Skill 原理与最佳实践 — 阿里技术</a> · <a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247607453&idx=1&sn=0d0dc5f97c286cb80c48a42a7bbf654f" target="_blank" rel="noopener">商业客户端Harness资产管理与应用实践 — 百度Geek说</a></div>
   </div>
 </section>
 
 <!-- ============ 工具推荐 ============ -->
-<section>
-  <h2>工具推荐</h2>
+<section class="section">
+  <h2 class="section-title green"><span class="num">3</span>工具推荐</h2>
 
-  <div class="grid2">
-    <div class="card">
-      <h3>🛠 DSH Desktop</h3>
-      <p>DeepSeek Harness 的开源桌面客户端（MIT 协议，社区项目，非官方）。把启动、更新、报错提示和数据保存封装好，双击图标即用，无需再开终端窗口。保留项目管理、Agent 与插件能力，且把除 DeepSeek 外其他模型的适配做得更丝滑。</p>
-      <div class="highlight">github.com/dataelement/dsh-desktop</div>
-      <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247536030&idx=1&sn=e2c7ef972c3ff21b834237fff7a24470" target="_blank" rel="noopener">逛逛GitHub</a></span>
+  <div class="tools-grid">
+    <div class="tool">
+      <h3><code>Copilot code review</code> 审查深度分级（Balanced/Lite）GA</h3>
+      <p>GitHub Copilot 代码审查新增"深度可调"：Balanced 做更深入分析、Lite 用于简单改动，可在 org/repo 级别设默认值，也可在 PR 上临时选择。AI 审查从"一刀切"走向按变更风险分配成本。</p>
+      <div class="src">📎 <a href="https://x.com/github/status/2089057545998479457" target="_blank" rel="noopener">GitHub(@github)</a></div>
     </div>
 
-    <div class="card">
-      <h3>🛠 GitMCP：把仓库变成 MCP 文档服务器</h3>
-      <p>让 AI Coding Agent 准确理解项目 API、架构与配置，避免「猜 API」或 API 过时。通用规则即 <span class="kbd">https://gitmcp.io/&lt;owner&gt;/&lt;repo&gt;</span>，无需自建 MCP Server。对涉及 DWG/DXF 解析、Three.js、Web Worker、Vue 这类复合项目尤其有效。</p>
-      <span class="src">📎 来源: <a href="https://juejin.cn/post/7673875524200808494" target="_blank" rel="noopener">掘金本周最热</a></span>
+    <div class="tool">
+      <h3><code>h3.c</code> MiniMax-H3 Mac 原生推理引擎</h3>
+      <p>antirez 开源的、针对 Mac 系列芯片原生优化的 MiniMax-H3 AI 视频/音频生成模型推理引擎，把本地跑多模态生成这件事做得更顺。</p>
+      <div class="src">📎 <a href="https://x.com/dingyi/status/2089322099420901482" target="_blank" rel="noopener">Ding(@dingyi)</a></div>
     </div>
 
-    <div class="card">
-      <h3>🛠 MLightCAD iframe 查看器</h3>
-      <p>纯浏览器端 DWG/DXF 查看方案：通过 <span class="kbd">url=</span> 查询参数在 iframe 中打开图纸，默认 review 模式（平移、缩放、测量、批注，不能编辑/新建）。全前端技术栈，文件从你的主机直达用户浏览器，不经任何 CAD 后端，图纸数据不出站——对把图纸当机密资产的产品是个强隐私叙事。</p>
-      <span class="src">📎 来源: <a href="https://juejin.cn/post/7674372498314936370" target="_blank" rel="noopener">掘金本周最热</a></span>
+    <div class="tool">
+      <h3><code>go2rtc</code> 多品牌摄像头接入 HomeKit</h3>
+      <p>用 go2rtc 项目把水星等品牌摄像头接入 HomeKit，配合硬解转码 H264 后在 HomeKit 里显示 1440p。家庭/设备侧开发的实用方案。</p>
+      <div class="src">📎 <a href="https://x.com/geekbb/status/2089333937411928150" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
     </div>
 
-    <div class="card">
-      <h3>🛠 Mole：Rust 编译磁盘清理</h3>
-      <p>Rust 项目一次编译动辄几十 GB，Mole 是实测好用的清理工具；另一个亮点是磁盘占用分析，能快速定位隐藏的大体积目录，解决后一劳永逸。</p>
-      <span class="src">📎 来源: <a href="https://x.com/dotey/status/2089006280530702447" target="_blank" rel="noopener">宝玉(@dotey)</a></span>
+    <div class="tool">
+      <h3><code>klibs.io MCP Server</code> KMP 库目录查询</h3>
+      <p>JetBrains 的 klibs.io 已收录 4200+ Kotlin Multiplatform 项目，现在可直接通过 MCP server 把最新的库元数据带进 AI 开发工作流，发现与选型更省事。</p>
+      <div class="src">📎 <a href="https://blog.jetbrains.com/kotlin/2026/08/klibsio-grows-to-4200-kmp-projects-with-smarter-discovery-and-new-ai-integrations/" target="_blank" rel="noopener">The JetBrains Blog</a></div>
     </div>
 
-    <div class="card">
-      <h3>🛠 Edgechat：Cloudflare 全家桶团队聊天</h3>
-      <p>前端 Vue 3，后端由 Workers / D1 / KV / R2 / Durable Objects 支撑，账号、公开/私有群组、私信、实时消息、文件上传、管理后台俱全，GitHub Actions 一键部署、全程不用管服务器。少见功能：群组可与 Telegram 群双向桥接，一个 Bot 让两边成员像在同一个群里聊天。</p>
-      <div class="highlight">github.com/aozorae/Edgechat</div>
-      <span class="src">📎 来源: <a href="https://x.com/geekbb/status/2089012581612871862" target="_blank" rel="noopener">Geek(@geekbb)</a></span>
+    <div class="tool">
+      <h3><code>IndexTTS 2.5</code> 开源多语种语音合成</h3>
+      <p>B 站自研 IndexTTS 2.5：中/英/日/西/阿五语种零样本配音，推理速度翻倍，跨语言情绪还原更自然，支持原声语速控制。声音合成方向的实用开源库。</p>
+      <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=Mzg3Njc0NTgwMg==&mid=2247504396&idx=1&sn=566c8a97a7ce765cac6b2df5d2f515e4" target="_blank" rel="noopener">哔哩哔哩技术</a></div>
     </div>
 
-    <div class="card">
-      <h3>🛠 Motrix 复活回归</h3>
-      <p>停更 3 年多的开源下载工具 Motrix 突然复活，一天连推 beta.1 到 beta.14，最新 commit 仍在发布。老牌下载器的回归对桌面工具生态是好事。</p>
-      <div class="highlight">github.com/agalwood/Motrix</div>
-      <span class="src">📎 来源: <a href="https://x.com/geekbb/status/2088921526095827189" target="_blank" rel="noopener">Geek(@geekbb)</a></span>
+    <div class="tool">
+      <h3><code>markdown-svg-renderer</code> 渲染含 SVG 的 Markdown</h3>
+      <p>Simon Willison 的轻量工具：粘贴 Markdown 或提供 URL/Gist，即可渲染包含 SVG 文档的 Markdown 转录页，可生成可书签的分享链接。适合技术写作与文档分享。</p>
+      <div class="src">📎 <a href="https://simonwillison.net/2026/Aug/16/markdown-svg-upgrades/" target="_blank" rel="noopener">Simon Willison's Weblog</a></div>
     </div>
   </div>
 </section>
 
 <!-- ============ 实践指南 ============ -->
-<section>
-  <h2>实践指南</h2>
+<section class="section">
+  <h2 class="section-title orange"><span class="num">4</span>实践指南</h2>
 
   <div class="card">
-    <h3><span class="pill green">实战 01</span> 让 Agent 输出「简单格式」来省 Token：BaoCut 的真实调优</h3>
-    <p>宝玉排查 BaoCut 转录慢的真实经历很有启发：让 Fable 5 / Codex 分析瓶颈，得到的都是「多开 workers、预热 workers」这类看起来靠谱但实际无效的建议。最后自己抓数据包才发现——耗时的根因是<b>输出 JSON 格式太长</b>，导致生成与校验时间都长。</p>
-    <p>改成纯文本 / 简单 HTML 输出后效果立竿见影：调用次数从 <b>33 次降到 12 次</b>，时间从 <b>31 分钟降到 18 分钟</b>；近 7 小时的访谈完整润色也只需 42 分钟。若走 Cloud 模型，1 小时视频完整翻译校对成双语字幕用 DeepSeek v4 Flash 成本约 ¥0.4。</p>
-    <div class="highlight"># 核心 trade-off
-让程序简单  → 模型输出复杂 → 费 token
-让模型输出简单 → 程序解析复杂 → 省 token
-（如字幕润色需 diff 比对、把变更重新对应到原文单词）</div>
-    <p>关键教训：把「让模型输出结构化 JSON」当成默认答案之前，先算一笔 token 账——结构化的代价最终由你的调用次数和等待时间买单。</p>
-    <span class="src">📎 来源: <a href="https://x.com/dotey/status/2088838461511839844" target="_blank" rel="noopener">宝玉(@dotey)</a></span>
+    <div class="tag-row"><span class="tag">Agent 上下文</span><span class="tag">CLAUDE.md</span></div>
+    <h3>管理 Codebase 上下文文件，拿到更好的 Agent 输出</h3>
+    <p>freeCodeCamp 的文章点破一个常见痛点：Agent 写出来的代码"能用但都得重写"，原因往往不是模型推理不行，而是"没人告诉它这个代码库怎么工作"。一个请求 90 秒出端点的背后，可能混入了 package.json 里没有的校验库、用了团队早已放弃的 Jest、在 route handler 里直连数据库——因为团队的约定都写在评审记录里而不是 Agent 能看到的地方。解法是把团队规范固化成上下文文件（如 CLAUDE.md / AGENTS.md），让 Agent 一进仓库就"知道规矩"。这是当前 ROI 最高的 Agent 提效手段之一。</p>
+    <div class="src">📎 来源: <a href="https://www.freecodecamp.org/news/how-to-manage-context-files-in-your-codebase-and-get-better-agent-output/" target="_blank" rel="noopener">How to Manage Context Files in Your Codebase and Get Better Output From AI Coding Agents — freeCodeCamp</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="pill green">实战 02</span> SQL 优化：为什么「先聚合再 JOIN」更高效</h3>
-    <p>数据量上来之后「查个统计结果要等半天」，往往是因为把聚合放在 JOIN 之后。JOIN 的计算复杂度与两张表行数的乘积相关（Nested Loop / Hash Join / Merge Join），数据量越大越慢；而聚合能把订单表从 N 行压缩到 M 行（M ≪ N）。</p>
-    <div class="highlight">-- 先 JOIN 再聚合：先拼大表，慢
-SELECT u.name, SUM(o.amount)
-FROM orders o JOIN users u ON o.user_id = u.id
-GROUP BY u.name;
-
--- 先聚合再 JOIN：先缩行数，快
-SELECT t.name, t.total
-FROM (SELECT user_id, SUM(amount) AS total
-      FROM orders GROUP BY user_id) t
-JOIN users u ON u.id = t.user_id;</div>
-    <p>优化思想一句话：<b>尽早减少数据量，避免在大数据集上做 JOIN</b>。小表测试和千万级数据下都成立。</p>
-    <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247637431&idx=1&sn=328bd6bba04f1eaa0f77ca3d40df8eb4" target="_blank" rel="noopener">dbaplus社群</a></span>
+    <div class="tag-row"><span class="tag">成本优化</span><span class="tag">Codex</span></div>
+    <h3>在 Codex 中为 GPT-5.6 Sol 开启 1M 上下文窗口（配置逐行抄）</h3>
+    <p>在 <code>~/.codex/config.toml</code> 顶部（任何 <code>[section]</code> 之前）写入三行即可：</p>
+    <pre>model = "gpt-5.6-sol"
+model_context_window = 1000000
+model_auto_compact_token_limit = 900000</pre>
+    <p>更大的窗口让 Codex 在压缩旧材料前保留更多代码、工具输出与会话历史。但注意：宝玉的补充观点是官方已经为性能/成本调优过，只要压缩得当，上下文短一些反而更快更便宜——建议先保持默认，确有大仓库需求再开。</p>
+    <div class="src">📎 来源: <a href="https://x.com/xiaohu/status/2089154640898404567" target="_blank" rel="noopener">如何在 Codex 中为 GPT-5.6 Sol 启用 1M 上下文窗口 — 小互 / Tibo</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="pill green">实战 03</span> 平台团队：用「接口与契约」替代「开会协调」</h3>
-    <p>KubeCon 欧洲大会上的一个平台团队经验：把平台从「项目思维」转向「产品思维」。做法是引入<span class="pill yellow">生产者—消费者模型</span>——提供某项能力的团队是生产者，使用方是消费者；生产者定义清晰的接口，交互走契约而不是临时协调。</p>
-    <p>一条可操作的经验法则：<b>如果两个团队需要定期开会来协调工作，说明它们之间的接口很可能没被明确定义。</b>同时「完成」的定义从「按范围和期限交付」改为「当一项能力能被其他人可靠地使用」——有文档、易理解、可运维、真正被目标消费者使用。评估就两个问题：「有人用它吗？」「它减少了用户的阻力吗？」</p>
-    <span class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651290850&idx=3&sn=6e678c6014c61378ce10be43e66ae961" target="_blank" rel="noopener">InfoQ</a></span>
+    <div class="tag-row"><span class="tag">AI Coding</span><span class="tag">大型重构</span><span class="tag">可验证</span></div>
+    <h3>去哪儿：AI Coding 驱动 15 万行高并发核心系统重构，总工时 100PD → 30PD</h3>
+    <p>去哪儿国内机票团队复盘了一次 AI Coding 重构实践：15 万行、主流程强依赖、链路复杂、对性能与稳定性要求极高的报价核心系统。结果：交付效率上总工时约 100 PD 降到 30 PD；搜索主流程 P50/P90 耗时均下降约 70%；机器资源成本大幅节省。文章回答的核心问题不是"AI 能不能写代码"，而是"AI 能不能从辅助写代码升级为驱动大型重构的工程化执行系统"——在长上下文、大影响面、高风险场景下如何让 AI 执行可控、可验证、可回滚。真正可复用的经验不是提示词，而是背后的工程约束与质量闭环。</p>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzA3NDcyMTQyNQ==&mid=2649283450&idx=1&sn=792041640adf9ebaa0f722d2903e4b2c" target="_blank" rel="noopener">AI Coding驱动大型核心系统重构实践 — Qunar技术沙龙</a></div>
   </div>
 
   <div class="card">
-    <h3><span class="pill green">实战 04</span> Claude Code 自动续跑 & GitHub Pages 一键上线</h3>
-    <p>两个提升日常效率的小技巧：</p>
-    <p>① Claude Code 桌面版新增 <b>auto-continue</b> 复选框：5 小时用量限制到期后自动继续，主 Agent 和子 Agent 都能续，无需手动输入 return 或重新开 subagent，可复用之前的子 Agent。</p>
-    <p>② GitHub 官方演示用 <b>GitHub Copilot CLI + Namecheap skill</b> 自动化：从空仓库到自定义域名 + HTTPS 的 GitHub Pages 站点约 14 分钟，全程无需手动编辑 DNS 记录。这类「Copilot 驱动运维」的工作流会是 2026 年的常态。</p>
-    <span class="src">📎 来源: <a href="https://x.com/dotey/status/2088877534859473370" target="_blank" rel="noopener">宝玉(@dotey)</a> · <a href="https://x.com/github/status/2088709818714329316" target="_blank" rel="noopener">GitHub(@github)</a></span>
+    <div class="tag-row"><span class="tag">Agent 设计</span><span class="tag">框架</span></div>
+    <h3>"AI Agent 五要素测试"：判断什么业务该做成 Agent，而不是自动化</h3>
+    <p>一个实用的判断框架：① 重复的触发器（高频重复才摊得平构建成本）；② 稳定的输入（输入越结构化，解析越可靠）；③ 明确的工具集（行为可控、结果可验证）；④ 可衡量的终点（没有验收标准就无法闭环迭代）；⑤ 中间需要判断力（每次运行有差异、要当下做真实决策）。关键洞察：前 4 条回答"这件事能不能被自动化"，第 5 条才是分水岭——规则驱动、路径完全相同的场景用 Automation（if-then），需要理解上下文、权衡选项、处理例外的场景才值得用 Agent（LLM 相对传统脚本的本质增量）。</p>
+    <div class="src">📎 来源: <a href="https://x.com/shao__meng/status/2089311613405057099" target="_blank" rel="noopener">我应该把什么业务/工作流做成 AI Agent？ — meng shao(@shao__meng)</a></div>
   </div>
 </section>
 
 <!-- ============ 参考链接汇总 ============ -->
-<section>
-  <h2>参考链接汇总</h2>
-  <div class="refs">
-    <ul>
-      <li><span class="fname">向阳乔木推荐看</span> — <a href="https://mp.weixin.qq.com/s?__biz=MzAwODIyOTQ4Mw==&mid=2649448074&idx=1&sn=c7d8c4f74d34acaa7ab94260c9b6c398" target="_blank" rel="noopener">二次元头像=技术大佬？DeepSeek Harness 安装与热门插件</a></li>
-      <li><span class="fname">人人都是产品经理</span> — <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651930237&idx=1&sn=4cdeebc146a39e77783b191a5bd808ea" target="_blank" rel="noopener">DeepSeek 故意做了一个难用的 Agent</a></li>
-      <li><span class="fname">逛逛GitHub</span> — <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247536030&idx=1&sn=e2c7ef972c3ff21b834237fff7a24470" target="_blank" rel="noopener">10 万 Star 的 DeepSeek Harness，终于有开源桌面版了</a></li>
-      <li><span class="fname">AI前线</span> — <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247665770&idx=2&sn=207c47d8661784369f19694b6b2b81a0" target="_blank" rel="noopener">MCP 迎来最大更新：重回上古时代 HTTP</a></li>
-      <li><span class="fname">InfoQ</span> — <a href="https://www.infoq.com/news/2026/08/aws-dogwood-agent-policy/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">AWS Open-Sources Dogwood, Extending Cedar to Govern Sequences of Agent Tool Calls</a></li>
-      <li><span class="fname">InfoQ</span> — <a href="https://www.infoq.com/news/2026/08/aws-dynamodb-vector-search/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">AWS Introduces Native Vector Search for DynamoDB</a></li>
-      <li><span class="fname">Qwen(@Alibaba_Qwen)</span> — <a href="https://x.com/Alibaba_Qwen/status/2088891548507492646" target="_blank" rel="noopener">Qwen3.8-27B flies on a laptop</a></li>
-      <li><span class="fname">Qwen(@Alibaba_Qwen)</span> — <a href="https://x.com/Alibaba_Qwen/status/2088876951041941792" target="_blank" rel="noopener">Qwen3.8-27B is now the #1 trending model on Hugging Face</a></li>
-      <li><span class="fname">Qwen(@Alibaba_Qwen)</span> — <a href="https://x.com/Alibaba_Qwen/status/2088881015855182122" target="_blank" rel="noopener">3,000,000,000 downloads!</a></li>
-      <li><span class="fname">创业邦</span> — <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650886824&idx=2&sn=9a392650fd41164f4f1633eeae51f11a" target="_blank" rel="noopener">千问大模型全球下载超30亿次｜AIGC日报</a></li>
-      <li><span class="fname">新智元</span> — <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652718320&idx=1&sn=4eaec3336d6f719c313a098630755389" target="_blank" rel="noopener">OpenAI提速狂飙16倍！GPT-5.6多智能体V2上线</a></li>
-      <li><span class="fname">印记中文</span> — <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247549207&idx=1&sn=0cb0f4218cdf2d93f1a30f23f8232862" target="_blank" rel="noopener">React 中文周刊 #289</a></li>
-      <li><span class="fname">InfoQ</span> — <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651290850&idx=2&sn=469d2172bf4f84c7f907d01f9bc3c969" target="_blank" rel="noopener">Anthropic 不走高端路线，Sonnet 5 永久降价</a></li>
-      <li><span class="fname">宝玉(@dotey)</span> — <a href="https://x.com/dotey/status/2088803072084504812" target="_blank" rel="noopener">Anthropic 官方技术说明：Claude 文本水印工作方式</a></li>
-      <li><span class="fname">AI Breakfast(@AiBreakfast)</span> — <a href="https://x.com/AiBreakfast/status/2089019039427543484" target="_blank" rel="noopener">Watermark stripper hits 10,000 stars</a></li>
-      <li><span class="fname">seangoedecke.com RSS feed</span> — <a href="https://seangoedecke.com/ai-text-watermarking-is-not-a-big-deal/" target="_blank" rel="noopener">AI text watermarking is not a big deal</a></li>
-      <li><span class="fname">Harrison Chase(@hwchase17)</span> — <a href="https://x.com/hwchase17/status/2089029054611837324" target="_blank" rel="noopener">How we architected deepagents</a></li>
-      <li><span class="fname">向阳乔木(@vista8)</span> — <a href="https://x.com/vista8/status/2088815337815056885" target="_blank" rel="noopener">DSH 插件聚合站与常用基础插件</a></li>
-      <li><span class="fname">Geek(@geekbb)</span> — <a href="https://x.com/geekbb/status/2088787826246877352" target="_blank" rel="noopener">又一堆 DeepSeek Harness 周边</a></li>
-      <li><span class="fname">掘金本周最热</span> — <a href="https://juejin.cn/post/7673875524200808494" target="_blank" rel="noopener">让 AI Coding Agent 直接访问 CAD 文档：GitMCP 实战指南</a></li>
-      <li><span class="fname">掘金本周最热</span> — <a href="https://juejin.cn/post/7674372498314936370" target="_blank" rel="noopener">一行代码集成 DWG/DXF 图纸查看</a></li>
-      <li><span class="fname">宝玉(@dotey)</span> — <a href="https://x.com/dotey/status/2089006280530702447" target="_blank" rel="noopener">Mole：Rust 编译磁盘清理工具</a></li>
-      <li><span class="fname">Geek(@geekbb)</span> — <a href="https://x.com/geekbb/status/2089012581612871862" target="_blank" rel="noopener">Edgechat：跑在 Cloudflare 全家桶上的团队聊天</a></li>
-      <li><span class="fname">Geek(@geekbb)</span> — <a href="https://x.com/geekbb/status/2088921526095827189" target="_blank" rel="noopener">Motrix 复活回归</a></li>
-      <li><span class="fname">宝玉(@dotey)</span> — <a href="https://x.com/dotey/status/2088838461511839844" target="_blank" rel="noopener">BaoCut 调优：输出简单格式省 Token</a></li>
-      <li><span class="fname">dbaplus社群</span> — <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247637431&idx=1&sn=328bd6bba04f1eaa0f77ca3d40df8eb4" target="_blank" rel="noopener">SQL 查询优化：为什么「先聚合再 JOIN」更高效？</a></li>
-      <li><span class="fname">InfoQ</span> — <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651290850&idx=3&sn=6e678c6014c61378ce10be43e66ae961" target="_blank" rel="noopener">少开会、讲契约：平台团队如何降低跨团队协作成本？</a></li>
-      <li><span class="fname">宝玉(@dotey)</span> — <a href="https://x.com/dotey/status/2088877534859473370" target="_blank" rel="noopener">Claude Code 桌面版 auto-continue</a></li>
-      <li><span class="fname">GitHub(@github)</span> — <a href="https://x.com/github/status/2088709818714329316" target="_blank" rel="noopener">空仓库到 GitHub Pages 自定义域名约 14 分钟</a></li>
-    </ul>
-  </div>
-</section>
-
 <footer>
-  ⚡ 开发者实践日报 · 由 tech-daily-generator 生成 · 数据窗口 2026-08-15 18:10 → 2026-08-16 18:10
+  <h2>▌ 参考链接汇总</h2>
+  <ul class="src-list">
+    <li><span class="feed">GitHub</span><a href="https://x.com/github/status/2089108944278970650" target="_blank" rel="noopener">GitHub case-folds every byte of code search at over 45 GiB/s on one core</a></li>
+    <li><span class="feed">GitHub</span><a href="https://x.com/github/status/2089057545998479457" target="_blank" rel="noopener">Copilot code review depth is now up to you (Balanced/Lite GA)</a></li>
+    <li><span class="feed">OpenAI Developers</span><a href="https://x.com/OpenAIDevs/status/2089374232040132764" target="_blank" rel="noopener">GPT-5.6 Sol retained reasoning + compaction (ARC-AGI-3)</a></li>
+    <li><span class="feed">Cursor</span><a href="https://x.com/cursor_ai/status/2089399057659596847" target="_blank" rel="noopener">Origin code hosting platform is now live</a></li>
+    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/java-native-json-api/" target="_blank" rel="noopener">JEP 540 Simple JSON API proposed to target JDK 28</a></li>
+    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/cloudflare-ci-code-workflows/" target="_blank" rel="noopener">Cloudflare Turns CI Pipelines into TypeScript Workflows</a></li>
+    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/grafana-mcp-server-telemetry/" target="_blank" rel="noopener">Grafana gcx and MCP Server reach GA</a></li>
+    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/shadcn-conversational-primitives/" target="_blank" rel="noopener">shadcn brings conversational primitives to shadcn/ui</a></li>
+    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/articles/agentic-fitness-functions-evolutionary-architecture/" target="_blank" rel="noopener">Agentic Fitness Functions for Evolutionary Architecture</a></li>
+    <li><span class="feed">Simon Willison</span><a href="https://simonwillison.net/2026/Aug/16/qwen-38-27b/" target="_blank" rel="noopener">Qwen 3.8 27B is excellent, but defaults to overthinking</a></li>
+    <li><span class="feed">Simon Willison</span><a href="https://simonwillison.net/2026/Aug/16/markdown-svg-upgrades/" target="_blank" rel="noopener">Markdown SVG upgrades</a></li>
+    <li><span class="feed">AI Engineer</span><a href="https://www.youtube.com/watch?v=WP3hjUXd918" target="_blank" rel="noopener">Context Engineering in 2026 — Compaction, Memory &amp; Cost</a></li>
+    <li><span class="feed">AI前线</span><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247665805&idx=1&sn=18246876641d23cd07242e846510b84c" target="_blank" rel="noopener">海外开发者正在"榨干" Qwen3.8-27B</a></li>
+    <li><span class="feed">AI前线</span><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247665805&idx=2&sn=0dfedefb07c8ad576da6a1dfc31c634b" target="_blank" rel="noopener">Zig 创始人直言 Bun 的 Rust 重构版是"没人把关的烂代码"</a></li>
+    <li><span class="feed">腾讯研究院</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTE0ODA2MQ==&mid=2650998369&idx=1&sn=6e02a963e465d53b1ae2fd3db16af115" target="_blank" rel="noopener">DeepSeek 的 Harness，为何是一头黑色鲸鱼？</a></li>
+    <li><span class="feed">Datawhale</span><a href="https://mp.weixin.qq.com/s?__biz=MzIyNjM2MzQyNg==&mid=2247725326&idx=1&sn=83f71af70806d679b72b480ed1e24691" target="_blank" rel="noopener">一文读懂 DeepSeek Harness 插件</a></li>
+    <li><span class="feed">阿里技术</span><a href="https://mp.weixin.qq.com/s?__biz=Mzg4NTczNzg2OA==&mid=2247511112&idx=1&sn=279ba391d62489b0226d94570388ac8d" target="_blank" rel="noopener">Harness 工程之道：Skill 原理与最佳实践</a></li>
+    <li><span class="feed">百度Geek说</span><a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247607453&idx=1&sn=0d0dc5f97c286cb80c48a42a7bbf654f" target="_blank" rel="noopener">商业客户端 Harness 资产管理与应用实践</a></li>
+    <li><span class="feed">freeCodeCamp</span><a href="https://www.freecodecamp.org/news/how-to-manage-context-files-in-your-codebase-and-get-better-agent-output/" target="_blank" rel="noopener">How to Manage Context Files in Your Codebase</a></li>
+    <li><span class="feed">Qunar技术沙龙</span><a href="https://mp.weixin.qq.com/s?__biz=MzA3NDcyMTQyNQ==&mid=2649283450&idx=1&sn=792041640adf9ebaa0f722d2903e4b2c" target="_blank" rel="noopener">去哪儿 AI Coding 驱动大型核心系统重构实践</a></li>
+    <li><span class="feed">meng shao</span><a href="https://x.com/shao__meng/status/2089311613405057099" target="_blank" rel="noopener">AI Agent 五要素测试</a></li>
+    <li><span class="feed">meng shao</span><a href="https://x.com/shao__meng/status/2089234540565057788" target="_blank" rel="noopener">Claude Code 会话价值最大化指南</a></li>
+    <li><span class="feed">JetBrains Blog</span><a href="https://blog.jetbrains.com/kotlin/2026/08/klibsio-grows-to-4200-kmp-projects-with-smarter-discovery-and-new-ai-integrations/" target="_blank" rel="noopener">klibs.io Grows to 4,200+ KMP Projects</a></li>
+    <li><span class="feed">JetBrains Blog</span><a href="https://blog.jetbrains.com/junie/2026/08/junie-gemini-3-7-flash/" target="_blank" rel="noopener">Junie's New Default Runs on Gemini 3.7 Flash</a></li>
+    <li><span class="feed">哔哩哔哩技术</span><a href="https://mp.weixin.qq.com/s?__biz=Mzg3Njc0NTgwMg==&mid=2247504396&idx=1&sn=566c8a97a7ce765cac6b2df5d2f515e4" target="_blank" rel="noopener">IndexTTS 2.5 让声音跨越语言</a></li>
+    <li><span class="feed">Ding</span><a href="https://x.com/dingyi/status/2089322099420901482" target="_blank" rel="noopener">antirez/h3.c MiniMax-H3 Mac 推理引擎</a></li>
+    <li><span class="feed">Geek</span><a href="https://x.com/geekbb/status/2089333937411928150" target="_blank" rel="noopener">go2rtc 摄像头接入 HomeKit</a></li>
+    <li><span class="feed">爱范儿</span><a href="https://www.ifanr.com/1675338" target="_blank" rel="noopener">电商模型测评 RealReplicaBench：所有参评模型均未及格</a></li>
+    <li><span class="feed">LlamaIndex</span><a href="https://x.com/llama_index/status/2089381635464556705" target="_blank" rel="noopener">ExtractBench：文档提取必须带引用（grounding）</a></li>
+  </ul>
+  <p class="footer-note">// generated by tech-daily-generator · role: developer_practice · data window: 2026-08-16 18:19 ~ 2026-08-17 18:19 · source_count: 424</p>
 </footer>
 
 </div>
