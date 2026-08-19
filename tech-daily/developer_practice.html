@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>开发者实践日报 · 2026-08-18</title>
+<title>开发者实践日报 · 2026-08-19</title>
 <style>
   :root {
     --bg: #0d1117;
@@ -265,13 +265,13 @@
 <header>
   <div class="header-top">
     <span class="badge"># developer_practice</span>
-    <span class="badge date">2026-08-18</span>
-    <span class="badge date">508 条新闻 · 24h 窗口</span>
+    <span class="badge date">2026-08-19</span>
+    <span class="badge date">481 条新闻 · 24h 窗口</span>
   </div>
   <h1>开发者实践日报 <span class="prompt">$</span></h1>
   <p class="subtitle">
     面向一线开发者的技术日刊，聚焦 <code>工具 / 框架</code>、<code>最佳实践</code>、<code>底层原理</code> 与 <code>学习资源</code>。
-    本期核心主线：<strong>Qwen3.8-27B 登顶本地 Frontier</strong>、<strong>Cursor Origin 与代码托管战争</strong>、<strong>Agent 上下文与记忆工程</strong>。
+    本期核心主线：<strong>GLM-5.3 登顶开源 SOTA</strong>、<strong>Agent Harness 插件化与 MCP 无状态化</strong>、<strong>AI Coding 工程化落地</strong>。
   </p>
 </header>
 
@@ -280,59 +280,52 @@
   <h2 class="section-title red"><span class="num">1</span>今日技术热榜</h2>
 
   <div class="card">
-    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">开源模型</span><span class="tag">本地部署</span></div>
-    <h3>Qwen3.8-27B 拿下 52 分：首个本地可跑模型达到 GPT-5.6 Luna 的 Frontier 水平</h3>
-    <p>Artificial Analysis 智能指数给 Qwen3.8-27B 打出 <code>52</code> 分，与 <code>GPT-5.6 Luna</code>（max）持平，仅比 <code>GLM-5.2</code>（753B）和 <code>DeepSeek V4 Pro 0813</code>（1.6B 参数）低 1 分——而后两者都是百亿/千亿级参数量。这是历史上第一次一个能在笔记本上本地运行的开源 27B 模型达到 frontier 能力：Xenova 实测它甚至能在浏览器里用自定义 WebGPU 内核跑起来。Cline 官方转发评价"我们没想到本地模型的进展会来得这么快"，社区普遍认为"本地（且开源权重）模型已足够胜任大多数日常任务"。</p>
-    <div class="src">📎 来源: <a href="https://x.com/Alibaba_Qwen/status/2089566892117860844" target="_blank" rel="noopener">Qwen: A local 27B model scoring frontier performance! — Qwen(@Alibaba_Qwen)</a> · <a href="https://simonwillison.net/2026/Aug/17/qwen-38-27b-scores-52/" target="_blank" rel="noopener">Qwen 3.8 27B scores 52 on the Artificial Analysis Intelligence Index — Simon Willison's Weblog</a></div>
+    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">开源模型</span><span class="tag">后训练</span></div>
+    <h3>GLM-5.3 上线：AA 指数 60 分登顶开源 SOTA，纯靠后训练、权重下周五开源</h3>
+    <p>智谱正式开放 GLM-5.3 API，在全球权威的 Artificial Analysis Intelligence Index 拿到 <code>60</code> 分，与 Claude Fable 5、GPT-5.6 Sol 等闭源旗舰处于同一水平区间，并与 Kimi K3 并列开源模型第一。对开发者最有信息量的是两点：一是它与上一代 GLM-5.2 共用同一基础模型（总参 753B、激活 40B），性能提升全部来自后训练——OpenRouter 的实测数据显示 <code>Terminal-Bench 3.0</code> 从 4.6 跳到 28.3、<code>DeepSWE v1.1</code> 从 46.2 到 66.9，即 Agent/终端任务上的增益极其显著；二是 API 定价与 GLM-5.2 保持一致，已接入 ZCode 等编码平台并纳入 GLM Coding Plan，模型权重将于下周五开源。</p>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247494105&idx=1&sn=8d7409e0fb846a3c7803c142b5d1a8e7" target="_blank" rel="noopener">GLM-5.3上线：拓展智能上界的可及边界 — 智谱</a> · <a href="https://x.com/OpenRouter/status/2089830854743015850" target="_blank" rel="noopener">GLM-5.3 is live on OpenRouter — OpenRouter(@OpenRouterAI)</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">代码托管</span><span class="tag">Agent</span></div>
-    <h3>Cursor 上线 Origin：为 Agent 时代重建的 Git 托管平台，与 GitHub 宕机同日上演</h3>
-    <p>Cursor 正式向付费用户开放代码托管平台 Origin（早期 Beta），定位"面向智能体时代的 Git forge"。核心能力：堆叠式 PR、合并队列、机器可读审查状态、MCP 协议支持与事件驱动自动化，并支持与 GitHub 双向同步、可直接从 GitHub 同步仓库，已集成 Vercel、Buildkite、Depot。设计动机很直白：当一个人同时指挥 5-10 个 Agent 高频提交、互相 rebase 时，以"人天"为节奏的 GitHub 协作流程会开始排队阻塞。戏剧性的是，几乎同一时间 GitHub 发生大规模宕机，Vercel CEO Guillermo Rauch 调侃"现在可以把仓库托管在 Origin 上，而 Origin 本身运行在 Vercel 上"。</p>
-    <div class="src">📎 来源: <a href="https://x.com/berryxia/status/2089489907718738036" target="_blank" rel="noopener">Cursor Origin is now live — Berryxia.AI</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&mid=2247619635&idx=1&sn=1b7ab087fe918f76608f4439f6b27c46" target="_blank" rel="noopener">Cursor 上线 Origin，为 Agent 重建 GitHub — 夕小瑶科技说</a></div>
+    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">语言</span><span class="tag">编译器</span></div>
+    <h3>Mojo🔥 正式开源：Apache 2.0 兑现 2023 年的承诺</h3>
+    <p>Mojo 编程语言在发布 1.0 一周后，把编译器与工具链以 <code>Apache 2.0</code> 协议正式开源，兑现了自 2023 年 5 月起许下的开源承诺。值得开发者关注的是产品定位的变化：最初目标是做成 Python 的超集，用存量 Python 生态做冷启动；2025 年 8 月起官方明确"Mojo 未来会不会成为完整 Python 超集都可以接受"，更乐观地认为 AI 辅助编码工具已经能很好地帮助开发者把 Python 迁移到 Mojo，未来的工具链与生态成熟度会让这个过程更顺滑。对追求高性能系统编程又想保留 Python 语感的团队，这是一个值得重新评估的选项。</p>
+    <div class="src">📎 来源: <a href="https://simonwillison.net/2026/Aug/18/mojo-is-now-open-source/" target="_blank" rel="noopener">Mojo🔥 is now open source — Simon Willison's Weblog</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">故障复盘</span><span class="tag">GitHub</span></div>
-    <h3>GitHub 大规模宕机约 7 小时：Web/API 错误率 20%，归档下载错误率 50%</h3>
-    <p>美东时间 8 月 17 日上午 9:40 起，GitHub 的 API、Actions、Webhooks、Issues、PR、Copilot、Pages 相继故障；官方披露 Web/API 请求错误率峰值约 <code>20%</code>，archive 与 raw repository 内容下载错误率升至约 <code>50%</code>，约 7.5 小时后才宣告解决，后半段仍零星出现身份认证失败。官方仅称定位到一个 "problematic component"。这场故障覆盖代码浏览、协作到自动化流水线多条开发链路，也让同日的 Origin 发布更显戏剧性。对依赖 GitHub 的团队，这轮事故再次提醒：核心流程要准备镜像缓存与 CI 双集群容灾。</p>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247665850&idx=1&sn=fee6723b451eeacff7a80af9c51b50a8" target="_blank" rel="noopener">GitHub 昨夜大规模宕机 7 小时 — AI前线</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247834478&idx=1&sn=2a63d29b07e7329a143e10a916d9e517" target="_blank" rel="noopener">GitHub 大规模宕机 7 小时！Cursor 趁机发布 Origin — CSDN</a></div>
+    <div class="tag-row"><span class="tag hot">HOT</span><span class="tag">IDE</span><span class="tag">AI Agent</span></div>
+    <h3>Rider 2026.2.1：Agent 终于能调用 IDE 重构引擎，任务耗时 -83%、成本 -64%</h3>
+    <p>JetBrains 追踪一个前沿模型做 15 个 C# 重构任务时发现：它在 2513 次工具调用里结构性重构操作次数为 0——它用管道灌文本 468 次、调 git 422 次、sed 392 次、跑 dotnet build 163 次，就是没有重构引擎可调。Rider 2026.2.1 随版本内置 <code>refactoring-code</code> skill 改变这一切：Agent 被要求重构 C# 时自动激活、无需配置。同一模型同一批任务加装 skill 后，中位任务耗时从 <code>157.9s → 26.6s</code>（快 83%）、单任务成本 <code>$0.52 → $0.19</code>（省 64%）、工具调用数 <code>17 → 6.2</code>（少 63%）。这是"让 Agent 用上工程师的精确工具、而不是用 shell 笨拙近似"的标杆案例。</p>
+    <div class="src">📎 来源: <a href="https://blog.jetbrains.com/dotnet/2026/08/19/rider-refactoring-code-skill/" target="_blank" rel="noopener">Rider Hands AI Agents The Keys To Its Refactoring Engine — The JetBrains Blog</a> · <a href="https://blog.jetbrains.com/dotnet/2026/08/19/rider-resharper-2026-2-1/" target="_blank" rel="noopener">Rider 2026.2.1 and ReSharper 2026.2.1 Are Here! — The JetBrains Blog</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">协作</span><span class="tag">PR</span></div>
-    <h3>GitHub Stacked Pull Requests 进入公开预览：原生支持堆叠式 PR</h3>
-    <p>GitHub 宣布堆叠式 Pull Request（把大型变更拆成多个相互依赖、可独立审查与合并的小 PR）进入公开预览，这是 GitHub 原生跟进 Graphite 等第三方主导的协作范式。当 AI 产出大量相互依赖的变更时，堆叠式 PR 能降低 PR 互相阻塞、减少人工仲裁冲突的成本。对多 Agent 高频开发的团队来说，这是下半年最值得关注的协作体验升级之一。</p>
-    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/github-stacked-pull-requests/" target="_blank" rel="noopener">GitHub Brings Stacked Pull Requests to Public Preview — InfoQ</a></div>
+    <div class="tag-row"><span class="tag">前端</span><span class="tag">ESM</span></div>
+    <h3>React Router v8：ESM-only 构建 + 默认中间件的"刻意平淡"大版本</h3>
+    <p>React Router v8 于 6 月 17 日发布，是一个破坏性变更极少的版本，但确立了新的技术基线：<code>ESM-only</code> 构建与默认启用的中间件。同时 React Router v6 与 Remix v2 已正式进入 End of Life，官方发布了具体迁移指南。对还在 v6/Remix v2 上跑生产项目的团队，这意味着升级窗口已经明确；也有部分开发者借机评估 TanStack Router 等替代方案。以"平淡"为卖点的框架版本值得留意——它往往说明核心 API 已稳定，剩下的主要是基线清理。</p>
+    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/react-route-v8/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">React Router v8: A Deliberately Boring Release — InfoQ</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">推理</span><span class="tag">NVIDIA</span><span class="tag">开源</span></div>
-    <h3>TensorRT Model Connect 公开预览：两行命令从 HuggingFace 模型到 TensorRT 推理</h3>
-    <p>NVIDIA 发布 TensorRT Model Connect 公开预览：受支持的 HuggingFace 模型可在两行命令内完成到 TensorRT 推理的端到端转换，无需中间 <code>ONNX</code> 导出，产物 bundle 可直接走原生 C++ API。值得注意的是官方宣布整个项目（模型实现、性能调优、测试、集成、文档）由 OpenAI Codex 代理构建、人类负责指导与审查——这是"AI 写代码 + 人把关"流水线在大厂基础设施上的一次实证。</p>
-    <div class="src">📎 来源: <a href="https://x.com/NVIDIAAI/status/2089750360869233059" target="_blank" rel="noopener">TensorRT Model Connect Public Preview — NVIDIA AI(@NVIDIAAI)</a></div>
+    <div class="tag-row"><span class="tag">.NET</span><span class="tag">C#</span></div>
+    <h3>.NET 11 Preview 7：C# 新增 labeled break/continue，Blazor 支持 circuit pausing</h3>
+    <p>.NET 11 Preview 7 上周发布，更新横跨 C#、ASP.NET Core、.NET MAUI、EF Core、Windows Forms 与 F#。语言层面 C# 新增 <code>labeled break</code> 与 <code>labeled continue</code>，让多层循环跳出/继续更直观；ASP.NET Core 带来 Blazor circuit pausing、CacheView 与内置验证本地化；Windows Forms 获得可选的现代渲染管线；EF Core 在 SQLite 上新增 Half 类型支持。对 .NET 技术栈开发者，这是把下一版功能引入原型的好时机。</p>
+    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/dotnet-11-preview-7/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">.NET 11 Preview 7 Brings Updates Across C#, ASP.NET Core, EF Core, and Windows Forms — InfoQ</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">CLI</span><span class="tag">性能</span></div>
-    <h3>Claude Code CLI：p99 CPU 占用降 2 倍，根因是 Bun GC 固定定时器抢占</h3>
-    <p>ClaudeDevs 公布一项性能优化：Claude Code CLI 的 p99 CPU 使用降低 2 倍。根因很有意思——Bun 的垃圾回收此前按固定定时器运行，会在 Agent 最忙的回合中途抢占 CPU；现在改为等进程空闲后再回收。这个案例对运行时优化很有参考价值：GC 调度策略对交互式 CLI 的 p99 延迟影响被严重低估，值得所有基于 JS/TS 运行时的 CLI 团队借鉴。</p>
-    <div class="src">📎 来源: <a href="https://x.com/bcherny/status/2089538781909332210" target="_blank" rel="noopener">Perf win: Claude Code CLI uses 2x less CPU at p99 — Boris Cherny(@bcherny)</a></div>
+    <div class="tag-row"><span class="tag">推理加速</span><span class="tag">投机解码</span><span class="tag">开源</span></div>
+    <h3>Qwen3.8-27B-DFlash2 开源：1.92B 草稿模型把吞吐推到自回归的 3.4 倍</h3>
+    <p>Inco AI 开源面向 Qwen3.8-27B 的投机解码草稿模型 DFlash2：草稿模型仅 <code>1.92B</code> 参数（约 3.85GB），配合目标模型在单张 NVIDIA H200、SGLang、单并发条件下把输出吞吐做到自回归解码的 <code>2.7–3.4 倍</code>，且解码结果无损。相比 Qwen3.8 原生 MTP（平均接受长度 4.28）与社区 DSpark 草稿（3.62），DFlash2 平均接受长度达到 4.80。该系列自今年 1 月发布以来已进入 SGLang、vLLM、TensorRT-LLM 与 llama.cpp，NVIDIA 在 Blackwell 上测得最高 15 倍吞吐提升，累计下载超 350 万——跑本地 27B 推理的团队值得直接跟进。</p>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247512213&idx=1&sn=18ecb824be98f26e2972e66f091dd0ac" target="_blank" rel="noopener">Qwen3.8-27B-DFlash2 开源 — 魔搭ModelScope社区</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">.NET</span><span class="tag">MAUI</span></div>
-    <h3>.NET 11 Preview 7：MAUI 新增 Passkey、增量 XAML Hot Reload 与 Shell 路由模板</h3>
-    <p>Microsoft 发布 .NET 11 Preview 7，MAUI 收获一批实质更新：跨平台 passkey 认证、全新实现的增量 XAML Hot Reload、Shell 路由模板、更多 AOT-safe 绑定，并继续从 legacy renderer 向 handler 迁移，改善 Android/Apple 平台开发工作流。同时间 Uno Platform 6.6 也以原生 AOT 把 Android 启动性能提升最高 61%——跨平台 .NET UI 的运行时性能竞争正在升温。</p>
-    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/dotnet-11-preview7-maui/" target="_blank" rel="noopener">.NET 11 Preview 7 Adds Passkeys, Incremental XAML Hot Reload to MAUI — InfoQ</a></div>
-  </div>
-
-  <div class="card">
-    <div class="tag-row"><span class="tag">MCP</span><span class="tag">安全</span></div>
-    <h3>Cloudflare WriteGuard：给 MCP 服务器加细粒度"写操作"安全控制</h3>
-    <p>Cloudflare 推出 WriteGuard（私有 Beta），为 MCP 服务器提供细粒度安全控制：限制 AI 代理对"能修改数据或执行动作"的工具的访问，而不是只允许只读查询。随着 Agent 越来越常通过 MCP 触达生产工具，这类"写操作护栏"正成为平台级安全标配——与 Deno 的 Claw Patrol、Google ADK 的 zero-trust 设计同属一个趋势。</p>
-    <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/08/cloudflare-writeguard-mcp-safety/" target="_blank" rel="noopener">Cloudflare WriteGuard Brings Fine-Grained Security Controls for MCP Servers — InfoQ</a></div>
+    <div class="tag-row"><span class="tag">本地模型</span><span class="tag">Ollama</span></div>
+    <h3>Kimi K3 开始上线 Ollama 云订阅：Claude Code / OpenCode 一行命令切换</h3>
+    <p>Ollama 宣布 Kimi K3 开始在云订阅上滚动上线，开发者可以用现有工具链直接切换：<code>ollama launch claude --model kimi-k3:cloud</code> 或 <code>ollama launch opencode --model kimi-k3:cloud</code>。Ollama 同时表示在优化云端的定价透明度，目标是展示最好的"性能/美元"。对想把本地模型体验与云上大模型串起来、又不想改工具的开发者，这是一条低摩擦路径。</p>
+    <div class="src">📎 来源: <a href="https://x.com/ollama/status/2089914983840989255" target="_blank" rel="noopener">Kimi K3 on Ollama cloud subscriptions — ollama(@ollama)</a></div>
   </div>
 </section>
 
@@ -341,57 +334,42 @@
   <h2 class="section-title purple"><span class="num">2</span>深度技术解读</h2>
 
   <div class="deep">
-    <h3># Agent 的命门是上下文：记忆工程与缓存成本工程</h3>
-    <p>四篇内容指向同一个结论：当 Agent 从一次性工具走向长期开发，真正稀缺的不是"生成代码的能力"，而是"上下文与记忆的治理能力"。</p>
-    <h4>成本真相：一个中等需求吃掉 2480 万 token / 202 元</h4>
+    <h3># MCP 走向无状态：移除协议会话，开发者追问"这不就又变回 API 了吗？"</h3>
+    <p>MCP 2026-07-28 规范做了一次大改：<strong>从协议层移除会话</strong>。这对 Agent 基础设施的横向扩展是实打实的利好，但也引发了一场"这还是不是 MCP"的争论。</p>
+    <h4>旧模型为什么是瓶颈</h4>
     <ul>
-      <li>腾讯云开发者实测：把"给 skill 详情页加评论区"（涉及十几个文件）交给多 Agent 工作流，整条流程消耗约 <code>2480 万 token</code>、成本约 <code>202 元</code>——即使已接入 CodeGraph（代码地图，先圈出相关文件）和 RTK（终端摘要器，压缩搜索/测试/日志输出）两个优化。</li>
-      <li>作者结论："关键不在少给，而在给对"——上下文工程不是压缩，而是精准路由与按需加载。</li>
+      <li>早期传输以 <code>initialize / initialized</code> 握手开始，之后每个请求都要携带 <code>Mcp-Session-Id</code> 找到关联会话状态。结果：自动扩缩基础设施必须保留会话、部署时必须排空或迁移会话、负载均衡几乎不可行——客户端会被钉在持有其会话的那台实例上。</li>
+      <li>新协议从核心请求路径移除握手、会话标头与协议会话。每个请求自带协议版本、客户端身份与能力，<strong>任何请求都可以落到任意实例</strong>。</li>
     </ul>
-    <h4>缓存经济学：一个"hi"为什么值 1 美元</h4>
+    <h4>被低估的改动：两个新 HTTP 标头</h4>
     <ul>
-      <li>Arena.ai 用"喝完咖啡回来说句 hi 花掉 1 美元"解释 Agent 计费陷阱：你为上一轮全部上下文付费，缓存命中约全价 <code>10%</code>，一旦缓存冷却（离开一小时）就按全价 prefill 重算，成本随上下文长度"平方级"增长。</li>
-      <li>工程含义：长会话设计必须考虑缓存亲和——保持前缀稳定、避免频繁切换模型/思考档位、谨慎 compact。</li>
-    </ul>
-    <h4>团队记忆：从 60% 到 80% 完成率</h4>
-    <ul>
-      <li>腾讯 TencentDB Agent Memory 把任务轨迹、项目知识、代码结构沉淀为"可治理的记忆资产"，在 SWE-bench 相关任务上把完成率从 <code>60%</code> 提升到 <code>80%</code>，Top 50 超长难任务成本降低 <code>19%</code> 且成功率提升。</li>
-      <li>核心做法："前序 Case 学习、后序 Case 验证"，从 2,600 个 Session、真实研发 Case 与访谈中校正产品设计。</li>
-    </ul>
-    <h4>长期记忆产品化：让 Coding Agent "记住过去"</h4>
-    <ul>
-      <li>机器之心报道 MemoraX Code，直指痛点：Agent 越来越会写代码，却常常"像第一次来到这个项目"——换模型、上下文被压缩后，会重扫代码、重复提失败方案、重新调查已排查问题。</li>
-      <li>解法是把"项目经验"（为何采用当前架构、哪些历史代码不能动、哪个方案被放弃、数据库升级兼容约束）变成可复用的长期记忆资产。</li>
+      <li>MCP 消息本质是 HTTP 上的 JSON-RPC，过去网关想知道请求是"列工具 / 调工具 / 读资源"必须解析 JSON 正文。现在 Streamable HTTP 请求必须携带 <code>Mcp-Method</code> 与 <code>Mcp-Name</code> 两个标头，例如 <code>Mcp-Method: tools/call</code> + <code>Mcp-Name: search</code>。</li>
+      <li>Cloudflare 的 Matt Carey 点出价值：网关、速率限制器、WAF 无需打开请求正文，就能按方法/工具对 Agent 流量做路由、限流与计量——复用它对其他 API 已有的那套机制。</li>
     </ul>
     <div class="callout">
-      <strong>实践要点：</strong>上下文治理 = 精准路由（该给什么）+ 记忆沉淀（记住了什么）+ 缓存友好（别击穿缓存）。三条腿缺一不可。
+      <strong>实践要点：</strong>无状态化让 MCP 服务终于可以无脑横向扩展，但"状态"并没有消失——会话状态被上移到网关/外部存储，Agent 长任务的状态管理仍然是你的设计责任。
     </div>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&mid=2247696974&idx=1&sn=7b3e885c64e10a944ea85e4018348a13" target="_blank" rel="noopener">Agent 的命门是上下文 — 腾讯云开发者</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649803679&idx=1&sn=910b29493df93cadf43078846d630cef" target="_blank" rel="noopener">TencentDB Agent Memory — 腾讯技术工程</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651050939&idx=1&sn=048d1d6f8e05e0ae4bd944928e5d2171" target="_blank" rel="noopener">MemoraX Code — 机器之心</a> · <a href="https://x.com/arena/status/2089755251134083578" target="_blank" rel="noopener">The $1 "hi" — Arena.ai</a></div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651291169&idx=4&sn=9affc303508c3ca9e851377dbf33629c" target="_blank" rel="noopener">MCP 走向无状态，开发者追问：这不就又变回 API 了吗？ — InfoQ</a></div>
   </div>
 
   <div class="deep">
-    <h3># AI 写的代码谁来看？代码审查的"死亡"与质量护栏重建</h3>
-    <p>AI 生成代码占比上升后，"人逐行审阅"的旧契约正在瓦解，行业在重新设计质量护栏。</p>
-    <h4>审查已死？先看数据</h4>
+    <h3># DeepSeek Harness 的新范式：一切皆插件，让 Agent 为自己造工具</h3>
+    <p>字节跳动技术团队与多家媒体的深度文章，把 DeepSeek Harness（DSH）的架构逻辑讲透了：<strong>把模型之外的一切都做成可插拔的插件</strong>，Harness 本身退到最薄。</p>
+    <h4>Harness 只做三件事</h4>
     <ul>
-      <li>Aviator 的 Ankit Jain：超过 <code>30%</code> 的变更已完全无人审查，需要审查的等待时间是过去的 <code>4 倍</code>。典型流程变成：AI 写代码、AI 审代码、来回在 Web UI 里博弈，人类扫一眼对话就合并。</li>
-      <li>他的判断："当 AI 审查且无人阅读时，我们配置错了对象"——审查的价值在于人脑的理解与判断，不是流程形式。他也修正了自己几个月前提出的"五层信任模型"，承认遗漏了关键环节。</li>
+      <li>在 DSH 中，Model、Tool、Memory、Sandbox、Agent 都是可组合、可替换、可扩展的插件；Harness 本体只负责：调度模型与工具、在高危操作前请你审批、维护一份任务计划。</li>
+      <li>启动方式极轻：<code>npx @deepseek-ai/dsh web</code>，默认访问 <code>http://127.0.0.1:3080/</code>。</li>
     </ul>
-    <h4>人该盯住什么：软件工厂的取舍</h4>
+    <h4>关键心智：Agent 会话不再是"密闭盒子"</h4>
     <ul>
-      <li>Addy Osmani：产品意图、系统设计、质量标准（quality bar）仍需人类前置决策；审查要有选择地用在不同场景；警惕自动化"背压"（back-pressure）失效点与可维护性 trade-off。</li>
-      <li>质量检查应尽可能早且持续：类型系统、自动化测试、mutation testing……不必全部靠审查兜底。</li>
+      <li>过去 Agent 会话一旦启动就不能往里塞工具，客户端也不允许改核心逻辑与主流程。DSH 的"一切皆插件"打破了这一点：Agent 循环、Tool、Hooks、记忆管理全部可替换，官方提供 100+ 插件，也可以随时"Vibe"一个更趁手的插件替换实现。插件既能常驻，也能作为"轮抛"的临时工具。</li>
+      <li>字节方舟把这一思路产品化为 Agent Plan：按 <code>Agent = Model + harness</code>，把"能干活、能记事、能成长、能出产品"所需的模型与 harness 组件打包，一次订阅、AFP 额度统一抵扣；DSH 提供插槽，Agent Plan 提供经过验证的"优选插件组合"（豆包搜索、记忆、Sandbox 等）。</li>
+      <li>一个直观的例子：像"开会时临时要一个内容运营"，过去要招人、开会、且裁不掉；现在可以直接"捏"一个带技能的 Agent 加入会议，讨论完"优化掉"——能力边界随任务动态伸缩。</li>
     </ul>
-    <h4>四阶段演进与五条原则</h4>
-    <ul>
-      <li>京东技术拆解 AI Coding 从"补全工具 → 对话副驾 → 流程协作者 → 共生体"的四阶段，提出"需求分治"——让 AI 参与架构级拆分，把人从"写代码"顶到"定规则、做裁判"。</li>
-      <li>沉淀五条可跨工具迁移的底层原则：验证成本、约束设定、置信度分流、批判性审验、知识沉淀。</li>
-    </ul>
-    <h4>QA 左移：spec 强化阶段</h4>
-    <ul>
-      <li>Stack Overflow 采访 Motorola Solutions 测试工程负责人：用 <code>Cohen's kappa</code> 评估"多个 LLM-as-judge"的一致性，并在设计阶段后加一个"spec 强化（specification enrichment）"阶段来提升需求质量——把测试思维前移到需求生成。</li>
-    </ul>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=YgEv7IQzGdM" target="_blank" rel="noopener">How to Kill the Code Review — AI Engineer / Aviator</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU1MzE2NzIzMg==&mid=2247502507&idx=1&sn=2ee6e6fa3ff5f8976283eff64780e5de" target="_blank" rel="noopener">AI Coding 的共生与替代 — 京东技术</a> · <a href="https://x.com/addyosmani/status/2089603496932724840" target="_blank" rel="noopener">software factory — Addy Osmani</a> · <a href="https://stackoverflow.blog/2026/08/18/building-an-agentic-sdlc-with-a-qa-engineering-mindset/" target="_blank" rel="noopener">Building an agentic SDLC with a QA mindset — Stack Overflow Blog</a></div>
+    <div class="callout">
+      <strong>实践要点：</strong>DSH 的激进在于把"Agent 运行时的可修改性"当作第一公民。自建 Agent 平台时，与其把 harness 写成黑盒，不如把循环、工具、记忆、审批全部插件化，让它能被替换和扩展。
+    </div>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&mid=2247521375&idx=1&sn=e11bc1ebfc05563e0d0ab2d5d47835b5" target="_blank" rel="noopener">Agent Plan x DeepSeek Harness 实践指南 — 字节跳动技术团队</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651930301&idx=2&sn=3a95e2314e44fba6159c39ff9afaed41" target="_blank" rel="noopener">DeepSeekHarness的新范式：让Agent为自己构建工具 — 人人都是产品经理</a></div>
   </div>
 </section>
 
@@ -401,63 +379,39 @@
 
   <div class="tools-grid">
     <div class="tool">
-      <h3><code>DeepSeek Harness</code> 插件生态：6000+ dsh-plugin 仓库</h3>
-      <p>DSH 三天近 13 万 Star，GitHub 上 <code>dsh-plugin</code> 标签仓库已超 6000 个。硅星人挑出 11 个最有意思的插件：让回答变成交互网页、文件树、模型管理、订阅账号直连……"一切皆插件"正在成为 Agent 时代的 App Store。</p>
-      <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247631889&idx=2&sn=2d9b89e2e289f656721192a27a76a4bb" target="_blank" rel="noopener">硅星人Pro</a></div>
+      <h3><code>Vercel fx</code> 10µs 冷启动的极简 coding agent</h3>
+      <p>Vercel Labs 开源的 Agent harness + CLI，用 Zig 编写：单文件原生二进制 <code>6.3MiB</code>、冷启动 <code>10µs</code>、基线内存个位数 MB。定位是模型 benchmark、沙箱、evals 与 gyms，可嵌入更大的系统甚至以 WebAssembly 跑在浏览器里。Rauch 说它 10-20x 小于主流 coding CLI，用起来像 zsh 而不是 IDE。</p>
+      <div class="src">📎 <a href="https://x.com/omarsar0/status/2089835269021135025" target="_blank" rel="noopener">elvis(@omarsar0)</a> · <a href="https://x.com/rauchg/status/2089831055373316274" target="_blank" rel="noopener">Guillermo Rauch(@rauchg)</a></div>
     </div>
 
     <div class="tool">
-      <h3><code>Pilot Harness</code> DSH 开箱即用客户端</h3>
-      <p>歸藏做的 DSH 客户端，默认加载所有优化插件，也可单独挑插件装进自己的 DSH。核心插件：UI/交互优化、聊天侧边文件树、模型服务商与管理拆分页。降低 DSH 上手门槛。</p>
-      <div class="src">📎 <a href="https://x.com/op7418/status/2089643178177819094" target="_blank" rel="noopener">歸藏(@op7418)</a></div>
+      <h3><code>herdr</code> macOS 原生 Coding Agent 控制台</h3>
+      <p>原生 macOS 控制台，集中管理所有 coding agent 及其实时终端，支持跨设备。早期阶段软件、测试覆盖不全，作者欢迎 PR（github.com/missuo/herdr）。对同时开多个 Agent 会话、想在一个原生窗口里看全部终端的开发者很友好。</p>
+      <div class="src">📎 <a href="https://x.com/dingyi/status/2090049915196252477" target="_blank" rel="noopener">Ding(@dingyi)</a></div>
     </div>
 
     <div class="tool">
-      <h3><code>Minke</code> DSH 原生桌面工作台（Tauri）</h3>
-      <p>lencx 的 Minke v0.1.0：把对话、项目文件、终端、Web 工具、本地模型和桌面操作放进同一工作空间。文章记录了从 Tauri 起步到跨平台打包的曲折历程，是桌面套壳应用的踩坑参考。</p>
-      <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzIzNjE2NTI3NQ==&mid=2247492414&idx=1&sn=b80d48c4cff9f30b9b3c21b3c2565ed4" target="_blank" rel="noopener">浮之静(lencx)</a></div>
+      <h3><code>Memmy</code> 给所有 Coding Agent 建共享记忆层</h3>
+      <p>把记忆从 Agent 里抽出来变成用户自己的 Personal Context：Cursor、Claude Code、Codex、OpenClaw 等几乎全部 coding agent 历史都能导入，统一整理后供所有 Agent 共享。通过 hooks 模式自动扫描并按匹配机制注入相关记忆——Codex 额度耗尽切到 Cursor 时，进度和踩过的坑能无缝带过去。Local-first，数据自持，支持桌面端、CLI、API、MCP 与 Skills。</p>
+      <div class="src">📎 <a href="https://x.com/vikingmute/status/2090046473262268708" target="_blank" rel="noopener">Viking(@vikingmute)</a></div>
     </div>
 
     <div class="tool">
-      <h3><code>macOS Harness</code> LLM 控制 Mac（Browser Use）</h3>
-      <p>一个持久化 Python harness，让 LLM 通过 accessibility tree、AppleScript、截图或原始坐标控制 Mac：完整 macOS + 浏览器 + 文件 + shell，虚拟光标不抢真实鼠标。100% 开源，还"自举"发布了 GitHub 与 PyPI。</p>
-      <div class="src">📎 <a href="https://x.com/browser_use/status/2089727767063756819" target="_blank" rel="noopener">Browser Use</a></div>
+      <h3><code>PenguinHarness</code> LlamaFactory 作者开源"Agent 造 Agent"</h3>
+      <p>郑耀威继 LlamaFactory 之后的新作：让 Agent 创建并调优其他 Agent。你说需要什么 Agent，它自动建目录、写 AGENTS.md 和 system_config.yaml、装 Skill，再调用刚创建出的 Agent 完成第一项任务；结果不好就回看失败记录改手册重考。本地示例通过 Ollama 调 qwen3.6:35b，数据不出机器——"Harness for RSI"。</p>
+      <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650453545&idx=1&sn=c98f59020251b53105380e1f1464cb3d" target="_blank" rel="noopener">AINLP</a></div>
     </div>
 
     <div class="tool">
-      <h3><code>Phone Harness</code> Agent 操作真实 iPhone</h3>
-      <p>不越狱、不装驱动：把 macOS 的 iPhone 镜像窗口当传输层，截图负责"看"、Vision OCR 提供坐标、CGEvent 负责"点"和"输"。架构启示——Agent 借助人类已有的图形界面就能操作真实设备。</p>
-      <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&mid=2247490906&idx=1&sn=f5aa14265c821a97d4f34f083aa6e7e3" target="_blank" rel="noopener">山行AI</a></div>
+      <h3><code>Milvus 3.0 Search Aggregation</code> RAG 检索的新信号</h3>
+      <p>Top-K 只告诉你有哪些 chunk 命中，不告诉你命中有多集中。Milvus 3.0 新增 Search Aggregation：把候选按 doc_id、tenant、产品线或内容类型分桶，返回桶计数、指标与代表性命中。RAG 流水线据此判断"证据是否扎堆在少数来源"，决定是否扩大检索。同题还有 Qdrant 的 filterable HNSW（1% filter 下 1M 向量 recall 99.8% @1.0ms vs ACORN 67.7% @4.7ms）值得对比。</p>
+      <div class="src">📎 <a href="https://x.com/milvusio/status/2090098967665078598" target="_blank" rel="noopener">Milvus(@milvusio)</a> · <a href="https://x.com/qdrant_engine/status/2089999409404957029" target="_blank" rel="noopener">Qdrant(@qdrant_engine)</a></div>
     </div>
 
     <div class="tool">
-      <h3><code>Fireworks-tech-graph</code> 技术图片生成 Skill</h3>
-      <p>专用于生成技术类图片的 skill，四个月破 10000 Star，支持 12 种风格与 svg/png/gif 多格式输出。给技术文章、架构图、教程配图很省事。</p>
-      <div class="src">📎 <a href="https://x.com/berryxia/status/2089615424987988277" target="_blank" rel="noopener">Berryxia.AI</a></div>
-    </div>
-
-    <div class="tool">
-      <h3><code>blobatar</code> 确定性头像（3.7KB 零依赖）</h3>
-      <p>同一输入永远得到同一头像：用户名、邮箱、ID 任意字符串都能生成人脸，无需存储、无需上传。React + vanilla，<code>npm i blobatar</code>。适合 Agent IM 与开发者工具的默认头像。</p>
-      <div class="src">📎 <a href="https://x.com/yangyi/status/2089610056790851593" target="_blank" rel="noopener">Yangyi</a></div>
-    </div>
-
-    <div class="tool">
-      <h3><code>GitHub README 心电图</code> 提交就跳，停更就停</h3>
-      <p>给 README 加一张动态心电图，原理类似心跳监测——停止提交就停止跳动。给个人主页或项目 README 增加"活跃度"视觉化装饰的小工具。</p>
-      <div class="src">📎 <a href="https://x.com/geekbb/status/2089626188562186376" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
-    </div>
-
-    <div class="tool">
-      <h3><code>dsh 订阅账号插件</code> OAuth 登录免 API Key</h3>
-      <p>让 DSH 直接用 ChatGPT(Codex)/Claude 订阅账号当模型提供商，网页内 OAuth 登录、不用填 API 密钥。适合持订阅但没有 API 额度、或不想暴露 Key 的开发者。</p>
-      <div class="src">📎 <a href="https://x.com/geekbb/status/2089590867640070478" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
-    </div>
-
-    <div class="tool">
-      <h3><code>Remotion Skills 2.0</code> 子技能化 + 可交互 + 审美中立</h3>
-      <p>三个关键更新：① 从"一个大技能"拆成 router + 12 个专项技能，只有相关信息进上下文；② AI 生成初稿后在 Remotion Studio 拖拽微调，编辑写回源码；③ 简化核心 API 降低生成错误率。"AI 搭结构、人做审美、再回喂 AI"的循环范本。</p>
-      <div class="src">📎 <a href="https://x.com/shao__meng/status/2089535930659115450" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+      <h3><code>ColaMD 1.9.0</code> 能导出 docx/图片的 Markdown 编辑器</h3>
+      <p>跨平台开源 Markdown 编辑器（macOS/Windows/Linux），1.9.0 解决两个真实痛点：直接导出 .docx（标题、列表、代码块、图片都带上），以及把长文导出成自动切图的图片，方便发微信群/社交媒体。另新增大纲模式、主题跟随的 PDF 导出、自动保存与自动更新。可与 Claude Code、Cursor 共享同一份文件并实时显示修改。</p>
+      <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzkwMzY5NzU2Nw==&mid=2247490377&idx=1&sn=9c8bb29ee61e186d78ae4eb502b0d35d" target="_blank" rel="noopener">有机大橘子</a></div>
     </div>
   </div>
 </section>
@@ -467,66 +421,38 @@
   <h2 class="section-title orange"><span class="num">4</span>实践指南</h2>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">本地部署</span><span class="tag">vLLM</span></div>
-    <h3>实战：一张 PRO 6000（96GB）跑通 Qwen3.8-27B，并接入 DeepSeek Harness</h3>
-    <p>作者用一张 RTX PRO 6000 Blackwell（96GB）原生 BF16 直跑 Qwen3.8-27B（约 52G / 18 个 safetensors 分片，原生上下文 262K，带 MTP）。关键经验：下载新权重后没有重建镜像，直接软链接到原有 vLLM Docker 容器（vLLM 0.18.0 / PyTorch 2.10 / CUDA 12.8 / Transformers 4.57.6）即被识别——新模型架构没有破坏既有环境，Dockerfile 一行未动。Ollama 也给出本地命令：Apple Silicon <code>ollama run qwen3.8:27b-mlx</code>、NVIDIA <code>ollama run qwen3.8:27b</code>。对计划本地部署的团队，"软链接复用镜像"是一条非常省事的路径。</p>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650453532&idx=1&sn=c326c7d2126312bbfef91fd63cb758ce" target="_blank" rel="noopener">我用一张 PRO 6000 跑通 Qwen3.8-27B — AINLP</a></div>
+    <div class="tag-row"><span class="tag">测试迁移</span><span class="tag">Codex</span></div>
+    <h3>Asana 用 Codex 两周完成 Enzyme→React Testing Library 迁移，原本预计还要 5 年</h3>
+    <p>OpenAI 披露 Asana 借助 Codex 完成前端测试迁移：从 Enzyme 到 React Testing Library，一个"预计还要 5 年"的项目在<strong>两个日历周</strong>内做完。这类大型机械性迁移（涉及大量用例改写、API 替换）正是 Agent 最擅长的工作类型——确定性高、重复度大、验收标准清晰。对还在维护 Enzyme 时代测试资产的团队，这是一个"用 Agent 批量重写测试"的可行性样本，关键是要把迁移规范写清楚、用 CI + 快照做回归护栏。</p>
+    <div class="src">📎 来源: <a href="https://x.com/OpenAIDevs/status/2090122836103102482" target="_blank" rel="noopener">OpenAI Developers(@OpenAIDevs)</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">踩坑记录</span><span class="tag">Linux</span></div>
-    <h3>翻车复盘：把 Linux 页大小从 4KB 换成 2MB 大页，性能不升反崩</h3>
-    <p>一位工程师把系统默认 4KB 页全盘替换成 2MB 大页，上线后 CPU 软中断飙升、接口随机抖动、整机内存暴涨 <code>30%</code>、线上崩盘，回滚排查花了一整天。根因：大页通过减少地址翻译开销、提高 TLB 命中率获益，但收益极度依赖业务场景（大内存密集、高并发访问模式）；常规线上业务保持默认 4KB 反而最稳。核心结论：所有性能参数都是 trade-off，没有万能优化，只有适配场景的优化。</p>
-    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247637434&idx=1&sn=60d1f5d990e0468eff8fa9828bce36dd" target="_blank" rel="noopener">彻底翻车！千万别把 Linux 页大小从 4KB 改为 2MB — dbaplus社群</a></div>
+    <div class="tag-row"><span class="tag">项目管理</span><span class="tag">AI Coding</span></div>
+    <h3>腾讯健康：AI Coding 时代研发项目管理 Debug，中位交付周期 19→9 天</h3>
+    <p>腾讯健康从 PM 视角拆解"个体提效 ≠ 组织提效"：AI 辅助开发后研发个体产出明显提升，但端到端交付周期没有同比例变短，问题出在研发效率、组织协调、交付效率三者"分化"。通过重拆交付链路并量化组织效率（价值创造时间 / 总时间），团队把中位交付周期从 19 天降到 9 天（-52.6%）、P85 从 52 天降到 23 天（-55.8%）、30 天以上长尾需求占比从 35% 收敛到 7%。核心启发：当 AI 压缩了编码耗时，"等待"和"协调"成为新的主导耗时，项目管理方法要随之重做。</p>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&mid=2247697007&idx=1&sn=f12d0ba52354af093099ab3c6c7c28f3" target="_blank" rel="noopener">AI Coding时代，研发项目管理新范式探索与实践 — 腾讯云开发者</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">成本优化</span><span class="tag">定价</span></div>
-    <h3>模型定价日益复杂：峰谷定价、推理强度与"想得太多"的成本</h3>
-    <p>三条实测指向同一件事——把"推理强度 / 峰谷时段 / 缓存命中"纳入成本建模，别只盯单次单价。① OpenRouter 展示 DeepSeek 按本地时区的峰谷定价，价格随时段浮动，聚合路由会自动择优；② 有人实测 V4 Flash 比 Pro 更划算、更低推理强度的 High 反而强于 Max——"贵的档位不一定更强"；③ ollama 对 9 个复杂任务的 benchmark 显示 deepseek-v4-flash 平均性能最佳；而 qwen3.8 开推理后质量更高，代价是慢约 <code>30 倍</code>、贵约 <code>4.5 倍</code>——"成本不是精度，而是想得太多"。</p>
-    <div class="src">📎 来源: <a href="https://x.com/OpenRouter/status/2089574460047155298" target="_blank" rel="noopener">DeepSeek peak-hour pricing — OpenRouter</a> · <a href="https://x.com/ollama/status/2089454609765146744" target="_blank" rel="noopener">deepseek v4 flash vs qwen3.8 benchmark — ollama</a> · <a href="https://x.com/oran_ge/status/2089482620040286392" target="_blank" rel="noopener">V4 Pro 实测 — Orange AI</a></div>
+    <div class="tag-row"><span class="tag">Skill</span><span class="tag">评测</span></div>
+    <h3>NVIDIA SkillEvaluator：300+ 官方 skill 实测，正确率平均 +41 分</h3>
+    <p>NVIDIA 对 300+ verified skills 做对照基准：同一任务、同一模型、同一配置，唯一区别是 Agent 是否带 skill。结果是正确率平均提升 41 点、有效性 39 点、效率 35 点。SkillEvaluator 本身已开源，可以直接拿来自测自己写的 skill 再决定是否发布。对正在沉淀团队 skill 库的开发者，这是把"这 skill 到底有没有用"从体感变成数据的一次示范。</p>
+    <div class="src">📎 来源: <a href="https://x.com/NVIDIAAI/status/2090113635683340622" target="_blank" rel="noopener">NVIDIA AI(@NVIDIAAI)</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">Agent 安全</span><span class="tag">零信任</span></div>
-    <h3>Agent 安全护栏合集：Deno Claw Patrol / Google zero-trust ADK / Vercel / Replit</h3>
-    <p>当 Agent 被授予生产权限，安全就不能靠"模型保持听话"这种 wishful thinking。四条实战路径：① Deno 的 Claw Patrol——给事故响应 Agent 生产 Postgres/K8s/ClickHouse/AWS/GitHub/Slack 读写权限后，Agent 能关闭原本要叫醒人类的 incident；但护栏不能住在 Agent 内部（Agent 是不受信任的软件），必须外置。② Google ADK 的 zero-trust 架构——数据库写入用硬件背书签名、动态代码跑在 gVisor 内核级沙箱、I/O 过确定性语义网关。③ Vercel 悬赏 <code>100 万美元</code> 公开测试 Sandbox 沙箱逃逸，承认"没有网络边界的沙箱只是半个沙箱"。④ Replit 上线黑盒渗透测试——按外部攻击者方式扫描，Replit Agent 一键修复。统一结论：审计 + 权限最小化 + 沙箱 + 网络隔离，缺一不可。</p>
-    <div class="src">📎 来源: <a href="https://www.youtube.com/watch?v=MkRYPFIMCSA" target="_blank" rel="noopener">Security Firewall for Agents — AI Engineer / Deno</a> · <a href="https://developers.googleblog.com/build-zero-trust-ai-agents-with-googles-agent-development-kit/" target="_blank" rel="noopener">Build zero-trust AI agents with ADK — Google Developers Blog</a> · <a href="https://vercel.com/blog/one-million-dollar-hacker-challenge-for-vercel-sandbox" target="_blank" rel="noopener">$1M hacker challenge for Vercel Sandbox — Vercel News</a> · <a href="https://x.com/Replit/status/2089427187162083785" target="_blank" rel="noopener">Black-box pen tests for Replit apps — Replit</a></div>
+    <div class="tag-row"><span class="tag">踩坑复盘</span><span class="tag">Benchmark</span></div>
+    <h3>复盘：J-Space "一个 Skill 让 DeepSeek V4 Pro 超 Fable 5"翻车，无法复现的 benchmark</h3>
+    <p>一个叫 J-Space Cognition Suite 的社区项目宣称：不改模型权重、仅以 Skill 形式接入推理时 harness，就能让 DeepSeek V4 Pro 在多个 Agent 基准上大幅提升、甚至超过 Fable 5，速度与 token 效率翻倍。社区复测结果完全相反——分数没提升、token 开销反而翻倍，作者还拒绝公开完整评测记录、被曝删除质疑 issue。翻车背后它提出的四类 Agent 失控（工作集过载、表征漂移、无效重试、过早完成）本身是有价值的诊断框架，但"惊艳结论必须可复现"这条铁律再次被验证。对开发者：看到夸张 benchmark 先问评测日志在哪。</p>
+    <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651051113&idx=2&sn=4170b4c6d918755486250701628d8bc6" target="_blank" rel="noopener">一个Skill让DeepSeek V4 Pro超越Fable 5？热门插件被锤了 — 机器之心</a></div>
   </div>
 
   <div class="card">
-    <div class="tag-row"><span class="tag">GPU 运维</span><span class="tag">调度</span></div>
-    <h3>同一集群 +33 点利用率：变化的只是调度顺序</h3>
-    <p>Dharma-AI 的 GPU 管理系列第二篇证明：同一批集群资源，仅调整任务调度/执行顺序就能让利用率提升 33 个百分点。对跑大模型训练的团队，这是一份值得精读的调度调优方法论——先别急着加卡，先看顺序与打包策略。</p>
-    <div class="src">📎 来源: <a href="https://huggingface.co/blog/Dharma-AI/gpu-management-pt2" target="_blank" rel="noopener">Same Cluster, 33 Points More Utilization — Hugging Face Blog</a></div>
-  </div>
-
-  <div class="card">
-    <div class="tag-row"><span class="tag">密钥管理</span><span class="tag">Serverless</span></div>
-    <h3>Vercel KMS：函数里签 JWT，私钥永不进代码/环境变量</h3>
-    <p>Vercel 让函数用受管的非对称签名密钥签发 JWT 与任意消息：函数通过 Vercel OIDC token 认证，私钥留在 KMS 内，验证方只用公钥。支持 CLI/仪表盘创建与轮换签发者（RSA/ECDSA/EdDSA）、自定义 claims 与 TTL、<code>@vercel/kms</code> 包直接签原始字节。这是"消除环境变量里的私钥"的现代范式，Serverless 场景尤其值得跟进。</p>
-    <div class="src">📎 来源: <a href="https://vercel.com/changelog/sign-jwts-from-your-functions-without-managing-private-keys" target="_blank" rel="noopener">Sign JWTs without managing private keys — Vercel News</a></div>
-  </div>
-
-  <div class="card">
-    <div class="tag-row"><span class="tag">代码安全</span><span class="tag">Qodana</span></div>
-    <h3>JetBrains Qodana 集成 OpenGrep：.NET 与 JS 项目安全分析增强</h3>
-    <p>Qodana 通过集成 OpenGrep（Semgrep 的开源继任者）驱动的检查，为 .NET 与 JavaScript 项目扩展安全分析能力。在"每天生成大量代码、需要被检查"的当下，把安全扫描无缝嵌进 CI/IDE 而不增加开发者摩擦，是质量左移的关键。</p>
-    <div class="src">📎 来源: <a href="https://blog.jetbrains.com/qodana/2026/08/opengrep-inspections/" target="_blank" rel="noopener">Qodana Expands Security Analysis with OpenGrep Rules — The JetBrains Blog</a></div>
-  </div>
-
-  <div class="card">
-    <div class="tag-row"><span class="tag">RAG</span><span class="tag">文档解析</span></div>
-    <h3>Agent 处理 PDF 的隐藏关键：把答案精确锚定回原文</h3>
-    <p>Jerry Liu 指出：2026 年做 "agent over your PDFs"，最被低估的一件事是给任何 agentic 答案提供精确的原文锚定——展示答案来自的确切词/行/区域。Frontier 视觉模型在预测精确 bounding box 上表现糟糕，而专门的 VLM OCR/抽取工具（如 LlamaParse）在视觉锚定上明显更准。对做 RAG/文档问答的团队，这是取舍落地的一个关键工程决策。</p>
-    <div class="src">📎 来源: <a href="https://x.com/jerryjliu0/status/2089710424388202565" target="_blank" rel="noopener">Agent over PDFs: exact grounding to source — Jerry Liu(@jerryjliu0)</a></div>
-  </div>
-
-  <div class="card">
-    <div class="tag-row"><span class="tag">框架动态</span><span class="tag">Next.js</span></div>
-    <h3>Next.js 16.3：Instant Navigations 打造类原生应用体验</h3>
-    <p>Next.js 16.3 主打 App-like 体验：Instant Navigations、服务端渲染数据、乐观更新与实时客户端状态。Web 应用越来越追求"类原生"的交互质感，这套组合（即时导航 + 乐观 UI + 实时状态）是 2026 年前端体验工程的核心套路。</p>
-    <div class="src">📎 来源: <a href="https://nextjs.org/blog/building-app-like-experiences-with-nextjs-16-3" target="_blank" rel="noopener">Building App-like Experiences with Next.js 16.3 — Next.js Blog</a></div>
+    <div class="tag-row"><span class="tag">性能</span><span class="tag">React</span></div>
+    <h3>React 高频实时数据：Ring Buffers + OffscreenCanvas，把主线程让出来</h3>
+    <p>freeCodeCamp 的长文指出两个问题：React 扛不住每秒数千数据点的"水龙头"，而且笔记本 8-16 核通常只有 1 个核在工作——主线程同时扛 JS、DOM、布局与绘制。解法是同一套思路：用<strong>环形缓冲区（Ring Buffers）</strong>缓冲高频数据、用 <strong>OffscreenCanvas + Web Worker</strong> 把绘制挪到非主线程。文章点明这正是 Figma 画布背后的模式。对做实时图表、监控面板、大屏的前端团队，这是把"卡顿"从体感变成工程方案的好教材。</p>
+    <div class="src">📎 来源: <a href="https://www.freecodecamp.org/news/high-frequency-real-time-data-in-react-from-ring-buffers-to-offscreencanvas/" target="_blank" rel="noopener">High-Frequency Real-Time Data in React — freeCodeCamp</a></div>
   </div>
 </section>
 
@@ -534,58 +460,33 @@
 <footer>
   <h2>▌ 参考链接汇总</h2>
   <ul class="src-list">
-    <li><span class="feed">Qwen</span><a href="https://x.com/Alibaba_Qwen/status/2089566892117860844" target="_blank" rel="noopener">A local 27B model scoring frontier performance</a></li>
-    <li><span class="feed">Simon Willison</span><a href="https://simonwillison.net/2026/Aug/17/qwen-38-27b-scores-52/" target="_blank" rel="noopener">Qwen 3.8 27B scores 52 on the Artificial Analysis Intelligence Index</a></li>
-    <li><span class="feed">Paul Couvert</span><a href="https://x.com/itsPaulAi/status/2089441959043559533" target="_blank" rel="noopener">Qwen 3.8 27B lands at 52 — massive!</a></li>
-    <li><span class="feed">Qwen</span><a href="https://x.com/Alibaba_Qwen/status/2089602715735519586" target="_blank" rel="noopener">Qwen3.8-27B one prompt one shot demo</a></li>
-    <li><span class="feed">Qwen</span><a href="https://x.com/Alibaba_Qwen/status/2089597078385446969" target="_blank" rel="noopener">Qwen3.8-27B runs locally, even in browser with WebGPU</a></li>
-    <li><span class="feed">Berryxia.AI</span><a href="https://x.com/berryxia/status/2089489907718738036" target="_blank" rel="noopener">Cursor Origin is now live</a></li>
-    <li><span class="feed">夕小瑶科技说</span><a href="https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&mid=2247619635&idx=1&sn=1b7ab087fe918f76608f4439f6b27c46" target="_blank" rel="noopener">Cursor 上线 Origin，为 Agent 重建 GitHub</a></li>
-    <li><span class="feed">创业邦</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650887020&idx=2&sn=a053c551e54d60dd7f450f263c6d970a" target="_blank" rel="noopener">突发！Cursor 一夜干掉了 GitHub</a></li>
-    <li><span class="feed">AI前线</span><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247665850&idx=1&sn=fee6723b451eeacff7a80af9c51b50a8" target="_blank" rel="noopener">GitHub 昨夜大规模宕机 7 小时</a></li>
-    <li><span class="feed">CSDN</span><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247834478&idx=1&sn=2a63d29b07e7329a143e10a916d9e517" target="_blank" rel="noopener">GitHub 大规模宕机 7 小时！Cursor 趁机发布 Origin</a></li>
-    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/github-stacked-pull-requests/" target="_blank" rel="noopener">GitHub Brings Stacked Pull Requests to Public Preview</a></li>
-    <li><span class="feed">NVIDIA AI</span><a href="https://x.com/NVIDIAAI/status/2089750360869233059" target="_blank" rel="noopener">TensorRT Model Connect Public Preview</a></li>
-    <li><span class="feed">Boris Cherny</span><a href="https://x.com/bcherny/status/2089538781909332210" target="_blank" rel="noopener">Claude Code CLI uses 2x less CPU at p99</a></li>
-    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/dotnet-11-preview7-maui/" target="_blank" rel="noopener">.NET 11 Preview 7 Adds Passkeys, Incremental XAML Hot Reload to MAUI</a></li>
-    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/cloudflare-writeguard-mcp-safety/" target="_blank" rel="noopener">Cloudflare WriteGuard Brings Fine-Grained Security Controls for MCP Servers</a></li>
-    <li><span class="feed">腾讯云开发者</span><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&mid=2247696974&idx=1&sn=7b3e885c64e10a944ea85e4018348a13" target="_blank" rel="noopener">Agent 的命门是上下文：关键不在少给，而在给对</a></li>
-    <li><span class="feed">腾讯技术工程</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649803679&idx=1&sn=910b29493df93cadf43078846d630cef" target="_blank" rel="noopener">任何错误只犯一次：TencentDB Agent Memory 的团队记忆实践</a></li>
-    <li><span class="feed">机器之心</span><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651050939&idx=1&sn=048d1d6f8e05e0ae4bd944928e5d2171" target="_blank" rel="noopener">让 Coding Agent 开始「记住过去」：MemoraX Code</a></li>
-    <li><span class="feed">Arena.ai</span><a href="https://x.com/arena/status/2089755251134083578" target="_blank" rel="noopener">The $1 "hi" — agentic caching math</a></li>
-    <li><span class="feed">AI Engineer</span><a href="https://www.youtube.com/watch?v=YgEv7IQzGdM" target="_blank" rel="noopener">How to Kill the Code Review — Ankit Jain, Aviator</a></li>
-    <li><span class="feed">京东技术</span><a href="https://mp.weixin.qq.com/s?__biz=MzU1MzE2NzIzMg==&mid=2247502507&idx=1&sn=2ee6e6fa3ff5f8976283eff64780e5de" target="_blank" rel="noopener">AI Coding 的共生与替代：一场分阶段的演进</a></li>
-    <li><span class="feed">Addy Osmani</span><a href="https://x.com/addyosmani/status/2089603496932724840" target="_blank" rel="noopener">If you're building a software factory…</a></li>
-    <li><span class="feed">Stack Overflow</span><a href="https://stackoverflow.blog/2026/08/18/building-an-agentic-sdlc-with-a-qa-engineering-mindset/" target="_blank" rel="noopener">Building an agentic SDLC with a QA engineering mindset</a></li>
-    <li><span class="feed">硅星人Pro</span><a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247631889&idx=2&sn=2d9b89e2e289f656721192a27a76a4bb" target="_blank" rel="noopener">网友把 DeepSeek Harness 玩成了赛博乐高，挑出 11 个插件</a></li>
-    <li><span class="feed">歸藏</span><a href="https://x.com/op7418/status/2089643178177819094" target="_blank" rel="noopener">Pilot Harness 发布</a></li>
-    <li><span class="feed">歸藏的AI工具箱</span><a href="https://mp.weixin.qq.com/s?__biz=MzU0MDk3NTUxMA==&mid=2247497667&idx=1&sn=d62d9cb88912f2625435214330c1db97" target="_blank" rel="noopener">开源 DeepSeek Harness 开箱即用客户端 Pilot Harness</a></li>
-    <li><span class="feed">浮之静</span><a href="https://mp.weixin.qq.com/s?__biz=MzIzNjE2NTI3NQ==&mid=2247492414&idx=1&sn=b80d48c4cff9f30b9b3c21b3c2565ed4" target="_blank" rel="noopener">Minke：DeepSeek Harness 桌面应用</a></li>
-    <li><span class="feed">Browser Use</span><a href="https://x.com/browser_use/status/2089727767063756819" target="_blank" rel="noopener">MacOS Harness enables LLMs to control your Mac</a></li>
-    <li><span class="feed">山行AI</span><a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&mid=2247490906&idx=1&sn=f5aa14265c821a97d4f34f083aa6e7e3" target="_blank" rel="noopener">不越狱、不装驱动，Agent 也能操作真实 iPhone</a></li>
-    <li><span class="feed">Berryxia.AI</span><a href="https://x.com/berryxia/status/2089615424987988277" target="_blank" rel="noopener">Fireworks-tech-graph 突破 10000 Star</a></li>
-    <li><span class="feed">Yangyi</span><a href="https://x.com/yangyi/status/2089610056790851593" target="_blank" rel="noopener">blobatar — deterministic avatars from any string</a></li>
-    <li><span class="feed">Geek</span><a href="https://x.com/geekbb/status/2089626188562186376" target="_blank" rel="noopener">GitHub README 动态心电图</a></li>
-    <li><span class="feed">Geek</span><a href="https://x.com/geekbb/status/2089590867640070478" target="_blank" rel="noopener">让 dsh 用订阅账号当模型提供商</a></li>
-    <li><span class="feed">meng shao</span><a href="https://x.com/shao__meng/status/2089535930659115450" target="_blank" rel="noopener">Remotion Skills 2.0 发布</a></li>
-    <li><span class="feed">AINLP</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650453532&idx=1&sn=c326c7d2126312bbfef91fd63cb758ce" target="_blank" rel="noopener">我用一张 PRO 6000 跑通 Qwen3.8-27B</a></li>
-    <li><span class="feed">dbaplus社群</span><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&mid=2247637434&idx=1&sn=60d1f5d990e0468eff8fa9828bce36dd" target="_blank" rel="noopener">彻底翻车！千万别把 Linux 页大小从 4KB 改为 2MB</a></li>
-    <li><span class="feed">OpenRouter</span><a href="https://x.com/OpenRouter/status/2089574460047155298" target="_blank" rel="noopener">DeepSeek peak-hour pricing in your local timezone</a></li>
-    <li><span class="feed">ollama</span><a href="https://x.com/ollama/status/2089454609765146744" target="_blank" rel="noopener">Ollama best performance for deepseek v4 flash</a></li>
-    <li><span class="feed">Orange AI</span><a href="https://x.com/oran_ge/status/2089482620040286392" target="_blank" rel="noopener">DeepSeek V4 Pro 实测：推理强度与性价比反直觉</a></li>
-    <li><span class="feed">AI Engineer</span><a href="https://www.youtube.com/watch?v=MkRYPFIMCSA" target="_blank" rel="noopener">Security Firewall for Agents — Ryan Dahl, Deno</a></li>
-    <li><span class="feed">Google Developers</span><a href="https://developers.googleblog.com/build-zero-trust-ai-agents-with-googles-agent-development-kit/" target="_blank" rel="noopener">Build zero-trust AI agents with Google's Agent Development Kit</a></li>
-    <li><span class="feed">Vercel News</span><a href="https://vercel.com/blog/one-million-dollar-hacker-challenge-for-vercel-sandbox" target="_blank" rel="noopener">$1 million hacker challenge for Vercel Sandbox</a></li>
-    <li><span class="feed">Guillermo Rauch</span><a href="https://x.com/rauchg/status/2089747453004468339" target="_blank" rel="noopener">$1M towards verifying Vercel Sandbox security</a></li>
-    <li><span class="feed">Replit</span><a href="https://x.com/Replit/status/2089427187162083785" target="_blank" rel="noopener">Black-box pen tests for Replit apps</a></li>
-    <li><span class="feed">Amjad Masad</span><a href="https://x.com/amasad/status/2089435606338416884" target="_blank" rel="noopener">Try to break your code with pen testing</a></li>
-    <li><span class="feed">Hugging Face</span><a href="https://huggingface.co/blog/Dharma-AI/gpu-management-pt2" target="_blank" rel="noopener">Same Cluster, 33 Points More Utilization: What Changed Was the Order</a></li>
-    <li><span class="feed">Vercel News</span><a href="https://vercel.com/changelog/sign-jwts-from-your-functions-without-managing-private-keys" target="_blank" rel="noopener">Sign JWTs from your Functions without managing private keys</a></li>
-    <li><span class="feed">JetBrains Blog</span><a href="https://blog.jetbrains.com/qodana/2026/08/opengrep-inspections/" target="_blank" rel="noopener">Qodana Expands Security Analysis with OpenGrep Rules</a></li>
-    <li><span class="feed">Jerry Liu</span><a href="https://x.com/jerryjliu0/status/2089710424388202565" target="_blank" rel="noopener">Agent over PDFs: provide exact grounding to source</a></li>
-    <li><span class="feed">Next.js Blog</span><a href="https://nextjs.org/blog/building-app-like-experiences-with-nextjs-16-3" target="_blank" rel="noopener">Building App-like Experiences with Next.js 16.3</a></li>
+    <li><span class="feed">智谱</span><a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247494105&idx=1&sn=8d7409e0fb846a3c7803c142b5d1a8e7" target="_blank" rel="noopener">GLM-5.3上线：拓展智能上界的可及边界</a></li>
+    <li><span class="feed">OpenRouter</span><a href="https://x.com/OpenRouter/status/2089830854743015850" target="_blank" rel="noopener">GLM-5.3 from @Zai_org is live on OpenRouter</a></li>
+    <li><span class="feed">Simon Willison</span><a href="https://simonwillison.net/2026/Aug/18/mojo-is-now-open-source/" target="_blank" rel="noopener">Mojo🔥 is now open source</a></li>
+    <li><span class="feed">JetBrains Blog</span><a href="https://blog.jetbrains.com/dotnet/2026/08/19/rider-refactoring-code-skill/" target="_blank" rel="noopener">Rider Hands AI Agents The Keys To Its Refactoring Engine</a></li>
+    <li><span class="feed">JetBrains Blog</span><a href="https://blog.jetbrains.com/dotnet/2026/08/19/rider-resharper-2026-2-1/" target="_blank" rel="noopener">Rider 2026.2.1 and ReSharper 2026.2.1 Are Here!</a></li>
+    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/react-route-v8/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">React Router v8: A Deliberately Boring Release</a></li>
+    <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/08/dotnet-11-preview-7/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">.NET 11 Preview 7 Brings Updates Across C#, ASP.NET Core, EF Core, and Windows Forms</a></li>
+    <li><span class="feed">魔搭ModelScope社区</span><a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247512213&idx=1&sn=18ecb824be98f26e2972e66f091dd0ac" target="_blank" rel="noopener">Qwen3.8-27B-DFlash2 开源：1.92B 草稿模型</a></li>
+    <li><span class="feed">ollama</span><a href="https://x.com/ollama/status/2089914983840989255" target="_blank" rel="noopener">Kimi K3 is starting to roll out on Ollama's cloud subscriptions</a></li>
+    <li><span class="feed">InfoQ</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651291169&idx=4&sn=9affc303508c3ca9e851377dbf33629c" target="_blank" rel="noopener">MCP 走向无状态，开发者追问：这不就又变回 API 了吗？</a></li>
+    <li><span class="feed">字节跳动技术团队</span><a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&mid=2247521375&idx=1&sn=e11bc1ebfc05563e0d0ab2d5d47835b5" target="_blank" rel="noopener">Agent Plan x DeepSeek Harness 实践指南</a></li>
+    <li><span class="feed">人人都是产品经理</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651930301&idx=2&sn=3a95e2314e44fba6159c39ff9afaed41" target="_blank" rel="noopener">DeepSeekHarness的新范式：让Agent为自己构建工具</a></li>
+    <li><span class="feed">elvis</span><a href="https://x.com/omarsar0/status/2089835269021135025" target="_blank" rel="noopener">I am bullish on simple agent harnesses — Vercel fx</a></li>
+    <li><span class="feed">Guillermo Rauch</span><a href="https://x.com/rauchg/status/2089831055373316274" target="_blank" rel="noopener">fx.sh as my daily driver</a></li>
+    <li><span class="feed">Ding</span><a href="https://x.com/dingyi/status/2090049915196252477" target="_blank" rel="noopener">herdr — Native macOS console for all your coding agents</a></li>
+    <li><span class="feed">Viking</span><a href="https://x.com/vikingmute/status/2090046473262268708" target="_blank" rel="noopener">Memmy — 开源项目：Coding Agent 共享记忆层</a></li>
+    <li><span class="feed">AINLP</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650453545&idx=1&sn=c98f59020251b53105380e1f1464cb3d" target="_blank" rel="noopener">LlamaFactory 作者又搞了个新东西：Agent 开始自己造 Agent 了</a></li>
+    <li><span class="feed">Milvus</span><a href="https://x.com/milvusio/status/2090098967665078598" target="_blank" rel="noopener">Milvus 3.0 Search Aggregation</a></li>
+    <li><span class="feed">Qdrant</span><a href="https://x.com/qdrant_engine/status/2089999409404957029" target="_blank" rel="noopener">ACORN vs filterable HNSW benchmark</a></li>
+    <li><span class="feed">有机大橘子</span><a href="https://mp.weixin.qq.com/s?__biz=MzkwMzY5NzU2Nw==&mid=2247490377&idx=1&sn=9c8bb29ee61e186d78ae4eb502b0d35d" target="_blank" rel="noopener">ColaMD 1.9.0 更新，解决两个真实的痛点</a></li>
+    <li><span class="feed">OpenAI Developers</span><a href="https://x.com/OpenAIDevs/status/2090122836103102482" target="_blank" rel="noopener">Asana finished Enzyme → React Testing Library migration with Codex</a></li>
+    <li><span class="feed">腾讯云开发者</span><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&mid=2247697007&idx=1&sn=f12d0ba52354af093099ab3c6c7c28f3" target="_blank" rel="noopener">AI Coding时代，研发项目管理新范式探索与实践</a></li>
+    <li><span class="feed">NVIDIA AI</span><a href="https://x.com/NVIDIAAI/status/2090113635683340622" target="_blank" rel="noopener">SkillEvaluator: benchmarked 300+ NVIDIA verified skills</a></li>
+    <li><span class="feed">机器之心</span><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651051113&idx=2&sn=4170b4c6d918755486250701628d8bc6" target="_blank" rel="noopener">一个Skill让DeepSeek V4 Pro超越Fable 5？热门插件被锤了</a></li>
+    <li><span class="feed">freeCodeCamp</span><a href="https://www.freecodecamp.org/news/high-frequency-real-time-data-in-react-from-ring-buffers-to-offscreencanvas/" target="_blank" rel="noopener">High-Frequency Real-Time Data in React: From Ring Buffers to OffscreenCanvas</a></li>
   </ul>
-  <p class="footer-note">// generated by tech-daily-generator · role: developer_practice · data window: 2026-08-17 18:18 ~ 2026-08-18 18:18 · source_count: 508</p>
+  <p class="footer-note">// generated by tech-daily-generator · role: developer_practice · data window: 2026-08-18 18:15 ~ 2026-08-19 18:15 · source_count: 481</p>
 </footer>
 
 </div>
