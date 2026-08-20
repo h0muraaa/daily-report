@@ -182,7 +182,7 @@ def call_anthropic(prompt: str, timeout: int = 600) -> str:
         "content-type": "application/json",
     }
     payload = {
-        "model": "claude-opus-4-7",
+        "model": os.environ.get("ANTHROPIC_MODEL", "claude-opus-4-7"),
         "max_tokens": 16384,
         "messages": [{"role": "user", "content": prompt}],
     }
