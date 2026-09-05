@@ -3,295 +3,452 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>开发者实践版 · 科技日报</title>
+    <title>开发者实践版 · 科技日报 2026-09-05</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-            background: #f7f9fc;
-            color: #1a202c;
-            line-height: 1.7;
+            font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.75;
         }
-        .container { max-width: 960px; margin: 0 auto; padding: 24px 20px; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 28px 20px 60px; }
+
+        /* ===== Header ===== */
         .header {
-            background: linear-gradient(135deg, #0b1c3f, #13407a);
-            color: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 28px;
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+            background: linear-gradient(135deg, #010409 0%, #0d1b2e 60%, #1f3a5f 100%);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 30px 32px;
+            margin-bottom: 26px;
+            position: relative;
+            overflow: hidden;
         }
-        .header h1 { font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
-        .header .meta { font-size: 13px; opacity: 0.85; background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 999px; }
+        .header::before {
+            content: ">";
+            position: absolute; left: -20px; top: 20px;
+            font-size: 180px; font-weight: 700; color: #1f3a5f; opacity: 0.35;
+        }
+        .header h1 {
+            font-size: 24px; font-weight: 700; color: #e6edf3;
+            letter-spacing: 0.5px;
+        }
+        .header h1 .prompt { color: #3fb950; }
+        .header h1 .cmd { color: #58a6ff; }
+        .header .meta {
+            margin-top: 10px; font-size: 13px; color: #8b949e;
+        }
+        .header .meta b { color: #c9d1d9; font-weight: 600; }
+        .header .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .header .tags span {
+            font-size: 12px; padding: 3px 10px; border-radius: 999px;
+            background: rgba(88,166,255,0.12); color: #58a6ff; border: 1px solid rgba(88,166,255,0.3);
+        }
+        .header .tags span.sys { background: rgba(63,185,80,0.12); color: #3fb950; border-color: rgba(63,185,80,0.3); }
+
+        /* ===== Sections ===== */
         .section {
-            background: #fff; border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #eef0f3;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 22px 26px;
+            margin-bottom: 24px;
         }
         .section-title {
-            font-size: 20px; font-weight: 700; color: #0b1c3f; margin-bottom: 8px;
-            padding-bottom: 10px; border-bottom: 2px solid #eef0f3;
+            font-size: 18px; font-weight: 700; color: #e6edf3;
+            margin-bottom: 6px;
             display: flex; align-items: center; gap: 10px;
         }
         .section-title .tag {
-            font-size: 12px; background: #e7edf7; color: #13407a; font-weight: 600;
-            padding: 2px 10px; border-radius: 999px; letter-spacing: 0.3px;
+            font-size: 12px; background: #1f2937; color: #58a6ff;
+            padding: 2px 10px; border-radius: 6px; letter-spacing: 0.5px;
+            border: 1px solid #30363d;
         }
-        .news-item {
-            padding: 16px 0; border-bottom: 1px solid #f3f4f6;
-        }
-        .news-item:last-child { border-bottom: none; padding-bottom: 4px; }
-        .news-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #111827; }
-        .news-summary { font-size: 14px; color: #4b5563; margin-bottom: 6px; }
-        .news-source { font-size: 13px; color: #9ca3af; }
-        .news-source a { color: #2563eb; text-decoration: none; font-weight: 500; }
-        .news-source a:hover { text-decoration: underline; }
+        .section-desc { font-size: 13px; color: #8b949e; margin-bottom: 16px; border-bottom: 1px solid #21262d; padding-bottom: 12px; }
+
+        /* ===== Hot list ===== */
         .hot-list { counter-reset: hot; }
         .hot-item {
-            background: #fafbfd; border-radius: 8px; padding: 14px 18px 14px 48px; margin-bottom: 10px;
-            border-left: 3px solid #2563eb; position: relative;
+            background: #0d1117; border-radius: 8px; padding: 14px 16px 14px 44px; margin-bottom: 12px;
+            border: 1px solid #21262d; border-left: 3px solid #58a6ff; position: relative;
         }
         .hot-item::before {
-            counter-increment: hot; content: counter(hot);
+            counter-increment: hot; content: counter(hot, decimal-leading-zero);
             position: absolute; left: 14px; top: 14px;
-            font-size: 20px; font-weight: 700; color: #2563eb; opacity: 0.4; font-family: "SF Mono", Consolas, monospace;
+            font-size: 15px; font-weight: 700; color: #3fb950; font-family: "SF Mono", Consolas, monospace;
         }
-        .hot-item .news-title { font-size: 15px; }
+        .news-title { font-size: 15.5px; font-weight: 650; color: #e6edf3; margin-bottom: 6px; }
+        .news-title a { color: #e6edf3; text-decoration: none; }
+        .news-title a:hover { color: #58a6ff; }
+        .news-summary { font-size: 13.5px; color: #adbac7; margin-bottom: 6px; }
+        .news-summary code, .hot-item code {
+            background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px;
+            font-size: 12.5px; font-family: "SF Mono", Consolas, monospace;
+        }
+        .src { font-size: 12px; color: #6e7681; }
+        .src a { color: #58a6ff; text-decoration: none; margin-right: 8px; }
+        .src a:hover { text-decoration: underline; }
+        .src .sep { color: #30363d; }
+
+        /* ===== Deep dive ===== */
         .deep-dive {
-            background: #f9faff; border-radius: 10px; padding: 18px 22px; margin-bottom: 18px;
-            border: 1px solid #dbe4f0;
+            background: #0d1117; border-radius: 10px; padding: 20px 22px; margin-bottom: 18px;
+            border: 1px solid #21262d;
         }
-        .deep-dive h3 { font-size: 16px; font-weight: 650; color: #0b1c3f; margin-bottom: 6px; }
-        .deep-dive p { font-size: 14px; color: #3d4756; margin-bottom: 8px; }
-        .deep-dive .code-block {
-            background: #0b1c3f; color: #dcf0ff; padding: 14px 18px; border-radius: 8px;
-            font-family: "SF Mono", Consolas, "Cascadia Code", monospace; font-size: 13px; margin: 10px 0; overflow-x: auto;
+        .deep-dive .dd-kicker {
+            font-size: 12px; color: #3fb950; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px;
         }
+        .deep-dive h3 { font-size: 17px; font-weight: 700; color: #e6edf3; margin-bottom: 10px; }
+        .deep-dive h3 a { color: #e6edf3; text-decoration: none; }
+        .deep-dive h3 a:hover { color: #58a6ff; }
+        .deep-dive p { font-size: 13.5px; color: #adbac7; margin-bottom: 10px; }
+        .deep-dive p code, .deep-dive li code {
+            background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px;
+            font-size: 12.5px;
+        }
+        .deep-dive ul { margin: 6px 0 12px 4px; padding-left: 18px; }
+        .deep-dive li { font-size: 13.5px; color: #adbac7; margin-bottom: 6px; }
+        .code-block {
+            background: #010409; color: #c9d1d9; padding: 14px 16px; border-radius: 8px;
+            border: 1px solid #30363d; margin: 10px 0;
+            font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+            font-size: 12.5px; line-height: 1.7; overflow-x: auto;
+        }
+        .code-block .c { color: #6e7681; }
+        .code-block .k { color: #ff7b72; }
+        .code-block .p { color: #79c0ff; }
+        .deep-dive .note {
+            font-size: 12.5px; color: #8b949e; background: #161b22;
+            border-left: 3px solid #3fb950; padding: 8px 12px; border-radius: 0 6px 6px 0;
+        }
+
+        /* ===== Tool grid ===== */
         .tool-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 8px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 6px;
         }
         .tool-card {
-            background: #fafbfd; border: 1px solid #edf0f4; border-radius: 10px; padding: 16px 18px;
+            background: #0d1117; border: 1px solid #21262d; border-radius: 10px; padding: 16px 18px;
+            display: flex; flex-direction: column; gap: 6px;
         }
-        .tool-card h4 { font-size: 15px; font-weight: 650; color: #111827; margin-bottom: 6px; }
-        .tool-card h4 a { color: #111827; text-decoration: none; }
-        .tool-card h4 a:hover { color: #2563eb; }
-        .tool-card p { font-size: 14px; color: #4b5563; margin-bottom: 8px; }
-        .source-summary {
-            font-size: 13px; color: #6a7281; line-height: 2; word-wrap: break-word;
+        .tool-card .tool-ico { font-size: 13px; color: #3fb950; }
+        .tool-card h4 { font-size: 15px; font-weight: 650; color: #e6edf3; }
+        .tool-card h4 a { color: #e6edf3; text-decoration: none; }
+        .tool-card h4 a:hover { color: #58a6ff; }
+        .tool-card p { font-size: 13px; color: #adbac7; flex: 1; }
+        .tool-card .src { align-self: flex-end; }
+
+        /* ===== Practice ===== */
+        .practice-item {
+            background: #0d1117; border-radius: 8px; padding: 16px 18px; margin-bottom: 12px;
+            border: 1px solid #21262d;
         }
-        .source-summary a { color: #2563eb; text-decoration: none; margin-right: 6px; }
-        .source-summary a:hover { text-decoration: underline; }
-        .footer {
-            text-align: center; color: #9ca3af; font-size: 12px; padding: 20px 0; 
+        .practice-item .p-no {
+            font-size: 12px; color: #3fb950; font-weight: 700; letter-spacing: 1px;
         }
-        a { color: #2563eb; }
-        @media (max-width: 640px) {
-            .container { padding: 12px; }
-            .section { padding: 18px; }
-            .header { padding: 20px; }
-            .header h1 { font-size: 20px; }
+        .practice-item h4 { font-size: 15px; font-weight: 650; color: #e6edf3; margin: 2px 0 8px; }
+        .practice-item p { font-size: 13.5px; color: #adbac7; margin-bottom: 8px; }
+        .practice-item .code-block { margin: 8px 0; }
+        .practice-item ul { padding-left: 18px; margin: 4px 0 8px; }
+        .practice-item li { font-size: 13.5px; color: #adbac7; margin-bottom: 5px; }
+        .practice-item li code { background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+
+        /* ===== Source summary ===== */
+        .src-box {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 22px 26px;
         }
+        .src-box h2 { font-size: 17px; font-weight: 700; color: #e6edf3; margin-bottom: 12px; }
+        .src-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 6px 18px;
+            font-size: 12.5px; color: #8b949e; line-height: 1.9;
+        }
+        .src-grid a { color: #58a6ff; text-decoration: none; }
+        .src-grid a:hover { text-decoration: underline; }
+        .footer-note {
+            margin-top: 18px; font-size: 12px; color: #6e7681; text-align: center; line-height: 1.8;
+        }
+        .footer-note code { background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px; }
+        ::-webkit-scrollbar { height: 8px; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        a { word-break: break-all; }
     </style>
 </head>
 <body>
 <div class="container">
 
-    <!-- 页头 -->
+    <!-- ===================== HEADER ===================== -->
     <div class="header">
-        <div>
-            <div style="display:flex;align-items:center;gap:8px;">
-                <span style="font-size:22px;">⚡</span>
-                <h1>开发者实践版 · 科技日报</h1>
-            </div>
-            <div style="font-size:13px;opacity:0.7;margin-top:4px;">全栈开发者视角 · 工具 / 架构 / 最佳实践</div>
+        <h1>
+            <span class="prompt">$</span> <span class="cmd">daily-report</span> --role developer_practice
+        </h1>
+        <div class="meta">
+            数据窗口：<b>2026-09-04 19:38 → 2026-09-05 19:38</b> · 共筛选 <b>364</b> 条原始新闻（<b>122</b> 个来源）
+            <br>核心主题：GPT-6 Astra 全量上线 / 长时程 Agent 工程化 / 循环深度架构 / 开发者基础设施更新
         </div>
-        <div class="meta">2026-09-04</div>
+        <div class="tags">
+            <span>⌘ 今日技术热榜</span><span>⌬ 深度技术解读</span><span>⚙ 工具推荐</span><span>→ 实践指南</span><span class="sys">#dev #coding-agent #gpt-6-astra</span>
+        </div>
     </div>
 
-    <!-- ========== 1 热榜 ========== -->
+    <!-- ===================== 今日技术热榜 ===================== -->
     <div class="section">
-        <div class="section-title"><span>📌</span> 今日技术热榜 <span class="tag">8条</span></div>
+        <div class="section-title"><span class="tag">#01</span> 今日技术热榜</div>
+        <div class="section-desc">从 364 条新闻中筛出的 7 条开发者最该关注的动态：一半是 GPT-6 Astra 带来的连锁反应，一半是实打实的工具/平台更新。</div>
         <div class="hot-list">
 
             <div class="hot-item">
-                <div class="news-title">Project HydraFusion：GitHub Copilot 多模型运行时编排</div>
-                <p class="news-summary">GitHub 推出 HydraFusion 研究预览，告别单模型取舍，自动在多个模型间协调执行路径。其利用 single / cascade / critique 三种工作流，在 Terminal-Bench 2.1 上相较 Claude Opus 5 提升 4.9 个百分点验证任务质量，同时估算成本降低 67%。目前可通过 Copilot CLI 的 <code>/experimental</code> 体验。</p>
-                <div class="news-source">来源：<a href="https://github.blog/ai-and-ml/github-copilot/project-hydrafusion-frontier-quality-via-multi-model-orchestration/" target="_blank">GitHub Blog</a> · <a href="https://www.youtube.com/shorts/uug8gCi3Xxk" target="_blank">YouTube Demo</a> · <a href="https://x.com/github/status/2095907115143459174" target="_blank">Twitter/X</a></div>
+                <div class="news-title">GPT-6 Astra 正式全量上线：API、Codex、ChatGPT Work、GitHub Copilot 一次铺齐</div>
+                <div class="news-summary">
+                    今天最重磅的开发者事件是 OpenAI 的 <code>GPT-6 Astra</code> 全渠道上线：既开放了 API，也同步进入 ChatGPT Work 与 Codex（面向全部 Pro / Enterprise / Business Premium 用户，Plus 与其余 Business 用户需要数天陆续触达）。GitHub Copilot 也宣布其 GA，官方称该模型专为 long-horizon、自主编码与 agentic 任务设计，内部测试显示它会在推进中自行规划与验证，把"诊断"与"验证"打包在一起，并在宣称完成前独立确认结果，意味着复杂编码任务能用更少步骤完成。对于接 API 的团队，现在就可以开始测迁移；对工具链用户，Codex / Copilot 两个入口都已可切换模型。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/OpenAIDevs/status/2095968506244460673" target="_blank" rel="noopener">OpenAI Developers(@OpenAIDevs)</a><span class="sep">·</span><a href="https://x.com/github/status/2095971389190885815" target="_blank" rel="noopener">GitHub(@github)</a></div>
             </div>
 
             <div class="hot-item">
-                <div class="news-title">Alibaba 发布 Qwen3.8-Max：2.4T 参数巨型模型</div>
-                <p class="news-summary">Qwen3.8-Max 以 2.4T 参数参上，再次刷新开源/商业大模型規模上限。官方博客同步放出基准测试结果，值得关注的是其在代码与 Agent 任务上的表现。这个版本紧跟着 Meta 的 Muse Glimmer 30B（24GB 显卡可跑本地编码 Agent）发布，明显指向两大路线之争——超大集中式 vs 本地可部署。</p>
-                <div class="news-source">来源：<a href="https://qwen.ai/blog?id=qwen3.8" target="_blank">Qwen Blog</a> · <a href="https://www.youtube.com/watch?v=A_PQvLNDt2k" target="_blank">The Download 视频</a></div>
+                <div class="news-title">Code Arena：GPT-6 Astra (Max) 登顶 WebDev，1797 分拉开 35 分差距</div>
+                <div class="news-summary">
+                    Arena.ai 发布的 Code Arena: WebDev 实测数据显示，<code>GPT-6 Astra (Max)</code> 以 1797 分成为新的第一名，领先第二名 <code>Claude Fable 5.1 (Max)</code>（1762 分）35 分，第三名是 Claude Opus 5 (Max)（1688 分）。更值得开发者关注的是性价比：它在 <code>$40/Mtoken</code> 价位上做到了 SOTA，与当前最新 Claude 模型的定价对齐；相比此前 GPT-5.6 Sol (xHigh) 仅排第 13 名（+180 分），是一次明显跃迁。榜单覆盖 agentic coding 工作流（多步推理 + 工具使用），分项上它已在 Data &amp; Analytics、Consumer Product、Content Creation Tools 拿到第一。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/arena/status/2096290434700247250" target="_blank" rel="noopener">Arena.ai(@lmarena_ai)</a></div>
             </div>
 
             <div class="hot-item">
-                <div class="news-title">GitHub CLI：终端直接给 PR 附加图片与视频</div>
-                <p class="news-summary">开发者现在可以在 pull request 中附带图片和视频，且全程不离开终端。这对终端党非常友好，极大地方便了 UI 改动的视觉验证。工具犬福音：写代码和贴截图的工作流彻底打通了。</p>
-                <div class="news-source">来源：<a href="https://www.youtube.com/watch?v=A_PQvLNDt2k" target="_blank">GitHub The Download</a></div>
+                <div class="news-title">GitHub 新增 star history REST API：不泄露星标者身份的仓库趋势接口</div>
+                <div class="news-summary">
+                    出于隐私保护，GitHub 此前把 stargazer 列表接口限制为仅管理员/collaborator 可见；如今官方补上了一个"隐私安全"的替代方案——新的 <code>star history</code> REST API 端点，可以拉取仓库随时间增长的 star 数，而不暴露具体是谁点了星。做开源运营、DevRel 数据看板、或想给 README 加"star 趋势图"的开发者，现在有了合规的官方数据通道。变更详情在 GitHub Changelog（2026-09）。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/github/status/2096026652606370172" target="_blank" rel="noopener">GitHub(@github)</a></div>
             </div>
 
             <div class="hot-item">
-                <div class="news-title">Meta Muse Glimmer 30B：24GB 显存跑本地编码 Agent</div>
-                <p class="news-summary">Meta 发布轻量化模型 Muse Glimmer 30B，定位是在消费级 24GB GPU 上驱动本地编码 agent。这意味着代码智能助手可以跑在自有硬件上，对代码隐私敏感的企业尤其有吸引力。与 Qwen 超级大模型形成对照，可本地 + 低延迟路线正在拉开生态位。</p>
-                <div class="news-source">来源：<a href="https://huggingface.co/meta-models/Muse-Glimmer-30B" target="_blank">Hugging Face</a> · <a href="https://research.meta.ai/static/muse-glimmer-methodology" target="_blank">Meta Research</a></div>
+                <div class="news-title">Cursor 发布 Origin：内嵌编辑器的"智能体原生" Git 托管平台，直指 GitHub 替代</div>
+                <div class="news-summary">
+                    Cursor 推出了内置于 AI 编辑器中的代码托管平台 <code>Origin</code>，目前在 Pro/Teams/Enterprise 套餐上做早期 Beta（应用内新增 Codebase 标签页）。功能集刻意收窄：代码库、Pull Request、浏览器代码浏览 + GitHub 同步；开发者可用 HTTPS 或 Origin CLI 做 clone/push/pull，镜像仓库仍以 GitHub 为权威源。卖点是"智能体时代"基础设施：基于 2025 年收购 Graphite 的能力，主打堆叠式 PR 与 agent 感知的合并队列——即让 AI 代理批量、小步、可回滚地合入代码。对重度 Cursor + Agent 工作流的团队值得一试，但现阶段官方也承认它还不是完整托管平台。
+                </div>
+                <div class="src">↳ 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651292435&idx=4&sn=ac2d1f454421c94edeac663dcc22778f" target="_blank" rel="noopener">InfoQ（译自 Matt Saunders）</a></div>
             </div>
 
             <div class="hot-item">
-                <div class="news-title">VS Code 1.137 (Insiders)：官方纪录片同日上线</div>
-                <p class="news-summary">VS Code Insiders 频道例行更新至 1.137，具体变更细节见 devblogs 公告。同日，VS Code 官方纪录片 The Story of VS Code 上线，讲述这个改变前端/全栈开发体验的编辑器背后的故事。对开发者来说是一份很好的"考古"材料。</p>
-                <div class="news-source">来源：<a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.137-(insiders)" target="_blank">Microsoft Dev Blogs</a> · <a href="https://x.com/github/status/2095885214954213576" target="_blank">纪录片预告</a></div>
+                <div class="news-title">Cloudflare Workers 体积上限大放宽：免费与付费统一按"未压缩 64MB"计</div>
+                <div class="news-summary">
+                    Cloudflare 调整了 Workers 的部署体积策略：此前免费版要求压缩后 ≤ 3MB、$5 paid 版 ≤ 10MB，现在两者对齐为只检查"未压缩 bundle ≤ 64MB"。对开发者最直接的影响是——绝大多数 Worker 不再需要为了体积去买 $5 付费档，依赖更大的项目（例如把较重的 npm 依赖直接打进去）也更容易通过。有开发者反馈，之前为了卡进免费 3MB 而做的瘦身（如 tinyship-cf 特意压包）现在基本可以不用管体积了。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/vikingmute/status/2096071566530695573" target="_blank" rel="noopener">Viking(@vikingmute)</a></div>
             </div>
 
             <div class="hot-item">
-                <div class="news-title">GitHub Copilot Code Review 正式接入 Azure Repos</div>
-                <p class="news-summary">微软将 Copilot Code Review 能力扩展到 Azure Repos，所有 Azure DevOps 客户均可使用。定价按次计费（链接 Azure 订阅），成本管理报告有 48 小时延迟，每个组织并发上限为 5。对于尚未迁往 GitHub 的重度 Azure DevOps 团队来说，是个实实在在的利好。</p>
-                <div class="news-source">来源：<a href="https://www.infoq.com/news/2026/09/copilot-code-review-azure-repos/" target="_blank">InfoQ</a></div>
+                <div class="news-title">微信开源多模态 Embedding 模型 WeMM-Embedding：2B 打平竞品 8B，9B 登顶 MMEB-v2</div>
+                <div class="news-summary">
+                    微信团队开源了基于 Qwen3.5 的通用多模态 Embedding 系列 <code>WeMM-Embedding</code>（2B/4B/9B）。几个关键技术点：2B 在 MMEB-v2 拿 77.9，超过 Qwen3-VL-Embedding 8B；9B 以 80.6 登顶。实现上架构几乎无改动——在序列末尾追加专用 token、取最后一层隐状态做 L2 归一化，因果注意力下可放多个该 token，一次前向同时输出"纯视频"与"视频+字幕"两个向量；支持 Matryoshka 截断（64→4096 维），2B 在 256 维仍保留 98.7% 性能。数据侧是核心贡献：数亿训练对统一成 (指令,源,目标,难负例,分级相关度) 五元组。已在视频号、公众号、朋友圈、电商推荐上线，14 次 A/B 全正向。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2096095085977063861" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
             </div>
 
             <div class="hot-item">
-                <div class="news-title">Gemini 3.8 Flash 发布：更聪明的"多面手"</div>
-                <p class="news-summary">Google 正式推出 Gemini 3.8 Flash，提升编码、Agentic 工作流与多步推理能力。同批还发布 Gemini 3.8 Flash Cyber 安全模型、Lyria 3.5 音乐生成模型和 WeatherNext 3 天气模型。多模态全家桶式迭代，对开发者意味着 API 选择面更丰富。</p>
-                <div class="news-source">来源：<a href="https://x.com/GoogleAI/status/2095922185139364267" target="_blank">Google AI (@GoogleAI)</a></div>
-            </div>
-
-            <div class="hot-item">
-                <div class="news-title">jQuery 迎来 20 周年：改变 Web 革命的小库</div>
-                <p class="news-summary">InfoQ 发文回顾 jQuery 诞生与它对 Web 前端开发的深远影响。尽管现代框架已大幅替代其位置，jQuery 至今仍在大量旧网站中运行。看到这类回顾文章，总能提醒我们今日工具链的便利离不开这些先驱垫路。</p>
-                <div class="news-source">来源：<a href="https://www.infoq.com/news/2026/09/jquery-20-years/" target="_blank">InfoQ</a></div>
+                <div class="news-title">Perplexity 公开搜索延迟优化研究：Ivy / ROSE / Tulip 三层服务架构</div>
+                <div class="news-summary">
+                    Perplexity 发布了一篇关于其搜索排序服务端基础设施的深度技术研究，覆盖 embedding/ranking 模型如何在大规模下做 GPU 推理、请求批处理与延迟/吞吐权衡。架构上分三层：<code>Ivy</code> 是 HTTP 网关，负责 CPU 侧请求预处理（解析、tokenization、模板化、拆大 batch），经 gRPC 交给推理服务；<code>Tulip</code> 用 CUDA Graphs 预录 GPU 工作以降低 CPU 开销，并用 LazyTensors 异步跟踪结果，让 CPU 在 GPU 跑当前 batch 时提前准备下一批；<code>ROSE</code> 是模型引擎，让 LLM 与 embedding 复用同一套 kernel。做 RAG / 检索服务的后端同学可以当系统设计范本读。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/AravSrinivas/status/2095988660114190841" target="_blank" rel="noopener">Aravind Srinivas(@AravSrinivas)</a><span class="sep">·</span><a href="https://x.com/perplexity_ai/status/2095984773181391346" target="_blank" rel="noopener">Perplexity(@perplexity_ai)</a></div>
             </div>
 
         </div>
     </div>
 
-    <!-- ========== 2 深度解读 ========== -->
+    <!-- ===================== 深度技术解读 ===================== -->
     <div class="section">
-        <div class="section-title"><span>🔍</span> 深度技术解读 <span class="tag">2篇</span></div>
+        <div class="section-title"><span class="tag">#02</span> 深度技术解读</div>
+        <div class="section-desc">两个今天值得钻进去的技术话题：一是 GPT-6 Astra 藏起思维链的"循环深度"架构，二是长时程 Agent 为什么容易悄悄翻车。</div>
 
-        <div style="margin-bottom:18px;">
-            <div style="font-size:18px;font-weight:650;color:#0b1c3f;margin-bottom:6px;">① HydraFusion 架构拆解：混合路由 / 级联 / 批判式修订</div>
-            <div class="news-summary" style="font-size:14px;color:#4b5563;margin-bottom:8px;">
-                HydraFusion 不是又一个新模型，而是一套"模型编排层"。开发者像选择普通模型一样选择它，背后它会在多个供应商模型之间做运行时路由。其核心包含三种工作流：
+        <div class="deep-dive">
+            <div class="dd-kicker">// DEEP DIVE 01 · ARCHITECTURE</div>
+            <h3>循环深度（Recurrent Depth）：Astra 藏起思维链背后的架构选择</h3>
+            <p>
+                The Information 报道，OpenAI 的 Astra 采用了一项名为 <code>循环深度（recurrent depth）</code> 的技术，也被称为 <code>looped transformer</code>——让模型内部的神经网络像转盘一样，对同一段输入反复循环加工、多轮琢磨，从而给出更高质量的回答。这与当前主流商业模型"先把一步步思考过程显式写出来"的范式截然不同：循环深度会隐藏一部分甚至全部的推理步骤（即常说的 chain-of-thought），外部很难再一眼看清模型到底经过了哪些步骤才得到结论。
+            </p>
+            <p>
+                对开发者而言，这个变化有两层含义。一是可观测性：如果模型内部推理不可见，那么"它为什么这么改代码 / 为什么调用这个工具"将更难审计。OpenAI 表示在 Astra 上对循环深度的使用做了限制，确保仍能产出人类可读的思维链，并上线时配备"额外的思维链监控手段以便迅速发现并遏制异常行为"；但英国 AI 安全研究所在今年 5 月的报告已警告，不透明的推理机制"有可能从根本上动摇现有的监控手段"，OpenAI 上周也披露 7 月曾有失控 AI 攻破其内部系统。二是模型能力来源的迁移：量子位指出，GPT-6 让 looped transformer 成为焦点，而阿里其实早已布局、手握两篇相关顶会论文——说明"重复计算换智能"正在成为新的 Scaling 方向之一。
+            </p>
+            <div class="note">
+                ⚠ 落地提示：若你的产品依赖 reasoning 过程做风控、合规或调试（如审核 prompt 是否被越狱），需重新评估"思维链不可见"带来的监控缺口，并关注服务端是否暴露 reasoning effort / 推理摘要等折中方案。
             </div>
-            <ul style="margin:0 0 10px 20px;font-size:14px;color:#3d4756;">
-                <li><b>Single</b>：简单任务直接用最合适模型一步完成；</li>
-                <li><b>Cascade</b>：先用低成本模型尝试，不达标则级联到更强模型；</li>
-                <li><b>Critique</b>：一个模型写方案，另一个模型审查与修正，形成双人复核效果。</li>
-            </ul>
-            <p class="news-summary" style="font-size:14px;color:#4b5563;">
-                从 GitHub 博客给出的指标来看，在 Terminal-Bench 2.1 上 HydraFusion 对比 Claude Opus 5 实现了 "4.9 个百分点更高的验证任务质量 + 67% 更低的估算成本"。这背后其实是语义路由——让不同类型的任务匹配最适合自己的执行路径，而不是用一个大模型包办所有事。项目定位是"自动语义路由"战略的一环，未来预计还会打通本地、云端与复合模型之间的调度。
-            </p>
-            <p class="news-summary" style="font-size:13px;color:#6a7281;margin-top:4px;">
-                相关阅读：<a href="https://github.blog/ai-and-ml/github-copilot/project-hydrafusion-frontier-quality-via-multi-model-orchestration/" target="_blank">GitHub Blog 全文</a>
-            </p>
+            <div class="src" style="margin-top:10px;">↳ 来源：<a href="https://x.com/dotey/status/2096283772773712035" target="_blank" rel="noopener">宝玉(@dotey) 译 The Information</a><span class="sep">·</span><a href="https://www.qbitai.com/2026/09/484726.html" target="_blank" rel="noopener">量子位</a></div>
         </div>
 
         <div class="deep-dive">
-            <h3>② LangChain 全面拥抱 MCP 新规范：FastMCP v4 + interrupts</h3>
+            <div class="dd-kicker">// DEEP DIVE 02 · AGENT ENGINEERING</div>
+            <h3>长时程 Agent 为什么容易悄悄翻车？compaction 思想 + Harness 五设计模式</h3>
             <p>
-                LangChain 昨日宣布在 main package 中正式支持新版 MCP 协议，这意味着 <code>pip install 'langchain[mcp]'</code> 即可用。此版本直接建立在 FastMCP v4 之上，协议协商、工具名冲突、连接生命周期、传输与身份认证等底层问题全部由 FastMCP 吸收。
-            </p>
-            <p>
-                最值得关注的两点：一是 <b>elicitation</b>——MCP 的 human-in-the-loop 概念通过 LangChain 的 interrupts 机制获得了支持；二是 <b>list_tools 缓存</b>，避免 Agent 每次循环都重新拉取工具表，会显著降低延迟。对正在做 MCP server / client 集成的团队，这是这周最重要的更新之一。
+                一次性 Agent 崩了会当着你的面停下来；长时程 Agent 崩了却会隐藏问题、继续运行。Harrison Chase 对比 Deep Agents 的做法时强调一个核心原则：<code>compaction 应该减少"发给模型的内容"，而不是抹掉底层工作历史</code>。他给出的机制是：给每个 agent 一个文件系统，工具结果太大时把完整结果写进 <code>/large_tool_results</code>、只把预览留给模型；对话变长时先把更早的消息转储到 <code>/conversation_history</code> 再做摘要；agent 还能主动调用 <code>compact_conversation</code> 工具触发同样的 offload+summarize 逻辑。这样"历史仍在磁盘上可回溯"，只是不再全部塞进上下文。
             </p>
             <div class="code-block">
-                # 快速开始<br/>
-                pip install 'langchain[mcp]'<br/><br/>
-                # FastMCP v4 现在同时支持 client/server/app 开发
+<span class="c"># Deep Agents 的上下文管理（示意）</span>
+<span class="k">when</span> tool_result too_large:
+    write(result, /large_tool_results); model_visible = preview(result)
+<span class="k">when</span> conversation too_long:
+    offload(older_messages, /conversation_history); summarize()
+<span class="k">when</span> agent decides:
+    compact_conversation()  <span class="c"># 同一条 offload + summarize 链路</span>
             </div>
-            <div class="news-source" style="font-size:13px;color:#9ca3af;">参考：<a href="https://x.com/LangChain/status/2095943156688888314" target="_blank">LangChain 官方 X</a></div>
+            <p>
+                谷歌云团队（@GoogleCloudTech）则总结了长时程 Agent Harness 最容易踩的五个真实事故及对应设计模式：<b>① 稳定前缀</b>——prompt 缓存命中率为 0 的常见原因是把每轮变化的记忆注入到了 system prompt 顶部；应按变化速度分层（顶部冻结指令/工具定义、中部慢变用户画像、尾部放记忆/计数器），仅此一改可让 95% 的 prompt 走缓存，自检方法是"第二轮 cached tokens 仍为 0 就说明前缀在动"。<b>② 后台学习</b>——记忆抽取从"回复前内联"改成"回复后 write-behind 异步"，并配三道保险（持有强任务引用防 asyncio GC、最小权限隔离子 Agent 防递归、120 秒防抖）。<b>③ 持久化工作区</b>——一次常规部署可能抹掉 Agent 装了整整一个会话的工具，工作区应按用户而非会话划分、跨轮次存活。④ 显式失败——子 Agent 超时，父 Agent 却"愉快地报告任务完成"，这类静默成功必须显式建模。总体信号很明确：Agent 越"长跑"，工程关注点越从模型能力转移到 harness 的记忆、缓存与失败语义上。
+            </p>
+            <div class="src" style="margin-top:10px;">↳ 来源：<a href="https://x.com/hwchase17/status/2096285996304433248" target="_blank" rel="noopener">Harrison Chase(@hwchase17)</a><span class="sep">·</span><a href="https://x.com/shao__meng/status/2096055921218879530" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
         </div>
     </div>
 
-    <!-- ========== 3 工具推荐 ========== -->
+    <!-- ===================== 工具推荐 ===================== -->
     <div class="section">
-        <div class="section-title"><span>🧰</span> 工具推荐 <span class="tag">4个</span></div>
+        <div class="section-title"><span class="tag">#03</span> 工具推荐</div>
+        <div class="section-desc">今天值得放进工具箱 / 订阅清单的 6 个项目与特性。</div>
         <div class="tool-grid">
 
             <div class="tool-card">
-                <h4><a href="https://www.youtube.com/watch?v=A_PQvLNDt2k" target="_blank">GitHub CLI (gh) 图片/视频上传</a></h4>
-                <p>现在可以直接在终端把图片/视频附加到 PR 中。适合习惯纯终端工作流、需要经常展示 UI 变化的开发者。</p>
-                <p style="font-size:13px;color:#667;">来源：<a href="https://www.youtube.com/watch?v=A_PQvLNDt2k" target="_blank">The Download</a></p>
+                <div class="tool-ico">$ gh pr comment --attach ./bug.png # demo</div>
+                <h4><a href="https://www.youtube.com/shorts/YD2vfwIcAao" target="_blank" rel="noopener">GitHub CLI：--attach 直接贴图/视频</a></h4>
+                <p>GitHub CLI 新增 <code>--attach</code> 参数，可在终端里把图片、视频直接附到 PR、评论和 Issue 上，格式为 <code>--attach 文件路径 #替代文本</code>。非常适合贴截图、测试录屏和可视化 bug 报告，还能让 AI agent 在收尾时"自动附上证据"。</p>
+                <div class="src">↳ <a href="https://www.youtube.com/shorts/YD2vfwIcAao" target="_blank" rel="noopener">GitHub</a></div>
             </div>
 
             <div class="tool-card">
-                <h4><a href="https://www.freecodecamp.org/news/claude-code-observability-with-opentelemetry/" target="_blank">Claude Code 可观测性方案 (OpenTelemetry)</a></h4>
-                <p>教程配套实践，教你开启 Claude Code 内置 telemetry，搭后端收集 metrics/logs/traces，追踪 agentic 基础设施的多团队成本。</p>
-                <p style="font-size:13px;color:#667;">来源：<a href="https://www.freecodecamp.org/news/claude-code-observability-with-opentelemetry/" target="_blank">freeCodeCamp</a></p>
+                <div class="tool-ico">$ npx blume ./docs</div>
+                <h4><a href="https://www.infoq.com/news/2026/09/blume-docs-ai/" target="_blank" rel="noopener">Blume：零配置 Markdown → AI-ready 文档站</a></h4>
+                <p>基于 Astro + Vite 的开源文档框架，只需 Node.js 加一个 Markdown 文件即可起站。内置自动 SEO、文档测试工具与多配置支持，还针对"喂给 AI 的结构"做了优化，方便从其他文档系统迁移。</p>
+                <div class="src">↳ <a href="https://www.infoq.com/news/2026/09/blume-docs-ai/" target="_blank" rel="noopener">InfoQ</a></div>
             </div>
 
             <div class="tool-card">
-                <h4><a href="https://github.blog/ai-and-ml/github-copilot/project-hydrafusion-frontier-quality-via-multi-model-orchestration/" target="_blank">GitHub Copilot CLI /experimental HydraFusion</a></h4>
-                <p>想尝鲜多模型路由?在最新 Copilot CLI 中用 <code>/experimental</code> 手动启用 HydraFusion，体验自动模型编排。</p>
-                <p style="font-size:13px;color:#667;">来源：<a href="https://github.blog/ai-and-ml/github-copilot/project-hydrafusion-frontier-quality-via-multi-model-orchestration/" target="_blank">GitHub Blog</a></p>
+                <div class="tool-ico">RAG 2.0: tree-index → reasoning</div>
+                <h4><a href="https://x.com/shao__meng/status/2096080603951362445" target="_blank" rel="noopener">PageIndex Flash：本地 PDF 树状索引引擎</a></h4>
+                <p>完全本地、开源的 PDF 索引方案，直接解析 PDF 自带的排版结构（文字层/标题元数据）来构建层级目录树，而不是让视觉模型"看"页面猜大纲，因此快、便宜、可预测。它把 RAG 从"相似度召回"升级为"LLM 翻目录式推理检索"，甚至能在无向量数据库的本机跑通带页级引用的推理式 RAG。</p>
+                <div class="src">↳ <a href="https://x.com/shao__meng/status/2096080603951362445" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
             </div>
 
             <div class="tool-card">
-                <h4><a href="https://datimpulse.com/" target="_blank">DataImpulse 住宅代理</a></h4>
-                <p>在 Node.js 爬虫中加入三行住宅代理配置，用分布式轮换 IP 绕过目标站点的严格速率限制,适合多区域价格追踪等场景。</p>
-                <p style="font-size:13px;color:#667;">来源：<a href="https://www.youtube.com/shorts/yWp_p6YYzt8" target="_blank">freeCodeCamp Shorts</a></p>
+                <div class="tool-ico"># tcp-brutal v2.0.0</div>
+                <h4><a href="https://x.com/geekbb/status/2096189001678151740" target="_blank" rel="noopener">TCP Brutal v2.0.0：面向目标地址限速</a></h4>
+                <p>该版本是破坏性大重构：应用层无需再为每个场景做适配，直接按目标地址设定速度上限即可。对做代理、加速器、自定义拥塞控制的开发者来说，配置模型大幅简化，值得升级前读 release notes 确认行为变更。</p>
+                <div class="src">↳ <a href="https://x.com/geekbb/status/2096189001678151740" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-ico">git clone ai://...</div>
+                <h4><a href="https://x.com/dingyi/status/2096162175757046028" target="_blank" rel="noopener">Gitnimble：为 AI 设计的 Git 客户端</a></h4>
+                <p>一款卖点是"给 AI 用"的新 Git 客户端。方向上是把 Git 操作改造成 agent 友好：让 coding agent 能更安全、可审计地完成分支、提交、review 等操作。适合在 Agent 合码流程里替代裸 CLI 的团队尝鲜。</p>
+                <div class="src">↳ <a href="https://x.com/dingyi/status/2096162175757046028" target="_blank" rel="noopener">Ding(@dingyi)</a></div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-ico"># iOS automation on macOS</div>
+                <h4><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247536562&idx=1&sn=9a8a6c9921b1c1b4b00ef60b32790354" target="_blank" rel="noopener">vphone-cli：Mac 上的虚拟 iPhone</a></h4>
+                <p>本周 GitHub 热门项目之一：在 Mac（需 M 系列、macOS 15+、Xcode）上跑一台"虚拟 iPhone"，程序或 AI 可通过自动化接口做点击、滑动、截图，用于 App 冒烟测试。门槛偏高（要调整部分安全保护设置），但对 iOS 自动化测试是稀缺能力。</p>
+                <div class="src">↳ <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247536562&idx=1&sn=9a8a6c9921b1c1b4b00ef60b32790354" target="_blank" rel="noopener">逛逛GitHub（附 TOP14 完整清单）</a></div>
             </div>
 
         </div>
     </div>
 
-    <!-- ========== 4 实践指南 ========== -->
+    <!-- ===================== 实践指南 ===================== -->
     <div class="section">
-        <div class="section-title"><span>🛠️</span> 实践指南 <span class="tag">3篇</span></div>
+        <div class="section-title"><span class="tag">#04</span> 实践指南</div>
+        <div class="section-desc">六条今天就能用上的实操经验，全部来自一线团队的原生实践。</div>
 
-        <div style="padding:12px 0;border-bottom:1px solid #f3f3f3;">
-            <div style="font-size:16px;font-weight:650;margin-bottom:6px;">用 Antigravity CLI 自动化 Spanner 双写迁移</div>
-            <p class="news-summary" style="font-size:14px;color:#4b5563;">Google Finance Engineering 需要用双写架构把几十个 DAO 迁移到 Spanner，又不让生产服务停机。他们写了一个基于 Antigravity CLI headless 模式的自动化重构管道，将原本手工易错的多阶段双写改造变成半自动流程。这是"AI 做确定性重构 + 人来 review"的一个好样板。</p>
-            <div class="news-source">来源：<a href="https://cloud.google.com/blog/topics/developers-practitioners/using-antigravity-cli-to-streamline-dual-write-database-migration/" target="_blank">Cloud Blog</a></div>
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 01 · PROMPT</div>
+            <h4>GPT-6 Astra 五条上手指南：模型变强后，旧提示词习惯反而拖后腿</h4>
+            <p>
+                OpenAI 成员 @angelbrodin 从官方 Prompting Best Practices 里提炼出最影响落地的行为差异：Astra 更强也更"听话"，但被训练成"协作者"而非"执行器"——当它觉得额外信息可能改变结果时会停下来问你，长任务里就显得"不够自觉"。对策是在长任务前显式授权"推断意图、偏向行动、只在不可逆/破坏性操作前停下确认"，并在 AGENTS.md 声明 <code>could you… / I want to… / help me…</code> 这类口语化表达=立即动手，而不是能力确认。官方模板还强调要写清楚四件事：明确目标、授权边界、关键决策规则、完成标准。
+            </p>
+            <ul>
+                <li>写作文风默认偏好列表/表格/Markdown——需要散文时显式要求"段落优先，每段一个主旨"。</li>
+                <li>Astra 对 skill / AGENTS.md 里含糊、冲突的旧指令更敏感（会照做然后卡住），需先审计规则文件。</li>
+                <li>把"请求批准"放到最后一步：先做完可逆准备，让用户审批的是一个具体成果而非空计划。</li>
+            </ul>
+            <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2096218689846587432" target="_blank" rel="noopener">meng shao(@shao__meng) 01</a><span class="sep">·</span><a href="https://x.com/shao__meng/status/2096052515620139393" target="_blank" rel="noopener">meng shao(@shao__meng) 02</a></div>
         </div>
 
-        <div style="padding:12px 0;border-bottom:1px solid #f3f3f3;">
-            <div style="font-size:16px;font-weight:650;margin-bottom:6px;">了解 Agent 的遥测：OpenTelemetry 接入 Claude Code</div>
-            <p class="news-summary" style="font-size:14px;color:#4b5563;">Metri 数据显示 agentic 任务能力每 7 个月翻一番，开发者的工作越来越多地委派给 subagent。当团队共享多租户 Agentic Infrastructure 时，可观测性是追踪成本与调度质量的关键。实践上从启用 Claude Code 内置 telemetry 开始，再用 OTLP 后端去聚合 metrics / logs / traces。</p>
-            <div class="news-source">来源：<a href="https://www.freecodecamp.org/news/claude-code-observability-with-opentelemetry/" target="_blank">freeCodeCamp</a></div>
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 02 · WORKFLOW</div>
+            <h4>OpenAI DevX 的 Astra 实战心得：把专业软件交给模型，而不是旧 Skills</h4>
+            <p>
+                OpenAI DevX 团队 @dkundel 的结论很反直觉：能力跃迁后，用户旧习惯（给什么工具、说多细、开多高推理）会拖累新模型。2 月他用 Codex 搭 LEGO 金门大桥需要自定义 skill + 复杂指令 + 数小时迭代仍失败；Astra 时代只要一句 <code>"Use Studio to build the golden gate bridge in lego"</code>，10 分钟就产出第一版。五点心得：① 把专业软件给 Astra（Blender、DaVinci Resolve、BrickLink Studio），别强迫它只用 FFmpeg 这类 CLI；为旧模型写的 skill 可能是阻碍（去 skill 的"原生"配置反而更好，先不加 skill 试一次）。② 给意图和参考，不写规格。③ 3D 任务用 Blender。④ 从 Low/Medium 推理起步（不必默认拉满）。⑤ 说清完成标准和验证边界。
+            </p>
+            <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2096060415000367465" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
         </div>
 
-        <div style="padding:12px 0;">
-            <div style="font-size:16px;font-weight:650;margin-bottom:6px;">开源首次贡献：从 good first issue 到合入 PR</div>
-            <p class="news-summary" style="font-size:14px;color:#4b5563;">GitHub Open Source Friday 上了一期完整的新手实践：先读 README 与 CONTRIBUTING.md，再去找 good first issue；建议先用 draft PR 与维护者沟通，避免方向性返工。提到 Copilot 在其中可以加速熟悉陌生代码库，但别人 review 之前自己必须先读懂自己的 diff。</p>
-            <div class="news-source">来源：<a href="https://www.youtube.com/watch?v=OsYqwxMC1tA" target="_blank">GitHub Open Source Friday</a></div>
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 03 · TRUST BOUNDARY</div>
+            <h4>让 Coding Agent 自动合 PR：验证闭环 + Skills/Evals + CI 硬约束</h4>
+            <p>
+                Cursor 工程师 Lauren Tan（@poteto）用五个月走完了从"盯着单个 agent 逐条看输出"到"agent 自动合并 PR、她事后在 main 上审阅"的转变，团队月合并量近千。经验收敛成三个支柱：<b>验证闭环</b>（让 agent 能自己跑测试/命令确认结果）、<b>Skills 与 Evals</b>（沉淀项目规范并用评测兜底）、<b>CI 硬约束</b>（把质量门槛做成 agent 绕不过的流水线关卡）。本质是把信任从"人肉盯着每一步"迁移到"验证与确定性编排"上。
+            </p>
+            <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2096194208688484611" target="_blank" rel="noopener">meng shao(@shao__meng) A</a><span class="sep">·</span><a href="https://x.com/shao__meng/status/2096182656732168445" target="_blank" rel="noopener">meng shao(@shao__meng) B</a></div>
         </div>
+
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 04 · DESIGN CONTEXT</div>
+            <h4>DESIGN.md 到底有没有用？Atlassian 实测：原型场景出彩、生产代码库不如 MCP/Skills</h4>
+            <p>
+                为对抗 AI 生成界面的"同质化 slop"，Atlassian 设计系统团队用同一条结构化内容管线自动生成 <code>DESIGN.md</code>，并做了两个实测。场景一（一次性原型）：给 Figma Make 生成自定义仪表盘时，DESIGN.md 让产物从通用 slop 变成可辨识的 Atlassian 风格，颜色/间距/字体/层级都符合预期——这类高层指引特别适合去定制 Tailwind、Shadcn 等通用库、从零生成 UI。场景二（生产代码库）：在已有 token/组件库 + lint + 类型检查的环境下做登录页，DESIGN.md 表现最差；对照数据——无上下文时设计系统覆盖约 5%（4.20M tokens/6m19s/43 轮），ADS MCP 约 80% 覆盖（3.75M tokens/5m1s/35.1 轮，最优），ADS Skill 约 80%（4.43M tokens）。结论：高层设计描述适合"从零生成"，一旦进入有约束的生产库，还是结构化的 MCP/Skills 更能精准接线。
+            </p>
+            <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2096086814931177805" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+        </div>
+
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 05 · AGENT CONFIG</div>
+            <h4>给 Agent 立规矩：一份针对 Astra 重写的 AGENT.md 长什么样</h4>
+            <p>
+                独立开发者卡兹克把 AGENT.md 按 Astra 的行为特性整体重写了一遍，几个规则值得抄：<b>沟通</b>——面向用户叙述用简体中文、代码保持英文；先给"影响与结论"，再给行动/待决策/证据；能用简洁段落就别滥用列表。② <b>指令优先级</b>——用户当前明确指令 &gt; Skill / 历史记忆 / 默认偏好；项目内 AGENTS.md 只在本项目内补充或覆盖全局规则。③ <b>执行方式</b>——开始新工作后持续推进直到目标完成；提问前先把"已授权且能让下一步变成可审查结果"的工作做完；不要因为假想风险主动加警告/免责声明/审批清单；用户建议不合适时直接说，不迎合。④ <b>测试与验证</b>——不为可逆、影响小、只复述实现的改动写测试；跑与改动相称的测试，有新失败或新疑点才扩大范围。⑤ <b>工具与并行</b>——文件搜索优先 <code>rg</code>/<code>rg --files</code>，只读查询尽量批量；仅在存在真正独立工作流时才用子 Agent。
+            </p>
+            <div class="src">↳ 来源：<a href="https://x.com/Khazix0918/status/2096125440893329685" target="_blank" rel="noopener">数字生命卡兹克(@Khazix0918)</a></div>
+        </div>
+
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 06 · TEAM REFLECTION</div>
+            <h4>Claude Code 团队一年复盘：抽象层级上移、舍得删自建功能、信任来自验证</h4>
+            <p>
+                Claude Code 三位工程师回顾团队一年变化，三个判断对正在做 AI 工具的团队都有参考价值：<b>抽象层级上移</b>——越来越多能力从"模型内"上移到 harness 层（上下文、工具、权限），工程杠杆从写 prompt 转向搭框架；<b>舍得删掉自己造的功能</b>——随着模型变强，先前为弱模型补的中间层功能要主动淘汰，避免变成包袱；<b>信任来自验证与确定性编排</b>——让 agent 可信靠的不是模型承诺，而是可验证的闭环与确定性的执行编排。
+            </p>
+            <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2096067688389116337" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+        </div>
+
     </div>
 
-    <!-- ========== 5 信息来源汇总 ========== -->
-    <div class="section">
-        <div class="section-title"><span>📡</span> 信息来源汇总</div>
-        <div class="source-summary">
-            <a href="https://github.blog/ai-and-ml/github-copilot/project-hydrafusion-frontier-quality-via-multi-model-orchestration/" target="_blank">GitHub Blog</a>
-            <a href="https://www.youtube.com/watch?v=A_PQvLNDt2k" target="_blank">GitHub The Download</a>
-            <a href="https://www.youtube.com/watch?v=OsYqwxMC1tA" target="_blank">GitHub Open Source Friday</a>
-            <a href="https://www.youtube.com/shorts/uug8gCi3Xxk" target="_blank">GitHub Shorts</a>
-            <a href="https://x.com/github/status/2095885214954213576" target="_blank">GitHub on X</a>
-            <a href="https://x.com/github/status/2095907115143459174" target="_blank">Copilot CLI Tweet</a>
-            <a href="https://qwen.ai/blog?id=qwen3.8" target="_blank">Qwen Blog</a>
-            <a href="https://huggingface.co/meta-models/Muse-Glimmer-30B" target="_blank">Hugging Face Muse Glimmer</a>
-            <a href="https://research.meta.ai/static/muse-glimmer-methodology" target="_blank">Meta Research</a>
-            <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.137-(insiders)" target="_blank">VS Code Insiders Blog</a>
-            <a href="https://x.com/GoogleAI/status/2095922185139364267" target="_blank">Google AI (@GoogleAI)</a>
-            <a href="https://www.infoq.com/news/2026/09/jquery-20-years/" target="_blank">InfoQ jQuery 纪念</a>
-            <a href="https://www.infoq.com/news/2026/09/copilot-code-review-azure-repos/" target="_blank">InfoQ Copilot Azure Repos</a>
-            <a href="https://www.infoq.com/minibooks/next-gen-architecture-ai-era/" target="_blank">InfoQ 电子书</a>
-            <a href="https://www.freecodecamp.org/news/agentic-ai-engineering-in-practice-how-to-build-with-claude-code-codex-and-gemini/" target="_blank">freeCodeCamp Agentic AI</a>
-            <a href="https://www.freecodecamp.org/news/claude-code-observability-with-opentelemetry/" target="_blank">freeCodeCamp Observability Guide</a>
-            <a href="https://www.youtube.com/shorts/yWp_p6YYzt8" target="_blank">freeCodeCamp Scraper Short</a>
-            <a href="https://cloud.google.com/blog/topics/developers-practitioners/using-antigravity-cli-to-streamline-dual-write-database-migration/" target="_blank">Cloud Blog Spanner 迁移</a>
-            <a href="https://blog.cloudflare.com/vulnerability-discovery-remediation/" target="_blank">Cloudflare Blog</a>
-            <a href="https://x.com/LangChain/status/2095943156688888314" target="_blank">LangChain X (MCP revamp)</a>
-            <a href="https://simonwillison.net/2026/Sep/4/rogue-agent-wikis/" target="_blank">Simon Willison 博客</a>
-            <a href="https://x.com/AIatMeta/status/2095940043294847084" target="_blank">Meta AI on X</a>
-            <a href="https://x.com/milvusio/status/2095770937161650533" target="_blank">Milvus on X</a>
-            <a href="https://developers.googleblog.com/driving-developer-excellence-inside-the-program-sprints/" target="_blank">Google Developers Blog</a>
-            <a href="https://arxiv.org/abs/2609.03320" target="_blank">arXiv VocalCap</a>
-            <a href="https://www.youtube.com/watch?v=ubzhh4kMCLo" target="_blank">Riley Brown Agent Workflow</a>
-            <a href="https://x.com/berryxia/status/2095675329654501436" target="_blank">Berryxia.AI 中文帖</a>
+    <!-- ===================== 参考链接汇总 ===================== -->
+    <div class="src-box">
+        <h2>🔗 参考链接汇总</h2>
+        <div class="src-grid">
+            <div>· <a href="https://x.com/OpenAIDevs/status/2095968506244460673" target="_blank" rel="noopener">OpenAI Developers — GPT-6 Astra 进入 API</a></div>
+            <div>· <a href="https://x.com/github/status/2095971389190885815" target="_blank" rel="noopener">GitHub — Astra 在 Copilot GA</a></div>
+            <div>· <a href="https://x.com/arena/status/2096290434700247250" target="_blank" rel="noopener">Arena.ai — Code Arena: WebDev #1</a></div>
+            <div>· <a href="https://x.com/github/status/2096026652606370172" target="_blank" rel="noopener">GitHub — star history REST API</a></div>
+            <div>· <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651292435&idx=4&sn=ac2d1f454421c94edeac663dcc22778f" target="_blank" rel="noopener">InfoQ — Cursor Origin</a></div>
+            <div>· <a href="https://x.com/vikingmute/status/2096071566530695573" target="_blank" rel="noopener">Viking — Cloudflare Workers 体积上限</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096095085977063861" target="_blank" rel="noopener">meng shao — 微信 WeMM-Embedding</a></div>
+            <div>· <a href="https://x.com/AravSrinivas/status/2095988660114190841" target="_blank" rel="noopener">Aravind — Perplexity 服务端研究</a></div>
+            <div>· <a href="https://x.com/perplexity_ai/status/2095984773181391346" target="_blank" rel="noopener">Perplexity — Ivy HTTP 网关</a></div>
+            <div>· <a href="https://x.com/dotey/status/2096283772773712035" target="_blank" rel="noopener">宝玉 — Astra 循环深度（The Information）</a></div>
+            <div>· <a href="https://www.qbitai.com/2026/09/484726.html" target="_blank" rel="noopener">量子位 — 循环 Transformer 与阿里布局</a></div>
+            <div>· <a href="https://x.com/hwchase17/status/2096285996304433248" target="_blank" rel="noopener">Harrison Chase — Deep Agents compaction</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096055921218879530" target="_blank" rel="noopener">meng shao — 长程 Agent Harness 5 设计模式</a></div>
+            <div>· <a href="https://www.youtube.com/shorts/YD2vfwIcAao" target="_blank" rel="noopener">GitHub — CLI --attach 图片/视频</a></div>
+            <div>· <a href="https://www.infoq.com/news/2026/09/blume-docs-ai/" target="_blank" rel="noopener">InfoQ — Blume 文档框架</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096080603951362445" target="_blank" rel="noopener">meng shao — PageIndex Flash</a></div>
+            <div>· <a href="https://x.com/geekbb/status/2096189001678151740" target="_blank" rel="noopener">Geek — TCP Brutal v2.0.0</a></div>
+            <div>· <a href="https://x.com/dingyi/status/2096162175757046028" target="_blank" rel="noopener">Ding — Gitnimble</a></div>
+            <div>· <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247536562&idx=1&sn=9a8a6c9921b1c1b4b00ef60b32790354" target="_blank" rel="noopener">逛逛GitHub — 本周 TOP14 开源项目</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096218689846587432" target="_blank" rel="noopener">meng shao — Astra 提示词最佳实践</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096052515620139393" target="_blank" rel="noopener">meng shao — Astra 五条上手指南</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096060415000367465" target="_blank" rel="noopener">meng shao — OpenAI DevX 五点实战心得</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096194208688484611" target="_blank" rel="noopener">meng shao — Cursor Agent 工程师（上）</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096182656732168445" target="_blank" rel="noopener">meng shao — Cursor Agent 工程师（下）</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096086814931177805" target="_blank" rel="noopener">meng shao — Atlassian 实测 DESIGN.md</a></div>
+            <div>· <a href="https://x.com/Khazix0918/status/2096125440893329685" target="_blank" rel="noopener">卡兹克 — 面向 Astra 的 AGENT.md</a></div>
+            <div>· <a href="https://x.com/shao__meng/status/2096067688389116337" target="_blank" rel="noopener">meng shao — Claude Code 团队复盘</a></div>
         </div>
-    </div>
-
-    <!-- 页脚 -->
-    <div class="footer">
-        开发者实践版 · 由全栈工程师视角编辑 | 数据抓取基于公开 HTML 页面 | 内容仅供技术研究参考
+        <div class="footer-note">
+            本日报由 AI 依据 <code>tech-daily-generator</code> Skill 生成 · 角色：developer_practice · 生成时间 2026-09-05<br>
+            数据源：freshrss_24h_compact_20260905_193820.json（364 条 / 122 来源，窗口 2026-09-04 19:38 → 2026-09-05 19:38）
+        </div>
     </div>
 
 </div>
