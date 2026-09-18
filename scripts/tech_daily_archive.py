@@ -4,6 +4,10 @@
 把 tech-daily/*.html 归档到 tech-daily/archive/<YYYY-MM-DD>/，并维护
 tech-daily/archive/history.json 供主页做历史回溯。
 
+同时把历史入口注入到页面里（纯 HTML，无 JS）：
+- 角色选择页 tech-daily/index.html 顶部：「📅 历史日报」折叠列表，点日期跳当天归档。
+- 每个归档页 tech-daily/archive/<date>/index.html 顶部：「← 前一天 / 后一天 →」翻页。
+
 用法:
     python3 scripts/tech_daily_archive.py save     --keep 15   # 工作流每日调用
     python3 scripts/tech_daily_archive.py backfill --keep 15   # 从 git 历史回填
@@ -13,6 +17,8 @@ tech-daily/archive/history.json 供主页做历史回溯。
   这样生成失败时只会重复归档旧日期，不会把旧内容错标成今天。
 - 清理按目录名的日期排序，不依赖文件 mtime（actions/checkout 会把 mtime 刷成当天，
   `find -mtime` 类逻辑在 CI 中不可靠）。
+- 两个入口都由本脚本按标签 <!-- history-nav:start/end --> 生成，不依赖客户端 fetch，
+  因此断网/禁用 JS 也能跳转；标签丢失时会告警并尝试重新插入，不会静默失效。
 """
 
 from __future__ import annotations
@@ -52,6 +58,12 @@ TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 DATE_DIR_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 CARD_RE = re.compile(r'[ \t]*<article class="card">.*?</article>\n?', re.DOTALL)
 CARD_HREF_RE = re.compile(r'href="\./([A-Za-z0-9_]+)\.html"')
+
+# 历史导航块的标签：脚本靠它做幂等替换；缺了会尝试重新插入而不是静默跳过。
+NAV_START = "<!-- history-nav:start -->"
+NAV_END = "<!-- history-nav:end -->"
+HISTORY_NAV_RE = re.compile(re.escape(NAV_START) + r".*?" + re.escape(NAV_END), re.DOTALL)
+TITLE_ANCHOR = "<h1>科技日报</h1>"
 
 BANNER_STYLE = """
         .archive-banner {
@@ -126,10 +138,72 @@ def list_dates(archive_dir: Path) -> list[str]:
     )
 
 
-def build_date_index(template: str, date: str, available: set[str]) -> str:
+def _short_date(date: str) -> str:
+    """2026-09-17 -> 09-17"""
+    return date[5:]
+
+
+def render_history_nav(dates: list[str], current: str | None, prefix: str) -> str:
+    """角色选择页顶部的「历史日报」入口：折叠列表 + 日期链接。"""
+    chips = []
+    for date in dates:
+        label = _short_date(date)
+        if date == current:
+            chips.append(f'<span class="history-chip current">{label}</span>')
+        else:
+            chips.append(f'<a class="history-chip" href="{prefix}{date}/index.html">{label}</a>')
+
+    return (
+        f"{NAV_START}\n"
+        f'            <nav class="history-nav">\n'
+        f'                <details class="history-details">\n'
+        f'                    <summary>📅 历史日报（{len(dates)} 天）</summary>\n'
+        f'                    <div class="history-dates">\n'
+        f'                        {" ".join(chips)}\n'
+        f"                    </div>\n"
+        f"                </details>\n"
+        f"            </nav>\n"
+        f"            {NAV_END}"
+    )
+
+
+def render_archive_nav(dates: list[str], date: str, prefix: str) -> str:
+    """归档页顶部的「前一天 / 后一天」翻页入口。dates 为降序（最新在前）。"""
+    older = newer = None
+    if date in dates:
+        index = dates.index(date)
+        if index + 1 < len(dates):
+            older = dates[index + 1]
+        if index > 0:
+            newer = dates[index - 1]
+
+    left = (
+        f'<a class="history-step" href="{prefix}{older}/index.html">← 前一天</a>'
+        if older
+        else '<span class="history-step disabled">← 已是最早</span>'
+    )
+    right = (
+        f'<a class="history-step" href="{prefix}{newer}/index.html">后一天 →</a>'
+        if newer
+        else '<span class="history-step disabled">已是最新 →</span>'
+    )
+
+    return (
+        f"{NAV_START}\n"
+        f'            <nav class="history-nav">\n'
+        f'                <div class="history-links">\n'
+        f"                    {left}\n"
+        f"                    {right}\n"
+        f"                </div>\n"
+        f"            </nav>\n"
+        f"            {NAV_END}"
+    )
+
+
+def build_date_index(template: str, date: str, available: set[str], dates: list[str]) -> str:
     """基于当前的角色选择页生成某个归档日期的 index.html。
 
-    只保留当天真实存在的角色卡片，并注入日期横幅与返回主页链接。
+    只保留当天真实存在的角色卡片，并注入日期横幅、翻页导航与返回主页链接。
     """
     dropped: list[str] = []
 
@@ -143,9 +217,15 @@ def build_date_index(template: str, date: str, available: set[str]) -> str:
 
     html = CARD_RE.sub(keep_card, template)
 
+    nav = render_archive_nav(dates, date, "../")
+    if HISTORY_NAV_RE.search(html):
+        html = HISTORY_NAV_RE.sub(lambda _: nav, html, count=1)
+    else:
+        print("  ⚠️  未找到 history-nav 标签，归档页没有前一天/后一天导航")
+
     banner = f'<p class="archive-banner">📅 {date} · 历史归档</p>'
-    if "<h1>科技日报</h1>" in html:
-        html = html.replace("<h1>科技日报</h1>", f"<h1>科技日报</h1>\n                {banner}", 1)
+    if TITLE_ANCHOR in html:
+        html = html.replace(TITLE_ANCHOR, f"{TITLE_ANCHOR}\n                {banner}", 1)
     else:
         print("  ⚠️  未找到 <h1>科技日报</h1> 锚点，跳过日期横幅注入")
 
@@ -164,16 +244,47 @@ def build_date_index(template: str, date: str, available: set[str]) -> str:
     return html
 
 
-def write_date_archive(archive_dir: Path, date: str, contents: dict[str, str], template: str | None) -> None:
+def write_roles(archive_dir: Path, date: str, contents: dict[str, str]) -> None:
     date_dir = archive_dir / date
     date_dir.mkdir(parents=True, exist_ok=True)
-
     for role, html in contents.items():
         (date_dir / f"{role}.html").write_text(html, encoding="utf-8")
 
-    if template is not None:
+
+def sync_current_nav(source_dir: Path, template: str | None, dates: list[str]) -> str | None:
+    """把「历史日报」入口写回角色选择页，并返回更新后的模板文本。
+
+    必须在生成归档页之前调用 —— 归档页是从这份模板派生的，标签要先进去。
+    """
+    if template is None or not dates:
+        return template
+
+    nav = render_history_nav(dates, dates[0], "./archive/")
+    if HISTORY_NAV_RE.search(template):
+        updated = HISTORY_NAV_RE.sub(lambda _: nav, template, count=1)
+    elif TITLE_ANCHOR in template:
+        updated = template.replace(TITLE_ANCHOR, f"{TITLE_ANCHOR}\n            {nav}", 1)
+        print("  ℹ️  角色选择页还没有 history-nav 标签，已插入到标题下方")
+    else:
+        print(f"  ⚠️  角色选择页缺少 {TITLE_ANCHOR} 锚点，历史日报入口未写入")
+        return template
+
+    if updated != template:
+        (source_dir / INDEX_NAME).write_text(updated, encoding="utf-8")
+    return updated
+
+
+def refresh_indexes(archive_dir: Path, template: str | None, dates: list[str]) -> None:
+    """按当前日期列表重新生成每个归档日的 index.html（含翻页导航）。"""
+    if template is None:
+        return
+    for date in dates:
+        date_dir = archive_dir / date
+        if not date_dir.is_dir():
+            continue
+        available = {p.stem for p in date_dir.glob("*.html") if p.stem in ROLES}
         (date_dir / INDEX_NAME).write_text(
-            build_date_index(template, date, set(contents)), encoding="utf-8"
+            build_date_index(template, date, available, dates), encoding="utf-8"
         )
 
 
@@ -271,12 +382,15 @@ def cmd_save(args: argparse.Namespace) -> int:
 
     date = pick_report_date(contents)
     print(f"📦 归档 {date}（{len(contents)} 个角色）→ {archive_dir / date}")
-    write_date_archive(archive_dir, date, contents, read_template(source_dir))
+    write_roles(archive_dir, date, contents)
 
     for removed in prune(archive_dir, args.keep):
         print(f"  🗑️  清理超过 {args.keep} 天的归档: {removed}")
 
     dates = write_history(archive_dir)
+    # 先补当前页的入口（拿到带标签的模板），再据此生成归档页的翻页导航
+    template = sync_current_nav(source_dir, read_template(source_dir), dates)
+    refresh_indexes(archive_dir, template, dates)
     print(f"✅ 归档完成，当前共 {len(dates)} 天: {', '.join(dates)}")
     return 0
 
@@ -293,12 +407,14 @@ def cmd_backfill(args: argparse.Namespace) -> int:
         return 1
 
     for date, contents in collected.items():
-        write_date_archive(archive_dir, date, contents, template)
+        write_roles(archive_dir, date, contents)
 
     for removed in prune(archive_dir, args.keep):
         print(f"  🗑️  清理超过 {args.keep} 天的归档: {removed}")
 
     dates = write_history(archive_dir)
+    template = sync_current_nav(source_dir, template, dates)
+    refresh_indexes(archive_dir, template, dates)
     print(f"✅ 回填完成，当前共 {len(dates)} 天: {', '.join(dates)}")
     return 0
 
