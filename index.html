@@ -136,9 +136,81 @@
         .social-links a:hover {
             transform: translateY(-3px);
         }
+        .archive-section {
+            margin-top: 40px;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        .archive-section h2 {
+            font-size: 1.4em;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+        .archive-hint {
+            color: #777;
+            font-size: 0.9em;
+            margin-bottom: 22px;
+        }
+        .archive-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .archive-chip {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            min-width: 88px;
+            padding: 10px 18px;
+            background: #f0f2f8;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            color: #444;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .archive-chip:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+        }
+        .archive-chip .chip-date {
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .archive-chip .chip-weekday {
+            font-size: 0.75em;
+            opacity: 0.7;
+        }
+        .archive-chip.latest {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .archive-chip.latest .chip-weekday {
+            opacity: 0.85;
+        }
+        .chip-badge {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.28);
+            font-size: 0.7em;
+            font-weight: 500;
+            vertical-align: middle;
+        }
+        .archive-empty {
+            color: #888;
+            font-size: 0.95em;
+        }
         @media (max-width: 600px) {
             h1 { font-size: 2em; }
             .project-card { padding: 25px; }
+            .archive-section { padding: 25px; }
+            .archive-chip { min-width: 74px; padding: 8px 14px; }
         }
     </style>
 </head>
@@ -182,6 +254,14 @@
             </a>
         </div>
 
+        <section class="archive-section">
+            <h2>📅 历史日报回看</h2>
+            <p class="archive-hint">点击日期即可翻阅当天的科技日报（含 6 个角色版本）</p>
+            <div id="archive-list" class="archive-list">
+                <p class="archive-empty">加载中…</p>
+            </div>
+        </section>
+
         <footer>
             <p>© 2026 Zhangzhan · Built with ❤️ on GitHub Pages</p>
             <div class="social-links">
@@ -189,5 +269,76 @@
             </div>
         </footer>
     </div>
+    <script>
+        (function () {
+            var HISTORY_URL = './tech-daily/archive/history.json';
+            var ARCHIVE_BASE = './tech-daily/archive/';
+            var WEEKDAYS = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            var list = document.getElementById('archive-list');
+
+            function showMessage(text) {
+                list.textContent = '';
+                var p = document.createElement('p');
+                p.className = 'archive-empty';
+                p.textContent = text;
+                list.appendChild(p);
+            }
+
+            function buildChip(date, isLatest) {
+                var parts = date.split('-');
+                if (parts.length !== 3) return null;
+
+                var parsed = new Date(date + 'T00:00:00');
+                if (isNaN(parsed.getTime())) return null;
+
+                var chip = document.createElement('a');
+                chip.className = 'archive-chip' + (isLatest ? ' latest' : '');
+                chip.href = ARCHIVE_BASE + date + '/index.html';
+
+                var dateText = document.createElement('span');
+                dateText.className = 'chip-date';
+                dateText.textContent = parts[1] + '-' + parts[2];
+                if (isLatest) {
+                    var badge = document.createElement('span');
+                    badge.className = 'chip-badge';
+                    badge.textContent = '最新';
+                    dateText.appendChild(document.createTextNode(' '));
+                    dateText.appendChild(badge);
+                }
+
+                var weekday = document.createElement('span');
+                weekday.className = 'chip-weekday';
+                weekday.textContent = WEEKDAYS[parsed.getDay()];
+
+                chip.appendChild(dateText);
+                chip.appendChild(weekday);
+                return chip;
+            }
+
+            fetch(HISTORY_URL)
+                .then(function (response) {
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    return response.json();
+                })
+                .then(function (data) {
+                    var dates = (data && data.dates) || [];
+                    if (!dates.length) {
+                        showMessage('暂无归档记录');
+                        return;
+                    }
+
+                    list.textContent = '';
+                    dates.forEach(function (date, index) {
+                        var chip = buildChip(date, index === 0);
+                        if (chip) list.appendChild(chip);
+                    });
+
+                    if (!list.children.length) showMessage('暂无归档记录');
+                })
+                .catch(function () {
+                    showMessage('暂无归档记录');
+                });
+        })();
+    </script>
 </body>
 </html>

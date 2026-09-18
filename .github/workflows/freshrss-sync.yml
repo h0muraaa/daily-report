@@ -128,7 +128,12 @@ jobs:
 
           echo "✅ 有 $SUCCESS_COUNT 个角色的日报生成成功，继续提交"
 
-      # 5. 提交变更
+      # 5. 归档当天日报，供主页历史回溯（按日期名清理，保留最近 15 天）
+      - name: Archive Daily Reports
+        if: ${{ github.event.inputs.mode != 'json-only' }}
+        run: python3 scripts/tech_daily_archive.py save --keep 15
+
+      # 6. 提交变更
       - name: Commit All Changes
         run: |
           git config --global user.name "github-actions[bot]"

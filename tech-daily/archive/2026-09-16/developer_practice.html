@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 开发者实践版 · 2026-09-16</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+    --fg:#c9d1d9; --fg-dim:#8b949e; --accent:#58a6ff; --accent2:#7ee787;
+    --warn:#ffa657; --hot:#ff7b72; --mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,'Courier New',monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:0; background:var(--bg); color:var(--fg);
+    font-family:var(--mono); font-size:15px; line-height:1.75;
+    background-image:linear-gradient(rgba(88,166,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(88,166,255,.03) 1px,transparent 1px);
+    background-size:32px 32px;
+  }
+  .wrap{max-width:960px; margin:0 auto; padding:36px 22px 80px;}
+  header.top{
+    border:1px solid var(--border); border-left:4px solid var(--accent);
+    background:linear-gradient(135deg,#161b22,#0d1117); border-radius:6px;
+    padding:24px 26px; margin-bottom:34px;
+  }
+  header.top h1{margin:0 0 6px; font-size:26px; letter-spacing:.5px;}
+  header.top h1 .prompt{color:var(--accent2);}
+  header.top .sub{color:var(--fg-dim); font-size:13px;}
+  header.top .meta{margin-top:14px; font-size:12.5px; color:var(--fg-dim);}
+  header.top .meta span{display:inline-block; margin-right:16px;}
+  h2.sec{
+    font-size:19px; margin:44px 0 18px; padding-bottom:8px;
+    border-bottom:1px dashed var(--border); color:#fff;
+  }
+  h2.sec::before{content:"$ "; color:var(--accent2);}
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:6px;
+    padding:18px 20px; margin-bottom:16px; transition:border-color .15s,box-shadow .15s;
+  }
+  .card:hover{border-color:var(--accent); box-shadow:0 0 0 1px rgba(88,166,255,.15);}
+  .card .num{
+    display:inline-block; min-width:26px; height:22px; line-height:22px; text-align:center;
+    background:var(--accent); color:#0d1117; font-weight:700; font-size:12px;
+    border-radius:4px; margin-right:10px; vertical-align:2px;
+  }
+  .card h3{margin:0 0 10px; font-size:16px; color:#fff; display:inline;}
+  .card p{margin:8px 0; color:var(--fg);}
+  .card p:last-child{margin-bottom:0;}
+  .tag{
+    display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px;
+    border:1px solid var(--border); color:var(--fg-dim); margin-right:6px; margin-bottom:4px;
+  }
+  .tag.hot{color:var(--hot); border-color:rgba(255,123,114,.4);}
+  .tag.new{color:var(--accent2); border-color:rgba(126,231,135,.35);}
+  .src{font-size:12.5px; margin-top:10px; color:var(--fg-dim);}
+  .src a{color:var(--accent); text-decoration:none; border-bottom:1px dotted rgba(88,166,255,.5);}
+  .src a:hover{color:var(--accent2); border-bottom-color:var(--accent2);}
+  .deep{
+    background:var(--panel2); border:1px solid var(--border); border-left:4px solid var(--warn);
+    border-radius:6px; padding:20px 22px; margin-bottom:22px;
+  }
+  .deep h3{margin:0 0 12px; font-size:17px; color:var(--warn);}
+  .deep h4{margin:16px 0 6px; font-size:14px; color:var(--accent2);}
+  .deep ul{margin:8px 0; padding-left:22px;}
+  .deep li{margin:5px 0;}
+  code{
+    background:#21262d; border:1px solid var(--border); border-radius:4px;
+    padding:1px 5px; font-size:13px; color:var(--accent2);
+  }
+  pre{
+    background:#0b0f14; border:1px solid var(--border); border-radius:6px;
+    padding:12px 14px; overflow-x:auto; font-size:13px; color:var(--fg);
+    margin:10px 0;
+  }
+  pre .c{color:var(--fg-dim);}
+  pre .k{color:var(--hot);}
+  pre .s{color:var(--accent2);}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:720px){.grid{grid-template-columns:1fr;}}
+  .tool{
+    background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:16px 18px;
+  }
+  .tool h3{margin:0 0 8px; font-size:15px; color:#fff;}
+  .tool p{margin:6px 0; font-size:14px;}
+  .refs{background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:18px 22px;}
+  .refs ol{margin:0; padding-left:24px;}
+  .refs li{margin:7px 0; font-size:13.5px; color:var(--fg-dim);}
+  .refs a{color:var(--accent); text-decoration:none;}
+  .refs a:hover{text-decoration:underline;}
+  footer{margin-top:40px; padding-top:16px; border-top:1px solid var(--border);
+    color:var(--fg-dim); font-size:12px; text-align:center;}
+  .kbd{color:var(--warn);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1><span class="prompt">~/tech-daily $</span> 科技日报 · 开发者实践版</h1>
+  <div class="sub">// 面向程序员与工程师：新工具、框架更新、底层原理与可落地的最佳实践</div>
+  <div class="meta">
+    <span>📅 2026-09-16</span>
+    <span>📦 数据源：FreshRSS 24h 抓取</span>
+    <span>🧮 共 576 条新闻 / 424 个来源，精选 <strong style="color:var(--accent2)">30</strong> 条</span>
+  </div>
+</header>
+
+<!-- ============ 1. 今日技术热榜 ============ -->
+
+<h2 class="sec">今日技术热榜</h2>
+
+<div class="card">
+  <span class="num">1</span><h3>Java 27 正式发布：G1 成为所有环境默认 GC，后量子加密入列</h3>
+  <p>9 月 15 日 JDK 27 发布，共包含 <strong>9 个正式 JEP</strong>，其中 5 个仍处于 Preview/Incubator 阶段。这不是一次语法级的大改版，重点落在 JVM 性能、内存占用、并发与安全这些基础能力上；需要注意 <strong>JDK 27 不是 LTS</strong>，官方只提供 6 个月支持到 2027 年 3 月，当前最新 LTS 仍是 JDK 25。</p>
+  <p>对普通应用影响最直接的是 JEP 523：<code>G1</code> 从 Java 9 起就是服务器环境默认 GC，但在单 CPU、小内存等资源受限环境里 JVM 可能退回 Serial GC；JDK 27 取消了这一分支，只要没在命令行显式指定收集器，HotSpot 一律选择 G1。此外本版还把后量子加密（PQC）纳入，并同步带动 Helidon 27、JavaFX 27 等 Java Verified Portfolio 项目。</p>
+  <p><strong>实践建议</strong>：升级前先确认依赖链（Lombok、字节码增强框架等）对 class 文件版本的支持；若你的服务跑在小规格容器里，本版会静默改变 GC 行为，压测时留意堆内存与 STW 指标的变化。</p>
+  <div class="src">📎 来源：
+    <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247835829&idx=2&sn=8c75904d04b70f40380b8296cb478d7c" target="_blank" rel="noopener">[CSDN]</a> ·
+    <a href="https://www.infoq.com/news/2026/09/java27-released/" target="_blank" rel="noopener">[InfoQ]</a>
+  </div>
+</div>
+
+<div class="card">
+  <span class="num">2</span><h3>pnpm 12 用 Rust 重写：保留全部工作流，安装速度大幅跃升</h3>
+  <p>pnpm 12 把原来 TypeScript + Node.js 的实现整体重写为原生 Rust，同时<strong>刻意保留了 pnpm 11 的命令、参数、配置项、lockfile 格式和 node_modules 目录结构</strong>——也就是说不需要重新学习 CLI，也不需要大规模迁移。目标是缩短启动时间、降低文件系统开销。</p>
+  <p>官方基准显示：文件量大的测试集全新安装从 8.2s 降到 5s；在缓存与 node_modules 已预热时重复安装，从 472ms 降到 <strong>15ms</strong>。Socket 对 Vercel Turborepo 工作区（21 个项目、1670 个包）的测试中，六种场景安装耗时中位数缩短 64.4%–90.5%。代价是原生 Corepack 产物更大，首次无缓存启动反而慢 11.1%，但缓存后启动快 74.7%。</p>
+  <p><strong>实践建议</strong>：用 <code>pnpm self-update next-12</code> 尝鲜（npm 的 latest 标签仍指向 11，Homebrew/winget/Scoop/Chocolatey 暂未跟进）。CI 里缓存命中率高，收益最明显；首次冷启动不要用这个指标做横向对比。</p>
+  <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651293181&idx=4&sn=83aa72823ad0deb5e8f171e4d5520926" target="_blank" rel="noopener">[InfoQ]</a></div>
+</div>
+
+<div class="card">
+  <span class="num">3</span><h3>OpenRouter 上线托管 Linux 容器：一行工具声明让任意模型跑代码</h3>
+  <p>OpenRouter 把代码执行做成了 Responses API 里的一个工具 <code>openrouter:shell</code>：模型自己写脚本、执行、读回结果，开发者不需要安装或托管任何东西。Anthropic Messages API 对应 <code>openrouter:bash</code>，聊天室打开 shell 开关也能直接用。软启动至今开发者已创建超过 <strong>18,000 个沙箱</strong>。</p>
+  <p>容器是「粘性」的：把上一次的 shell 结果带进下一次请求，或用 <code>container_reference</code> 加 <code>container_id</code> 就能复用，文件仍在。默认关闭出网，按次用 <code>network_policy</code> 打开（例如只允许 pypi.org 和 files.pythonhosted.org 的白名单）。沙箱按活跃秒计费 <strong>$0.0001/秒</strong>，推理费用另算。</p>
+<pre><span class="k">"tools"</span>: [{
+  <span class="k">"type"</span>: <span class="s">"openrouter:shell"</span>,
+  <span class="k">"parameters"</span>: { <span class="k">"engine"</span>: <span class="s">"openrouter"</span> }
+}]</pre>
+  <p><strong>实践建议</strong>：默认关网 + 白名单是很好的默认值，但别把它当安全边界——沙箱里跑的是模型生成的代码，敏感数据不要进上下文，凭据要用网络策略之外的分层来隔离。</p>
+  <div class="src">📎 来源：
+    <a href="https://x.com/OpenRouter/status/2100269250766401683" target="_blank" rel="noopener">[OpenRouter 1/6]</a> ·
+    <a href="https://x.com/OpenRouter/status/2100269298921201930" target="_blank" rel="noopener">[5/6 计费与网络]</a> ·
+    <a href="https://x.com/OpenRouter/status/2100269310732296242" target="_blank" rel="noopener">[6/6]</a>
+  </div>
+</div>
+
+<div class="card">
+  <span class="num">4</span><h3>Shopify 弃用 React Native，改用 Swift + Kotlin 原生重写</h3>
+  <p>Shopify 宣布放弃 React Native，把旗舰 App 用 Swift 和 Kotlin 重写。移动负责人 Mustafa Ali 的公开理由是：随着 AI 模型质量的大幅提升，维护跨平台原生代码库的<strong>收益/成本比已经超过使用抽象层</strong>。</p>
+  <p>这条新闻的价值不在于「RN 不行了」，而在于它揭示了一个正在被重新定价的工程权衡：跨平台框架的核心理由是「一份代码省人力」，而当 AI 能低成本产出并维护多套平台代码时，抽象层的边际收益被压缩，而它带来的调试间接性、平台能力滞后、性能天花板这些成本依然存在。</p>
+  <p><strong>实践建议</strong>：如果团队正在做跨平台选型，值得把「AI 辅助下原生代码的维护成本」作为一个显式变量放进决策表，而不是沿用三年前的默认结论。反过来，共享业务逻辑层（网络、状态、领域模型）的价值并没有消失，被质疑的是 UI 层的抽象。</p>
+  <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/09/shopify-drops-react-native/" target="_blank" rel="noopener">[InfoQ]</a></div>
+</div>
+
+<div class="card">
+  <span class="num">5</span><h3>微软开源 TauGrid：在 Kubernetes 上统一调度 GPU AI 工作负载</h3>
+  <p>微软开源了 TauGrid，一个云原生平台，用于在启用 GPU 的 Kubernetes 集群上<strong>管理、调度和监控 AI 工作负载</strong>。它瞄准的是很多团队都在自己造轮子的那一段：训练/推理任务与常规微服务混跑在同一批节点上时，GPU 拓扑、配额、抢占和可观测性都缺少统一的抽象。</p>
+  <p>对已经用 K8s 做统一底座的团队，这意味着多了一个不必自研的选项；同时它也是观察大型云厂商如何划分「AI 编排层」职责边界的一个样本。</p>
+  <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/09/microsoft-taugrid-open-source/" target="_blank" rel="noopener">[InfoQ]</a></div>
+</div>
+
+<div class="card">
+  <span class="num">6</span><h3>TypeSafe 发布 Jev「System One 模型」：不做生成，只做类型安全的决策函数</h3>
+  <p>ChatGPT 共同发明人之一 Diogo Almeida 创办的 TypeSafe AI 发布了 Jev——一类<strong>完全放弃文本生成</strong>的模型。输入非结构化数据，输出带校准概率的类型安全结构化结果；不会聊天、不会写文章，专门充当代码里的「智能判断函数」：分类、打分、路由、提取。</p>
+  <p>关键数字：响应 <strong>70–500ms</strong>（主流前沿模型是 3–329 秒），输入 $0.042/百万 token（约 42 美元/十亿 token），输出免费。官方自称比同智能水平的大模型快 20–200 倍、便宜 40–400 倍——但这套「工作流评测」以 GPT-6 Astra 和 Fable 5.1 的平均结果为参考答案，本身偏向这两家模型，官方也承认 Jev 的真实相对表现可能被低估。</p>
+  <p>它用 RLCD（Reinforcement Learning for Calibrated Decisions）训练。技术评论者 seangoedecke 点出了本质：Jev 与「带结构化输出的普通 LLM」差别没有宣传得那么大，<strong>真正有意思的是它的接口形态</strong>——把模型当作返回类型化对象的同步函数调用，而不是一段需要解析的文本。这个接口值得在自研系统里借鉴。Latent.Space 补充：它定位是「System Two」慢思考模型（编码、复杂推理）的互补件而非替代品。</p>
+  <div class="src">📎 来源：
+    <a href="https://x.com/dotey/status/2100109937237987823" target="_blank" rel="noopener">[宝玉]</a> ·
+    <a href="https://www.latent.space/p/ainews-jev-a-system-one-model-that" target="_blank" rel="noopener">[Latent.Space]</a> ·
+    <a href="https://seangoedecke.com/jev-means-structured-output-is-interesting-again/" target="_blank" rel="noopener">[seangoedecke.com]</a>
+  </div>
+</div>
+
+<div class="card">
+  <span class="num">7</span><h3>Perplexity 用 2 名工程师 + 数百个 Agent，两个月重写 AI 搜索存储层</h3>
+  <p>Perplexity 用「热存储 CobbleDB + 持久状态层 Pillar + 批量投递层 Lorry」三件套替换了 DynamoDB，批量读延迟降低约 <strong>5 倍</strong>、成本降低至少 <strong>20%</strong>。这套约 4 万行 Rust 的系统由 2 名工程师配合数百个 AI Coding Agent 在两个月内建成。</p>
+  <p>更有信息量的是它对问题的拆解：AI 搜索的读侧和写侧负载方向几乎相反——离线处理侧要 durable 队列、可重试、可大规模回填；在线服务侧要预计算记录、热缓存、极简查询开销（一次 Search 请求要取 100–120 个页面 key，按 10–20 个一批、单条约 50KB 批量读，且位于通向答案的关键路径）。把两种负载塞进同一个数据库，回填和恢复工作就会干扰延迟敏感的在线读，这正是原架构的病根。</p>
+  <p><strong>实践建议</strong>：在为 AI 型读负载做存储选型时，先按「读写负载方向是否一致」判断能否共用一套存储，再谈具体产品。另外，「小团队 + 大量 Agent 重建核心基础设施」正在从个例变成可参考的工程范式。</p>
+  <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2100042172800307431" target="_blank" rel="noopener">[meng shao]</a></div>
+</div>
+
+<div class="card">
+  <span class="num">8</span><h3>工具链更新日：Node.js 26.9.0 与 VS Code 1.138 Insiders 同日放出</h3>
+  <p>Node.js 发布 <strong>26.9.0（Current）</strong>。Current 线是通往下一个 LTS 的通道，适合在 CI 里提前验证依赖兼容性，不建议直接上生产。</p>
+  <p>同日 Microsoft for Developers 放出 <strong>VS Code 1.138 (Insiders)</strong>，属于迭代型预览版本，适合想提前验证扩展 API 变更的插件作者。两条更新都建议先在独立环境试跑再合并回主线。</p>
+  <div class="src">📎 来源：
+    <a href="https://nodejs.org/en/blog/release/v26.9.0" target="_blank" rel="noopener">[Node.js Blog]</a> ·
+    <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.138-(insiders)" target="_blank" rel="noopener">[Microsoft for Developers]</a>
+  </div>
+</div>
+
+<!-- ============ 2. 深度技术解读 ============ -->
+
+<h2 class="sec">深度技术解读</h2>
+
+<div class="deep">
+  <h3>① SwiftUI 到底「原生」吗？一场演示背后是动画架构的取舍</h3>
+  <p>React Native 开发者 Krzysztof Magiera 发了一段对比演示：<strong>阻塞主线程时，SwiftUI 的动画球会卡住，而 UIKit 的球依然平滑运动</strong>。他给出的结论是——SwiftUI 放弃了让 iOS 动画丝滑二十年的底层引擎 Core Animation，所以称不上「真正原生」。这条推迅速引发讨论，SwiftUI 共同创建者、苹果工程师 Kyle Macomber 亲自回应了。</p>
+
+  <h4>机制：动画跑在哪个进程</h4>
+  <ul>
+    <li><strong>UIKit / Core Animation</strong>：动画由独立的渲染进程（render server）执行，与 app 进程隔离。所以主线程被阻塞时动画照常推进——动画的「生命」不依赖你的代码在跑。</li>
+    <li><strong>SwiftUI</strong>：动画放回 app 进程执行，没有 CA 的 backing。主线程一堵，动画就停。</li>
+  </ul>
+
+  <h4>为什么苹果要这么设计</h4>
+  <p>Macomber 说这是团队最早、最根本的设计决策之一。进程隔离让 CA 免疫主线程卡顿，但代价是：<strong>当你想让用户在动画进行中随时打断并交互</strong>——列表滚动的回弹、主屏切换 App 的手势——实现起来非常困难，因为事件处理和动画不在同一个进程里。SwiftUI 把动画拉回 app 进程，就是为了让「可交互、可中断的动画」成为默认能力，而不是需要开发者费力绕开限制的特例。他同时指出，SwiftUI 的动画大部分时间实际跑在非主线程上，并不像演示暗示的那样总会卡。</p>
+
+  <h4>一线开发者的正确姿势</h4>
+  <ul>
+    <li><strong>不要用这个演示给 SwiftUI 做定性判决</strong>。它证明的是「主线程阻塞的影响面不同」，不是「SwiftUI 一定更卡」。两者是不同约束下的不同最优解。</li>
+    <li><strong>性能归因要分两类</strong>：如果是主线程做了重活（解码、同步 IO、大计算），那是你的代码问题，换 UIKit 也一样救不回来；如果是动画在交互密集场景下的线程调度问题，才需要讨论框架层面。</li>
+    <li><strong>排查卡顿的工具顺序</strong>：先用 Instruments 的 Time Profiler 确认主线程占用，再看 Core Animation / Hangs 模板判断是丢帧还是主线程 hang，最后才归因到框架。</li>
+  </ul>
+  <div class="src">📎 来源：
+    <a href="https://x.com/dotey/status/2100068419986923933" target="_blank" rel="noopener">[宝玉 · 技术演示与苹果回应]</a> ·
+    <a href="https://x.com/dotey/status/2100049650426200191" target="_blank" rel="noopener">[宝玉 · 卡顿归因]</a>
+  </div>
+</div>
+
+<div class="deep">
+  <h3>② Harness Evolution 的评测陷阱：复杂的自我进化，可能不如「多跑几遍」</h3>
+  <p>Agent 研究里正流行一个方向：让 Agent 不只完成任务，还能分析自己的失败，<strong>修改自己的 Prompt、工具、Memory 和控制逻辑，甚至重写整个运行框架</strong>（Harness Evolution）。愿景是工程师今天手工做的调优工作，未来交给 Agent 自己，一轮比一轮强。</p>
+  <p>AI2 与华盛顿大学的新论文《Rethinking the Evaluation of Harness Evolution for Agents》（arXiv:2607.12227）把一个被忽略的问题摆上台面：<strong>当「自我进化」的 Agent 得分提高时，怎么知道它是真的学会了更好的工作方式，而不是仅仅多获得了几次尝试机会？</strong></p>
+
+  <h4>问题的根源：推理预算没有被对齐</h4>
+  <p>论文的做法很朴素——给同等数量的额外推理预算（比如 5 次机会），然后对比几种花法：</p>
+  <ul>
+    <li><strong>Best-of-N</strong>：同一道题重做几遍，从多个结果里挑最好的；</li>
+    <li><strong>Retry-from-failure</strong>：把上一次失败的过程交回给 Agent，让它接着修；</li>
+    <li><strong>Harness Evolution</strong>：让 Agent 反思失败、改写自己的运行框架。</li>
+  </ul>
+  <p>结论是：在预算对齐的前提下，前两种朴素策略经常足以匹敌甚至超过复杂的 Harness Evolution。也就是说，<strong>很多被归功于「自我进化」的收益，其实来自额外算力，而非结构改进</strong>。</p>
+
+  <h4>实践建议</h4>
+  <ul>
+    <li><strong>任何 Agent 改进都要做预算对齐的基线</strong>。报告「提升了 N 分」时，必须同时给出 best-of-N 和 retry 在同等调用次数下的分数，否则结论不可信。</li>
+    <li><strong>自进化系统要记录「改动日志 + 分数曲线」</strong>，才能区分一次性涨分和真实能力提升。</li>
+    <li><strong>先榨干简单策略</strong>。在做昂贵的 harness 自改写之前，先确认多采样 + 选择、失败重试这两板斧已经用满。</li>
+  </ul>
+<pre><span class="c"># 朴素的预算对齐评测骨架</span>
+<span class="k">for</span> budget <span class="k">in</span> [<span class="s">1</span>, <span class="s">5</span>, <span class="s">10</span>]:
+    score_best_of_n = best_of_n(task, n=budget)
+    score_retry     = retry_from_failure(task, max_tries=budget)
+    score_evolve    = harness_evolution(task, max_tries=budget)
+    <span class="c"># 只有 evolve 在同预算下显著领先，才说明结构改进有效</span></pre>
+  <div class="src">📎 来源：
+    <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651057510&idx=2&sn=8e1bea2b097f6ec4c012b75cf0ccfacb" target="_blank" rel="noopener">[机器之心]</a> ·
+    <a href="https://arxiv.org/abs/2607.12227" target="_blank" rel="noopener">[论文 arXiv:2607.12227]</a> ·
+    <a href="https://github.com/rethinking-harness-evolution" target="_blank" rel="noopener">[代码仓库]</a>
+  </div>
+</div>
+
+<!-- ============ 3. 工具推荐 ============ -->
+
+<h2 class="sec">工具推荐</h2>
+
+<div class="grid">
+
+  <div class="tool">
+    <h3>🔧 Devframe — 构建开发者工具的框架</h3>
+    <p>Anthony Fu 发布。就像 Nuxt/Next.js 之于 Web 应用，Devframe 让你把一个 devtool <strong>只定义一次</strong>，就能以 Vite 插件、独立 CLI、静态报告、MCP server 等多种形态运行在任何宿主框架里，同时服务人类和 AI Coding Agent。</p>
+    <p>核心是 handler-first 模型：<code>defineDevframe()</code> 声明工具的 id、能力、RPC 函数、共享状态、SPA 和面向 Agent 的接口；<code>initDevframe()</code> 产出两个出口——Web 标准的 <code>(Request) =&gt; Promise&lt;Response&gt;</code> handler，和 Connect 风格的中间件。这个边界选得很准：Hono/Nitro 直接吃 Web 请求，Next.js/SvelteKit 暴露 route handler，Vite/Rsbuild 接受 Connect 中间件，任何满足其一的宿主都能挂载同一个工具。</p>
+    <div class="src">📎 <a href="https://x.com/shao__meng/status/2100131016509980852" target="_blank" rel="noopener">[meng shao]</a></div>
+  </div>
+
+  <div class="tool">
+    <h3>🛡️ Cloudflare security-audit-skill</h3>
+    <p>Cloudflare 官方开源的安全审计 Skill，两种模式：<strong>Guidance mode</strong> 做局部审查，适合小 PR；<strong>Full Audit mode</strong> 跑完整的六个阶段并产出完整报告，适合大重构或对老项目从头审计。</p>
+    <p>最值得抄的设计是里面的硬性规定——<strong>adversarial validation：发现者和验证者强制拆开</strong>，同一个模型、同一份上下文不得既提问题又确认问题。这能极大减少自证式的幻觉。</p>
+    <div class="src">📎 <a href="https://x.com/vikingmute/status/2100214450829905995" target="_blank" rel="noopener">[Viking]</a></div>
+  </div>
+
+  <div class="tool">
+    <h3>🌐 腾讯 BrowserSkill — 让 Agent 用你真实的已登录浏览器</h3>
+    <p>现有 Agent 浏览器自动化（Playwright、headless Chrome、browser-use）有个共同尴尬：开的是「另一个浏览器」，没有你的登录态，碰到需要登录的站点就得配测试账号。BrowserSkill 反过来，直接借用你日常使用的浏览器 profile。</p>
+    <p>架构是四层：<code>Agent → bsk CLI → bsk daemon（本地 IPC）→ 浏览器扩展（WebSocket）→ Agent Window</code>，Agent 永远不直接碰浏览器。三个关键特性：登录态直接复用、自动化跑在独立的 Agent Window 里不打断你、框架无关（只要能跑 shell 就能用，Cursor / Claude Code / Codex 均可，DeepSeek Harness 有专门插件提供原生 <code>browser_*</code> 工具）。遇到验证码、短信 OTP、支付确认这类只有人能做的步骤，Agent 可以发 <code>bsk request-help</code> 请你接管后继续。</p>
+    <div class="src">📎 <a href="https://x.com/shao__meng/status/2100208718592032854" target="_blank" rel="noopener">[meng shao]</a></div>
+  </div>
+
+  <div class="tool">
+    <h3>🔀 AgentGit — 给 Agent 会话做版本控制</h3>
+    <p>我们给 Agent 产出的代码做版本控制，但产出代码的那次会话本身往往是一次性的。AgentGit 是开源平台，用来保存、恢复、分享和交接 Agent 会话，让「一个 Agent 干了几小时的任务」在换人接手时不必从零重讲。</p>
+    <p>随着 Agent 任务跨度从分钟级走向小时级，会话上下文的可移交性和代码本身同样重要。</p>
+    <div class="src">📎 <a href="https://x.com/omarsar0/status/2100245953278279715" target="_blank" rel="noopener">[elvis]</a></div>
+  </div>
+
+  <div class="tool">
+    <h3>⚙️ DeepSeek Harness — Everything is a Plugin 的 Agent 运行时</h3>
+    <p>DSH 关注的不是「模型能不能答对」，而是让 Agent <strong>持续做事</strong>的那套运行系统：如何组织模型、工具、上下文、任务状态和执行策略，让任务能推进，也能在必要时停下来。任务中途用户改需求、工具超时、上下文逼近上限、进程退出——这些都需要运行时支撑。</p>
+    <p>最有辨识度的设计是一切皆插件：模型适配器、工具注册表、会话日志，甚至 <strong>Agent 的执行循环本身</strong>都通过插件装配。目前仓库仍标注为开发者预览版，接口和行为可能变动，适合作为架构参考。</p>
+    <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=Mzg4MTYwMzY1Mw==&amp;mid=2247518513&amp;idx=1&amp;sn=d540b8ce97bc739dad4927a975830417" target="_blank" rel="noopener">[奇舞精选]</a></div>
+  </div>
+
+  <div class="tool">
+    <h3>🧰 JetBrains 三连更新：Logpoints、IntelliJ 2026.2.3、Rider/ReSharper 2026.2.2</h3>
+    <p><strong>Logpoints</strong>：JetBrains 官方推荐作为调试能力的入门首选——用起来和加 <code>println</code> 一样简单，但覆盖面广得多，某些问题里甚至是唯一可行的手段；IntelliJ IDEA 2026.2 对 logpoints 做了明显改进。Rider/ReSharper 2026.2.2 新增 <strong>AI Agent Setup widget</strong>，把 MCP 工具、skills、hooks 等面向 coding agent 的配置收进状态栏一个入口。</p>
+    <p><strong>IntelliJ IDEA 2026.2.3</strong> 修了一批 IDE 冻结问题，修复了打开最近项目时 Maven 工具窗数据缺失、Markdown 预览竖向滚动条异常、WSL2 mirrored networking 下 Debug 模式无响应等问题，PlantUML 扩展更新到 1.2026.6。</p>
+    <div class="src">📎 来源：
+      <a href="https://blog.jetbrains.com/idea/2026/09/logpoints-walkthrough/" target="_blank" rel="noopener">[Logpoints]</a> ·
+      <a href="https://blog.jetbrains.com/idea/2026/09/intellij-idea-2026-2-3/" target="_blank" rel="noopener">[IntelliJ 2026.2.3]</a> ·
+      <a href="https://blog.jetbrains.com/dotnet/2026/09/16/rd-rs-2026-2-2/" target="_blank" rel="noopener">[Rider/ReSharper]</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ 4. 实践指南 ============ -->
+
+<h2 class="sec">实践指南</h2>
+
+<div class="card">
+  <span class="num">1</span><h3>上下文工程才是 Agent Harness 的核心战场</h3>
+  <p>LangChain 的判断很直接：<strong>Agent harness 面临的最大挑战是上下文工程</strong>——即 Agent 拿到什么信息、在什么时候拿到。任务越长，越难阻止上下文窗口过载。它的 Deep Agents 把这一点做成了内置能力：文件系统、子 Agent、Skills 三件套都围绕上下文管理预接线。</p>
+  <p>与之呼应的一场演讲来自 AI Engineer：Jo Kristian Bergum 认为 <strong>BM25 这个三十年没变过的词法检索函数正在回归</strong>。原因不是算法变了，而是使用者变了——模型已经知道实体、公司、日期、邮编和产品 ID，因此能写出比人长得多、具体得多的查询，并且可以一口气发十几个。人类查询日志几十年都是两三个词，而 Agent 是根本不同的查询者。对一线开发的启示：在 agentic search 里，别急着上向量库，先测 BM25 这类词法基线，它很可能就已经够用。</p>
+  <div class="src">📎 来源：
+    <a href="https://x.com/LangChain/status/2100235963339313648" target="_blank" rel="noopener">[LangChain]</a> ·
+    <a href="https://www.youtube.com/watch?v=fZH97QHHYjY" target="_blank" rel="noopener">[AI Engineer · BM25 for agentic search]</a>
+  </div>
+</div>
+
+<div class="card">
+  <span class="num">2</span><h3>用 SKILL 编排，给存量代码做「微创手术」</h3>
+  <p>vivo 技术团队的经验：面对涉及存量代码变更的需求，<strong>挑战不在编码，而在如何安全、精准地修改</strong>。他们的例子是一个「图片上传前压缩」需求——功能很简单，但影响范围不确定（同一上传组件被多个父组件共用）、逻辑分支复杂（单文件与批量上传两条路径）、降级策略未定义、边界值处理模糊。</p>
+  <p>方案是构建一条由 <strong>1 个编排器 + 多个单职责 Skill</strong> 组成的 AI 协作流水线，把影响分析、规则沉淀、埋点和回归检查这些隐性工作显式流程化，确保在实现功能的同时对存量代码做到最小侵入。核心思路值得直接借鉴：<strong>把「改哪儿、为什么能改、改完怎么验证」从模型的一次性推理里拿出来，变成可复用的流水线阶段</strong>，而不是指望一个 prompt 搞定。</p>
+  <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI4NjY4MTU5Nw==&amp;mid=2247506958&amp;idx=1&amp;sn=6cab83047982c5ce484b3d361c89738a" target="_blank" rel="noopener">[vivo互联网技术]</a></div>
+</div>
+
+<div class="card">
+  <span class="num">3</span><h3>Agent 记忆的两条进阶路线：经验记忆与可演化流水线</h3>
+  <p><strong>路线一 · 经验记忆（字节 OpenViking）</strong>。核心洞察是「做过」不等于「学会」：聊天记录说明上次说了什么，日志说明工具返回了什么，但 Agent 再次面对类似任务时真正需要的是——这类任务应先确认哪些条件？哪套执行顺序更可靠？哪些路径失败过、原因是什么？最后该检查什么才能确认任务完成？OpenViking 为 Agent 建立面向执行过程的长期记忆，持续收集目标、消息、工具调用、执行结果和用户反馈，从中还原完整执行轨迹，把相似轨迹归类比较，提取反复出现的成功模式、失败模式与边界条件。第一条经验可以来自很少的轨迹，后续样本不断为它提供验证和更新依据。</p>
+  <p><strong>路线二 · 可演化的记忆程序（小红书 MemPro，EMNLP 2026）</strong>。现有 Agent 记忆系统大多走「记忆构建—检索与使用」（MCR）流水线，但通常只更新记忆内容，写入、检索、使用的流程一旦部署就固定，很难同时兼顾时间推理和多跳问答，也可能随记忆库变大而失效。MemPro 把整条 MCR 流水线看成<strong>一段可演化的程序</strong>：用版本树保存不同实现，由 Evolving Agent 挑出有潜力的版本、分析典型错误，再通过「编辑—调试」改写 Prompt、执行代码和控制逻辑。四个数据集上只用少量演化轮次就超过强静态基线和 Prompt 级优化方法，且之后还能继续涨。</p>
+  <p><strong>落地建议</strong>：先把「记忆什么内容」和「如何写入/检索/使用」拆成两个独立层，前者可以用现成方案，后者要预留可替换、可版本化的接口，否则系统会卡死在第一版流水线上。</p>
+  <div class="src">📎 来源：
+    <a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247522604&amp;idx=1&amp;sn=6ea201d826647e12047227cd3d386ba4" target="_blank" rel="noopener">[字节跳动技术团队 · OpenViking]</a> ·
+    <a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496400&amp;idx=1&amp;sn=64957c6e3a95d71fe7a51146825c04db" target="_blank" rel="noopener">[小红书技术REDtech · MemPro]</a>
+  </div>
+</div>
+
+<div class="card">
+  <span class="num">4</span><h3>提示词自进化：GEPA 的「推理 → 评分 → 反思 → 选择」闭环</h3>
+  <p>大淘宝技术基于 GEPA（Genetic-Pareto，Reflective Prompt Evolution）实现了一套 Prompt 自进化系统，针对的是人工调 Prompt 的四个痛点：方向靠直觉（盲目性高）、用强模型静态扫描只是浅层迭代（伪自动化）、经验沉淀在个人（难复制）、补完 A 指标坏了 B 指标（无权衡机制）。</p>
+  <p>系统的闭环是：<strong>推理 → 评分 → 反思 → 选择</strong>。让 LLM 自动分析 Badcase、把问题归因到 Prompt 的具体规则、生成候选变体，再基于<strong>帕累托前沿做多目标择优</strong>，避免单点优化引发的指标对抗性退化。架构是任务无关的，支持二分类、多分类、评分等场景，并做零配置设计——自动分析数据集并推断配置，同时保留可解释的优化过程。</p>
+  <p><strong>落地建议</strong>：如果你在做 LLM Judge 或评测器，把「多目标帕累托择优」作为必备项而不是可选项。单指标优化几乎必然在某个拐点后开始伤害其他指标，而对抗性退化往往拖到线上才暴露。</p>
+  <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&amp;mid=2650545973&amp;idx=1&amp;sn=01a23266cadd126c68a1a14dd0db544a" target="_blank" rel="noopener">[大淘宝技术]</a></div>
+</div>
+
+<div class="card">
+  <span class="num">5</span><h3>大规模 Agent 重构实战：1393 个子 Agent 削减 34.4% 代码</h3>
+  <p>NousResearch 让开源 Agent「Hermes」重构自己的代码库：主运行约 <strong>19 个有效小时</strong>，派出 <strong>1393 个子 Agent</strong>（峰值 218 个并行），把超过 106 万行的非测试 Python 代码削减了 <strong>34.4%</strong>，模型花费约 1.93 万美元；人工做同样工作的估算成本是 15 万–180 万美元。仓库里 <code>gateway/run.py</code> 单文件就有 34847 行。</p>
+  <p>文章里最有价值的是几个可复用的工程决策：</p>
+  <ul>
+    <li><strong>技能积累是前提，不是事后包装</strong>。团队每天都在用 Hermes 开发 Hermes，流程被纠正或走通时自动沉淀为 Skills（例如「失败的检查要在干净的 origin/main 上复现，以判断是否为存量问题」）。几个月的日常协作攒下的规范，才是这次能放手交给它的底座。</li>
+    <li><strong>编排者—工人树状分工</strong>。顶层 Agent 只做协调（写任务书、读报告、合并分支、跑检查），不直接改代码；把代码库切成 36 个互不重叠的组，每个工人在独立的 git worktree 里工作避免互相覆盖，委托树最深达三层。</li>
+    <li><strong>接口保真作为验证锚点</strong>。工具的 JSON schema 必须与原版完全一致——用可机械校验的不变量来锚定「重构没有改变语义」。</li>
+  </ul>
+  <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2100034501909065938" target="_blank" rel="noopener">[meng shao]</a></div>
+</div>
+
+<div class="card">
+  <span class="num">6</span><h3>顺手一提：两个你多半知道、但没在用的标准能力</h3>
+  <p><strong>CSS Container Queries</strong>：浏览器支持率已经约 <strong>94%</strong>，但 State of CSS 调查显示 <strong>86% 的开发者知道它，只有 41.4% 真的在用</strong>。Smashing Magazine 的文章专门纠正「把它当媒体查询用」的常见误解——容器查询依据的是<strong>组件自身容器</strong>的尺寸，而不是视口。对组件库和设计系统来说，这是让组件真正可复用的关键，值得花半小时补课。</p>
+  <p><strong>SQL MATCH_RECOGNIZE</strong>：Databricks 把它称作「面向行的正则」。当你有一张登录尝试表，想检测「短时间内连续失败 N 次后成功」这类<strong>行与行之间的模式</strong>时，用自连接或窗口函数硬凑既难写又难读。<code>MATCH_RECOGNIZE</code> 让你用类似正则表达式的语法在 SQL 里声明这种序列模式，可读性和维护性都好得多。安全检测、风控、用户行为漏斗都是它的典型场景。</p>
+  <div class="src">📎 来源：
+    <a href="https://smashingmagazine.com/2026/09/stop-treating-css-container-queries-traditional-media-queries/" target="_blank" rel="noopener">[Smashing Magazine]</a> ·
+    <a href="https://www.databricks.com/blog/regex-rows-simplifying-pattern-detection-sql-matchrecognize" target="_blank" rel="noopener">[Databricks Blog]</a>
+  </div>
+</div>
+
+<!-- ============ 5. 参考链接汇总 ============ -->
+
+<h2 class="sec">参考链接汇总</h2>
+<div class="refs">
+<ol>
+  <li>Java 27 正式发布，9 项 JEP 齐上阵：G1 成默认 GC · <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247835829&amp;idx=2&amp;sn=8c75904d04b70f40380b8296cb478d7c" target="_blank" rel="noopener">CSDN</a></li>
+  <li>Java 27 Delivers Post-Quantum Cryptography, Future Language Innovation · <a href="https://www.infoq.com/news/2026/09/java27-released/" target="_blank" rel="noopener">InfoQ</a></li>
+  <li>pnpm 12 采用 Rust 语言重写了包管理器 · <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651293181&amp;idx=4&amp;sn=83aa72823ad0deb5e8f171e4d5520926" target="_blank" rel="noopener">InfoQ</a></li>
+  <li>OpenRouter：Any model can now run code in a hosted Linux container（1/6、5/6、6/6） · <a href="https://x.com/OpenRouter/status/2100269250766401683" target="_blank" rel="noopener">OpenRouter</a></li>
+  <li>Shopify Drops React Native for Swift and Kotlin · <a href="https://www.infoq.com/news/2026/09/shopify-drops-react-native/" target="_blank" rel="noopener">InfoQ</a></li>
+  <li>Microsoft Open-Sources TauGrid to Simplify AI Workload Management on Kubernetes · <a href="https://www.infoq.com/news/2026/09/microsoft-taugrid-open-source/" target="_blank" rel="noopener">InfoQ</a></li>
+  <li>Jev：TypeSafe 发布「System One 模型」 · <a href="https://x.com/dotey/status/2100109937237987823" target="_blank" rel="noopener">宝玉</a> · <a href="https://www.latent.space/p/ainews-jev-a-system-one-model-that" target="_blank" rel="noopener">Latent.Space</a> · <a href="https://seangoedecke.com/jev-means-structured-output-is-interesting-again/" target="_blank" rel="noopener">seangoedecke.com</a></li>
+  <li>CobbleDB 深度解读：Perplexity 为什么重写 AI 搜索的存储层 · <a href="https://x.com/shao__meng/status/2100042172800307431" target="_blank" rel="noopener">meng shao</a></li>
+  <li>Node.js 26.9.0 (Current) · <a href="https://nodejs.org/en/blog/release/v26.9.0" target="_blank" rel="noopener">Node.js Blog</a></li>
+  <li>Visual Studio Code 1.138 (Insiders) · <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.138-(insiders)" target="_blank" rel="noopener">Microsoft for Developers</a></li>
+  <li>SwiftUI 与 Core Animation 的架构取舍（技术演示与苹果工程师回应） · <a href="https://x.com/dotey/status/2100068419986923933" target="_blank" rel="noopener">宝玉</a></li>
+  <li>复杂的 Harness Evolution，甚至不如多跑几遍（Rethinking the Evaluation of Harness Evolution for Agents） · <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651057510&amp;idx=2&amp;sn=8e1bea2b097f6ec4c012b75cf0ccfacb" target="_blank" rel="noopener">机器之心</a> · <a href="https://arxiv.org/abs/2607.12227" target="_blank" rel="noopener">arXiv</a> · <a href="https://github.com/rethinking-harness-evolution" target="_blank" rel="noopener">GitHub</a></li>
+  <li>Devframe：一个构建开发者工具的框架 · <a href="https://x.com/shao__meng/status/2100131016509980852" target="_blank" rel="noopener">meng shao</a></li>
+  <li>Cloudflare 官方 security-audit-skill · <a href="https://x.com/vikingmute/status/2100214450829905995" target="_blank" rel="noopener">Viking</a></li>
+  <li>腾讯 BrowserSkill：CLI + 浏览器扩展 · <a href="https://x.com/shao__meng/status/2100208718592032854" target="_blank" rel="noopener">meng shao</a></li>
+  <li>AgentGit：为 Agent 会话做版本控制 · <a href="https://x.com/omarsar0/status/2100245953278279715" target="_blank" rel="noopener">elvis</a></li>
+  <li>DeepSeek Harness：从「会回答」到「能持续做事」的 Agent 运行时 · <a href="https://mp.weixin.qq.com/s?__biz=Mzg4MTYwMzY1Mw==&amp;mid=2247518513&amp;idx=1&amp;sn=d540b8ce97bc739dad4927a975830417" target="_blank" rel="noopener">奇舞精选</a></li>
+  <li>JetBrains：Logpoints Walkthrough · <a href="https://blog.jetbrains.com/idea/2026/09/logpoints-walkthrough/" target="_blank" rel="noopener">The JetBrains Blog</a></li>
+  <li>JetBrains：IntelliJ IDEA 2026.2.3 Is Out! · <a href="https://blog.jetbrains.com/idea/2026/09/intellij-idea-2026-2-3/" target="_blank" rel="noopener">The JetBrains Blog</a></li>
+  <li>JetBrains：Rider and ReSharper 2026.2.2 Are Out! · <a href="https://blog.jetbrains.com/dotnet/2026/09/16/rd-rs-2026-2-2/" target="_blank" rel="noopener">The JetBrains Blog</a></li>
+  <li>Agent harness 的最大挑战是上下文工程 · <a href="https://x.com/LangChain/status/2100235963339313648" target="_blank" rel="noopener">LangChain</a></li>
+  <li>The unreasonable effectiveness of BM25 for agentic search · <a href="https://www.youtube.com/watch?v=fZH97QHHYjY" target="_blank" rel="noopener">AI Engineer</a></li>
+  <li>告别「散装 AI」：用 SKILL 编排对存量代码做「微创手术」 · <a href="https://mp.weixin.qq.com/s?__biz=MzI4NjY4MTU5Nw==&amp;mid=2247506958&amp;idx=1&amp;sn=6cab83047982c5ce484b3d361c89738a" target="_blank" rel="noopener">vivo互联网技术</a></li>
+  <li>用 OpenViking 经验记忆构建 Agent 的进化闭环 · <a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247522604&amp;idx=1&amp;sn=6ea201d826647e12047227cd3d386ba4" target="_blank" rel="noopener">字节跳动技术团队</a></li>
+  <li>EMNLP 2026｜MemPro：让 Agent 的记忆系统学会自我进化 · <a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496400&amp;idx=1&amp;sn=64957c6e3a95d71fe7a51146825c04db" target="_blank" rel="noopener">小红书技术REDtech</a></li>
+  <li>agent 优化之 GEPA——一种提示词自进化的优化方案 · <a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&amp;mid=2650545973&amp;idx=1&amp;sn=01a23266cadd126c68a1a14dd0db544a" target="_blank" rel="noopener">大淘宝技术</a></li>
+  <li>用 1393 个 Agent 重构 Hermes Agent · <a href="https://x.com/shao__meng/status/2100034501909065938" target="_blank" rel="noopener">meng shao</a></li>
+  <li>Stop Treating CSS Container Queries Like Traditional Media Queries · <a href="https://smashingmagazine.com/2026/09/stop-treating-css-container-queries-traditional-media-queries/" target="_blank" rel="noopener">Smashing Magazine</a></li>
+  <li>「Regex for Rows」：Simplifying Pattern Detection in SQL with MATCH_RECOGNIZE · <a href="https://www.databricks.com/blog/regex-rows-simplifying-pattern-detection-sql-matchrecognize" target="_blank" rel="noopener">Databricks</a></li>
+</ol>
+</div>
+
+<footer>
+  生成时间 2026-09-16 · 数据窗口 24h · 原始条目 576 条 / 424 个来源<br>
+  本日报由 tech-daily-generator 生成，面向<strong>开发者实践</strong>角色，内容经筛选与重新组织，请以原文为准。
+</footer>
+
+</div>
+</body>
+</html>

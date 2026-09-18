@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者实践版 · 科技日报 2026-09-09</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", monospace;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.75;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 28px 20px 60px; }
+
+        /* ===== Header ===== */
+        .header {
+            background: linear-gradient(135deg, #010409 0%, #0d1b2e 60%, #1f3a5f 100%);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 30px 32px;
+            margin-bottom: 26px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: ">";
+            position: absolute; left: -20px; top: 20px;
+            font-size: 180px; font-weight: 700; color: #1f3a5f; opacity: 0.35;
+        }
+        .header h1 {
+            font-size: 24px; font-weight: 700; color: #e6edf3;
+            letter-spacing: 0.5px;
+        }
+        .header h1 .prompt { color: #3fb950; }
+        .header h1 .cmd { color: #58a6ff; }
+        .header .meta {
+            margin-top: 10px; font-size: 13px; color: #8b949e;
+        }
+        .header .meta b { color: #c9d1d9; font-weight: 600; }
+        .header .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .header .tags span {
+            font-size: 12px; padding: 3px 10px; border-radius: 999px;
+            background: rgba(88,166,255,0.12); color: #58a6ff; border: 1px solid rgba(88,166,255,0.3);
+        }
+        .header .tags span.sys { background: rgba(63,185,80,0.12); color: #3fb950; border-color: rgba(63,185,80,0.3); }
+
+        /* ===== Sections ===== */
+        .section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 22px 26px;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 18px; font-weight: 700; color: #e6edf3;
+            margin-bottom: 6px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-title .tag {
+            font-size: 12px; background: #1f2937; color: #58a6ff;
+            padding: 2px 10px; border-radius: 6px; letter-spacing: 0.5px;
+            border: 1px solid #30363d;
+        }
+        .section-desc { font-size: 13px; color: #8b949e; margin-bottom: 16px; border-bottom: 1px solid #21262d; padding-bottom: 12px; }
+
+        /* ===== Hot list ===== */
+        .hot-list { counter-reset: hot; }
+        .hot-item {
+            background: #0d1117; border-radius: 8px; padding: 14px 16px 14px 44px; margin-bottom: 12px;
+            border: 1px solid #21262d; border-left: 3px solid #58a6ff; position: relative;
+        }
+        .hot-item::before {
+            counter-increment: hot; content: counter(hot, decimal-leading-zero);
+            position: absolute; left: 14px; top: 14px;
+            font-size: 15px; font-weight: 700; color: #3fb950; font-family: "SF Mono", Consolas, monospace;
+        }
+        .news-title { font-size: 15.5px; font-weight: 650; color: #e6edf3; margin-bottom: 6px; }
+        .news-title a { color: #e6edf3; text-decoration: none; }
+        .news-title a:hover { color: #58a6ff; }
+        .news-summary { font-size: 13.5px; color: #adbac7; margin-bottom: 6px; }
+        .news-summary code, .hot-item code {
+            background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px;
+            font-size: 12.5px; font-family: "SF Mono", Consolas, monospace;
+        }
+        .src { font-size: 12px; color: #6e7681; }
+        .src a { color: #58a6ff; text-decoration: none; margin-right: 8px; }
+        .src a:hover { text-decoration: underline; }
+        .src .sep { color: #30363d; }
+
+        /* ===== Deep dive ===== */
+        .deep-dive {
+            background: #0d1117; border-radius: 10px; padding: 20px 22px; margin-bottom: 18px;
+            border: 1px solid #21262d;
+        }
+        .deep-dive .dd-kicker {
+            font-size: 12px; color: #3fb950; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px;
+        }
+        .deep-dive h3 { font-size: 17px; font-weight: 700; color: #e6edf3; margin-bottom: 10px; }
+        .deep-dive h3 a { color: #e6edf3; text-decoration: none; }
+        .deep-dive h3 a:hover { color: #58a6ff; }
+        .deep-dive p { font-size: 13.5px; color: #adbac7; margin-bottom: 10px; }
+        .deep-dive p code, .deep-dive li code {
+            background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px;
+            font-size: 12.5px;
+        }
+        .deep-dive ul { margin: 6px 0 12px 4px; padding-left: 18px; }
+        .deep-dive li { font-size: 13.5px; color: #adbac7; margin-bottom: 6px; }
+        .code-block {
+            background: #010409; color: #c9d1d9; padding: 14px 16px; border-radius: 8px;
+            border: 1px solid #30363d; margin: 10px 0;
+            font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+            font-size: 12.5px; line-height: 1.7; overflow-x: auto;
+        }
+        .code-block .c { color: #6e7681; }
+        .deep-dive .note {
+            font-size: 12.5px; color: #8b949e; background: #161b22;
+            border-left: 3px solid #3fb950; padding: 8px 12px; border-radius: 0 6px 6px 0;
+        }
+
+        /* ===== Tool grid ===== */
+        .tool-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 6px;
+        }
+        .tool-card {
+            background: #0d1117; border: 1px solid #21262d; border-radius: 10px; padding: 16px 18px;
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .tool-card .tool-ico { font-size: 13px; color: #3fb950; }
+        .tool-card h4 { font-size: 15px; font-weight: 650; color: #e6edf3; }
+        .tool-card h4 a { color: #e6edf3; text-decoration: none; }
+        .tool-card h4 a:hover { color: #58a6ff; }
+        .tool-card p { font-size: 13px; color: #adbac7; flex: 1; }
+        .tool-card p code { background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+        .tool-card .src { align-self: flex-end; }
+
+        /* ===== Practice ===== */
+        .practice-item {
+            background: #0d1117; border-radius: 8px; padding: 16px 18px; margin-bottom: 12px;
+            border: 1px solid #21262d;
+        }
+        .practice-item .p-no {
+            font-size: 12px; color: #3fb950; font-weight: 700; letter-spacing: 1px;
+        }
+        .practice-item h4 { font-size: 15px; font-weight: 650; color: #e6edf3; margin: 2px 0 8px; }
+        .practice-item p { font-size: 13.5px; color: #adbac7; margin-bottom: 8px; }
+        .practice-item .code-block { margin: 8px 0; }
+        .practice-item ul { padding-left: 18px; margin: 4px 0 8px; }
+        .practice-item li { font-size: 13.5px; color: #adbac7; margin-bottom: 5px; }
+        .practice-item li code { background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+
+        /* ===== Source summary ===== */
+        .src-box {
+            background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 22px 26px;
+        }
+        .src-box h2 { font-size: 17px; font-weight: 700; color: #e6edf3; margin-bottom: 12px; }
+        .src-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 6px 18px;
+            font-size: 12.5px; color: #8b949e; line-height: 1.9;
+        }
+        .src-grid a { color: #58a6ff; text-decoration: none; }
+        .src-grid a:hover { text-decoration: underline; }
+        .src-grid .feed { color: #6e7681; margin-left: 4px; }
+        .footer-note {
+            margin-top: 18px; font-size: 12px; color: #6e7681; text-align: center; line-height: 1.8;
+        }
+        .footer-note code { background: #21262d; color: #f0883e; padding: 1px 5px; border-radius: 4px; }
+        ::-webkit-scrollbar { height: 8px; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        a { word-break: break-all; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ===================== HEADER ===================== -->
+    <div class="header">
+        <h1>
+            <span class="prompt">$</span> <span class="cmd">daily-report</span> --role developer_practice
+        </h1>
+        <div class="meta">
+            数据窗口：<b>2026-09-08 20:07 → 2026-09-09 20:07</b> · 共 <b>567</b> 条新闻（来自 <b>424</b> 个订阅源）
+            <br>核心主题：Coding Agent 进入 "Harness 工程" 时代（Codex 工程拆解 / 行为评测 / 框架成本治理）/ Tailwind 加入 Shopify，前端生态变天 / 开源 Agentic 模型与推理引擎（Nex-N2.5 / OUI-1 / Cohere Megakernel）
+        </div>
+        <div class="tags">
+            <span>今日技术热榜</span><span>深度技术解读</span><span>工具推荐</span><span>实践指南</span><span class="sys">#dev #coding-agent #harness #frontend #llm-infra</span>
+        </div>
+    </div>
+
+    <!-- ===================== 今日技术热榜 ===================== -->
+    <div class="section">
+        <div class="section-title"><span class="tag">#01</span> 今日技术热榜</div>
+        <div class="section-desc">从 567 条新闻里筛出 7 条开发者最该点开的内容：今天的共同主线是——AI 编程的竞争点正在从"模型"转向"Harness、成本与生态"，前端基础设施也迎来一次地震级别的收购。</div>
+        <div class="hot-list">
+
+            <div class="hot-item">
+                <div class="news-title">Tailwind Labs 加入 Shopify：爆款 CSS 框架找到"长期归宿"，AI 冲击下的商业模式转身</div>
+                <div class="news-summary">
+                    Tailwind CSS 之父 Adam Wathan 官宣 Tailwind Labs 加入 Shopify（多被媒体定性为收购，金额未披露）。背景是 AI 的"残酷冲击"：今年 1 月 Wathan 曾自曝公司收入跌了近 <code>80%</code>——AI 编码助手能直接生成 Tailwind 代码，绕过了官网文档这一核心流量入口。交易后开源项目（Tailwind CSS 等）保持 <code>MIT</code> 授权、核心团队继续主导维护；商业产品停止新签，框架将深度服务于 Shopify 的商店前台、管理后台与"agentic commerce"界面。对前端开发者：License 没变、框架仍在，但路线图重心会明显偏向 Shopify 的产品形态，值得关注后续治理与社区走向。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/dingyi/status/2097694956672753779" target="_blank" rel="noopener">Ding(@dingyi)</a></div>
+            </div>
+
+            <div class="hot-item">
+                <div class="news-title">"Building Codex"：Pragmatic Engineer 深访 Tibo，Codex CLI 为何用 Rust、为何开源、为何不绑定自家模型</div>
+                <div class="news-summary">
+                    Codex 创始团队成员、现任 OpenAI Core Products &amp; Platform 负责人 Tibo Sottiaux 在 Pragmatic Engineer 播客完整复盘 Codex 的工程演化：核心 Agent 用 <code>Rust</code> 编写，CLI/SDK 选择开源；harness 为模型提供安全、可靠、高效的"拐杖"，而当模型变强后 harness 会主动做薄；Codex 刻意支持多厂商模型而非只服务 OpenAI 自己。他还透露 OpenAI 内部已把 Codex 用于 code review、安全检查、依赖升级与系统重构等全生命周期，并分享了与 ChatGPT 合并时的系统挑战。对想自建 coding-agent 平台的团队，这是一份难得的"从研究项目到产品"的工程参考（中文听众可配"跨国串门儿计划 #714"克隆集收听）。
+                </div>
+                <div class="src">↳ 来源：<a href="https://www.youtube.com/watch?v=sLSTM9znQNs" target="_blank" rel="noopener">The Pragmatic Engineer</a><span class="sep">·</span><a href="https://www.xiaoyuzhoufm.com/episode/6aa1a08d9d3264778166b832" target="_blank" rel="noopener">跨国串门儿计划 #714</a></div>
+            </div>
+
+            <div class="hot-item">
+                <div class="news-title">Nex-AGI 开源 Nex-N2.5 智能体模型家族：Mini/Pro/Max 三档，Max 首次在万亿参数规模完成 Agentic 后训练</div>
+                <div class="news-summary">
+                    上海创智学院发起的 Nex-AGI 开源面向真实环境长程任务的 <code>Nex-N2.5</code> 家族。Mini 与 Pro 强化计算机使用、网页浏览与视觉辅助；Max 基于 <code>DeepSeek-V4-Pro-Base</code>，采用 1.6T 总参、每 token 激活 49B 的纯文本 MoE，是官方首次在万亿参数规模完成的完整后训练。基准上 Max 以 <code>92.6</code> 拿下 BrowseComp 同表最佳、Pro 以 <code>87.4</code> 拿下 OSWorld-G 同表最佳，SWE-Bench Pro 超越 GPT-5.6。OpenRouter 已同步上线 Pro/Mini 两档（工具调用 + 可调 reasoning effort），仓库在 github.com/nex-agi/Nex-N2.5。做真实环境 Agent（芯片设计、CAD、长程操作）的团队可以直接拉权重自测。
+                </div>
+                <div class="src">↳ 来源：<a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247513065&idx=1&sn=fba23adcf774d286d066025e9ee8f968" target="_blank" rel="noopener">魔搭ModelScope社区</a><span class="sep">·</span><a href="https://x.com/OpenRouter/status/2097429886541693069" target="_blank" rel="noopener">OpenRouter(@OpenRouterAI)</a></div>
+            </div>
+
+            <div class="hot-item">
+                <div class="news-title">OUI-1：首个开源权重生成式 UI 模型，用 Diffusion 的并行解码思路把"生成界面"做到既快又可靠</div>
+                <div class="news-summary">
+                    OpenUI 团队发布基于 <code>DiffusionGemma</code> 微调的 <code>OUI-1</code>（26B/A4B MoE），在 Generative UI Benchmark 上拿到 <code>71.7%</code>，是基座模型 <code>13.0%</code> 的 5.5 倍，并以 8 倍更少的激活参数击败 Gemma 4 31B 的 46.7%。选扩散模型的原因很工程：自回归逐 token 生成受内存带宽限制，而 DiffusionGemma 一次并行生成 256-token 块（H100 上 1000+ tok/s、RTX 5090 上 700+），满足"亚秒级生成 + 消费级硬件"的约束。训练的核心在第二阶段的<em>自蒸馏</em>：先修掉枚举值写错、缺必需属性、生成"孤儿"区块这类结构性错误，再谈速度。做 AI 生成 UI / 前端自动化的团队，这是可直接本地部署的新底座。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2097479009286451524" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+            </div>
+
+            <div class="hot-item">
+                <div class="news-title">Cloudflare 重写 Workers 模块注册表：向 Node.js 模块语义对齐，体积上限提升到 64 MiB</div>
+                <div class="news-summary">
+                    Cloudflare 在 <code>workerd</code>（Workers 开源运行时核心）里重写了 module registry，目标是更快、更贴近标准、并与 Node.js 的模块注册表对齐。此前 Workers 已支持 Node.js 全部稳定 API 且默认开启，这次补齐的是"运行时如何解析、加载与缓存模块"的语义：ESM、CommonJS 与 WebAssembly 三类模块统一处理。同时所有套餐的压缩包体积上限提升到 <code>64 MiB</code>，并取消了压缩后体积限制。对想把手头 Node.js 应用迁到 Serverless 的团队，这相当于打通了"API 兼容之后"的最后一公里。
+                </div>
+                <div class="src">↳ 来源：<a href="https://blog.cloudflare.com/workers-module-registry-nodejs/" target="_blank" rel="noopener">The Cloudflare Blog</a></div>
+            </div>
+
+            <div class="hot-item">
+                <div class="news-title">三项实测拆穿 AI 编程成本黑洞：同一模型、不同 Agent 框架，Token 消耗最高差 70 倍</div>
+                <div class="news-summary">
+                    InfoQ 编译的三项基准测试把成本矛头从"模型"转向"Agent 框架"：6 月的独立测试在相同 12 个 Python 任务上比较 2 模型 × 12 配置；8 月 Composio 用 DeepSeek V4 Flash 在 30 个企业工作流（Airtable/Gmail/Sheets/GitHub/Slack/PostHog 等）上对比 8 个框架，每次成功任务的成本从 Pi Agent 的 <code>$0.028</code> 到 Claude Code 的 <code>$0.195</code>，叠加 token 放大效应最高可达 70 倍差距。差异主要来自每轮推理都要重复携带框架的系统提示词、工具描述与历史上下文。Artificial Analysis 已推出 Coding Agent Index 持续追踪。结论很直接：<em>选框架和选模型同等重要</em>。
+                </div>
+                <div class="src">↳ 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651292636&idx=2&sn=32fdeba4fa9c536f57c1f9cfc704b31a" target="_blank" rel="noopener">InfoQ</a></div>
+            </div>
+
+            <div class="hot-item">
+                <div class="news-title">LangChain Managed Deep Agents 0.7 引入 Connections：把"Agent 以谁的身份行动"做成代码里的一等公民</div>
+                <div class="news-summary">
+                    Agent 认证一直很难：要替每个服务维护 OAuth app、token 存储、refresh 逻辑与 consent 流程。LangChain 托管 Deep Agents 0.7 新增 <code>Connections</code> 解决这一痛点——代码里用单个参数声明身份：<code>agent</code> 表示用 Agent 自己的共享 token，<code>user</code> 表示走用户 OAuth，未连接时自动引导授权。密钥存进 LangSmith workspace 而不是散落在 <code>.env</code>。官方演示覆盖三种接法：agent-owned secrets、经 MCP 的 user-owned OAuth、自定义 OAuth app。做多用户 Agent 产品或 SaaS 集成的团队，可以直接抄这个身份模型。
+                </div>
+                <div class="src">↳ 来源：<a href="https://x.com/LangChain/status/2097426431328358627" target="_blank" rel="noopener">LangChain(@LangChainAI)</a><span class="sep">·</span><a href="https://x.com/LangChain/status/2097732992735015230" target="_blank" rel="noopener">Connections 发布帖</a></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===================== 深度技术解读 ===================== -->
+    <div class="section">
+        <div class="section-title"><span class="tag">#02</span> 深度技术解读</div>
+        <div class="section-desc">两个今天值得读透的底层真相：一个关于 coding agent 该怎么被评测与改进，一个关于自回归推理为什么"慢在等待而不是计算"。</div>
+
+        <div class="deep-dive">
+            <div class="dd-kicker">// Harness 工程</div>
+            <h3><a href="https://developers.googleblog.com/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/" target="_blank" rel="noopener">"Agent 的进步 = Harness 的进步"：把评测从"最终结果"下沉到"工具边界"</a></h3>
+            <p>今天至少有四个独立信源指向同一个结论：coding agent 的瓶颈正在从模型本身，转移到模型外围的 harness——编排逻辑、上下文传递、工具提供、失败恢复与评测方式。Google 开发者博客这篇《The Anatomy of Harness Engineering》直接点题：端到端基准（如 SWE-bench）贵、慢、且缺乏根因诊断，无法告诉你 Agent 的逻辑到底在哪一步断掉。解法是引入<em>行为评测（behavioral evals）</em>：快速、本地、单元测试式，断言离散的中间动作——例如"是否调用了某个工具""是否修改了某个文件"，而不是最终字符串是否相等。用这些廉价微检查撑起日常迭代，再配合宏观基准做发布门禁，团队就能放心升级模型、改 system prompt 而不怕回归。</p>
+            <p>LangChain 创始人 Harrison Chase 转发的 EMNLP'26 论文《Beyond Prompts: Measuring and Optimizing LLM Tool-Agent Harnesses》把这个直觉形式化：固定模型下的 harness 优化是一个"预算内选择"问题——harness 的编辑是发生在<em>工具边界</em>的守卫式拦截（guarded intercept），而不是重写执行逻辑。其 PRISM 方法对失败聚类，把每个修复路由到 prompt、middleware 或联合表面，再用 gate 挑选候选。AI Engineer 大会上还有一个成本佐证：Laurie Voss 重跑了一个一年前"200 条指令就能难倒所有模型"的基准——现在所有模型满分，上限逼近 2000 条指令，整场研究只花了 <code>$29</code>。评测的边际成本正在趋近于零，把它做进日常迭代完全可行。</p>
+            <div class="code-block">
+                <span class="c">// 行为评测：断言"工具边界发生了什么"，而不是最终输出</span><br>
+                test("update_ticket 之前必须先 search 定位到目标单", async () =&gt; {<br>
+                &nbsp;&nbsp;const ctx = await runAgent(prompt, { tools });<br>
+                &nbsp;&nbsp;const names = ctx.toolCalls.map(t =&gt; t.name);<br>
+                &nbsp;&nbsp;expect(names).toContain("search_tickets");<br>
+                &nbsp;&nbsp;expect(names.indexOf("search_tickets"))<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;.toBeLessThan(names.indexOf("update_ticket"));<br>
+                &nbsp;&nbsp;expect(ctx.toolCalls.find(t =&gt; t.name === "update_ticket").args.status)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;.toBe("resolved");<br>
+                });
+            </div>
+            <ul>
+                <li><b>对自建 Agent 的团队：</b>把"调了哪些工具、以什么顺序、传了什么参数"落成可断言的 trace，比只看 pass@k 更容易定位回归。</li>
+                <li><b>对选型/买工具的团队：</b>优先选那些把评测与可观测性做进 harness 的平台（Deep Agents + LangSmith、Codex 内部同类闭环都是这个方向）。</li>
+                <li><b>参考学习：</b>CMU 26 秋季新课「AI Agents」（Graham Neubig / Daniel Fried）28 讲全公开，从零搭 harness、建评测、用 RL 训 Agent，是系统补课路径。</li>
+            </ul>
+            <div class="note">一句话：想加快 Agent 迭代，别只盯着最终结果。把"工具边界上发生了什么"变成可断言的单元测试，才是低成本、可解释的回归网。</div>
+        </div>
+
+        <div class="deep-dive">
+            <div class="dd-kicker">// LLM 推理内核</div>
+            <h3><a href="https://x.com/shao__meng/status/2097467097970552993" target="_blank" rel="noopener">Cohere 开源 Megakernel：decode 慢在"等待"而非"计算"，一个常驻 kernel 把 H100 顶到 62% 理论带宽</a></h3>
+            <p>自托管 LLM 服务时，我们常默认算力（FLOPs）是瓶颈——但低 batch 的自回归解码是典型的<em>显存带宽受限</em>：每生成一个 token，都要把模型权重完整读一遍。以 Cohere 的 North Mini Code（约 30B 参数、每 token 激活 3.3B）为例，BF16 下每步解码要流过约 <code>6.6 GB</code> 权重，加 8K 上下文约 <code>0.5 GB</code> KV cache；H100 的 HBM 带宽 3.35 TB/s 对应理论极限约 <code>470 tok/s</code>，而 vLLM 只跑到 <code>185 tok/s</code>，仅利用理论的 39%。差距不在 kernel 本身，而在 kernel 之间：传统引擎把 QKV 投影、attention、MoE、RMSNorm 切成独立 kernel，彼此隔着全 GPU 的隐式同步与启动开销——对 memory-bound 负载，SM 在算子边界空转一拍，就是带宽利用率的直接损失。</p>
+            <p>Megakernel 的思路是把整个 decode 阶段的前向计算融合成一个<em>常驻 GPU 的持久 kernel</em>，消除算子之间的启动与等待。实测单张 H100、BF16、batch size 1 下达到 <code>292 tok/s</code>，即理论带宽上限的 <code>62%</code>，是 vLLM（185 tok/s）的 1.58 倍；端到端服务（batch 8）在真实基准上快 1.25–1.41 倍。Cohere 已把这一推理服务系统开源。</p>
+            <ul>
+                <li>自建推理 / 低延迟场景：把"kernel 启动开销"也放进选型指标，融合 kernel（如 Megakernel、FlashInfer 类路线）在低 batch 下收益显著。</li>
+                <li>容量规划：当服务跑在带宽受限区，加 GPU 数量不如提高单卡带宽利用率；先看 SOL% 再谈扩展。</li>
+                <li>对框架开发者：这是"持久化 kernel + 显式调度"路线可参考的完整开源样本。</li>
+            </ul>
+            <div class="note">一句话：自回归推理的优化哲学不是把单个 kernel 变快，而是让 GPU 别在 kernel 与 kernel 之间闲着。</div>
+        </div>
+    </div>
+
+    <!-- ===================== 工具推荐 ===================== -->
+    <div class="section">
+        <div class="section-title"><span class="tag">#03</span> 工具推荐</div>
+        <div class="section-desc">今天值得装进工具箱的四样东西：一个跑在 GPU 上的语法高亮模型、一个给 Coding Agent 装"评审大脑"的工具箱、一个极致精简的浏览器 Agent，以及一条让 Agent 的 PR 自带"工作证据"的 GitHub CLI 能力。</div>
+        <div class="tool-grid">
+
+            <div class="tool-card">
+                <div class="tool-ico">▲ Vercel Labs</div>
+                <h4><a href="https://x.com/shao__meng/status/2097622055672012970" target="_blank" rel="noopener">gpu-lexer：27.5KB 的 WebGPU 神经语法高亮器</a></h4>
+                <p>Vercel 的 @shuding 把语法高亮从"基于规则"改成"基于模型"：一个 <code>27.5KB</code> 的模型内联打包，消灭了每种语言动辄 MB 级的 grammar bundle 与"先检测语言再异步拉取"的长链路；推理跑在 WebGPU 上，绕开主线程阻塞。本质是序列标注——为每个 token 预测语法角色再映射为高亮 span。覆盖 50+ 语言，对训练集之外的语言也"表现尚可"，说明学到的是跨语言统计共性；正确性以 Shiki 为基准、按 top-25 GitHub 流行语言加权对比。做代码展示/编辑器增强的开发者值得体验。</p>
+                <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2097622055672012970" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-ico">🛠 Qodo</div>
+                <h4><a href="https://x.com/omarsar0/status/2097675900531732624" target="_blank" rel="noopener">Qodo Agentic Toolbox：给 Claude Code / Codex / Kiro / Cursor 装同一个"评审引擎"</a></h4>
+                <p>通过 MCP 让主流 coding agent 直接接入 Qodo 的代码评审引擎、代码库知识与团队规则——相当于把"人肉 review 的标准"前置到 Agent 改码的那一刻，而不是等 PR 出来再事后找茬。这和今天热榜的 harness 主题同频：团队规则与评审反馈本是 harness 的一部分，用它一次接入多款 Agent，比在每家工具里重复配置省事得多。</p>
+                <div class="src">↳ 来源：<a href="https://x.com/omarsar0/status/2097675900531732624" target="_blank" rel="noopener">elvis(@omarsar0)</a></div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-ico">🥧 Browser Use</div>
+                <h4><a href="https://x.com/browser_use/status/2097576914080890923" target="_blank" rel="noopener">Browser Use Pi：极简 TypeScript 浏览器 Web Agent（npm i @browser_use/pi）</a></h4>
+                <p>Browser Use 团队让 Astra 在"跑真实浏览器任务 → 读 trace → 修问题 → 删复杂度"的 hill-climbing 循环里重写自家经验，产出一个极小实现：<code>Pi Mono</code> + 持久 V8 REPL + 原生 CDP，全 TypeScript，尽可能少代码、少启发式。支持云端浏览器、持久会话、流式输出与 step 上限。适合想要一个可读、可控、不带重型框架的浏览器自动化方案的开发者。</p>
+                <div class="src">↳ 来源：<a href="https://x.com/browser_use/status/2097576914080890923" target="_blank" rel="noopener">Browser Use(@browser_use)</a></div>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-ico">⌨️ GitHub CLI</div>
+                <h4><a href="https://www.youtube.com/watch?v=YHHjEet47_4" target="_blank" rel="noopener">GitHub CLI --attach：让 Agent 的 PR/Issue 自带"工作证据"</a></h4>
+                <p>GitHub CLI 新增 <code>--attach</code> 参数，可直接在终端把截图/视频传进 issue、PR 与评论。官方演示里，一个 Playwright 自动化 Agent 扫站找 bug、失败时截图并附到 issue，再开 PR 贴 before/after 证据。对 AI 批量生成的自动化 PR 意义很大：reviewer 不必重跑一遍就能看到失败现场，Agent 的"工作量证明"随 PR 一起提交。</p>
+                <div class="src">↳ 来源：<a href="https://www.youtube.com/watch?v=YHHjEet47_4" target="_blank" rel="noopener">GitHub</a></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===================== 实践指南 ===================== -->
+    <div class="section">
+        <div class="section-title"><span class="tag">#04</span> 实践指南</div>
+        <div class="section-desc">五条今天就能落地的经验：一条大型成本治理打法、两条 Agent 稳定性/编排架构、一条成本权限治理反思、一条系统性学习路径。</div>
+
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 01 · AI 工程成本</div>
+            <h4>Uber "AI 软件工厂"：请求量 ×9.4，总账单却能稳住——先把"成本优化"和"模型升级"两个变量拆开</h4>
+            <p>Uber 在 2026 AI Engineer 大会上公开数据：超过 <code>70%</code> 的合并请求由本地或云端 Agent 生成，全司已构建 3600+ 个 Agent 技能、每天执行 3 万+ 次技能调用；从 2026 年 2 月到 8 月，周活跃用户 ×7、周 Agent 请求 ×9.4，但 AI 总支出自 4 月起基本平稳。关键方法论是"固定同一模型做对照"：由于工具采用率、负载构成与模型版本一直在变，想单独衡量优化收益就必须锁住模型。对照结果是每 1000 次请求成本较峰值下降约 <code>34%</code>，单会话成本较 6 月峰值下降 <code>52%</code>。落点：技能复用、缓存与 prompt 精简才是杠杆，别把成本波动简单归因于模型涨价或用量增长。</p>
+            <div class="src">↳ 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247666895&idx=2&sn=a1371750f9952b6b39ece9dc77113592" target="_blank" rel="noopener">AI前线（UberEng）</a></div>
+        </div>
+
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 02 · Agent 稳定性</div>
+            <h4>大淘宝：长程任务断点续传的"框架 Checkpoint + 上层任务调度"两层架构</h4>
+            <p>直播技术团队梳理了生产环境的三类中断：用户主动中断、工具执行中断（协作式）与系统级中断（机器重启/发布），长程任务、A2A 协同与人机协作场景都依赖恢复能力。方案在不修改 Spring AI Alibaba 框架源码的前提下做了两层：框架层扩展 <code>InterruptableAction</code>、用 Hook 注入关机信号检测、消息顺序修正、多工具调用 Mock 返回与子图会话 ID 记录，实现进程内状态保存/恢复；上层调度用 MQ 摘流阻止关机机器消费新消息，再靠任务表 + MQ 协调跨进程恢复。设计要点是给每一类中断一条显式的恢复路径，而不是统一"从头再跑"。</p>
+            <div class="src">↳ 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&mid=2650545838&idx=1&sn=3c5a25dfe00876f608af093ff0881942" target="_blank" rel="noopener">大淘宝技术</a></div>
+        </div>
+
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 03 · MultiAgent 编排</div>
+            <h4>得物：把 ReAct 换成"Plan 模式"——Plan 是一个有状态、可持久化、可被前端观察的运行对象</h4>
+            <p>得物在基于 AgentScope Java 的企业级 MultiAgent 平台上总结：只用 ReAct 循环会遇到"前置步骤缺失到最后才发现、过程藏在 prompt 里无法审计、token 消耗难预估、工具失败后没有稳定恢复路径"四个问题。Plan-and-Execute 把"要做什么"与"怎么做"拆开：Plan 生命周期覆盖创建、<code>Hint 注入</code>、持久化与断点恢复、SSE 过程可见；主 Agent 与子 Agent 声明式配置与调用，跨服务用 A2A Agent Teams；企业级配套包括多租户隔离、双模式认证、全链路调用树、SSE 分层消息协议与"四道异常防线"。结论：复杂任务编排优先考虑 Plan-and-Execute，把 Plan 当"一等运行对象"而不是备注。</p>
+            <div class="src">↳ 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&mid=2247546765&idx=1&sn=2089591cd6fb7dafeb246e40c4d18e63" target="_blank" rel="noopener">得物技术</a></div>
+        </div>
+
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 04 · Agent 成本治理</div>
+            <h4>腾讯云：一次需求触发数百次付费决策——"消费权限"要和"执行权限"一样被治理</h4>
+            <p>一次真实事故：产品同学用 DeepSeek Harness 分析一个插件需求，输入只有几十 token，<code>5 分钟内烧掉 1000 元</code>。展开执行链路后发现后台实际输入约 1964 万 token、输出约 13 万，而用量记录里 <code>cacheReadTokens</code> 每次都是 0——缓存完全没生效；过程中启动了 12 个 subagent、反复检索、上下文被反复携带。文章点出更本质的产品命题：用户只提了一次需求，Agent 却在后台自主完成了数百次付费决策，用户既看不见也无从在成本扩张时确认。落点：给 Agent 设"消费权限"——预算上限、缓存策略、subagent 数量、关键确认点，与执行权限同等对待。</p>
+            <div class="src">↳ 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&mid=2247697414&idx=1&sn=3672d692ba91de5791a6cff902c4484d" target="_blank" rel="noopener">腾讯云开发者</a></div>
+        </div>
+
+        <div class="practice-item">
+            <div class="p-no">PRACTICE 05 · 学习资源</div>
+            <h4>CMU 26 秋季新课「AI Agents」全公开：从零搭 Harness、建评测、用 RL 训 Agent</h4>
+            <p>由 OpenHands 作者 Graham Neubig 与 Daniel Fried 联合开设，<code>28 讲</code>贯通工具调用、上下文工程、技能与记忆、SFT/RL 训练、沙箱安全与人机交互，讲义与视频全公开。今天日报里反复出现的 harness、行为评测、Agent 训练正是这门课的主线——与其零散刷推文，不如拿它系统补一遍 Agent 工程的地基。</p>
+            <div class="src">↳ 来源：<a href="https://x.com/shao__meng/status/2097496946877636655" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
+        </div>
+
+    </div>
+
+    <!-- ===================== 参考链接汇总 ===================== -->
+    <div class="src-box">
+        <h2>参考链接汇总</h2>
+        <div class="src-grid">
+            <div><a href="https://x.com/dingyi/status/2097694956672753779" target="_blank" rel="noopener">Tailwind 加入 Shopify 官宣</a><span class="feed">Ding(@dingyi)</span></div>
+            <div><a href="https://www.youtube.com/watch?v=sLSTM9znQNs" target="_blank" rel="noopener">Building Codex with Tibo Sottiaux</a><span class="feed">The Pragmatic Engineer</span></div>
+            <div><a href="https://www.xiaoyuzhoufm.com/episode/6aa1a08d9d3264778166b832" target="_blank" rel="noopener">#714 Tibo 谈 Codex：harness 总比模型快一步</a><span class="feed">跨国串门儿计划</span></div>
+            <div><a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247513065&idx=1&sn=fba23adcf774d286d066025e9ee8f968" target="_blank" rel="noopener">Nex-AGI 开源 Nex-N2.5 家族</a><span class="feed">魔搭ModelScope社区</span></div>
+            <div><a href="https://x.com/OpenRouter/status/2097429886541693069" target="_blank" rel="noopener">Nex-N2.5 上线 OpenRouter</a><span class="feed">OpenRouter(@OpenRouterAI)</span></div>
+            <div><a href="https://x.com/shao__meng/status/2097479009286451524" target="_blank" rel="noopener">OUI-1 开源生成式 UI 模型</a><span class="feed">meng shao(@shao__meng)</span></div>
+            <div><a href="https://blog.cloudflare.com/workers-module-registry-nodejs/" target="_blank" rel="noopener">Workers 模块注册表重建：Node.js 兼容</a><span class="feed">The Cloudflare Blog</span></div>
+            <div><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651292636&idx=2&sn=32fdeba4fa9c536f57c1f9cfc704b31a" target="_blank" rel="noopener">AI 编程工具成本黑洞：Token 相差 70 倍</a><span class="feed">InfoQ</span></div>
+            <div><a href="https://x.com/LangChain/status/2097426431328358627" target="_blank" rel="noopener">Managed Deep Agents 0.7 Connections</a><span class="feed">LangChain(@LangChainAI)</span></div>
+            <div><a href="https://x.com/LangChain/status/2097732992735015230" target="_blank" rel="noopener">Connections 发布详情</a><span class="feed">LangChain(@LangChainAI)</span></div>
+            <div><a href="https://developers.googleblog.com/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/" target="_blank" rel="noopener">The Anatomy of Harness Engineering</a><span class="feed">Google Developers Blog</span></div>
+            <div><a href="https://x.com/hwchase17/status/2097720484431360365" target="_blank" rel="noopener">agent improvement is harness improvement（PRISM/EMNLP）</a><span class="feed">Harrison Chase(@hwchase17)</span></div>
+            <div><a href="https://x.com/shao__meng/status/2097467097970552993" target="_blank" rel="noopener">Cohere 开源 Megakernel</a><span class="feed">meng shao(@shao__meng)</span></div>
+            <div><a href="https://x.com/shao__meng/status/2097622055672012970" target="_blank" rel="noopener">gpu-lexer：WebGPU 神经语法高亮</a><span class="feed">meng shao(@shao__meng)</span></div>
+            <div><a href="https://x.com/omarsar0/status/2097675900531732624" target="_blank" rel="noopener">Qodo Agentic Toolbox</a><span class="feed">elvis(@omarsar0)</span></div>
+            <div><a href="https://x.com/browser_use/status/2097576914080890923" target="_blank" rel="noopener">Browser Use Pi 发布</a><span class="feed">Browser Use(@browser_use)</span></div>
+            <div><a href="https://www.youtube.com/watch?v=YHHjEet47_4" target="_blank" rel="noopener">GitHub CLI --attach 附加媒体演示</a><span class="feed">GitHub</span></div>
+            <div><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247666895&idx=2&sn=a1371750f9952b6b39ece9dc77113592" target="_blank" rel="noopener">Uber AI 软件工厂成本优化</a><span class="feed">AI前线（UberEng）</span></div>
+            <div><a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&mid=2650545838&idx=1&sn=3c5a25dfe00876f608af093ff0881942" target="_blank" rel="noopener">Agent 长程任务断点续传实践</a><span class="feed">大淘宝技术</span></div>
+            <div><a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&mid=2247546765&idx=1&sn=2089591cd6fb7dafeb246e40c4d18e63" target="_blank" rel="noopener">企业级 MultiAgent：Plan 模式与主子 Agent 协作</a><span class="feed">得物技术</span></div>
+            <div><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&mid=2247697414&idx=1&sn=3672d692ba91de5791a6cff902c4484d" target="_blank" rel="noopener">5 分钟烧掉 1000 块：Agent token 成本治理</a><span class="feed">腾讯云开发者</span></div>
+            <div><a href="https://x.com/shao__meng/status/2097496946877636655" target="_blank" rel="noopener">CMU 新课「AI Agents」全公开</a><span class="feed">meng shao(@shao__meng)</span></div>
+        </div>
+        <div class="footer-note">
+            本日报由 <code>tech-daily-generator</code> 自动生成 · 角色 <code>developer_practice</code> · 生成于 2026-09-09<br>
+            新闻数据来自 FreshRSS 24h 聚合窗口，标注为各原始来源 · 仅供技术参考，请以原文为准
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
