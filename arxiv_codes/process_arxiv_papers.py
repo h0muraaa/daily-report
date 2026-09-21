@@ -35,6 +35,14 @@ INFOGRAPHIC_READY_WAIT = int(os.environ.get("INFOGRAPHIC_READY_WAIT", 30))
 # 才映射成 completed），照那个字段等只会永远等不到。
 ARTIFACT_READY_TIMEOUT = int(os.environ.get("ARTIFACT_READY_TIMEOUT", 1800))
 ARTIFACT_READY_INTERVAL = int(os.environ.get("ARTIFACT_READY_INTERVAL", 60))
+# 每篇之间的节流。NotebookLM 对 infographic 创建有账号级配额（见 memory:
+# notebooklm_infographic_rate_limit），一串背靠背的请求很容易把时间窗打满，
+# 之后每一篇都只会回 RESOURCE_EXHAUSTED。
+CREATE_THROTTLE = int(os.environ.get("CREATE_THROTTLE", 45))
+# 整批共享的墙钟预算。单篇的 ARTIFACT_READY_TIMEOUT 管不住总数（20 篇 × 1800s
+# = 10h，照样撞 GitHub 的 6h 硬顶），这一道才是封住总时长的闸：超预算的篇目
+# 直接跳过，已经拿到的结果照常落盘。
+TOTAL_BUDGET = int(os.environ.get("TOTAL_BUDGET", 4 * 3600))
 
 os.makedirs(IMAGES_DIR, exist_ok=True)
 
@@ -220,7 +228,12 @@ def download_infographic_when_ready(notebook_id, output_path, artifact_id=None, 
     「下得下来」是「已生成完」的充要条件，所以直接拿下载当就绪信号，
     不再依赖 nlm 的 artifact status 字段（见文件顶部 ARTIFACT_READY_* 的注释）。
     """
-    timeout_seconds = timeout_seconds or ARTIFACT_READY_TIMEOUT
+    # 不能用 `or` 兜底：调用方会传 0 或负数表示「整批预算已用光」，
+    # `0 or ARTIFACT_READY_TIMEOUT` 会把它们悄悄换回默认值，闸就失效了。
+    if timeout_seconds is None:
+        timeout_seconds = ARTIFACT_READY_TIMEOUT
+    if timeout_seconds < 0:
+        timeout_seconds = 0
     deadline = time.time() + timeout_seconds
     attempt = 0
     last_error = ""
@@ -510,9 +523,13 @@ def cleanup_task_notebook(task):
         traceback.print_exc()
 
 
-def collect_paper_task(task):
+def collect_paper_task(task, deadline=None):
     """
     回收论文任务，负责下载、压缩、生成结果并清理 notebook。
+
+    deadline 是整批共享的墙钟截止时间，单篇等待不会超过剩余预算；预算已经
+    用光时直接跳过（不下载、不保存生成的图），但照常清掉 notebook，免得
+    留下一堆半成品。
     """
     paper = task["paper"]
     arxiv_id = task["arxiv_id"]
@@ -527,6 +544,12 @@ def collect_paper_task(task):
     print(f"标题: {paper.get('title', 'N/A')[:60]}...")
 
     try:
+        remaining = None if deadline is None else deadline - time.time()
+        if remaining is not None and remaining <= 0:
+            print(f"  总预算 {TOTAL_BUDGET}s 已耗尽，跳过下载并清理 notebook")
+            cleanup_task_notebook(task)
+            return None
+
         if artifact_id:
             print(f"  步骤5: 等待 infographic 可下载 ({artifact_id[:8]}...) ...")
         else:
@@ -538,6 +561,7 @@ def collect_paper_task(task):
             task["notebook_id"],
             png_path,
             artifact_id=artifact_id,
+            timeout_seconds=remaining,
         )
         if not dl_success:
             print("  下载失败")
@@ -588,7 +612,11 @@ def process_papers():
     print(
         f"参数: source等待 {SOURCE_READY_WAIT}s, "
         f"生成启动等待 {INFOGRAPHIC_READY_WAIT}s, "
-        f"就绪判定=下载成功，每 {ARTIFACT_READY_INTERVAL}s 重试 / 预算 {ARTIFACT_READY_TIMEOUT}s"
+        f"就绪判定=下载成功，每 {ARTIFACT_READY_INTERVAL}s 重试 / 单篇上限 {ARTIFACT_READY_TIMEOUT}s"
+    )
+    print(
+        f"节流: 每篇之间等 {CREATE_THROTTLE}s；"
+        f"整批共享预算 {TOTAL_BUDGET}s（{TOTAL_BUDGET / 3600:.1f}h，封住 GitHub 的 6h 硬顶）"
     )
     print("=" * 60)
 
@@ -617,21 +645,32 @@ def process_papers():
 
     results = load_existing_results()
     pending_tasks = []
+    # 整批共享的截止时间，提交和回收都从这里扣，保证总时长不撞 GitHub 的 6h 硬顶。
+    deadline = time.time() + TOTAL_BUDGET
 
     print(f"\n{'#' * 60}")
     print("# 阶段一：批量提交 infographic 生成任务")
     print(f"{'#' * 60}")
     submitted_count = 0
+    total_to_submit = len(papers_to_process)
 
     for index, paper in enumerate(papers_to_process, 1):
-        print(f"\n[{index}/{len(papers_to_process)}] 提交论文任务")
+        if deadline - time.time() <= 0:
+            print(f"\n总预算 {TOTAL_BUDGET}s 已耗尽，停止提交剩余 {total_to_submit - index + 1} 篇")
+            break
+
+        print(f"\n[{index}/{total_to_submit}] 提交论文任务")
         task = submit_paper_task(paper, today)
         if task:
             pending_tasks.append(task)
             submitted_count += 1
-            print(f"  提交成功，累计已提交 {submitted_count}/{len(papers_to_process)}")
+            print(f"  提交成功，累计已提交 {submitted_count}/{total_to_submit}")
         else:
             print(f"  提交失败: {paper.get('arxiv_id', 'N/A')}")
+
+        if CREATE_THROTTLE > 0 and index < total_to_submit:
+            print(f"  节流：等 {CREATE_THROTTLE}s 再提交下一篇...")
+            time.sleep(CREATE_THROTTLE)
 
     if not pending_tasks:
         print("\n没有成功提交的任务，结束")
@@ -646,7 +685,7 @@ def process_papers():
 
     for index, task in enumerate(pending_tasks, 1):
         print(f"\n[{index}/{len(pending_tasks)}] 回收论文任务")
-        result = collect_paper_task(task)
+        result = collect_paper_task(task, deadline=deadline)
         if result:
             results.append(result)
             collected_count += 1

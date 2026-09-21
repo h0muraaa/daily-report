@@ -51,7 +51,9 @@ jobs:
       # 5. 执行核心流程：抓取RSS、生成图表与HTML、推送到当前仓库
       - name: Run arXiv Daily Generation & Push
         env:
-          DEBUG_LIMIT: 20
+          # 15 = generate_html_report.py 的显示条数上限，再多也展示不出来，
+          # 却要多烧一次 NotebookLM 的 infographic 配额。曾用 20，把额度打满过。
+          DEBUG_LIMIT: 15
           PROXY: ${{ secrets.PROXY }}
         run: |
           git config --global user.name "github-actions[bot]"
