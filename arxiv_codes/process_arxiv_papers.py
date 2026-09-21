@@ -29,10 +29,12 @@ NOTEBOOK_PREFIX = "arxiv_daily"
 PAPERS_LIMIT = int(os.environ.get("DEBUG_LIMIT", 12))
 SOURCE_READY_WAIT = int(os.environ.get("SOURCE_READY_WAIT", 10))
 INFOGRAPHIC_READY_WAIT = int(os.environ.get("INFOGRAPHIC_READY_WAIT", 30))
-DOWNLOAD_MAX_RETRIES = int(os.environ.get("DOWNLOAD_MAX_RETRIES", 5))
-DOWNLOAD_RETRY_INTERVAL = int(os.environ.get("DOWNLOAD_RETRY_INTERVAL", 60))
-ARTIFACT_STATUS_POLL_INTERVAL = int(os.environ.get("ARTIFACT_STATUS_POLL_INTERVAL", 30))
-ARTIFACT_STATUS_TIMEOUT = int(os.environ.get("ARTIFACT_STATUS_TIMEOUT", 1800))
+# 就绪判定 = 「能下载下来」，所以下面这两个就是等待生成的预算。
+# 不再轮询 nlm 的 artifact status：0.10.0 的 `status artifacts` 会抛 TypeError，
+# 而 `studio status` 又把生成好的 infographic 报成 "unknown"（状态码 2 只在音频时
+# 才映射成 completed），照那个字段等只会永远等不到。
+ARTIFACT_READY_TIMEOUT = int(os.environ.get("ARTIFACT_READY_TIMEOUT", 1800))
+ARTIFACT_READY_INTERVAL = int(os.environ.get("ARTIFACT_READY_INTERVAL", 60))
 
 os.makedirs(IMAGES_DIR, exist_ok=True)
 
@@ -74,18 +76,6 @@ def run_nlm(*args: str) -> subprocess.CompletedProcess[str]:
         capture_output=True,
         text=True,
     )
-
-
-def run_nlm_json(*args: str):
-    """Run nlm and parse JSON output when possible."""
-    result = run_nlm(*args)
-    if result.returncode != 0:
-        return None, result
-
-    try:
-        return json.loads(result.stdout), result
-    except json.JSONDecodeError:
-        return None, result
 
 
 def extract_arxiv_id(abs_url):
@@ -224,94 +214,39 @@ def create_infographic(notebook_id, source_id):
     return False, None, "infographic creation failed after retries"
 
 
-def get_artifact_status(notebook_id, artifact_id):
-    """Fetch the current artifact status from NotebookLM."""
-    data, result = run_nlm_json("status", "artifacts", notebook_id, "--json", "-p", NLM_PROFILE)
-    if result.returncode != 0:
-        return None, result.stderr
+def download_infographic_when_ready(notebook_id, output_path, artifact_id=None, timeout_seconds=None):
+    """等到 infographic 能下载下来为止，成功即返回。
 
-    if not isinstance(data, list):
-        return None, "Unexpected artifact status payload"
-
-    for artifact in data:
-        if artifact.get("id") == artifact_id:
-            return artifact, None
-
-    return None, "Artifact not found"
-
-
-def wait_for_artifact_ready(notebook_id, artifact_id, timeout_seconds=None):
-    """Wait until an infographic artifact reaches completed status."""
-    timeout_seconds = timeout_seconds or ARTIFACT_STATUS_TIMEOUT
+    「下得下来」是「已生成完」的充要条件，所以直接拿下载当就绪信号，
+    不再依赖 nlm 的 artifact status 字段（见文件顶部 ARTIFACT_READY_* 的注释）。
+    """
+    timeout_seconds = timeout_seconds or ARTIFACT_READY_TIMEOUT
     deadline = time.time() + timeout_seconds
-    last_error = None
+    attempt = 0
+    last_error = ""
 
-    while time.time() < deadline:
-        artifact, error = get_artifact_status(notebook_id, artifact_id)
-        if artifact:
-            status = (artifact.get("status") or "").lower()
-            if status == "completed":
-                return True, artifact, None
-            if status in {"failed", "canceled", "cancelled"}:
-                return False, artifact, f"Artifact ended with status: {status}"
-            last_error = status or "unknown"
-        else:
-            last_error = error
-
-        time.sleep(ARTIFACT_STATUS_POLL_INTERVAL)
-
-    return False, None, f"Timed out waiting for infographic readiness: {last_error}"
-
-
-def download_infographic_with_retry(notebook_id, output_path, max_retries=10, retry_interval=60):
-    """
-    下载 infographic，支持重试。
-    每隔 retry_interval 秒尝试一次，最多重试 max_retries 次。
-    """
-    for attempt in range(max_retries):
-        result = run_nlm("download", "infographic", notebook_id, "--output", output_path)
+    while True:
+        attempt += 1
+        args = ["download", "infographic", notebook_id, "--no-progress", "--output", output_path]
+        if artifact_id:
+            args += ["--id", artifact_id]
+        result = run_nlm(*args)
         if result.returncode == 0:
+            if attempt > 1:
+                print(f"    第 {attempt} 次尝试下载成功")
             return True, result.stdout, None
 
-        stderr = result.stderr or ""
-        lowered = stderr.lower()
-        if "not ready" in lowered or "does not exist" in lowered or is_transient_nlm_error(stderr):
-            if attempt < max_retries - 1:
-                print(
-                    f"    图片未就绪，等待 {retry_interval} 秒后重试..."
-                    f" ({attempt + 1}/{max_retries})"
-                )
-                time.sleep(retry_interval)
-                continue
+        last_error = result.stderr or result.stdout or ""
+        if time.time() >= deadline:
+            return False, result.stdout, (
+                f"等待 {timeout_seconds}s 后仍未下载成功（共尝试 {attempt} 次）: {last_error.strip()}"
+            )
 
-        return False, result.stdout, result.stderr
-
-    return False, "", f"超过最大重试次数({max_retries})"
-
-
-def download_infographic_by_id(notebook_id, artifact_id, output_path):
-    """Download an infographic artifact explicitly by ID."""
-    for attempt in range(3):
-        result = run_nlm(
-            "download",
-            "infographic",
-            notebook_id,
-            "--id",
-            artifact_id,
-            "--no-progress",
-            "--output",
-            output_path,
+        print(
+            f"    图片未就绪，等待 {ARTIFACT_READY_INTERVAL} 秒后重试..."
+            f" (第 {attempt} 次，预算 {timeout_seconds}s)"
         )
-        if result.returncode == 0:
-            return True, result.stdout, None
-
-        if attempt < 2 and is_transient_nlm_error(result.stderr):
-            time.sleep(5 * (attempt + 1))
-            continue
-
-        return False, result.stdout, result.stderr
-
-    return False, "", "download infographic failed after retries"
+        time.sleep(ARTIFACT_READY_INTERVAL)
 
 
 def delete_notebook(notebook_id):
@@ -593,39 +528,20 @@ def collect_paper_task(task):
 
     try:
         if artifact_id:
-            print(f"  步骤5: 轮询等待 infographic 完成 ({artifact_id[:8]}...) ...")
-            ready, artifact, wait_error = wait_for_artifact_ready(
-                task["notebook_id"],
-                artifact_id,
-            )
-            if not ready:
-                print("  infographic 仍未完成")
-                print(f"    错误: {wait_error}")
-                cleanup_task_notebook(task)
-                return None
-            print(f"  infographic 状态: {artifact.get('status')}")
+            print(f"  步骤5: 等待 infographic 可下载 ({artifact_id[:8]}...) ...")
         else:
             print(f"  步骤5: 等待 {INFOGRAPHIC_READY_WAIT} 秒让生成开始...")
             time.sleep(INFOGRAPHIC_READY_WAIT)
 
         print("  步骤6: 下载图片...")
-        if artifact_id:
-            dl_success, stdout, dl_error = download_infographic_by_id(
-                task["notebook_id"],
-                artifact_id,
-                png_path,
-            )
-        else:
-            dl_success, stdout, dl_error = download_infographic_with_retry(
-                task["notebook_id"],
-                png_path,
-                max_retries=DOWNLOAD_MAX_RETRIES,
-                retry_interval=DOWNLOAD_RETRY_INTERVAL,
-            )
+        dl_success, stdout, dl_error = download_infographic_when_ready(
+            task["notebook_id"],
+            png_path,
+            artifact_id=artifact_id,
+        )
         if not dl_success:
             print("  下载失败")
             print(f"    错误: {dl_error}")
-            print(f"    stdout: {stdout}")
             cleanup_task_notebook(task)
             return None
         print(f"  已下载: {png_filename}")
@@ -672,8 +588,7 @@ def process_papers():
     print(
         f"参数: source等待 {SOURCE_READY_WAIT}s, "
         f"生成启动等待 {INFOGRAPHIC_READY_WAIT}s, "
-        f"下载最多重试 {DOWNLOAD_MAX_RETRIES} 次, "
-        f"artifact轮询 {ARTIFACT_STATUS_POLL_INTERVAL}s / 超时 {ARTIFACT_STATUS_TIMEOUT}s"
+        f"就绪判定=下载成功，每 {ARTIFACT_READY_INTERVAL}s 重试 / 预算 {ARTIFACT_READY_TIMEOUT}s"
     )
     print("=" * 60)
 
