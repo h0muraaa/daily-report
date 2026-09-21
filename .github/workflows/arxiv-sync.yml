@@ -66,13 +66,21 @@ jobs:
           echo "生成论文信息图表..."
           python3 arxiv_codes/process_arxiv_papers.py
 
-          echo "生成 HTML 网页..."
-          python3 arxiv_codes/generate_html_report.py
+          # papers_processed.json 只在真正处理过论文时才会写出来：今天没有新论文、
+          # 或 infographic 全部提交失败（比如 NotebookLM 配额打满）时它都不存在。
+          # 那种情况下 generate_html_report.py 必然报错、cp 也必然失败，
+          # 会把整条流水线染红——但结论其实是「今天没有可发布的新内容」，不该算失败。
+          if [ -f ./arxiv-daily-output/papers_processed.json ]; then
+            echo "生成 HTML 网页..."
+            python3 arxiv_codes/generate_html_report.py
 
-          echo "同步生成结果至当前仓库..."
-          mkdir -p arxiv-daily/images
-          cp ./arxiv-daily-output/arxiv-daily/index.html arxiv-daily/
-          cp ./arxiv-daily-output/arxiv-daily/images/*.jpg arxiv-daily/images/ 2>/dev/null || true
+            echo "同步生成结果至当前仓库..."
+            mkdir -p arxiv-daily/images
+            cp ./arxiv-daily-output/arxiv-daily/index.html arxiv-daily/
+            cp ./arxiv-daily-output/arxiv-daily/images/*.jpg arxiv-daily/images/ 2>/dev/null || true
+          else
+            echo "ℹ️  没有处理任何论文（今天无新论文，或 infographic 未提交成功），跳过 HTML 生成与仓库同步。"
+          fi
 
           echo "清理超过 7 天的旧图片..."
           python3 scripts/arxiv_prune_images.py --keep-days 7
