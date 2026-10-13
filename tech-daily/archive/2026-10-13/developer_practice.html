@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践版 · 科技日报 2026-10-13</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel-2: #1c2330;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-2: #7ee787;
+    --warn: #f0883e;
+    --pink: #ff7b72;
+    --purple: #d2a8ff;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 32px 20px 80px; }
+  header.hero {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: linear-gradient(135deg, #161b22 0%, #10151c 100%);
+    padding: 26px 26px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::before {
+    content: "~/tech-daily $ ./run --role developer_practice";
+    display: block;
+    color: var(--accent-2);
+    font-size: 12.5px;
+    margin-bottom: 14px;
+    opacity: .85;
+  }
+  header.hero h1 { margin: 0 0 8px; font-size: 25px; color: #fff; letter-spacing: .3px; }
+  header.hero .sub { color: var(--muted); font-size: 13.5px; }
+  header.hero .meta { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    font-size: 12px; padding: 3px 10px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--panel-2); color: var(--muted);
+  }
+  .chip b { color: var(--accent); font-weight: 600; }
+  h2.section {
+    margin: 40px 0 16px; font-size: 19px; color: #fff;
+    padding-left: 12px; border-left: 3px solid var(--accent);
+  }
+  h2.section .num { color: var(--accent-2); }
+  .card {
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--panel); padding: 18px 20px; margin-bottom: 14px;
+    transition: border-color .15s ease;
+  }
+  .card:hover { border-color: #42506a; }
+  .card h3 { margin: 0 0 8px; font-size: 16px; color: #fff; line-height: 1.5; }
+  .card p { margin: 8px 0 0; color: var(--text); }
+  .card p.body { color: #b7c0cb; font-size: 14.2px; }
+  .tag {
+    display: inline-block; font-size: 11px; letter-spacing: .4px;
+    padding: 2px 8px; border-radius: 4px; margin-right: 8px; vertical-align: middle;
+    background: rgba(88,166,255,.12); color: var(--accent); border: 1px solid rgba(88,166,255,.3);
+  }
+  .tag.green { background: rgba(126,231,135,.1); color: var(--accent-2); border-color: rgba(126,231,135,.3); }
+  .tag.orange { background: rgba(240,136,62,.1); color: var(--warn); border-color: rgba(240,136,62,.3); }
+  .tag.purple { background: rgba(210,168,255,.1); color: var(--purple); border-color: rgba(210,168,255,.3); }
+  .src { margin-top: 12px; font-size: 12.5px; color: var(--muted); }
+  .src a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted rgba(88,166,255,.5); }
+  .src a:hover { border-bottom-style: solid; }
+  code {
+    background: #21262d; border: 1px solid var(--border); border-radius: 4px;
+    padding: 1px 5px; font-size: 13px; color: var(--accent-2);
+  }
+  pre {
+    background: #0b1017; border: 1px solid var(--border); border-radius: 6px;
+    padding: 14px 16px; overflow-x: auto; font-size: 13px; color: #adbac7; margin: 12px 0 0;
+  }
+  pre .c { color: var(--muted); }
+  pre .k { color: var(--pink); }
+  pre .s { color: var(--accent-2); }
+  ul.clean { margin: 10px 0 0; padding-left: 20px; }
+  ul.clean li { margin: 6px 0; color: #b7c0cb; }
+  .deep {
+    border: 1px solid var(--border); border-left: 3px solid var(--purple);
+    border-radius: 8px; background: var(--panel-2); padding: 20px 22px; margin-bottom: 16px;
+  }
+  .deep h3 { margin: 0 0 4px; color: #fff; font-size: 17px; }
+  .deep .lead { color: var(--purple); font-size: 13px; margin-bottom: 10px; }
+  footer.summary {
+    margin-top: 44px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--panel); padding: 20px 22px;
+  }
+  footer.summary h2 { margin: 0 0 12px; font-size: 16px; color: #fff; }
+  footer.summary ol { margin: 0; padding-left: 22px; }
+  footer.summary li { margin: 7px 0; font-size: 13px; color: #b7c0cb; }
+  footer.summary li a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted rgba(88,166,255,.4); }
+  footer.summary li a:hover { border-bottom-style: solid; }
+  footer.summary .feed { color: var(--muted); }
+  .foot-note { margin-top: 26px; text-align: center; color: #56606b; font-size: 12px; }
+  .blink { animation: blink 1.1s steps(2, start) infinite; }
+  @keyframes blink { to { visibility: hidden; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>开发者实践版 · 科技日报</h1>
+    <div class="sub">面向一线工程师 / 全栈开发者 · 关注“怎么用”和“为什么这样设计”</div>
+    <div class="meta">
+      <span class="chip">📅 <b>2026-10-13</b></span>
+      <span class="chip">数据窗口 <b>24h</b>（10-12 22:00 → 10-13 22:00）</span>
+      <span class="chip">样本 <b>601</b> 篇 / <b>424</b> 源</span>
+      <span class="chip">视角 <b>developer_practice</b></span>
+    </div>
+  </header>
+
+  <h2 class="section"><span class="num">01</span> 今日技术热榜</h2>
+
+  <div class="card">
+    <h3><span class="tag green">IDE</span>VS Code 1.142 (Insiders) 发布，Gemini 4 Argon 同步进入 GitHub Copilot</h3>
+    <p class="body">微软发布 VS Code 1.142 Insiders 版本；同日 GitHub 宣布 Google 的 Gemini 4 Argon 在 GitHub Copilot 全面可用。GitHub 给出的早期测试结论值得关注：新模型在“每一项编码基准”上都比此前的 Gemini 模型解出更多任务，且在 <code>Copilot CLI</code> 上的提升幅度最大；此外它会“主动检查自己的工作”，在收尾前补测边界用例——这对依赖 agent 自动改代码的团队，是一个直接影响返工率的信号。Cursor 侧同步披露该模型在 CursorBench 默认档位下得分 52.8%，与 Opus 5.5 持平，定价 $2/M 输入、$10/M 输出。</p>
+    <div class="src">📎 来源：<a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.142-(insiders)" target="_blank" rel="noopener">Microsoft for Developers — VS Code 1.142</a> · <a href="https://x.com/github/status/2110085117041594750" target="_blank" rel="noopener">GitHub（Copilot 实测）</a> · <a href="https://x.com/cursor_ai/status/2110087611763368271" target="_blank" rel="noopener">Cursor（CursorBench 数据）</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">架构</span>Anthropic：因“智能体规模”而自建版本控制系统，五个月把 monorepo 迁出 git</h3>
+    <p class="body">Anthropic 工程博客披露了一个颇具冲击力的数字：2026 年 5 月其日均合并约 <b>2,500</b> 个变更，到 9 月已超过 <b>30,000</b> 个/天（增长逾 10 倍）。原有的开发者基础设施是按“人类规模”设计的，很快成为瓶颈。为此他们自建了一套版本控制系统，并在五个月内把整个 monorepo 从 git 完整迁移过去。对于正在被 agent 提交速率倒逼的团队，这是一个“基础设施必须重新设计，而非简单扩容”的现实案例。</p>
+    <div class="src">📎 来源：<a href="https://x.com/AnthropicAI/status/2110047081414987957" target="_blank" rel="noopener">Anthropic (@AnthropicAI)</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag green">成本</span>GitHub 新密钥检测模型：服务成本降 98%，误报率同步下降</h3>
+    <p class="body">GitHub 用一个小型专用模型替换了原先依赖远程 LLM 调用的密钥扫描流水线。官方给出的对比数据相当亮眼：<b>告警接受率提升 11.5%</b>、扫描执行时间中位数<b>下降 86%</b>、服务成本<b>下降 98%</b>。核心思路是把“能本地小模型判定”的任务从远程大模型调用中剥离出来。这与当天另一条趋势呼应——把确定性、窄任务交给专用小模型，而非一律走生成式大模型。</p>
+    <div class="src">📎 来源：<a href="https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/" target="_blank" rel="noopener">The GitHub Blog — Secret detection</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">千行代码</span>Google：一夜之间用 Gemini 4 Argon 优化 20 万行 Python 代码库</h3>
+    <p class="body">Google 开发者博客分享了一次“无人值守通宵跑 agent”的实践：团队用 <code>.agents/skills</code> 与 <code>/goal</code> 模式让 Gemini 4 Argon 在夜间自动优化其开源 Python Agent Development Kit (ADK)。结果是把长会话的内存态准备开销砍掉 <b>40%</b>，冷启动导入速度提升 <b>21%</b>。值得借鉴的不是模型本身，而是“技能文件 + 目标模式 + 无人值守”这套可复用的工程编排方式。</p>
+    <div class="src">📎 来源：<a href="https://developers.googleblog.com/optimizing-a-200000-line-python-codebase-overnight-with-gemini-4-argon/" target="_blank" rel="noopener">Google Developers Blog</a> · 关联：<a href="https://www.youtube.com/watch?v=LVEfFyijQ2c" target="_blank" rel="noopener">Google DeepMind — 用 Gemini 4 维护 Chromium 代码库</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">框架</span>Google ADK 覆盖五种语言：Python / Go / TypeScript / Java / Kotlin</h3>
+    <p class="body">Google 的 Agent Development Kit 明确反对“agent 就等于 Python”的假设。新版本为 Python、Go、TypeScript、Java、Kotlin 各自从运行时与类型系统出发做了原生实现，同时通过开放协议保持互操作性。对已有非 Python 技术栈（例如用 Go 写高并发微服务）的团队，这意味着不必为了跑 agent 逻辑而额外维护一套 Python 服务。</p>
+    <div class="src">📎 来源：<a href="https://cloud.google.com/blog/topics/developers-practitioners/one-agent-development-kit-five-languages/" target="_blank" rel="noopener">Google Cloud Blog — ADK</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">数据库</span>Cloudflare D1 控制面：如何把 serverless SQLite 扩到百万级数据库</h3>
+    <p class="body">Cloudflare 详述了 D1 控制面的架构改造。传统数据库假设“每个应用一到两个大集群 + 连接池”，但 AI 辅助开发 / vibe coding 平台正在走向“每个用户、每个预览环境、每个租户一个小库”的反向模型。D1 基于 SQLite 的托管 serverless 形态正好契合这一趋势，真正的工程挑战在于：如何在不把每次查询都塞进中心化瓶颈的前提下，支撑数百万数据库的控制面。文中给出了具体的架构取舍。</p>
+    <div class="src">📎 来源：<a href="https://blog.cloudflare.com/d1-control-plane/" target="_blank" rel="noopener">The Cloudflare Blog — How D1 scales</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">平台</span>Backstage 1.55：Scaffolder 任务可恢复，但含破坏性变更</h3>
+    <p class="body">Spotify 开源的开发者门户 Backstage 迎来 1.55。亮点是 Software Template 任务的可选恢复能力——崩溃或超时的运行可从“最后一个完成的步骤”续跑，而非从头再来。但该版本对 catalog、search 与 TechDocs 均有破坏性变更，InfoQ 建议团队升级前先审阅配置，并跟进至 1.55.3 补丁版本。正在做内部开发者平台（IDP）的团队需重点关注。</p>
+    <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/10/backstage-1-55-task-recovery/" target="_blank" rel="noopener">InfoQ — Backstage 1.55</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag purple">工具链</span>Cursor 推出自有代码托管 Origin：20+ 集成、市场开放公开提交</h3>
+    <p class="body">Cursor 的代码托管平台 <b>Origin</b> 已支持 20 多个集成，覆盖 CI、部署、代码评审、安全、监控与项目管理；同时其应用市场向公众开放提交，任何做开发者工具的团队都可以发布 app。这是在“编辑器 + 托管 + 市场”三位一体方向上的扩张，对习惯 GitHub 工作流的团队意味着多了一个围绕 agent 构建的一体化选项。</p>
+    <div class="src">📎 来源：<a href="https://x.com/cursor_ai/status/2110075611633074295" target="_blank" rel="noopener">Cursor — Origin integrations</a> · <a href="https://x.com/cursor_ai/status/2110075624253751796" target="_blank" rel="noopener">市场开放</a></div>
+  </div>
+
+  <h2 class="section"><span class="num">02</span> 深度技术解读</h2>
+
+  <div class="deep">
+    <div class="lead">// deep dive 01</div>
+    <h3>Harness 到底值不值这个成本？——一组可复现的对照实验 &amp; 三条一线结论</h3>
+    <p class="body">今天信息流里，“Agent Harness”成为贯穿多个来源的高频工程话题，而且恰好凑齐了<b>实验数据、一线经验、落地踩坑</b>三块拼图。</p>
+    <p class="body"><b>① 实验数据（Martin Fowler 博客 / Naresh Jain）。</b>同一套 API 服务，分别在有/无“行为 harness”的条件下交给 coding agent 构建：前沿模型 <code>GPT-6 Sol</code> 无论有无 harness 都通过了全部外部评测；而成本优化模型 <code>GPT-6 Luna</code> 在无 harness 时 10 次只有 3 次成功，加上 harness 后 10 次全部成功。更关键的是成本：挂了 harness 的 Luna <b>达到与 Sol 相同的 10/10 可靠性，同时每次运行成本低 33%</b>（$0.273 vs $0.406）。结论很实用——harness 对强模型是“花更多 token 买不到多少收益”，对弱模型却是“用小钱买到可靠性”。</p>
+<pre><span class="c"># 实验结论速览</span>
+GPT-6 Sol  + 无 harness  → <span class="s">10/10 通过</span>   <span class="c">(基线)</span>
+GPT-6 Sol  + harness    → 10/10 通过   <span class="c">(贵了，收益不明显)</span>
+GPT-6 Luna + 无 harness  → <span class="k">3/10 通过</span>    <span class="c">(不可靠)</span>
+GPT-6 Luna + harness    → <span class="s">10/10 通过</span>   <span class="c">$0.273/run，比 Sol 便宜 33%</span></pre>
+    <p class="body"><b>② 一线经验（Simon Willison 引 Geoffrey Huntley）。</b>Geoffrey 指出，靠写 <code>AGENTS.md</code> 去“提醒”agent 使用某内部库是没用的——“它总会漂移”。他的做法是写一个 <b>pre-commit hook</b>：检查 git diff 中是否有绕过自家 diagnostics 模块、直接调用 observability 模块的代码；一旦命中就直接 fail 提交，并在报错里“注入提示”告诉 agent 改用 diagnostics 库。他形容效果“突然之间就是 10 分满分”。<b>把约束放进机器可强制的检查点，而不是放进提示词</b>——这是今日最值得抄走的一条经验。</p>
+    <p class="body"><b>③ 落地踩坑（百度网盘 / 金融监管）。</b>百度网盘团队复盘了他们放弃“一键全自动生成代码”的流水线、转向 <b>Agentic Engineering Loop（人机多轮反馈循环）</b>的过程，核心一句是“流程能从头跑到尾，不代表跑出来的东西是对的”。金融监管场景的中软融鑫则把 Harness 用于零容错领域：通过知识底座、数据底座、受控状态机与全链路可追溯，把 agent 改造成“宁可不答、不能答错”的严格受控系统。</p>
+    <p class="body"><b>实践建议：</b>(a) 先量化你的 harness 收益——对便宜模型跑 A/B，别默认 harness 对强模型也划算；(b) 优先把关键约束做成 pre-commit / CI 检查，而不是提示词约定；(c) 不要追求端到端全自动，把不确定项“挂账”、分轮验证，成本和返工往往更低。</p>
+    <div class="src">📎 来源：<a href="https://martinfowler.com/articles/are-harnesses-worth-the-cost.html" target="_blank" rel="noopener">Martin Fowler — Are Harnesses Worth the Cost?</a> · <a href="https://x.com/martinfowler/status/2110004985790349755" target="_blank" rel="noopener">@martinfowler</a> · <a href="https://simonwillison.net/2026/Oct/13/geoffrey-huntley/" target="_blank" rel="noopener">Simon Willison's Weblog</a> · <a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247607686&idx=1&sn=a9428c9fdf46957a8cc77ed5ac070368" target="_blank" rel="noopener">百度Geek说</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247668300&idx=2&sn=3ee0dda3879efd9d7c8e73b162a3245b" target="_blank" rel="noopener">AI前线 — 金融监管 Harness 实践</a></div>
+  </div>
+
+  <div class="deep">
+    <div class="lead">// deep dive 02</div>
+    <h3>“把判定从提示词里拿出来”——确定性怎么重塑 LLM 评估与推理</h3>
+    <p class="body">今天有几条新闻在讲同一件事：<b>把不确定的生成环节，替换成确定的结构化决策</b>，从而让结果可解释、可复现、更便宜。</p>
+    <p class="body"><b>评估侧（DeepEval 的 JevEval）。</b>传统 <code>LLM-as-a-judge</code> 让一个生成式模型在一次调用里同时干三件事——定义评估逻辑、做判断、算分数，带来两个老大难：0.71 与 0.66 的差异无法解释、同一输入两次运行结果不稳定。JevEval 把三者拆开：<b>逻辑由人写（显式、可审查）→ 语义判断交给 Jev（返回概率分布，不生成文本）→ 分数由 DeepEval 固定公式计算（确定）</b>。它支持三类决策：命题真假（返回 P(true)）、有序等级（返回各等级概率后取期望）、无序行为选择（每项赋 0–1 credit，并支持“不适用”）。以 Tool Faithfulness 为例，它把“是否幻觉”拆成四个带权重的显式子问题，<b>权重写在代码里，而不是藏在提示词里</b>。</p>
+    <p class="body"><b>推理侧（Constrained Decoding Models）。</b>scaledown 的一族模型在 OpenRouter 上线，每个只做一件事：<code>Summarize</code>（长文/图片/PDF → 一致性摘要，用于上下文压缩）、<code>Extract</code>（用自然语言描述字段 → 干净 JSON + 置信度 + 来源 span）、<code>Classify</code>（自定义标签 → 校准概率）。发布方一句反问点破动机：“你已经把答案给 LLM 了，为什么还要它从头把答案写出来？”——大多数生产负载并不需要“生成”，只需要“结构化决策”。</p>
+    <p class="body"><b>检索侧（Qdrant 实测）。</b>同一份 Qdrant collection，在后台优化期间查询延迟 <b>780 ms</b>，优化完成后降到 <b>4.3 ms</b>。团队在 176 万向量上对比了 13 种 optimizer 配置，量化了索引、恢复时间与查询性能之间的取舍——提醒我们“把索引/优化状态纳入运行时监控与部署流程”本身就是一项可观测性工作。</p>
+    <p class="body"><b>实践建议：</b>优先识别你系统里的“生成其实只是在对答案做编码”的环节，用结构化/受约束模型替换；评估管线坚持“逻辑、判断、计分”三分离，把权重与阈值落到代码而非提示词；向量库把后台优化状态纳入健康检查。</p>
+    <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2109947508424389075" target="_blank" rel="noopener">meng shao — JevEval</a> · <a href="https://x.com/OpenRouter/status/2109989782302716140" target="_blank" rel="noopener">OpenRouter — scaledown CDM</a> · <a href="https://x.com/qdrant_engine/status/2109939556170768727" target="_blank" rel="noopener">Qdrant 实测</a></div>
+  </div>
+
+  <h2 class="section"><span class="num">03</span> 工具推荐</h2>
+
+  <div class="card">
+    <h3><span class="tag">SDK</span>agentchat（LiteLLM 开源）：让任意框架的 Agent 两行接入五个聊天平台</h3>
+    <p class="body">LiteLLM 开源了 Agent 传输层 SDK <b>agentchat</b>，一个 Python SDK 把用任意框架写的 Agent 统一接入 Slack、Teams、iMessage、WhatsApp、Discord。它替你处理 OAuth、webhook 签名校验、Socket 连接、消息去重与会话隔离。架构是清晰的“管道 + 协议 + 值对象”：平台事件 → Channel 适配器（解码/路由）→ AgentChat 核心（去重 → 会话锁 → 入历史 → 分发）→ 你的 handler（授权、调用 agent）→ 原路回达。官方称“2 行代码接入、适配任意 agent SDK”，适合想砍掉重复适配层的团队。</p>
+    <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2109819186893766721" target="_blank" rel="noopener">meng shao — agentchat</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag orange">踩坑</span>“红绿灯提示语”+ hook：治 Agent“刹不住车”的 token 黑洞</h3>
+    <p class="body">一个很接地气的开源实践。作者观察到：需求本体往往一小时就做完，但 Agent 每改完一批就“再列一批优化清单”，于是半小时的活拖成一个下午——他称之为“Agent 推荐下一步做什么”的认知陷阱。解法是不到 300 字的提示语，在每个 Agent、每轮对话结尾自动生效（不依赖 skill，靠提示语 + hook 实现）：让 Agent 明确给出“可归档 / 进行中”的信号，而不是无限往下跑。原文还附了可直接抄的提示语写法。</p>
+    <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=Mzg3MTk3NzYzNw==&mid=2247512301&idx=1&sn=40314d1a32248853cd0106205eb03857" target="_blank" rel="noopener">卡尔的AI沃茨</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag green">可观测</span>Go 小工具：一屏定位上次 Linux 崩溃原因（读 systemd journal）</h3>
+    <p class="body">一个用 Go 写的命令行工具，在机器死机或强制关机后，读取上一次启动的 systemd journal，在一屏内告诉你这次开机是怎么结束的（正常关机 / 硬断电 / 睡眠中死亡 / 内核 panic），以及结束前发生了什么（OOM 杀进程、GPU 报错、服务启动失败、任务挂起、过热、磁盘错误）。对做线上排障或本地开发环境不稳定的人很实用，安装即用、无守护进程。</p>
+    <div class="src">📎 来源：<a href="https://x.com/geekbb/status/2109902456289443865" target="_blank" rel="noopener">Geek (@geekbb)</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag purple">模型</span>微软开源 Code Video Model：先写代码定骨架，再交给扩散模型上色</h3>
+    <p class="body">微软研究院开源了一套“用代码生成视频”的方案，借鉴电影工业的 Previs（前期可视化预览）机制：先让模型写一段类 3D 引擎代码，在虚拟空间里摆好舞台、家具、角色与机位，算好运动轨迹与物理碰撞，先跑出一个“低配游戏画面”的小样；改一行代码即可纠正构图。关键创新是 <b>Early-step Conditioning（早期步数条件注入）</b>——只在扩散采样最前几步用代码视频定构图与动作骨架，后续步数撤掉代码参考，全力按参考图还原真实质感，从而避免成片带上“塑料感”。对做视频生成/多模态的开发者是值得一读的架构思路。</p>
+    <div class="src">📎 来源：<a href="https://x.com/xiaohu/status/2109987823290065076" target="_blank" rel="noopener">小互 (@xiaohu)</a></div>
+  </div>
+
+  <h2 class="section"><span class="num">04</span> 实践指南</h2>
+
+  <div class="card">
+    <h3><span class="tag green">评估</span>把 LLM 评估的“逻辑、判断、计分”三分离</h3>
+    <p class="body">落地 JevEval 的思路，即使不用它本身也能立刻改善你的评估管线：</p>
+    <ul class="clean">
+      <li><b>评估逻辑</b>由人显式编写，可审查、可 diff；不要塞进提示词。</li>
+      <li><b>语义判断</b>用返回概率分布的受约束模型，而非生成一段解释。</li>
+      <li><b>计分</b>用固定公式，保证同一输入结果可复现。</li>
+      <li>把幻觉等关键失败模式设为高权重问题（原文示例中“事实是否全部来自工具输出”权重为 2），权重写进代码。</li>
+    </ul>
+    <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2109947508424389075" target="_blank" rel="noopener">meng shao — JevEval</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag orange">CI/CD</span>把代码约束做成 pre-commit 检查，而不是提示词</h3>
+    <p class="body">Geoffrey Huntley 的做法值得直接抄：与其在 <code>AGENTS.md</code> 里反复叮嘱（它会漂移），不如写一个 pre-commit hook 检查 diff 里是否出现绕过内部模块的调用；命中就 fail，并在报错信息里带上“指向正确做法”的提示。对 agent 而言，失败信息本身就是一次强反馈。同理可推广到：目录分层约束、禁止直接依赖某底层库、必须走统一的日志/诊断/配置入口。</p>
+    <div class="src">📎 来源：<a href="https://simonwillison.net/2026/Oct/13/geoffrey-huntley/" target="_blank" rel="noopener">Simon Willison's Weblog</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">Rust</span>为什么 Rust 适合当 AI coding agent 的目标语言</h3>
+    <p class="body">Stack Overflow 播客请到 Rust 团队 Josh Triplett，谈了一个对 agent 时代特别相关的角度：<b>Rust 严格的编译器约束，恰恰让它成为 AI coding agent 的理想目标</b>——编译器会替 agent 抓住大量错误，反馈闭环短、确定性高。加之借用检查器在零 GC 开销下提供编译期内存安全，以及“最受开发者喜爱语言”的长期口碑所带来的一套心理安全感，都指向同一个工程结论：给 agent 选目标语言时，“编译器能挡掉多少错”是一项被低估的考量。</p>
+    <div class="src">📎 来源：<a href="https://stackoverflow.blog/2026/10/13/keep-calm-and-call-clone-with-rust/" target="_blank" rel="noopener">Stack Overflow Blog</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">多端</span>京东 KMP 分仓实践：鸿蒙/iOS 的 stdlib 复用与桥接坑清单</h3>
+    <p class="body">京东零售分享了把 KMP（Kotlin Multiplatform）组件交付从“大仓聚合”改为“分仓”的完整方案。旧方案把全部 KMP 业务模块打进一个 iOS Umbrella Framework / 鸿蒙 HAR，改任一组件都要重发整个聚合包，且 stdlib、Native runtime 会重复打包。改造要点是抽取 stdlib carrier 与 runtime 公共基座、按组件构建 Native 产物，并用 Gradle 插件 + CI/CD 管三端产物。文中把鸿蒙与 iOS 的具体坑讲得很细：桥接编号为何错位、类型判断为何失效、stdlib 怎样按需裁剪、Gradle/集成单/流水线如何衔接。做 KMP、多端组件化或原生包治理的同学可当作设计检查清单。</p>
+    <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzU1MzE2NzIzMg==&mid=2247503109&idx=1&sn=42f0206a94c87bbbb9901bcaa3e7d6f6" target="_blank" rel="noopener">京东技术</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag green">安全</span>两条安全实践：密钥检测与“不要跳过权限确认”</h3>
+    <p class="body"><b>① 密钥扫描。</b>GitHub 用小模型替代远程 LLM 后，接受率、速度、成本三方面同时改善；对你的启发是把“窄而确定”的检测任务从大模型调用中剥离，本地小模型往往更准也更便宜。<b>② 一个真实事故。</b>一名开发者为让 Claude Code 连续无人值守数小时，使用了 <code>--dangerously-skip-permissions</code> 跳过权限确认，随后因一次命令拼接问题，整个 C 盘数据被删除，帖子浏览破百万；万幸他设置了每日自动备份到 NAS，恢复了约 98%。教训直白：跳过权限确认意味着把破坏半径交给模型的措辞，务必配合隔离环境与自动备份。</p>
+    <div class="src">📎 来源：<a href="https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/" target="_blank" rel="noopener">The GitHub Blog</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247836884&idx=1&sn=1e6397c4d20b91a8ce78edfed6ccff64" target="_blank" rel="noopener">CSDN</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag orange">运维</span>Google 发布《Site Reliability Engineering》第二版：十年六大领域演进</h3>
+    <p class="body">距 2016 年第一版出版十年，Google 官方发布 SRE 第二版。摘要梳理了六大实践领域的演进：SLO 与错误预算从“手动策略”走向“用户中心多层级 SLO + 动态 burn-rate 告警”；可观测性从“静态仪表盘”走向 OpenTelemetry / 分布式追踪 / 自动异常关联；自动化从“孤立脚本”走向声明式 IaC 与内部开发者平台；可靠性测试、容量管理、组织模式亦同步演进。同时明确 SRE 与 AI 的双向关系：一方面是运维 AI 基础设施（GPU/TPU 集群、非确定性输出监控），另一方面把 AI 作为运维力量倍增器（事件分类、自然语言查询遥测、预测性容量）。</p>
+    <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2109925143900574060" target="_blank" rel="noopener">meng shao — SRE 2nd Edition</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag green">学习</span>值得收藏的几份资源</h3>
+    <ul class="clean">
+      <li><b>斯坦福 CS 329Z《Engineering AI Agents》</b>第 6 讲“Agent Design Patterns and Scaffolds”讲义已公开：控制流归属 → 工作流五种模式 → 推理/行动模式 → 上下文管理 → 用真实系统 Pi 验证，是理解 Harness/脚手架的系统性框架（<a href="https://x.com/shao__meng/status/2109825111289368857" target="_blank" rel="noopener">meng shao</a>）。</li>
+      <li><b>腾讯技术工程《大语言模型从零入门》</b>：约 3 万字、1.5 小时，从图灵机讲到 Transformer，只用加减乘除与对数，适合带新人（<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649804278&idx=1&sn=9e9c88b84f8188503c9862f9b226839b" target="_blank" rel="noopener">腾讯技术工程</a>）。</li>
+      <li><b>freeCodeCamp《Design Software Systems Like a Senior Engineer》</b>：五步框架 + Spotify / Booking.com / WhatsApp 式案例，讲系统设计面试与实战（<a href="https://www.youtube.com/watch?v=soTfFFIQQ8U" target="_blank" rel="noopener">freeCodeCamp.org</a>）。</li>
+      <li><b>ByteByteGo</b>：用 19 世纪热传导物理的数学（傅里叶）解释 LLM 如何理解句子，适合补直觉（<a href="https://blog.bytebytego.com/p/how-the-math-used-in-19th-century" target="_blank" rel="noopener">ByteByteGo Newsletter</a>）。</li>
+    </ul>
+    <div class="src">📎 来源见上方各链接</div>
+  </div>
+
+  <h2 class="section"><span class="num">05</span> 其他值得一瞥</h2>
+
+  <div class="card">
+    <h3><span class="tag">底层</span>C++ futures 第二讲：std::promise / std::packaged_task 的心智模型</h3>
+    <p class="body">Raymond Chen 的“Old New Thing”栏目续讲 C++ 并发原语。上一讲拆解了支撑 std::promise、std::packaged_task、std::async、std::future 的“source”共享状态；本讲说明该状态如何通过 <code>std::shared_ptr&lt;source&lt;T&gt;&gt;</code> 在各持有者之间传递——std::promise 的操作几乎一一对应 source 的操作，std::packaged_task 则把 callable 存起来、用 <code>get_future</code> 当作“未来某刻会在此产出值”的欠条。</p>
+    <div class="src">📎 来源：<a href="https://devblogs.microsoft.com/oldnewthing/20261013-00/?p=112769" target="_blank" rel="noopener">Microsoft for Developers</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">性能</span>MoE kernel 工程：在 Amazon SageMaker AI 上优化稀疏专家推理</h3>
+    <p class="body">MoE 是稀疏激活架构，能在保持“每 token 计算量低”的前提下扩大模型容量，但其算子占了总计算时间的很大比例，因此 kernel 级优化收益最高。核心技巧是 <b>Fused MoE</b>——把 token 路由、数据重排、专家网络计算合并成一次 GPU 批处理，替代原本顺序执行的独立循环；代价是 kernel 实现的复杂度上升。做大模型推理性能的同学可参考其取舍分析。</p>
+    <div class="src">📎 来源：<a href="https://aws.amazon.com/blogs/machine-learning/mixture-of-experts-kernel-engineering-on-amazon-sagemaker-ai/" target="_blank" rel="noopener">AWS Machine Learning Blog</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag orange">安全</span>Zimbra 远程命令执行漏洞（CVE-2026-73570）已被在野利用</h3>
+    <p class="body">InfoQ 报道：Zimbra Collaboration Suite 存在一个严重的远程命令执行漏洞，源于 SNMP handler 输入未正确消毒，可导致未授权访问邮箱数据与凭据，且已被主动利用。缓解措施：升级到 10.1.20 或禁用受影响的 SNMP 服务。若你的组织在用自建 Zimbra，请优先处理。</p>
+    <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/10/zimbra-command-injection/" target="_blank" rel="noopener">InfoQ — Zimbra CVE</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag purple">基础设施</span>Cloudflare / AWS / Vercel 三则平台更新</h3>
+    <p class="body"><b>Cloudflare OHTTP Gateway</b> 进入封闭 beta：一个托管端点，为源站解密 Oblivious HTTP 请求。引人注意的设计是“拒绝”——它不会解密来自 Cloudflare Workers 或经 Cloudflare 代理主机的请求，以避免把客户端标识与请求内容交到同一双手里。<b>AWS EventBridge</b> 重新设计了 Custom Event Bus，针对事件驱动架构跨团队/跨账号后“事件基础设施本身碎片化”的问题。<b>Vercel</b> 则把仓库 checkout 与 Git LFS 下载提速：&gt;2 vCPU 构建机上项目文件就绪时间平均降 20%，LFS 项目降 54%（约省 13 秒/次部署），无需额外操作。</p>
+    <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/10/cloudflare-ohttp-gateway/" target="_blank" rel="noopener">InfoQ — OHTTP</a> · <a href="https://www.infoq.com/news/2026/10/aws-eventbridge-scaling/" target="_blank" rel="noopener">InfoQ — EventBridge</a> · <a href="https://vercel.com/changelog/repository-checkout-and-git-lfs-downloads-are-now-faster" target="_blank" rel="noopener">Vercel Changelog</a></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">模型</span>Anthropic 反蒸馏进展 &amp; 微软无向量库的 RAG 方案</h3>
+    <p class="body"><b>Anthropic</b> 公布过去数月在“降低蒸馏攻击有效性”方面的进展，说明其防御机制持续收紧——对依赖官方 API 做二次训练的团队是一条需要留意的合规与封号风险信号。<b>微软</b>则给出一个“不建向量数据库也能做企业 RAG”的路径：通过 Microsoft 365 Copilot Retrieval API（SharePoint Embedded）自行掌控 grounding、prompt 与模型，另提供 SharePoint Embedded MCP server 公测，让 coding agent 直接构建与管理应用，跳过自建文档平台。</p>
+    <div class="src">📎 来源：<a href="https://x.com/AnthropicAI/status/2109795898909950247" target="_blank" rel="noopener">Anthropic (@AnthropicAI)</a> · <a href="https://devblogs.microsoft.com/microsoft365dev/build-ai-powered-apps-without-creating-a-vector-database" target="_blank" rel="noopener">Microsoft for Developers</a></div>
+  </div>
+
+  <footer class="summary">
+    <h2>参考链接汇总</h2>
+    <ol>
+      <li>Visual Studio Code 1.142 (Insiders) — <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.142-(insiders)" target="_blank" rel="noopener">devblogs.microsoft.com</a> <span class="feed">[Microsoft for Developers]</span></li>
+      <li>Gemini 4 Argon in GitHub Copilot — <a href="https://x.com/github/status/2110085117041594750" target="_blank" rel="noopener">x.com/github</a> <span class="feed">[GitHub]</span></li>
+      <li>Gemini 4 Argon in Cursor（52.8% CursorBench）— <a href="https://x.com/cursor_ai/status/2110087611763368271" target="_blank" rel="noopener">x.com/cursor_ai</a> <span class="feed">[Cursor]</span></li>
+      <li>Anthropic: Creating in-house source control — <a href="https://x.com/AnthropicAI/status/2110047081414987957" target="_blank" rel="noopener">x.com/AnthropicAI</a> <span class="feed">[Anthropic]</span></li>
+      <li>GitHub’s model for secret detection — <a href="https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/" target="_blank" rel="noopener">github.blog</a> <span class="feed">[The GitHub Blog]</span></li>
+      <li>Optimizing a 200,000-line Python codebase overnight with Gemini 4 Argon — <a href="https://developers.googleblog.com/optimizing-a-200000-line-python-codebase-overnight-with-gemini-4-argon/" target="_blank" rel="noopener">developers.googleblog.com</a> <span class="feed">[Google Developers Blog]</span></li>
+      <li>Applying Gemini 4 for large-scale codebase maintenance in Chromium — <a href="https://www.youtube.com/watch?v=LVEfFyijQ2c" target="_blank" rel="noopener">youtube.com</a> <span class="feed">[Google DeepMind]</span></li>
+      <li>One Agent Development Kit, five languages — <a href="https://cloud.google.com/blog/topics/developers-practitioners/one-agent-development-kit-five-languages/" target="_blank" rel="noopener">cloud.google.com</a> <span class="feed">[Cloud Blog]</span></li>
+      <li>Under the hood: How D1 scales to millions of databases — <a href="https://blog.cloudflare.com/d1-control-plane/" target="_blank" rel="noopener">blog.cloudflare.com</a> <span class="feed">[The Cloudflare Blog]</span></li>
+      <li>Backstage 1.55 Adds Scaffolder Task Recovery — <a href="https://www.infoq.com/news/2026/10/backstage-1-55-task-recovery/" target="_blank" rel="noopener">infoq.com</a> <span class="feed">[InfoQ]</span></li>
+      <li>Cursor Origin integrations &amp; marketplace — <a href="https://x.com/cursor_ai/status/2110075611633074295" target="_blank" rel="noopener">x.com/cursor_ai</a> <span class="feed">[Cursor]</span></li>
+      <li>Are Harnesses Worth the Cost? — <a href="https://martinfowler.com/articles/are-harnesses-worth-the-cost.html" target="_blank" rel="noopener">martinfowler.com</a> <span class="feed">[Martin Fowler]</span></li>
+      <li>Quoting Geoffrey Huntley (pre-commit hook 约束 agent) — <a href="https://simonwillison.net/2026/Oct/13/geoffrey-huntley/" target="_blank" rel="noopener">simonwillison.net</a> <span class="feed">[Simon Willison's Weblog]</span></li>
+      <li>百度网盘：我们放弃了“全自动生成代码”（Agentic Engineering Loop）— <a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247607686&idx=1&sn=a9428c9fdf46957a8cc77ed5ac070368" target="_blank" rel="noopener">mp.weixin.qq.com</a> <span class="feed">[百度Geek说]</span></li>
+      <li>金融监管领域的 Harness 实践 — <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247668300&idx=2&sn=3ee0dda3879efd9d7c8e73b162a3245b" target="_blank" rel="noopener">mp.weixin.qq.com</a> <span class="feed">[AI前线]</span></li>
+      <li>JevEval：用 Jev 替代生成式 LLM 当评估裁判 — <a href="https://x.com/shao__meng/status/2109947508424389075" target="_blank" rel="noopener">x.com/shao__meng</a> <span class="feed">[meng shao]</span></li>
+      <li>Constrained Decoding Models on OpenRouter（scaledown）— <a href="https://x.com/OpenRouter/status/2109989782302716140" target="_blank" rel="noopener">x.com/OpenRouter</a> <span class="feed">[OpenRouter]</span></li>
+      <li>Qdrant：13 种 optimizer 配置实测（780ms → 4.3ms）— <a href="https://x.com/qdrant_engine/status/2109939556170768727" target="_blank" rel="noopener">x.com/qdrant_engine</a> <span class="feed">[Qdrant]</span></li>
+      <li>agentchat（LiteLLM 开源传输层 SDK）— <a href="https://x.com/shao__meng/status/2109819186893766721" target="_blank" rel="noopener">x.com/shao__meng</a> <span class="feed">[meng shao]</span></li>
+      <li>开源「红绿灯」提示语 — <a href="https://mp.weixin.qq.com/s?__biz=Mzg3MTk3NzYzNw==&mid=2247512301&idx=1&sn=40314d1a32248853cd0106205eb03857" target="_blank" rel="noopener">mp.weixin.qq.com</a> <span class="feed">[卡尔的AI沃茨]</span></li>
+      <li>Go 小工具：一屏定位上次 Linux 崩溃原因 — <a href="https://x.com/geekbb/status/2109902456289443865" target="_blank" rel="noopener">x.com/geekbb</a> <span class="feed">[Geek]</span></li>
+      <li>微软开源 Code Video Model — <a href="https://x.com/xiaohu/status/2109987823290065076" target="_blank" rel="noopener">x.com/xiaohu</a> <span class="feed">[小互]</span></li>
+      <li>Keep calm and call clone with Rust — <a href="https://stackoverflow.blog/2026/10/13/keep-calm-and-call-clone-with-rust/" target="_blank" rel="noopener">stackoverflow.blog</a> <span class="feed">[Stack Overflow Blog]</span></li>
+      <li>Why Your Sandbox Never Quite Matches Production — <a href="https://stackoverflow.blog/2026/10/13/why-your-sandbox-never-quite-matches-production-and-why-that-s-fine/" target="_blank" rel="noopener">stackoverflow.blog</a> <span class="feed">[Stack Overflow Blog]</span></li>
+      <li>京东 KMP 组件交付：大仓到分仓 — <a href="https://mp.weixin.qq.com/s?__biz=MzU1MzE2NzIzMg==&mid=2247503109&idx=1&sn=42f0206a94c87bbbb9901bcaa3e7d6f6" target="_blank" rel="noopener">mp.weixin.qq.com</a> <span class="feed">[京东技术]</span></li>
+      <li>Google《Site Reliability Engineering》第二版 — <a href="https://x.com/shao__meng/status/2109925143900574060" target="_blank" rel="noopener">x.com/shao__meng</a> <span class="feed">[meng shao]</span></li>
+      <li>斯坦福 CS 329Z：Engineering AI Agents — <a href="https://x.com/shao__meng/status/2109825111289368857" target="_blank" rel="noopener">x.com/shao__meng</a> <span class="feed">[meng shao]</span></li>
+      <li>腾讯技术工程：大语言模型从零入门 — <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649804278&idx=1&sn=9e9c88b84f8188503c9862f9b226839b" target="_blank" rel="noopener">mp.weixin.qq.com</a> <span class="feed">[腾讯技术工程]</span></li>
+      <li>freeCodeCamp：Design Software Systems Like a Senior Engineer — <a href="https://www.youtube.com/watch?v=soTfFFIQQ8U" target="_blank" rel="noopener">youtube.com</a> <span class="feed">[freeCodeCamp.org]</span></li>
+      <li>ByteByteGo：19 世纪热物理数学帮助 LLM 理解句子 — <a href="https://blog.bytebytego.com/p/how-the-math-used-in-19th-century" target="_blank" rel="noopener">blog.bytebytego.com</a> <span class="feed">[ByteByteGo Newsletter]</span></li>
+      <li>C++ futures part 2: std::promise / std::packaged_task — <a href="https://devblogs.microsoft.com/oldnewthing/20261013-00/?p=112769" target="_blank" rel="noopener">devblogs.microsoft.com</a> <span class="feed">[Microsoft for Developers]</span></li>
+      <li>Mixture-of-Experts kernel engineering on Amazon SageMaker AI — <a href="https://aws.amazon.com/blogs/machine-learning/mixture-of-experts-kernel-engineering-on-amazon-sagemaker-ai/" target="_blank" rel="noopener">aws.amazon.com</a> <span class="feed">[Artificial Intelligence]</span></li>
+      <li>ZCS Command Injection（CVE-2026-73570）— <a href="https://www.infoq.com/news/2026/10/zimbra-command-injection/" target="_blank" rel="noopener">infoq.com</a> <span class="feed">[InfoQ]</span></li>
+      <li>Cloudflare OHTTP Gateway（封闭 beta）— <a href="https://www.infoq.com/news/2026/10/cloudflare-ohttp-gateway/" target="_blank" rel="noopener">infoq.com</a> <span class="feed">[InfoQ]</span></li>
+      <li>AWS Reworks EventBridge Custom Buses — <a href="https://www.infoq.com/news/2026/10/aws-eventbridge-scaling/" target="_blank" rel="noopener">infoq.com</a> <span class="feed">[InfoQ]</span></li>
+      <li>Vercel：Repository checkout &amp; Git LFS faster — <a href="https://vercel.com/changelog/repository-checkout-and-git-lfs-downloads-are-now-faster" target="_blank" rel="noopener">vercel.com</a> <span class="feed">[Vercel News]</span></li>
+      <li>Anthropic：反蒸馏进展 — <a href="https://x.com/AnthropicAI/status/2109795898909950247" target="_blank" rel="noopener">x.com/AnthropicAI</a> <span class="feed">[Anthropic]</span></li>
+      <li>Build AI-powered apps without creating a vector database — <a href="https://devblogs.microsoft.com/microsoft365dev/build-ai-powered-apps-without-creating-a-vector-database" target="_blank" rel="noopener">devblogs.microsoft.com</a> <span class="feed">[Microsoft for Developers]</span></li>
+      <li>“我的整个C盘被删光了” — <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247836884&idx=1&sn=1e6397c4d20b91a8ce78edfed6ccff64" target="_blank" rel="noopener">mp.weixin.qq.com</a> <span class="feed">[CSDN]</span></li>
+      <li>CI/CD Pipeline Observability Tools — <a href="https://blog.jetbrains.com/teamcity/2026/10/cicd-pipeline-observability-tools/" target="_blank" rel="noopener">blog.jetbrains.com</a> <span class="feed">[The JetBrains Blog]</span></li>
+      <li>Python vs Go: A Practical Comparison — <a href="https://blog.jetbrains.com/go/2026/10/13/python-vs-go/" target="_blank" rel="noopener">blog.jetbrains.com</a> <span class="feed">[The JetBrains Blog]</span></li>
+    </ol>
+  </footer>
+
+  <div class="foot-note">tech-daily-generator · role=developer_practice · 生成于 2026-10-13 · 数据源 Freshrss 24h compact<span class="blink">_</span></div>
+
+</div>
+</body>
+</html>
