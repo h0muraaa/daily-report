@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>开发者实践日报 · 2026-10-19</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+  --text:#c9d1d9; --muted:#8b949e; --green:#3fb950; --blue:#58a6ff;
+  --orange:#d29922; --purple:#bc8cff; --red:#f85149; --cyan:#39d4d0;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:"JetBrains Mono","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  line-height:1.7; font-size:14px;
+}
+.wrap{max-width:980px; margin:0 auto; padding:32px 20px 80px}
+header.top{
+  border:1px solid var(--border); border-radius:10px; background:var(--panel);
+  padding:26px 28px; margin-bottom:20px;
+}
+header.top .prompt{color:var(--green)}
+header.top .prompt::before{content:"$ "}
+h1{font-size:1.75rem; margin:.35rem 0 .5rem; color:#fff; letter-spacing:-.5px}
+.sub{color:var(--muted); font-size:.85rem}
+.meta-grid{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px}
+.chip{border:1px solid var(--border); border-radius:6px; padding:5px 11px; font-size:.76rem; color:var(--muted); background:var(--panel2)}
+.chip b{color:var(--green)}
+.callout{
+  border:1px solid var(--border); border-left:3px solid var(--purple); border-radius:8px;
+  background:var(--panel); padding:15px 18px; margin-bottom:8px;
+}
+.callout .h{color:var(--purple); font-weight:600; font-size:.85rem; margin-bottom:4px}
+.callout p{margin:0; color:var(--text)}
+h2.sec{
+  font-size:1.15rem; color:#fff; margin:44px 0 16px; padding-bottom:9px;
+  border-bottom:1px solid var(--border);
+}
+h2.sec .num{color:var(--green); margin-right:.5rem}
+h2.sec .tag{color:var(--muted); font-size:.78rem; font-weight:400; float:right}
+.card{
+  border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:8px;
+  background:var(--panel); padding:17px 19px; margin-bottom:14px;
+}
+.card.blue{border-left-color:var(--blue)}
+.card.green{border-left-color:var(--green)}
+.card.orange{border-left-color:var(--orange)}
+.card.purple{border-left-color:var(--purple)}
+.card.red{border-left-color:var(--red)}
+.card.cyan{border-left-color:var(--cyan)}
+.card .t{color:#fff; font-weight:600; font-size:.98rem; margin:0 0 8px}
+.card .t .rank{color:var(--muted); font-weight:400; margin-right:.5rem}
+.card p{margin:0 0 9px}
+.card p:last-child{margin-bottom:0}
+.cite{color:var(--cyan); text-decoration:none; font-size:.75rem; border-bottom:1px dotted var(--cyan); white-space:nowrap}
+.cite:hover{color:#fff; border-bottom-color:#fff}
+.deep{border:1px solid var(--border); border-radius:10px; background:var(--panel); padding:22px 24px; margin-bottom:18px}
+.deep h3{color:var(--blue); margin:0 0 6px; font-size:1.05rem}
+.deep h3 .k{color:var(--muted); font-size:.78rem; font-weight:400}
+.deep h4{color:var(--green); font-size:.86rem; margin:18px 0 6px; letter-spacing:.3px}
+.deep p{margin:0 0 10px}
+.deep ul{margin:6px 0 12px; padding-left:20px}
+.deep li{margin-bottom:6px}
+code{
+  background:var(--panel2); border:1px solid var(--border); border-radius:4px;
+  padding:1px 6px; color:var(--green); font-size:.85em;
+}
+pre{
+  background:var(--panel2); border:1px solid var(--border); border-radius:6px;
+  padding:12px 14px; overflow-x:auto; font-size:.8rem; line-height:1.6;
+  color:var(--text); margin:8px 0 12px;
+}
+pre code{background:none; border:0; padding:0; color:inherit; font-size:inherit}
+.tool{border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:14px 17px; margin-bottom:11px}
+.tool .name{color:var(--orange); font-weight:600}
+.tool .name::before{content:"> "; color:var(--green)}
+.tool p{margin:7px 0 0}
+.tool .url{color:var(--muted); font-size:.75rem}
+.tip{border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:15px 18px; margin-bottom:12px}
+.tip .h{color:var(--purple); font-weight:600; margin-bottom:3px}
+.tip .h::before{content:"## "; color:var(--muted)}
+.tip p{margin:0 0 7px}
+.tip p:last-child{margin-bottom:0}
+.tip ul{margin:6px 0 8px; padding-left:20px}
+.tip li{margin-bottom:4px}
+.tbl{width:100%; border-collapse:collapse; margin:10px 0 12px; font-size:.8rem}
+.tbl th,.tbl td{border:1px solid var(--border); padding:7px 9px; text-align:left; vertical-align:top}
+.tbl th{background:var(--panel2); color:var(--green); font-weight:600}
+.tbl td{color:var(--text)}
+.tbl tr:nth-child(even) td{background:#12171e}
+.refs{border:1px solid var(--border); border-radius:10px; background:var(--panel); padding:8px 20px 18px}
+.refs .grp{margin-top:16px}
+.refs .grp .src{color:var(--green); font-size:.8rem; margin-bottom:5px}
+.refs a{color:var(--text); text-decoration:none; font-size:.8rem; display:block; padding:3px 0; border-bottom:1px solid var(--panel2)}
+.refs a:hover{color:var(--blue)}
+.refs a::before{content:"→ "; color:var(--muted)}
+footer{color:var(--muted); font-size:.75rem; text-align:center; margin-top:40px; border-top:1px solid var(--border); padding-top:18px}
+.hl{color:var(--orange)}
+.hl2{color:var(--green)}
+.dim{color:var(--muted)}
+@media (max-width:640px){
+  .wrap{padding:20px 14px 60px}
+  header.top{padding:20px 18px}
+  h1{font-size:1.4rem}
+  h2.sec .tag{float:none; display:block; margin-top:4px}
+  .deep{padding:18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="prompt">tech-daily --role developer_practice</div>
+  <h1>&lt;/&gt; 开发者实践日报</h1>
+  <div class="sub">全栈视角 · 关注技术细节、工具更新与最佳实践 · 数据窗口 2026-10-18 21:47 → 2026-10-19 21:47</div>
+  <div class="meta-grid">
+    <div class="chip">时间窗口 <b>24h</b></div>
+    <div class="chip">抓取文章 <b>530</b></div>
+    <div class="chip">来源 <b>424</b></div>
+    <div class="chip">本期精选 <b>22</b> 条</div>
+    <div class="chip">生成于 <b>2026-10-19 21:47:11</b></div>
+  </div>
+</header>
+
+<div class="callout">
+  <div class="h">// 今天最值得动手的三件事</div>
+  <p>① 检查 <b>prompt cache 前缀</b>是否被仓库/时间等变量污染；② 把 Agent 的<b>路由与领域推理拆开</b>；③ 给 <b>LLM-as-judge</b> 做一次换位与长度校准。三条都有可复用的数据和实现细节。</p>
+</div>
+
+<h2 class="sec"><span class="num">01</span>今日技术热榜<span class="tag">// 8 条重要技术动态</span></h2>
+
+<div class="card red">
+<p class="t"><span class="rank">01</span>Anthropic 重造版本控制系统：Git 顶不住 Agent 的代码产出速度</p>
+<p>Anthropic 的 Monorepo 主分支历史已接近 <span class="hl">100GB</span>，压缩后的工作副本超过 25GB，CI 每天要做约 <span class="hl">2500 万次代码检出</span>；若用朴素 Git 拉取，每天可能产生超过 600PB 传输。合并量从 5 月的日均约 2,500 次涨到 9 月的 3 万次以上（4 个月增长 12 倍），浅克隆、稀疏检出、镜像和对象存储快照等优化已难以维持。最终一个 <b>7 人团队用 5 个月</b>写出了新版本控制系统 <b>Scion</b>，并配套了代码审查工具 Antique、代码搜索与权限系统；迁移后其基础设施 CPU 和内存占用约为原 Git 镜像方案的 <span class="hl2">1/200</span>。</p>
+<p>同一时间，Claude Code 约 <b>90% 的代码由 Claude 自己编写</b>，6 月到 9 月合并的 PR 数量翻倍以上，回滚率反而下降超过 40%。当“写代码”不再是瓶颈，版本控制、CI、审查和权限这些支撑系统就成了新的上限——这是所有重度使用 Coding Agent 的团队都会遇到的结构性问题。</p>
+<p><a class="cite" href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247668623&amp;idx=2&amp;sn=a06c6020dc81d9f371e707e03a59859b" target="_blank" rel="noopener">[来源: AI前线]</a> <a class="cite" href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652735857&amp;idx=2&amp;sn=080a2d5531a5d51a3afe813509c04e82" target="_blank" rel="noopener">[来源: 新智元]</a> <a class="cite" href="https://x.com/shao__meng/status/2112007112511607291" target="_blank" rel="noopener">[来源: meng shao]</a></p>
+</div>
+
+<div class="card orange">
+<p class="t"><span class="rank">02</span>JDK 28 定稿 JEP 543：Structured Concurrency 结束七轮预览</p>
+<p>JEP 543 在 JDK 28 中正式定稿结构化并发（Structured Concurrency），相比 JDK 27 的 API <b>没有变化</b>：已经在 JDK 27 上使用的团队只需去掉 <code>--enable-preview</code> 并重新编译。从 JDK 25/26 迁移的代码则需要适配三处：异常类型参数 <code>R_X</code>、<code>ExecutionException</code> 的包装方式，以及 joiner 上抽象的 <code>timeout()</code> 回调。</p>
+<p>结构化并发把一组子任务绑定到同一个作用域，父任务统一等待、取消和传播异常，配合虚拟线程可以显著降低并发代码的泄漏与取消难题。建议在升级 JDK 28 前，先把现有 <code>StructuredTaskScope</code> 用法跑一遍编译与超时路径测试，尤其是自定义 joiner 的实现。</p>
+<p><a class="cite" href="https://www.infoq.com/news/2026/10/jep-543-jdk-28/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a></p>
+</div>
+
+<div class="card blue">
+<p class="t"><span class="rank">03</span>.NET 11 RC2 开放 Go-Live 许可，多语言与 UI 栈同步更新</p>
+<p>Microsoft 发布 .NET 11 Release Candidate 2，并提供 <b>Go-Live 许可</b>，可在 Visual Studio 2026 Insiders 中使用，意味着团队可以开始在预生产环境验证。新增内容包括增量 CBOR 读取、实验性的后量子密码学 API、基于文件的应用指令改进、NuGet 包冷却（cooldown）机制、F# 运行时异步构建块、.NET MAUI 的 C# UI 选项，以及 Windows Forms 视觉样式调整。</p>
+<p>对后端团队，增量 CBOR 与后量子 API 值得单独评估；对桌面/移动团队，MAUI 的 C# UI 选项可能改变现有 XAML 技术选型。Go-Live 许可也意味着可以更早把兼容性问题暴露在真实负载下。</p>
+<p><a class="cite" href="https://www.infoq.com/news/2026/10/dotnet-11-rc-2/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a></p>
+</div>
+
+<div class="card green">
+<p class="t"><span class="rank">04</span>NestJS 12 发布：核心包转向 ESM，引入 Standard Schema 与可观测性 SDK</p>
+<p>NestJS 12 将核心包迁移到 <b>ESM</b>，新增 <b>Standard Schema</b> 验证支持，并更新 CLI、引入可观测性 SDK。新项目创建时可以在 CJS 与 ESM 之间选择，同时提供更灵活的验证选项和生命周期项目钩子；运行环境最低要求 Node.js <b>20.19+ 或 22.12+</b>。</p>
+<p>这是一次需要认真对待的升级：ESM 会影响构建工具、测试框架、装饰器元数据和第三方包的加载方式。官方提供了迁移指南，建议先在独立分支验证 <code>type: module</code>、路径解析和常用 Nest 生态包，再逐步切换生产服务。</p>
+<p><a class="cite" href="https://www.infoq.com/news/2026/10/nestjs-12-observability/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a></p>
+</div>
+
+<div class="card cyan">
+<p class="t"><span class="rank">05</span>DeepSeek 开放 Search / Fetch API：Agent 与 RAG 可直接调用实时网页</p>
+<p>DeepSeek API 正式支持网页搜索与抓取：<b>Search</b> 按 query 返回结构化结果，<b>Fetch</b> 抓取单个网页并以 Markdown 返回标题与正文。两者都是原始 JSON API，Base URL 为 <code>api.deepseek.com</code>，沿用现有 Bearer 鉴权。计费为每 1000 次成功请求 <b>5 元</b>（HN 摘要折合约 $0.75），空结果不收费，两类接口每账户各限速 <b>5 QPS</b>。</p>
+<p>目前通过 DeepSeek Harness / Claude Code / Codex 的 Server 端工具调用访问 Search / Fetch 暂不计费，但从北京时间 <b>2026-11-01 00:00</b> 起按次收费。对自建 Agent 和 RAG 流程，这减少了自建搜索/抓取管道的维护成本，但要把 QPS 限流、结果缓存和按次成本纳入设计。</p>
+<p><a class="cite" href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247637014&amp;idx=1&amp;sn=477c8dcca743e1f6037e5b9486a01d15" target="_blank" rel="noopener">[来源: 少数派]</a> <a class="cite" href="https://supertechfans.com/cn/post/2026-10-19-HackerNews/" target="_blank" rel="noopener">[来源: HackerNews每日摘要]</a></p>
+</div>
+
+<div class="card purple">
+<p class="t"><span class="rank">06</span>Buildkite 增加管道级 Secret 与 Agentic CI 工具</p>
+<p>Buildkite 引入 <b>pipeline-scoped secrets</b>，把密钥可见范围从组织级收紧到单条流水线；同时新增一组 MCP 工具，用于验证流水线、诊断失败构建和修复 webhook。其 GitHub Actions 兼容层增加了 <b>Linux arm64</b> 支持，Agent v4.1.0 也扩展了 OpenTelemetry 数据。</p>
+<p>对有 CI/CD 平台责任的团队，这两点都值得跟进：更细的 secret 作用域能直接缩小泄露面；MCP 工具则把“读日志、查失败、改 webhook”这类高频排障操作交给 Agent，但需要配套权限和审计，避免 Agent 获得过大的流水线控制权。</p>
+<p><a class="cite" href="https://www.infoq.com/news/2026/10/buildkite-ci-secrets-agentic/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a></p>
+</div>
+
+<div class="card red">
+<p class="t"><span class="rank">07</span>Cloudflare Containers 跨租户数据泄露：问题出在存储分配器，不在 VM 边界</p>
+<p>Cloudflare 披露并修复了 Containers 平台（也为 Cloudflare Sandboxes 提供支撑）的跨租户数据泄露漏洞：Workers 付费账户的客户可能恢复同一主机上其他客户容器遗留的磁盘块，官方表示未发现被恶意利用的证据。根因不在 Firecracker 虚拟机边界，而在底层存储分配器：受影响的资源池使用 <b>64 KiB 精简块</b>并配置了 <code>skip_block_zeroing</code>，一次 4 KiB 写入只覆盖自身空间，剩余最多 60 KiB 仍可能保留前一个容器的数据。</p>
+<p>研究者利用 ext4 目录块校验和区分自己写入的块与其他用户的块；在六个生产部署中，5,614 个可测试的目录块全部来自其他用户。这个问题提醒所有做多租户隔离的团队：<b>虚拟机边界不等于数据边界</b>，精简置备、块清零策略、卷回收流程都要纳入安全评审。</p>
+<p><a class="cite" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295407&amp;idx=4&amp;sn=99d7b1b770fe9bc89cf7ca7a6b6bc3ae" target="_blank" rel="noopener">[来源: InfoQ]</a></p>
+</div>
+
+<div class="card blue">
+<p class="t"><span class="rank">08</span>MCP Apps：给工具调用配一个可交互的实时 UI</p>
+<p>Google Cloud 介绍 MCP Apps（<b>SEP-1865</b>）：这是一项开放的 Model Context Protocol 扩展，把工具与一个实时 UI 配对。在 Gemini Enterprise 中，该 UI 直接渲染在聊天流里的沙箱 iframe 中，可扩展到全屏或侧边栏；编辑在本地执行，同时工作区与助手保持同步。Gemini 负责员工登录、受治理的数据访问和 Default Assistant，开发者只需把 MCP server 托管在私有 Cloud Run 服务上。</p>
+<p>对做企业内部助手的团队，这提供了一条从“纯文本回答”升级到“可视化多步操作”的路径，同时避免重造身份、权限和会话基础设施。设计时要把 UI 状态同步、iframe 沙箱边界和 MCP server 的权限模型一起考虑。</p>
+<p><a class="cite" href="https://cloud.google.com/blog/topics/developers-practitioners/devs-guide-to-mcp-apps-in-gemini/" target="_blank" rel="noopener">[来源: Cloud Blog]</a></p>
+</div>
+
+<h2 class="sec"><span class="num">02</span>深度技术解读<span class="tag">// 从数据到实现细节</span></h2>
+
+<div class="deep">
+<h3>01 · Cloudflare 如何把 AI Code Review 成本砍掉 68%<span class="k">  // 不是换更便宜的模型，而是重做上下文与调用链</span></h3>
+<p>Cloudflare 的 AI code reviewer 在 4 月平均每次审查花费 $1.19，到 8 月底涨到约 $2.46，而架构没有大改：仍是 coordinator 把任务分给同一组 specialist reviewer，仍由同一套风险分级决定审查强度。真正变化的是 token 量——每次审查从约 <b>0.91M tokens</b> 涨到 <b>2.99M tokens</b>；其中 code-quality reviewer 平均每次审查要发起 <b>16.6 次 LLM 调用</b>，每次调用都重发整段对话，写出 72k tokens 缓存、读取 1.08M tokens。成本结构为：输出 23%、缓存写入 43%、缓存读取 34%。即使缓存命中率从 85.7% 升到 97%，一个更大的上下文仍然更贵。</p>
+
+<h4>第一步：测量“第一个请求”，而不是只看总命中率</h4>
+<p>他们给每个 reviewer 的首次 LLM 调用埋点，记录 token 用量和 system block 的哈希，发现首次请求的缓存命中率只有 <b>14–26%</b>，尽管各仓库共享的 tools 与 agent instructions 有 11k–21k tokens 完全一致。原因是 OpenCode v1 把唯一的缓存断点放在包含仓库特定环境数据的块之后，共享前缀从未被单独缓存。修复方式是把 system prompt 拆成两个 block，在共享部分之后加断点，并把仓库路径、变量化 skill 列表、工具描述等移到断点之后——首次请求命中率升到 <b>91–99.5%</b>。</p>
+
+<h4>第二步：减少调用次数，而不是先压单价</h4>
+<ul>
+<li><b>把 Codex reference index 直接放进 prompt</b>，省掉初始三轮文件读取：调用数从 15.9 降到 9.6，成本从 $1.12 降到 $0.72。</li>
+<li><b>首轮并行读取共享上下文与全部 patch</b>（最多 150KB），替代“一次读一个文件”的串行工具循环。</li>
+<li><b>三个 reviewer 发送完全相同的首个请求</b>：code quality、security、performance 共享 tools 与规则，之后才加各自指令。一个 reviewer 写缓存，另外两个最多等 20 秒读取流式结果，每个 reviewer 省约 9 美分。</li>
+<li><b>删掉用不上的工具</b>：57–76% 的会话会尝试调用最终评论工具、被拒后再花一次调用恢复；移除后还减少约 2.9k tokens 的工具定义。</li>
+<li><b>跳过空转</b>：复审时没有新内容就跳过对应 reviewer（AGENTS.md 跳过 56%、performance 23%、docs 13%）；审查发布后立即停止，不再生成没人看的总结，每次省约 $0.07。</li>
+<li><b>区分超时与供应商故障</b>，并把取消检查改为每 15 秒轮询——此前抽样的 446 个已取消 GitLab job 中有 358 个仍跑到了结束。</li>
+</ul>
+
+<h4>第三步：用数据路由模型与 effort，而不是假设“越贵越好”</h4>
+<p>同一模型下，full-tier medium effort 比 high effort 快 20%，两组 coordinator 配置被淘汰。Opus 5.5 medium 与 Opus 5 在结果上没有可测差异，但更便宜；Opus 5.5 的单价下降只解释了约 $0.20 的节省，其余来自更少的 token。Sonnet 5 与 Sonnet 5.5 单价相同，但 5.5 在 code quality、performance、security 上分别便宜 62%、58%、47%，原因完全是 token 用量更少：Sonnet 5.5 medium 每次 code-quality 运行平均 1.7 次调用（此前 6.2 次），超过一半一次调用完成。high effort 则需要 3.4 次调用、贵 61%，但多产出 58% 的 critical/warning findings，折算约每次审查 2 美分，因此 code quality 最终保留 high effort。</p>
+
+<h4>结果与质量校验</h4>
+<table class="tbl">
+<tr><th>指标</th><th>优化前</th><th>优化后</th><th>变化</th></tr>
+<tr><td>平均每次审查成本</td><td>$2.43</td><td>$0.77</td><td class="hl2">-68%</td></tr>
+<tr><td>中位延迟</td><td>4m 09s</td><td>1m 32s</td><td class="hl2">更快</td></tr>
+<tr><td>p99 延迟</td><td>15m 20s</td><td>4m 41s</td><td class="hl2">更快</td></tr>
+<tr><td>每千次审查被采纳的严重问题</td><td>229</td><td>321</td><td class="hl2">+40%</td></tr>
+<tr><td>每次审查重要 finding</td><td>0.28</td><td>0.30</td><td class="hl2">持平略升</td></tr>
+<tr><td>严重性虚高</td><td>0.46</td><td>0.14</td><td class="hl2">-70%</td></tr>
+<tr><td>无结论结束的审查</td><td>0.79%</td><td>0.27%</td><td class="hl2">下降</td></tr>
+</table>
+<p>成本下降的构成也值得注意：代码/工作流改动贡献 $0.65，模型与 effort 路由贡献 $1.06；缓存读取下降 82%、缓存写入下降 54%、输出下降 67%。但便宜并非对所有 reviewer 都安全：performance reviewer 在 medium effort 下丢失约 64% 的重要 findings，security 下降约 25%，code quality medium 的已采纳 findings 只有 high 的四分之一。Cloudflare 因此保留 code quality high，其余继续测试。</p>
+
+<h4>可复用的检查清单</h4>
+<ul>
+<li>分别监控 output / cache write / cache read 三项成本；高命中率不等于低成本。</li>
+<li>对首次 provider 请求做 token 与 system prompt 哈希埋点，验证共享前缀真的被缓存。</li>
+<li>先减少调用次数与上下文体积，再谈模型单价；重发增长中的对话是最大的成本乘数。</li>
+<li>删除不可用工具、跳过无新内容的复审、任务完成后立即停止、强制执行取消。</li>
+<li>用“被采纳的 finding”和盲评来验证质量，而不是只看成本或 token 单价。</li>
+</ul>
+<p><a class="cite" href="https://blog.cloudflare.com/obsessive-inference-optimization/" target="_blank" rel="noopener">[来源: The Cloudflare Blog]</a></p>
+</div>
+
+<div class="deep">
+<h3>02 · Meta 的 Thin Orchestrator：把路由交给代码，把推理留给专家 Agent<span class="k">  // 1,300 行编排器，20+ 工作流，14 个专家</span></h3>
+<p>Meta 最初用一个“全能 Agent”自动完成推荐系统的数据列接入：把所有 schema、代码生成规则、流水线路由、校验要求和数据源模式都塞进同一个上下文。上线后它开始幻觉并串味——把某个子系统的命名约定或代码模式套到另一个子系统上。于是他们把架构改成 <b>1,300 行的薄编排器</b>，将 20+ 工作流路由到 <b>14 个领域专家 Agent</b>，编排器本身<b>不做任何领域工作</b>。</p>
+
+<h4>确定性边界：七步里只有一步用 LLM</h4>
+<p>编排器负责：识别意图、收集字段、执行可靠性检查、委派、处理结果、暴露错误、确认成功。它不推理代码、不生成配置、不碰代码库。具体七步协议中，第 1–5 步和第 7 步都是确定性的，只有第 6 步“委派给子 Agent”使用 LLM 推理，而且发生在隔离的、领域受限的上下文中。</p>
+<ol>
+<li>读取相关子 Agent 的 instruction 文件。</li>
+<li>检查目标是否已存在，避免重复创建。</li>
+<li>从用户处收集必填字段。</li>
+<li>自动发现可推断的信息，如仓库类型、已有配置。</li>
+<li>执行可靠性门禁：活动告警、必需 reviewer。</li>
+<li>带着完整上下文委派给子 Agent。</li>
+<li>处理结果、暴露错误并确认成功。</li>
+</ol>
+
+<h4>用工作流模板复用专家，而不是不断加 Agent</h4>
+<pre><code>Column Onboarding:  Schema → Validation → Population → Testing
+Event Onboarding:   Schema → Population → Validation → Testing → Event Processing
+Pipeline Migration: Assessment → Planning → Population → Validation → Monitoring</code></pre>
+<p>三条模板复用同一组 14 个 Agent，只是阶段顺序不同。Pipeline Migration 只需要新增模板，<b>没有新增任何 Agent 代码</b>。每个子 Agent 结构统一：运行时知识源、前置收集清单、执行工作流、代码发现模式、故障排查映射；知识从 25+ 个文件按需加载，每个通常几千 token，更新后立即生效，不需要改编排器或重新部署。</p>
+
+<h4>结果与设计取舍</h4>
+<p>数据列配置准备时间从手工 3–4 天降到 <b>1 小时以内</b>，约三分之二的变更无需显著人工修改。Meta 还引用了一项预印本结果：在 80 个任务的批次上，编排式多 Agent 达到 <b>65.3%</b> 准确率，单 Agent 为 <b>16.6%</b>，token 用量最多降低 65 倍；单 Agent 只有在逐任务手工调 prompt 时才能到 70–80%，不调则只有 10–20%。</p>
+<p>核心取舍是“没有 Agent 看到全貌”。这牺牲了全局上下文，换来了故障隔离：子 Agent 失败时，编排器可以重试或升级，而不会污染自身状态或其他 Agent 的上下文；由于路由和可靠性检查不是 LLM 驱动，编排层几乎没有幻觉空间。</p>
+
+<h4>给生产团队的 5 条经验</h4>
+<ul>
+<li><b>路由与推理分离</b>：路由用关键词、意图分类、字段收集等确定性逻辑，领域推理放在隔离子 Agent。</li>
+<li><b>标准化子 Agent 结构</b>：统一模板让新增专家变成填模板，而不是改架构。</li>
+<li><b>用工作流模板扩展</b>：先问现有 Agent 能否重新排序，而不是先加新 Agent。</li>
+<li><b>运行时加载知识</b>：别把领域知识写进编排器，否则每次更新都要重新部署。</li>
+<li><b>显式画出确定性/概率性边界</b>：不要把路由决策和推理任务混在一起。</li>
+</ul>
+<p><a class="cite" href="https://engineering.fb.com/2026/10/19/ml-applications/thin-orchestrator-ai-agent-architecture/" target="_blank" rel="noopener">[来源: Engineering at Meta]</a></p>
+</div>
+
+<h2 class="sec"><span class="num">03</span>工具推荐<span class="tag">// 可以直接装、可以直接读</span></h2>
+
+<div class="tool">
+<p class="name">Pele — 从零重写的 Mermaid 渲染器</p>
+<p>Obsidian CEO kepano 开源了 <b>Pele</b>，用一套完全自主实现的解析与渲染管线替代 mermaid.js，支持 Mermaid 12.1.0 的全部内置图表语法并输出 SVG，零运行时依赖、同步渲染，采用 MIT 协议。它没有 fork mermaid.js，而是为约 30 种图型各自实现 lexer → parser → model → render 管线，并用 Mermaid 官方 parser spec 与差分模糊测试验证语法兼容性；布局层也是自研的分层（约 78KB）、泳道和复合嵌套三个引擎。</p>
+<p>公开对比数据很夸张：gzip 后 <b>230 kB vs 1.6 MB</b>（约 6 倍），渲染耗时 <b>0.05–0.3 ms vs 6–82 ms</b>（最高约 500 倍），直接依赖 <b>0 vs 23</b>。同步渲染能成立的关键是文本测量：浏览器端用 canvas，Node 等无 DOM 环境用内置字符宽度表，也可注入自定义 measurer。</p>
+<pre><code>npm install pele
+
+import { render } from 'pele';
+
+const { svg } = render(`flowchart LR
+  A[Mermaid text] --&gt; B[SVG]`);
+
+document.querySelector('#diagram').innerHTML = svg;</code></pre>
+<p class="url">注意：这是较新的项目（GitHub 约 2.4k stars），接入前请用自己文档里的图表类型做一轮兼容性与安全验证；Pele 会转义图表文本、过滤链接与样式，并限制输入/输出大小。</p>
+<p><a class="cite" href="https://x.com/shao__meng/status/2112009709989548131" target="_blank" rel="noopener">[来源: meng shao]</a> <a class="cite" href="https://github.com/obsidianmd/pele" target="_blank" rel="noopener">[来源: GitHub]</a></p>
+</div>
+
+<div class="tool">
+<p class="name">OpenGCUA — 通用计算机使用智能体的完整开源栈</p>
+<p>阿里通义 MAI-UI 团队开源了 <b>OpenGCUA</b>，包含 harness、跨设备 SDK、原生 macOS 应用、评测轨迹和参考 Agent 实现。它把传统“看截图点按钮”的 GUI Agent 扩展为 GCUA（generalist computer-use agent）：模型自主决定<b>观察什么</b>（按需调用 <code>screenshot()</code>，而不是每步强制截图）、<b>如何行动</b>（输出一段带循环和条件的 Python 程序，编排 GUI 操作、API 调用和 shell 命令）、<b>如何组织工作</b>（自己维护 todo 列表，每步声明 intent）。</p>
+<p>两个设计支柱是 code execution 与 harness-to-model decision transfer：复用模型已有的编程能力，循环内中间结果直接决定下一步代码，不必每步回模型，从而提升效率。对正在做 computer-use Agent 的团队，这是一份可以直接跑、可以对照评测轨迹的完整参考实现。</p>
+<p><a class="cite" href="https://x.com/shao__meng/status/2111999471588679916" target="_blank" rel="noopener">[来源: meng shao]</a></p>
+</div>
+
+<div class="tool">
+<p class="name">Harness² — 不改模型权重，递归改进 Agent Harness</p>
+<p>Google Research 开源了 <b>Harness²</b>（Recursive Agent Harnessing for an Open World），Apache 2.0 协议，支持 OpenCode 和 Codex（默认 OpenCode，可切换）。它把可修改的 Harness 拆成 <b>8 类组件</b>：系统提示词、护栏、记忆、工具指导、子智能体、Skills、脚本和插件，让 Agent 通过持续调整这些外部组件实现递归式能力提升，而不修改模型权重。</p>
+<p>核心是两层递归：任务级递归在遇到未见过的任务时执行“提出—探测—组合”，先产生多个 Harness 变体再选择；更高层则从执行经验中提炼可复用的组件更新。国内开发者 Joseph Zhou 称接入 Jev 1.14 后，在不调整权重的情况下显著提升了视觉任务表现。官方明确这是研究项目、不是受支持的产品，适合做实验和借鉴设计，不建议直接压生产。</p>
+<p><a class="cite" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295407&amp;idx=1&amp;sn=b8c188b3e578205013431c43c98bc95d" target="_blank" rel="noopener">[来源: InfoQ]</a> <a class="cite" href="https://github.com/google-research/harness2" target="_blank" rel="noopener">[来源: GitHub]</a></p>
+</div>
+
+<div class="tool">
+<p class="name">MiniMax M3.1 Flash + Mercury 3 — 两个适合 Agent 的新模型已上 AI Gateway</p>
+<p><b>MiniMax M3.1 Flash</b> 是开源权重多模态模型，1M 上下文，面向编码与 Agent 任务，官方称在复杂 Agent 流程、前端交互、定向 bug 修复和组件测试上有提升；在 Vercel AI Gateway 上 <b>10 月 22 日前免费</b>，但只有请求由 MiniMax 自己服务时才免费，需要用 provider 的 <code>order</code> 选项确保路由到 MiniMax。</p>
+<p><b>Mercury 3</b> 来自 Inception，用扩散方式并行细化生成文本，速度超过 <b>1,000 tokens/s</b>，同样有 1M 上下文，适合浏览器 Agent、实时搜索、交互式教育和客服等延迟敏感场景；AI Gateway 上线期间 5 折。两个模型都可以通过 <code>AI_GATEWAY_API_KEY</code> 和模型名直接接入现有 SDK 或 Claude Code / Codex / Cursor 等 Agent。</p>
+<p><a class="cite" href="https://x.com/aisdk/status/2112195849866645652" target="_blank" rel="noopener">[来源: AI SDK]</a> <a class="cite" href="https://vercel.com/changelog/minimax-m3-1-flash-now-available-on-ai-gateway-for-free" target="_blank" rel="noopener">[来源: Vercel News]</a> <a class="cite" href="https://vercel.com/changelog/mercury-3-now-available-on-ai-gateway" target="_blank" rel="noopener">[来源: Vercel News]</a></p>
+</div>
+
+<div class="tool">
+<p class="name">EmbeddingGemma 2 — 把语义检索扩展到代码、图像、视频和音频</p>
+<p>Google 发布 <b>EmbeddingGemma 2</b>，基于 Gemma 4，Apache 2.0 开源，是一个紧凑的开源权重多模态 embedding 模型，支持代码、图像、视频和音频输入，目标是让语义搜索和 RAG 更高效，并针对端侧部署优化。相比只做文本 embedding，它可以让同一个检索索引覆盖多模态内容，减少为不同模态维护多套管道的成本。</p>
+<p>落地时重点验证三件事：向量维度与现有索引是否兼容、长文档/长视频的截断策略，以及端侧运行时的内存与延迟预算。对隐私敏感或离线场景，端侧 embedding 也能避免把原始内容上传到服务端。</p>
+<p><a class="cite" href="https://www.infoq.com/news/2026/10/embeddinggemma-2-multimodal/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">[来源: InfoQ]</a></p>
+</div>
+
+<div class="tool">
+<p class="name">llm-echo 0.5 — 不调用真模型，也能测试 LLM 管道和 token 统计</p>
+<p>Simon Willison 更新了调试插件 <b>llm-echo</b>：它提供一个“假模型”，完全不调用 LLM，只把收到的 prompt 原样返回，同时模拟 token 用量统计。0.5 版把 <b>工具调用、system prompt 和 reasoning tokens</b> 都纳入模拟计数，适合在没有 API 开销的情况下测试 LLM 应用的工具循环、计费展示和流式处理。</p>
+<pre><code>uvx --with llm-echo llm -m echo 'hi there' -o thinking 1 --usage</code></pre>
+<p>输出会包含模拟的 prompt、system、attachments、stream 等字段，以及类似 “2 input, 24 output” 的 token 统计。对需要在 CI 里验证 token 计量逻辑的团队，这是一个很轻量的桩。</p>
+<p><a class="cite" href="https://simonwillison.net/2026/Oct/18/llm-echo/" target="_blank" rel="noopener">[来源: Simon Willison's Weblog]</a></p>
+</div>
+
+<h2 class="sec"><span class="num">04</span>实践指南<span class="tag">// 可以放进团队规范的做法</span></h2>
+
+<div class="tip">
+<div class="h">把 Code Review 从“有人看过”改成“每一层拦住它该拦的问题”</div>
+<p>Anthropic 的 Claude Code 团队在约 90% 代码由 Claude 编写的情况下，6 月到 9 月合并 PR 数量翻倍以上，回滚率反而下降超过 40%；内部 PR 获得实质性审查评论的比例从 16% 升到 54%。他们的结论是：人工是否逐行读过代码，是一个不准确的替代指标。真正要问的是“这次变更有哪些失败模式，应该由哪一层检查来抓”。</p>
+<ul>
+<li><b>PR 之前</b>：Claude 必须运行测试、构建和 linter，并展示真实输出，而不是口头声称完成；另起一个全新上下文的 subagent 独立审查 diff。</li>
+<li><b>PR 上</b>：必需 CI 阻塞合并；多个 AI reviewer 并行找 bug，由“验证者”投票过滤误报；安全审查走独立流程。</li>
+<li><b>风险分级审批</b>：由分类器而非作者判定风险。低风险（文档、flag 后的增量改动）零人工，中风险一人，高风险（计费、自动更新等敏感路径）两人；<b>AI 的审批永远不能占用人工名额</b>。</li>
+<li><b>合并之后</b>：flag 灰度内部先行，出问题可不部署直接关闭；每周 on-call，事故复盘追问“哪一层本应拦住它”。</li>
+<li><b>事故转化为 eval</b>：把历史上导致事故的 PR 收集成每日评测集，让审查系统持续针对真实失败模式回归。</li>
+</ul>
+<p>不要只抄“AI 审 AI”这个结论。真正可复用的是分层验证、风险分级、可回滚发布和事故回归这四件事；没有它们，90% 自动生成就是风险放大器。</p>
+<p><a class="cite" href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652735857&amp;idx=2&amp;sn=080a2d5531a5d51a3afe813509c04e82" target="_blank" rel="noopener">[来源: 新智元]</a> <a class="cite" href="https://x.com/shao__meng/status/2112007112511607291" target="_blank" rel="noopener">[来源: meng shao]</a></p>
+</div>
+
+<div class="tip">
+<div class="h">用七级成熟度模型给生产 Agent 做一次自检</div>
+<p>Stack Overflow 的 field guide 把 LLM/Agent 的生产化分成 7 级。核心观点不是“让模型更确定”，而是把模型限制在最小的判断点上，用可测试、可门禁、可审计、可观测的确定性组件把它包起来。</p>
+<table class="tbl">
+<tr><th>级别</th><th>你拥有的能力</th><th>危险信号</th></tr>
+<tr><td>L0 Notebook</td><td>prompt、模型、happy-path demo</td><td>“在我的例子上能跑”</td></tr>
+<tr><td>L1 确定性</td><td>Agent 只提出动作；每个能力有固定步骤；模型只占一个节点；循环有界</td><td>Agent 能改业务状态，或行为随路径变化</td></tr>
+<tr><td>L2 评测</td><td>eval 进入 CI；发布对比基线；用生产流量做 shadow eval</td><td>改 prompt 后只能“祈祷”，eval 还在 notebook 里</td></tr>
+<tr><td>L3 置信度</td><td>组合且校准的置信度；阈值分离自动与人工；抽样 LLM judge</td><td>直接用模型原始置信度；没有弃权路径</td></tr>
+<tr><td>L4 安全治理</td><td>分层护栏；边界处处理 PII；只追加的审计账本；有作用域的记忆</td><td>只有一个 moderation filter；记录原始输入；审计可篡改</td></tr>
+<tr><td>L5 可运维</td><td>决策可观测；成本控制；模型路由与降级；kill switch</td><td>通过账单和客户投诉才发现质量/成本问题</td></tr>
+<tr><td>L6 生产级构建</td><td>有纪律的构建流程；面向 Coding Agent 的操作系统；并行 Agent 基于决策日志工作</td><td>靠口口相传的知识；同一决策反复争论</td></tr>
+</table>
+<p>按依赖顺序爬级：确定性 → 评测 → 置信度 → 自动化 → 安全 → 规模化 → 可观测。自检里若不足一半为真，系统的成熟度就低于 demo 给人的印象。先修最弱的那一级，不要跳级。</p>
+<p><a class="cite" href="https://stackoverflow.blog/2026/10/19/production-grade-llms-and-agents-a-field-guide/" target="_blank" rel="noopener">[来源: Stack Overflow Blog]</a></p>
+</div>
+
+<div class="tip">
+<div class="h">把“运维漂移”当成一等监控对象</div>
+<p>系统在部署后立刻符合规格，不代表几小时后仍然符合。freeCodeCamp 的文章把<b>运维漂移（operational drift）</b>定义为“运维规格与持续观测到的状态之间的偏离”，它比配置漂移更宽：流量变化、依赖劣化、证书过期、配置被改、feature flag 移动、数据增长、人工变更、Agent 执行动作、基础设施替换，都会让系统偏离规格。</p>
+<p>可落地的做法是：先写清楚可观测的运维规格（SLO、依赖版本、证书有效期、关键配置、容量阈值），再用持续采样去比对，发现偏离时在变成事故前告警。特别注意把 <b>Agent 的动作</b>也纳入观测面——Agent 能改配置、发请求、动数据，它本身就是漂移源。</p>
+<p><a class="cite" href="https://www.freecodecamp.org/news/detect-operational-drift-before-incident/" target="_blank" rel="noopener">[来源: freeCodeCamp]</a></p>
+</div>
+
+<div class="tip">
+<div class="h">LLM-as-a-judge 不是客观裁判：先做四项偏差校准</div>
+<p>Google Cloud 的文章指出一个常见误区：人类有主观性，所以用 AI 做客观评估。实际上 LLM judge 也有偏差：<b>冗长偏差</b>（偏爱更长、更自信的答案，即使事实错误）、<b>位置偏差</b>（交换两个选项的顺序，判词翻转率可超过 75%）、<b>光环效应</b>（干净的语法和格式会让 judge 给准确性高分）、<b>顺从偏差</b>（擅长认可正确工作，却容易漏掉错误、bug 或不正确的实现）。</p>
+<p>实操上至少做四件事：随机化候选顺序并多次评估；控制答案长度与格式差异；用人工标注样本校准 judge 的阈值与偏差；对关键决策保留抽样人工复核。把 judge 当成“一个会给出有用信号的评审”，而不是“客观真值”。</p>
+<p><a class="cite" href="https://cloud.google.com/blog/topics/consulting/three-ways-to-audit-your-llm-evaluators/" target="_blank" rel="noopener">[来源: Cloud Blog]</a></p>
+</div>
+
+<div class="tip">
+<div class="h">接入 DeepSeek Search / Fetch 时，先把限流、缓存和计费日写进设计</div>
+<p>Search / Fetch 是原始 JSON API，沿用 Bearer 鉴权，适合直接给 Agent 或 RAG 管道加“实时网页”能力。落地时要注意四点：</p>
+<ul>
+<li><b>限流</b>：每账户两类接口各 5 QPS，批量抓取要自己排队或并发控制。</li>
+<li><b>计费</b>：每 1000 次成功请求 5 元，空结果不收费；当前在 Harness / Claude Code / Codex 中的 Server 端调用免费，但 <b>11 月 1 日 00:00（北京时间）</b>起收费。</li>
+<li><b>缓存</b>：搜索结果和抓取正文按 URL/query 做短 TTL 缓存，既省成本也降低上游压力。</li>
+<li><b>格式</b>：Fetch 返回 Markdown（标题+正文），适合直接进上下文；但仍要做长度截断和内容清洗，避免把整页噪声塞进 prompt。</li>
+</ul>
+<p><a class="cite" href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247637014&amp;idx=1&amp;sn=477c8dcca743e1f6037e5b9486a01d15" target="_blank" rel="noopener">[来源: 少数派]</a> <a class="cite" href="https://supertechfans.com/cn/post/2026-10-19-HackerNews/" target="_blank" rel="noopener">[来源: HackerNews每日摘要]</a></p>
+</div>
+
+<div class="tip">
+<div class="h">设计时先问：哪些需求是你“没有”的？</div>
+<p>seangoedecke 的文章提出一个很实用的架构视角：设计软件时，<b>你没有的需求和你有的需求同样重要</b>。优雅的设计往往来自主动放弃某些需求——Unicorn 这类 preforking server 不支持进程间共享可变状态，因此可以让每个 server 跑在独立进程里，免费获得隔离；它明确不处理慢客户端，因此可以直接把请求排在 Unix socket 上，大幅简化实现；S3 不支持多 key 原子更新，因此可以按 blob 存储，避免复杂的跨对象事务。</p>
+<p>下次做架构评审时，除了列“必须支持什么”，也列一列“可以慢、可以旧、可以不灵活、可以最终一致”的部分。你愿意放弃的约束，往往就是复杂度的来源。</p>
+<p><a class="cite" href="https://seangoedecke.com/what-requirements-dont-you-have/" target="_blank" rel="noopener">[来源: seangoedecke.com]</a></p>
+</div>
+
+<h2 class="sec"><span class="num">05</span>参考链接汇总<span class="tag">// 按来源分组</span></h2>
+
+<div class="refs">
+  <div class="grp">
+    <div class="src">InfoQ</div>
+    <a href="https://www.infoq.com/news/2026/10/jep-543-jdk-28/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">JEP 543 Finalizes Structured Concurrency in JDK 28</a>
+    <a href="https://www.infoq.com/news/2026/10/dotnet-11-rc-2/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">.NET 11 Release Candidate 2: Go-Live License and Updates</a>
+    <a href="https://www.infoq.com/news/2026/10/nestjs-12-observability/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">NestJS 12: ESM Packages, Standard Schema Validation and Native Observability</a>
+    <a href="https://www.infoq.com/news/2026/10/buildkite-ci-secrets-agentic/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Buildkite Adds Scoped Secrets and New Agentic CI Tools</a>
+    <a href="https://www.infoq.com/news/2026/10/embeddinggemma-2-multimodal/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">EmbeddingGemma 2 Expands beyond Text to Support Code, Images, Video, and Audio</a>
+    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295407&amp;idx=4&amp;sn=99d7b1b770fe9bc89cf7ca7a6b6bc3ae" target="_blank" rel="noopener">Cloudflare 修复了容器中的跨租户数据泄露问题</a>
+    <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295407&amp;idx=1&amp;sn=b8c188b3e578205013431c43c98bc95d" target="_blank" rel="noopener">谷歌开源 Harness，支持 OpenCode 和 Codex</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">AI前线 / 新智元 / meng shao</div>
+    <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668623&amp;idx=2&amp;sn=a06c6020dc81d9f371e707e03a59859b" target="_blank" rel="noopener">Claude 写代码太快，Git 扛不住了：Anthropic 仅靠 7 人、5 个月重造版本控制系统</a>
+    <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652735857&amp;idx=2&amp;sn=080a2d5531a5d51a3afe813509c04e82" target="_blank" rel="noopener">Claude Code「自产自审」：九成代码不再经过人类</a>
+    <a href="https://x.com/shao__meng/status/2112007112511607291" target="_blank" rel="noopener">Addy Osmani 谈 Agent 时代代码审查的重构</a>
+    <a href="https://x.com/shao__meng/status/2112009709989548131" target="_blank" rel="noopener">Obsidian CEO 开源 Mermaid 渲染库 Pele</a>
+    <a href="https://x.com/shao__meng/status/2111999471588679916" target="_blank" rel="noopener">阿里通义 MAI-UI 开源 OpenGCUA</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">The Cloudflare Blog</div>
+    <a href="https://blog.cloudflare.com/obsessive-inference-optimization/" target="_blank" rel="noopener">Cutting our inference bill by 68% by being obsessive about optimization</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">Engineering at Meta</div>
+    <a href="https://engineering.fb.com/2026/10/19/ml-applications/thin-orchestrator-ai-agent-architecture/" target="_blank" rel="noopener">The Thin Orchestrator: How We Made Our AI Agents More Reliable by Giving the Router Less to Do</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">Cloud Blog</div>
+    <a href="https://cloud.google.com/blog/topics/developers-practitioners/devs-guide-to-mcp-apps-in-gemini/" target="_blank" rel="noopener">Developer's guide to implementing MCP apps in Gemini</a>
+    <a href="https://cloud.google.com/blog/topics/consulting/three-ways-to-audit-your-llm-evaluators/" target="_blank" rel="noopener">Who judges the judge? Three helpful ways to audit your LLM evaluators</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">Stack Overflow Blog</div>
+    <a href="https://stackoverflow.blog/2026/10/19/production-grade-llms-and-agents-a-field-guide/" target="_blank" rel="noopener">Production-grade LLMs and agents: a field guide</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">freeCodeCamp</div>
+    <a href="https://www.freecodecamp.org/news/detect-operational-drift-before-incident/" target="_blank" rel="noopener">How to Detect Operational Drift Before It Becomes an Incident</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">少数派 / HackerNews每日摘要</div>
+    <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247637014&amp;idx=1&amp;sn=477c8dcca743e1f6037e5b9486a01d15" target="_blank" rel="noopener">DeepSeek API 已支持网页搜索和抓取</a>
+    <a href="https://supertechfans.com/cn/post/2026-10-19-HackerNews/" target="_blank" rel="noopener">2026-10-19 Hacker News Top Stories</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">AI SDK / Vercel News</div>
+    <a href="https://x.com/aisdk/status/2112195849866645652" target="_blank" rel="noopener">Use MiniMax M3.1 Flash with AI SDK and AI Gateway for free</a>
+    <a href="https://vercel.com/changelog/minimax-m3-1-flash-now-available-on-ai-gateway-for-free" target="_blank" rel="noopener">MiniMax M3.1 Flash now available on AI Gateway for free</a>
+    <a href="https://vercel.com/changelog/mercury-3-now-available-on-ai-gateway" target="_blank" rel="noopener">Mercury 3 now available on AI Gateway</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">Simon Willison's Weblog</div>
+    <a href="https://simonwillison.net/2026/Oct/18/llm-echo/" target="_blank" rel="noopener">llm-echo 0.5</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">seangoedecke.com</div>
+    <a href="https://seangoedecke.com/what-requirements-dont-you-have/" target="_blank" rel="noopener">What requirements don't you have?</a>
+  </div>
+
+  <div class="grp">
+    <div class="src">GitHub</div>
+    <a href="https://github.com/obsidianmd/pele" target="_blank" rel="noopener">obsidianmd/pele</a>
+    <a href="https://github.com/google-research/harness2" target="_blank" rel="noopener">google-research/harness2</a>
+  </div>
+</div>
+
+<footer>
+  开发者实践日报 · 由 tech-daily-generator 生成 · 数据窗口 2026-10-18 21:47 → 2026-10-19 21:47 · 共 530 篇文章 / 424 个来源<br>
+  所有观点与数据均来自上方标注的原文，链接可点击查看。
+</footer>
+
+</div>
+</body>
+</html>

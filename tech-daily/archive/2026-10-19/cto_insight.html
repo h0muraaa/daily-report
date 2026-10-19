@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · CTO洞察版 · 2026-10-19</title>
+<style>
+  :root {
+    --navy: #1b2a41;
+    --navy-soft: #2c4059;
+    --slate: #4a5b70;
+    --steel: #6b7d94;
+    --line: #d9e0e8;
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --accent: #2f6fb0;
+    --accent-soft: #e8f0f9;
+    --amber: #b07a2f;
+    --amber-soft: #faf3e6;
+    --green: #2f7a5b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--navy);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.75;
+    font-size: 16px;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  header.masthead {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 34px 36px;
+    margin-bottom: 28px;
+    box-shadow: 0 10px 30px rgba(27,42,65,.18);
+  }
+  header.masthead .kicker {
+    font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+    color: #9fb6ce; margin: 0 0 8px;
+  }
+  header.masthead h1 { margin: 0 0 10px; font-size: 30px; letter-spacing: 1px; }
+  header.masthead .meta { font-size: 13px; color: #b9c9da; }
+  header.masthead .meta span { margin-right: 18px; }
+
+  section { margin-bottom: 34px; }
+  h2 {
+    font-size: 20px; margin: 0 0 18px;
+    padding-left: 14px;
+    border-left: 4px solid var(--accent);
+    letter-spacing: .5px;
+  }
+  h2 .en { font-size: 12px; color: var(--steel); font-weight: 400; letter-spacing: 2px; margin-left: 8px; text-transform: uppercase; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(27,42,65,.04);
+  }
+  .card h3 { margin: 0 0 10px; font-size: 17px; color: var(--navy); line-height: 1.5; }
+  .card p { margin: 0 0 10px; color: #33465c; }
+  .card p:last-of-type { margin-bottom: 0; }
+  .src { display: inline-block; margin-top: 10px; font-size: 12.5px; color: var(--steel); }
+  .src a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  .src a:hover { border-bottom-style: solid; }
+
+  /* 今日要点 */
+  .keypoints { counter-reset: kp; }
+  .kp {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--card); border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 14px;
+  }
+  .kp .num {
+    counter-increment: kp;
+    flex: 0 0 34px; height: 34px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+  }
+  .kp .num::before { content: counter(kp); }
+  .kp .body h3 { margin: 2px 0 6px; font-size: 16.5px; }
+  .kp .body p { margin: 0 0 6px; color: #33465c; font-size: 15px; }
+  .kp .body .src { margin-top: 4px; }
+
+  /* deep dive */
+  .deep {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 24px 26px; margin-bottom: 18px;
+    box-shadow: 0 2px 6px rgba(27,42,65,.04);
+  }
+  .deep .tag {
+    display: inline-block; font-size: 12px; letter-spacing: 1px;
+    background: var(--amber-soft); color: var(--amber);
+    padding: 3px 10px; border-radius: 20px; margin-bottom: 12px;
+  }
+  .deep h3 { margin: 0 0 14px; font-size: 19px; }
+  .deep h4 { margin: 18px 0 8px; font-size: 15px; color: var(--navy-soft); }
+  .deep p { margin: 0 0 12px; color: #33465c; }
+  .deep ul { margin: 0 0 12px; padding-left: 20px; color: #33465c; }
+  .deep li { margin-bottom: 6px; }
+  .fig {
+    background: var(--accent-soft); border-radius: 8px;
+    padding: 12px 16px; margin: 14px 0; font-size: 14.5px;
+    color: var(--navy-soft); border-left: 3px solid var(--accent);
+  }
+  .fig strong { color: var(--accent); }
+  .deep .src { display: block; margin-top: 4px; }
+
+  /* radar */
+  .radar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .radar {
+    background: var(--card); border: 1px solid var(--line);
+    border-top: 3px solid var(--steel);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .radar h3 { margin: 0 0 8px; font-size: 15.5px; }
+  .radar p { margin: 0 0 8px; font-size: 14.3px; color: #3c5068; }
+  .radar .src { margin-top: 4px; }
+
+  /* CTO actions */
+  .actions { background: var(--navy); border-radius: 12px; padding: 26px 28px; color: #e8eef5; }
+  .actions h2 { color: #fff; border-left-color: #6fa8dc; }
+  .actions h2 .en { color: #8fa9c4; }
+  .actions ol { margin: 0; padding-left: 22px; }
+  .actions li { margin-bottom: 14px; color: #dbe6f1; }
+  .actions li strong { color: #fff; }
+  .actions .why { display: block; font-size: 13.5px; color: #9db4cc; margin-top: 4px; }
+  .actions a { color: #9cc3e8; }
+
+  /* sources */
+  .sources { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; }
+  .sources h2 { border-left-color: var(--steel); }
+  .sources ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 28px; }
+  @media (max-width: 640px) { .sources ul { columns: 1; } }
+  .sources li { font-size: 13px; margin-bottom: 9px; break-inside: avoid; color: #4a5b70; }
+  .sources li a { color: var(--accent); text-decoration: none; }
+  .sources li a:hover { text-decoration: underline; }
+  .sources .feed { color: var(--steel); }
+
+  footer.note { text-align: center; font-size: 12px; color: var(--steel); margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="kicker">Executive Tech Briefing</p>
+    <h1>科技日报 · CTO 洞察版</h1>
+    <div class="meta">
+      <span>📅 覆盖窗口：2026-10-18 21:47 → 2026-10-19 21:47</span>
+      <span>📰 信源 424 个 / 原始条目 530 条</span>
+      <span>🎯 读者：CTO / VP Engineering / 技术战略负责人</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>今日要点 <span class="en">Key Takeaways</span></h2>
+    <div class="keypoints">
+
+      <div class="kp">
+        <div class="num"></div>
+        <div class="body">
+          <h3>模型层继续「通缩」：MiniMax 成本降 70%，DeepSeek 以约 27% 价格拿到 37% 的前沿提升</h3>
+          <p>MiniMax 发布 M3.1 Flash，官方称推理速度提升近 3 倍、使用成本降低 70%，在 DeepSWE v1.1 拿到 73.7%、OSWorld V2 拿到 61.7 分（国产模型第一）；其匿名版本 Space Bunny 此前已处理超过 200T Token。同一天，DeepSeek-V4.1-Flash-20261017 登顶 Agent Arena 开源模型第一、总榜第 11，中位任务成本仅 0.20 美元，用约为 GPT-6.1 Sol 27% 的成本取得了后者约 37% 的净提升。</p>
+          <p>这不是单点降价，而是采购结构的改变：前沿模型溢价正在变成「按任务购买的期权」，而不是默认配置。CTO 需要把模型路由、缓存命中率和任务级 eval 当成基础设施，而不是临时优化。</p>
+          <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzE5MTA3NzcxMQ==&amp;mid=2247489196&amp;idx=1&amp;sn=4c8b969db8bd136f47d7b1a7650790c4" target="_blank" rel="noopener">MiniMax 稀宇科技</a> · <a href="https://x.com/arena/status/2112247114944360666" target="_blank" rel="noopener">Arena.ai @lmarena_ai</a> · <a href="https://x.com/FinanceYF5/status/2112063910039933166" target="_blank" rel="noopener">AI Will @FinanceYF5</a></span>
+        </div>
+      </div>
+
+      <div class="kp">
+        <div class="num"></div>
+        <div class="body">
+          <h3>Anthropic 披露 90% 代码由 Claude 编写：瓶颈已从「写」转向「验证」与「基础设施」</h3>
+          <p>Claude Code 约 90% 的代码由 Claude 自己编写，6 月至 9 月合并 PR 数量翻倍以上，回滚率反而下降超过 40%。其审查体系改为分层验证：PR 前由独立上下文的 subagent 审 diff、CI 强制阻塞、多个 AI 审查员并行找 bug 并由「验证者」投票过滤误报，内部 PR 获得实质性审查评论的比例从 16% 升到 54%；风险分级由分类器判定，低风险零人工、中风险一人、高风险两人，AI 审批不计入人工名额。</p>
+          <p>更底层的变化是基础设施跟不上：Anthropic 每天合并量从 5 月的约 2,500 次涨到 9 月的 3 万次以上，Monorepo 历史接近 100GB，最终由 7 名工程师用 5 个月重写版本控制系统 Scion，CPU 与内存占用降至原 Git 镜像方案的约 1/200。</p>
+          <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652735857&amp;idx=2&amp;sn=080a2d5531a5d51a3afe813509c04e82" target="_blank" rel="noopener">新智元</a> · <a href="https://x.com/shao__meng/status/2112007112511607291" target="_blank" rel="noopener">meng shao @shao__meng</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668623&amp;idx=2&amp;sn=a06c6020dc81d9f371e707e03a59859b" target="_blank" rel="noopener">AI前线</a></span>
+        </div>
+      </div>
+
+      <div class="kp">
+        <div class="num"></div>
+        <div class="body">
+          <h3>Meta Prometheus 一期建成：目标约 100 万 GPU，训练竞争变成系统工程与能源竞争</h3>
+          <p>Meta 在俄亥俄州 New Albany 的千兆瓦级超算 Prometheus 一期已完成，正在向约 100 万 GPU 规模扩展，并采用闭环液冷。Muse 系列基础模型即在此训练：预训练 goodput 达到 85% 以上、强化学习超过 90%，训练期间平均约 4.7 万 GPU 小时才发生一次中断。</p>
+          <p>当单集群进入数十万乃至百万 GPU 量级，决定模型进度的不再只是算法，而是供电、冷却、网络、故障恢复和调度效率。对多数企业而言，这意味着自建超大训练集群的门槛进一步抬高，外购算力时的「有效算力/有效工时」条款会变得比名义 GPU 小时更重要。</p>
+          <span class="src">📎 来源：<a href="https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/" target="_blank" rel="noopener">Engineering at Meta</a> · <a href="https://x.com/AIatMeta/status/2112245968750145561" target="_blank" rel="noopener">AI at Meta @AIatMeta</a></span>
+        </div>
+      </div>
+
+      <div class="kp">
+        <div class="num"></div>
+        <div class="body">
+          <h3>基础设施供应商风险被重新定价：VMware 涨价 400% 与微软退出 Nscale 交易</h3>
+          <p>博通收购 VMware 后，Topgolf 面临的 VMware 使用成本预计上涨 400%，公司已将 1.2 万台虚拟机迁移到 VergeIO 的 VergeOS，累计节省基础设施总成本超过 1,130 万美元（约 7,560 万元人民币）；Gartner 预测到 2029 年将有 55% 的企业启动弃用 VMware 的概念验证。另一边，微软退出了与英国数据中心企业 Nscale 在埃塞克斯的合作，而 Nscale 正推进最高 350 亿美元的上市计划，失去锚定租户使其融资叙事受挫。</p>
+          <p>两件事指向同一个判断：在 AI 资本开支高企的周期里，供应商的定价权与履约稳定性都在变化。关键基础设施合同需要按「三年 TCO + 退出成本 + 替代路径」重新审视，而不是只看当前单价。</p>
+          <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638164&amp;idx=1&amp;sn=f8ed2c1b9226ded269a5e648c5dc4f31" target="_blank" rel="noopener">dbaplus 社群</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894385&amp;idx=3&amp;sn=b9a5c7d8c5196191937ae6fa2ad6942b" target="_blank" rel="noopener">创业邦</a></span>
+        </div>
+      </div>
+
+      <div class="kp">
+        <div class="num"></div>
+        <div class="body">
+          <h3>AI 治理从原则进入公司结构与生产流程：Anthropic 拿出 5% 股份，微软把模型当「内部风险」</h3>
+          <p>Anthropic 计划将 5% 股份注入新的公共利益基金，用于包括缓解 AI 对就业市场冲击在内的公益用途；公司估值每较基准增长 50%，董事会还可追加 2%。此举发生在其筹备史上最大规模 IPO 之一的背景下，也是在为「AI 替代人类劳动」的社会成本提前定价。同期，Anthropic 正与律所研究 AI 智能体代表用户谈判时的规范，并探讨让用户签署委托文件确认智能体权限边界。</p>
+          <p>企业侧的对应动作已经出现：微软 CEO Satya Nadella 主张把模型当作内部风险（insider risk），安全控制放在模型之外，并通过 Project Perception 持续评估 Agent 风险、动态调整权限；OpenAI 则将 25% 的生产工程师转岗安全，并用自家最强模型寻找系统漏洞。</p>
+          <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&amp;mid=2247518816&amp;idx=3&amp;sn=75abf5bfc5e24e6c8c2fd93b77eefe9f" target="_blank" rel="noopener">Z Potentials</a> · <a href="https://x.com/satyanadella/status/2112168320946634932" target="_blank" rel="noopener">Satya Nadella @satyanadella</a> · <a href="https://www.youtube.com/shorts/zt6dSvcJZC8" target="_blank" rel="noopener">No Priors</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894385&amp;idx=3&amp;sn=b9a5c7d8c5196191937ae6fa2ad6942b" target="_blank" rel="noopener">创业邦</a></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>深度分析 <span class="en">Deep Dive</span></h2>
+
+    <div class="deep">
+      <span class="tag">深度分析 01 · 工程组织</span>
+      <h3>当 90% 的代码由 AI 生成，工程管理的最小单位从「人天」变成「变更」</h3>
+
+      <p>Anthropic 公开的这组数字值得所有技术负责人认真对待：Claude Code 约 90% 的代码由 Claude 编写，6 月到 9 月合并 PR 翻倍，回滚率下降超过 40%。这打破了一个常见假设——AI 生成代码越多，质量越不可控。真正的变化不是「AI 会不会写代码」，而是代码供给量突然放大后，原来的评审、合并、发布和故障定位体系是否还成立。</p>
+
+      <p>Addy Osmani 对这套流程的拆解显示，Anthropic 把审查从「合并前的终点关卡」改成了「分层、快速、确定性的反馈系统」：</p>
+      <ul>
+        <li><strong>PR 之前：</strong>Claude 必须运行测试、构建和 linter，并展示真实输出；另有一个全新上下文的 subagent 独立审查 diff，避免「自己批自己」。</li>
+        <li><strong>PR 之上：</strong>必需 CI 阻塞合并，多个 AI 审查 Agent 并行找 bug，由验证者投票过滤误报；内部 PR 获得实质性审查评论的比例从 16% 提升到 54%。</li>
+        <li><strong>风险分级：</strong>由分类器判定风险等级，低风险（文档、flag 后的增量改动）零人工，中风险一人，高风险（计费、自动更新等敏感路径）两人；AI 审批永远不能占用人工名额。</li>
+        <li><strong>合并之后：</strong>flag 灰度内部先行，出问题可不部署直接关闭；每周 on-call 复盘追问「哪一层本应拦住它」，并把历史事故 PR 转成每日 eval 集。</li>
+      </ul>
+
+      <div class="fig">
+        <strong>瓶颈迁移的三组硬数据：</strong>Anthropic 日合并量 5 月约 2,500 次 → 9 月 3 万次以上（12 倍）；Monorepo 历史接近 100GB、工作副本超 25GB，CI 每天约 2,500 万次代码检出，朴素 Git 拉取每天可能产生 600PB 传输；Cloudflare 的 AI 代码审查单次成本从 1.19 美元涨到 2.46 美元后，通过 token 优化降到 0.77 美元，降幅 68%。
+      </div>
+
+      <p>基础设施层面的信号同样明确。Anthropic 最终不是继续堆 Git 镜像服务器，而是由 7 人团队用 5 个月重写了版本控制系统 Scion，把 CPU 与内存占用降到原方案的约 1/200；Meta 则用 1,300 行代码的「薄编排器」把 20 多个工作流路由给 14 个专业 Agent，编排层本身不做任何领域推理，以可靠性换取复杂度下降。Cloudflare 的案例说明，即使架构不变，Agent 工作流也会让 token 成本自然膨胀，必须像对待数据库慢查询一样持续做成本归因。</p>
+
+      <p>对 CTO 的直接含义是：考核指标要从「token 用量」「AI 使用率」转向「每次合并成本」「从提交到可验证的时长」「回滚率」「高风险变更的人工覆盖率」。组织上，需要把平台工程、CI/eval、可观测性和安全团队放在 AI 生产力的关键路径上；否则代码产能提升 2 倍，瓶颈只会以更贵的方式出现在合并队列、CI 队列和事故复盘里。Gergely Orosz 提到的「把 token 用量设成 KPI」正是反面教材——它奖励消耗，而不是奖励可验证的产出。</p>
+
+      <span class="src">📎 来源：<a href="https://x.com/shao__meng/status/2112007112511607291" target="_blank" rel="noopener">meng shao @shao__meng（Addy Osmani 拆解）</a> · <a href="https://x.com/dotey/status/2111974893676060990" target="_blank" rel="noopener">宝玉 @dotey（代码审查实践）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652735857&amp;idx=2&amp;sn=080a2d5531a5d51a3afe813509c04e82" target="_blank" rel="noopener">新智元（Claude Code 自产自审）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668623&amp;idx=2&amp;sn=a06c6020dc81d9f371e707e03a59859b" target="_blank" rel="noopener">AI前线（Scion）</a> · <a href="https://blog.cloudflare.com/obsessive-inference-optimization/" target="_blank" rel="noopener">The Cloudflare Blog</a> · <a href="https://engineering.fb.com/2026/10/19/ml-applications/thin-orchestrator-ai-agent-architecture/" target="_blank" rel="noopener">Engineering at Meta</a> · <a href="https://x.com/shao__meng/status/2112004342253556016" target="_blank" rel="noopener">meng shao @shao__meng（token KPI）</a> · <a href="https://x.com/cognition/status/2112223929414607228" target="_blank" rel="noopener">Cognition @cognition_labs</a></span>
+    </div>
+
+    <div class="deep">
+      <span class="tag">深度分析 02 · 资本与单位经济</span>
+      <h3>便宜的 Token，昂贵的算力：AI 资本周期的「双层定价」正在形成</h3>
+
+      <p>a16z 引用的一组预测显示，Alphabet、亚马逊、Meta、微软和甲骨文今年的资本开支合计正奔向 7,770 亿美元。这笔钱从广告、电商、软件和云服务的利润中流出，再进入芯片、内存、机房、电力设备、冷却系统和工程建设——科技行业正在做越来越像重工业的事。更关键的是，价值捕获在每一层并不相同：芯片厂商拿到订单即可确认收入，云厂商要把机器租出去，软件公司要证明客户愿意为 AI 多付钱，终端企业则要算清楚到底省了多少人、赚了多少钱。</p>
+
+      <p>与重资产扩张同时发生的，是模型层价格的快速下探。MiniMax M3.1 Flash 把使用成本降低 70%、推理速度提升近 3 倍；DeepSeek-V4.1-Flash 在 Agent Arena 的中位任务成本只有 0.20 美元；DeepSeek 的 Search / Fetch API 按每 1,000 次成功请求 5 元人民币计费，空结果不收费。需求端却在反向放大：网易 LobsterAI 的报告显示，9 月用户单次任务平均消耗 20.2 万 Token，是 3 月 6.3 万的 3.2 倍，9 月日活环比增长 83.1%；同一份报告还指出，缓存命中与否会让同样的任务成本相差七倍以上。</p>
+
+      <p>这就是「双层定价」：单位 token 越来越便宜，但每个任务消耗的 token 越来越多，最终决定账单的是任务规模、上下文管理和缓存策略，而不是模型标价。与此同时，算力层的稀缺性并未缓解——Meta 的 Prometheus 目标约 100 万 GPU，微软退出 Nscale 的埃塞克斯数据中心交易，都说明电力、机房和长期算力承诺正在成为新的约束条件。</p>
+
+      <div class="fig">
+        <strong>收入侧的两极信号：</strong>2026 年至今已有 44 家公司宣布收入突破 1 亿美元，其中企业服务类 21 家、平均「破亿」用时超过 6 年；而 AI 基础设施、模型、搜索、代码、机器人五类合计 19 家，最快的只用了 1–2 年。AI 原生产品的杠杆也在放大：Greptile 以不到 50 人服务数千个工程团队、每天审查 GitHub 上超过 1% 的 PR，并完成 5,000 万美元 B 轮。头部实验室则在为长期资本结构做准备：Anthropic 拟将 5% 股份注入公益基金，并筹备可能创纪录的 IPO。
+      </div>
+
+      <p>对 CTO 而言，战略结论不是「等 token 更便宜再投入」，而是建立一个能持续吃到降价红利的采购与架构体系：按任务分层路由，保留 2–3 家可切换供应商，把 prompt 缓存、上下文压缩、批处理和评测集纳入平台能力；对高风险、高价值任务保留前沿模型，对长尾任务主动下探性价比模型。在资本层面，要警惕两类风险：一是把长期算力承诺锁死在单一供应商身上，二是把业务逻辑深度绑定到某家模型 API，导致降价时无法迁移、涨价时无法议价。模型会继续商品化，算力会继续重资产化，企业真正能控制的是「路由权」和「退出权」。</p>
+
+      <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3ODk5OTEzOA==&amp;mid=2962188952&amp;idx=1&amp;sn=85b28ba1bc47fd2148cdd0f6d3a7bcc2" target="_blank" rel="noopener">经纬创投 / Z Potentials（a16z 报告）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzE5MTA3NzcxMQ==&amp;mid=2247489196&amp;idx=1&amp;sn=4c8b969db8bd136f47d7b1a7650790c4" target="_blank" rel="noopener">MiniMax 稀宇科技</a> · <a href="https://x.com/arena/status/2112247114944360666" target="_blank" rel="noopener">Arena.ai @lmarena_ai</a> · <a href="https://x.com/dotey/status/2112194237211029946" target="_blank" rel="noopener">宝玉 @dotey（LobsterAI 报告）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247637014&amp;idx=1&amp;sn=477c8dcca743e1f6037e5b9486a01d15" target="_blank" rel="noopener">少数派（DeepSeek Search/Fetch API）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzYzNTkyMTI2Ng==&amp;mid=2247577612&amp;idx=1&amp;sn=ee02761238be93ec9284a239e5f00108" target="_blank" rel="noopener">白鲸出海（44 家公司破亿）</a> · <a href="https://x.com/ycombinator/status/2112234482975846504" target="_blank" rel="noopener">Y Combinator（Greptile B 轮）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&amp;mid=2247518816&amp;idx=3&amp;sn=75abf5bfc5e24e6c8c2fd93b77eefe9f" target="_blank" rel="noopener">Z Potentials（Anthropic 公益基金）</a></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>趋势雷达 <span class="en">Signal Radar</span></h2>
+    <div class="radar-grid">
+
+      <div class="radar">
+        <h3>Agent 正在成为数据库的主要「用户」</h3>
+        <p>阿里云披露，过去一年 RDS PostgreSQL 新增实例同比增长 400%+，其中约 80% 的新增实例由 Agent 创建，Agent 访问流量占比正快速接近 50% 的目标。数据库的设计假设正在从「人类设计、使用、维护」转向「Agent 设计、使用、维护，人类制定规则与边界」。这意味着权限模型、审计粒度、连接池与成本归因都需要为机器调用重写。</p>
+        <span class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247837254&amp;idx=1&amp;sn=a9a3eace68607dda5a6d52d36505a206" target="_blank" rel="noopener">CSDN（专访阿里云杨辛军）</a></span>
+      </div>
+
+      <div class="radar">
+        <h3>Personal Agent 从软件入口烧到专用硬件</h3>
+        <p>YC 华裔团队 Oki Home 以 1,799 美元首发、三天售罄，搭载 RTX 5060 Ti，可在本地运行 270 亿参数模型；Ghost.ai 的 Core 定价 3,499 美元、获 a16z 领投 1,100 万美元种子轮。Meta Muse 上线 12 天装机约 280 万、一度登顶美区 App Store；Anthropic 则明确不走消费级个人 Agent 路线。入口之争将决定未来个人数据的归属与 Agent 的分发权。</p>
+        <span class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=Mzg3NDkyMTQ5Mw==&amp;mid=2247502622&amp;idx=1&amp;sn=c75e9683f6c750e5d98ce65fe635a30d" target="_blank" rel="noopener">有新Newin</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894400&amp;idx=4&amp;sn=046e5dc2e4e1acdc31876b8a1262ba45" target="_blank" rel="noopener">创业邦（为什么 Anthropic 不做 Personal AI）</a></span>
+      </div>
+
+      <div class="radar">
+        <h3>具身智能「退烧」与「产教融合」同时发生</h3>
+        <p>英诺科创基金合伙人王晟判断，具身智能虚火正在退潮，世界模型的早期投资窗口基本关闭，真正踏实做事的企业会迎来好时代。另一边，智元拿出 1,000 多台真机、总价值 2 亿元投入 20 多所高校的实践教学，并计划五年投入超 20 亿元建设生态；OpenAI 也确认将在 2027 年展示人形机器人；京东则预计未来 5 年创造超 10 万个机器人维修工程师岗位。资本降温与人才/场景基础设施加码并行，是行业从叙事走向交付的典型形态。</p>
+        <span class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&amp;mid=2650540920&amp;idx=1&amp;sn=b759964e7e15dcbdb0369092bed5dc0c" target="_blank" rel="noopener">网易科技</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652735857&amp;idx=1&amp;sn=196d008bb0b5ade72d612b8dd85b7292" target="_blank" rel="noopener">新智元（智元进高校）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&amp;mid=2247518816&amp;idx=2&amp;sn=12a4244e2c9be98a21a38a29e7d0c957" target="_blank" rel="noopener">Z Potentials（OpenAI 人形机器人）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894400&amp;idx=3&amp;sn=80e8ad991f8a308f12cf466b7677df4d" target="_blank" rel="noopener">创业邦（京东机器人岗位）</a></span>
+      </div>
+
+      <div class="radar">
+        <h3>企业历史数据成为 AI 时代的并购标的</h3>
+        <p>Google 出价 1,000 万美元（约 7,000 万元人民币）收购破产航空公司 Spirit 三十年的公司数据，包括约 1 亿封邮件、5 亿条 Teams 记录、1,700 万份 OneDrive 文件、2,060 万份 SharePoint 文件和约 3,000 万行代码，覆盖 8 万个邮箱账户。交易因数据敏感性仍被审理和阻挠。对 CTO 的提醒是：企业内部沉淀的协作数据与代码资产，正在被重新定价，数据治理和训练数据授权将成为资产负债表之外的新风险项。</p>
+        <span class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894483&amp;idx=2&amp;sn=142798aca3e95352f34469ddfe19f062" target="_blank" rel="noopener">创业邦 / APPSO</a></span>
+      </div>
+
+      <div class="radar">
+        <h3>Agent 安全从「提示词风险」变成「生产基础设施风险」</h3>
+        <p>Cloudflare 披露 Containers 平台跨租户数据泄露：因 dm-thin 的 64KiB 块分配与 skip_block_zeroing 组合，租户可能读到同主机上其他客户容器遗留的磁盘块，漏洞由漏洞赏金计划报告并已修复。OpenCode 安全事件则波及 1.4% 的 Console 用户。再叠加微软「模型即内部风险」的定位与 OpenAI 25% 生产工程师转岗安全，Agent 安全的边界正在从模型输出扩展到存储、身份、供应链和运行时隔离。</p>
+        <span class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295407&amp;idx=4&amp;sn=99d7b1b770fe9bc89cf7ca7a6b6bc3ae" target="_blank" rel="noopener">InfoQ（Cloudflare）</a> · <a href="https://supertechfans.com/cn/post/2026-10-19-HackerNews/" target="_blank" rel="noopener">HackerNews 每日摘要</a> · <a href="https://x.com/satyanadella/status/2112168320946634932" target="_blank" rel="noopener">Satya Nadella @satyanadella</a> · <a href="https://www.youtube.com/shorts/zt6dSvcJZC8" target="_blank" rel="noopener">No Priors（Greg Brockman）</a></span>
+      </div>
+
+      <div class="radar">
+        <h3>中国 AI 的决策权向年轻技术负责人集中，芯片业务开始分拆融资</h3>
+        <p>晚点报道显示，33 岁的杨植麟（月之暗面）、33 岁的肖弘（Manus 卖给 Meta 后又买回）、31 岁的罗福莉（小米万亿参数模型）和 28 岁的姚顺雨（腾讯混元，进入总裁办）正通过技术路径进入核心决策层，在商业成功之前就掌握数百名研究员和数亿元算力的分配权。同期，理想汽车芯片子公司马赫心完成 16.25 亿元首轮融资，投后估值 171 亿元，并拿出 20% 股权用于员工激励，芯片与域控制器被定位为新的增长曲线。</p>
+        <span class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&amp;mid=2247539314&amp;idx=1&amp;sn=5dfbab5aca1b10bceb11401de540d12b" target="_blank" rel="noopener">晚点LatePost（年轻掌权者）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&amp;mid=2247539314&amp;idx=2&amp;sn=26ba7abd4814180a0d2f0dec14cf8d22" target="_blank" rel="noopener">晚点LatePost（理想芯片）</a></span>
+      </div>
+
+      <div class="radar">
+        <h3>Token 正在变成商品、入口和路由生意</h3>
+        <p>天猫把 Token 摆上双 11 货架，总裁家洛称 AI 的重点是理解「没说出口的需求」，通过跨场景人群信号组合，部分品类转化率比日常高 3 倍以上。企业侧则出现「Token 时代智能电网」的定位：由 DeepSeek 研究员与谷歌工程师创立的 AnyInt，用智能路由帮企业在速度、质量、价格之间为每次请求匹配模型组合，并已获百度战略投资。模型越商品化，路由层和场景入口越值钱。</p>
+        <span class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&amp;mid=2653115053&amp;idx=2&amp;sn=c3d6b3ae7b03c795467ae9f68d03f070" target="_blank" rel="noopener">极客公园（天猫双 11）</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894400&amp;idx=1&amp;sn=8a961dcf0debe4da09c666199688786c" target="_blank" rel="noopener">创业邦（AnyInt）</a></span>
+      </div>
+
+      <div class="radar">
+        <h3>开源 Agent Harness 与平台标准之争升温</h3>
+        <p>Google Research 以 Apache 2.0 开源 Harness²，支持 OpenCode 和 Codex，通过递归调整系统提示词、记忆、工具指导、Skills 和子 Agent 等 8 类组件，在不修改模型权重的情况下提升 Agent 能力；国内开发者称接入 Jev 1.14 后视觉任务表现明显提升。同时 Google 被 IDC 评为 2026 年 Agentic AI 平台领导者。Agent 框架层正在重复云原生早期的路径：先开源建立事实标准，再竞争托管与企业治理能力。</p>
+        <span class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295407&amp;idx=1&amp;sn=b8c188b3e578205013431c43c98bc95d" target="_blank" rel="noopener">InfoQ（Harness²）</a> · <a href="https://cloud.google.com/blog/products/ai-machine-learning/google-named-leader-in-2026-idc-marketscape-for-agentic-ai-platforms/" target="_blank" rel="noopener">Google Cloud Blog</a></span>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="actions">
+    <h2>CTO 视角 <span class="en">Action Items</span></h2>
+    <ol>
+      <li>
+        <strong>把模型采购重做成「路由 + 评测 + 缓存」三件套，而不是年度框架合同。</strong>
+        <span class="why">MiniMax M3.1 Flash 成本降 70%、DeepSeek V4.1 Flash 以 0.20 美元中位成本登顶开源 Agent 榜，说明前沿智能的采购价仍在快速下探。为每个关键任务建立 eval 集和成本基线，按质量/时延/价格动态路由，保留 2–3 家可切换供应商；把缓存命中率纳入平台指标——LobsterAI 数据显示同一任务因缓存差异可产生 7 倍成本差。</span>
+      </li>
+      <li>
+        <strong>把工程度量从「token 用量」改为「每次合并成本 / 验证时长 / 回滚率」。</strong>
+        <span class="why">Anthropic 90% 代码由 AI 编写后，PR 翻倍而回滚率下降 40%+，关键不在写得更多，而在分层验证和风险分级审批。优先投资 CI 并发、merge queue、变更级可观测性、独立 subagent 审查和事故转 eval；否则代码产能提升只会把瓶颈推给合并队列和 on-call。</span>
+      </li>
+      <li>
+        <strong>把 Agent 纳入身份、权限与审计体系，把模型当作内部风险。</strong>
+        <span class="why">微软 Project Perception 的做法是让安全控制位于模型之外，持续评估 Agent 风险、动态调整权限并隔离威胁；OpenAI 已把 25% 生产工程师转岗安全。给 Agent 独立身份、短期凭证、最小权限、金额与调用预算、完整审计链；对第三方 Agent、插件和 MCP 服务做供应链审查，并用红队方式让 AI 攻击自己的系统。</span>
+      </li>
+      <li>
+        <strong>对关键基础设施做「三年 TCO + 退出成本」压力测试。</strong>
+        <span class="why">Topgolf 在 VMware 涨价 400% 后迁移 1.2 万台虚拟机、节省 1,130 万美元，Gartner 预计 2029 年 55% 企业将启动弃用 VMware 的 POC；微软退出 Nscale 交易也说明长期算力承诺并非无风险。对虚拟化、数据库、云和模型供应商同时评估替代路径，合同里明确数据可迁移性、价格上限和断供条款。</span>
+      </li>
+      <li>
+        <strong>重新设计初级工程师与平台的协作方式，而不是简单缩减招聘。</strong>
+        <span class="why">当 AI 承担大部分编码，人的价值转向问题定义、系统设计、验证与结果所有权。把初级工程师放到「定义验收标准、构建 eval、审查高风险变更」的路径上，用 AI 杠杆率和交付质量评估团队，而不是用 token 消耗或代码行数。Anthropic 将 5% 股份注入公共利益基金（可用于缓解就业冲击）、Gergely 对「拒绝学习 AI」的直白判断，都说明组织契约正在被重新谈判；提前做岗位重构和再培训，比事后被动调整便宜得多。</span>
+      </li>
+    </ol>
+  </section>
+
+  <section class="sources">
+    <h2>信息来源汇总 <span class="en">Sources</span></h2>
+    <ul>
+      <li><a href="https://blog.cloudflare.com/obsessive-inference-optimization/" target="_blank" rel="noopener">Cutting our inference bill by 68% by being obsessive about optimization</a> <span class="feed">· The Cloudflare Blog</span></li>
+      <li><a href="https://x.com/arena/status/2112247114944360666" target="_blank" rel="noopener">DeepSeek-V4.1-Flash-20261017 is now the #1 open model in Agent Arena</a> <span class="feed">· Arena.ai</span></li>
+      <li><a href="https://x.com/AIatMeta/status/2112245968750145561" target="_blank" rel="noopener">Muse models trained at Prometheus, a gigawatt-scale supercluster</a> <span class="feed">· AI at Meta</span></li>
+      <li><a href="https://x.com/ycombinator/status/2112234482975846504" target="_blank" rel="noopener">Greptile raises $50M Series B</a> <span class="feed">· Y Combinator</span></li>
+      <li><a href="https://x.com/cognition/status/2112223929414607228" target="_blank" rel="noopener">Efficiency-based auto-approvals and Devin Coach</a> <span class="feed">· Cognition</span></li>
+      <li><a href="https://engineering.fb.com/2026/10/19/ml-applications/thin-orchestrator-ai-agent-architecture/" target="_blank" rel="noopener">The Thin Orchestrator: Making AI Agents More Reliable</a> <span class="feed">· Engineering at Meta</span></li>
+      <li><a href="https://x.com/dotey/status/2112194237211029946" target="_blank" rel="noopener">网易 LobsterAI《中国办公 Agent 用户行为报告》第二期</a> <span class="feed">· 宝玉 @dotey</span></li>
+      <li><a href="https://x.com/satyanadella/status/2112168320946634932" target="_blank" rel="noopener">Treat models as insider risks; expanding Project Perception</a> <span class="feed">· Satya Nadella</span></li>
+      <li><a href="https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/" target="_blank" rel="noopener">Inside Prometheus: Meta’s Journey to a Gigawatt-Scale Supercluster</a> <span class="feed">· Engineering at Meta</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894483&amp;idx=2&amp;sn=142798aca3e95352f34469ddfe19f062" target="_blank" rel="noopener">谷歌出价 7000 万「蒸馏」一家破产公司</a> <span class="feed">· 创业邦 / APPSO</span></li>
+      <li><a href="https://www.youtube.com/shorts/zt6dSvcJZC8" target="_blank" rel="noopener">How OpenAI Secures Its Systems with AI</a> <span class="feed">· No Priors</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&amp;mid=2653115053&amp;idx=2&amp;sn=c3d6b3ae7b03c795467ae9f68d03f070" target="_blank" rel="noopener">今年双 11，天猫想卖的不只是货，还有 Token</a> <span class="feed">· 极客公园</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzE5MTA3NzcxMQ==&amp;mid=2247489196&amp;idx=1&amp;sn=4c8b969db8bd136f47d7b1a7650790c4" target="_blank" rel="noopener">MiniMax M3.1 Flash：重新定义 Agent 的性能与成本</a> <span class="feed">· MiniMax 稀宇科技</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&amp;mid=2247539314&amp;idx=1&amp;sn=5dfbab5aca1b10bceb11401de540d12b" target="_blank" rel="noopener">中国 AI 的年轻掌权者们</a> <span class="feed">· 晚点LatePost</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&amp;mid=2247539314&amp;idx=2&amp;sn=26ba7abd4814180a0d2f0dec14cf8d22" target="_blank" rel="noopener">理想芯片公司完成 16.25 亿元融资，投后估值 171 亿元</a> <span class="feed">· 晚点LatePost</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247837254&amp;idx=1&amp;sn=a9a3eace68607dda5a6d52d36505a206" target="_blank" rel="noopener">80% 新增实例由 Agent 创建！专访阿里云杨辛军</a> <span class="feed">· CSDN</span></li>
+      <li><a href="https://cloud.google.com/blog/products/ai-machine-learning/google-named-leader-in-2026-idc-marketscape-for-agentic-ai-platforms/" target="_blank" rel="noopener">Google named a Leader in the 2026 IDC MarketScape for Agentic AI Platforms</a> <span class="feed">· Cloud Blog</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295407&amp;idx=1&amp;sn=b8c188b3e578205013431c43c98bc95d" target="_blank" rel="noopener">谷歌开源 Harness，支持 OpenCode 和 Codex</a> <span class="feed">· InfoQ</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295407&amp;idx=4&amp;sn=99d7b1b770fe9bc89cf7ca7a6b6bc3ae" target="_blank" rel="noopener">Cloudflare 修复了容器中的跨租户数据泄露问题</a> <span class="feed">· InfoQ</span></li>
+      <li><a href="https://x.com/FinanceYF5/status/2112063910039933166" target="_blank" rel="noopener">模型层商品化与算力层扩张：理解当前 AI 经济的一张图</a> <span class="feed">· AI Will @FinanceYF5</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668623&amp;idx=2&amp;sn=a06c6020dc81d9f371e707e03a59859b" target="_blank" rel="noopener">Claude 写代码太快，Git 扛不住了：Anthropic 7 人团队重造版本控制系统</a> <span class="feed">· AI前线</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894400&amp;idx=1&amp;sn=8a961dcf0debe4da09c666199688786c" target="_blank" rel="noopener">Deepseek 研究员联手谷歌工程师创业，做 Token 时代的「智能电网」</a> <span class="feed">· 创业邦</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894400&amp;idx=3&amp;sn=80e8ad991f8a308f12cf466b7677df4d" target="_blank" rel="noopener">英伟达辟谣 RTX5090 停产；京东：未来 5 年创造超 10 万个机器人维修工程师岗位</a> <span class="feed">· 创业邦</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894400&amp;idx=4&amp;sn=046e5dc2e4e1acdc31876b8a1262ba45" target="_blank" rel="noopener">为什么 Anthropic 不做 Personal AI</a> <span class="feed">· 创业邦 / 极客公园</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3ODk5OTEzOA==&amp;mid=2962188952&amp;idx=1&amp;sn=85b28ba1bc47fd2148cdd0f6d3a7bcc2" target="_blank" rel="noopener">AI 繁荣的另一面：7770 亿美元资本开支背后，谁在兑现收入</a> <span class="feed">· 经纬创投 / Z Potentials</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&amp;mid=2247518816&amp;idx=2&amp;sn=12a4244e2c9be98a21a38a29e7d0c957" target="_blank" rel="noopener">速递｜OpenAI 将入局人形机器人赛道</a> <span class="feed">· Z Potentials</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&amp;mid=2247518816&amp;idx=3&amp;sn=75abf5bfc5e24e6c8c2fd93b77eefe9f" target="_blank" rel="noopener">Anthropic 预计将 5% 的股份注入公益基金</a> <span class="feed">· Z Potentials / Bloomberg</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652735857&amp;idx=1&amp;sn=196d008bb0b5ade72d612b8dd85b7292" target="_blank" rel="noopener">清华期末考用了真机器人！豪掷 2 亿元，开进 20 多所高校</a> <span class="feed">· 新智元</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652735857&amp;idx=2&amp;sn=080a2d5531a5d51a3afe813509c04e82" target="_blank" rel="noopener">Claude Code「自产自审」：九成代码不再经过人类</a> <span class="feed">· 新智元</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&amp;mid=2650540920&amp;idx=1&amp;sn=b759964e7e15dcbdb0369092bed5dc0c" target="_blank" rel="noopener">独家对话王晟：近千亿资金涌入后，具身智能开始退烧</a> <span class="feed">· 网易科技</span></li>
+      <li><a href="https://x.com/shao__meng/status/2112007112511607291" target="_blank" rel="noopener">Addy Osmani 谈 Agent 时代代码审查的重构</a> <span class="feed">· meng shao @shao__meng</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247637014&amp;idx=1&amp;sn=477c8dcca743e1f6037e5b9486a01d15" target="_blank" rel="noopener">DeepSeek API 已支持网页搜索和抓取</a> <span class="feed">· 少数派</span></li>
+      <li><a href="https://x.com/shao__meng/status/2112004342253556016" target="_blank" rel="noopener">老板把「AI token 用量」设为 KPI 的讨论</a> <span class="feed">· meng shao @shao__meng</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3NDkyMTQ5Mw==&amp;mid=2247502622&amp;idx=1&amp;sn=c75e9683f6c750e5d98ce65fe635a30d" target="_blank" rel="noopener">YC 华裔团队造了一台本地 AI 电脑，1799 美元三天售罄</a> <span class="feed">· 有新Newin</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzYzNTkyMTI2Ng==&amp;mid=2247577612&amp;idx=1&amp;sn=ee02761238be93ec9284a239e5f00108" target="_blank" rel="noopener">2026 年，44 家公司宣布收入破 1 亿美元</a> <span class="feed">· 白鲸出海</span></li>
+      <li><a href="https://x.com/dotey/status/2111974893676060990" target="_blank" rel="noopener">Claude Code 团队的代码审查实践</a> <span class="feed">· 宝玉 @dotey</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894385&amp;idx=3&amp;sn=b9a5c7d8c5196191937ae6fa2ad6942b" target="_blank" rel="noopener">DeepSeek 新模型 Token 消耗降超五成；微软取消 AI 相关合作，Nscale 遇挫</a> <span class="feed">· 创业邦</span></li>
+      <li><a href="https://supertechfans.com/cn/post/2026-10-19-HackerNews/" target="_blank" rel="noopener">2026-10-19 Hacker News Top Stories</a> <span class="feed">· HackerNews 每日摘要</span></li>
+      <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638164&amp;idx=1&amp;sn=f8ed2c1b9226ded269a5e648c5dc4f31" target="_blank" rel="noopener">VMware 价格暴涨 400% 后：公司怒迁 12000 台虚拟机，降本 7500 万</a> <span class="feed">· dbaplus 社群</span></li>
+    </ul>
+  </section>
+
+  <footer class="note">
+    本报告由 tech-daily-generator 基于 Freshrss 24 小时抓取数据生成 · 视角：CTO 洞察 · 生成时间：2026-10-19<br>
+    新闻事实与数据均来自所标注来源，链接可点击查看原文；报告中的判断为基于公开信息的分析，不构成投资或采购决策建议。
+  </footer>
+
+</div>
+</body>
+</html>
