@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践版 · 科技日报 2026-10-20</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #111821;
+    --panel-2: #0e141b;
+    --border: #223041;
+    --text: #d7e2ee;
+    --muted: #8fa3b7;
+    --dim: #5f7387;
+    --green: #4ade80;
+    --cyan: #22d3ee;
+    --blue: #60a5fa;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --mono: "JetBrains Mono", "Fira Code", "Sarasa Mono SC", "Noto Sans Mono CJK SC", "SFMono-Regular", Consolas, "PingFang SC", "Microsoft YaHei", monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      linear-gradient(rgba(34, 211, 238, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.025) 1px, transparent 1px),
+      var(--bg);
+    background-size: 32px 32px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  a { color: var(--cyan); text-decoration: none; border-bottom: 1px dashed rgba(34, 211, 238, 0.35); }
+  a:hover { color: #67e8f9; border-bottom-color: #67e8f9; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  /* Header */
+  header.hero {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: linear-gradient(145deg, #0f1720 0%, #0b1219 60%, #0c1520 100%);
+    padding: 28px 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px 200px at 85% -10%, rgba(34, 211, 238, 0.13), transparent 60%);
+    pointer-events: none;
+  }
+  .prompt { color: var(--green); font-size: 13px; letter-spacing: 0.02em; }
+  .prompt .caret { display: inline-block; width: 8px; height: 15px; background: var(--green); vertical-align: -2px; margin-left: 4px; animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  h1 { margin: 12px 0 8px; font-size: clamp(24px, 4vw, 38px); line-height: 1.25; letter-spacing: -0.02em; }
+  h1 .accent { color: var(--cyan); }
+  .subtitle { color: var(--muted); font-size: 13.5px; margin: 0 0 18px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chip {
+    font-size: 12px; color: var(--muted); border: 1px solid var(--border);
+    background: rgba(34, 211, 238, 0.04); border-radius: 999px; padding: 4px 11px;
+  }
+  .chip b { color: var(--text); font-weight: 500; }
+
+  /* TOC */
+  nav.toc { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 34px; font-size: 12.5px; }
+  nav.toc a {
+    border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px;
+    color: var(--muted); background: var(--panel-2); border-bottom: 1px solid var(--border);
+  }
+  nav.toc a:hover { color: var(--cyan); border-color: rgba(34, 211, 238, 0.5); }
+
+  /* Sections */
+  section { margin-bottom: 46px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .sec-num { color: var(--green); font-size: 13px; }
+  h2 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+  .sec-desc { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  .rule { height: 1px; background: linear-gradient(90deg, var(--border), transparent); margin: 8px 0 22px; }
+
+  /* Hot list */
+  .hot-item {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    border-radius: 8px;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .hot-item:hover { border-color: #2d4258; transform: translateX(2px); }
+  .hot-top { display: flex; gap: 14px; align-items: flex-start; }
+  .rank { color: var(--dim); font-size: 22px; line-height: 1; min-width: 30px; padding-top: 3px; }
+  .hot-item:nth-child(1) .rank { color: var(--amber); }
+  .hot-body { flex: 1; min-width: 0; }
+  .hot-body h3 { font-size: 16.5px; margin: 0 0 6px; line-height: 1.45; }
+  .src-row { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 12px; }
+  .src { color: var(--dim); border-bottom: 1px dotted rgba(95, 115, 135, 0.5); }
+  .src:hover { color: var(--cyan); }
+  .tag {
+    display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 4px;
+    margin-right: 6px; vertical-align: 1px; letter-spacing: 0.02em;
+  }
+  .tag.new { color: var(--green); background: rgba(74, 222, 128, 0.09); border: 1px solid rgba(74, 222, 128, 0.25); }
+  .tag.os { color: var(--purple); background: rgba(167, 139, 250, 0.09); border: 1px solid rgba(167, 139, 250, 0.25); }
+  .tag.ga { color: var(--cyan); background: rgba(34, 211, 238, 0.08); border: 1px solid rgba(34, 211, 238, 0.25); }
+  .tag.agent { color: var(--amber); background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25); }
+
+  /* Deep dive */
+  .dive {
+    border: 1px solid var(--border); border-radius: 10px; background: var(--panel-2);
+    padding: 24px; margin-bottom: 22px;
+  }
+  .dive h3 { font-size: 19px; margin: 0 0 4px; line-height: 1.4; }
+  .dive .kicker { color: var(--green); font-size: 12px; margin-bottom: 12px; }
+  .dive h4 { color: var(--cyan); font-size: 14.5px; margin: 22px 0 8px; }
+  .dive p { margin: 10px 0; color: #c2d0de; }
+  .dive ul, .dive ol { margin: 8px 0; padding-left: 22px; color: #c2d0de; }
+  .dive li { margin: 5px 0; }
+  pre {
+    background: #081019; border: 1px solid #1c2b3a; border-radius: 7px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.8px; line-height: 1.65;
+    color: #c9d7e4; margin: 12px 0;
+  }
+  code { font-family: var(--mono); }
+  p code, li code, td code {
+    background: rgba(34, 211, 238, 0.07); border: 1px solid rgba(34, 211, 238, 0.16);
+    border-radius: 4px; padding: 1px 5px; font-size: 12.5px; color: #a5f3fc;
+  }
+  .tok-k { color: #c792ea; }
+  .tok-s { color: #c3e88d; }
+  .tok-c { color: #5f7387; font-style: italic; }
+  .tok-f { color: #82aaff; }
+  .tok-n { color: #f78c6c; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 6px; font-size: 13px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: rgba(34, 211, 238, 0.05); color: var(--cyan); font-weight: 500; }
+  td { color: #c2d0de; background: rgba(255, 255, 255, 0.012); }
+
+  .callout {
+    border: 1px solid rgba(251, 191, 36, 0.25); border-left: 3px solid var(--amber);
+    background: rgba(251, 191, 36, 0.045); border-radius: 6px;
+    padding: 12px 16px; margin: 14px 0; font-size: 13.5px; color: #d8cba8;
+  }
+  .callout b { color: var(--amber); }
+
+  /* Tools grid */
+  .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .tool {
+    border: 1px solid var(--border); border-radius: 8px; background: var(--panel);
+    padding: 18px; position: relative;
+  }
+  .tool::after {
+    content: ""; position: absolute; top: 0; left: 18px; width: 42px; height: 2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+  }
+  .tool h3 { margin: 0 0 2px; font-size: 15.5px; }
+  .tool .kind { color: var(--dim); font-size: 11.5px; margin-bottom: 8px; }
+  .tool p { margin: 0; font-size: 13.5px; color: #b9c8d6; }
+  .tool .src-row { margin-top: 12px; }
+
+  /* Practice */
+  .practice {
+    border: 1px solid var(--border); border-radius: 8px; background: var(--panel-2);
+    padding: 20px 22px; margin-bottom: 14px;
+  }
+  .practice h3 { margin: 0 0 4px; font-size: 16.5px; color: #e6eef6; }
+  .practice h3 .idx { color: var(--green); margin-right: 8px; }
+  .practice p { margin: 8px 0; color: #bccbda; font-size: 14px; }
+  .practice ul { margin: 8px 0; padding-left: 20px; color: #bccbda; font-size: 14px; }
+  .practice li { margin: 4px 0; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border); margin-top: 50px; padding-top: 26px;
+  }
+  footer h2 { font-size: 18px; margin-bottom: 14px; }
+  .sources { list-style: none; padding: 0; margin: 0; counter-reset: src; }
+  .sources li {
+    counter-increment: src; position: relative; padding: 7px 0 7px 34px;
+    border-bottom: 1px dashed rgba(34, 48, 65, 0.45); font-size: 13px;
+  }
+  .sources li::before {
+    content: "[" counter(src) "]"; position: absolute; left: 0; color: var(--dim); font-size: 11.5px;
+  }
+  .sources .s-title { color: #c2d0de; }
+  .sources .s-feed { color: var(--dim); font-size: 11.5px; margin-left: 4px; }
+  .colophon { margin-top: 26px; color: var(--dim); font-size: 11.5px; line-height: 1.8; }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 20px 14px 48px; }
+    header.hero { padding: 22px 18px; }
+    .dive { padding: 18px; }
+    .hot-item { padding: 15px 14px; }
+    .rank { min-width: 22px; font-size: 18px; }
+    th, td { padding: 6px 7px; font-size: 12px; }
+    pre { font-size: 11.8px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="prompt">~/tech-daily $ ./daily-report --role developer_practice --date 2026-10-20<span class="caret"></span></div>
+    <h1>开发者实践版<span class="accent">_</span>科技日报</h1>
+    <p class="subtitle">一线工程师视角 · 只关心能落地的东西：工具、架构、踩坑与最佳实践</p>
+    <div class="meta-row">
+      <span class="chip">数据窗口 <b>2026-10-19 20:57 → 2026-10-20 20:57</b></span>
+      <span class="chip">原始资讯 <b>260 条</b></span>
+      <span class="chip">采集源 <b>424 个</b></span>
+      <span class="chip">本期主题 <b>推理基建 / Agent Harness / 工具链提速</b></span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <a href="#hot">01 今日技术热榜</a>
+    <a href="#deep">02 深度技术解读</a>
+    <a href="#tools">03 工具推荐</a>
+    <a href="#practice">04 实践指南</a>
+    <a href="#sources">05 参考链接汇总</a>
+  </nav>
+
+  <!-- ============ 01 HOT ============ -->
+  <section id="hot">
+    <div class="sec-head">
+      <span class="sec-num">// 01</span>
+      <h2>今日技术热榜</h2>
+    </div>
+    <p class="sec-desc">从 260 条资讯中筛出 8 条对开发者有直接信息增量的动态，按落地价值排序。</p>
+    <div class="rule"></div>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">01</div>
+        <div class="hot-body">
+          <h3><span class="tag os">OPEN SOURCE</span>TorchTPU 开源：PyTorch 原生跑上 TPU，vLLM / SGLang 同步适配</h3>
+          <p>Google 在 PyTorch Conference 2026 宣布把 TorchTPU 开源，TPU 正式成为 PyTorch 的一等后端：开发者用 <code>torch.device("tpu")</code> 就能训练、推理和部署，不必把模型改写成 JAX。更关键的是服务侧，vLLM 与 SGLang 已提供由 TorchTPU 驱动的原生 PyTorch 后端，包含优化的 TPU kernel、基于 TPU Sync 的 KV Cache 管理和 disaggregated serving，官方称在 Ironwood TPU 的长上下文与 agentic 负载上取得 SOTA 性能与成本效率。训练侧，TorchTitan 的 TPU fork 提供 SimpleFSDP、Graph Trainer 和自定义 Pallas kernel，面向 dense 与 MoE 架构冲击高 MFU。这意味着 PyTorch 生态的存量代码第一次有了低摩擦迁移到 TPU 的路径，多了一种和 GPU 做成本对照的现实选项。</p>
+          <div class="src-row">
+            <a class="src" href="https://cloud.google.com/blog/topics/ai-infrastructure/torchtpu-is-now-open-source-run-native-pytorch-on-tpus/" target="_blank" rel="noopener">📎 来源: Cloud Blog</a>
+            <a class="src" href="https://developers.googleblog.com/announcing-new-vllm-and-sglang-inference-engines-on-tpu/" target="_blank" rel="noopener">📎 来源: Google Developers Blog · vLLM/SGLang</a>
+            <a class="src" href="https://huggingface.co/blog/hf-torchtpu" target="_blank" rel="noopener">📎 来源: Hugging Face Blog</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">02</div>
+        <div class="hot-body">
+          <h3><span class="tag new">RUST</span>tsrs：Cloudflare 与 VoidZero 用 Rust 重写 TypeScript 编译器</h3>
+          <p>Cloudflare 与 VoidZero 联合 Owner.com 的 Max Schwenk 推进 tsrs，把 TypeScript 编译器移植到 Rust，并以 Oxc 工具链孵化。项目明确表示不是 fork：语言的设计与方向仍由 TypeScript 团队掌控，tsrs 只解决“检查得慢、内存占用高”的工程问题。官方目标很直接——减少等待类型检查的时间，同时把完整开发环境带到更多地方，包括浏览器里。对前端团队来说，这类底层工具的提速会同时反映在本地反馈循环和 CI 时长上；不过项目仍处于合作推进阶段，生产接入需要等待稳定性与兼容性验证。</p>
+          <div class="src-row">
+            <a class="src" href="https://blog.cloudflare.com/typescript-rust-port/" target="_blank" rel="noopener">📎 来源: The Cloudflare Blog</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">03</div>
+        <div class="hot-body">
+          <h3><span class="tag os">OPEN SOURCE</span>DeepSeek 开源推理框架 DeepInfer，兼容 NVIDIA 与昇腾</h3>
+          <p>DeepSeek 把内部推理框架 DeepInfer 全面开源，定位是模型服务中常被忽视的中间层：负责算力集群的统筹调度，直接决定吞吐、延迟与电力成本。它支持分布式推理、推测解码、SWA Bounded Replay 和结构化输出，同时兼容 NVIDIA 与华为昇腾平台；配套开源的 deepseek-recipe 提供与官方 API 处理逻辑对齐的生产级编解码组件。DeepSeek V4.1 Flash 的高吞吐、低延迟服务已经跑在这套框架上，后续新模型的推理代码也会持续更新。对自建推理的团队，这是一份来自头部大模型公司的真实部署参考，尤其值得研究其长上下文与服务调度策略。</p>
+          <div class="src-row">
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=Mzk0OTYwNzc3NQ==&amp;mid=2247485884&amp;idx=1&amp;sn=d457981abe7db1f1b5d600fc109dc836" target="_blank" rel="noopener">📎 来源: DeepSeek 官方公众号</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">04</div>
+        <div class="hot-body">
+          <h3><span class="tag ga">GA</span>Vercel Functions WebSocket 正式 GA，日均 1500 万连接</h3>
+          <p>Vercel Functions 的 WebSocket 支持结束公测正式 GA。自 6 月底开放 beta 以来，Vercel CDN 已累计承载 3 亿次 WebSocket 连接，目前每天服务 1500 万次；连接遵循与普通 Function 调用相同的限额和计费规则，在 Active CPU 模式下只对处理消息所消耗的 CPU 时间计费。官方列出的典型场景是 AI 聊天、流式输出和实时多人应用，Vercel AI Gateway 的实时模型也跑在 WebSocket 之上。对于需要长连接、但不想自己维护网关和扩缩容的团队，这给 Serverless 实时架构增加了一个可评估的选项。</p>
+          <div class="src-row">
+            <a class="src" href="https://vercel.com/changelog/websocket-support-is-now-generally-available" target="_blank" rel="noopener">📎 来源: Vercel News</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">05</div>
+        <div class="hot-body">
+          <h3><span class="tag new">API</span>OpenAI API 支持 12 小时 prompt caching</h3>
+          <p>OpenAI Developers 宣布 API 可以选择 12 小时提示缓存。对持久化 Agent 来说，这意味着共享的指令、工具定义和上下文可以缓存更久，即使两次请求相隔数小时，仍能按更低的 cached-input 价格计费。最直接的受益者是 always-on 的个人助理、值班 Agent 和定时任务类应用：稳定前缀不再需要每轮重新付费。工程上要注意的是，缓存命中依赖请求前缀完全一致，因此必须刻意把“长期不变的部分”和“每轮变化的数据”拆开，否则缓存形同虚设。</p>
+          <div class="src-row">
+            <a class="src" href="https://x.com/OpenAIDevs/status/2112603916076781778" target="_blank" rel="noopener">📎 来源: OpenAI Developers</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">06</div>
+        <div class="hot-body">
+          <h3><span class="tag agent">AGENT</span>Pi 1.0 发布：原生 MCP 进核心，新 Harness「Pi Durable」接管长时任务</h3>
+          <p>Pi 迎来今年最大更新：项目升级到 1.0，Code Mode 与原生 MCP 进入稳定版，同时推出新的 Harness Pi Durable。MCP 在过去一年经历六七轮调整后被装进核心，Pi Durable 的架构也迭代了八轮。它接管的正是长时 Agent 最琐碎的部分：保存用户消息、模型回复、工具执行结果和任务状态，进程崩溃后能从中断处继续；可安全重放的操作会重新执行，可能产生重复副作用的操作则不会被贸然重跑。有开发者估算这套框架能替掉自己一半的样板代码，对 Slack Bot、个人助理这类需要持久会话和故障恢复的应用，是明显的基建减负。</p>
+          <div class="src-row">
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668664&amp;idx=2&amp;sn=184b3d506aeba3ba7fce5163285802e8" target="_blank" rel="noopener">📎 来源: AI前线</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">07</div>
+        <div class="hot-body">
+          <h3><span class="tag agent">AGENT</span>Devin Fusion 以 68 分登顶 Coding Agent Index，单任务成本低 31%</h3>
+          <p>Cognition 宣布 Devin Fusion 在 Artificial Analysis Coding Agent Index 上拿到 68 分的最高分，配置是 Opus 5.5 担任主线模型、GPT-6 Luna 担任副手。官方称其在性能与价格上都优于 Claude Code + Opus 5.5 的组合，单个任务成本低 31%，并已可在 Devin CLI 中试用。比分数更值得关注的是架构信号：商业 Coding Agent 开始采用“主模型负责规划与关键决策、副模型处理旁路任务”的协作/路由形态。对自建 Agent 的团队，这提供了一条现实的降本思路——不是所有步骤都值得用最贵的模型。</p>
+          <div class="src-row">
+            <a class="src" href="https://x.com/cognition/status/2112290148205436979" target="_blank" rel="noopener">📎 来源: Cognition</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">08</div>
+        <div class="hot-body">
+          <h3><span class="tag new">CI/CD</span>GitHub Actions Runner Controller 0.15.0：面向大规模自托管 runner 的可靠性升级</h3>
+          <p>GitHub 发布 Actions Runner Controller（ARC）0.15.0，面向在 Kubernetes 上运行自托管 GitHub Actions runner 的组织，重点改进可靠性、可扩展性和可观测性。对 CI 平台团队来说，ARC 的稳定性直接对应高峰期排队、runner 漂移和故障定位成本；这类小版本往往不改变使用方式，但值得在预发集群先验证再滚动升级。结合自托管 runner 在成本与合规上的需求，ARC 仍然是 GitHub Actions 重度用户做水平扩展的主要方式。</p>
+          <div class="src-row">
+            <a class="src" href="https://www.infoq.com/news/2026/10/github-runner-controller-0-15/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ 02 DEEP DIVE ============ -->
+  <section id="deep">
+    <div class="sec-head">
+      <span class="sec-num">// 02</span>
+      <h2>深度技术解读</h2>
+    </div>
+    <p class="sec-desc">两个今天最值得展开的技术话题：TPU 软件栈的开放化，以及 Agent Harness 的工程化。</p>
+    <div class="rule"></div>
+
+    <div class="dive">
+      <h3>A. TPU 的「去 JAX 化」：TorchTPU 把整个 PyTorch 生态搬上 TPU</h3>
+      <div class="kicker">关键词：TorchTPU · vLLM · SGLang · llm-d · Pallas · KV Cache</div>
+
+      <p><b>问题在哪：</b>TPU 在特定负载上的性能和成本一直有吸引力，但软件栈长期围绕 JAX/XLA 构建。对已经沉淀了大量 PyTorch 训练代码、自定义算子和服务链路的团队，迁移意味着重写和重新调优，机会成本极高。TorchTPU 试图消灭的正是这道“语言税”。</p>
+
+      <h4>四层栈各自解决什么</h4>
+      <table>
+        <thead>
+          <tr><th>层次</th><th>组件</th><th>今天新增的关键能力</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>训练</td>
+            <td>TorchTPU + TorchTitan TPU fork</td>
+            <td>原生 <code>torch.device("tpu")</code>；SimpleFSDP、Graph Trainer、自定义 Pallas kernel；面向 dense/MoE 提升 MFU；提供 Hugging Face modeling backend</td>
+          </tr>
+          <tr>
+            <td>推理引擎</td>
+            <td>vLLM / SGLang</td>
+            <td>基于 TorchTPU 的原生 PyTorch 后端；优化的 TPU kernel；TPU Sync 管理 KV Cache；支持 disaggregated serving</td>
+          </tr>
+          <tr>
+            <td>分布式编排</td>
+            <td>llm-d 1.0</td>
+            <td>Kubernetes 原生分布式推理栈，CNCF Sandbox 项目，500+ 贡献者、25+ 组织；针对 agent 多步调用、长共享前缀与 RL rollout</td>
+          </tr>
+          <tr>
+            <td>调试</td>
+            <td>Model Explorer</td>
+            <td>支持 TOSA、VGF、PTE 等自定义 IR 适配器；分层图可视化、分屏视图、逐节点 trace 覆盖，用于定位导出回归与硬件 delegate 问题</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <pre><code><span class="tok-c"># 迁移的核心变化：设备选择，而不是重写模型</span>
+<span class="tok-k">import</span> torch
+
+device = torch.device(<span class="tok-s">"tpu"</span>)
+model = model.to(device)
+
+<span class="tok-c"># 训练：TorchTitan TPU fork 提供 SimpleFSDP / Graph Trainer / Pallas kernels</span>
+<span class="tok-c"># 推理：vLLM / SGLang 通过 TorchTPU 后端在 Ironwood TPU 上提供服务</span>
+<span class="tok-c"># 编排：llm-d 1.0 负责 K8s 上的分布式推理与长前缀调度</span></code></pre>
+
+      <h4>为什么值得关注</h4>
+      <ul>
+        <li><b>多供应商议价能力：</b>同一套 PyTorch 代码可以同时跑 GPU、CPU 和 TPU，推理成本终于能做同口径 A/B，而不是靠估算。</li>
+        <li><b>推理栈合流：</b>vLLM、SGLang、llm-d、Ray、TorchRec、Hugging Face 被放进同一软件模型，团队不必为 TPU 维护一套独立服务链路。</li>
+        <li><b>Agent 负载被单独照顾：</b>llm-d 1.0 明确针对多步 agent 和 RL rollout 的长共享前缀，这与传统“一问一答”推理的优化重点不同。</li>
+      </ul>
+
+      <div class="callout">
+        <b>落地建议：</b>先用一个小模型 + vLLM 在 TPU 上跑通吞吐/延迟基线，再评估训练迁移；重点验证自定义算子与 Pallas kernel 的覆盖度。不要为了 TPU 而 TPU，先把数据搬运、算子缺口和运维成本算进 TCO。
+      </div>
+
+      <div class="src-row">
+        <a class="src" href="https://cloud.google.com/blog/topics/ai-infrastructure/torchtpu-is-now-open-source-run-native-pytorch-on-tpus/" target="_blank" rel="noopener">📎 Cloud Blog · TorchTPU open source</a>
+        <a class="src" href="https://developers.googleblog.com/integrating-torchtpu-into-torchtitan-and-optimizing-models-for-tpu/" target="_blank" rel="noopener">📎 Google Developers Blog · TorchTitan</a>
+        <a class="src" href="https://cloud.google.com/blog/topics/ai-infrastructure/llm-d-1-0-an-open-source-stack-for-distributed-inference/" target="_blank" rel="noopener">📎 Cloud Blog · llm-d 1.0</a>
+        <a class="src" href="https://developers.googleblog.com/bringing-visual-graph-debugging-to-custom-edge-compilers-with-model-explorer/" target="_blank" rel="noopener">📎 Google Developers Blog · Model Explorer</a>
+      </div>
+    </div>
+
+    <div class="dive">
+      <h3>B. Agent Harness 正在成为新的「后端框架」：持久化、护栏与外部验收</h3>
+      <div class="kicker">关键词：Pi Durable · Harness · 崩溃恢复 · 循环上限 · 写审分离 · FPY</div>
+
+      <p><b>问题在哪：</b>写一个 <code>while</code> 循环加几个 tool call 就能做出 demo，但生产环境的问题全在循环之外：工具失败怎么办？谁来校验参数？如何防止无限循环和上下文爆炸？进程崩了任务能不能续？让同一个 Agent 自评，结论几乎永远是“没问题”。这些正是 Agent Harness 的职责——模型与执行环境之间的那层软件。</p>
+
+      <h4>今天出现的三个工程样本</h4>
+      <ul>
+        <li><b>Pi Durable（持久化）：</b>把消息、模型回复、工具结果、任务状态落盘，支持崩溃后从断点恢复与会话分叉。关键设计是重放语义：安全操作可重放，可能产生重复副作用的操作不会盲目重跑。</li>
+        <li><b>freeCodeCamp 的 TypeScript Harness 教程（可测试性）：</b>强调 provider 无关的执行循环，并逐层加入工具注册、参数校验、失败处理、执行上限；同时把模型响应抽象掉，让 harness 本身可以脱离真实模型做单测。</li>
+        <li><b>腾讯云 AI 工程化护栏（安全边界）：</b>把安全边界外置到 Harness，按事前隔离与授权、事中循环封顶/人机分级/哨兵熔断、事后门禁与审计分层设防；并明确指出“写和评不能是同一个 Agent”，以对抗自我确认偏差。</li>
+      </ul>
+
+      <p>组织层面，货拉拉的实践提供了另一个视角：个人提效不等于组织提效。他们用 AI 代码占比的分层签名、FPY（首次通过率）公式及已知盲区来做度量，用对抗性审查和 SDD 五步产线兜住初级工程师的产出下限，再把散落在个人手里的 AI 配置收编成统一工作台。这些动作本质上都是在补 Harness 之上的流程层。</p>
+
+      <h4>一个可测试的 Harness 骨架</h4>
+      <pre><code><span class="tok-k">type</span> Tool = {
+  name: <span class="tok-k">string</span>;
+  schema: ZodType;                    <span class="tok-c">// 参数必须过 schema，不信任模型输出</span>
+  run: (args: unknown) =&gt; Promise&lt;unknown&gt;;
+};
+
+<span class="tok-k">async function</span> <span class="tok-f">runAgent</span>(task: <span class="tok-k">string</span>, tools: Tool[]) {
+  <span class="tok-k">let</span> ctx = createContext(task);
+
+  <span class="tok-k">for</span> (<span class="tok-k">let</span> step = <span class="tok-n">0</span>; step &lt; MAX_STEPS; step++) {
+    <span class="tok-k">const</span> action = <span class="tok-k">await</span> model.decide(ctx, tools);
+
+    <span class="tok-k">if</span> (action.type === <span class="tok-s">"final"</span>) <span class="tok-k">return</span> action.answer;
+
+    <span class="tok-k">const</span> result = <span class="tok-k">await</span> <span class="tok-f">execute</span>(tools, action);  <span class="tok-c">// 校验、超时、重试、幂等键</span>
+    ctx = ctx.<span class="tok-f">append</span>(action, result).<span class="tok-f">compactIfNeeded</span>();
+  }
+
+  <span class="tok-k">throw new</span> <span class="tok-f">Error</span>(<span class="tok-s">"step budget exhausted"</span>);  <span class="tok-c">// 宁可失败，不要失控</span>
+}</code></pre>
+
+      <p>JetBrains 今天的两篇文章从不同角度补了注脚：一篇解释为什么仍然需要 IDE——Agent 开始承担跨文件任务后，IDE 的角色从“编辑器”转向工作环境与审查界面；另一篇用 4782 个真实开发会话指出，主流 Coding Agent benchmark 大多是单轮任务，而真实使用是连续多轮、意图不断演化的，评测与用户任务流存在结构性偏差。这也提醒我们：Harness 的验收标准，最好来自真实工作流，而不是单一跑分。</p>
+
+      <div class="callout">
+        <b>落地建议：</b>把 Harness 当后端服务来设计——有状态、有预算、有审计、有幂等、有外部验收。最小可用清单：工具 schema 校验、循环与 token 双预算、写审模型分离、崩溃恢复、浏览器/测试门禁、全链路 trace。
+      </div>
+
+      <div class="src-row">
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668664&amp;idx=2&amp;sn=184b3d506aeba3ba7fce5163285802e8" target="_blank" rel="noopener">📎 AI前线 · Pi Durable</a>
+        <a class="src" href="https://www.freecodecamp.org/news/how-to-build-an-ai-agent-harness-from-scratch-in-typescript/" target="_blank" rel="noopener">📎 freeCodeCamp · Harness in TypeScript</a>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697793&amp;idx=1&amp;sn=f5b75921777d81554b97cee8c6214a1b" target="_blank" rel="noopener">📎 腾讯云开发者 · AI 工程化护栏</a>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638165&amp;idx=1&amp;sn=422b44326258ce961020bde902bbf99b" target="_blank" rel="noopener">📎 dbaplus · 货拉拉 AI Coding 实践</a>
+        <a class="src" href="https://blog.jetbrains.com/blog/2026/10/20/why-we-still-need-an-ide/" target="_blank" rel="noopener">📎 JetBrains · Why We Still Need an IDE</a>
+        <a class="src" href="https://blog.jetbrains.com/research/2026/10/user-task-flow-paper/" target="_blank" rel="noopener">📎 JetBrains Research · Benchmarks vs Task Flows</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 TOOLS ============ -->
+  <section id="tools">
+    <div class="sec-head">
+      <span class="sec-num">// 03</span>
+      <h2>工具推荐</h2>
+    </div>
+    <p class="sec-desc">今天发布的、可以直接放进工具箱的 8 个东西。</p>
+    <div class="rule"></div>
+
+    <div class="tools">
+      <div class="tool">
+        <h3>tsrs</h3>
+        <div class="kind">TypeScript 编译器 · Rust 移植</div>
+        <p>Cloudflare × VoidZero 合作项目，在 Oxc 工具链中孵化的 TypeScript 编译器 Rust 实现。不是 fork，目标是更快的类型检查、更低内存，并为浏览器内开发环境铺路。</p>
+        <div class="src-row"><a class="src" href="https://blog.cloudflare.com/typescript-rust-port/" target="_blank" rel="noopener">📎 The Cloudflare Blog</a></div>
+      </div>
+
+      <div class="tool">
+        <h3>llm-d 1.0</h3>
+        <div class="kind">K8s 原生分布式推理</div>
+        <p>CNCF Sandbox 项目，500+ 贡献者、25+ 组织共建。把 vLLM/SGLang 的服务能力与 Kubernetes 的扩缩容结合起来，针对 agent 多步调用、长共享前缀和 RL rollout 做优化。</p>
+        <div class="src-row"><a class="src" href="https://cloud.google.com/blog/topics/ai-infrastructure/llm-d-1-0-an-open-source-stack-for-distributed-inference/" target="_blank" rel="noopener">📎 Cloud Blog</a></div>
+      </div>
+
+      <div class="tool">
+        <h3>DeepInfer + deepseek-recipe</h3>
+        <div class="kind">开源推理框架 · 编解码组件</div>
+        <p>DeepSeek 内部推理框架开源，支持分布式推理、推测解码、SWA Bounded Replay、结构化输出，兼容 NVIDIA 与昇腾；配套编解码组件与官方 API 逻辑对齐，可直接对照学习生产级实现。</p>
+        <div class="src-row"><a class="src" href="https://mp.weixin.qq.com/s?__biz=Mzk0OTYwNzc3NQ==&amp;mid=2247485884&amp;idx=1&amp;sn=d457981abe7db1f1b5d600fc109dc836" target="_blank" rel="noopener">📎 DeepSeek</a></div>
+      </div>
+
+      <div class="tool">
+        <h3>Model Explorer（AI Edge）</h3>
+        <div class="kind">编译图可视化调试</div>
+        <p>支持 TOSA、VGF、PTE 等自定义 IR 适配器，提供分层图可视化、分屏视图和逐节点 trace 覆盖，适合排查模型导出回归、硬件 delegate 失败和 cycle-level 延迟瓶颈。</p>
+        <div class="src-row"><a class="src" href="https://developers.googleblog.com/bringing-visual-graph-debugging-to-custom-edge-compilers-with-model-explorer/" target="_blank" rel="noopener">📎 Google Developers Blog</a></div>
+      </div>
+
+      <div class="tool">
+        <h3>Work IQ Retrieve</h3>
+        <div class="kind">MCP 检索工具 · 企业上下文</div>
+        <p>Microsoft 365 的新 MCP retrieve 工具，可搜索用户的邮件、文件、会议、Teams 消息、联系人及已连接企业源，并严格按用户权限返回。适合给 Agent 补充组织上下文，而不必自建多源检索。</p>
+        <div class="src-row"><a class="src" href="https://devblogs.microsoft.com/microsoft365dev/work-iq-retrieve-october-2026" target="_blank" rel="noopener">📎 Microsoft for Developers</a></div>
+      </div>
+
+      <div class="tool">
+        <h3>Claude Code Mods 组合</h3>
+        <div class="kind">编码 Agent 插件 · 需 2.1.287+</div>
+        <p>视频实测了 Filetree（会话旁文件浏览）、Replay Theater（逐步回放编辑）、Blast Radius（影响面分析）、Collision Guard（双会话同文件防冲突）、Agent Flow（并行 Agent）、Reflect（沉淀项目规则）和 Cache Tax（缓存成本可视化）。</p>
+        <div class="src-row"><a class="src" href="https://www.youtube.com/watch?v=OTfS65T70L8" target="_blank" rel="noopener">📎 AICodeKing</a></div>
+      </div>
+
+      <div class="tool">
+        <h3>ARC 0.15.0</h3>
+        <div class="kind">GitHub Actions 自托管 Runner</div>
+        <p>Actions Runner Controller 新版本，面向 Kubernetes 上的自托管 runner，改进可靠性、可扩展性与可观测性。适合 CI 规模上来后需要弹性 runner 池、又要控制成本的平台团队。</p>
+        <div class="src-row"><a class="src" href="https://www.infoq.com/news/2026/10/github-runner-controller-0-15/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 InfoQ</a></div>
+      </div>
+
+      <div class="tool">
+        <h3>FreshRSS 1.30.2</h3>
+        <div class="kind">开源 RSS 阅读器 · 安全修复</div>
+        <p>1.30.x 的第二个安全与缺陷修复版本：SimplePie sanitizer 阻止 data: URI（保留 data:image）、修复代理抓取时的本地 DNS 泄漏、避免认证失败时记录 Fever API key，并降低导出内存占用。自部署用户建议尽快跟进。</p>
+        <div class="src-row"><a class="src" href="https://github.com/FreshRSS/FreshRSS/releases/tag/1.30.2" target="_blank" rel="noopener">📎 FreshRSS Releases</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 PRACTICE ============ -->
+  <section id="practice">
+    <div class="sec-head">
+      <span class="sec-num">// 04</span>
+      <h2>实践指南</h2>
+    </div>
+    <p class="sec-desc">可以明天就落到代码里的 6 条建议，每条都对应今天的一条具体动态。</p>
+    <div class="rule"></div>
+
+    <div class="practice">
+      <h3><span class="idx">01</span>把 12 小时缓存用起来：重构请求前缀</h3>
+      <p>既然 OpenAI API 现在可以缓存 12 小时，请求结构就应该围绕“稳定前缀 + 动态尾部”来设计。把系统指令、工具 schema、few-shot 示例、长期记忆放在最前面，且保证逐字节稳定；把用户输入、时间戳、本轮检索结果放到后面。时间戳、随机 ID、动态排序的工具列表都会让缓存失效。</p>
+      <ul>
+        <li>工具定义按固定顺序序列化，避免 JSON key 顺序抖动。</li>
+        <li>不要把“当前时间”写进 system prompt，移到 user message 或工具返回值里。</li>
+        <li>监控 cached tokens 比例，把它当作和延迟同级的指标。</li>
+      </ul>
+      <div class="src-row"><a class="src" href="https://x.com/OpenAIDevs/status/2112603916076781778" target="_blank" rel="noopener">📎 OpenAI Developers</a></div>
+    </div>
+
+    <div class="practice">
+      <h3><span class="idx">02</span>给上下文做显式预算，而不是“能塞就塞”</h3>
+      <p>上下文是稀缺资源。Transformer 的注意力是 n² 关系：1 万 token 是 1 亿对关系，10 万 token 是 100 亿对，100 万 token 是 1 万亿对；token 涨 10 倍，注意力被摊薄 100 倍。更直接的是成本：10 万 token 的上下文，Agent 跑 20 轮就是 20 倍重复付费。建议为系统提示、工具定义、对话历史、检索结果分别设定 token 配额，超过阈值就压缩或摘要，而不是等窗口溢出。</p>
+      <div class="src-row"><a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651981794&amp;idx=1&amp;sn=34c80a490ba2ce49fa6b95b4d7bf8c50" target="_blank" rel="noopener">📎 架构师之路</a></div>
+    </div>
+
+    <div class="practice">
+      <h3><span class="idx">03</span>让 Agent 在浏览器里自证，而不是只看测试绿灯</h3>
+      <p>Coding Agent 说“已实现并验证”，通常只代表格式化、类型检查和单测通过。前端改动仍然可能出现控件重叠、选中态没高亮、某个重置路径失效等人类三秒就能发现的问题。把浏览器行为纳入 Agent 的验收闭环：打开页面、执行关键路径、断言可见结果、收集 console error，再配合截图留档。</p>
+      <pre><code><span class="tok-k">const</span> errors: <span class="tok-k">string</span>[] = [];
+page.<span class="tok-f">on</span>(<span class="tok-s">"console"</span>, (m) =&gt; {
+  <span class="tok-k">if</span> (m.<span class="tok-f">type</span>() === <span class="tok-s">"error"</span>) errors.<span class="tok-f">push</span>(m.<span class="tok-f">text</span>());
+});
+
+<span class="tok-k">await</span> page.<span class="tok-f">goto</span>(url);
+<span class="tok-k">await</span> page.<span class="tok-f">getByRole</span>(<span class="tok-s">"button"</span>, { name: <span class="tok-s">"保存"</span> }).<span class="tok-f">click</span>();
+<span class="tok-k">await</span> <span class="tok-f">expect</span>(page.<span class="tok-f">getByText</span>(<span class="tok-s">"保存成功"</span>)).<span class="tok-f">toBeVisible</span>();
+<span class="tok-f">expect</span>(errors).<span class="tok-f">toEqual</span>([]);</code></pre>
+      <div class="src-row"><a class="src" href="https://www.freecodecamp.org/news/how-to-make-your-coding-agent-check-its-work-in-the-browser/" target="_blank" rel="noopener">📎 freeCodeCamp</a></div>
+    </div>
+
+    <div class="practice">
+      <h3><span class="idx">04</span>能上 schema 就别写解析和重试</h3>
+      <p>Amazon Bedrock 现已为所有 Anthropic Claude 模型支持 structured outputs，<code>bedrock-runtime</code> 与 <code>bedrock-mantle</code> 两个端点都能直接返回符合 schema 的 JSON。对于财务报告字段抽取、临床笔记转 EHR、商品目录补全这类流水线，可以删掉自定义解析、重试和后处理逻辑，把失败处理集中到 schema 与校验层。</p>
+      <div class="src-row"><a class="src" href="https://aws.amazon.com/blogs/machine-learning/structured-outputs-for-anthropic-claude-models-on-amazon-bedrock/" target="_blank" rel="noopener">📎 AWS Machine Learning Blog</a></div>
+    </div>
+
+    <div class="practice">
+      <h3><span class="idx">05</span>按“寿命”给代码定质量标准</h3>
+      <p>Capital One 首席软件工程师 Max Kanat-Alexander 提出的判断框架很实用：不是所有代码都值得同一套质量标准。先问四个问题——这段软件准备活多久？坏掉会伤到谁？有多少人和系统依赖它？重写是否真的更便宜？半小时用完的 CSV 清洗脚本和每天处理资金交易的账户系统，不应该共享同一套评审强度。AI 把代码生产成本压低之后，“可抛弃软件”会越来越多，但前提是明确它真的可抛弃。</p>
+      <div class="src-row"><a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943375&amp;idx=1&amp;sn=49cc89f78542e864c05aa5987800f534" target="_blank" rel="noopener">📎 51CTO 技术栈</a></div>
+    </div>
+
+    <div class="practice">
+      <h3><span class="idx">06</span>用 fetch + 薄封装替代 axios 前，先看自己的真实需求</h3>
+      <p>一篇在掘金引发讨论的团队规范解释了禁 axios 的动机：原生 fetch 已覆盖超时、取消、拦截器等核心能力，而流式响应（SSE、大文件流）反而是 axios 的短板；多层拦截器嵌套还会变成调试黑洞。更稳妥的做法不是一刀切，而是盘点项目是否真的需要拦截器链、进度监控和上传能力——如果只是发 JSON 请求，一个 10 行左右的 fetch 封装就够了；如果需要 SSE，原生方案反而更直接。</p>
+      <div class="src-row"><a class="src" href="https://juejin.cn/post/7698268211587022874" target="_blank" rel="noopener">📎 掘金</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 05 SOURCES ============ -->
+  <footer id="sources">
+    <div class="sec-head">
+      <span class="sec-num">// 05</span>
+      <h2>参考链接汇总</h2>
+    </div>
+    <p class="sec-desc">本期日报引用的全部原始资讯，按正文出现顺序排列。</p>
+    <div class="rule"></div>
+
+    <ol class="sources">
+      <li><a class="s-title" href="https://cloud.google.com/blog/topics/ai-infrastructure/torchtpu-is-now-open-source-run-native-pytorch-on-tpus/" target="_blank" rel="noopener">TorchTPU is now open source: Run native PyTorch on TPUs</a><span class="s-feed">— Cloud Blog</span></li>
+      <li><a class="s-title" href="https://developers.googleblog.com/announcing-new-vllm-and-sglang-inference-engines-on-tpu/" target="_blank" rel="noopener">Announcing New vLLM and SGLang Inference Engines on TPU</a><span class="s-feed">— Google Developers Blog</span></li>
+      <li><a class="s-title" href="https://developers.googleblog.com/integrating-torchtpu-into-torchtitan-and-optimizing-models-for-tpu/" target="_blank" rel="noopener">Integrating TorchTPU into TorchTitan and Optimizing Models for TPU</a><span class="s-feed">— Google Developers Blog</span></li>
+      <li><a class="s-title" href="https://cloud.google.com/blog/topics/ai-infrastructure/llm-d-1-0-an-open-source-stack-for-distributed-inference/" target="_blank" rel="noopener">Announcing llm-d 1.0: Open distributed inference for agents on Google Cloud TPUs and GPUs</a><span class="s-feed">— Cloud Blog</span></li>
+      <li><a class="s-title" href="https://developers.googleblog.com/bringing-visual-graph-debugging-to-custom-edge-compilers-with-model-explorer/" target="_blank" rel="noopener">Bringing Visual Graph Debugging to Custom Edge Compilers with Model Explorer</a><span class="s-feed">— Google Developers Blog</span></li>
+      <li><a class="s-title" href="https://huggingface.co/blog/hf-torchtpu" target="_blank" rel="noopener">Hugging Face ❤️ TorchTPU: TPUs, Natively</a><span class="s-feed">— Hugging Face Blog</span></li>
+      <li><a class="s-title" href="https://blog.cloudflare.com/typescript-rust-port/" target="_blank" rel="noopener">Introducing tsrs: A port of TypeScript to Rust</a><span class="s-feed">— The Cloudflare Blog</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=Mzk0OTYwNzc3NQ==&amp;mid=2247485884&amp;idx=1&amp;sn=d457981abe7db1f1b5d600fc109dc836" target="_blank" rel="noopener">DeepSeek 开源推理框架：走向真正普惠的未来</a><span class="s-feed">— DeepSeek</span></li>
+      <li><a class="s-title" href="https://vercel.com/changelog/websocket-support-is-now-generally-available" target="_blank" rel="noopener">WebSocket support is now generally available</a><span class="s-feed">— Vercel News</span></li>
+      <li><a class="s-title" href="https://x.com/OpenAIDevs/status/2112603916076781778" target="_blank" rel="noopener">You can now choose 12-hour prompt caching in the API</a><span class="s-feed">— OpenAI Developers</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668664&amp;idx=2&amp;sn=184b3d506aeba3ba7fce5163285802e8" target="_blank" rel="noopener">Pi 抛出全新 Agent Harness，还把自己骂了一年的 MCP 装进了核心</a><span class="s-feed">— AI前线</span></li>
+      <li><a class="s-title" href="https://x.com/cognition/status/2112290148205436979" target="_blank" rel="noopener">Devin Fusion claims top score of 68 on Coding Agent Index</a><span class="s-feed">— Cognition</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/news/2026/10/github-runner-controller-0-15/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">GitHub Actions Runner Controller 0.15.0 Targets Reliability at Scale</a><span class="s-feed">— InfoQ</span></li>
+      <li><a class="s-title" href="https://www.freecodecamp.org/news/how-to-build-an-ai-agent-harness-from-scratch-in-typescript/" target="_blank" rel="noopener">How to Build an AI Agent Harness from Scratch in TypeScript</a><span class="s-feed">— freeCodeCamp</span></li>
+      <li><a class="s-title" href="https://www.freecodecamp.org/news/how-to-make-your-coding-agent-check-its-work-in-the-browser/" target="_blank" rel="noopener">How to Make Your Coding Agent Check Its Work in the Browser</a><span class="s-feed">— freeCodeCamp</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697793&amp;idx=1&amp;sn=f5b75921777d81554b97cee8c6214a1b" target="_blank" rel="noopener">AI 工程化防翻车指南</a><span class="s-feed">— 腾讯云开发者</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638165&amp;idx=1&amp;sn=422b44326258ce961020bde902bbf99b" target="_blank" rel="noopener">个人提效到团队提效：货拉拉 AI Coding 流程化落地实践</a><span class="s-feed">— dbaplus社群</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651981794&amp;idx=1&amp;sn=34c80a490ba2ce49fa6b95b4d7bf8c50" target="_blank" rel="noopener">上下文是稀缺资源，Agent 的上下文里，究竟要放哪些东西？</a><span class="s-feed">— 架构师之路</span></li>
+      <li><a class="s-title" href="https://juejin.cn/post/7698268211587022874" target="_blank" rel="noopener">为什么我在团队里禁止使用 axios？</a><span class="s-feed">— 掘金本周最热</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943375&amp;idx=1&amp;sn=49cc89f78542e864c05aa5987800f534" target="_blank" rel="noopener">AI 让软件进入“一次性消费”时代！Capital One 首席软件工程师：有些代码写完就该扔</a><span class="s-feed">— 51CTO技术栈</span></li>
+      <li><a class="s-title" href="https://blog.jetbrains.com/blog/2026/10/20/why-we-still-need-an-ide/" target="_blank" rel="noopener">Why We Still Need an IDE</a><span class="s-feed">— The JetBrains Blog</span></li>
+      <li><a class="s-title" href="https://blog.jetbrains.com/research/2026/10/user-task-flow-paper/" target="_blank" rel="noopener">Coding-Agent Benchmarks Should Match Their Users’ Task Flows</a><span class="s-feed">— JetBrains Research</span></li>
+      <li><a class="s-title" href="https://devblogs.microsoft.com/microsoft365dev/work-iq-retrieve-october-2026" target="_blank" rel="noopener">Work IQ: the new retrieve tool</a><span class="s-feed">— Microsoft for Developers</span></li>
+      <li><a class="s-title" href="https://www.youtube.com/watch?v=OTfS65T70L8" target="_blank" rel="noopener">These Claude Code Mods Are ACTUALLY Useful: Filetree, Replay Theater, Blast Radius &amp; More</a><span class="s-feed">— AICodeKing</span></li>
+      <li><a class="s-title" href="https://aws.amazon.com/blogs/machine-learning/structured-outputs-for-anthropic-claude-models-on-amazon-bedrock/" target="_blank" rel="noopener">Structured outputs for Anthropic Claude models on Amazon Bedrock</a><span class="s-feed">— AWS Machine Learning Blog</span></li>
+      <li><a class="s-title" href="https://github.com/FreshRSS/FreshRSS/releases/tag/1.30.2" target="_blank" rel="noopener">FreshRSS 1.30.2</a><span class="s-feed">— FreshRSS Releases</span></li>
+    </ol>
+
+    <p class="colophon">
+      生成时间：2026-10-20 · 角色：developer_practice（开发者实践版）<br>
+      筛选说明：优先纳入可落地的技术方案、工具更新、架构实践与踩坑经验；纯商业新闻、融资与人事变动未纳入。<br>
+      本页所有观点均基于上述公开来源整理，代码片段为示意性写法，接入前请以官方文档与目标版本 API 为准。
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
