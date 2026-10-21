@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践版 · 科技日报 2026-10-21</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #111821;
+    --panel-2: #0e141b;
+    --border: #223041;
+    --text: #d7e2ee;
+    --muted: #8fa3b7;
+    --dim: #5f7387;
+    --green: #4ade80;
+    --cyan: #22d3ee;
+    --blue: #60a5fa;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --mono: "JetBrains Mono", "Fira Code", "Sarasa Mono SC", "Noto Sans Mono CJK SC", "SFMono-Regular", Consolas, "PingFang SC", "Microsoft YaHei", monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      linear-gradient(rgba(34, 211, 238, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.025) 1px, transparent 1px),
+      var(--bg);
+    background-size: 32px 32px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  a { color: var(--cyan); text-decoration: none; border-bottom: 1px dashed rgba(34, 211, 238, 0.35); }
+  a:hover { color: #67e8f9; border-bottom-color: #67e8f9; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  header.hero {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: linear-gradient(145deg, #0f1720 0%, #0b1219 60%, #0c1520 100%);
+    padding: 28px 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px 200px at 85% -10%, rgba(34, 211, 238, 0.13), transparent 60%);
+    pointer-events: none;
+  }
+  .prompt { color: var(--green); font-size: 13px; letter-spacing: 0.02em; }
+  .prompt .caret { display: inline-block; width: 8px; height: 15px; background: var(--green); vertical-align: -2px; margin-left: 4px; animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  h1 { margin: 12px 0 8px; font-size: clamp(24px, 4vw, 38px); line-height: 1.25; letter-spacing: -0.02em; }
+  h1 .accent { color: var(--cyan); }
+  .subtitle { color: var(--muted); font-size: 13.5px; margin: 0 0 18px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chip {
+    font-size: 12px; color: var(--muted); border: 1px solid var(--border);
+    background: rgba(34, 211, 238, 0.04); border-radius: 999px; padding: 4px 11px;
+  }
+  .chip b { color: var(--text); font-weight: 500; }
+
+  nav.toc { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 34px; font-size: 12.5px; }
+  nav.toc a {
+    border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px;
+    color: var(--muted); background: var(--panel-2); border-bottom: 1px solid var(--border);
+  }
+  nav.toc a:hover { color: var(--cyan); border-color: rgba(34, 211, 238, 0.5); }
+
+  section { margin-bottom: 46px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .sec-num { color: var(--green); font-size: 13px; }
+  h2 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+  .sec-desc { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  .rule { height: 1px; background: linear-gradient(90deg, var(--border), transparent); margin: 8px 0 22px; }
+
+  .hot-item {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    border-radius: 8px;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .hot-item:hover { border-color: #2d4258; transform: translateX(2px); }
+  .hot-item.urgent { border-left-color: var(--red); }
+  .hot-item.urgent .rank { color: var(--red); }
+  .hot-top { display: flex; gap: 14px; align-items: flex-start; }
+  .rank { color: var(--dim); font-size: 22px; line-height: 1; min-width: 30px; padding-top: 3px; }
+  .hot-item:nth-child(1) .rank { color: var(--amber); }
+  .hot-body { flex: 1; min-width: 0; }
+  .hot-body h3 { font-size: 16.5px; margin: 0 0 6px; line-height: 1.45; }
+  .src-row { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 12px; }
+  .src { color: var(--dim); border-bottom: 1px dotted rgba(95, 115, 135, 0.5); }
+  .src:hover { color: var(--cyan); }
+  .tag {
+    display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 4px;
+    margin-right: 6px; vertical-align: 1px; letter-spacing: 0.02em;
+  }
+  .tag.new { color: var(--green); background: rgba(74, 222, 128, 0.09); border: 1px solid rgba(74, 222, 128, 0.25); }
+  .tag.os { color: var(--purple); background: rgba(167, 139, 250, 0.09); border: 1px solid rgba(167, 139, 250, 0.25); }
+  .tag.ga { color: var(--cyan); background: rgba(34, 211, 238, 0.08); border: 1px solid rgba(34, 211, 238, 0.25); }
+  .tag.agent { color: var(--amber); background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25); }
+  .tag.sec { color: var(--red); background: rgba(248, 113, 113, 0.09); border: 1px solid rgba(248, 113, 113, 0.28); }
+  .tag.k8s { color: var(--blue); background: rgba(96, 165, 250, 0.09); border: 1px solid rgba(96, 165, 250, 0.26); }
+  .tag.data { color: var(--green); background: rgba(74, 222, 128, 0.07); border: 1px solid rgba(74, 222, 128, 0.22); }
+  .tag.java { color: #f78c6c; background: rgba(247, 140, 108, 0.08); border: 1px solid rgba(247, 140, 108, 0.25); }
+
+  .dive {
+    border: 1px solid var(--border); border-radius: 10px; background: var(--panel-2);
+    padding: 24px; margin-bottom: 22px;
+  }
+  .dive h3 { font-size: 19px; margin: 0 0 4px; line-height: 1.4; }
+  .dive .kicker { color: var(--green); font-size: 12px; margin-bottom: 12px; }
+  .dive h4 { color: var(--cyan); font-size: 14.5px; margin: 22px 0 8px; }
+  .dive p { margin: 10px 0; color: #c2d0de; }
+  .dive ul, .dive ol { margin: 8px 0; padding-left: 22px; color: #c2d0de; }
+  .dive li { margin: 5px 0; }
+  pre {
+    background: #081019; border: 1px solid #1c2b3a; border-radius: 7px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.8px; line-height: 1.65;
+    color: #c9d7e4; margin: 12px 0;
+  }
+  code { font-family: var(--mono); }
+  p code, li code, td code {
+    background: rgba(34, 211, 238, 0.07); border: 1px solid rgba(34, 211, 238, 0.16);
+    border-radius: 4px; padding: 1px 5px; font-size: 12.5px; color: #a5f3fc;
+  }
+  .tok-k { color: #c792ea; }
+  .tok-s { color: #c3e88d; }
+  .tok-c { color: #5f7387; font-style: italic; }
+  .tok-f { color: #82aaff; }
+  .tok-n { color: #f78c6c; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 6px; font-size: 13px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: rgba(34, 211, 238, 0.05); color: var(--cyan); font-weight: 500; }
+  td { color: #c2d0de; background: rgba(255, 255, 255, 0.012); }
+
+  .callout {
+    border: 1px solid rgba(251, 191, 36, 0.25); border-left: 3px solid var(--amber);
+    background: rgba(251, 191, 36, 0.045); border-radius: 6px;
+    padding: 12px 16px; margin: 14px 0; font-size: 13.5px; color: #d8cba8;
+  }
+  .callout b { color: var(--amber); }
+  .callout.danger {
+    border-color: rgba(248, 113, 113, 0.28); border-left-color: var(--red);
+    background: rgba(248, 113, 113, 0.05); color: #e9b6b6;
+  }
+  .callout.danger b { color: var(--red); }
+
+  .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .tool {
+    border: 1px solid var(--border); border-radius: 8px; background: var(--panel);
+    padding: 18px; position: relative;
+  }
+  .tool::after {
+    content: ""; position: absolute; top: 0; left: 18px; width: 42px; height: 2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+  }
+  .tool h3 { margin: 0 0 2px; font-size: 15.5px; }
+  .tool .kind { color: var(--dim); font-size: 11.5px; margin-bottom: 8px; }
+  .tool p { margin: 0; font-size: 13.5px; color: #b9c8d6; }
+  .tool .src-row { margin-top: 12px; }
+
+  .practice {
+    border: 1px solid var(--border); border-radius: 8px; background: var(--panel-2);
+    padding: 20px 22px; margin-bottom: 14px;
+  }
+  .practice h3 { margin: 0 0 4px; font-size: 16.5px; color: #e6eef6; }
+  .practice h3 .idx { color: var(--green); margin-right: 8px; }
+  .practice p { margin: 8px 0; color: #bccbda; font-size: 14px; }
+  .practice ul { margin: 8px 0; padding-left: 20px; color: #bccbda; font-size: 14px; }
+  .practice li { margin: 4px 0; }
+
+  footer {
+    border-top: 1px solid var(--border); margin-top: 50px; padding-top: 26px;
+  }
+  footer h2 { font-size: 18px; margin-bottom: 14px; }
+  .sources { list-style: none; padding: 0; margin: 0; counter-reset: src; }
+  .sources li {
+    counter-increment: src; position: relative; padding: 7px 0 7px 34px;
+    border-bottom: 1px dashed rgba(34, 48, 65, 0.45); font-size: 13px;
+  }
+  .sources li::before {
+    content: "[" counter(src) "]"; position: absolute; left: 0; color: var(--dim); font-size: 11.5px;
+  }
+  .sources .s-title { color: #c2d0de; }
+  .sources .s-feed { color: var(--dim); font-size: 11.5px; margin-left: 4px; }
+  .colophon { margin-top: 26px; color: var(--dim); font-size: 11.5px; line-height: 1.8; }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 20px 14px 48px; }
+    header.hero { padding: 22px 18px; }
+    .dive { padding: 18px; }
+    .hot-item { padding: 15px 14px; }
+    .rank { min-width: 22px; font-size: 18px; }
+    th, td { padding: 6px 7px; font-size: 12px; }
+    pre { font-size: 11.8px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="prompt">~/tech-daily $ ./daily-report --role developer_practice --date 2026-10-21<span class="caret"></span></div>
+    <h1>开发者实践版<span class="accent">_</span>科技日报</h1>
+    <p class="subtitle">一线工程师视角 · 只关心能落地的东西：安全补丁、上下文工程、工具链与推理性能</p>
+    <div class="meta-row">
+      <span class="chip">数据窗口 <b>2026-10-20 20:57 → 2026-10-21 20:57</b></span>
+      <span class="chip">原始资讯 <b>313 条</b></span>
+      <span class="chip">采集源 <b>424 个</b></span>
+      <span class="chip">本期主题 <b>安全应急 / 上下文工程 / 推理提速</b></span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <a href="#hot">01 今日技术热榜</a>
+    <a href="#deep">02 深度技术解读</a>
+    <a href="#tools">03 工具推荐</a>
+    <a href="#practice">04 实践指南</a>
+    <a href="#sources">05 参考链接汇总</a>
+  </nav>
+
+  <!-- ============ 01 HOT ============ -->
+  <section id="hot">
+    <div class="sec-head">
+      <span class="sec-num">// 01</span>
+      <h2>今日技术热榜</h2>
+    </div>
+    <p class="sec-desc">从 313 条资讯中筛出 8 条对开发者有直接信息增量的动态，按“今天要不要动手”排序。</p>
+    <div class="rule"></div>
+
+    <article class="hot-item urgent">
+      <div class="hot-top">
+        <div class="rank">01</div>
+        <div class="hot-body">
+          <h3><span class="tag sec">SECURITY</span>PHP 核心爆出 php2shell 双 RCE，整个 8.x 线必须紧急升级</h3>
+          <p>PHP 官方发布了两个影响核心运行时的严重漏洞 <code>CVE-2026-109618</code> 与 <code>CVE-2026-109619</code>，分别对应“OOM 破坏导致的 RCE”和“陈旧全局状态导致的 RCE”，CVSS 均为 9.2。漏洞影响 PHP 5.4 及以上的所有 Web 服务，可被未认证攻击者用于远程代码执行、内存泄露和拒绝服务。修复版本为 <code>8.2.35</code>、<code>8.3.36</code>、<code>8.4.27</code>、<code>8.5.12</code>；如果你用 Remi 仓库，作者休假期间尚未更新，需要临时切回官方仓库。Simon Willison 还披露，漏洞信息在协调披露过程中提前泄露，社区昨晚已出现利用，项目因此把发布提前。Cloudflare 则提前约 9 小时部署了 WAF 规则作为止血。</p>
+          <div class="src-row">
+            <a class="src" href="https://simonwillison.net/2026/Oct/21/php-security-release/" target="_blank" rel="noopener">📎 来源: Simon Willison's Weblog</a>
+            <a class="src" href="https://www.jeffgeerling.com/blog/2026/php-vulnerability-php2shell/" target="_blank" rel="noopener">📎 来源: Jeff Geerling</a>
+            <a class="src" href="https://cloud.google.com/blog/products/identity-security/responding-to-core-php-vulnerabilities-cve-2026-109618-cve-2026-109619/" target="_blank" rel="noopener">📎 来源: Cloud Blog</a>
+            <a class="src" href="https://blog.cloudflare.com/php-vulnerabilities-waf-protection/" target="_blank" rel="noopener">📎 来源: The Cloudflare Blog</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item urgent">
+      <div class="hot-top">
+        <div class="rank">02</div>
+        <div class="hot-body">
+          <h3><span class="tag sec">SECURITY</span>Node.js 三条版本线同步发版：Brotli 越界写可致 RCE，TLS 校验可被绕过</h3>
+          <p>Node.js 发布 <code>22.23.4</code>、<code>24.22.1</code>、<code>26.12.1</code> 安全版本，最高严重级别为 HIGH。最危险的是 Brotli 解码器的越界写 <code>CVE-2026-111497</code>，可被利用执行远程代码；此外还有多处 TLS 证书主机名校验绕过，包括全角数字表示的 IP 和非规范 IPv4 主机名，以及 <code>dns.resolve</code> 遇到 NUL 字符截断名称的问题。值得开发者额外注意的是 <code>crypto.randomUUID()</code> / <code>randomInt()</code> 的熵缓存会进入用户态启动快照和 SEA，导致不同进程产生重复随机值。该版本同时更新了 c-ares、OpenSSL、SQLite、Undici 和 eMudhra CA 证书，属于应当当天完成升级的级别。</p>
+          <div class="src-row">
+            <a class="src" href="https://nodejs.org/en/blog/vulnerability/october-2026-security-releases" target="_blank" rel="noopener">📎 来源: Node.js Blog</a>
+            <a class="src" href="https://nodejs.org/en/blog/release/v26.12.1" target="_blank" rel="noopener">📎 来源: Node.js Blog · 26.12.1</a>
+            <a class="src" href="https://nodejs.org/en/blog/release/v24.22.1" target="_blank" rel="noopener">📎 来源: Node.js Blog · 24.22.1</a>
+            <a class="src" href="https://nodejs.org/en/blog/release/v22.23.4" target="_blank" rel="noopener">📎 来源: Node.js Blog · 22.23.4</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item urgent">
+      <div class="hot-top">
+        <div class="rank">03</div>
+        <div class="hot-body">
+          <h3><span class="tag sec">SECURITY</span>8 张 eMudhra 中间 CA 私钥泄露，所有内置信任库的软件都要刷新</h3>
+          <p>eMudhra 的 8 张中间 CA 私钥被确认泄露，这些证书链到 Mozilla、Microsoft、Apple、Chrome 根程序以及大量下游信任库。由于密钥本身强度不足，攻击者可以为任意域名伪造证书，用来冒充服务器并拦截或篡改流量。任何自带证书列表的软件都需要更新：Python 生态已发布 <code>certifi 2026.10.19</code>、<code>uv 0.13.4</code> 和 <code>pip 26.2.2</code>，Linux 发行版需要更新 <code>ca-certificates</code> 包。只更新应用依赖还不够，容器基础镜像、JDK、Node.js 运行时和嵌入式设备里的信任库同样在影响范围内。</p>
+          <div class="src-row">
+            <a class="src" href="https://simonwillison.net/2026/Oct/20/emudhra-certificates/" target="_blank" rel="noopener">📎 来源: Simon Willison's Weblog</a>
+            <a class="src" href="https://blog.cloudflare.com/emudhra-certificate-compromise/" target="_blank" rel="noopener">📎 来源: The Cloudflare Blog</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">04</div>
+        <div class="hot-body">
+          <h3><span class="tag new">DEVTOOLS</span>Pylance 接入 Pyrefly：微软与 Meta 推出 Type Server Protocol</h3>
+          <p>微软宣布 Type Server Protocol（TSP），这是一个扩展自 LSP 的开放标准，目标是让任意编辑器或工具都能接入任意类型检查器，而不是把编辑器与某一家实现绑定。首个落地是 Pylance 与 Meta 的 Pyrefly 合作：VS Code 的 Python 用户可以在 Pylance 中获得 Pyrefly 的类型检查能力。官方给出的理由很直接——类型检查不仅影响诊断和补全，也是 AI 编程 Agent 做静态语义理解的基础。对团队而言，这意味着类型检查器可以像语言服务器一样独立选型和替换，编辑器插件不必重写；对工具作者而言，多了一个可复用的协议层。</p>
+          <div class="src-row">
+            <a class="src" href="https://devblogs.microsoft.com/python/announcing-tsp" target="_blank" rel="noopener">📎 来源: Microsoft for Developers</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">05</div>
+        <div class="hot-body">
+          <h3><span class="tag new">PLATFORM</span>Vercel Routing Middleware 支持 Python：在请求到达应用前做改写与拦截</h3>
+          <p>Vercel 的 Routing Middleware 现在可以用 Python 编写，适用于 FastAPI、Flask、Django 等框架。中间件以 ASGI 或 WSGI 应用的形式独立运行，在请求进入主应用之前完成重写、重定向或直接响应；它只能使用 <code>pyproject.toml</code> 中 <code>vercel.proxy</code> 依赖组的包，从而与主应用的依赖隔离。配置方式是在 <code>vercel.toml</code> 中把 proxy 入口指向你的中间件，官方还提供 <code>vercel-proxy</code> 包，其中的 <code>Proxy</code> 应用可以按路径路由。没有命中任何路由的请求会原样透传给主应用。对需要在边缘层做灰度、鉴权或 A/B 的 Python 团队，这减少了一层自建网关。</p>
+          <div class="src-row">
+            <a class="src" href="https://vercel.com/changelog/routing-middleware-now-supports-python" target="_blank" rel="noopener">📎 来源: Vercel News</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">06</div>
+        <div class="hot-body">
+          <h3><span class="tag agent">AGENT</span>GitHub 9 月更新：HydraFusion 扩到 VS Code，本地沙箱 GA，自动审查可计入合并门禁</h3>
+          <p>GitHub 在月度更新中把 Project HydraFusion 扩展到 VS Code 和 GitHub Copilot 应用，提供完整的模型可见性，官方称相比前沿模型可达 10 倍 token 效率。本地沙箱（local sandboxing）正式 GA，自动代码审查的批准结果现在可以计入合并门禁（merge gates），不再只是建议；CodeQL 质量问题支持一次批量自动修复最多 25 条。另一个独立更新是 Azure DevOps 的 Copilot Autofix 转向 Agent 架构，新增依赖漏洞修复和第三方扫描告警支持，并会读取仓库上下文来遵循团队的修复规范。这两个更新共同指向一个趋势：AI 修复正在从“生成建议”走向“在既有流程里提交可合并的变更”。</p>
+          <div class="src-row">
+            <a class="src" href="https://www.youtube.com/watch?v=ZQ0Qq6LlAmI" target="_blank" rel="noopener">📎 来源: GitHub</a>
+            <a class="src" href="https://devblogs.microsoft.com/devops/introducing-agentic-autofix-for-code-and-dependencies" target="_blank" rel="noopener">📎 来源: Microsoft for Developers · Agentic Autofix</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">07</div>
+        <div class="hot-body">
+          <h3><span class="tag k8s">K8S</span>Cilium 1.20：Gateway API 覆盖更广，eBPF 数据面开放扩展，netkit 跨内核易用</h3>
+          <p>Cilium 1.20 发布，继续围绕 Kubernetes 网络数据面做文章：更完整的 Gateway API 支持、可扩展的 eBPF 数据面，以及 sidecarless 双向 TLS 的进一步工作。这个版本还降低了 netkit 网络设备的引入门槛，让运行不同 Linux 内核版本的 Kubernetes 集群可以逐步启用，而不是要求全集群一次性升级内核。对平台团队来说，值得关注的是“数据面可编程”和“mTLS 无 sidecar”两条线同时推进：前者意味着可以在 eBPF 层做更多策略和可观测性，后者则直接影响服务网格的资源开销和延迟。</p>
+          <div class="src-row">
+            <a class="src" href="https://www.infoq.com/news/2026/10/cilium-120-kubernetes-networking/" target="_blank" rel="noopener">📎 来源: InfoQ</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">08</div>
+        <div class="hot-body">
+          <h3><span class="tag data">DATA</span>在 PostgreSQL 里同时做 BM25 与向量检索，省掉一个搜索集群</h3>
+          <p>freeCodeCamp 发布了一门实践课程，演示如何在 PostgreSQL 内构建完整的混合检索管线：用关键词匹配处理“Apollo 13”这类精确查询，用稠密向量处理“自己会发光的动物”这类概念查询，两路结果合并排序。核心卖点是把搜索索引进业务库，保留 ACID 保证，同时去掉 Elasticsearch 之类的独立搜索集群和同步管道。对中小规模应用，这能显著减少运维面；但需要提前评估索引体积、写入放大与召回质量，不能把“少一个组件”当成唯一收益。</p>
+          <div class="src-row">
+            <a class="src" href="https://www.freecodecamp.org/news/build-a-hybrid-search-engine-in-postgresql-bm25-vector-retrieval/" target="_blank" rel="noopener">📎 来源: freeCodeCamp</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ 02 DEEP ============ -->
+  <section id="deep">
+    <div class="sec-head">
+      <span class="sec-num">// 02</span>
+      <h2>深度技术解读</h2>
+    </div>
+    <p class="sec-desc">两个今天值得手抄进团队 wiki 的话题：Agent 的上下文该怎么管，以及推理性能到底该从哪里抠。</p>
+    <div class="rule"></div>
+
+    <article class="dive">
+      <h3>上下文工程：为什么 800 行规则，反而不如一套可执行的体系</h3>
+      <div class="kicker">// context engineering · agent harness · prompt vs tooling</div>
+
+      <p>腾讯云开发者团队分享了一次很典型的翻车：他们把开发流程写成 Skill，让 AI 按清单执行。AI 总是漏步骤，于是团队不断加规则，不到一个月从 500 多行涨到 800 多行，开头还加了五条“违反任何一条即为失败”的铁律，第一条就是“逐步执行，禁止跳步”。结果规则越多，AI 反而越不听话。作者的判断是：上下文里塞进的东西越多，每条规则分到的注意力就越少，最重要的几条被埋掉了。</p>
+
+      <p>这不是孤例。Every 的评估负责人 Mike Taylor 把同类现象称为 <b>Context Rot</b>：同一个会话里，旧架构、失败方案、错误结论和纠正意见会持续累积，模型不会因为需求变了就自动降低旧信息的权重。他的做法很简单——每接到一项新任务就新开一条对话，因为旧要求已经不再适用。LangChain 的 Deep Agents 则把处理方式做进了 Harness：超过约 20,000 token 的工具结果和长消息会被 offload 到虚拟文件系统，不留在上下文里；当 token 使用量达到阈值（默认 85%）时触发摘要压缩，并用 keep cutoff 决定哪些内容保留原文。注意摘要触发前 token 可能已经超过阈值，所以不能把 85% 当成精确水位线。</p>
+
+      <h4>把“流程”从提示词里拿出来</h4>
+      <p>腾讯团队最终的解法是搭一套工程化体系，并把经验归纳为三根支柱：<b>流程让 AI 可控，知识库让 AI 能积累，工具让 AI 能接触真实环境</b>。翻译成工程语言就是：能由脚本、lint、hook、CI 强制执行的约束，不要写成自然语言请求模型遵守；需要长期积累的经验，放进可检索的知识库，而不是每轮全量塞进上下文；当前任务的真实状态（报错、文件、测试结果）通过工具读取，而不是靠人复制粘贴。</p>
+
+      <pre><span class="tok-c"># 反模式：把流程和纪律都写进 system prompt</span>
+RULES = <span class="tok-f">open</span>(<span class="tok-s">"rules.md"</span>).read()   <span class="tok-c"># 500 → 800 行，继续膨胀</span>
+prompt = RULES + task
+
+<span class="tok-c"># 推荐：流程由工具阻断，知识按需检索，上下文只装当前任务</span>
+<span class="tok-f">run_step</span>(<span class="tok-s">"lint"</span>)        <span class="tok-c"># 失败即返回非零，模型无法跳过</span>
+<span class="tok-f">run_step</span>(<span class="tok-s">"test"</span>)        <span class="tok-c"># 结果写入文件，而不是全部回灌上下文</span>
+state = <span class="tok-f">load_task_state</span>()  <span class="tok-c"># 只加载当前步骤需要的最小状态</span>
+context = <span class="tok-f">retrieve</span>(state.query) + state.diff</pre>
+
+      <table>
+        <thead><tr><th>做法</th><th>放在哪里</th><th>为什么</th></tr></thead>
+        <tbody>
+          <tr><td>“必须先跑测试”</td><td>CI / pre-commit hook / 脚本退出码</td><td>机器执行，不消耗注意力，无法被跳过</td></tr>
+          <tr><td>“遵循团队的修复规范”</td><td>仓库内的规范文档 + 可检索知识库</td><td>按需加载，避免每轮全量注入</td></tr>
+          <tr><td>“记住上周的踩坑”</td><td>带索引的决策记录 / memory 文件</td><td>跨会话可复用，且不污染当前上下文</td></tr>
+          <tr><td>当前报错、文件内容</td><td>工具读取的实时状态</td><td>避免人工转述导致的信息失真</td></tr>
+        </tbody>
+      </table>
+
+      <p>还有一个容易忽略的工程细节：长上下文模型并不等于可以放弃上下文管理。阶跃星辰今天开放权重的 Step 5 Preview 已经把窗口做到 100 万 token，总参数 600B、每 token 激活 27B，主打跨文件代码修改与多轮工具调用；但官方技术博客讨论的重点仍然是上下文管理、训练系统和运行时状态，而不是“窗口大所以随便塞”。窗口变大只是延后了问题，成本、延迟和注意力稀释依然存在。</p>
+
+      <div class="callout"><b>实践结论：</b>先问“这条规则能不能变成一次工具调用或一次失败退出”，不能的再考虑写进提示词；能写进知识库的，不要写进 system prompt。上下文预算要和 token 成本一样被监控。</div>
+
+      <div class="src-row">
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697801&amp;idx=1&amp;sn=3a7b94e654b48a3d06627ebd265ab14e" target="_blank" rel="noopener">📎 来源: 腾讯云开发者</a>
+        <a class="src" href="https://www.youtube.com/watch?v=Ud5RsBegyfw" target="_blank" rel="noopener">📎 来源: LangChain</a>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943405&amp;idx=1&amp;sn=2615011524acba9a25b81891776fcfc0" target="_blank" rel="noopener">📎 来源: 51CTO技术栈 · Every 访谈</a>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668681&amp;idx=2&amp;sn=9fd0a95a73d74c9bae7e7e6e6d0c581f" target="_blank" rel="noopener">📎 来源: AI前线 · Step 5 Preview</a>
+      </div>
+    </article>
+
+    <article class="dive">
+      <h3>推理提速的三条路线：国产 NPU 调参、稀疏注意力索引器、线性注意力</h3>
+      <div class="kicker">// inference optimization · ascend 910c · dosa · linear attention</div>
+
+      <p>今天有三篇来自不同层面的推理优化实践，放在一起看很有信息量：它们分别从运行时、算法和模型结构下手，但共同点是都先做 profile，再决定改哪里。</p>
+
+      <h4>路线一：昇腾 910C 上把 Qwen3.5-35B-A3B 提速 40%</h4>
+      <p>得物技术公开了国产算力适配的完整过程：先建立 Qwen3.5-35B-A3B 在昇腾 910C 上的性能基线，用 MindStudio 做 profile 定位瓶颈，再按“镜像与版本升级 → 参数与环境变量调优 → vllm-ascend 源码修改 → 算子层融合 → MTP 投机解码”五层推进，累计落地 20 余项有效优化，最终提速 40%。文中最有价值的部分不是成功项，而是十余项<b>实测无效或负向</b>的尝试清单。具体手段包括把集合通信下沉到 AI Vector（<code>HCCL_OP_EXPANSION_MODE=AIV</code>）、静态 kernel 预编译、HBM 分配器调优、用 jemalloc 替换 glibc malloc、MoE 权重预取、HCCL 通信参数与 CPU 绑定、cudagraph 捕获尺寸与 warmup 等。对做国产卡推理的团队，这是一份可以直接对照复用的工程记录。</p>
+
+      <h4>路线二：小红书 DoSA 把首 token 延迟砍掉 37%–48%</h4>
+      <p>稀疏注意力本来是为了减少主注意力计算，但负责筛选 token 的 Indexer 自己成了瓶颈。在约 1M 上下文的测试里，Indexer 占预填充 GPU 时间的 73.0%–90.8%。DoSA 的思路是利用分数的上下界，提前排除不可能进入 Top-K 的候选，再配合 GPU kernel 优化减少实际耗时；它保持原始评分函数下的精确 Top-K，不牺牲结果质量。在 GLM-5.2 上，约 97% 的查询—key 候选组合无需全头精算；在约 1M token 的测试中，Dots3-Note-preview、GLM-5.2、DeepSeek-V3.2 的首 token 延迟相对各自 SGLang 基线分别下降约 37%、46%、48%。</p>
+
+      <h4>路线三：Laplace 3B 用线性注意力摆脱 KV cache 增长</h4>
+      <p>i14 的 Laplace 3B 采用 Gated Linear Attention，推理时的循环状态固定为每序列 29.5 MB，不随上下文长度增长，直接绕开了 KV cache 限制并发和成本的问题。团队与 AWS 合作，用 TorchNeuron Native 的原生 PyTorch 支持把这一自定义架构搬到 Trainium2，同时保留 GLA 设计和 Muon 优化器。在一台 <code>trn2.48xlarge</code> 上，训练吞吐约 120,000 token/s，服务侧可在 1,280 并发下输出 11,544 token/s。这条路线说明，当模型结构允许时，“换一种注意力”可能比在 KV cache 上继续做工程优化更彻底。</p>
+
+      <table>
+        <thead><tr><th>路线</th><th>先定位到的瓶颈</th><th>关键手段</th><th>结果</th></tr></thead>
+        <tbody>
+          <tr><td>昇腾 910C</td><td>推理栈适配与内核效率</td><td>镜像/参数/算子/MTP 五层调优</td><td>提速 40%，20+ 项优化落地</td></tr>
+          <tr><td>DoSA</td><td>Indexer 占预填充 73%–91%</td><td>分数上下界剪枝 + GPU kernel</td><td>TTFT 降低 37%–48%，精确 Top-K</td></tr>
+          <tr><td>Laplace 3B</td><td>KV cache 随上下文增长</td><td>GLA 线性注意力 + Trainium2 原生 PyTorch</td><td>29.5 MB/序列，1,280 并发下 11,544 tok/s</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout"><b>共同经验：</b>不要先抄参数。先建立基线、用 profiler 找到真正占时间的那一段，再决定是改运行时、改算法还是改模型结构；同时把无效尝试记录下来，避免团队重复踩坑。</div>
+
+      <div class="src-row">
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&amp;mid=2247547397&amp;idx=1&amp;sn=07d58827badbc78b58ea3e9e247e21b6" target="_blank" rel="noopener">📎 来源: 得物技术</a>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496757&amp;idx=1&amp;sn=42a95f2ad3ebc18eac32f7de5aae14e3" target="_blank" rel="noopener">📎 来源: 小红书技术REDtech</a>
+        <a class="src" href="https://aws.amazon.com/blogs/machine-learning/beyond-the-kv-cache-training-and-serving-i14s-laplace-3b-linear-attention-model-on-trainium2-with-native-pytorch/" target="_blank" rel="noopener">📎 来源: AWS Machine Learning Blog</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ 03 TOOLS ============ -->
+  <section id="tools">
+    <div class="sec-head">
+      <span class="sec-num">// 03</span>
+      <h2>工具推荐</h2>
+    </div>
+    <p class="sec-desc">今天发布或更新、且值得花十分钟试一下的工具与学习资源。</p>
+    <div class="rule"></div>
+
+    <div class="tools">
+      <article class="tool">
+        <h3>dotnetup</h3>
+        <div class="kind">.NET toolchain manager · public preview</div>
+        <p>微软发布的跨平台 .NET SDK / 运行时管理工具，安装到用户目录，不需要管理员权限。支持 latest、lts、preview、daily 通道，会读取 <code>global.json</code>，并能清理不再使用的安装。适合多项目、多 SDK 并行且不想污染系统目录的团队；命令在 GA 前还可能变化。</p>
+        <div class="src-row"><a class="src" href="https://www.infoq.com/news/2026/10/dotnetup-preview/" target="_blank" rel="noopener">📎 来源: InfoQ</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>TornadoVM 7</h3>
+        <div class="kind">Java GPU / heterogeneous computing</div>
+        <p>开源异构编程框架，能把 Java 程序自动加速到多核 CPU 和 GPU 上。7.0 版本可与 Temurin、Red Hat OpenJDK、Corretto、Oracle JDK、GraalVM、Zulu 等主流 JDK 配合使用，适合不想引入 CUDA/JNI 又需要利用 GPU 的 Java 服务。</p>
+        <div class="src-row"><a class="src" href="https://www.infoq.com/news/2026/10/tornadovm-7-gpu/" target="_blank" rel="noopener">📎 来源: InfoQ</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>PowerToys 0.102</h3>
+        <div class="kind">Windows power tools</div>
+        <p>新增 Mouse Button Lock（长按后锁定鼠标键，长时间拖选不再手酸）与 CursorHide；Command Palette 增加可选快捷入口；ZoomIt 支持截屏听写；还提供一组用于自动化 PowerToys 的命令行工具。Color Picker 与 Text Extractor 迁移到 WinUI 3，Keyboard Manager 补上了长期请求的重映射功能。</p>
+        <div class="src-row"><a class="src" href="https://devblogs.microsoft.com/commandline/powertoys-0-102-is-here-new-mouse-utilities-command-palette-improvements-and-much-more" target="_blank" rel="noopener">📎 来源: Microsoft for Developers</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>FreshRSS 1.30.3</h3>
+        <div class="kind">self-hosted RSS · security release</div>
+        <p>1.30.x 的第三个安全版本，主要修复 PHP 的 CVE-2026-109618 / CVE-2026-109619，并把官方默认 Docker 镜像更新到 Debian 13 Trixie + PHP 8.4.27。新增 <code>Minz_HookType::AutofillField</code> 认证视图钩子。官方建议使用 edge 滚动发布通道以更快拿到安全补丁；Alpine 镜像的更新有所延迟。</p>
+        <div class="src-row"><a class="src" href="https://github.com/FreshRSS/FreshRSS/releases/tag/1.30.3" target="_blank" rel="noopener">📎 来源: FreshRSS releases</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>Go 1.27.3-1 / 1.26.10-1（Microsoft build）</h3>
+        <div class="kind">Go toolchain · security fixes</div>
+        <p>微软构建的 Go 版本更新，包含安全修复。这个版本还为 Microsoft build 增加了持久化遥测偏好的支持，可通过 <code>go env -w</code> 或 <code>go.env</code> 配置；遥测默认开启，Azure Linux 等发行版可在 <code>go.env</code> 中默认关闭。使用微软构建的团队需要确认构建环境是否会因此产生额外配置差异。</p>
+        <div class="src-row"><a class="src" href="https://devblogs.microsoft.com/go/go-1-27-3-1-and-1-26-10-1-microsoft-builds-now-available" target="_blank" rel="noopener">📎 来源: Microsoft for Developers</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>JetBrains Plugin Developer Conf 2026</h3>
+        <div class="kind">免费线上会议 · 11 月 10 日 13:00 UTC</div>
+        <p>面向 IntelliJ 平台插件开发者的年度活动，议程覆盖 AI 辅助插件开发、基于 LSP 的语言支持、新的 IntelliJ Platform 工具与 API，以及插件维护的实战经验。适合正在做 IDE 插件、语言工具或内部开发平台的工程师。</p>
+        <div class="src-row"><a class="src" href="https://blog.jetbrains.com/platform/2026/10/jetbrains-plugin-developer-conf-2026-ai-new-apis-and-more/" target="_blank" rel="noopener">📎 来源: The JetBrains Blog</a></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 04 PRACTICE ============ -->
+  <section id="practice">
+    <div class="sec-head">
+      <span class="sec-num">// 04</span>
+      <h2>实践指南</h2>
+    </div>
+    <p class="sec-desc">今天就能在团队里落地的四件事，按优先级排列。</p>
+    <div class="rule"></div>
+
+    <article class="practice">
+      <h3><span class="idx">01</span>24 小时内完成三类安全处置：PHP、Node.js、信任库</h3>
+      <p>这不是“下个迭代再排”的级别。php2shell 已有在野利用，Node.js 的 Brotli 漏洞可致 RCE，CA 泄露则影响所有 TLS 校验。建议按下面顺序处理：</p>
+      <ul>
+        <li><b>PHP：</b>升级到 <code>8.2.35</code> / <code>8.3.36</code> / <code>8.4.27</code> / <code>8.5.12</code>；RedHat 系使用 Remi 仓库的，临时切换到官方仓库完成升级。</li>
+        <li><b>Node.js：</b>升级到 <code>26.12.1</code> / <code>24.22.1</code> / <code>22.23.4</code>，并确认部署环境没有继续使用 EOL 分支。</li>
+        <li><b>信任库：</b>更新 Python 的 <code>certifi</code>（≥ 2026.10.19）、<code>uv</code>（≥ 0.13.4）、<code>pip</code>（≥ 26.2.2）和系统 <code>ca-certificates</code>；所有自带 CA bundle 的容器镜像都要重建，而不是只重启。</li>
+        <li><b>验证：</b>升级后跑一遍 TLS 连接测试、依赖安装和镜像构建；检查是否有固定在旧版本的基础镜像或 SDK 缓存。</li>
+      </ul>
+      <div class="src-row">
+        <a class="src" href="https://simonwillison.net/2026/Oct/21/php-security-release/" target="_blank" rel="noopener">📎 Simon Willison</a>
+        <a class="src" href="https://nodejs.org/en/blog/vulnerability/october-2026-security-releases" target="_blank" rel="noopener">📎 Node.js Blog</a>
+        <a class="src" href="https://simonwillison.net/2026/Oct/20/emudhra-certificates/" target="_blank" rel="noopener">📎 eMudhra 事件</a>
+      </div>
+    </article>
+
+    <article class="practice">
+      <h3><span class="idx">02</span>容器构建报错“vite: not found”，先查第一个失败而不是最后一个</h3>
+      <p>freeCodeCamp 记录了一个很典型的排查误区：应用在浏览器开发环境里正常，迁到 Azure Container Registry 构建后报 <code>sh: 1: vite: not found</code>。团队一开始怀疑 devDependencies 被裁剪或 <code>NODE_ENV</code> 设置错误，但真正的原因是更早的一次失败——<code>npm ci</code> 从只存在于浏览器开发环境的包源下载 tarball，失败后构建却继续走到了下一步，最后才以“找不到 vite”暴露出来。落地建议：</p>
+      <ul>
+        <li>构建脚本开启 <code>set -euo pipefail</code>，或在 CI 中检查每一步的退出码，避免上游失败被下游错误掩盖。</li>
+        <li>检查 lockfile 中的 <code>resolved</code> URL 和 npm registry 配置，确保 CI 环境能访问同一来源；不要依赖开发环境里的本地代理。</li>
+        <li>用与 CI 一致的干净环境复现，开启详细日志（如 <code>npm ci --loglevel verbose</code>），先定位第一条 error，再谈修复。</li>
+      </ul>
+      <div class="src-row"><a class="src" href="https://www.freecodecamp.org/news/diagnose-vite-not-found-npm-ci-container-build/" target="_blank" rel="noopener">📎 来源: freeCodeCamp</a></div>
+    </article>
+
+    <article class="practice">
+      <h3><span class="idx">03</span>给 Agent 立规矩：把流程交给工具，把知识交给检索，把上下文留给当前任务</h3>
+      <p>腾讯云团队 800 行规则的教训值得直接写入团队规范。具体可以这样做：</p>
+      <ul>
+        <li>能由 lint、测试、pre-commit、CI 或脚本退出码强制执行的约束，不要写进提示词；模型无法“跳过”一个返回非零的步骤。</li>
+        <li>项目规范、历史决策、踩坑记录放进可检索的知识库或带索引的 memory 文件，按需加载，不要每轮全量注入。</li>
+        <li>长任务启用 offload 与摘要：大块工具结果落盘，只把摘要和当前 diff 留在上下文；监控 token 水位，而不是等模型开始“忘事”。</li>
+        <li>需求切换时新开会话，避免旧方案和错误结论继续影响新任务；需要跨会话保留的偏好，显式写入 memory。</li>
+      </ul>
+      <div class="src-row">
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697801&amp;idx=1&amp;sn=3a7b94e654b48a3d06627ebd265ab14e" target="_blank" rel="noopener">📎 腾讯云开发者</a>
+        <a class="src" href="https://www.youtube.com/watch?v=Ud5RsBegyfw" target="_blank" rel="noopener">📎 LangChain Deep Agents</a>
+      </div>
+    </article>
+
+    <article class="practice">
+      <h3><span class="idx">04</span>模型可以换，外围别锁死：给 LLM 调用加一层薄适配</h3>
+      <p>Stacklok 对 520 位技术负责人的调查显示，团队已经在频繁更换模型，真正担心的是模型之上那层“胶水”被锁死。工程上的应对不是造一个庞大的抽象框架，而是把变化点收敛：</p>
+      <ul>
+        <li>模型调用统一走内部适配层，隔离 SDK、鉴权、重试和流式协议差异；业务代码不直接依赖某家的专有对象。</li>
+        <li>提示词、工具定义、评测集都版本化，换模型时用同一套回归用例对比，而不是凭感觉判断“更聪明了”。</li>
+        <li>谨慎使用只有单一供应商支持的记忆、文件或 Agent 托管格式；至少保留可导出的原始数据。</li>
+        <li>把模型选择和路由做成配置，而不是散落在代码里的硬编码；这也为“主模型 + 便宜模型”的分工留出空间。</li>
+      </ul>
+      <div class="src-row"><a class="src" href="https://stackoverflow.blog/2026/10/21/survey-says-you-ll-swap-the-model-but-everything-you-build-around-it-is-staying-put/" target="_blank" rel="noopener">📎 来源: Stack Overflow Blog</a></div>
+    </article>
+
+    <article class="practice">
+      <h3><span class="idx">05</span>别再往计算节点里塞长期凭据：用工作负载证明换短期证书</h3>
+      <p>Netflix 公开了其在 Amazon EMR 上为 Spark 作业做工作负载证明（workload attestation）的设计：把 AWS IAM 身份与控制面签发的签名声明结合，校验通过后才签发短期内部 X.509 证书，让托管计算任务访问内部服务时不需要直接注入长期凭据。对自建平台，可以借鉴的原则是：用平台身份 + 运行时声明做双向校验，凭据短 TTL、可轮换、可审计，应用侧不再持有静态密钥。</p>
+      <div class="src-row"><a class="src" href="https://www.infoq.com/news/2026/10/netflix-workload-attestation-aws/" target="_blank" rel="noopener">📎 来源: InfoQ</a></div>
+    </article>
+  </section>
+
+  <!-- ============ 05 SOURCES ============ -->
+  <footer id="sources">
+    <h2>参考链接汇总</h2>
+    <ol class="sources">
+      <li><a class="s-title" href="https://simonwillison.net/2026/Oct/21/php-security-release/" target="_blank" rel="noopener">Today's PHP Security Release, and How We're Strengthening PHP Security</a><span class="s-feed">Simon Willison's Weblog</span></li>
+      <li><a class="s-title" href="https://www.jeffgeerling.com/blog/2026/php-vulnerability-php2shell/" target="_blank" rel="noopener">Upgrade your PHP installs immediately to protect against php2shell</a><span class="s-feed">Jeff Geerling</span></li>
+      <li><a class="s-title" href="https://cloud.google.com/blog/products/identity-security/responding-to-core-php-vulnerabilities-cve-2026-109618-cve-2026-109619/" target="_blank" rel="noopener">Responding to core PHP vulnerabilities CVE-2026-109618 and CVE-2026-109619</a><span class="s-feed">Cloud Blog</span></li>
+      <li><a class="s-title" href="https://blog.cloudflare.com/php-vulnerabilities-waf-protection/" target="_blank" rel="noopener">Cloudflare deploys protections against php2shell vulnerability</a><span class="s-feed">The Cloudflare Blog</span></li>
+      <li><a class="s-title" href="https://github.com/FreshRSS/FreshRSS/releases/tag/1.30.3" target="_blank" rel="noopener">FreshRSS 1.30.3</a><span class="s-feed">FreshRSS releases</span></li>
+      <li><a class="s-title" href="https://nodejs.org/en/blog/vulnerability/october-2026-security-releases" target="_blank" rel="noopener">Wednesday, October 21, 2026 Security Releases</a><span class="s-feed">Node.js Blog</span></li>
+      <li><a class="s-title" href="https://nodejs.org/en/blog/release/v26.12.1" target="_blank" rel="noopener">Node.js 26.12.1 (Current)</a><span class="s-feed">Node.js Blog</span></li>
+      <li><a class="s-title" href="https://nodejs.org/en/blog/release/v24.22.1" target="_blank" rel="noopener">Node.js 24.22.1 (LTS)</a><span class="s-feed">Node.js Blog</span></li>
+      <li><a class="s-title" href="https://nodejs.org/en/blog/release/v22.23.4" target="_blank" rel="noopener">Node.js 22.23.4 (LTS)</a><span class="s-feed">Node.js Blog</span></li>
+      <li><a class="s-title" href="https://simonwillison.net/2026/Oct/20/emudhra-certificates/" target="_blank" rel="noopener">eMudhra Intermediate CA Compromise</a><span class="s-feed">Simon Willison's Weblog</span></li>
+      <li><a class="s-title" href="https://blog.cloudflare.com/emudhra-certificate-compromise/" target="_blank" rel="noopener">8 eMudhra certificates are compromised. Here's what you need to know</a><span class="s-feed">The Cloudflare Blog</span></li>
+      <li><a class="s-title" href="https://devblogs.microsoft.com/python/announcing-tsp" target="_blank" rel="noopener">Pylance + Pyrefly: bring your preferred type checker to Visual Studio Code</a><span class="s-feed">Microsoft for Developers</span></li>
+      <li><a class="s-title" href="https://vercel.com/changelog/routing-middleware-now-supports-python" target="_blank" rel="noopener">Routing Middleware now supports Python</a><span class="s-feed">Vercel News</span></li>
+      <li><a class="s-title" href="https://www.youtube.com/watch?v=ZQ0Qq6LlAmI" target="_blank" rel="noopener">Inside GitHub's September updates: Project HydraFusion, sandboxing, and PR approvals</a><span class="s-feed">GitHub</span></li>
+      <li><a class="s-title" href="https://devblogs.microsoft.com/devops/introducing-agentic-autofix-for-code-and-dependencies" target="_blank" rel="noopener">Introducing Agentic Autofix for code and dependencies</a><span class="s-feed">Microsoft for Developers</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/news/2026/10/cilium-120-kubernetes-networking/" target="_blank" rel="noopener">Cilium 1.20 Expands Gateway API and Opens eBPF Datapath for Kubernetes</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://www.freecodecamp.org/news/build-a-hybrid-search-engine-in-postgresql-bm25-vector-retrieval/" target="_blank" rel="noopener">Build a Hybrid Search Engine in PostgreSQL: BM25 + Vector Retrieval</a><span class="s-feed">freeCodeCamp</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697801&amp;idx=1&amp;sn=3a7b94e654b48a3d06627ebd265ab14e" target="_blank" rel="noopener">给 AI 写了 800 行规则，它反而更不听话了</a><span class="s-feed">腾讯云开发者</span></li>
+      <li><a class="s-title" href="https://www.youtube.com/watch?v=Ud5RsBegyfw" target="_blank" rel="noopener">How Deep Agents Manages Context: Offloading and Summarization</a><span class="s-feed">LangChain</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943405&amp;idx=1&amp;sn=2615011524acba9a25b81891776fcfc0" target="_blank" rel="noopener">AI 为什么越聊越容易犯错？旧的上下文，正在带偏你的 Agent</a><span class="s-feed">51CTO技术栈</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668681&amp;idx=2&amp;sn=9fd0a95a73d74c9bae7e7e6e6d0c581f" target="_blank" rel="noopener">阶跃星辰开放 Step 5 Preview 权重：长程 Agent 的竞争，延伸到上下文管理与训练系统</a><span class="s-feed">AI前线</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&amp;mid=2247547397&amp;idx=1&amp;sn=07d58827badbc78b58ea3e9e247e21b6" target="_blank" rel="noopener">国产算力·昇腾 910C 大模型推理优化（上）：镜像更新与参数调优，提速 40%</a><span class="s-feed">得物技术</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496757&amp;idx=1&amp;sn=42a95f2ad3ebc18eac32f7de5aae14e3" target="_blank" rel="noopener">提速不降智，小红书 DoSA 将首 token 延迟无损减少近一半</a><span class="s-feed">小红书技术REDtech</span></li>
+      <li><a class="s-title" href="https://aws.amazon.com/blogs/machine-learning/beyond-the-kv-cache-training-and-serving-i14s-laplace-3b-linear-attention-model-on-trainium2-with-native-pytorch/" target="_blank" rel="noopener">Beyond the KV cache: Training and serving i14's Laplace 3B linear attention model on AWS Trainium2 with native PyTorch</a><span class="s-feed">AWS Machine Learning Blog</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/news/2026/10/dotnetup-preview/" target="_blank" rel="noopener">Microsoft Previews dotnetup: Toolchain Manager for .NET SDKs and Runtimes</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/news/2026/10/tornadovm-7-gpu/" target="_blank" rel="noopener">TornadoVM 7 Enables GPU-Native Workloads From Java Applications</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://devblogs.microsoft.com/commandline/powertoys-0-102-is-here-new-mouse-utilities-command-palette-improvements-and-much-more" target="_blank" rel="noopener">PowerToys 0.102 is here: new mouse utilities, Command Palette improvements and much more</a><span class="s-feed">Microsoft for Developers</span></li>
+      <li><a class="s-title" href="https://devblogs.microsoft.com/go/go-1-27-3-1-and-1-26-10-1-microsoft-builds-now-available" target="_blank" rel="noopener">Go 1.27.3-1 and 1.26.10-1 Microsoft builds now available</a><span class="s-feed">Microsoft for Developers</span></li>
+      <li><a class="s-title" href="https://blog.jetbrains.com/platform/2026/10/jetbrains-plugin-developer-conf-2026-ai-new-apis-and-more/" target="_blank" rel="noopener">JetBrains Plugin Developer Conf 2026: AI, New APIs, and More</a><span class="s-feed">The JetBrains Blog</span></li>
+      <li><a class="s-title" href="https://stackoverflow.blog/2026/10/21/survey-says-you-ll-swap-the-model-but-everything-you-build-around-it-is-staying-put/" target="_blank" rel="noopener">Survey Says: You'll swap the model, but everything you build around it is staying put</a><span class="s-feed">Stack Overflow Blog</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/news/2026/10/netflix-workload-attestation-aws/" target="_blank" rel="noopener">Netflix Bridges AWS IAM and Internal Identity with Workload Attestation</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://www.freecodecamp.org/news/diagnose-vite-not-found-npm-ci-container-build/" target="_blank" rel="noopener">How to Diagnose vite: not found After npm ci in a Container Build</a><span class="s-feed">freeCodeCamp</span></li>
+    </ol>
+
+    <div class="colophon">
+      本期从 313 条资讯中筛选 8 条热榜、2 个深度话题、5 条实践建议，覆盖 424 个采集源。所有链接均指向原文，信息以原文为准。<br>
+      开发者实践版 · 生成时间 2026-10-21 · 深色代码主题
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
