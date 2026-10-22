@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践版 · 科技日报 2026-10-22</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #111821;
+    --panel-2: #0e141b;
+    --border: #223041;
+    --text: #d7e2ee;
+    --muted: #8fa3b7;
+    --dim: #5f7387;
+    --green: #4ade80;
+    --cyan: #22d3ee;
+    --blue: #60a5fa;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --mono: "JetBrains Mono", "Fira Code", "Sarasa Mono SC", "Noto Sans Mono CJK SC", "SFMono-Regular", Consolas, "PingFang SC", "Microsoft YaHei", monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      linear-gradient(rgba(34, 211, 238, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.025) 1px, transparent 1px),
+      var(--bg);
+    background-size: 32px 32px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  a { color: var(--cyan); text-decoration: none; border-bottom: 1px dashed rgba(34, 211, 238, 0.35); }
+  a:hover { color: #67e8f9; border-bottom-color: #67e8f9; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  header.hero {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: linear-gradient(145deg, #0f1720 0%, #0b1219 60%, #0c1520 100%);
+    padding: 28px 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px 200px at 85% -10%, rgba(34, 211, 238, 0.13), transparent 60%);
+    pointer-events: none;
+  }
+  .prompt { color: var(--green); font-size: 13px; letter-spacing: 0.02em; }
+  .prompt .caret { display: inline-block; width: 8px; height: 15px; background: var(--green); vertical-align: -2px; margin-left: 4px; animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  h1 { margin: 12px 0 8px; font-size: clamp(24px, 4vw, 38px); line-height: 1.25; letter-spacing: -0.02em; }
+  h1 .accent { color: var(--cyan); }
+  .subtitle { color: var(--muted); font-size: 13.5px; margin: 0 0 18px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .chip {
+    font-size: 12px; color: var(--muted); border: 1px solid var(--border);
+    background: rgba(34, 211, 238, 0.04); border-radius: 999px; padding: 4px 11px;
+  }
+  .chip b { color: var(--text); font-weight: 500; }
+
+  nav.toc { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 34px; font-size: 12.5px; }
+  nav.toc a {
+    border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px;
+    color: var(--muted); background: var(--panel-2); border-bottom: 1px solid var(--border);
+  }
+  nav.toc a:hover { color: var(--cyan); border-color: rgba(34, 211, 238, 0.5); }
+
+  section { margin-bottom: 46px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .sec-num { color: var(--green); font-size: 13px; }
+  h2 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+  .sec-desc { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  .rule { height: 1px; background: linear-gradient(90deg, var(--border), transparent); margin: 8px 0 22px; }
+
+  .hot-item {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    border-radius: 8px;
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .hot-item:hover { border-color: #2d4258; transform: translateX(2px); }
+  .hot-item.urgent { border-left-color: var(--red); }
+  .hot-item.urgent .rank { color: var(--red); }
+  .hot-top { display: flex; gap: 14px; align-items: flex-start; }
+  .rank { color: var(--dim); font-size: 22px; line-height: 1; min-width: 30px; padding-top: 3px; }
+  .hot-item:nth-child(1) .rank { color: var(--amber); }
+  .hot-body { flex: 1; min-width: 0; }
+  .hot-body h3 { font-size: 16.5px; margin: 0 0 6px; line-height: 1.45; }
+  .src-row { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 12px; }
+  .src { color: var(--dim); border-bottom: 1px dotted rgba(95, 115, 135, 0.5); }
+  .src:hover { color: var(--cyan); }
+  .tag {
+    display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 4px;
+    margin-right: 6px; vertical-align: 1px; letter-spacing: 0.02em;
+  }
+  .tag.new { color: var(--green); background: rgba(74, 222, 128, 0.09); border: 1px solid rgba(74, 222, 128, 0.25); }
+  .tag.os { color: var(--purple); background: rgba(167, 139, 250, 0.09); border: 1px solid rgba(167, 139, 250, 0.25); }
+  .tag.ga { color: var(--cyan); background: rgba(34, 211, 238, 0.08); border: 1px solid rgba(34, 211, 238, 0.25); }
+  .tag.agent { color: var(--amber); background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25); }
+  .tag.sec { color: var(--red); background: rgba(248, 113, 113, 0.09); border: 1px solid rgba(248, 113, 113, 0.28); }
+  .tag.k8s { color: var(--blue); background: rgba(96, 165, 250, 0.09); border: 1px solid rgba(96, 165, 250, 0.26); }
+  .tag.data { color: var(--green); background: rgba(74, 222, 128, 0.07); border: 1px solid rgba(74, 222, 128, 0.22); }
+  .tag.java { color: #f78c6c; background: rgba(247, 140, 108, 0.08); border: 1px solid rgba(247, 140, 108, 0.25); }
+
+  .dive {
+    border: 1px solid var(--border); border-radius: 10px; background: var(--panel-2);
+    padding: 24px; margin-bottom: 22px;
+  }
+  .dive h3 { font-size: 19px; margin: 0 0 4px; line-height: 1.4; }
+  .dive .kicker { color: var(--green); font-size: 12px; margin-bottom: 12px; }
+  .dive h4 { color: var(--cyan); font-size: 14.5px; margin: 22px 0 8px; }
+  .dive p { margin: 10px 0; color: #c2d0de; }
+  .dive ul, .dive ol { margin: 8px 0; padding-left: 22px; color: #c2d0de; }
+  .dive li { margin: 5px 0; }
+  pre {
+    background: #081019; border: 1px solid #1c2b3a; border-radius: 7px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.8px; line-height: 1.65;
+    color: #c9d7e4; margin: 12px 0;
+  }
+  code { font-family: var(--mono); }
+  p code, li code, td code {
+    background: rgba(34, 211, 238, 0.07); border: 1px solid rgba(34, 211, 238, 0.16);
+    border-radius: 4px; padding: 1px 5px; font-size: 12.5px; color: #a5f3fc;
+  }
+  .tok-k { color: #c792ea; }
+  .tok-s { color: #c3e88d; }
+  .tok-c { color: #5f7387; font-style: italic; }
+  .tok-f { color: #82aaff; }
+  .tok-n { color: #f78c6c; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 6px; font-size: 13px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: rgba(34, 211, 238, 0.05); color: var(--cyan); font-weight: 500; }
+  td { color: #c2d0de; background: rgba(255, 255, 255, 0.012); }
+
+  .callout {
+    border: 1px solid rgba(251, 191, 36, 0.25); border-left: 3px solid var(--amber);
+    background: rgba(251, 191, 36, 0.045); border-radius: 6px;
+    padding: 12px 16px; margin: 14px 0; font-size: 13.5px; color: #d8cba8;
+  }
+  .callout b { color: var(--amber); }
+  .callout.danger {
+    border-color: rgba(248, 113, 113, 0.28); border-left-color: var(--red);
+    background: rgba(248, 113, 113, 0.05); color: #e9b6b6;
+  }
+  .callout.danger b { color: var(--red); }
+
+  .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .tool {
+    border: 1px solid var(--border); border-radius: 8px; background: var(--panel);
+    padding: 18px; position: relative;
+  }
+  .tool::after {
+    content: ""; position: absolute; top: 0; left: 18px; width: 42px; height: 2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+  }
+  .tool h3 { margin: 0 0 2px; font-size: 15.5px; }
+  .tool .kind { color: var(--dim); font-size: 11.5px; margin-bottom: 8px; }
+  .tool p { margin: 0; font-size: 13.5px; color: #b9c8d6; }
+  .tool .src-row { margin-top: 12px; }
+
+  .practice {
+    border: 1px solid var(--border); border-radius: 8px; background: var(--panel-2);
+    padding: 20px 22px; margin-bottom: 14px;
+  }
+  .practice h3 { margin: 0 0 4px; font-size: 16.5px; color: #e6eef6; }
+  .practice h3 .idx { color: var(--green); margin-right: 8px; }
+  .practice p { margin: 8px 0; color: #bccbda; font-size: 14px; }
+  .practice ul { margin: 8px 0; padding-left: 20px; color: #bccbda; font-size: 14px; }
+  .practice li { margin: 4px 0; }
+
+  footer {
+    border-top: 1px solid var(--border); margin-top: 50px; padding-top: 26px;
+  }
+  footer h2 { font-size: 18px; margin-bottom: 14px; }
+  .sources { list-style: none; padding: 0; margin: 0; counter-reset: src; }
+  .sources li {
+    counter-increment: src; position: relative; padding: 7px 0 7px 34px;
+    border-bottom: 1px dashed rgba(34, 48, 65, 0.45); font-size: 13px;
+  }
+  .sources li::before {
+    content: "[" counter(src) "]"; position: absolute; left: 0; color: var(--dim); font-size: 11.5px;
+  }
+  .sources .s-title { color: #c2d0de; }
+  .sources .s-feed { color: var(--dim); font-size: 11.5px; margin-left: 4px; }
+  .colophon { margin-top: 26px; color: var(--dim); font-size: 11.5px; line-height: 1.8; }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 20px 14px 48px; }
+    header.hero { padding: 22px 18px; }
+    .dive { padding: 18px; }
+    .hot-item { padding: 15px 14px; }
+    .rank { min-width: 22px; font-size: 18px; }
+    th, td { padding: 6px 7px; font-size: 12px; }
+    pre { font-size: 11.8px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="prompt">~/tech-daily $ ./daily-report --role developer_practice --date 2026-10-22<span class="caret"></span></div>
+    <h1>开发者实践版<span class="accent">_</span>科技日报</h1>
+    <p class="subtitle">一线工程师视角 · 今天先打补丁，再谈 AI 提效：PHP2Shell 应急、Review 瓶颈、Agent 状态管理</p>
+    <div class="meta-row">
+      <span class="chip">数据窗口 <b>2026-10-21 20:55 → 2026-10-22 20:55</b></span>
+      <span class="chip">原始资讯 <b>263 条</b></span>
+      <span class="chip">采集源 <b>424 个</b></span>
+      <span class="chip">本期主题 <b>安全应急 / 验证瓶颈 / Agent 工程化</b></span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <a href="#hot">01 今日技术热榜</a>
+    <a href="#deep">02 深度技术解读</a>
+    <a href="#tools">03 工具推荐</a>
+    <a href="#practice">04 实践指南</a>
+    <a href="#sources">05 参考链接汇总</a>
+  </nav>
+
+  <!-- ============ 01 HOT ============ -->
+  <section id="hot">
+    <div class="sec-head">
+      <span class="sec-num">// 01</span>
+      <h2>今日技术热榜</h2>
+    </div>
+    <p class="sec-desc">从 263 条资讯中筛出 8 条对开发者有直接信息增量的动态，按“今天要不要动手”排序。</p>
+    <div class="rule"></div>
+
+    <article class="hot-item urgent">
+      <div class="hot-top">
+        <div class="rank">01</div>
+        <div class="hot-body">
+          <h3><span class="tag sec">SECURITY</span>PHP2Shell 双 RCE 席卷全球：约七成网站受影响，8.x 全线上补丁</h3>
+          <p>PHP 官方发布紧急安全版本，修复两个内存安全漏洞 <code>CVE-2026-109618</code> 与 <code>CVE-2026-109619</code>，CVSS 均为 9.2，可被未认证攻击者用于远程代码执行。修复版本为 <code>8.5.12</code>、<code>8.4.27</code>、<code>8.3.36</code>、<code>8.2.35</code>；PHP 8.1 及更早版本已停止支持，不会获得官方补丁。两个漏洞分别涉及内存不足（OOM）处理和陈旧全局状态，Cloudflare 表示受影响版本可追溯到十多年前的 PHP 5.4，且在最常见的 Apache <code>mod_php</code> 部署下，攻击在应用自身代码开始运行之前就已触发——这意味着应用层的参数校验救不了你。</p>
+          <p>这次事件的披露过程同样值得复盘：原定 10 月 22 日协调披露，但 10 月 20 日 Hacker News 先出现帖子并流传“CVSS 10 分”的截图，PHP 团队被迫提前发版；随后研究方误发的漏洞演示视频、Chainguard 提前放出的修复镜像，都让攻击者更早拿到研究材料。漏洞由 AI 辅助发现（Calif 使用 GPT-5.6 Sol，Wiz 独立复现），被认为是首次由 AI 挖出、并直接导致多国政府批量下线网站的高危漏洞。Cloudflare 已提前部署 WAF 规则，但官方明确临时缓解不能替代升级。</p>
+          <div class="src-row">
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295776&amp;idx=1&amp;sn=4abf71ba22e010b5b0eff50003540717" target="_blank" rel="noopener">📎 来源: InfoQ</a>
+            <a class="src" href="https://www.ifanr.com/1685507?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">📎 来源: 爱范儿</a>
+            <a class="src" href="https://www.ifanr.com/1685446?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">📎 来源: 爱范儿 · 拔网线复盘</a>
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650455604&amp;idx=1&amp;sn=73748d3cd50cea9786b80fa48dc65f5a" target="_blank" rel="noopener">📎 来源: AINLP</a>
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU2NjU3Nzg2Mg==&amp;mid=2247548218&amp;idx=1&amp;sn=97d816b0e4f014f6f072c1537e0a4520" target="_blank" rel="noopener">📎 来源: 稀土掘金技术社区</a>
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&amp;mid=2653115304&amp;idx=1&amp;sn=4430a37c19df1aa3532d1e073b63dd63" target="_blank" rel="noopener">📎 来源: 极客公园</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">02</div>
+        <div class="hot-body">
+          <h3><span class="tag new">TOOLING</span>tsrs：Cloudflare 与 VoidZero 把 TypeScript 编译器移植到 Rust，最高 8 倍提速</h3>
+          <p>Cloudflare 与 VoidZero 联合推出 <code>tsrs</code>——把 TypeScript v7（Go 实现）的编译器移植到 Rust。基准测试显示其速度最高可达 TypeScript v7.0 的 8 倍，并且可以运行在 WebAssembly 中，目前正在并入 Oxc。项目虽标注实验性，但已经可以通过 <code>npx tsrs</code> 直接试用。更值得注意的是工程过程：项目由 Max Schwenk 发起，代码主要由智能体代写，他所在公司把类型检查从 80 秒缩短到 7 秒。</p>
+          <p>对一线团队来说，这意味着前端/Node 工具链的“Rust 化”从打包器（Rspack、Turbopack）进一步延伸到了类型检查。短期建议只在本地或旁路 CI 做基准对比，记录真实项目的冷启动、增量检查和内存占用；等它正式并入 Oxc、API 稳定后再考虑替换 <code>tsc</code>。迁移时重点验证第三方类型声明、装饰器、路径别名和增量编译缓存行为。</p>
+          <div class="src-row">
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&amp;mid=2247550267&amp;idx=1&amp;sn=5331a723f37fd10767bba8ab803f1cb1" target="_blank" rel="noopener">📎 来源: 印记中文 · JavaScript 中文周刊 #258</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">03</div>
+        <div class="hot-body">
+          <h3><span class="tag agent">AI WORKFLOW</span>GitHub Copilot 的委派审查可计入分支保护，但责任仍要留给人</h3>
+          <p>GitHub 上线“委派代码审查批准”（delegated code review approvals）：Copilot 评估 PR 后给出的结论可以直接计入 merge protection 规则，再叠加一次人工批准即可满足分支要求。官方定位很明确——解决“等队友点一个 routine PR 批准”造成的团队流速阻塞，而不是取消人工把关。</p>
+          <p>落地时建议把适用面收窄：低风险、改动可验证、有测试证据的 PR 可以走“Copilot + 单人工”模式；涉及鉴权、支付、数据迁移、基础设施和供应链的变更仍要求领域负责人审查。同时确认分支保护配置、审查记录和审计日志能对应到具体版本，避免“自动通过”变成无人负责的橡皮图章。</p>
+          <div class="src-row">
+            <a class="src" href="https://www.youtube.com/shorts/exBCpV9eJnc" target="_blank" rel="noopener">📎 来源: GitHub</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">04</div>
+        <div class="hot-body">
+          <h3><span class="tag agent">ML ENGINEERING</span>DeepSeek V4.1 Agentic RL 踩坑日记：官方文档没写的权重转换与推理一致性问题</h3>
+          <p>一线团队把 DeepSeek V4.1 Flash 的 Agentic RL 训练接入自研 LoongSage 框架，链路最终跑通（r2e gym + mini-swe-agent，24k response 长度，训推一致保持到万分位），但过程中踩了一串工程坑。首先是权重格式：训练和推理统一使用 bf16，V4.1 引入多模态后需要转成纯文本模型，而官方和社区都没有现成转换脚本；转换后还必须删除 HF model config 中的 <code>quantization_config</code>，否则 SGLang 加载会出问题，同时要删掉 <code>vision_config</code> 并把 <code>text_config</code> 的内容提到顶层。</p>
+          <p>这类记录比“框架支持 XX 模型”的发布说明更有价值：它暴露了真实训练链路的隐式契约——精度、配置层级、推理引擎加载方式必须一起对齐。做同类 Agentic RL 的团队可以把这些检查项前置成转换脚本的自检，而不是等到 SGLang 报错再逐项排查。</p>
+          <div class="src-row">
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&amp;mid=2247557571&amp;idx=2&amp;sn=a513f50769a856f96915416ef0af43b6" target="_blank" rel="noopener">📎 来源: 大模型智能</a>
+            <a class="src" href="https://zhuanlan.zhihu.com/p/2093494438676927321" target="_blank" rel="noopener">📎 来源: 知乎原文</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">05</div>
+        <div class="hot-body">
+          <h3><span class="tag agent">ARCHITECTURE</span>美团 AutoResearch 架构演进：从单线程 LOOP 到 CyclicGraph Engine</h3>
+          <p>美团技术团队从 Karpathy 的 AutoResearch 原型出发（三个文件：<code>program.md</code> 描述研究规则、<code>train.py</code> 是 Agent 唯一可改的训练代码、<code>prepare.py</code> 负责评估），经过三次重构，做成可在企业云端训练平台运行的自进化系统。核心变化是把单线程 LOOP 探索升级为 CyclicGraph Engine 图探索，用状态机保证长周期运行的稳定性，并通过“业务知识库 + 真实大闭环 + 经验自动沉淀”让系统越用越顺。</p>
+          <p>结果指标很硬：在两个结构、目标和场景都不同的业务建模项目里，单任务完成耗时相比人工基线分别减少约 85% 和 83%；其中一个算法模型已把系统自主推导的方案推全上线并获得线上收益；另一个多目标项目中，系统方案在全部 12 个预估目标上同时超过人工基线。两个项目唯一的共同点是同一套系统架构，说明增益来自架构而非特定业务调参。对做 Agent 平台的团队，这份材料可以直接当“长周期任务如何不中断、如何沉淀经验”的参考实现。</p>
+          <div class="src-row">
+            <a class="src" href="https://tech.meituan.com/2026/10/22/LOOP-AutoResearch.html" target="_blank" rel="noopener">📎 来源: 美团技术团队</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">06</div>
+        <div class="hot-body">
+          <h3><span class="tag ga">EVAL</span>Harbor 接入 Docker Sandboxes：每个 Agent 评测任务跑在独立 microVM</h3>
+          <p>Docker 宣布开源 Agent 评测框架 Harbor 支持 Docker Sandboxes，每个评测任务都在自己的 microVM 中运行，而不是共享同一个容器。这样做的直接收益是隔离性和可复现性：coding agent 会改文件、装依赖、访问网络，共享容器里的残留状态会污染后续任务，让评测结果不可比。microVM 把每个任务的文件系统、网络和进程边界切开，挂掉一个任务也不会影响其他评测。</p>
+          <p>如果你正在搭 Agent 的回归测试或模型选型基准，这类“评测基础设施”比再换一个模型更值得投入。建议把每个任务的环境快照、初始仓库、允许的网络出口和资源上限都版本化，评测结果才能在不同模型、不同 prompt 版本之间做归因。</p>
+          <div class="src-row">
+            <a class="src" href="https://www.infoq.com/news/2026/10/ai-agents-harbor-docker/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">07</div>
+        <div class="hot-body">
+          <h3><span class="tag data">LLM INFRA</span>小红书 Hint Tuning：1000 条数据让推理模型“少想”，数学推理 token 降 31.5%</h3>
+          <p>小红书 REDtech 的 NeurIPS 2026 工作发现：把推理模型自己的思维链切成片段，取前几段作为 hint 交给同家族的 Instruct 模型，很多题在开头几段、甚至不给提示时就能答对。顺着这个观察，团队只用 1000 条数据做一次 SFT，就让推理模型学会按题目难度分配思考长度；数学基准上推理 token 平均减少 31.5%，准确率基本持平。论文、代码、模型和数据均已开源。</p>
+          <p>这项工作的工程意义在于“推理成本可裁剪”：不是所有请求都值得长思考。落地时可以先在业务日志里按难度分层采样，验证短思考是否影响关键指标，再用小规模数据做针对性微调；同时保留一条“难题回退到长思考”的路由，避免一刀切降本带来长尾质量回退。</p>
+          <div class="src-row">
+            <a class="src" href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496829&amp;idx=1&amp;sn=7f270d1782d622da489efed974b2550b" target="_blank" rel="noopener">📎 来源: 小红书技术REDtech</a>
+            <a class="src" href="https://github.com/redai-infra/hint-tuning" target="_blank" rel="noopener">📎 来源: GitHub · hint-tuning</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="hot-item">
+      <div class="hot-top">
+        <div class="rank">08</div>
+        <div class="hot-body">
+          <h3><span class="tag new">PLATFORM</span>React Native Windows 0.85：彻底移除旧架构，升级前先换工具链</h3>
+          <p>React Native Windows 0.85.0 基于 React Native 0.85.3 发布，完成了向新架构（New Architecture）的迁移，旧架构已被移除；仍停留在旧架构的应用必须先迁移到 Fabric 才能升级。构建环境要求也同步抬高：Visual Studio 2026、.NET 10、Windows App SDK 1.8。新版本还增加了 Modal 标题栏与边框控制，并修复了触摸、文本、无障碍和渲染相关问题。</p>
+          <p>对维护 Windows 客户端的团队，这是一次需要排期的破坏性升级：先确认原生模块和第三方库是否支持 Fabric，再升级 VS/.NET/WinAppSDK，最后做触摸与无障碍回归。同周微软还发布了实验性的 <code>Microsoft.UI.Reactor</code>——用 C# 和 MVU（Model-View-Update）模式写 WinUI 应用，不写 XAML、code-behind 和 ViewModel；它明确不是 XAML/MVVM 的替代品，适合小范围试验而非生产押注。</p>
+          <div class="src-row">
+            <a class="src" href="https://devblogs.microsoft.com/react-native/react-native-windows-v0-85-is-here" target="_blank" rel="noopener">📎 来源: Microsoft for Developers</a>
+            <a class="src" href="https://devblogs.microsoft.com/ifdef-windows/microsoft-ui-reactor-a-c-first-way-to-build-winui-apps" target="_blank" rel="noopener">📎 来源: Microsoft for Developers · Microsoft.UI.Reactor</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ 02 DEEP DIVE ============ -->
+  <section id="deep">
+    <div class="sec-head">
+      <span class="sec-num">// 02</span>
+      <h2>深度技术解读</h2>
+    </div>
+    <p class="sec-desc">两个直接影响日常工程决策的话题：AI 写码之后瓶颈去了哪里，以及 Agent 从 Demo 走向生产到底缺什么。</p>
+    <div class="rule"></div>
+
+    <!-- Dive 1 -->
+    <article class="dive">
+      <div class="kicker">// DEEP DIVE 01 · 研发效能</div>
+      <h3>AI 写得更多，交付却没变快：瓶颈已经挪到 Review 和验证</h3>
+      <p>本周两组数据给出了同一个结论：AI 提升的是“代码产量”，不是“完成的工作”。哈佛与 Jellyfish 的研究覆盖 718 家公司、约 70 万名工作者、3 亿条工作事件（2021-01 至 2026-03），结果显示编码助手带来 12% 的代码行数增长、9% 的提交增长和 5% 的 PR 增长，但只有提交数在统计上显著；解决掉的 Jira 工单没有增加。Agent 的增益更大：代码行数 +30%、提交 +20%、PR +23%，但 Jira 工单只增加 12%，远低于代码量的涨幅。与此同时，Vercel CEO 称其平台上约 60% 的部署已经由 agent 发起——代码生产端的自动化正在向上游基础设施扩散，而人的验证能力并没有同步扩容。</p>
+      <p>增量去哪了？被下游吸收掉了。工程师只有 30%–40% 的时间在写代码；研究观察到每个 PR 的审查时间上升 49%、评论数上升 53%、需要返工的 PR 占比翻倍，参与审查的人数增加 14%，而 AI 辅助审查并没有缓解这些指标——这些变化也不能用“PR 变大”解释。另一组来自 Jellyfish 对约 5 万名工程师、447 家公司的分析更直接：工具本身对吞吐差异的解释力不足 1%，重度使用技能约贡献 3%，token 用量约 9%，公司/团队约 12%，剩下的大部分由工程师个人决定；当 Cursor 把一批用户切到 Grok 时，合并 PR 数量几乎没有变化，AI 时代之前的头部工程师现在大多仍是头部。</p>
+      <h4>把“验证”当成一等公民</h4>
+      <p>Stack Overflow 本周的文章补上了方法论：传统回归测试只编码开发者“意图中的行为”，而长期运行的系统会积累大量没有文档化的实际行为（边界、顺序、错误文案），这些正是集成方依赖的部分（Hyrum 定律）。建议用 characterization testing 先钉住“代码现在实际做什么”，再改代码：</p>
+      <ul>
+        <li><b>Golden master / 快照测试</b>：一次性捕获批量输出，后续运行逐字对比。</li>
+        <li><b>网络层流量录制</b>：记录请求、响应、数据库查询、队列消息和下游调用，无需改应用代码。</li>
+        <li><b>带依赖回放</b>：保证运行确定性，暴露副作用变化而不只是响应变化。</li>
+        <li><b>刻意审查 diff</b>：每个差异都回答“这是我有意改的吗”，确认后才更新基线；只屏蔽时间戳和生成 ID 这类噪声。</li>
+      </ul>
+      <p>这条思路对 AI 生成的改动尤其有效：在让 Agent 重构之前先录一遍真实流量，改动后回放，任何行为变化都会变成可评审的 diff。与之互补的是 InfoQ 文章提出的“确定性拆分”：让 AI 生成受约束的 SQL/Python，由 DuckDB 这类确定性引擎从 Parquet 计算可复现的事实，AI 只负责解释结果。概率性的接口和确定性的计算分开，分析才可重放、可审计。</p>
+      <div class="callout">
+        <b>给团队的可操作结论：</b>不要再用代码行数衡量 AI 收益。盯住 PR 周期时间、返工率、审查队列长度和变更失败率；为高风险模块建立行为基线；要求 AI 生成的 PR 附带可复现的测试证据。
+      </div>
+      <div class="src-row">
+        <a class="src" href="https://www.infoq.com/news/2026/10/jellyfish-ai-productivity/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ · Harvard/Jellyfish 研究</a>
+        <a class="src" href="https://www.youtube.com/watch?v=Ve2bAarPA2I" target="_blank" rel="noopener">📎 来源: AI Engineer · Nicholas Arcolano</a>
+        <a class="src" href="https://stackoverflow.blog/2026/10/22/the-regression-tests-nobody-writes-capturing-how-software-actually-behaves/" target="_blank" rel="noopener">📎 来源: Stack Overflow Blog</a>
+        <a class="src" href="https://www.infoq.com/articles/ai-changes-data-interface/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ · AI Changes the Data Interface</a>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=Mzg3NDc2MjQxMg==&amp;mid=2247495568&amp;idx=1&amp;sn=449c74dba57e5a26715f4966fe1f1740" target="_blank" rel="noopener">📎 来源: 深思圈 · Vercel CEO 访谈</a>
+      </div>
+    </article>
+
+    <!-- Dive 2 -->
+    <article class="dive">
+      <div class="kicker">// DEEP DIVE 02 · Agent 工程</div>
+      <h3>Agent 上生产的分水岭：状态、审批与幂等</h3>
+      <p>“六行代码就能跑 Agent”并不假：调模型、执行工具、写回结果、继续循环，Demo 很快就能演示。但业务方接着会提三个要求——大额操作先审批、服务重启后未完成任务要接着办、并发处理多张订单且状态不能串。此时问题不再是模型能力，而是执行进度藏在调用栈和局部变量里：进程一停、任务一暂停、请求一并发，系统就说不清“完成了什么、在等什么、下一步做什么”。InfoQ 的文章把这称为 Agent 从“能跑”走向“可控”的起点。</p>
+      <h4>把 Agent 当分布式系统，而不是一个长函数</h4>
+      <p>InfoQ 的 Actors for Agents 演讲给出了成熟答案：把 Agent 视为分布式系统，用 actor 模型处理状态归属、消息传递、write-through state 和监督边界（supervision boundaries），从而管理失败、续跑和可变执行图。落到代码上，至少要显式建模这些字段：</p>
+      <pre><code><span class="tok-c"># 任务状态必须是可持久化、可迁移的显式数据</span>
+task = {
+  <span class="tok-s">"id"</span>: <span class="tok-s">"refund-8842"</span>,
+  <span class="tok-s">"state"</span>: <span class="tok-s">"WAITING_APPROVAL"</span>,   <span class="tok-c"># 而不是藏在函数栈里</span>
+  <span class="tok-s">"checkpoint"</span>: <span class="tok-s">"after_risk_check"</span>,
+  <span class="tok-s">"idempotency_key"</span>: <span class="tok-s">"refund:8842:v3"</span>,
+  <span class="tok-s">"attempts"</span>: <span class="tok-n">1</span>,
+  <span class="tok-s">"approval"</span>: {<span class="tok-s">"required"</span>: <span class="tok-k">True</span>, <span class="tok-s">"by"</span>: <span class="tok-s">"finance"</span>}
+}</code></pre>
+      <p>三条设计规则值得直接照抄：第一，工作流引擎负责顺序和审批门，Agent 只在有界的单步内推理——AWS 医疗编码架构明确指出，把整条工作流交给 Agent，等于让运行时路径变成模型推理的副产品，难以审查和回放；第二，每个副作用操作带幂等键，工具执行成功但写回结果时崩溃，重试不能把退款做两遍；第三，任务可以在审批处保存现场、释放进程，几小时后再从检查点恢复。</p>
+      <h4>可参考的开源形态与测试方法</h4>
+      <p>Pizza Bot 把这种模式产品化了：Apache 2.0 自托管，定时任务或 Webhook 触发，Agent 在后台运行、把任务委派给专门的工作节点，需要时暂停等待人工批准，结果通过“收件箱”返回；状态、线程、检查点、附件和日志持久化在用户可控的本地文件夹，凭证放在操作系统密钥库。它的核心类比是邮件：一条线程代表一项可以回头处理的工作，而不是必须全程盯着的会话。</p>
+      <p>测试 Agent 也有可落地的技巧。Air Canada 团队在没有公开基准、领域专家没时间打分的情况下，采用“先写答案”的方法：从已知答案出发反向生成输入，再看 Agent 能否走回答案；这让他们把过去每周 1 条专家评分测试，提升到每天数十条自动化测试。供应商合同审查场景中，他们用五种方式构造测试集：历史决策、植入规则违规、删除条款、不应影响结果的变化、填好空白的合同模板。一个值得记住的原则是：能用代码断言答案时，不要用 LLM 当裁判。</p>
+      <div class="src-row">
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295776&amp;idx=3&amp;sn=c4e2e8c851dea53536502e87d473dbd9" target="_blank" rel="noopener">📎 来源: InfoQ · 六行代码跑 Agent</a>
+        <a class="src" href="https://www.infoq.com/presentations/actors-for-production-ai-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ · Actors for Agents</a>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295776&amp;idx=4&amp;sn=2ddc9e7cb37fd02a65140f3034067c8f" target="_blank" rel="noopener">📎 来源: InfoQ · Pizza Bot</a>
+        <a class="src" href="https://aws.amazon.com/blogs/architecture/automate-medical-coding-with-step-functions-and-amazon-bedrock-agentcore/" target="_blank" rel="noopener">📎 来源: AWS Architecture Blog</a>
+        <a class="src" href="https://www.youtube.com/watch?v=c_SPW__jF9w" target="_blank" rel="noopener">📎 来源: AI Engineer · Air Canada</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ 03 TOOLS ============ -->
+  <section id="tools">
+    <div class="sec-head">
+      <span class="sec-num">// 03</span>
+      <h2>工具推荐</h2>
+    </div>
+    <p class="sec-desc">本日发布的工具与库，按“能否马上用”排序；实验性项目已单独标注风险。</p>
+    <div class="rule"></div>
+
+    <div class="tools">
+      <article class="tool">
+        <h3>fx</h3>
+        <div class="kind">Vercel Labs · Zig 编写 · 实验性</div>
+        <p>一个用 Zig 写的开源 coding agent，可作为 CLI、脚本组件或嵌入式库使用，并提供 WebAssembly 构建，适合把编码 Agent 嵌进自己的产品或 CI 流程。目前为 pre-1.0，早期反馈质疑其“模型无关”的宣称，并存在与现有工具重名的问题，生产使用需自行承担 API 变化成本。</p>
+        <div class="src-row"><a class="src" href="https://www.infoq.com/news/2026/10/vercel-zig-fx-agent/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>Qdrant 1.20</h3>
+        <div class="kind">向量数据库 · 正式版</div>
+        <p>本版支持直接对 payload 文本做 BM25 排序，无需先生成 embedding；新增 code tokenizer 改善代码检索；嵌套过滤改用 per-element payload index，不再读取整段 payload；16-bit TurboQuant 将向量存储减半且无精度损失，8-bit 量化召回接近 float16。适合做代码、日志和文档的混合检索。</p>
+        <div class="src-row"><a class="src" href="https://qdrant.tech/blog/qdrant-1.20.x/" target="_blank" rel="noopener">📎 来源: Qdrant</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>Microsoft Agent Framework for Go</h3>
+        <div class="kind">Go SDK · 向量检索</div>
+        <p>Go 版 Agent Framework 新增 embedding 生成和 vector store API，可在 Go 服务里直接搭 RAG 检索闭环：把查询和文档转成向量并做相似度检索。适合已经有 Go 后端、不想为了向量检索再引入 Python 服务的团队。</p>
+        <div class="src-row"><a class="src" href="https://devblogs.microsoft.com/go/embeddings-and-vector-search-in-agent-framework-for-go" target="_blank" rel="noopener">📎 来源: Microsoft for Developers</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>php2shell-checker</h3>
+        <div class="kind">OpenAI Codex Skill · 安全自查</div>
+        <p>OpenAI 发布的 Codex Skill，用来帮助网站自查 PHP2Shell 漏洞影响范围。把它当作升级前的辅助排查工具，而不是补丁替代品：先确认 PHP 版本和部署方式（尤其 mod_php），再检查容器基础镜像和对外服务，最后按官方版本升级并复核。</p>
+        <div class="src-row">
+          <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650455596&amp;idx=1&amp;sn=604bb921862674ab7e51b2c4906e74bc" target="_blank" rel="noopener">📎 来源: AINLP</a>
+          <a class="src" href="https://github.com/openai/php2shell-checker" target="_blank" rel="noopener">📎 来源: GitHub · openai/php2shell-checker</a>
+        </div>
+      </article>
+
+      <article class="tool">
+        <h3>Pizza Bot</h3>
+        <div class="kind">Apache 2.0 · 自托管 Agent 收件箱</div>
+        <p>亚马逊云科技团队开源的后台 Agent 收件箱：支持定时任务和 Webhook 触发，把任务委派给工作节点，重大操作前暂停等待人工批准，结果以邮件线程形式返回。支持多模型厂商、MCP 服务器和 Agent 技能，状态与数据保存在本机，凭证进入系统密钥库。</p>
+        <div class="src-row"><a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295776&amp;idx=4&amp;sn=2ddc9e7cb37fd02a65140f3034067c8f" target="_blank" rel="noopener">📎 来源: InfoQ</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>EdgeRock-4B</h3>
+        <div class="kind">开源模型 · 固定 KV Cache</div>
+        <p>岩芯矩阵联合港科大、CMU 等发布并开源，由 Qwen3.5-4B 转换而来，核心是记忆岩锚（RMA）：让推理中的关键信息被固定下来，而不是让 KV Cache 随上下文增长。官方测试显示每条序列 KV 固定为 72 MiB，256K 上下文下比来源模型少 99.1%，同卡长推理吞吐为 6.42 倍，AIME 2024–2026 平均一次通过率 82.9%。对长任务 coding agent 的推理成本有直接参考价值。</p>
+        <div class="src-row"><a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU5OTI0NTc3Mg==&amp;mid=2247559421&amp;idx=1&amp;sn=9285a1d29c6d189dd11def0d9e6bd66e" target="_blank" rel="noopener">📎 来源: 甲子光年</a></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 04 PRACTICE ============ -->
+  <section id="practice">
+    <div class="sec-head">
+      <span class="sec-num">// 04</span>
+      <h2>实践指南</h2>
+    </div>
+    <p class="sec-desc">四条可以直接放进 runbook 或团队规范的动作。</p>
+    <div class="rule"></div>
+
+    <article class="practice">
+      <h3><span class="idx">01</span>PHP2Shell 当天应急清单</h3>
+      <p>先确认版本，再升级；不要只依赖 WAF 或应用层过滤。由于漏洞在 mod_php 下先于应用代码触发，参数校验、WAF 规则都只能算临时止血。</p>
+      <pre><code><span class="tok-c"># 1. 盘点版本与部署方式</span>
+php -v
+php -i | grep -i <span class="tok-s">"Server API"</span>   <span class="tok-c"># 关注 mod_php / FPM</span>
+
+<span class="tok-c"># 2. 升级到已修复版本（按发行版实际包名调整）</span>
+<span class="tok-c">#    Debian/Ubuntu</span>
+sudo apt-get update &amp;&amp; sudo apt-get install --only-upgrade <span class="tok-s">'php*'</span>
+<span class="tok-c">#    RHEL/Rocky/Alma</span>
+sudo dnf upgrade --refresh <span class="tok-s">'php*'</span>
+
+<span class="tok-c"># 3. 容器与基础镜像也要一起换</span>
+docker images --format <span class="tok-s">'{{.Repository}}:{{.Tag}}'</span> | grep -i php
+</code></pre>
+      <ul>
+        <li>目标版本：<code>8.5.12</code>、<code>8.4.27</code>、<code>8.3.36</code>、<code>8.2.35</code>；8.1 及更早无补丁，必须升级大版本。</li>
+        <li>无法立即升级的对外服务，优先隔离或临时下线；WAF 规则仅作过渡，并保留可回滚路径。</li>
+        <li>检查日志中是否存在异常请求与 shell 执行痕迹；有可疑迹象时轮换数据库、云凭证和会话密钥。</li>
+        <li>Chainguard 曾提前发布修复镜像，使用其镜像的团队确认 digest 与版本来源，不要盲信缓存。</li>
+        <li>同日 <a href="https://nodejs.org/en/blog/vulnerability/october-2026-security-releases" target="_blank" rel="noopener">Node.js 也发布了安全版本</a>，建议把运行时升级合并到同一个维护窗口处理。</li>
+      </ul>
+    </article>
+
+    <article class="practice">
+      <h3><span class="idx">02</span>给 AI 改动先建立“行为基线”</h3>
+      <p>在让 Agent 重构一个你不太放心的服务之前，先录下它现在的真实行为。选一个改动风险最高的服务，捕获 HTTP 请求/响应、数据库查询、队列消息和下游调用；用这些录制数据做回放，保存为 golden master。改完后逐项对比，只屏蔽时间戳和随机 ID，不要屏蔽业务字段。每个差异都必须回答“这是我预期的行为变化吗”，确认后才更新基线。</p>
+      <p>配套的团队规则：PR 描述必须包含测试证据或复现步骤；限制单 PR 规模，避免 AI 一次性生成过大 diff；跟踪审查队列长度和返工率，而不是代码行数。Copilot 委派审查可以用，但只对低风险改动用“自动 + 单人工”，关键路径仍由领域负责人签字。</p>
+    </article>
+
+    <article class="practice">
+      <h3><span class="idx">03</span>Agent 生产化的最小状态模型</h3>
+      <p>把每个任务建模成显式状态机，至少包含：当前状态、检查点、尝试次数、幂等键、审批状态和预算。规定哪些状态可以迁移、哪些操作必须人工批准；每个副作用执行后写检查点；重启后从最近检查点恢复；并发任务按业务键分区，避免共享可变状态。运行环境按任务隔离（microVM 或独立容器），并设置超时、token 和工具调用上限。</p>
+      <p>评测用“先写答案”的方法：从已知正确答案反推输入，检查 Agent 能否走回答案；能用代码断言的场景不要用 LLM 裁判。监控四个指标：任务成功率、人工接管率、从失败恢复的平均时间、单任务成本。</p>
+    </article>
+
+    <article class="practice">
+      <h3><span class="idx">04</span>工具链升级的灰度策略</h3>
+      <p>面对 tsrs、fx、Microsoft.UI.Reactor 这类实验性项目，采用“旁路验证”而不是直接替换：在 CI 里并行跑新旧工具，记录速度、内存、产物差异和失败案例；先在本地或非阻塞 job 中启用；把结果沉淀成团队基准，等上游 API 稳定后再切换。React Native Windows 0.85 则是相反的情况——旧架构已移除，属于必须排期的破坏性升级，先审计原生模块的 Fabric 兼容性，再升级 VS 2026 / .NET 10 / WinAppSDK 1.8。</p>
+    </article>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer id="sources">
+    <div class="sec-head">
+      <span class="sec-num">// 05</span>
+      <h2>参考链接汇总</h2>
+    </div>
+    <ol class="sources">
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295776&amp;idx=1&amp;sn=4abf71ba22e010b5b0eff50003540717" target="_blank" rel="noopener">全球 70% 网站一夜告急，日本首相催打补丁！详解 PHP 暴雷事件始末</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://www.ifanr.com/1685507?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">OpenAI 发现 PHP「世纪漏洞」，全球 70% 网站都危险了</a><span class="s-feed">爱范儿</span></li>
+      <li><a class="s-title" href="https://www.ifanr.com/1685446?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">PHP 爆雷引发全球紧急「拔网线」，别指望 AI 拯救互联网</a><span class="s-feed">爱范儿</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650455604&amp;idx=1&amp;sn=73748d3cd50cea9786b80fa48dc65f5a" target="_blank" rel="noopener">GPT 挖出 PHP 大漏洞，全球互联网连夜打补丁</a><span class="s-feed">AINLP</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650455596&amp;idx=1&amp;sn=604bb921862674ab7e51b2c4906e74bc" target="_blank" rel="noopener">OpenAI 发布 Codex Skill 帮助网站自查 PHP 关键漏洞影响</a><span class="s-feed">AINLP</span></li>
+      <li><a class="s-title" href="https://github.com/openai/php2shell-checker" target="_blank" rel="noopener">php2shell-checker</a><span class="s-feed">GitHub · OpenAI</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzU2NjU3Nzg2Mg==&amp;mid=2247548218&amp;idx=1&amp;sn=97d816b0e4f014f6f072c1537e0a4520" target="_blank" rel="noopener">紧急！PHP 两个 9.2 级漏洞已修复，未升级的赶紧检查</a><span class="s-feed">稀土掘金技术社区</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&amp;mid=2653115304&amp;idx=1&amp;sn=4430a37c19df1aa3532d1e073b63dd63" target="_blank" rel="noopener">AI 到处挖漏洞一整年，终于给人类爆了个大的</a><span class="s-feed">极客公园</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&amp;mid=2247550267&amp;idx=1&amp;sn=5331a723f37fd10767bba8ab803f1cb1" target="_blank" rel="noopener">JavaScript 中文周刊 #258 - TypeScript 的 Rust 移植版：最高 8 倍提速</a><span class="s-feed">印记中文</span></li>
+      <li><a class="s-title" href="https://www.youtube.com/shorts/exBCpV9eJnc" target="_blank" rel="noopener">Stop waiting on pull request reviews with GitHub Copilot approvals</a><span class="s-feed">GitHub</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&amp;mid=2247557571&amp;idx=2&amp;sn=a513f50769a856f96915416ef0af43b6" target="_blank" rel="noopener">DeepSeek v4.1 RL 训练踩坑日记</a><span class="s-feed">大模型智能</span></li>
+      <li><a class="s-title" href="https://zhuanlan.zhihu.com/p/2093494438676927321" target="_blank" rel="noopener">DeepSeek v4.1 RL 训练踩坑日记（原文）</a><span class="s-feed">知乎</span></li>
+      <li><a class="s-title" href="https://tech.meituan.com/2026/10/22/LOOP-AutoResearch.html" target="_blank" rel="noopener">从 LOOP 到图探索 —— 算法模型的 AutoResearch 自进化系统架构演进之路</a><span class="s-feed">美团技术团队</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/news/2026/10/ai-agents-harbor-docker/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Harbor Adds Docker Sandboxes to Run Reproducible AI Agent Evals in Isolated MicroVMs</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496829&amp;idx=1&amp;sn=7f270d1782d622da489efed974b2550b" target="_blank" rel="noopener">用推理模型自己的思维链作 hint，1000 条数据教会模型“少想”</a><span class="s-feed">小红书技术REDtech</span></li>
+      <li><a class="s-title" href="https://github.com/redai-infra/hint-tuning" target="_blank" rel="noopener">Hint Tuning: Less Data Makes Better Reasoners（代码与数据）</a><span class="s-feed">GitHub</span></li>
+      <li><a class="s-title" href="https://devblogs.microsoft.com/react-native/react-native-windows-v0-85-is-here" target="_blank" rel="noopener">React Native Windows v0.85 is here</a><span class="s-feed">Microsoft for Developers</span></li>
+      <li><a class="s-title" href="https://devblogs.microsoft.com/ifdef-windows/microsoft-ui-reactor-a-c-first-way-to-build-winui-apps" target="_blank" rel="noopener">Microsoft.UI.Reactor: a C#-first way to build WinUI apps</a><span class="s-feed">Microsoft for Developers</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/news/2026/10/jellyfish-ai-productivity/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Study Finds AI-generated Code Fails to Boost Productivity Due to Downstream Bottlenecks</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://www.youtube.com/watch?v=Ve2bAarPA2I" target="_blank" rel="noopener">Better AI Models Won't Fix Your Engineering Team</a><span class="s-feed">AI Engineer · Nicholas Arcolano</span></li>
+      <li><a class="s-title" href="https://stackoverflow.blog/2026/10/22/the-regression-tests-nobody-writes-capturing-how-software-actually-behaves/" target="_blank" rel="noopener">The Regression Tests Nobody Writes: Capturing How Software Actually Behaves</a><span class="s-feed">Stack Overflow Blog</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/articles/ai-changes-data-interface/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">AI Changes the Data Interface, Not the Query Engine</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=Mzg3NDc2MjQxMg==&amp;mid=2247495568&amp;idx=1&amp;sn=449c74dba57e5a26715f4966fe1f1740" target="_blank" rel="noopener">Vercel CEO 最新爆料：60% 的部署已经来自 agent，互联网正在为 AI 重做一遍</a><span class="s-feed">深思圈</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295776&amp;idx=3&amp;sn=c4e2e8c851dea53536502e87d473dbd9" target="_blank" rel="noopener">六行代码就能跑 Agent，为什么还要设计一套框架？</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/presentations/actors-for-production-ai-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Actors for Agents: Patterns for Production AI</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295776&amp;idx=4&amp;sn=2ddc9e7cb37fd02a65140f3034067c8f" target="_blank" rel="noopener">Pizza Bot：开源的后台 AI 智能体收件箱</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://aws.amazon.com/blogs/architecture/automate-medical-coding-with-step-functions-and-amazon-bedrock-agentcore/" target="_blank" rel="noopener">Automate medical coding with Step Functions and Amazon Bedrock AgentCore</a><span class="s-feed">AWS Architecture Blog</span></li>
+      <li><a class="s-title" href="https://www.youtube.com/watch?v=c_SPW__jF9w" target="_blank" rel="noopener">How to Test AI Agents When No Benchmark Exists</a><span class="s-feed">AI Engineer · Air Canada</span></li>
+      <li><a class="s-title" href="https://www.infoq.com/news/2026/10/vercel-zig-fx-agent/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Vercel Labs Open-Sources fx: A Zig Coding Agent Designed to Be Embedded</a><span class="s-feed">InfoQ</span></li>
+      <li><a class="s-title" href="https://qdrant.tech/blog/qdrant-1.20.x/" target="_blank" rel="noopener">Qdrant 1.20 - Full-Text Search Improvements</a><span class="s-feed">Qdrant</span></li>
+      <li><a class="s-title" href="https://devblogs.microsoft.com/go/embeddings-and-vector-search-in-agent-framework-for-go" target="_blank" rel="noopener">Embeddings and vector search in Microsoft Agent Framework for Go</a><span class="s-feed">Microsoft for Developers</span></li>
+      <li><a class="s-title" href="https://mp.weixin.qq.com/s?__biz=MzU5OTI0NTc3Mg==&amp;mid=2247559421&amp;idx=1&amp;sn=9285a1d29c6d189dd11def0d9e6bd66e" target="_blank" rel="noopener">给 AI 装上记忆岩锚：岩芯矩阵开源 EdgeRock-4B，单卡吞吐达原模型 6.4 倍</a><span class="s-feed">甲子光年</span></li>
+      <li><a class="s-title" href="https://nodejs.org/en/blog/vulnerability/october-2026-security-releases" target="_blank" rel="noopener">Wednesday, October 21, 2026 Security Releases</a><span class="s-feed">Node.js Blog</span></li>
+    </ol>
+    <p class="colophon">数据窗口 2026-10-21 20:55 → 2026-10-22 20:55 · 原始资讯 263 条 · 采集源 424 个<br>
+    由 tech-daily-generator 生成 · 角色 developer_practice · 生成时间 2026-10-22 20:55</p>
+  </footer>
+
+</div>
+</body>
+</html>
