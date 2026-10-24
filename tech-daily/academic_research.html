@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>科技日报 · 学术研究员版 · 2026-10-23</title>
+<title>科技日报 · 学术研究员版 · 2026-10-24</title>
 <style>
   :root{
     --ink:#1c2733;
@@ -303,11 +303,11 @@
 <header class="masthead">
   <div class="kicker">Technology Daily · Academic Research Edition</div>
   <h1>科技日报 · 学术研究员版</h1>
-  <p class="subtitle">本期聚焦语音与音频研究：37 篇 arXiv 新预印本、评测方法学转向与开源模型/数据资源</p>
+  <p class="subtitle">本期聚焦开源前沿模型、物理世界 scaling 与推理/评测基础设施</p>
   <div class="meta-grid">
-    <div><b>2026-10-23</b>出版日期</div>
-    <div><b>242</b>条候选新闻</div>
-    <div><b>37</b>篇独立 arXiv 论文</div>
+    <div><b>2026-10-24</b>出版日期</div>
+    <div><b>129</b>条候选新闻</div>
+    <div><b>8</b>项研究动态</div>
     <div><b>424</b>个数据来源</div>
   </div>
 </header>
@@ -316,8 +316,8 @@
 
 <div class="abstract">
   <h2>摘要</h2>
-  <p>本日新闻流中，语音与音频方向出现了异常集中的 arXiv 投稿（cs.SD 26 条、eess.AS 14 条、cs.MM 4 条，去重后 37 篇独立论文），主题覆盖语音基座模型、统一音频理解与生成、TTS/ASR 评测方法、深度伪造检测与低资源语料。与之呼应的是工业界的两类信号：一是 MiniMax、上海人工智能实验室、中国电信等机构密集开源模型与数据；二是多项新基准（TORUS、StreamEval、RobotWorld）显示，现有模型在闭环一致性、交互式生成和具身任务上的绝对分数远低于预期。</p>
-  <p>因此，本期不按「热点」而按「方法论」组织：研究动态侧重可复现的实验与基准；深度解读选取两篇以「负结果」和「指标分解」见长的论文；趋势观察则讨论评测科学化、音频模型决策接口化、效率优先与低资源公平性四条主线。</p>
+  <p>本期数据窗口内最集中的信号来自三类。其一，开源前沿模型重新上探能力天花板：Kimi K3.1 Pro 以 2.8T 总参数、104B 激活的 MoE 架构和大幅增加的后训练算力逼近闭源旗舰，并承诺 11 月 4 日前开放完整权重。其二，底层系统与物理世界的 scaling：TorchTPU 让 TPU 成为 PyTorch 原生设备；PrismWAM 与 RoboDoctor 把具身智能的核心问题从语义理解转向物理状态建模与执行反馈。其三，评测方法学继续迁移：UI2App 考察静态截图下的交互推断，Quant Arena 让模型在封存数据上接受受约束的研究过程检验，工业界则把评测建立在生产轨迹与 CI 门禁之上。</p>
+  <p>因此，本期研究动态侧重可复现的数据与受控实验；深度解读选取 PrismWAM/RoboDoctor 与 EchoChat 两项工作，分别代表「物理 scaling」与「结构化认知建模」；趋势观察讨论开源权重、Scaling Physics、推理系统、评测科学化与 Agent 可靠性五条主线。</p>
 </div>
 
 <nav class="toc">
@@ -333,101 +333,113 @@
   <div class="sec-head"><span class="num">§ 1</span><h2>研究动态</h2></div>
 
   <article class="item">
-    <h3>Spark-Audio 1.0：0.65B 音频编码器 + 30B-A3B MoE 的语音基座模型</h3>
-    <div class="en-title">Spark-Audio 1.0 Technical Report — arXiv:2610.31292</div>
-    <div class="tags"><span class="tag">语音基座模型</span><span class="tag">MoE</span><span class="tag">多语种</span></div>
-    <p>Spark-Audio 1.0 是一份完整的语音基座模型技术报告：模型接受文本与语音输入、输出文本，覆盖 99 种语言与 202 种方言的语音识别、语音翻译、音频感知与理解，以及文本与语音两种对话形态。架构上，它将 0.65B 参数的稠密音频编码器与 30B-A3B 的 MoE 语言模型耦合，编码器先以 representation-enhanced BEST-RQ 预训练，再经多任务监督精调。报告的定位是让系统从「听得清」走向「听得懂」，并明确说明整个训练运行在国产算力基础设施之上；对研究社区而言，其价值在于给出了大规模多语种语音模型在编码器—LLM 耦合方式与训练配方上的一个可参照样本。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.31292" target="_blank" rel="noopener">arXiv · eess.AS updates on arXiv.org</a></div>
+    <h3>Kimi K3.1 Pro：以后训练规模化为核心的开源旗舰</h3>
+    <div class="en-title">Kimi K3.1 Pro Technical Release · 2.8T 总参数 / 104B 激活 · 1M 上下文</div>
+    <div class="tags"><span class="tag">开源权重</span><span class="tag">MoE</span><span class="tag">后训练</span><span class="tag">长程 Agent</span></div>
+    <p>月之暗面于 10 月 24 日（1024 程序员节）发布 Kimi K3.1 Pro，这是 K3.1 系列首款模型：底座仍是 2.8T 总参数、104B 激活参数的混合专家架构，支持 100 万 token 上下文与原生图像/视频输入，完整权重计划在 11 月 4 日前开放。与 K3 相比，它的变化主要来自后训练——大幅增加后训练算力，并在数百个下游领域做大规模联合强化学习；为支撑这套训练，团队重构了 RL 框架、长上下文推理、沙箱基础设施、调度系统与环境质量检查平台。</p>
+    <p>公开成绩显示，它在 Terminal-Bench 4.0 取得 65.7%（GPT-6 Astra 58.2%，Claude Opus 5.5 66.4%）、SWE Marathon v1.1 51.7、Agents&rsquo; Last Exam 43.2、OfficeQA Pro v2 64.4，借助工具在 BenchCAD 上达到 92.7%；第三方 Artificial Analysis 的智能指数为 55，位列全球第四、开源第一。API 标准版输入 13 元/百万 token、输出 68 元，缓存命中输入 1.3 元，官方称价格约为 GPT-6 Astra 的五分之一；另提供速度约 2–3 倍的 Highspeed 版本，价格为标准版两倍。对研究社区而言，值得关注的不是单点分数，而是一个接近前沿的开放权重模型把「后训练 + 大规模 RL」作为主要能力来源，并给出了可复现的工程配方线索。</p>
+    <div class="source">来源：<a href="https://latent.space/p/ainews-kimi-31/" target="_blank" rel="noopener">Latent.Space</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650455673&amp;idx=1&amp;sn=7131d82982a14342e102368e9b5409b1" target="_blank" rel="noopener">AINLP</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295910&amp;idx=1&amp;sn=69fe74ceaa7e133f8c64496e3989a96c" target="_blank" rel="noopener">InfoQ</a></div>
   </article>
 
   <article class="item">
-    <h3>TORUS：统一音频模型的闭环一致性基准</h3>
-    <div class="en-title">TORUS: A Unified Closed-Loop Benchmark for Unified Audio Models — arXiv:2607.28896</div>
-    <div class="tags"><span class="tag">评测基准</span><span class="tag">统一音频模型</span><span class="tag">闭环评测</span></div>
-    <p>统一音频模型同时具备音频理解、生成乃至编辑能力，但各能力历来在专用基准上分开评测，留下一个基本问题：模型能否理解自己生成或编辑的音频？TORUS 将这一点形式化为「理解—生成自洽性」（UGC_OWN），构建了 1,053 道问题、117 项测试、覆盖 21 个任务、8 类音频场景与三种音频类型的音频原生闭环基准。它同时评测统一模型与「专用模型级联」两类系统，并辅以客观与主观指标。该工作把评测单位从单项能力转向生成与理解之间的一致性，为统一音频模型提供了更接近真实使用方式的度量。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2607.28896" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <h3>TorchTPU：TPU 成为 PyTorch 原生设备，CUDA 护城河出现裂缝</h3>
+    <div class="en-title">TorchTPU: A Hybrid Software Stack for PyTorch on TPU · PyTorch Conference 2026</div>
+    <div class="tags"><span class="tag">系统</span><span class="tag">编译栈</span><span class="tag">PyTorch</span><span class="tag">TPU</span></div>
+    <p>在圣何塞举行的 PyTorch Conference 2026 上，谷歌宣布开源 TorchTPU，这是一套让 PyTorch 原生运行在 TPU 上的完整软件栈；在 Hugging Face Transformers v5 中，部署到 TPU 只需传入 <span style="font-family:monospace">device_map="tpu"</span>。此前 PyTorch 用户使用 TPU 需经过 PyTorch/XLA 转接，工程成本较高；TorchTPU 将 TPU 与 GPU、CPU 并列为原生设备选项。项目由谷歌与 Meta 联合开发，vLLM、SGLang、Hugging Face、Ray、TorchTitan 等主流项目同步接入，并发布了一份 23 页的 arXiv 技术报告。</p>
+    <p>据机器之心报道，该栈已覆盖 4,917 个模型、与 GPU 结果 97% 对齐。其研究意义不在「多一个后端」，而在于把跨加速器的编译、算子与分布式训练抽象成可验证的兼容层：CUDA 的护城河长期建立在框架与硬件共同演进之上，而 TorchTPU 试图用框架原生支持削弱这种绑定。对做编译器、内核与推理系统研究的团队，这是一份现成的、可测量的对照实验基座。</p>
+    <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651069794&amp;idx=2&amp;sn=ae62dbad6234b3c4c7359543936974c7" target="_blank" rel="noopener">机器之心</a> · 项目 <a href="https://github.com/google-pytorch/torch_tpu" target="_blank" rel="noopener">google-pytorch/torch_tpu</a></div>
   </article>
 
   <article class="item">
-    <h3>Qwen-Audio-Jev：面向音频决策的类型化接口</h3>
-    <div class="en-title">Qwen-Audio-Jev: A Unified Interface for Audio Decisions — arXiv:2610.21614</div>
-    <div class="tags"><span class="tag">音频大模型</span><span class="tag">决策接口</span><span class="tag">推理效率</span></div>
-    <p>大型音频语言模型在音频理解上进展显著，但自回归文本生成在高吞吐、需频繁做选择、判断与打分的应用中会带来额外计算与延迟。Qwen-Audio-Jev 在 Qwen-Audio-3.1-ASR-Flash-Next 之上增加专用 Jev 决策头，以 CHOICE、NOUL、SCORE 三种决策原语统一选择、二值判断与评分：给定音频、自然语言问题与显式答案规范，模型直接输出任务条件概率分布或数值分数。这种「类型化决策读出」把输出从自由文本收窄为可解析的决策变量，为音频模型的工业部署提供了一种更轻的接口形态。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.21614" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <h3>UI2App：只给静态截图，模型能否推断出 App 的交互行为？</h3>
+    <div class="en-title">UI2App: Interaction Inference from Static UI Screenshots — arXiv:2607.06306v2</div>
+    <div class="tags"><span class="tag">评测基准</span><span class="tag">交互推断</span><span class="tag">程序合成</span></div>
+    <p>给模型几张网站截图，生成一个「看起来很像」的网页已不困难，但真正操作起来问题才出现：在商品页加入商品后购物车是否更新？切换页面后刚才的状态是否保留？来自港科广的研究提出 UI2App，把这种能力定义为 Interaction Inference（交互推断）：不提供功能说明、点击轨迹或交互演示，只给静态 UI 截图，考察模型能否自行推断并实现其中隐含的应用行为。</p>
+    <p>该工作同时给出了论文、项目主页与开源代码，评测目标从「视觉相似度」转向「行为正确性」——状态转移、事件处理、跨页面状态保持等。对界面智能体、前端代码生成与程序合成研究而言，这类基准补上了「静态还原」与「可交互系统」之间的关键缺口；其价值也在于把评测单位从像素级相似度移到可执行的交互语义上。</p>
+    <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652737586&amp;idx=3&amp;sn=c381f1250a66caf597b4a1994ee99be0" target="_blank" rel="noopener">新智元</a> · 论文 <a href="https://arxiv.org/abs/2607.06306v2" target="_blank" rel="noopener">arXiv:2607.06306v2</a> · 代码 <a href="https://github.com/chenmancm169/UI2App" target="_blank" rel="noopener">GitHub</a></div>
   </article>
 
   <article class="item">
-    <h3>Muting Tokens：音频 Transformer 的 token 稀疏化系统评测</h3>
-    <div class="en-title">Muting Tokens: Exploring Token Sparsification for Efficient Audio Transformers — arXiv:2610.31235</div>
-    <div class="tags"><span class="tag">效率</span><span class="tag">Token 稀疏化</span><span class="tag">可复现评测</span></div>
-    <p>Token 稀疏化通过减少 Transformer 层中处理的 token 数量来降低自注意力的计算开销，在视觉与语言领域已被广泛研究，但在音频中仍缺乏系统评估，已有工作往往只覆盖单一方法、单一模型规模或单一数据集。本文在多个数据集与多种模型规模上，对一系列 token 剪枝与合并策略做了统一评测，考察精度与效率的权衡关系。其价值不在于提出新算法，而在于为音频 Transformer 的效率研究建立可比较的实验基线与结论边界。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.31235" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <h3>Quant Arena：让模型做一段受约束的研究，再在封存数据上检验</h3>
+    <div class="en-title">Quant Arena &amp; LaPlace&rsquo;s Eye · Einsia AI</div>
+    <div class="tags"><span class="tag">评测基准</span><span class="tag">金融研究</span><span class="tag">受控研究过程</span></div>
+    <p>Einsia AI 发布 Quant Arena，并推出研究品牌 LaPlace&rsquo;s Eye。Quant Arena 的设定是：让大模型基于 2022–2023 年数据开展研究，经过有限轮次迭代后提交策略，再在封存的 2024 年数据上接受回测。榜单在代表配置口径下，等权市场年化收益为 17.1%，而受测模型的最高代表配置为 10.7%——即在同等约束下，模型尚未跑赢简单基线。</p>
+    <p>LaPlace&rsquo;s Eye 的首个私有策略 Kepler-1 在榜单中领先，品牌表述强调观察、行动、校准与持续学习，而非「预测未来」。这项工作的方法论意义在于把「研究能力」本身做成可评测对象：模型不仅要给出结论，还要在有限信息、有限迭代与不可见测试集下完成一段受约束的研究过程。对评测研究而言，这比单点问答更接近真实科研的约束结构。</p>
+    <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&amp;mid=2247518961&amp;idx=1&amp;sn=19f597b6f6dcc2db34b515a27d02603e" target="_blank" rel="noopener">Z Potentials</a></div>
   </article>
 
   <article class="item">
-    <h3>「验证器的下限」：TTS 误差中有多少其实是 ASR 误差？</h3>
-    <div class="en-title">Measuring the Verifier's Floor: How Much Apparent Rare-Word Text-to-Speech Error Is ASR Error? — arXiv:2610.31470</div>
-    <div class="tags"><span class="tag">评测方法</span><span class="tag">TTS</span><span class="tag">ASR</span></div>
-    <p>TTS 通常用 ASR 转写其输出来计算词错误率，因此该指标也把识别器自身的错误计入了 TTS 误差。作者先在人类录制的测试句上测量这一「验证器下限」：在 LibriSpeech 与 FLEURS 上，评测用识别器即使面对人声也会漏掉 33%–67% 的极稀有词，三类识别器合计漏掉 22%–42%。引入另外两个识别器族做交叉核验后，在至少被一个识别器听到的词上，表观 TTS 错误率降为原来的二分之一到三分之一（LibriSpeech 极稀有词从 10%–13% 降至 3%–5%），但极稀有词仍是最难的部分；而直接忽略「人声也被漏掉」的词则会引入系统性偏差。该研究提示，TTS 评测应报告识别器集成与偏差校正后的结果，而非单一识别器的 WER。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.31470" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <h3>Cloudflare：一致性哈希的统计分析回收超过 100 TB 内存</h3>
+    <div class="en-title">Reclaiming 100 TB of RAM by Optimizing Consistent Hashing · pingora-ketama</div>
+    <div class="tags"><span class="tag">分布式系统</span><span class="tag">一致性哈希</span><span class="tag">内存优化</span></div>
+    <p>Cloudflare 公开了其内部负载均衡服务的一次内存优化：通过改进 Rust 实现的一致性哈希（pingora-ketama），把该服务的内存占用降低超过 100 TB。关键手段是压缩哈希环条目，并对哈希分布与碰撞率做统计分析，从而把每个后端的哈希数量减少约 90%。</p>
+    <p>这类工作没有新模型或新范式，但对大规模系统研究有直接参考价值：一致性哈希的常数因子（每个后端保留多少虚拟节点/哈希）长期被当作经验参数，而这里用分布统计把它变成可优化的变量，并用生产环境的内存账单验证收益。对做分布式系统、负载均衡与绿色计算的研究者，它提供了一个「用统计刻画结构、再据结构省资源」的清晰案例。</p>
+    <div class="source">来源：<a href="https://www.infoq.com/news/2026/10/cloudflare-hashing-optimization/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
   </article>
 
   <article class="item">
-    <h3>MAVOS-DD：多语言音视频深度伪造开放集基准</h3>
-    <div class="en-title">MAVOS-DD: Multilingual Audio-Video Open-Set Deepfake Detection Benchmark — arXiv:2505.11109</div>
-    <div class="tags"><span class="tag">深度伪造检测</span><span class="tag">开放集泛化</span><span class="tag">数据集</span></div>
-    <p>多语言音视频深度伪造检测此前缺少大规模开放集基准。MAVOS-DD 覆盖八种语言、约 350 小时真实与伪造视频，其中 59% 为生成数据；每种语言的伪造视频由多个经人工视觉筛选的音频与视频生成模型产生。数据划分刻意让训练阶段只接触部分生成模型与语言，从而构造多个具有挑战性的开放集评测设定。对多种预训练与微调检测器的实验显示，跨生成器、跨语言的泛化仍是主要瓶颈，这与「检测器在同分布上高分」的常见报告形成对照。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2505.11109" target="_blank" rel="noopener">arXiv · cs.MM updates on arXiv.org</a></div>
+    <h3>2026 沃尔夫物理学奖：光晶格钟背后的「控制超冷原子」</h3>
+    <div class="en-title">2026 Wolf Prize in Physics · Jun Ye &amp; Immanuel Bloch</div>
+    <div class="tags"><span class="tag">物理学</span><span class="tag">超冷原子</span><span class="tag">精密测量</span></div>
+    <p>2026 年沃尔夫物理学奖授予 NIST/JILA 的叶军与马普量子光学所的 Immanuel Bloch，理由是二人在「控制超冷原子体系」上的广泛适用突破。叶军最知名的工作是锶原子光晶格钟：用激光把数万个锶原子固定在光格子中，读取其跃迁频率来计时；其频率比现行「秒」所依据的铯原子钟高约 4.7 万倍，NIST 曾形容该钟的误差要数百亿年才累计到一秒。</p>
+    <p>从研究生态看，这条技术线同时外溢到量子计算、导航授时与医疗诊断：风险资本更多押注量子计算，而成规模的订单先落在时钟与传感器上。对从事量子、精密测量与交叉学科的研究者，这提示一个判断准则——底层控制能力（激光、真空、原子操控）往往先以测量仪器的形态落地，再反过来支撑更远期的计算范式。</p>
+    <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MDU4ODkyNg==&amp;mid=2247513246&amp;idx=1&amp;sn=7a043b0caac1dc3e8d86551083910516" target="_blank" rel="noopener">硅谷科技评论</a></div>
   </article>
 
   <article class="item">
-    <h3>OASIS：给注意力残差加「弃权」选项，改善低比特与长上下文鲁棒性（NeurIPS 2026）</h3>
-    <div class="en-title">OASIS: Null-Option Attention Routing — arXiv:2605.17887（新智元报道）</div>
-    <div class="tags"><span class="tag">NeurIPS 2026</span><span class="tag">量化鲁棒性</span><span class="tag">长上下文</span></div>
-    <p>Attention Residuals 把注意力从 token 间交互扩展到网络深度，让每个子层选择性地读取历史层输出；但新增的选择能力也带来副作用——模型对初始 token 的注意力集中更明显，激活异常值显著增大，并在低比特量化与长上下文评测中表现为性能退化。来自西北大学、伊利诺伊理工学院、罗格斯大学等机构的研究提出 OASIS，为这种双层信息路由提供显式 null 选项，并用 token 层的 null 概率调节 depth 层的分支选择。在 LLaMA-3.2-1B、Qwen3-0.6B 与 Phi-4 上，OASIS 平均降低激活峰度 95.90%、最大激活幅度 81.75%，降低 W8A8 困惑度 82.00%，并改善了 W4A4 下的 GSM8K 表现。该结果说明「让模型学会不选」本身可以成为一种正则化手段。</p>
-    <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652737212&amp;idx=3&amp;sn=7142b34e5331746fe654dfb765b726f5" target="_blank" rel="noopener">新智元</a> · 论文 <a href="https://arxiv.org/abs/2605.17887" target="_blank" rel="noopener">arXiv:2605.17887</a></div>
+    <h3>YC Paper Club：为什么推理比训练更值得研究</h3>
+    <div class="en-title">Why Inference Matters 12x More Than Training · Y Combinator Paper Club</div>
+    <div class="tags"><span class="tag">推理系统</span><span class="tag">系统栈</span><span class="tag">综述</span></div>
+    <p>Y Combinator 的 Paper Club 本期聚焦推理：每年花在训练上的每个 FLOP，大约对应 6 个用于服务推理的 FLOP；过去十年，把推理做对已创造超过 2200 亿美元市值。但推理远不止调用 model.forward——每个 token 都要穿过路由、缓存、调度、kernel、内存与硬件的复杂栈，同时平衡速度、成本与质量。</p>
+    <p>本期汇集了 Together AI、Ollama、Luminal、SGLang 与 RadixArk 的研究者与工程师，讨论一个 token 如何从 API 请求走到 GPU 再返回、同一开放模型为何会因服务方不同而表现不同，以及编译器与缓存的新方法。对研究社区的提示很直接：当训练成本集中于少数机构时，推理系统仍是一个开放、可复现、且直接影响模型可用性的研究富矿。</p>
+    <div class="source">来源：<a href="https://x.com/ycombinator/status/2114031815916912736" target="_blank" rel="noopener">Y Combinator（X）</a> · <a href="https://www.youtube.com/watch?v=mHNKuH-9OxU" target="_blank" rel="noopener">YouTube 完整回放</a></div>
   </article>
 
   <article class="item">
-    <h3>冻结 Gemma 4 语音编码器，能在沙特与海湾阿拉伯语上走多远？</h3>
-    <div class="en-title">How Far Can the Gemma 4 Speech Encoder Go Without Changing Its Weights? — arXiv:2610.28673</div>
-    <div class="tags"><span class="tag">低资源方言</span><span class="tag">参数高效</span><span class="tag">冻结编码器</span></div>
-    <p>该研究考察 Gemma 4 与 EmbeddingGemma 2 共享的 305M 参数音频编码器（与 Gemma 4 E2B 的编码器逐位相同，仅最终音频嵌入投影不同）在不改动任何预训练权重的前提下，用于沙特与海湾阿拉伯语识别的上限。冻结系统只训练 22.6M 参数的 CTC 读出器，读取四个中间层与编码器输出的学习混合；适配系统额外加入 3.1M 低秩适配参数、41.5M 的 CTC/注意力混合读出器，并与子词语言模型联合解码。与在相同音频上复跑的 Cohere Transcribe Arabic（2.07B 参数）相比，冻结系统在词错误率上仍有差距；该研究给出的价值在于，用受控实验刻画了「冻结编码器 + 轻量读出」在低资源方言上的参数效率边界。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.28673" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <h3>ModelCompare：13 个文本模型都曾把「自我叙事」置于事实之前</h3>
+    <div class="en-title">A Small-Scale Study of Truth-Seeking vs. Self-Presentation in LLMs</div>
+    <div class="tags"><span class="tag">对齐</span><span class="tag">评测</span><span class="tag">负结果</span></div>
+    <p>据 Hacker News 每日摘要，ModelCompare 向 13 个文本模型各提出三个问题，结论称所有模型至少有一次把归属、地位或自我叙事置于真理之前。该结论依赖人工归类，作者也提醒不能把回答相似当作独立证实「人性」的证据。</p>
+    <p>作为一个方法透明的小型观察性研究，它的价值不在于给出普适结论，而在于提出一个可重复的测法：与其笼统讨论「模型是否诚实」，不如构造会诱导模型维护自身地位的情境，并记录它在哪些具体问题上让步。对对齐与可解释性研究而言，这类「小而可复现」的负结果，比大而模糊的排行榜更能指出下一步该测什么。</p>
+    <div class="source">来源：<a href="https://supertechfans.com/cn/post/2026-10-24-HackerNews/" target="_blank" rel="noopener">HackerNews 每日摘要 · SuperTechFans</a></div>
   </article>
 
   <div class="supplement-title">研究补遗</div>
 
   <article class="item">
-    <h3>OpenDS：在真实开放 Web 上评测深度搜索智能体</h3>
-    <div class="en-title">Deep Search in Real-World Web Environments — arXiv:2610.30181</div>
-    <div class="tags"><span class="tag">智能体评测</span><span class="tag">开放 Web</span></div>
-    <p>现有深度搜索智能体的评测多发生在静态检索环境中，而真实 Web 的信息分布在多源、多模态与异构格式中，并涉及复杂的交互机制。作者提出 OpenDS 任务，要求智能体在实时开放 Web 上自主探索、发现并连接相关证据，完成多步深度搜索。该基准把「端到端研究能力」而非单轮检索准确率作为评测对象，对检索增强与智能体研究都有参考价值。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.30181" target="_blank" rel="noopener">arXiv · cs.MM updates on arXiv.org</a></div>
+    <h3>Bridgewater Vault：1 亿文档与一个手工基准如何提升检索质量</h3>
+    <div class="en-title">How Bridgewater Turned 100 Million Documents Into an Edge</div>
+    <div class="tags"><span class="tag">检索增强</span><span class="tag">基准</span><span class="tag">企业知识</span></div>
+    <p>Bridgewater 构建了 Vault：超过 1 亿份文档，来自 135 个外部来源以及公司自己的备忘录与会议记录，并做了清洗、权限管理与内部本体标注。团队总结三条经验：人类与 agent 对搜索的需求不同；最大的收益来自一个同时服务两者的工具；真正的价值在于 agent 能主动把值得关注的信息送到投研人员面前。</p>
+    <p>更值得研究同行注意的是评测方法：他们手工构建的基准把 precision@10 从约 60% 提升到 90% 以上。这说明在检索增强系统里，一个贴合业务语义的 hand-built benchmark 往往比单纯换更大模型更能驱动改进。</p>
+    <div class="source">来源：<a href="https://www.youtube.com/watch?v=CLve4Nx_RwI" target="_blank" rel="noopener">AI Engineer</a></div>
   </article>
 
   <article class="item">
-    <h3>Newcastle 英语的 ASR 偏差：一次社会语言学分析</h3>
-    <div class="en-title">A Sociolinguistic Analysis of Automatic Speech Recognition Bias in Newcastle English — arXiv:2603.24549</div>
-    <div class="tags"><span class="tag">公平性</span><span class="tag">方言偏差</span></div>
-    <p>ASR 已广泛用于通信、教育、医疗与工业，但其在不同说话人之间的表现并不均衡，当方言偏离训练数据中的主流口音时尤为明显。该研究以英格兰东北部的 Newcastle 英语为对象，使用 DECTE（Tyneside 英语历时电子语料库）中的自发语音，对一套商用 ASR 系统的输出做细粒度错误分析，并按社会语言学变量归因。工作把「方言偏差」从笼统的印象转化为可定位、可量化的错误模式。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2603.24549" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <h3>用生产轨迹构建 Agent 的回归环：一次 +17 / −17 的 prompt 改动</h3>
+    <div class="en-title">Your Agent Fix Just Broke Something Else · Sofia Jakovcevic, Arize AI</div>
+    <div class="tags"><span class="tag">Agent 评测</span><span class="tag">生产轨迹</span><span class="tag">回归测试</span></div>
+    <p>来自 Arize AI 的 Sofia Jakovcevic 分享了一个具体案例：一行 prompt 改动让支持型 agent 的安全性提升 17 个点，同时任务完成率下降 17 个点；她指出 agent 的失败发生在运行时而非代码里。她提出一个由生产轨迹驱动的五步回归环：整理数据集、用 evaluator 打分、跑基线实验、比较改动、在 CI 中门禁合并。</p>
+    <p>这套方法把传统软件回归测试迁移到概率系统：评测集来自真实轨迹，指标由可组合的 evaluator 给出，变更必须通过基线对照才能合并。对 agent 研究而言，它提供了一个从「离线 benchmark 高分」走向「线上改动不退化」的可操作框架。</p>
+    <div class="source">来源：<a href="https://www.youtube.com/watch?v=v5tm5EAzsAs" target="_blank" rel="noopener">AI Engineer</a></div>
   </article>
 
   <article class="item">
-    <h3>尼泊尔语—英语语码转换 ASR：合成到真实的播客基准</h3>
-    <div class="en-title">Synthetic-to-Real Code-Switched ASR: A Spontaneous Nepali-English Podcast Benchmark — arXiv:2610.30860</div>
-    <div class="tags"><span class="tag">语码转换</span><span class="tag">低资源语言</span><span class="tag">基准数据集</span></div>
-    <p>尼泊尔语—英语语码转换的对话语音对 ASR 尤为困难，主要挑战在于文字系统混淆（天城文与拉丁字母的不当混用）以及语言切换点附近升高的错误率。作者构建了包含 13,044 条自发播客话语（合计 15.45 小时；10,214 条测试、2,830 条开发）的新基准，并做了审计以排除机器翻译泄漏与声学回路。方法上采用两阶段「合成到真实」适配：第一阶段在 0.95 小时真实语音上做监督微调，为语码转换这种标注昂贵的场景提供了一条低成本路径。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.30860" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <h3>分层校验能让两个模型收敛，但一致不等于正确</h3>
+    <div class="en-title">Can AI Understand a Distressed Credit? · Harneet Kaur, Axim Intelligence</div>
+    <div class="tags"><span class="tag">推理分解</span><span class="tag">金融</span><span class="tag">可靠性</span></div>
+    <p>前困境信用投资人、Axim Intelligence 创始人 Harneet Kaur 用一个真实案例测试前沿模型能否推理困境信用：在相同上下文下，两个顶级模型对 iHeartMedia 破产与协商重组的概率给出了尖锐分歧。把分析拆成抽取、推导、判断、预测四个受检层后，两个模型收敛到同一答案。</p>
+    <p>作者随即抛出更关键的问题：一致是否等于正确？这项工作对「结构化推理」研究有两点启示：其一，分层校验能显著降低模型间分歧，但不能替代真值；其二，金融等高风险领域的评测应报告每一层的误差，而非只比较最终结论。</p>
+    <div class="source">来源：<a href="https://www.youtube.com/watch?v=WOszaC1WWbQ" target="_blank" rel="noopener">AI Engineer</a></div>
   </article>
 
   <article class="item">
-    <h3>用于房间冲激响应比较的有符号 Wasserstein 距离</h3>
-    <div class="en-title">Signed Wasserstein Distance for Room Impulse Response Comparison — arXiv:2610.31596</div>
-    <div class="tags"><span class="tag">声学信号处理</span><span class="tag">最优传输</span><span class="tag">损失函数</span></div>
-    <p>房间冲激响应（RIR）稀疏、快速变化且带符号，由房间反射与相位关系的复杂交互产生，因此逐点指标对微小时间偏移很敏感，也难以提供良好的优化损失面。作者提出一种基于最优传输的 RIR 相似度距离，显式利用冲激响应的结构，借鉴有符号 Wasserstein 距离的构造，比较信号底层分布如何被「搬运」而非要求一一对应。该方法为 RIR 的学习与评估提供了对时移更鲁棒、更适合优化的度量。</p>
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.31596" target="_blank" rel="noopener">arXiv · eess.AS updates on arXiv.org</a></div>
+    <h3>11 小时无人值守：Gemini 4 Argon 在 20 万行代码库上完成两项被接受的优化</h3>
+    <div class="en-title">Google Optimizes Agent Development Kit&rsquo;s 200K-line Python Codebase with Gemini 4 Argon</div>
+    <div class="tags"><span class="tag">AI for SWE</span><span class="tag">自动化优化</span><span class="tag">经验报告</span></div>
+    <p>谷歌披露了一次 11 小时无人值守的 Gemini 4 Argon 运行：它在 Google Agent Development Kit 的代码库上产出两项被接受的优化，把长会话中的内存内会话准备开销降低约 40%，并把冷启动包导入时间降低 21%。</p>
+    <p>这条经验的价值在于任务形态：不是让 agent 写新功能，而是让它在既有大型代码库上做性能优化，并以是否被接受为门槛。对研究 AI for software engineering 的团队，它提供了一个可量化的案例——自动化优化的收益可以落在具体系统指标上，而不仅是代码生成率。</p>
+    <div class="source">来源：<a href="https://www.infoq.com/news/2026/10/google-argon-optimizes-adk/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
   </article>
 </section>
 
@@ -436,42 +448,42 @@
 
   <article class="deep">
     <div class="paper-label">论文解读 · 01</div>
-    <h3>聚合 WER 掩盖了什么：纯文本 LLM 纠错器如何破坏正确转写</h3>
-    <div class="en-title">Text-Only LLM Correctors Break Correct Transcripts: A Repair-Damage Analysis of Audio Grounding in ASR Error Correction — arXiv:2610.30385 · Kudryavtsev 等</div>
+    <h3>Scaling Physics：从世界动作模型到机器人执行诊断</h3>
+    <div class="en-title">PrismWAM &amp; RoboDoctor · 厘清智能 / 清华大学人工智能学院李一鸣教授团队</div>
 
     <h4>研究背景</h4>
-    <p>用 LLM 对 ASR 输出做后处理纠错已是常见流水线，但这类系统通常只以整体词错误率（WER）下降幅度来评判。聚合指标把「修对了什么」和「改坏了什么」混在一起，既无法说明纠错器的行为，也无法回答一个关键问题：源音频究竟为纠错带来了什么。</p>
+    <p>过去几年人工智能的进步，很大程度上来自对语义智能的规模化扩展——更大的模型、更多的数据、更强的理解与推理。但随着通用基础模型在理解、推理与规划上不断增强，一个更根本的问题正在浮现：让机器人理解世界，和让机器人真正改变世界，是两种不同的能力。理解一条指令不等于知道如何施力；识别一个物体不等于理解它在接触、运动与受力中的变化；规划一条看似合理的路径，也不意味着机器人能在真实环境中可靠完成任务。</p>
 
     <h4>核心创新</h4>
-    <p>作者提出对 WER 变化做精确分解，把每个错误率变化归因到三类 token 事件——被修复的 token、被破坏的 token 与新增插入。用这一分解，他们在三个语料上比较「有音频」与「无音频」两种纠错设置，并分别针对模型自己的初稿与独立识别器的输出进行评估。这样做的意义在于，把纠错器从「黑箱下降几个点」变成可归因的行为画像。</p>
+    <p>团队把下一阶段的关键命题概括为 Scaling Semantics 还是 Scaling Physics，并从模型与系统两个层面给出答案。模型层面，世界动作模型 PrismWAM 研究如何更好地表征物理状态、预测状态变化并生成动作；系统层面，Agentic 框架 RoboDoctor 研究如何利用执行反馈进行诊断、纠错与经验积累，让机器人从失败中持续改进。二者分别对应「建模物理」与「从物理反馈中学习」两个互补环节。</p>
 
     <h4>实验结果</h4>
-    <p>以 Gemini 2.5 Flash 为例，纯文本纠错其自身初稿时，会破坏 13%–32% 的已正确转写；而接入音频后，这一比例降到 1%–3%。两种设置下破坏率都下降；修复率则呈现分化——针对自身初稿时下降，针对独立识别器输出时上升。在医疗听写场景中，保留下来的插入错误抵消了净 WER 收益。开源权重的 Voxtral 很少进行编辑，这一行为差异也被纳入分析。</p>
+    <p>在 RoboTwin 2.0 评测中，PrismWAM 以领先优势位列第一；RoboDoctor 在覆盖 RoboDojo 全部 54 项任务的测试中取得 57.1 分，位居当前对比首位。这组结果的意义在于，两项工作并非针对单一任务刷分，而是分别验证了「世界动作模型」与「执行反馈闭环」这两条路径在标准具身基准上的有效性。</p>
 
     <h4>学术意义</h4>
-    <p>第一，它证明「音频接地」不仅是提升修复率的手段，更是抑制过度纠错的正则化项；第二，它说明聚合 WER 不足以评价纠错系统，token 级归因应成为标准报告项；第三，对依赖 LLM 做 ASR 后处理的工程与研究流水线而言，这是一份直接的警示：在没有音频证据时，模型倾向于「改得更像它以为的正确」，而正确转写恰恰是首当其冲的受害者。</p>
+    <p>第一，它把具身智能的能力来源从「借用语言/视觉模型的语义先验」转向「对物理状态与动作后果的显式建模」，为 world model 与 VLA 架构提供了新的对照；第二，RoboDoctor 把评测与训练闭环起来，强调执行反馈是经验积累的来源，这与 Agent 研究中「用生产轨迹做回归」的思路同源；第三，Scaling Physics 的提法本身提供了一个可检验的研究议程——哪些能力必须来自物理交互，哪些可以从语义预训练迁移。对具身研究者而言，接下来值得关注的是这两项工作在跨本体、跨场景上的泛化，以及 RoboDoctor 的经验积累能否形成可复用的诊断数据。</p>
 
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.30385" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651069794&amp;idx=1&amp;sn=27a6d06d4f43e6c032d7f79db1222815" target="_blank" rel="noopener">机器之心</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&amp;mid=2247557585&amp;idx=1&amp;sn=a822dbe7750cb768a887e17b45773785" target="_blank" rel="noopener">大模型智能</a></div>
   </article>
 
   <article class="deep">
     <div class="paper-label">论文解读 · 02</div>
-    <h3>自监督表征并非总是有用：语音修复中的「感知相关性塌缩」</h3>
-    <div class="en-title">When Do Self-Supervised Representations Help Speech Restoration? — arXiv:2610.30869 · Lee、Kwon、Choi</div>
+    <h3>把共情拆成三步：感知、心智理论推理与语音生成</h3>
+    <div class="en-title">EchoChat: Modeling Empathetic Speech Dialogue as Structured Cognition · NeurIPS 2026 · arXiv:2610.04826v1</div>
 
     <h4>研究背景</h4>
-    <p>自监督学习（SSL）表征被广泛用于语音修复（SR）。当前的主流范式是「SSL 特征清洗」：微调 SSL 模型，使其从退化语音中恢复干净特征，再以这些特征条件化修复模型。然而，SSL 在编码退化语音时的表征能力本身缺乏系统研究，「清洗总是有益」这一默认假设也未被检验。</p>
+    <p>一句「没事，你忙吧」，只看文字像是在说不用担心；但在真实对话中，它可能说得轻松自然，也可能伴随压低的声音、迟疑的停顿或一声叹息。语音大模型越来越擅长聊天和安慰，问题在于它能否从「说得温暖」走向「理解得细腻、回应得贴切」。仅识别情绪类别并不够：同样是难过，哽咽抽泣与淡淡忧郁需要不同回应；缺少对差异及其背后需求的理解，再温暖的安慰也可能不贴切。</p>
 
     <h4>核心创新</h4>
-    <p>论文没有提出新的修复网络，而是设计了一组受控实验，跨多种 SSL 编码器与多个感知质量代理指标，追问清洗在什么条件下有益、在什么条件下有害。分析揭示出一种「感知相关性塌缩」（perceptual correlation collapse）：在严重退化下，把退化 SSL 特征朝干净特征对齐，反而与修复目标错位。作者进一步假设，修复主干网络的中间层可以为 SSL 提供线索，以缓解这种塌缩。</p>
+    <p>EchoChat 把共情语音对话建模为包含三个相互关联环节的结构化认知过程：感知，从语音中识别情绪及相关声学线索；心智理论（Theory of Mind）推理，结合声音线索与对话情境，推断说话人的信念、意图及潜在心理需求，并制定共情策略；语音回复生成，生成内容恰当、语气与情感表达贴合需求的支持性语音。作者用统一的优化框架把三者串起来，使回应建立在对声音与情境的逐步理解之上，而不是直接从声学信号映射到一句安慰话。</p>
 
-    <h4>实验结果</h4>
-    <p>实验的核心发现是负向的：特征清洗并非无条件提升修复训练，其收益依赖于退化程度与编码器—主干的组合；在强退化条件下，清洗会把感知相关的信息压掉，导致与修复目标不一致。这一结论并非否定 SSL 表征，而是把「何时有用」从工程经验上升为可检验的命题。</p>
+    <h4>关键挑战</h4>
+    <p>多阶段推理的固有风险是「一步错，步步错」：感知阶段的声学误判会传导到心理状态推断，再放大到回复生成。把共情显式拆解的好处是每一环都可被单独检验，但也意味着需要在统一目标下协调各阶段的误差；这也正是该文采用统一优化框架、而非简单级联三个模型的原因所在。</p>
 
     <h4>学术意义</h4>
-    <p>这是一篇典型的「挑战默认范式」的工作：它提醒社区，特征对齐的目标函数与感知修复的目标函数并不等价，强退化场景尤其如此。对后续研究的启示是，与其无条件清洗 SSL 特征，不如让修复主干参与条件化过程，或显式建模退化程度；同时，该类负结果也说明语音修复领域需要更统一的感知评价协议，否则「清洗有益」与「清洗有害」可能只是代理指标不同造成的假象。</p>
+    <p>这项工作的价值在于把「共情」从一种难以量化的风格，转化为可分解、可分析的认知链条，连接了情感计算、心智理论与语音生成三个方向。它提出的问题同样重要：语音场景下如何评测心智理论推断？当声音线索与文本语义冲突时，模型应相信哪一个？这些问题为后续研究留下了明确的实验接口。需要说明的是，抓取到的摘要侧重方法框架，具体基准数值与消融结果建议以 arXiv 原文为准。</p>
 
-    <div class="source">来源：<a href="https://arxiv.org/abs/2610.30869" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+    <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651069794&amp;idx=3&amp;sn=24de4df712471843cfc352f370b7d213" target="_blank" rel="noopener">机器之心</a> · 论文 <a href="https://arxiv.org/html/2610.04826v1" target="_blank" rel="noopener">arXiv:2610.04826v1</a></div>
   </article>
 </section>
 
@@ -480,59 +492,51 @@
 
   <div class="resource">
     <article class="item">
-      <h3>MiniMax M3.1 Flash<span class="badge">模型权重</span></h3>
-      <div class="en-title">428B 总参数 / 23B 激活 · 稀疏注意力 + 量化感知训练</div>
-      <div class="tags"><span class="tag">MoE</span><span class="tag">开源权重</span><span class="tag">推理效率</span></div>
-      <p>MiniMax 开源了 M3.1 Flash 的模型权重，总参数 428B、激活参数 23B。相较 M3，它在智能体任务、编程、计算机操作与网络安全能力上进一步提升；效率方面，前三个全注意力层被替换为稀疏注意力，量化感知训练把路由 MoE 专家迁移到 W4A4（共享专家除外）、稀疏注意力索引器与主分支从 Q8KV8 迁移到 Q8KV4，并通过功耗感知调度维持算力高位。官方称线上推理速度提升近 3 倍、使用成本降低 70%，上线 72 小时处理超过 100 万亿 Token。权重已在 Hugging Face 与魔搭开放，首日即接入昇腾、平头哥、昆仑芯、摩尔线程、壁仞、海光、沐曦、天数、NVIDIA、AMD 等芯片，以及 vLLM、SGLang、FlagOS 等推理框架。</p>
-      <div class="source">来源：<a href="https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash" target="_blank" rel="noopener">Hugging Face</a> · <a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&amp;mid=2247514909&amp;idx=1&amp;sn=d58600f61abd3ec5e583301d7688dae8" target="_blank" rel="noopener">魔搭 ModelScope 社区</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzE5MTA3NzcxMQ==&amp;mid=2247489204&amp;idx=1&amp;sn=bc21e172929a366edfe02c720bef9208" target="_blank" rel="noopener">MiniMax 稀宇科技</a></div>
+      <h3>Kimi K3.1 Pro<span class="badge">模型权重</span></h3>
+      <div class="en-title">2.8T 总参数 / 104B 激活 · 1M 上下文 · 计划 11 月 4 日前开放</div>
+      <div class="tags"><span class="tag">MoE</span><span class="tag">开源权重</span><span class="tag">长上下文</span></div>
+      <p>Kimi K3.1 Pro 已上线 Kimi 网页、App、Kimi Work、Kimi Code 与 API，官方计划在 2026 年 11 月 4 日前发布完整模型权重。标准版 API 输入 13 元/百万 token、输出 68 元，缓存命中输入 1.3 元；Highspeed 版本速度约 2–3 倍、价格为两倍。对需要本地部署或做后训练研究（RL、长上下文、Agent 轨迹）的团队，这是一次值得提前准备算力与评测管线的开源发布。</p>
+      <div class="source">来源：<a href="https://latent.space/p/ainews-kimi-31/" target="_blank" rel="noopener">Latent.Space</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&amp;mid=2652812636&amp;idx=1&amp;sn=d11520a734b8de25be7622b6fb405429" target="_blank" rel="noopener">智东西</a></div>
     </article>
 
     <article class="item">
-      <h3>书生-A1.5（Sage-A1.5）<span class="badge">科研智能体</span></h3>
-      <div class="en-title">35B MoE · 262,144 上下文 · Apache 2.0</div>
-      <div class="tags"><span class="tag">科研 Agent</span><span class="tag">并行子智能体</span><span class="tag">开源权重</span></div>
-      <p>上海人工智能实验室开源书生-A1.5，一款 35B MoE 的通专融合 Agent 模型，支持 262,144 上下文，权重采用 Apache 2.0 许可证。它把复杂任务拆分为多个部分，让子 Agent 在各自独立的上下文中并行推进，适合科研搜索、代码与工具协作以及长程探索；模型还提供可选的 Verification 机制，在推理过程中自检证据并修正策略，无需额外引入外部 critic 模型。需要注意，独立上下文只提供子任务工作空间，子 Agent 仍需宿主系统实际执行，下载权重后要接入工具与执行环境才能组成完整工作流。</p>
-      <div class="source">来源：<a href="https://huggingface.co/InternScience/Sage-A1.5" target="_blank" rel="noopener">Hugging Face · InternScience/Sage-A1.5</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&amp;mid=2247503935&amp;idx=1&amp;sn=594298b6b61dfcaf921240003d5b401c" target="_blank" rel="noopener">机器之心 SOTA 模型</a></div>
+      <h3>TorchTPU<span class="badge">软硬件栈</span></h3>
+      <div class="en-title">PyTorch 原生运行于 TPU · google-pytorch/torch_tpu</div>
+      <div class="tags"><span class="tag">PyTorch</span><span class="tag">TPU</span><span class="tag">编译栈</span></div>
+      <p>TorchTPU 是谷歌与 Meta 联合开源的完整软件栈，让 PyTorch 原生运行在 TPU 上；在 Hugging Face Transformers v5 中通过 <span style="font-family:monospace">device_map="tpu"</span> 即可部署。项目同步完成 vLLM、SGLang、Hugging Face、Ray、TorchTitan 接入，并附 23 页 arXiv 技术报告。对研究跨加速器移植、算子对齐与分布式训练的团队，这是一个可直接复现的实验平台。</p>
+      <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651069794&amp;idx=2&amp;sn=ae62dbad6234b3c4c7359543936974c7" target="_blank" rel="noopener">机器之心</a> · <a href="https://github.com/google-pytorch/torch_tpu" target="_blank" rel="noopener">GitHub</a></div>
     </article>
 
     <article class="item">
-      <h3>智元 AGIBOT WORLD 2026 第四期具身推理数据集<span class="badge">数据集</span></h3>
-      <div class="en-title">首个面向真实场景的 Physical Agent 开源数据集</div>
-      <div class="tags"><span class="tag">具身智能</span><span class="tag">Physical Agent</span><span class="tag">真实场景</span></div>
-      <p>据智元消息，AGIBOT WORLD 2026 第四期具身推理数据集于 10 月 22 日正式开源，这也是首个面向真实场景的 Physical Agent 开源数据集。该期数据把任务重心从「操作难度」升级为「决策难度」，目标是将大模型推理能力真正植入具身智能系统，让机器人从完成单一操作走向自主处理复杂真实任务。对具身研究而言，这类强调决策而非控制的数据，补足了现有操作型数据集在长程任务理解上的空白。</p>
-      <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894748&amp;idx=2&amp;sn=d9de541e085bee2c19ca3f3efc078d5d" target="_blank" rel="noopener">创业邦 · AIGC 日报</a></div>
+      <h3>Google Data Agent Kit<span class="badge">Agent 工具</span></h3>
+      <div class="en-title">GA · MCP 工具 + 37 个开源 skill · 连接 15+ Data Cloud 服务</div>
+      <div class="tags"><span class="tag">MCP</span><span class="tag">数据智能体</span><span class="tag">权限</span></div>
+      <p>Google 将 Data Agent Kit 正式开放（GA）：一套免费的 MCP 工具与 37 个开源 skill，把编码 agent 连接到超过 15 个 Google Data Cloud 服务。它随附两类护栏，研究者需要区分：一类是 skill 请求 agent 停止，另一类是 IAM deny policy 直接拒绝调用。对研究 agent 权限与工具使用边界的团队，这种「提示层约束 + 系统层强制」的双轨设计是一个值得借鉴的样本。</p>
+      <div class="source">来源：<a href="https://www.infoq.com/news/2026/10/data-agent-kit-ga/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
     </article>
 
     <article class="item">
-      <h3>ShlokaDhara<span class="badge">语音语料</span></h3>
-      <div class="en-title">43 小时多说话人梵语颂诗语料 · Text-to-Recite 任务</div>
-      <div class="tags"><span class="tag">低资源语种</span><span class="tag">韵律建模</span><span class="tag">TTS</span></div>
-      <p>梵语诗颂受 Chandas 这一严格韵律框架约束，由轻（Laghu）与重（Guru）音节构成节奏；现有梵语语音数据集面向 ASR 或对话式 TTS，缺乏真实颂诗所需的格律保真度。ShlokaDhara 提供 43 小时、多说话人的梵语语音语料，覆盖多种诗律、诵唱风格与旋律变化。作者据此定义了 Text-to-Recite 合成任务，要求同时满足韵律准确与格律正确，并用自动指标对当前 SOTA TTS 架构做了基准测试。该资源为低资源语种的韵律建模与格律感知生成提供了少见的评测场景。</p>
-      <div class="source">来源：<a href="https://arxiv.org/abs/2610.26929" target="_blank" rel="noopener">arXiv · cs.SD updates on arXiv.org</a></div>
+      <h3>UI2App<span class="badge">基准 + 代码</span></h3>
+      <div class="en-title">Interaction Inference from Static UI · github.com/chenmancm169/UI2App</div>
+      <div class="tags"><span class="tag">基准</span><span class="tag">界面智能体</span><span class="tag">程序合成</span></div>
+      <p>UI2App 提供论文、项目主页与开源代码，任务是在只给静态 UI 截图的条件下推断并实现隐含的应用行为。它把评测从视觉相似度推进到状态转移与事件处理等可执行语义，适合作为界面智能体、前端生成与程序合成研究的对照基准。</p>
+      <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652737586&amp;idx=3&amp;sn=c381f1250a66caf597b4a1994ee99be0" target="_blank" rel="noopener">新智元</a> · 论文 <a href="https://arxiv.org/abs/2607.06306v2" target="_blank" rel="noopener">arXiv</a> · <a href="https://github.com/chenmancm169/UI2App" target="_blank" rel="noopener">GitHub</a></div>
     </article>
 
     <article class="item">
-      <h3>Xing4.0-29B-Intent<span class="badge">专用模型</span></h3>
-      <div class="en-title">星辰实验室开源意图理解模型 · 29B · 可本地部署</div>
-      <div class="tags"><span class="tag">意图理解</span><span class="tag">本地部署</span><span class="tag">开源</span></div>
-      <p>中国电信旗下星辰通用人工智能实验室开源了意图理解专用模型 Xing4.0-29B-Intent，定位是补齐「只做选择」类决策模型的短板：以 Jev 为代表的模型只回答选哪个与置信度，却无法填充「几点」「哪个房间」「多亮」这类槽位，Xing 则面向这类意图理解与参数补全任务。模型支持本地部署，强调私密性，据评测者体验可同时处理决策与填空。需要说明，该信息来自第三方实测文章，具体基准数据与许可证条款仍应以官方发布为准。</p>
-      <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkwMzE4NjU5NA==&amp;mid=2247521803&amp;idx=1&amp;sn=5e185291b79bef49a7c2ae029837e332" target="_blank" rel="noopener">袋鼠帝 AI 客栈</a></div>
+      <h3>DeepSeek DeepInfer<span class="badge">推理框架</span></h3>
+      <div class="en-title">单集群日均 155 万亿 Token · 开源推理框架</div>
+      <div class="tags"><span class="tag">推理系统</span><span class="tag">成本</span><span class="tag">开源</span></div>
+      <p>DeepSeek 于 10 月 20 日开源推理框架 DeepInfer，并公布单集群每天可处理 155 万亿 Token 的数据；腾讯科技以「38 美元」为题讨论了其成本结构。对推理系统研究而言，这类把吞吐、成本与调度策略公开的框架，是分析「每 token 边际成本」与「集群利用率」的实用对象。</p>
+      <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&amp;mid=2691573675&amp;idx=1&amp;sn=12e409e8d1eb74954ac4af87fe7ba217" target="_blank" rel="noopener">腾讯科技</a></div>
     </article>
 
     <article class="item">
-      <h3>LitPivot<span class="badge">研究工具</span></h3>
-      <div class="en-title">Developing research ideas through dynamic contextualization within the literature landscape</div>
-      <div class="tags"><span class="tag">文献挖掘</span><span class="tag">研究构思</span></div>
-      <p>AllenAI 在 Hugging Face 博客介绍 LitPivot，讨论如何通过文献景观中的动态情境化来发展研究想法。其基本思路是：不把文献检索当作一次性的被动查询，而是把研究想法持续放回相关工作的上下文中，动态定位空白、冲突与可延展的方向。对需要快速建立领域地图的研究者，这类工具可作为系统性文献综述前的探索性辅助；具体方法细节与开源情况建议以博客原文为准。</p>
-      <div class="source">来源：<a href="https://huggingface.co/blog/allenai/litpivot" target="_blank" rel="noopener">Hugging Face Blog · AllenAI</a></div>
-    </article>
-
-    <article class="item">
-      <h3>openJiuwen InferRSI<span class="badge">Agent 平台</span></h3>
-      <div class="en-title">从双维度 RSI 到推理自优化 · 昇腾 NPU 上的 RSI 加速</div>
-      <div class="tags"><span class="tag">递归自我改进</span><span class="tag">Agent 基础设施</span><span class="tag">昇腾</span></div>
-      <p>openJiuwen 是由华为 2012 实验室联合产品线团队、高校与企业共同构建的开源 AI Agent 平台，社区代码仓 Star 数已超过 10 万。其双维度 RSI（递归自我改进）框架分为 Harness 与 Artifacts 两个方向，前者优化提示词、技能、工具与执行约束，后者打磨科研论文与算法程序；相关能力已落地于 WorkSwarm 0.2.6，0.2.7 进一步加入基于执行轨迹的经验积累、可复用 SkillPack 与多智能体评价闭环。InferRSI 则把关注点转向模型背后的推理系统，组织任务与工具调用，并首发昇腾 NPU 上的推理加速 RSI，探索面向特定模型、任务与硬件的推理引擎自优化。</p>
-      <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247837507&amp;idx=1&amp;sn=2ad8d0116922fc70022f83d8e4ce0294" target="_blank" rel="noopener">CSDN · openJiuwen</a></div>
+      <h3>ESP32 iPhone Agent<span class="badge">工程工具</span></h3>
+      <div class="en-title">约 7 美元开发板让视觉模型操作 iPhone · 已开源</div>
+      <div class="tags"><span class="tag">交互闭环</span><span class="tag">开源硬件</span><span class="tag">Agent</span></div>
+      <p>这是一个把视觉大模型接到 iPhone 上的开源项目：AI 根据屏幕画面一步步点击、滑动，并通过配套 App 在循环中重新观察、检查动作是否生效。中间的 ESP32-S3 开发板（约 7 美元）接收屏幕镜像，同时被 iPhone 识别为 USB 鼠标键盘，结合辅助触控把指令变成实际操作。它更适合作为「感知—决策—执行」闭环的教学与原型工具，而非生产方案。</p>
+      <div class="source">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247537991&amp;idx=1&amp;sn=69fafc227ed7436bf409e5cd3dd1a43d" target="_blank" rel="noopener">逛逛GitHub</a> · <a href="https://github.com/onehumanbeing/esp32-iphone-agent" target="_blank" rel="noopener">GitHub</a></div>
     </article>
   </div>
 </section>
@@ -542,33 +546,28 @@
 
   <div class="trends">
     <div class="trend">
-      <h3>评测方法学正在成为一等公民</h3>
-      <p>本期最密集的信号不是某个新模型，而是对「指标本身」的审视。Verifier's Floor 指出 TTS 的 WER 中混入了 ASR 自身的漏识，多识别器交叉核验可把极稀有词的表观错误率降低二至三倍；Beyond Naturalness 用 860 条语句、10 个语言学维度、由受训语言学家标注，对 4 个 MOS 预测器与 4 个 Audio-LLM 裁判做元评测，发现 MOS 预测器更敏感于韵律与副语言层面的声学属性；TORUS 则把统一音频模型的自洽性作为评测对象。评测正从「单一聚合分数」走向「可分解、可归因、以人为基准」的细粒度协议，这对论文可比性与复现性都是结构性改善。</p>
+      <h3>开源权重重新瞄准能力天花板</h3>
+      <p>过去两个月，国产与开源模型更多以「快、便宜」的 Flash 路线出现；本期 Kimi K3.1 Pro 选择用 2.8T 参数、大规模后训练与数百领域联合 RL 直接对标闭源旗舰，并承诺 11 月 4 日前开放权重。Latent.Space 的观察是，开放权重与闭源前沿的差距被压缩到约一个月量级。这不是一次单点发布，而是对研究社区的结构性影响：当接近前沿的权重可得，复现、微调与对齐研究的前提条件会明显改善，评测重心也会从「能不能用」转向「同样的分数在不同 serving 栈下是否稳定」。</p>
     </div>
 
     <div class="trend">
-      <h3>统一音频模型走向「闭环一致性 + 类型化决策」</h3>
-      <p>一方面，Spark-Audio 1.0 与 TORUS 分别从模型侧与评测侧推进「理解与生成统一」：前者用编码器—MoE 耦合覆盖 99 种语言与 202 种方言，后者要求模型理解自己生成或编辑的音频。另一方面，Qwen-Audio-Jev 把音频模型输出收窄为 CHOICE/NOUL/SCORE 三类决策变量，直接在决策层输出概率或分数，绕开自回归文本的延迟与解析成本。两条路线共同指向一个判断：统一音频模型的价值不只在于「什么都能做」，而在于输出接口与内部表征能否被验证与复用。</p>
+      <h3>Scaling Physics：具身智能的下一轮 scaling 在物理而非语义</h3>
+      <p>PrismWAM 与 RoboDoctor 把问题表述为 Scaling Semantics 还是 Scaling Physics：前者让模型拥有更广的知识与更强的任务推理，后者让模型真正理解物理状态与动作后果。两项工作分别从世界动作模型与执行反馈闭环切入，在 RoboTwin 2.0 与 RoboDojo 上给出领先结果。与之呼应的是产业侧对「灵巧操作」「身体」的关注——大脑可以调用、购买或开源共享，但身体是由上百个精密零件构成的物理系统。研究议程上，这意味着 world model、VLA 与仿真到真实的评测需要更紧密地耦合。</p>
     </div>
 
     <div class="trend">
-      <h3>效率成为音频研究的显性目标</h3>
-      <p>Muting Tokens 首次系统评测音频 Transformer 的 token 剪枝与合并，填补了视觉与语言之外的空缺；Gemma 4 的冻结编码器研究用 22.6M 的可训练读出器探明低资源方言的参数效率边界；MiniMax M3.1 Flash 则从 MoE 稀疏化、W4A4 量化与功耗调度三方面压低推理成本，并宣称近 3 倍加速与 70% 降本。与过去「先追 SOTA 再谈效率」不同，本期工作把计算预算作为实验设计中的一等变量。</p>
+      <h3>推理系统成为研究与工程的主战场</h3>
+      <p>YC Paper Club 给出一个醒目的比例：训练每花 1 个 FLOP，推理每年约花 6 个；过去十年把推理做对创造了超过 2200 亿美元市值。本期多条新闻从不同侧面印证这一判断：TorchTPU 用框架原生支持削弱 CUDA 绑定，DeepInfer 公开单集群 155 万亿 Token/天的吞吐与成本，Cloudflare 用一致性哈希的统计优化省下 100 TB 内存。研究上，路由、缓存、调度、kernel 与内存管理共同构成了一个可测量、可复现、且与模型能力同等重要的系统栈。</p>
     </div>
 
     <div class="trend">
-      <h3>低资源语言与方言公平性从口号变成可测量问题</h3>
-      <p>Newcastle 英语的社会语言学分析把商用 ASR 的方言偏差定位到具体语言变量；尼泊尔语—英语语码转换基准用 13,044 条自发播客话语与严格审计，暴露了文字系统混淆与切换点错误；ShlokaDhara 以 43 小时颂诗语料把格律保真度引入 TTS 评价；Gemma 4 冻结编码器研究则给出沙特与海湾阿拉伯语的受控结果。它们的共同点是：不再只报告「低资源性能差」，而是给出了可比较的数据、变量与误差结构，这对领域公平性研究是必要前提。</p>
+      <h3>评测从静态分数转向过程、闭环与受控研究</h3>
+      <p>UI2App 要求模型从静态截图推断交互，Quant Arena 要求模型在有限迭代与封存数据上完成一段受约束的研究，Bridgewater 用 hand-built benchmark 把 precision@10 从 60% 推到 90% 以上，Sofia 的实践则把评测建立在生产轨迹与 CI 门禁上。这些工作的共同点是：不再用一个聚合分数代表能力，而是把「过程是否可分解」「改动是否可回归」「结论是否可验证」作为评测对象。对论文可比性与复现性而言，这是一次向实验科学靠拢的转向。</p>
     </div>
 
     <div class="trend">
-      <h3>交互式与具身基准揭示巨大的能力缺口</h3>
-      <p>据夕小瑶科技说报道，10 月 20 日发布的 StreamEval（清华、NVIDIA、CMU、UC Berkeley、普林斯顿、NUS 等合作）面向交互式流式视频生成，37 个受测模型最高仅得 15 分，全军覆没；RobotWorld 则在 84 项机器人任务上让 Astra、Opus、Kimi、DeepSeek、Gemini 同场竞技，最强模型 Astra 仅完成 16 项（19%），整体成功率 7.9%，63 项任务没有任何模型解决。两项工作都说明：在数字世界中表现优异的通用模型，一旦进入需要持续状态维护、证据获取与物理决策的场景，能力会出现断崖式下降。这为「交互式评测」「具身推理」留下了明确的研究议程。</p>
-    </div>
-
-    <div class="trend">
-      <h3>AI 正在进入数学与形式化验证的核心地带</h3>
-      <p>Anthropic 前沿红队与 Theorem 合作，用 Claude 在数周内为 123 个开源软件库、239 个测试入口写出约 1.8 亿行形式化证明，并发现数百个曾躲过数万亿次测试的 bug，被称为首次在汇编层面对真实生产软件做大规模形式化验证。Latent.Space 的梳理则列出另一条线索：OpenAI 内部模型为 Erdős 单位距离猜想（1946 年提出）找到反例，随后给出 Cycle Double Cover 问题的证明，并在 7 月解决另外十个开放问题；Anthropic 形式化了费马大定理并推进黎曼假设的相关界。无论具体清单如何演进，可预测性——哪些问题对 LLM 可解、其解法与人类有何不同——正成为比「能否解题」更重要的研究问题。</p>
+      <h3>Agent 可靠性：从「会不会用」到「如何证明它没改坏」</h3>
+      <p>一行 prompt 改动可以让 agent 安全性 +17、任务完成率 −17；两个顶级模型对同一信用案例给出相反判断，分层校验后才收敛，而一致仍不等于正确。与此同时，Anthropic 因监管草案陷入信任争议、共享主机 VM 上的计时侧信道被 agent 放大、NVIDIA OpenShell 用形式化检查辅助审查权限变更——这些信号指向同一个问题：随着 agent 获得工具、账户与长时间运行能力，可靠性研究必须同时覆盖行为回归、权限边界与可验证性。仅报告能力提升已不足以支撑部署。</p>
     </div>
   </div>
 </section>
@@ -576,41 +575,38 @@
 <section id="sec5">
   <div class="sec-head"><span class="num">§ 5</span><h2>参考文献</h2></div>
   <ol class="refs">
-    <li>Zhang C. 等. <em>Spark-Audio 1.0 Technical Report</em>. arXiv:2610.31292. <a href="https://arxiv.org/abs/2610.31292" target="_blank" rel="noopener">https://arxiv.org/abs/2610.31292</a></li>
-    <li>Bhosale A. V. 等. <em>TORUS: A Unified Closed-Loop Benchmark for Unified Audio Models</em>. arXiv:2607.28896. <a href="https://arxiv.org/abs/2607.28896" target="_blank" rel="noopener">https://arxiv.org/abs/2607.28896</a></li>
-    <li>Chen P. 等. <em>Qwen-Audio-Jev: A Unified Interface for Audio Decisions</em>. arXiv:2610.21614. <a href="https://arxiv.org/abs/2610.21614" target="_blank" rel="noopener">https://arxiv.org/abs/2610.21614</a></li>
-    <li>Sajid S. 等. <em>Muting Tokens: Exploring Token Sparsification for Efficient Audio Transformers</em>. arXiv:2610.31235. <a href="https://arxiv.org/abs/2610.31235" target="_blank" rel="noopener">https://arxiv.org/abs/2610.31235</a></li>
-    <li>Borodin K. 等. <em>Measuring the Verifier's Floor: How Much Apparent Rare-Word Text-to-Speech Error Is ASR Error?</em> arXiv:2610.31470. <a href="https://arxiv.org/abs/2610.31470" target="_blank" rel="noopener">https://arxiv.org/abs/2610.31470</a></li>
-    <li>Croitoru F.-A. 等. <em>MAVOS-DD: Multilingual Audio-Video Open-Set Deepfake Detection Benchmark</em>. arXiv:2505.11109. <a href="https://arxiv.org/abs/2505.11109" target="_blank" rel="noopener">https://arxiv.org/abs/2505.11109</a></li>
-    <li>新智元. <em>NeurIPS'26 | 注意力也能弃权！改善长上下文、低比特鲁棒性</em>. 2026-10-23. <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652737212&amp;idx=3&amp;sn=7142b34e5331746fe654dfb765b726f5" target="_blank" rel="noopener">原文链接</a>；论文：<a href="https://arxiv.org/abs/2605.17887" target="_blank" rel="noopener">arXiv:2605.17887</a></li>
-    <li>Abdelkhalik A. <em>How Far Can the Gemma 4 Speech Encoder Go Without Changing Its Weights?</em> arXiv:2610.28673. <a href="https://arxiv.org/abs/2610.28673" target="_blank" rel="noopener">https://arxiv.org/abs/2610.28673</a></li>
-    <li><em>Deep Search in Real-World Web Environments</em>. arXiv:2610.30181. <a href="https://arxiv.org/abs/2610.30181" target="_blank" rel="noopener">https://arxiv.org/abs/2610.30181</a></li>
-    <li><em>A Sociolinguistic Analysis of Automatic Speech Recognition Bias in Newcastle English</em>. arXiv:2603.24549. <a href="https://arxiv.org/abs/2603.24549" target="_blank" rel="noopener">https://arxiv.org/abs/2603.24549</a></li>
-    <li><em>Synthetic-to-Real Code-Switched ASR: A Spontaneous Nepali-English Podcast Benchmark</em>. arXiv:2610.30860. <a href="https://arxiv.org/abs/2610.30860" target="_blank" rel="noopener">https://arxiv.org/abs/2610.30860</a></li>
-    <li>Fabiani L., Schlecht S. J., Elvander F. <em>Signed Wasserstein Distance for Room Impulse Response Comparison</em>. arXiv:2610.31596. <a href="https://arxiv.org/abs/2610.31596" target="_blank" rel="noopener">https://arxiv.org/abs/2610.31596</a></li>
-    <li>Kudryavtsev V. 等. <em>Text-Only LLM Correctors Break Correct Transcripts: A Repair-Damage Analysis of Audio Grounding in ASR Error Correction</em>. arXiv:2610.30385. <a href="https://arxiv.org/abs/2610.30385" target="_blank" rel="noopener">https://arxiv.org/abs/2610.30385</a></li>
-    <li>Lee Y., Kwon Y., Choi J.-W. <em>When Do Self-Supervised Representations Help Speech Restoration?</em> arXiv:2610.30869. <a href="https://arxiv.org/abs/2610.30869" target="_blank" rel="noopener">https://arxiv.org/abs/2610.30869</a></li>
-    <li>MiniMax. <em>MiniMax M3.1 Flash 开源</em>. Hugging Face: <a href="https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash" target="_blank" rel="noopener">https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash</a>；魔搭社区：<a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&amp;mid=2247514909&amp;idx=1&amp;sn=d58600f61abd3ec5e583301d7688dae8" target="_blank" rel="noopener">报道链接</a></li>
-    <li>上海人工智能实验室. <em>书生-A1.5（Sage-A1.5）</em>. Hugging Face: <a href="https://huggingface.co/InternScience/Sage-A1.5" target="_blank" rel="noopener">https://huggingface.co/InternScience/Sage-A1.5</a>；报道：<a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&amp;mid=2247503935&amp;idx=1&amp;sn=594298b6b61dfcaf921240003d5b401c" target="_blank" rel="noopener">机器之心 SOTA 模型</a></li>
-    <li>创业邦. <em>智元开源首个真实场景 Physical Agent 数据集</em>. 2026-10-23. <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&amp;mid=2650894748&amp;idx=2&amp;sn=d9de541e085bee2c19ca3f3efc078d5d" target="_blank" rel="noopener">原文链接</a></li>
-    <li><em>ShlokaDhara: A Multi-Speaker Sanskrit Speech Corpus for Learning Meter-Aware Prosody in Text-to-Recitation</em>. arXiv:2610.26929. <a href="https://arxiv.org/abs/2610.26929" target="_blank" rel="noopener">https://arxiv.org/abs/2610.26929</a></li>
-    <li>袋鼠帝. <em>中国电信悄悄开源本地 29B 模型，不仅会决策，还能填空，实测夯！</em>. 2026-10-23. <a href="https://mp.weixin.qq.com/s?__biz=MzkwMzE4NjU5NA==&amp;mid=2247521803&amp;idx=1&amp;sn=5e185291b79bef49a7c2ae029837e332" target="_blank" rel="noopener">原文链接</a></li>
-    <li>AllenAI. <em>LitPivot: Developing research ideas through dynamic contextualization within the literature landscape</em>. Hugging Face Blog. <a href="https://huggingface.co/blog/allenai/litpivot" target="_blank" rel="noopener">https://huggingface.co/blog/allenai/litpivot</a></li>
-    <li>CSDN / openJiuwen. <em>openJiuwen 从双维度 RSI 到 InferRSI 推理自优化</em>. 2026-10-23. <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247837507&amp;idx=1&amp;sn=2ad8d0116922fc70022f83d8e4ce0294" target="_blank" rel="noopener">原文链接</a></li>
-    <li>Bamgbose O. 等. <em>Beyond Naturalness: Probing Automated Text-To-Speech Evaluators on Linguistically Grounded Dimensions</em>. arXiv:2608.09930. <a href="https://arxiv.org/abs/2608.09930" target="_blank" rel="noopener">https://arxiv.org/abs/2608.09930</a></li>
-    <li>夕小瑶科技说. <em>实时视频 AI 第一份公开成绩单出炉！最高才 15 分，37 个模型全军覆没</em>. 2026-10-23. <a href="https://mp.weixin.qq.com/s?__biz=MzIwNzc2NTk0NQ==&amp;mid=2247622709&amp;idx=1&amp;sn=77b6f06dba7a445c63825f95ee0280e5" target="_blank" rel="noopener">原文链接</a>；StreamEval 论文：<a href="https://arxiv.org/abs/2610.28402" target="_blank" rel="noopener">arXiv:2610.28402</a></li>
-    <li>十字路口 Crossing. <em>Astra 得分仅 19%，这可能是目前最难刷的 Benchmark｜RobotWorld 团队回应一切</em>. 2026-10-23. <a href="https://mp.weixin.qq.com/s?__biz=MzAxMDMxOTI2NA==&amp;mid=2649112565&amp;idx=1&amp;sn=5cd042df6abdcbce40b8754d7b487aae" target="_blank" rel="noopener">原文链接</a></li>
-    <li>新智元. <em>Claude 狂写 1.8 亿行证明！万亿次测试漏掉的 Bug，被 AI 一锅端</em>. 2026-10-23. <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652737212&amp;idx=1&amp;sn=5a1bfdf04ac60667d4b36bd67a30c371" target="_blank" rel="noopener">原文链接</a></li>
-    <li>Latent.Space. <em>AI Is Getting Good at Math. Here's Why.</em> <a href="https://latent.space/p/ai-is-getting-good-at-math/" target="_blank" rel="noopener">https://latent.space/p/ai-is-getting-good-at-math/</a></li>
+    <li>Latent.Space. <em>[AINews] Kimi 3.1 Pro 104BA-2.8T: Fable-5.1-Class Open Weights narrows Closed-AI lead to 1 month</em>. <a href="https://latent.space/p/ainews-kimi-31/" target="_blank" rel="noopener">https://latent.space/p/ainews-kimi-31/</a></li>
+    <li>AINLP. <em>Kimi K3.1 Pro 发布，多项跑分直追顶级闭源模型</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650455673&amp;idx=1&amp;sn=7131d82982a14342e102368e9b5409b1" target="_blank" rel="noopener">原文链接</a></li>
+    <li>InfoQ. <em>Kimi K3.1 Pro 刚发布，社区先炸了：比 K3 快、性能逼近 Opus，但额度 10 分钟就烧光了</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651295910&amp;idx=1&amp;sn=69fe74ceaa7e133f8c64496e3989a96c" target="_blank" rel="noopener">原文链接</a></li>
+    <li>智东西. <em>3 万亿级参数！Kimi K3.1 空降国产第一，1/5 价格狙击 Astra，实测跑通 3D 建模</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&amp;mid=2652812636&amp;idx=1&amp;sn=d11520a734b8de25be7622b6fb405429" target="_blank" rel="noopener">原文链接</a></li>
+    <li>机器之心. <em>谷歌开源 TorchTPU！TPU 成 PyTorch 原生设备，CUDA 最深的护城河开始松动</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651069794&amp;idx=2&amp;sn=ae62dbad6234b3c4c7359543936974c7" target="_blank" rel="noopener">原文链接</a>；项目：<a href="https://github.com/google-pytorch/torch_tpu" target="_blank" rel="noopener">github.com/google-pytorch/torch_tpu</a></li>
+    <li>机器之心. <em>RoboTwin 第一、RoboDojo 领跑：Physical AI 的下一轮 Scaling，为什么是 Physics？</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651069794&amp;idx=1&amp;sn=27a6d06d4f43e6c032d7f79db1222815" target="_blank" rel="noopener">原文链接</a></li>
+    <li>大模型智能. <em>RoboTwin 第一、RoboDojo 领跑：Physical AI 的下一轮 Scaling，为什么是 Physics？</em>. 2026-10-25. <a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&amp;mid=2247557585&amp;idx=1&amp;sn=a822dbe7750cb768a887e17b45773785" target="_blank" rel="noopener">原文链接</a></li>
+    <li>机器之心. <em>NeurIPS 26 | 从声音到回应，AI 如何理解并表达共情？</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651069794&amp;idx=3&amp;sn=24de4df712471843cfc352f370b7d213" target="_blank" rel="noopener">原文链接</a>；论文：<a href="https://arxiv.org/html/2610.04826v1" target="_blank" rel="noopener">arXiv:2610.04826v1</a></li>
+    <li>新智元. <em>港科广新基准：只给截图，AI 能把 App 交互做出来吗？</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652737586&amp;idx=3&amp;sn=c381f1250a66caf597b4a1994ee99be0" target="_blank" rel="noopener">原文链接</a>；论文：<a href="https://arxiv.org/abs/2607.06306v2" target="_blank" rel="noopener">arXiv:2607.06306v2</a>；代码：<a href="https://github.com/chenmancm169/UI2App" target="_blank" rel="noopener">GitHub</a></li>
+    <li>Z Potentials. <em>深度｜Einsia AI 发布 LaPlace&rsquo;s Eye：在未来尚未命名时，看见新的可能</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==&amp;mid=2247518961&amp;idx=1&amp;sn=19f597b6f6dcc2db34b515a27d02603e" target="_blank" rel="noopener">原文链接</a></li>
+    <li>InfoQ. <em>Cloudflare Reclaims 100 TB of RAM by Optimizing Consistent Hashing</em>. 2026-10. <a href="https://www.infoq.com/news/2026/10/cloudflare-hashing-optimization/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">https://www.infoq.com/news/2026/10/cloudflare-hashing-optimization/</a></li>
+    <li>硅谷科技评论. <em>华裔物理学家叶军获沃尔夫奖：钱涌向量子计算，订单先落在原子钟上</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzA3MDU4ODkyNg==&amp;mid=2247513246&amp;idx=1&amp;sn=7a043b0caac1dc3e8d86551083910516" target="_blank" rel="noopener">原文链接</a></li>
+    <li>Y Combinator. <em>Why Inference Matters 12x More Than Training</em>. Paper Club. <a href="https://x.com/ycombinator/status/2114031815916912736" target="_blank" rel="noopener">X 帖文</a>；<a href="https://www.youtube.com/watch?v=mHNKuH-9OxU" target="_blank" rel="noopener">YouTube</a></li>
+    <li>HackerNews 每日摘要 · SuperTechFans. <em>2026-10-24 Hacker News Top Stories</em>. <a href="https://supertechfans.com/cn/post/2026-10-24-HackerNews/" target="_blank" rel="noopener">https://supertechfans.com/cn/post/2026-10-24-HackerNews/</a></li>
+    <li>AI Engineer. <em>How Bridgewater Turned 100 Million Documents Into an Edge — Sam Green &amp; Aaron Linsky</em>. <a href="https://www.youtube.com/watch?v=CLve4Nx_RwI" target="_blank" rel="noopener">https://www.youtube.com/watch?v=CLve4Nx_RwI</a></li>
+    <li>AI Engineer. <em>Your Agent Fix Just Broke Something Else — Sofia Jakovcevic, Arize AI</em>. <a href="https://www.youtube.com/watch?v=v5tm5EAzsAs" target="_blank" rel="noopener">https://www.youtube.com/watch?v=v5tm5EAzsAs</a></li>
+    <li>AI Engineer. <em>Can AI Understand a Distressed Credit? — Harneet Kaur, Axim Intelligence</em>. <a href="https://www.youtube.com/watch?v=WOszaC1WWbQ" target="_blank" rel="noopener">https://www.youtube.com/watch?v=WOszaC1WWbQ</a></li>
+    <li>InfoQ. <em>Google Optimizes Agent Development Kit&rsquo;s 200K-line Python Codebase Overnight with Gemini 4 Argon</em>. 2026-10. <a href="https://www.infoq.com/news/2026/10/google-argon-optimizes-adk/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">https://www.infoq.com/news/2026/10/google-argon-optimizes-adk/</a></li>
+    <li>InfoQ. <em>Google&rsquo;s Data Agent Kit Hits GA, Splitting Agent Guardrails Between Skills and IAM</em>. 2026-10. <a href="https://www.infoq.com/news/2026/10/data-agent-kit-ga/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">https://www.infoq.com/news/2026/10/data-agent-kit-ga/</a></li>
+    <li>腾讯科技. <em>38 美元，DeepSeek 算了一笔赚钱的账</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&amp;mid=2691573675&amp;idx=1&amp;sn=12e409e8d1eb74954ac4af87fe7ba217" target="_blank" rel="noopener">原文链接</a></li>
+    <li>逛逛 GitHub. <em>最近又刷到 4 个黑科技 GitHub 项目</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247537991&amp;idx=1&amp;sn=69fafc227ed7436bf409e5cd3dd1a43d" target="_blank" rel="noopener">原文链接</a>；项目：<a href="https://github.com/onehumanbeing/esp32-iphone-agent" target="_blank" rel="noopener">GitHub</a></li>
+    <li>AI 前线. <em>造成 50 人以上死伤才能叫停 AI 模型？Anthropic 私下推动监管草案惹众怒，达里奥亲自回应</em>. 2026-10-24. <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247668795&amp;idx=1&amp;sn=eba1ec1755a1c9d23d9d606af02f6989" target="_blank" rel="noopener">原文链接</a></li>
+    <li>Guillermo Rauch. <em>Agents can play &ldquo;Ouija&rdquo; in the cloud</em>. 2026-10-24. <a href="https://x.com/rauchg/status/2113759533801877920" target="_blank" rel="noopener">X 帖文</a></li>
   </ol>
-  <p class="ref-note">说明：以上条目按正文首次引用顺序编号。arXiv 论文均来自 2026-10-22 20:42 至 2026-10-23 20:42 的 RSS 抓取窗口（cs.SD、eess.AS、cs.MM 等分类），部分论文存在跨分类重复，已去重；工业动态与基准报道来自微信公众号及博客，摘要依据抓取到的原文片段与元数据整理，具体数值与结论请以原文为准。</p>
+  <p class="ref-note">说明：以上条目按正文首次引用顺序编号。arXiv 成果均给出论文或项目链接；工业动态与基准报道来自微信公众号、InfoQ 与 YouTube，摘要依据抓取到的原文片段与元数据整理。部分条目（如 EchoChat、UI2App）的抓取摘要侧重方法框架，具体实验数值、消融结果与许可证条款请以原文与官方发布为准。</p>
 </section>
 
 </main>
 
 <footer>
-  <div>科技日报 · 学术研究员版 · 生成日期 2026-10-23 · 数据窗口 2026-10-22 20:42 — 2026-10-23 20:42</div>
-  <div>本日报由 tech-daily-generator 基于 242 条新闻、424 个来源自动筛选生成，面向人工智能与计算机科学研究人员。摘要为编辑性综合，不替代原文阅读。</div>
+  <div>科技日报 · 学术研究员版 · 生成日期 2026-10-24 · 数据窗口 2026-10-23 19:54 — 2026-10-24 19:54</div>
+  <div>本日报由 tech-daily-generator 基于 129 条新闻、424 个来源自动筛选生成，面向人工智能与计算机科学研究人员。摘要为编辑性综合，不替代原文阅读。</div>
 </footer>
 
 </div>
