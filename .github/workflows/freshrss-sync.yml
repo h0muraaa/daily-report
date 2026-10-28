@@ -27,7 +27,7 @@ jobs:
       ENABLE_TOOL_SEARCH: false
       ANTHROPIC_BASE_URL: https://opencode.ai/zen/go
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      ANTHROPIC_MODEL: deepseek-v4-flash
+      ANTHROPIC_MODEL: deepseek-v4.1-flash
 
     steps:
       - name: Checkout Source Repository
@@ -99,6 +99,11 @@ jobs:
           echo "📄 使用 JSON 文件: $JSON_FILE"
 
           ROLES="cto_insight developer_practice tech_enthusiast investment_analysis academic_research user_research"
+
+          # checkout 会带上仓库里上一次的 HTML，不清掉的话下面的存在性检查永远为真，
+          # 模型调用全失败也照样打出「6 个角色生成成功」并提交（2026-10-26 就踩了）。
+          # 只删角色页，index.html 等其他文件保持不动。
+          for ROLE in $ROLES; do rm -f "./tech-daily/${ROLE}.html"; done
 
           echo "🚀 并行启动 6 个角色的日报生成..."
           for ROLE in $ROLES; do
