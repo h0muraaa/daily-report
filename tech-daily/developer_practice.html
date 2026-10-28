@@ -309,18 +309,18 @@
     <h1>科技日报 <span class="accent">//</span> 开发者实践版</h1>
     <p class="subtitle">面向一线工程师：新工具、框架发布、性能优化与可落地的工程实践。</p>
     <div class="meta-grid">
-      <div class="meta-cell">覆盖窗口<b>2026-10-27 02:49 → 10-28 02:49</b></div>
-      <div class="meta-cell">新闻条目<b>276 条 / 424 个来源</b></div>
+      <div class="meta-cell">覆盖窗口<b>2026-10-27 21:57 → 10-28 21:57</b></div>
+      <div class="meta-cell">新闻条目<b>278 条 / 424 个来源</b></div>
       <div class="meta-cell">本期精选<b>8 条热榜 · 2 篇深读 · 6 个工具</b></div>
-      <div class="meta-cell">生成时间<b>2026-10-28 02:49:17</b></div>
+      <div class="meta-cell">生成时间<b>2026-10-28 21:57:00</b></div>
     </div>
 
     <div class="tldr">
       <div class="head"><b>TL;DR</b> — 今天最值得动手处理的三件事</div>
       <ul>
-        <li><b>Next.js 安全窗口</b>：官方预告 11 月 3 日修复 7 个 medium 漏洞，公告随版本一起发；今天先把版本盘点与升级演练排上日程。</li>
-        <li><b>AI 提效的账要重算</b>：Atlassian 调研里“每周省 10 小时以上”的开发者从 68% 掉到 26%；npm 创始人给出 741% 代码产出 vs 30% 发布增速。瓶颈已从“写”移到“评审与交付”。</li>
-        <li><b>Agent 上线四件套</b>：网关、会话级审计、最小权限、成本熔断。Runlayer 60 人跑 300 个 Agent，踩过的坑包括邮件注入、PR 评审 Agent 被说服批准、以及一次模型切换让成本翻 100 倍。</li>
+        <li><b>CI 与前端构建的成本账</b>：Vercel CI 进入 Beta，只跑受影响任务，官方称内部 push 到 CI 通过快 2–6 倍；Next.js 同时放出 <span class="kbd">next-bundle-optimizer</span> Agent Skill。先把 monorepo 的构建与审查队列量出来。</li>
+        <li><b>Agent 质量要可度量</b>：Agents CLI 给出“评测循环”样板，Google Agent Skills 用自动门禁 + AI 审查守住 170 多个 Skill。把“感觉变好”换成 golden set、trace diff 和夜间阈值告警。</li>
+        <li><b>Agent 安全与 AI Coding 落地</b>：Agent Auth 的核心是 per-agent 身份、短期最小权限凭据与网关审计；vivo、得物、腾讯云、百度的实践都指向同一件事——先补上下文与规格，再谈换模型。</li>
       </ul>
     </div>
 
@@ -333,7 +333,6 @@
     </nav>
   </header>
 
-  <!-- ================= HOT ================= -->
   <section id="hot">
     <div class="sec-head">
       <span class="sec-idx">[01]</span>
@@ -344,200 +343,223 @@
     <div class="news-list">
 
       <article class="news">
-        <h3><span class="tag sec">SECURITY</span>Next.js 预告 11 月 3 日安全版本：一次修 7 个 medium 漏洞</h3>
-        <p>Next.js 官方发布提前通知：计划于 2026 年 11 月 3 日（周二）发布安全版本，一次性修复 7 个中危（medium）漏洞。完整的安全公告会随版本同时公布，包含影响范围、受影响版本与升级指令，官方建议在补丁可用后尽快升级到修复版本。</p>
-        <p>提前预告的价值在于给团队留出排期：安全版本往往与常规发版节奏错开，临时插入升级窗口容易和生产变更冲突。今天值得做的不是猜测漏洞内容，而是把仓库里所有 Next.js 版本、部署单元和锁文件梳理清楚，尤其是多仓库共用同一套前端基座的团队——一个组件库滞后，就可能把修复拖到所有下游。</p>
-        <p>另外注意，Next.js 的安全问题通常同时牵涉框架运行时与构建产物，只升级 <code class="inline">package.json</code> 而不重建镜像、不刷新 CDN 缓存，线上仍可能跑着旧代码。</p>
-        <div class="src">来源：<a href="https://nextjs.org/blog/upcoming-nextjs-security-release-november-2026" target="_blank" rel="noopener">Next.js Blog · Upcoming Next.js November Security Release</a></div>
+        <h3><span class="tag fw">CI/CD</span>Vercel CI 进入 Beta：只跑受影响任务，push 到“CI 通过”快 2–6 倍</h3>
+        <p>Vercel 发布 Vercel CI Beta，核心思路是复用 Turborepo 的任务图：它读取 <code class="inline">turbo.json</code>，只运行被本次改动影响的任务，并且只为这些检查启动所需算力。官方称在其内部仓库里，从 <code class="inline">git push</code> 到 “CI passed” 的等待时间比之前缩短 2–6 倍，目标正是跟上越来越多由编码 Agent 提交的 PR。</p>
+        <p>配套能力包括：只跑受影响任务、使用 Vercel Remote Cache 做任务缓存、每次运行只安装一次依赖、在代码更新之间复用依赖缓存。对已有 Turborepo 的项目几乎零额外配置，每个带 <code class="inline">ci</code> 标签的任务都会在每次 push 时运行。</p>
+        <p>这项更新真正解决的是“Agent 把 PR 数量拉高之后，CI 成为评审前的排队瓶颈”。值得先量三个数：push→CI 通过的 p50/p95、每次 CI 实际执行的任务数、缓存命中率。如果任务图划分得粗，只跑“受影响任务”仍然会把整块工作全部拖进来。</p>
+        <div class="src">来源：<a href="https://vercel.com/changelog/vercel-ci-is-now-in-beta" target="_blank" rel="noopener">Vercel News · Vercel CI is now in beta</a> ·
+          <a href="https://vercel.com/blog/introducing-vercel-ci" target="_blank" rel="noopener">Vercel Blog · Introducing Vercel CI</a></div>
       </article>
 
       <article class="news">
-        <h3><span class="tag fw">TOOLCHAIN</span>Cloudflare 与 VoidZero 发布 tsrs：AI 生成的 TypeScript 编译器 Rust 移植版</h3>
-        <p>Cloudflare、VoidZero 与 Max Schwenk 联合公布 tsrs，一个实验性的 TypeScript 编译器 Rust 移植版本，TypeScript 团队也参与了共建。官方给出的数字是：相比 TypeScript 7.0，类型检查最快提升 8 倍、内存占用减少 70%；但在与 7.1 beta 的一次对照测试中，实际加速只有 2.7 倍。</p>
-        <p>限制同样明确：目前没有 watch 模式，没有语言服务器（LSP），类型错误时以退出码 2 结束。这意味着它还无法直接替代日常开发里的 <code class="inline">tsc --watch</code> 与编辑器类型提示，更适合放进 CI 做一次性全量检查。对大型 monorepo 来说，类型检查往往是最慢的门禁之一，8 倍与 70% 内存的组合值得先用真实仓库做一次基准，再决定是否接入。</p>
-        <div class="src">来源：<a href="https://www.infoq.com/news/2026/10/cloudflare-tsrs-ai-typescript/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Cloudflare and VoidZero Introduce tsrs: An AI-Generated Rust Port of TypeScript</a></div>
+        <h3><span class="tag fw">FRONTEND</span>Next.js 推出 next-bundle-optimizer：让 Agent 帮你删掉多余的 JavaScript</h3>
+        <p>Next.js 官方发布 <code class="inline">next-bundle-optimizer</code> Agent Skill，用于分析并优化应用的 bundle；同时更新了 Bundle Analyzer 工具，让开发者可以直接查看产物体积构成。官方给出的使用方式是“让 AI Agent 调用这个 Skill 来定位并削减不必要的 JavaScript”，而不是手工逐个模块排查。</p>
+        <p>在此之前，bundle 优化依赖开发者阅读构建产物、判断哪些依赖被误引入，经验门槛较高。把它做成 Agent Skill 后，优化动作可以被重复调用，也更适合放进日常的“体检”流程。建议先建立基线：首屏 JS 体积、路由级分包大小、重复依赖数量，再让 Agent 在受控分支上提交改动并跑性能回归。</p>
+        <div class="src">来源：<a href="https://nextjs.org/blog/ship-less-javascript-with-ai" target="_blank" rel="noopener">Next.js Blog · Ship less JavaScript in Next.js with your AI agent</a></div>
       </article>
 
       <article class="news">
-        <h3><span class="tag infra">ECOSYSTEM</span>2026 Python 类型调查：类型标注没变，checker 选择在剧烈变化</h3>
-        <p>Meta 工程博客公布第三份 Python 类型调查，共 1794 份有效回答，其中 76.4% 的受访者有 5 年以上 Python 经验。高频使用类型标注的比例三年基本持平（2024 年 88.0%、2025 年 85.9%、2026 年 85.5%），但 checker 的选择变化明显：报告使用情况的受访者中，一半会同时使用多个 checker，多 checker 比例从 46.0% 升到 49.9%。</p>
-        <p>数据里有两组很工程化的细节：700 人选择 Mypy，264 人选择 Pyrefly，而 Pyrefly 用户中有 83.3% 同时选了另一个 checker；选择 checker 的首要理由是速度/性能（56.5%）。最大的痛点依然是第三方库缺少类型信息（65.1%），其次是类型系统无法描述代码行为（44.6%）与不同 checker 结论不一致（33.3%，多 checker 用户中升到 42.7%）。</p>
-        <p>AI 已经进入这条链路：42.5% 的人用 AI 写类型标注，61.0% 至少在四类类型相关活动中用过 AI；24.4% 表示 AI 编程工具会主动调用他们的类型检查器，而这批人里有 61.6% 也会用 AI 修检查错误（其余人群为 19.3%）。求助渠道则从 Stack Overflow（46.4% → 22.9%）明显转向 LLM 对话（26.0% → 41.7%）。</p>
-        <div class="src">来源：<a href="https://engineering.fb.com/2026/10/27/developer-tools/python-typing-survey-2026-ai-tools-checker-landscape/" target="_blank" rel="noopener">Engineering at Meta · Python Typing Survey 2026: AI Tools and the Shifting Checker Landscape</a></div>
+        <h3><span class="tag infra">K8S</span>Kubernetes 1.37 “Garhwal” 发布：Metrics API 转正，Pod 检查点进入 Alpha</h3>
+        <p>CNCF 发布 Kubernetes 1.37，代号 Garhwal，重点放在稳定性、安全性与 AI/ML 工作负载优化。最重要的变化是 <code class="inline">metrics.k8s.io</code> Metrics API 正式 GA，为节点与 Pod 健康度提供统一度量方式，也是 HPA、VPA 与 <code class="inline">kubectl top</code> 等能力的基础。</p>
+        <p>Alpha 特性同样值得关注：工作负载感知调度通过 <code class="inline">InPlacePodVerticalScalingSchedulerPreemption</code> 特性门控，让调度器抢占低优先级工作负载、为高优先级应用腾出资源做原地规格调整；新增 Pod 级检查点与恢复，可对运行中容器的内存与进程树做快照，便于调试与安全分析；StatefulSet 滚动更新新增 Recreate 策略。Rootless Kubelet 进入 Beta——标题里的“Rootless Kubelet”正是本轮安全增强的一部分。</p>
+        <p>升级前先做两件事：用 <code class="inline">kubectl</code> 的弃用 API 检查扫一遍清单；确认 HPA/VPA 在 Metrics API GA 后行为没有变化。AI/ML 团队则可以评估 Pod 检查点是否能降低长任务重跑成本，但 Alpha 特性不要直接上生产。</p>
+        <div class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296150&amp;idx=3&amp;sn=009fcb5563707c2ffd75c6a09c7b007d" target="_blank" rel="noopener">InfoQ · Kubernetes 1.37 发布：稳定版 Metrics API 和 Beta 版 Rootless Kubelet</a></div>
       </article>
 
       <article class="news">
-        <h3><span class="tag infra">DATA</span>Atlassian 2026 开发者体验报告：AI 带来“每周省 10 小时”的人从 68% 降到 26%</h3>
-        <p>Atlassian《State of Developer Experience 2026》显示，声称借助 AI 每周节省 10 小时以上的开发者比例，从去年的 68% 降至今年的 26%；只有 28% 的人表示相比引入 AI 之前，工作摩擦明显减少。更有意思的是角色差异：工程管理者表示，自己花在管理和修正 AI 产出上的时间比开发者还多。</p>
-        <p>这组数字配合今天的另一条演讲看更有意义：npm 联合创始人 Laurie Voss 在 AI Engineer NYC 上给出 741% 的代码产出增长与 30% 的软件发布速度增长。两者并不矛盾——AI 让“写”变便宜，但评审、合并、部署、扩容与安全的成本没有同步下降。对团队的启示是，衡量 AI 收益的指标要从“生成代码量/主观省时”换成“变更前置时间、评审排队时长、回滚率、发布频率”。</p>
-        <div class="src">来源：<a href="https://www.infoq.com/news/2026/10/atlassian-devex-2026/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Developers Reporting Double-Digit Weekly Time Savings from AI Fell from 68% to 26%</a></div>
+        <h3><span class="tag infra">EDGE</span>Cloudflare 开放 Quicksilver：Workers KV Instant 把 p99 读延迟从 287ms 打到 1.62ms</h3>
+        <p>Cloudflare 把支撑其绝大多数请求的内部键值存储 Quicksilver，以 Workers KV 的新模式 “Instant” 开放私有 Beta。官方数据是：读请求 p99 延迟 1.62ms，而经典 Workers KV 为 287ms。差异来自数据放置位置与读取路径，而不是简单的缓存命中。</p>
+        <p>限制同样明确：每个 namespace 最多 10,000 个 key、总容量 1MB、每秒最多 1 次写入。这决定了它适合配置、功能开关、边缘路由表、小型白名单等“读多写少、体积很小”的场景，而不适合用户数据或需要高频更新的计数。经典 KV 的最终一致性模型在 Instant 模式下依然是设计前提。</p>
+        <p>如果你的边缘函数每次请求都要读一份配置，且能接受秒级写入频率，这个模式值得申请试用；但先算清楚 namespace 的 1MB 预算，别把“KV 是无限容量”的习惯带过来。</p>
+        <div class="src">来源：<a href="https://www.infoq.com/news/2026/10/workers-kv-instant/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Cloudflare Opens Quicksilver to Customers as Workers KV Instant, Inside a 1 MB Envelope</a></div>
       </article>
 
       <article class="news">
-        <h3><span class="tag sec">AGENT</span>60 人公司跑 300 个 Agent：一次模型切换让成本涨了 100 倍</h3>
-        <p>Runlayer 创始工程师 Aiden Sochowski 在 AI Engineer 分享了他们的内部实践：公司约 60 人，但每天有 300 多个 Agent 在跑。他们做的第一件事是在所有 Agent 前面放一个网关，并记录每一个会话与每一次工具调用——在此之前，公司对自己有多少 Agent、它们能访问什么，几乎没有可见性。</p>
-        <p>有了日志之后暴露的问题相当具体：通过邮件内容实施的提示注入；PR 评审 Agent 被说服批准变更；权限过大的机器人账号；一个被污染的 Agent 影响其他 Agent；以及“vibe coding”出来的 MCP server 反复烧 token。还有一个容易被忽视的运维风险：一次模型切换，让一周内的成本上涨超过 100 倍。</p>
-        <p>他们的结论是，会话级数据不只是审计材料，更是缩小权限的依据——看清某个 Agent 在一次会话里实际调用了哪些工具，才能把权限从“能访问一切”收窄到“只访问需要的”。这与 Meta 同一天公布的 PrivacyLib 思路一致：把访问控制放在数据访问边界，而不是依赖每个调用方自觉。</p>
-        <div class="src">来源：<a href="https://www.youtube.com/watch?v=BgLdvF7Qkh8" target="_blank" rel="noopener">AI Engineer · 300 Agents, 60 People: How We Secured Our Own AI Agents — Aiden Sochowski, Runlayer</a></div>
+        <h3><span class="tag fw">FRAMEWORK</span>Spring AI 2.1 重构消息模型：推理块要在多轮往返中“原样带回”</h3>
+        <p>Spring AI 2.1 把消息内容从“一段文本 + 附属的工具调用列表”改为有序的 message parts 列表。变化的原因是推理模型会把一部分“思考过程”交还给调用方，并要求下一次请求原样带回：Claude 会签名 thinking block，Gemini 在函数调用上附加 thought signature，OpenAI Responses API 则返回加密的 reasoning item。</p>
+        <p>官方明确提示：如果丢弃、重排或编辑这些块，轻则 HTTP 400，重则模型静默丢失此前的推理并从头开始。这不是某个框架的兼容性问题，而是所有多轮工具调用应用的共同契约——消息的“顺序”和“完整性”本身就是状态。</p>
+        <p>升级时重点检查三处：持久化层是否保存了 parts 的顺序与类型；网关或日志中间件是否在转发前“清洗”掉了不认识的字段；重试逻辑是否会重新组装消息。用一次带工具调用的多轮对话做回归，比只看单轮问答更能暴露问题。</p>
+        <div class="src">来源：<a href="https://spring.io/blog/2026/10/28/spring-ai-message-parts-reasoning-replay" target="_blank" rel="noopener">Spring Blog · Spring AI 2.1 Message Parts: Reasoning That Survives the Round Trip</a></div>
       </article>
 
       <article class="news">
-        <h3><span class="tag model">MODEL</span>文心 Unlimited OCR 2 开源：任意页数文档解析，峰值 KV 缓存从 47GB 降到 1.77GB</h3>
-        <p>百度发布并开源文心 Unlimited OCR 2，号称首次实现任意页数文档解析，把 OCR 的处理上限从数十页推到“无限”。实测中，模型连续识别 7 部《哈利·波特》共 3600 多页、《三体》全集 1200 多页，在文档长度大幅增加时仍保持精度与效率。</p>
-        <p>关键突破在显存：百页级单序列测试里，峰值 KV 缓存从标准解码的 47GB 降到 1.77GB，降幅约 96%。这依赖新的稀疏参考滑动窗口注意力机制（SR-SWA），思路类似人抄书——主要看当前页，需要核对时才回看相关页；再配合持续解码，让单步解码开销不随文档变长而上涨。公开基准上，MPDocBench 84.6 分、MarathonDocBench 77.1 分，领先 Qwen 3.8-Max、Gemini-3.8-Flash、GLM-5.3-Flash、DeepSeek-4.1-Flash 等模型。</p>
-        <p>上一代 Unlimited OCR 在开源社区已有 1000 万+ 下载、约 2.86 万 GitHub Star，并已支持 SGLang 推理，这一代的可接入性值得关注。对做合同、财报、书籍扫描流水线的团队，长文档连续解析意味着可以少做一层“分块 + 拼接”的工程胶水，但跨页语义一致性和失败重试粒度仍需自己验证（见深读）。</p>
-        <div class="src">来源：<a href="https://www.qbitai.com/2026/10/505773.html" target="_blank" rel="noopener">量子位 · KV Cache 被压成常数！OCR 开源新王：页数没上限，缓存砍 96%</a> ·
-          <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzUyMzM1Mg==&amp;mid=2247670434&amp;idx=1&amp;sn=56c5aed1c7365834218290917e580894" target="_blank" rel="noopener">百度文心 · OCR 界出了个魔法师？</a></div>
+        <h3><span class="tag model">ANDROID</span>LiteRT 进入 Google Play services：GPU 推理快 1.4 倍，安装包小约 8MB</h3>
+        <p>Google 宣布 Google Play services 中的 LiteRT 支持由 ML Drift 驱动的 GPU 推理，并引入新的 <code class="inline">CompiledModel</code> API，官方称性能约提升 1.4 倍。相比把运行时二进制打包进应用，改用系统内置版本可让安装包减小约 8MB，同时获得跨数十亿设备的自动运行时更新。</p>
+        <p>迁移路径也被工具化：更新依赖即可接入，并可使用新的 Android Studio LiteRT Skill 做自动化迁移。对 Android 端侧模型应用来说，这解决的是“每个应用各自打包推理运行时、版本碎片化、包体膨胀”的老问题。</p>
+        <p>上线前仍需验证 GPU delegate 的回退路径：不同 SoC 与驱动对算子支持不一致，<code class="inline">CompiledModel</code> 编译失败时应有 CPU 回退，并记录首次编译耗时——它通常发生在用户第一次打开功能时。</p>
+        <div class="src">来源：<a href="https://developers.googleblog.com/smaller-apps-and-faster-gpu-inference-with-litert-in-google-play-services/" target="_blank" rel="noopener">Google Developers Blog · Smaller apps and faster GPU inference with LiteRT in Google Play services</a></div>
       </article>
 
       <article class="news">
-        <h3><span class="tag infra">INFERENCE</span>StartLux 开源 Prism：决策模型专用推理引擎，单卡最高提速 5.3 倍</h3>
-        <p>StartLux 开源了为自家 StartLux-Decision 模型设计的推理引擎 Prism。在单张 NVIDIA H200 上，使用 StartLux-Decision v1.1 27B，Prism 在测试场景中的速度达到原 vLLM 方案的 1.2 至 5.3 倍：同一份材料回答三个问题时，处理时间从 92.9 毫秒降到 17.4 毫秒；短问题场景约 2.8 倍。</p>
-        <p>决策模型与生成式 LLM 的工作负载不同：它读入材料，对有限候选选项计算概率，而不需要逐 token 生成长文本，所以通用引擎的优化方向并不完全匹配。Prism 还强调确定性——相同请求不受并发量、批处理方式与 GPU 数量影响，输出概率逐位一致；在 7 个评测集、12351 次决策上平均准确率 92.94%，与 BF16 原始精度的 92.97% 基本持平。它同时支持张量并行与数据并行组合部署。</p>
-        <p>这延续了本周的一个趋势：优化重心从模型本身延伸到推理系统。10 月 20 日 DeepSeek 刚开源了面向自家模型的 DeepInfer。对自建推理的团队，值得关注的不是单个数字，而是“专用引擎 + 位级确定性”是否会成为高风险决策类应用的默认要求。</p>
-        <div class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296067&amp;idx=3&amp;sn=beb1f192ad02995c0c45a968e4f4ba8d" target="_blank" rel="noopener">InfoQ · 决策模型也有专用推理引擎了：StartLux 开源 Prism，单卡最高提速 5.3 倍</a></div>
+        <h3><span class="tag sec">SECURITY</span>微软 10 月补丁修复 1415 个漏洞：85 个严重，1 个已被在野利用</h3>
+        <p>微软 10 月安全更新覆盖 Windows、Office、Exchange、.NET、Edge，以及可能涉及的 Hyper-V 与 Azure 组件，共修复 1415 个漏洞，其中 85 个被评级为严重。一个影响 Windows Shell 的漏洞已被确认在野利用。</p>
+        <p>对开发者而言，重点不是记住 CVE 数量，而是排优先级：面向公网的 Exchange、Edge 与远程桌面相关组件优先；Windows Shell 这类“打开文件/预览即触发”的漏洞要同步终端侧补丁；.NET 与 Azure 组件则要核对自建服务的依赖版本。Chainguard 在同日的分享里给出一个更悲观的判断——如今利用平均先于补丁落地，30 天修复窗口已经不够用（见深读）。</p>
+        <div class="src">来源：<a href="https://www.infoq.com/news/2026/10/microsoft-october-2026-patch/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Microsoft's October Security Update Fixes 1,400+ Vulnerabilities, One Exploited in the Wild</a></div>
       </article>
 
       <article class="news">
-        <h3><span class="tag tool">IDE</span>JetBrains IDE 内置终端改用 libghostty：2026.3 起替换 JediTerm</h3>
-        <p>JetBrains 宣布从 2026.3 版本开始，IDE 内置终端改用 libghostty——驱动 Ghostty 终端的终端仿真库，取代使用多年的 JediTerm。官方给出的理由很直接：现在跑在终端里的东西，比过去一个 shell 提示符要求高得多，包括 Claude Code、Codex 这类 AI 编程 Agent，Neovim、tmux 这类全屏应用，以及各种监控面板与 TUI 工具。</p>
-        <p>这些工具依赖现代终端协议（如更完整的转义序列、图像协议与性能更好的渲染路径），JediTerm 在这些场景下容易出兼容性问题。libghostty 已被多个项目嵌入，官方称其在可靠性与性能上表现稳定，这也是选它而非其他方案的原因。对日常在 IDE 里跑 Agent 和 TUI 的开发者，这次升级的实际收益会体现在渲染正确性与输入响应上，而不只是“换了个终端”。</p>
-        <div class="src">来源：<a href="https://blog.jetbrains.com/platform/2026/10/jetbrains-terminal-now-uses-ghostty/" target="_blank" rel="noopener">The JetBrains Blog · The Terminal in JetBrains IDEs Now Runs on libghostty</a></div>
+        <h3><span class="tag infra">ECOSYSTEM</span>GitHub Octoverse 2026：合并 PR 每月 2.2 亿次，一年内翻三倍</h3>
+        <p>GitHub 在 Universe 2026 公布 Octoverse 数据：2026 年每月合并 pull request 达 2.2 亿次，不到一年增长三倍；每月提交 73.8 亿次，同样翻三倍，且大部分增长发生在下半年；每月新建仓库 3030 万个，较去年翻倍。过去 12 个月开发者共推送 179 亿次，超过 2024 与 2025 两年之和。</p>
+        <p>GitHub 将增长直接归因于 Agentic Engineering：编码 Agent 让“产生变更”的成本大幅下降。GitHub 同时表示，降低 PR 门槛也带来了大量低投入的 AI 贡献，维护者工具（如 PR 数量限制）因此变得更重要。</p>
+        <p>这组数字对团队的直接含义是容量规划要重做：评审人力、CI 算力、依赖扫描与发布流水线都需要按“变更量”而不是“人数”扩容。Simon Willison 的现场记录也指出，报告专门统计了“互操作与逆向工程”相关仓库，说明 Agent 正在改变贡献的结构，而不只是数量。</p>
+        <div class="src">来源：<a href="https://github.blog/news-insights/octoverse/octoverse-commits-pushes-reach-new-highs-in-2026-as-developers-build-with-agents/" target="_blank" rel="noopener">The GitHub Blog · Octoverse: Commits, pushes, reach new highs in 2026 as developers build with agents</a> ·
+          <a href="https://simonwillison.net/2026/Oct/28/github-octoverse-2026/" target="_blank" rel="noopener">Simon Willison's Weblog · GitHub Octoverse 2026</a></div>
       </article>
 
     </div>
 
     <div class="callout">
-      <strong>快讯 · 顺手记下的五条：</strong>Visual Studio 十月更新支持把任意历史提交与当前工作区对比（含未提交改动），并可批量解决多个文件的合并冲突，还带来 Hot Exit 与新的 Copilot 聊天体验；Blazor 迎来 Infragistics 贡献，50 多个控件转为开源并新增 .NET 11 分析器；Azure DevOps Server RC（26H2）开放下载，支持从 TFS 2015 及以后版本直接升级；VS Code 1.144 Insiders 已发布；Cloudflare 上线 PHP Capture the Flag 挑战，背景是上周 eMudhra 中间证书泄露与 PHP 的 php2shell 漏洞。
-      <div class="src">来源：<a href="https://devblogs.microsoft.com/visualstudio/visual-studio-october-update-compare-commits-to-your-code-resolve-conflicts-in-bulk-keep-coding" target="_blank" rel="noopener">Visual Studio Blog</a> ·
-        <a href="https://devblogs.microsoft.com/dotnet/blazor-welcomes-infragistics" target="_blank" rel="noopener">Microsoft for Developers · Blazor</a> ·
-        <a href="https://devblogs.microsoft.com/devops/azure-devops-server-rc-26h2-is-now-available" target="_blank" rel="noopener">Azure DevOps Blog</a> ·
-        <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.144-(insiders)" target="_blank" rel="noopener">VS Code Blog</a> ·
-        <a href="https://blog.cloudflare.com/php-ctf/" target="_blank" rel="noopener">The Cloudflare Blog</a></div>
+      <strong>快讯 · 顺手记下的五条：</strong>Node.js 发布 26.13.0 与 24.22.2 两个 LTS 版本，升级前请核对 release notes 中的破坏性变更；VS Code 1.144 Insiders 已发布；InfoQ 报道 Qwen4 推理内核 PR 意外公开了 27B 模型的张量尺寸、注意力与量化细节，社区据此逆向出更多架构线索；阿里巴巴 12 篇论文入选 ATC 2026，覆盖模型服务、Agent 基础设施、资源调度与安全容器；Reddit 近 40 万人的 r/opensource 社区宣布不再接受 AI 生成或专为 AI 打造的开源项目，要求项目至少维护一年、有多名贡献者。
+      <div class="src">来源：<a href="https://nodejs.org/en/blog/release/v26.13.0" target="_blank" rel="noopener">Node.js Blog · v26.13.0</a> ·
+        <a href="https://nodejs.org/en/blog/release/v24.22.2" target="_blank" rel="noopener">Node.js Blog · v24.22.2</a> ·
+        <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.144-(insiders)" target="_blank" rel="noopener">VS Code Blog · 1.144 Insiders</a> ·
+        <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296150&amp;idx=2&amp;sn=475b8f861bd93d178ff9f2a80d2761f1" target="_blank" rel="noopener">InfoQ · Qwen4 推理内核代码现身 GitHub</a> ·
+        <a href="https://mp.weixin.qq.com/s?__biz=Mzg4NTczNzg2OA==&amp;mid=2247512288&amp;idx=1&amp;sn=e2bc205de8a8396fb0e743f1e757b6e6" target="_blank" rel="noopener">阿里技术 · 12 篇论文入选 ATC 2026</a> ·
+        <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247837720&amp;idx=1&amp;sn=4be2c1e2b802391ce246f696fe9774fb" target="_blank" rel="noopener">CSDN · Reddit r/opensource 宣布禁 AI</a></div>
     </div>
 
     <div class="callout warn">
-      <strong>架构信号 · 三条同向的“边界前移”：</strong>Uber 用 Normalized Compute Units（NCU）在异构服务器 fleet 上统一 CPU 分配，不再按物理核数计价；Anthropic 把 monorepo 从 Git 迁到自研的 Scion，把仓库操作移到服务端，用内容寻址存储与分层缓存服务 Agent 与 CI；Meta 的 PrivacyLib 把隐私检查下沉到数据访问边界，系统只需接入一次，新能力以模块形式插入，每秒执行数十亿次检查。共同点是：别指望每个调用方写对，把约束做进平台层。
-      <div class="src">来源：<a href="https://www.infoq.com/news/2026/10/uber-cpu-stateful-workloads/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Uber NCU</a> ·
-        <a href="https://www.infoq.com/news/2026/10/anthropic-source-control/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Anthropic Scion</a> ·
-        <a href="https://engineering.fb.com/2026/10/27/security/privacylib/" target="_blank" rel="noopener">Engineering at Meta · PrivacyLib</a></div>
+      <strong>架构信号 · 三条同向的“把约束前移”：</strong>Vercel CI 把“是否需要跑”的判断前移到任务图；Spring AI 把推理状态前移到消息模型，要求框架而不是业务代码保证往返完整；Cloudflare 把配置读取前移到边缘的 Quicksilver。共同点是：不要指望每个调用方都记得做对，把约束做进平台与协议层，才是可规模化的做法。
     </div>
   </section>
 
-  <!-- ================= DEEP ================= -->
   <section id="deep">
     <div class="sec-head">
       <span class="sec-idx">[02]</span>
       <h2>深度技术解读</h2>
-      <span class="sec-note">长文档推理的内存账本，与 Agent 的权限边界</span>
+      <span class="sec-note">Agent 质量的评测闭环，与 Agent 凭据的边界</span>
     </div>
 
     <article class="deep">
-      <h3>把 KV 缓存从 47GB 压到 1.77GB：长文档 OCR 真正要算的是显存账</h3>
-      <div class="kicker">Unlimited OCR 2 的 SR-SWA 为什么有效，以及自建文档流水线该怎么验证“无限页数”</div>
+      <h3>Agent 质量不是“感觉变好”：把评测做成一条可以爬的坡</h3>
+      <div class="kicker">从 Agents CLI 的评测循环、Google 的 Skill 质量门禁，到阿里策略 Agent 的“谁更值得上线”</div>
 
-      <p>长文档解析的瓶颈通常不在识别单页，而在“记住前文”。Transformer 推理时，每一页的视觉 token 都会在 KV 缓存里留下记录；页数越多，这份“边读边记的小抄”越厚。在百页级单序列测试中，标准解码把所有页面的视觉缓存同时保留在显存里，峰值达到 47GB——比不少笔记本的整机内存还大，而这还只是 KV 缓存，模型权重与激活另算。Unlimited OCR 2 把这个数字压到 1.77GB，减少约 96%。</p>
+      <p>Agent 的退化往往不是一次大爆炸，而是许多小漂移：改了提示词、换了模型后端、加了一个工具、调了检索参数，单看每次都“差不多”，合起来却让通过率慢慢滑下去。Google 的 Agents CLI 把这件事拆成一个可重复的评测循环：持续测试与打分、捕获提示词回归、在切换模型后端时做并排 trace 对比、自动化评测执行，并接入夜间定时运行与基于阈值的告警。</p>
 
-      <h4>// SR-SWA 做了什么</h4>
-      <p>核心机制叫稀疏参考滑动窗口注意力（Sparse Reference Sliding Window Attention，SR-SWA），灵感来自人抄书的过程：抄当前页时主要看当前页，只有需要核对前文或查跨页信息时才回看相关页，而不是每写一个字都把整本书翻一遍。落到模型里分两步：</p>
-      <ul>
-        <li><strong>页面门控（Page Gate）：</strong>把每个查询的视觉参考范围从整篇文档缩小到相关页面，同时建模跨页的位置关系，避免“只看当前页”丢失跨页上下文。</li>
-        <li><strong>视觉 token 桶：</strong>在筛出的页面范围内，只把得分最高的视觉 token 桶送入注意力计算，其余稀疏跳过，从而让计算量与页数解耦。</li>
-      </ul>
-      <p>再配合持续解码（continuous decoding），模型可以连续处理超长文档，且单步解码开销不会随文档变长而线性上涨。这是“页数无上限”在工程上成立的前提：不是把窗口调大，而是让每一步只看该看的。</p>
+      <p>这套循环里最关键的不是“跑分”，而是“可比较”。同一个用例在旧后端与新后端的完整 trace 要能并排看：模型在哪一步选了哪个工具、参数是什么、哪一步开始偏离、耗时与 token 花在哪里。只看最终答案的对错，无法定位是检索、工具还是生成出了问题；只有 trace 级对比，才能把“换模型”从赌博变成决策。</p>
+
+      <h4>// 规模化的 Skill 需要产品级门禁</h4>
+      <p>Google 的 Agent Skills 仓库在两个月里从 1.5 万 Star 涨到 2.1 万，收录了 170 多个来自 Google 各团队的 Skill，并分发到多个 AI 平台。官方第二篇复盘的重点不是“怎么写 Skill”，而是“怎么保证 170 个 Skill 不腐化”：每一次变更都必须通过自动质量门禁，另有一个 AI 审查 Agent 检查 Skill 质量，团队也总结了一套可以复用到自家 Skill 仓库的规则。</p>
+      <p>这提示了一个常被忽略的事实：Skill 不是提示词的别名，而是有接口、有依赖、有失效条件的“软件资产”。它需要版本、需要测试、需要审查，也需要在底层模型或工具变化时被重新验证。小项目写一个 <code class="inline">SKILL.md</code> 很容易，难的是让它在大规模分发后仍然可靠。</p>
+
+      <h4>// 当输出没有标准答案，评测就变成“谁更值得上线”</h4>
+      <p>阿里云开发者分享的策略效果类 Agent 是个更难的样本：商品营销场景里，Agent 输出的是补贴、投放、素材策略，没有静态正确答案；输入每天在变（业务效果、预算约束、帕累托最优策略、实验桶数据、人工规则）；离线看起来合理的策略，上线后还会受环境、货盘、周期与流量影响，线上指标变化也不能直接归因为策略质量。</p>
+      <p>更现实的约束是反馈信号稀缺且延迟：每天只能跑 3 组对照实验，T+1 才拿到业务效果数据，半个月大约积累 100 组。于是评测问题从“这条输出对不对”变成“多个可接受策略里，谁更值得上线”。这要求评测体系同时处理三件事：用少量高价值实验做在线验证、用离线回放与模拟扩大样本、把人工经验变成可复用的判断规则。</p>
+
+      <h4>// 好 Agent 的“骨架”本身就在定义评测点</h4>
+      <p>Arize 的产品内 Agent Alex 从 2023 年“50% 幻觉”的原型，演进为单个具备规划、记忆与按需技能（skills）的 Agent，且用自研 harness 代码而不是框架。它的几个决策恰好对应可测的边界：把计划移进 harness；把“结束”做成显式 gate；把大的工具结果当文件处理；每个用户一份 8,000 字符的记忆文件，效果胜过向量库与知识图谱；把 10 个专家 Agent 合并成 1 个；用生产会话当测试集。</p>
+      <p>Anthropic 关于“何时把 subagent 折回主循环”的讨论则给出另一条经验：不要照搬组织架构去拆 Agent，拆分会增加成本与延迟、降低质量；应该先用一小套 golden examples 度量，再逐个折叠；只有少数理由（如需要独立上下文、独立权限、独立生命周期）才保留独立 subagent。</p>
 
       <table class="tbl">
         <thead>
-          <tr><th>指标</th><th>标准解码（百页级单序列）</th><th>Unlimited OCR 2</th><th>对工程的含义</th></tr>
+          <tr><th>评测层</th><th>要回答的问题</th><th>信号</th><th>典型失败</th></tr>
         </thead>
         <tbody>
-          <tr><td>峰值 KV 缓存</td><td>47 GB</td><td>1.77 GB</td><td>从中高端多卡降到单卡可承载</td></tr>
-          <tr><td>单步解码开销</td><td>随页数增长</td><td>基本恒定</td><td>长文档延迟可预估，便于排容量</td></tr>
-          <tr><td>MPDocBench</td><td>—</td><td>84.6</td><td>多页文档解析综合得分 SOTA</td></tr>
-          <tr><td>MarathonDocBench</td><td>—</td><td>77.1</td><td>百页级超长文档专项能力</td></tr>
+          <tr><td>单步 / 工具</td><td>该不该调这个工具、参数对不对</td><td>工具选择准确率、参数校验、trace</td><td>检索到了但没用、参数幻觉</td></tr>
+          <tr><td>会话 / 任务</td><td>多步之后是否完成任务</td><td>任务成功率、轮数、成本、延迟</td><td>中途放弃、死循环、提前结束</td></tr>
+          <tr><td>回归 / 变更</td><td>换模型或改提示词后是否退化</td><td>golden set 分数、trace diff</td><td>静默退化、只在边缘用例上崩</td></tr>
+          <tr><td>业务 / 上线</td><td>多个可接受方案谁更值得上线</td><td>在线实验、离线回放、人工复核</td><td>离线合理、线上无效</td></tr>
         </tbody>
       </table>
 
-      <h4>// 自建流水线怎么验证</h4>
-      <p>“峰值 1.77GB”是 KV 缓存口径，不等于整机显存占用，也不代表你的输入（扫描质量、版式、表格密度）会得到相同结果。更靠谱的做法是把显存与延迟当成一等信息记录到每次跑批里，并与现有的“分块 + 拼接”方案做同集对照。下面是最小化的实测骨架：</p>
+      <h4>// 一个最小可用的评测配置</h4>
+      <p>不必一开始就搭平台。先从生产 trace 里挑 20–50 个代表性用例，固定输入与判定标准，每次提示词或模型变更都跑一遍，并把结果写进版本库。下面的配置是示意，重点是把“阈值”和“对比基线”写死，避免每次靠人眼看：</p>
 
-      <pre><span class="c"># 给文档流水线加显存与延迟账本，而不是只看吞吐</span>
-<span class="g">import</span> torch, time
+      <pre><span class="c"># 示意：agent-eval.yaml，不是某个工具的官方格式</span>
+suite: checkout-assistant
+cases:
+  - id: refund-eligibility
+    input: <span class="y">"我 15 天前买的鞋能退吗？"</span>
+    expect: {tool: order_lookup, contains: <span class="y">"可退"</span>}
+  - id: address-change
+    input: <span class="y">"还没发货，改一下地址"</span>
+    expect: {tool: update_address, approval: true}
 
-torch.cuda.reset_peak_memory_stats()
-t0 = time.perf_counter()
+run:
+  baseline: main
+  compare: [trace, tool_calls, latency, cost]
+  repeat: 5                 <span class="c"># 非确定性任务，取分布而不是单次</span>
 
-result = pipeline.run(pages)          <span class="c"># 你的 OCR / VLM 流水线</span>
+gate:
+  min_pass_rate: 0.90
+  max_cost_usd: 0.02
+  max_p95_latency_ms: 4000
 
-elapsed = time.perf_counter() - t0
-peak_gb = torch.cuda.max_memory_allocated() / <span class="y">2</span>**<span class="y">30</span>
-
-print(<span class="y">f"peak_gb={peak_gb:.2f} sec_per_page={elapsed/len(pages):.3f}"</span>)</pre>
-
-      <p>对照时至少覆盖四类样本：纯文本书页、带跨页表格的财报、双栏排版、低质量扫描件。评估指标不要只有字符准确率，还要看跨页表格是否被切断、页眉页脚是否被误合并、页码与目录引用是否对得上。这些恰恰是“分块拼接”最容易出错、而长上下文模型最该赢的地方。</p>
+schedule:
+  nightly: true
+  alert_on_drop: 0.05       <span class="c"># 通过率下降 5 个百分点即告警</span></pre>
 
       <div class="callout">
-        <strong>落地建议：</strong>① 先估算目标硬件的 KV 预算，再决定单次送入的最大页数，别按“模型说无限”就无限灌；② 把失败重试粒度从“整本重跑”改成“按页/按段重跑”，否则长文档一次失败代价极高；③ 保留分块方案作为降级路径，长文档模型输出异常时可回退；④ 记录 <span class="kbd">peak_memory_allocated</span> 与每页耗时，作为容量规划输入；⑤ 关注上游对 SGLang 等推理框架的适配，部署方式会直接影响实际收益。
+        <strong>落地建议：</strong>① 评测用例从真实失败案例里长出来，不要凭空编；② 生成器与评分器分离，尽量用不同模型或规则评分，避免“自己批自己”；③ 对非确定性任务重复跑并看分布，单次通过不代表稳定；④ 每次模型切换必须做 trace 并排对比，而不是只看总分；⑤ 把成本与延迟纳入门禁，质量提升不能以 10 倍账单为代价；⑥ 保留人工抽检，尤其是“看起来对但理由错”的样本；⑦ Skill 仓库同样要门禁，变更必须可回归。
       </div>
 
-      <p class="src">来源：<a href="https://www.qbitai.com/2026/10/505773.html" target="_blank" rel="noopener">量子位 · KV Cache 被压成常数！OCR 开源新王</a> ·
-        <a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&amp;mid=2247557606&amp;idx=1&amp;sn=462d5d78de2fa8e6b275618cd6e85d30" target="_blank" rel="noopener">大模型智能 · 页数没上限，缓存砍 96%</a></p>
+      <p class="src">来源：<a href="https://developers.googleblog.com/hill-climbing-agent-quality-with-agents-cli-evaluation/" target="_blank" rel="noopener">Google Developers Blog · Hill-Climbing Agent Quality with Agents CLI Evaluation</a> ·
+        <a href="https://cloud.google.com/blog/topics/developers-practitioners/behind-the-scenes-two-months-later-how-we-ship-google-agent-skills-like-products/" target="_blank" rel="noopener">Google Cloud Blog · How we ship Google Agent Skills like products</a> ·
+        <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&amp;mid=2247562577&amp;idx=1&amp;sn=22122e51ba24f88c044e29669bafd9e7" target="_blank" rel="noopener">阿里云开发者 · 让 Agent 可评、可控、可迭代</a> ·
+        <a href="https://www.youtube.com/watch?v=YIhvrvHtonk" target="_blank" rel="noopener">AI Engineer · We Kept Rebuilding Our AI Agent. Here's What Survived</a> ·
+        <a href="https://www.youtube.com/watch?v=fdtkh30oFA8" target="_blank" rel="noopener">AICodeKing · Claude Code is getting rid of SUB-AGENTS?</a></p>
     </article>
 
     <article class="deep">
-      <h3>Agent 的权限不该靠自觉：从 300 个 Agent 的事故清单反推网关设计</h3>
-      <div class="kicker">邮件注入、评审 Agent 被说服、模型切换 100 倍成本——这些都能在网关层拦住</div>
+      <h3>Agent 的凭据不该交给 Agent：从身份、网关到供应链签名</h3>
+      <div class="kicker">OAuth 只是起点，SDK 与网关都有边界；Chainguard 说补丁已经追不上利用</div>
 
-      <p>Runlayer 的分享之所以值得细读，是因为它给的不是“最佳实践清单”，而是真实事故清单。60 人的公司跑 300 多个 Agent，在装上网关、记录每个会话与每次工具调用之前，团队对自己有多少 Agent、它们能碰什么数据基本没有概念。可见性一旦建立，问题就变得具体：</p>
+      <p>Keycard 的 Agent Auth 101 把现状说得很直白：今天大多数 Agent 拿到凭据的方式，是个人访问令牌、静态 API key，或者权限过大的服务账号。问题在于一次 Agent 请求往往横跨多个步骤、多个工具，当 Agent 用“你的令牌”发出一个操作时，系统很难回答“到底是谁发起的”。</p>
+      <p>合理的 Agent 鉴权需要几件东西：每个 Agent 有独立身份；支持委托（delegation）而不是共享人类账号；凭据短期有效且按需缩小 scope；能与遗留系统做联邦；有集中策略与审计。演讲还比较了 SDK 与网关两条路径——SDK 把凭据交给进程内代码，网关把凭据留在 Agent 够不到的地方，但网关本身也有取舍，比如额外的跳数、单点与策略复杂度。</p>
+
+      <h4>// 补丁追不上利用，30 天窗口已经失效</h4>
+      <p>Chainguard 的 Patrick Smyth 给出一个更不乐观的背景：前沿 AI 让攻击者整体更强，平均而言利用已经先于补丁落地，传统的 30 天修复窗口不再成立。他列出四类攻击面：恶意软件、已知 CVE、零日，以及“侧门”——CI/CD、开发者笔记本、Agent Skill。对应的动作是：设置依赖冷却期、加快 CVE 修复、用 SLSA 与 Sigstore 给所有产物签名。</p>
+      <p>微软 10 月的补丁数据是一个具体注脚：一次更新修复 1415 个漏洞，85 个严重，其中 1 个已被在野利用。这并不意味着“补丁没用”，而是说明“以月为单位”的节奏已经跟不上，尤其是面向公网与开发者工具链的组件。</p>
+
+      <h4>// 社区信任也是供应链的一部分</h4>
+      <p>Reddit 的 r/opensource（近 40 万成员）宣布不再接受任何使用 AI、由 AI 制作或专为 AI 打造的项目，并要求项目至少维护一年、拥有多名贡献者、发布者账号注册满一年。公告获得约 2800 条评论、净投票为 0，争议很大。版主的理由是：AI 降低了生成代码与创建项目的门槛，但不代表项目值得推广，“Token 很便宜，我们不在乎你花了多少 Token”。</p>
+      <p>这条规则是否合理可以讨论，但它反映了一个真实问题：当生成变得廉价，维护者的审查带宽成为稀缺资源，社区只能用“可验证的投入”来筛选。对 Agent 工具链而言，这意味着 Skill、MCP server、插件这类“看起来很小”的依赖，同样需要来源、版本与签名，而不能因为“只是一个配置文件”就跳过审查。</p>
 
       <table class="tbl">
         <thead>
-          <tr><th>事故类型</th><th>触发路径</th><th>网关层能做什么</th></tr>
+          <tr><th>凭据模式</th><th>典型风险</th><th>改进方向</th></tr>
         </thead>
         <tbody>
-          <tr><td>提示注入</td><td>Agent 读取邮件正文，正文里藏着指令</td><td>标记不可信输入；对同一会话内的写操作强制人工确认</td></tr>
-          <tr><td>评审 Agent 被说服</td><td>PR 评论里嵌入诱导内容，Agent 点了批准</td><td>评审 Agent 只给建议，批准权限不授予 Agent</td></tr>
-          <tr><td>权限过大</td><td>机器人账号能访问超出职责的数据</td><td>按会话日志收敛工具与数据范围，最小权限</td></tr>
-          <tr><td>交叉污染</td><td>一个被污染的 Agent 影响其他 Agent</td><td>会话隔离；共享记忆写入需审核</td></tr>
-          <tr><td>MCP server 缺陷</td><td>随手生成的服务反复调用、烧 token</td><td>限流、超时、成本预算；上线前代码审查</td></tr>
-          <tr><td>成本暴涨</td><td>一次模型切换让周成本涨 100 倍</td><td>按会话/按 Agent 的成本熔断与告警</td></tr>
+          <tr><td>个人访问令牌</td><td>无法区分人与其 Agent；离职/轮换困难</td><td>per-agent 身份 + 委托链</td></tr>
+          <tr><td>静态 API key</td><td>长期有效、易泄漏、权限过大</td><td>短期凭据 + 按需 scope</td></tr>
+          <tr><td>共享服务账号</td><td>审计只剩一个名字，无法归因</td><td>一 Agent 一身份，账号与策略绑定</td></tr>
+          <tr><td>进程内 SDK 注入</td><td>凭据进入 Agent 可读内存/上下文</td><td>网关代持，Agent 只拿能力不拿密钥</td></tr>
+          <tr><td>无签名依赖</td><td>CI/CD、笔记本、Skill 成为侧门</td><td>SLSA/Sigstore、锁版本、冷却期</td></tr>
         </tbody>
       </table>
 
-      <p>这些攻击的共同点在于“跨步骤展开”：单看某一次工具调用可能都合理，但把一次会话串起来看，就能看到数据从不可信输入流向高权限工具。所以只做单点过滤不够，必须有会话级身份与完整调用链。Runlayer 的做法是先记录、再收权——用真实会话数据决定某个 Agent 到底需要哪些工具，而不是一开始就按“可能会用到”授予。</p>
+      <h4>// 一次受控调用的形状</h4>
+      <p>目标不是“让 Agent 拿到 token”，而是“让 Agent 发起一次可归因、可限制、可审计的请求”。一种常见做法是：Agent 用自身身份向令牌服务做交换，拿到 audience 与 scope 都收窄、TTL 很短的凭据，再由网关在出口处注入真实密钥并记录审计。示意流程如下：</p>
 
-      <h4>// 网关策略长什么样</h4>
-      <p>下面是示意配置，重点不在具体字段，而在四类约束：工具白名单、不可信输入标记、写操作审批、成本上限。</p>
+      <pre><span class="c"># 示意：token exchange + 网关代持，不是某产品的真实配置</span>
+agent(identity=pr-reviewer)
+  → token_service.exchange(
+      audience=<span class="y">"github"</span>,
+      scope=<span class="y">"repo:read pull_request:comment"</span>,
+      ttl=<span class="y">300</span>s,
+      on_behalf_of=user_42
+    )
+  → gateway.call(
+      tool=<span class="y">"comment_pr"</span>,
+      credential=<span class="y">"&lt;short-lived&gt;"</span>,   <span class="c"># 网关校验后注入真实密钥</span>
+      args={pr: <span class="y">123</span>, body: <span class="y">"..."</span>}
+    )
+  → audit(session_id, agent, user, tool, args_hash, result)
 
-      <pre><span class="c"># 示意：Agent 网关的一层策略，不是某个产品的真实配置</span>
-agents:
-  pr-reviewer:
-    tools: [read_file, list_pr, comment_pr]
-    deny: [merge_pr, push]              <span class="c"># 评审 Agent 不给合并权</span>
-    approval_required: [comment_pr]
-    budget_usd_per_session: <span class="y">0.50</span>
-
-  inbox-triage:
-    tools: [read_email, label_email]
-    untrusted_inputs: [email_body]      <span class="c"># 读入即标记不可信</span>
-    approval_required: [send_email, forward_email]
-    budget_usd_per_session: <span class="y">0.20</span>
-
-audit:
-  log: [session_id, agent, tool, args_hash, tokens, cost]</pre>
-
-      <p>这份策略能拦住表格里的大部分问题：邮件正文被标为不可信，那么从“读邮件”到“发邮件”的动作就需要人工确认；评审 Agent 没有合并权，被说服也无济于事；每个会话有成本上限，模型切换导致的价格变化会立刻触发熔断而不是等到月底账单。真正难的是运营：权限要随职责持续收敛，MCP server 要像生产服务一样做代码审查与版本固定，日志要能支撑事后追溯。</p>
+<span class="c"># 默认拒绝：没有对应 scope 的工具不出现在 Agent 的工具列表里</span>
+<span class="c"># 写操作需审批；只读操作也按数据域收窄</span></pre>
 
       <div class="callout warn">
-        <strong>上线前的最小检查单：</strong>① 每个 Agent 有独立身份，不共用人类账号；② 所有工具调用经网关，记录参数哈希与成本；③ 不可信输入（邮件、网页、PR 评论、外部文档）显式标记；④ 写操作默认需要审批，读操作按数据域收窄；⑤ 按会话设成本与调用次数上限；⑥ MCP server 固定版本并做代码审查；⑦ 用真实注入样本做一次红队演练。
+        <strong>上线前的最小检查单：</strong>① 每个 Agent 有独立身份，不共用人类账号；② 凭据短期有效、audience 与 scope 收窄；③ 真实密钥由网关代持，不进入 Agent 上下文；④ 所有工具调用记录会话、调用链与参数哈希；⑤ 不可信输入（邮件、网页、PR 评论、外部文档）显式标记，写操作默认审批；⑥ Skill、MCP server、插件固定版本并做代码审查；⑦ 产物用 SLSA/Sigstore 签名，依赖设冷却期；⑧ 把补丁 SLA 从 30 天压到与暴露面匹配的节奏。
       </div>
 
-      <p class="src">来源：<a href="https://www.youtube.com/watch?v=BgLdvF7Qkh8" target="_blank" rel="noopener">AI Engineer · 300 Agents, 60 People: How We Secured Our Own AI Agents</a> ·
-        <a href="https://engineering.fb.com/2026/10/27/security/privacylib/" target="_blank" rel="noopener">Engineering at Meta · PrivacyLib</a></p>
+      <p class="src">来源：<a href="https://www.youtube.com/watch?v=58ulJViGFgU" target="_blank" rel="noopener">AI Engineer · Who Is Making This Request? Agent Auth 101 — Kamil Potrec, Keycard</a> ·
+        <a href="https://www.youtube.com/watch?v=xZX3pmaB8Hk" target="_blank" rel="noopener">AI Engineer · Exploits Now Beat Patches: Open Source Security in the AI Era — Patrick Smyth, Chainguard</a> ·
+        <a href="https://www.infoq.com/news/2026/10/microsoft-october-2026-patch/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Microsoft October 2026 Patch</a> ·
+        <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247837720&amp;idx=1&amp;sn=4be2c1e2b802391ce246f696fe9774fb" target="_blank" rel="noopener">CSDN · Reddit r/opensource 禁 AI</a></p>
     </article>
   </section>
 
-  <!-- ================= TOOLS ================= -->
   <section id="tools">
     <div class="sec-head">
       <span class="sec-idx">[03]</span>
@@ -548,58 +570,58 @@ audit:
     <div class="tools">
 
       <div class="tool">
-        <div class="name"><span class="dot"></span>tsrs</div>
-        <div class="why">用 Rust 重写 TypeScript 类型检查的实验中坚</div>
-        <p>Cloudflare、VoidZero 与 Max Schwenk 推出的实验性 Rust 版 TypeScript 编译器，TypeScript 团队参与共建。官方称对比 TypeScript 7.0 检查速度最高 8 倍、内存减少 70%，但与 7.1 beta 对照时只有 2.7 倍，说明收益随版本与代码库差异很大。</p>
-        <p>适合先在 CI 里做“只检查、不开发”的加速尝试：它没有 watch 模式与语言服务器，类型错误时退出码为 2（而非 tsc 的 1），接入脚本时要注意。先在单体大仓库跑一次全量基准，再决定是否作为并行门禁，而不是直接替换现有工具链。</p>
-        <div class="src">参考：<a href="https://www.infoq.com/news/2026/10/cloudflare-tsrs-ai-typescript/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Cloudflare and VoidZero Introduce tsrs</a></div>
+        <div class="name"><span class="dot"></span>HelloGitHub 第 127 期</div>
+        <div class="why">每月一次的开源项目淘金，这期有“无 GPU 跑千亿模型”</div>
+        <p>本期最值得看的是 colibri：纯 C 编写的混合专家（MoE）推理引擎，零依赖、不需要显卡。它只把每次都要用的部分留在内存，其余专家权重在需要时从硬盘读取，最低 8GB 内存即可运行 GLM、Kimi、DeepSeek、Qwen 等开源模型，并提供兼容 OpenAI 与 Anthropic 的 API，支持 Windows、Linux、macOS。</p>
+        <p>其它有趣项目包括用盲文点阵在终端模拟鸟群的 cbirds（Boids 算法、3D 模式、老鹰捕猎、屏保）、把 Linux 桌面渲染成一张书桌的 DEsk（Wayland + 光线追踪），以及 C# 写的拖拽式格式转换工具 Filee。适合当周末项目或给小内存机器找本地模型方案。</p>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MzA5MzYyNzQ0MQ==&amp;mid=2247524749&amp;idx=1&amp;sn=5ff97486026dcbae38ad56f580feace1" target="_blank" rel="noopener">HelloGitHub · 第 127 期</a></div>
       </div>
 
       <div class="tool">
-        <div class="name"><span class="dot"></span>StartLux Prism</div>
-        <div class="why">为“选选项”而不是“写长文”优化的推理引擎</div>
-        <p>面向 StartLux-Decision v1.1 27B 的专用推理引擎，已在 GitHub 开源。单张 H200 上对比 vLLM 提速 1.2–5.3 倍，同一材料回答三个问题从 92.9ms 降到 17.4ms；支持 TP + DP 组合部署。</p>
-        <p>值得注意的是位级确定性：相同请求不受并发、批处理与 GPU 数量影响，输出概率逐位一致，7 个评测集共 12351 次决策上准确率 92.94%（BF16 原始精度 92.97%）。如果你的场景是分类、打分或路由而非生成，值得拿自己的评测集复现一遍。</p>
-        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296067&amp;idx=3&amp;sn=beb1f192ad02995c0c45a968e4f4ba8d" target="_blank" rel="noopener">InfoQ · 决策模型也有专用推理引擎了</a></div>
+        <div class="name"><span class="dot"></span>MiniCPM-OCR + Jev</div>
+        <div class="why">1.3B 专用 OCR 加 2B“判卷模型”，输出可编辑 Markdown</div>
+        <p>面壁智能与 OpenBMB 开源 MiniCPM-OCR，这是 MiniCPM-V/o 家族首个专做 OCR 的模型，参数 1.3B，能把照片、扫描件、PDF 识别并导出为可直接编辑的 Markdown。它会动态调整文字方向与大小，对拍歪的文件更友好；在 OmniDocBench v1.6（1651 张页面图）上，官方给出与同类模型的速度对比，单张 RTX 5090 环境。</p>
+        <p>配套发布的 Jev（2B）是一个创新点：把原图与识别文本放在一起打可信度分，分数低时提示人工处理。两个模型的权重、推理代码与微调工具都在 GitHub 的 OpenBMB/MiniCPM-OCR 仓库。适合文档入库、合同/发票识别这类需要“识别 + 质量分流”的流水线。</p>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MzkzNDQxOTU2MQ==&amp;mid=2247522122&amp;idx=1&amp;sn=ac4209279baed5f2c01df064c3d7189d" target="_blank" rel="noopener">赛博禅心 · MiniCPM-OCR 开源：把 “Jev” 用在文字识别</a></div>
       </div>
 
       <div class="tool">
-        <div class="name"><span class="dot"></span>文心 Unlimited OCR 2</div>
-        <div class="why">开源、可连续解析数千页的长文档模型</div>
-        <p>百度开源的长文档 OCR，采用 SR-SWA 稀疏参考滑动窗口注意力与持续解码，宣称任意页数解析。实测连续处理 3600+ 页书籍，百页级测试峰值 KV 缓存由 47GB 降至 1.77GB。</p>
-        <p>MPDocBench 84.6、MarathonDocBench 77.1，官方称领先同代多家模型；上一代已有 1000 万+ 下载并支持 SGLang。适合替代“分块 + 拼接”的文档流水线原型，但上线前需用自己的版式样本验证跨页表格与页眉页脚处理。</p>
-        <div class="src">参考：<a href="https://www.qbitai.com/2026/10/505773.html" target="_blank" rel="noopener">量子位 · OCR 开源新王</a> ·
-          <a href="https://mp.weixin.qq.com/s?__biz=MzI5NzUyMzM1Mg==&amp;mid=2247670434&amp;idx=1&amp;sn=56c5aed1c7365834218290917e580894" target="_blank" rel="noopener">百度文心</a></div>
+        <div class="name"><span class="dot"></span>Taobao3D（TaoFlowForge + TaoTex）</div>
+        <div class="why">电商级 3D 资产：5MB 以内、秒级加载、40fps 以上</div>
+        <p>淘宝 Meta 技术团队开源了 TaoFlowForge 与 TaoTex 两项 3D 原生模型。前者聚焦轻量化、拓扑干净的网格生成，在减面的同时尽量保留几何细节；后者处理材质精确解耦与纹理高频细节（如文字与 logo）的还原。两者协同可在分钟级完成 3D 资产建模。</p>
+        <p>落地指标很明确：资产体积控制在 5MB 以内、手机与 XR 端秒级加载、渲染帧率高于 40fps，同时保持高还原度。对做电商 3D、AR 试摆或游戏资产的团队，这是一套可参考的“生成 + 轻量化”组合，论文与代码已同步开源。</p>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&amp;mid=2650546617&amp;idx=1&amp;sn=70b04510e22050f467b360b1e971db3d" target="_blank" rel="noopener">大淘宝技术 · Taobao3D 拓扑生成算法开源</a></div>
       </div>
 
       <div class="tool">
-        <div class="name"><span class="dot"></span>Azure Cosmos DB Shell</div>
-        <div class="why">在终端里直接翻本地 emulator 的数据</div>
-        <p>微软推出的命令行工具，可以在不打开门户、也不写临时应用代码的情况下，浏览数据库与容器、执行查询、读取单条文档。配套的 Linux Emulator 可在本地复现开发与 CI 环境。</p>
-        <p>适合排查“本地跑出来值不对、文档缺失、分区键选错”这类问题：先把本地数据看清楚，再谈部署。对用 Cosmos DB 做开发但仍依赖云上调试的团队，能省掉不少来回切换。</p>
-        <div class="src">参考：<a href="https://devblogs.microsoft.com/cosmosdb/inspecting-local-data-with-azure-cosmos-db-shell" target="_blank" rel="noopener">Microsoft for Developers · Inspecting Local Data with Azure Cosmos DB Shell</a></div>
+        <div class="name"><span class="dot"></span>JetBrains Junie：Local 提速 + Eco Mode 降本</div>
+        <div class="why">本地 70 tokens/s，规划用强模型、实现用便宜模型</div>
+        <p>Junie Local 在 Mac M5 Max 上从约 40 tokens/s 提升到约 70 tokens/s，峰值可达 107 tokens/s，依赖两个变化：Splash 推理引擎与新的 DFlash2 草稿模型。对本地编码 Agent 来说，这个速度已经接近“边写边看”的交互区间。</p>
+        <p>Junie Eco Mode 则从成本侧入手：用你选择的模型调查任务并制定计划，再把实现与测试交给更便宜的模型。两个内部基准中，平均每任务模型成本下降 48% 与 57%，而平均解决率变化不到 1 个百分点。适合把“探索/规划”和“机械执行”分开计价。</p>
+        <div class="src">参考：<a href="https://blog.jetbrains.com/junie/2026/10/junie-local-splash-dflash2/" target="_blank" rel="noopener">The JetBrains Blog · Junie Local became 70% faster on Mac M5</a> ·
+          <a href="https://blog.jetbrains.com/junie/2026/10/junie-eco-mode/" target="_blank" rel="noopener">The JetBrains Blog · Junie Eco Mode</a></div>
       </div>
 
       <div class="tool">
-        <div class="name"><span class="dot"></span>Ignite UI for Blazor（开源部分）</div>
-        <div class="why">50 多个 Blazor 控件转为免费开源</div>
-        <p>Infragistics 成为 Blazor 的活跃贡献者，把 50 多个 Blazor 控件开源，包括输入、导航与布局类组件，如 Combo Box 等；同时为 .NET 11 提供新的 Blazor 分析器与上手工具。</p>
-        <p>即便不用其商业控件，分析器与框架贡献也会让所有 Blazor 开发者受益。选型时可以先把开源控件纳入评估，注意确认具体组件的许可证与维护节奏，再决定是否替换现有组件库。</p>
-        <div class="src">参考：<a href="https://devblogs.microsoft.com/dotnet/blazor-welcomes-infragistics" target="_blank" rel="noopener">Microsoft for Developers · Blazor Welcomes Open-Source Contributions from Infragistics</a></div>
+        <div class="name"><span class="dot"></span>Vercel fx × T3 Code / Vercel Plugin for OpenCode</div>
+        <div class="why">把编码 Agent 的 harness 与控制面解耦</div>
+        <p>Vercel 开源的编码 Agent harness fx 现在可在 T3 Code 中使用，覆盖 Web、桌面与移动端。T3 Code 是开源的编码 Agent 控制面，可把 fx 等 Agent 作为 provider 加入会话；内置 fx provider 支持 Supervised 与 Auto 两种模式，沿用你已有的模型与 skills。</p>
+        <p>另一个方向是 Vercel Plugin 登陆 OpenCode：提供 Vercel API 与推荐模式的指引，内置 AI SDK、Vercel Functions、Workflow 等 skills，以及部署、性能优化、AI 应用设计的专门 Agent；<code class="inline">/vercel:deploy</code> 与 <code class="inline">/vercel:env</code> 可直接操作部署与环境变量。需要 OpenCode 2，并连接 Vercel MCP server。</p>
+        <div class="src">参考：<a href="https://vercel.com/changelog/fx-is-now-available-in-t3-code" target="_blank" rel="noopener">Vercel News · fx is now available in T3 Code</a> ·
+          <a href="https://vercel.com/changelog/vercel-plugin-now-available-in-opencode" target="_blank" rel="noopener">Vercel News · Vercel Plugin now available in OpenCode</a></div>
       </div>
 
       <div class="tool">
-        <div class="name"><span class="dot"></span>Cloudflare PHP Capture the Flag</div>
-        <div class="why">从真实事件延伸出的动手练习</div>
-        <p>Cloudflare 推出 PHP 主题的 CTF 挑战，背景是上周 eMudhra 八个中间证书被攻破、以及 PHP 的 php2shell 严重漏洞。事件期间 Cloudflare 连夜更新客户端、调整 WAF 规则，并上线 full transaction detection，相关能力对所有套餐（含免费）开放。</p>
-        <p>对安全意识和代码审计训练来说，这类以真实漏洞为蓝本的题目比抽象靶场更有代入感。团队可以拿它做一次内部安全分享，顺带复盘自己的证书链监控与 WAF 规则覆盖。</p>
-        <div class="src">参考：<a href="https://blog.cloudflare.com/php-ctf/" target="_blank" rel="noopener">The Cloudflare Blog · Introducing the Cloudflare PHP Capture the Flag challenge</a></div>
+        <div class="name"><span class="dot"></span>OpenViking 3D 内容理解</div>
+        <div class="why">让 Agent 直接“看懂” STEP 三维文件，而不只是文本与图片</div>
+        <p>火山引擎的 Agent 上下文数据库 OpenViking 上线原生 3D 内容理解模型，支持三维 STEP 文件导入与解析，信息还原率 100%。解析产物包含正交六视图、八轴侧视图、信息摘要与模型明细，覆盖几何、PMI、装配、工艺等原始信息，并建立索引供下游推理使用。</p>
+        <p>演示场景很具体：结构工程师把零件库、图纸与项目资料接入 Agent，用一句话描述需求（例如“找一个 L 形安装座，水平面承接机器人底部、竖直面连接设备并避开线缆”），Agent 会推断孔位、孔距等细节并给出候选零件，还能整理 BOM、核对供应变更影响。适合硬件设计、制造与采购知识库场景。</p>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247523852&amp;idx=1&amp;sn=f753b63616a0f85bc2a12fab780e7d5d" target="_blank" rel="noopener">字节跳动技术团队 · OpenViking 上线原生 3D 内容理解模型</a></div>
       </div>
 
     </div>
   </section>
 
-  <!-- ================= PRACTICE ================= -->
   <section id="practice">
     <div class="sec-head">
       <span class="sec-idx">[04]</span>
@@ -610,139 +632,163 @@ audit:
     <div class="practice">
 
       <div class="step">
-        <h3><span class="num">01</span>给 Next.js 预留 11 月 3 日的安全升级窗口</h3>
-        <p>先把“有哪些 Next.js 服务、分别什么版本、谁负责”列清楚，再决定升级路径。安全版本发布当天，公告会给出影响范围与修复版本，提前准备好预览环境比当天现搭要快得多。</p>
+        <h3><span class="num">01</span>先建 20–50 条 golden case，再谈 Agent 升级</h3>
+        <p>Agents CLI 的评测循环可以直接借用：固定一组代表性用例、每次变更都跑、对比 trace、夜间定时执行、按阈值告警。不必等平台化，先把“可比较”这件事做出来，模型切换和提示词调整才不再是拍脑袋。</p>
         <ul>
-          <li>梳理所有仓库的 <code class="inline">next</code> 版本与锁文件，确认没有被 <code class="inline">overrides</code> 钉死。</li>
-          <li>确认构建产物与镜像会随依赖重建，避免只改版本号不重新打包。</li>
-          <li>在预览环境跑一次现有测试与关键路径回归，记录基线。</li>
+          <li>用例从生产失败样本里挑，覆盖工具选择、参数、多轮终止与拒答。</li>
+          <li>每次跑 5 次取分布，非确定性任务不要用单次结果下结论。</li>
+          <li>门禁同时约束通过率、成本与 p95 延迟，避免“质量换账单”。</li>
         </ul>
-        <div class="src">参考：<a href="https://nextjs.org/blog/upcoming-nextjs-security-release-november-2026" target="_blank" rel="noopener">Next.js Blog · Upcoming November Security Release</a></div>
+        <div class="src">参考：<a href="https://developers.googleblog.com/hill-climbing-agent-quality-with-agents-cli-evaluation/" target="_blank" rel="noopener">Google Developers Blog · Agents CLI Evaluation</a></div>
       </div>
 
       <div class="step">
-        <h3><span class="num">02</span>Python 类型检查：接受“多 checker 并存”，但把版本写进 CI</h3>
-        <p>调查显示一半用户同时使用多个 checker，且不同 checker 的结论并不总是一致（多 checker 用户里 33.3% 报告过不一致，多 checker 用户中为 42.7%）。与其争论“哪个才对”，不如把两者都当信号：主 checker 做门禁，副 checker 做增量提示。</p>
+        <h3><span class="num">02</span>给 Skill 仓库加自动门禁与 AI 审查</h3>
+        <p>Google Agent Skills 在 170 多个 Skill 的规模上，靠“每次变更必须通过自动质量门禁 + AI 审查 Agent”维持质量。小团队也可以从两条规则开始：Skill 必须有可执行的示例与期望输出；任何修改都要跑一遍关联用例，失败则阻断合并。</p>
         <ul>
-          <li>在 CI 里固定 checker 与插件版本，避免升级后门禁结果漂移。</li>
-          <li>优先补齐第三方库的类型信息（65.1% 的首要痛点），给内部公共库发布 stub 或 <code class="inline">py.typed</code>。</li>
-          <li>如果已用 AI 写类型，确认它是否真的调用了 checker（仅 24.4% 如此），并在错误修复环节保留人工复核。</li>
+          <li>把 Skill 当代码管理：版本、依赖、变更记录、负责人。</li>
+          <li>底层模型或工具升级时，触发相关 Skill 的回归。</li>
+          <li>对第三方 Skill 固定版本并审查，不因为“只是提示词”跳过。</li>
         </ul>
-        <div class="src">参考：<a href="https://engineering.fb.com/2026/10/27/developer-tools/python-typing-survey-2026-ai-tools-checker-landscape/" target="_blank" rel="noopener">Engineering at Meta · Python Typing Survey 2026</a></div>
+        <div class="src">参考：<a href="https://cloud.google.com/blog/topics/developers-practitioners/behind-the-scenes-two-months-later-how-we-ship-google-agent-skills-like-products/" target="_blank" rel="noopener">Google Cloud Blog · How we ship Google Agent Skills like products</a></div>
       </div>
 
       <div class="step">
-        <h3><span class="num">03</span>把 AI 代码评审当“信号”而不是“门禁”</h3>
-        <p>Laurie Voss 用四款 AI 代码审查工具检查同一份代码，它们都找出了问题，但指出的位置并不相同。这意味着任何单一工具的“通过”都不能作为合并依据；Atlassian 的数据也提示，管理者花在修正 AI 产出上的时间反而更多。评审流程要按“多信号 + 人工判定”设计。</p>
+        <h3><span class="num">03</span>AI Coding 冷启动：先沉淀项目级 Skill，再按闭环交付需求</h3>
+        <p>vivo 在 SmartFlow 项目上的结论值得直接抄：AI Coding 的瓶颈已经从模型逻辑能力转向上下文管理与开发意图表达。他们用两条循环主线落地——从存量代码与历史需求中提炼项目级 Skill，把隐性架构知识显式化；新需求则走“需求规格化 → 规格评审 → 受控实现 → 验证联调 → 知识回写”的闭环。最终交付时间比原计划减少 2/3。</p>
         <ul>
-          <li>至少运行两类检查：静态规则类与语义评审类，输出分歧单独列出。</li>
-          <li>用变更前置时间、评审排队时长、回滚率衡量收益，而不是“生成了多少行”。</li>
-          <li>别把新人练手的小工单全部交给 Agent，资深工程师的成长路径需要保留。</li>
+          <li>先做知识沉淀，不要一上来就让 Agent 改核心链路。</li>
+          <li>每次需求结束把新知识写回 Skill，让下一次少踩坑。</li>
+          <li>跨服务、跨机房、跨前后端项目收益最大，也最需要规格先行。</li>
         </ul>
-        <div class="src">参考：<a href="https://www.infoq.com/news/2026/10/atlassian-devex-2026/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Atlassian State of Developer Experience 2026</a> ·
-          <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943485&amp;idx=1&amp;sn=88dba1815ee2dc60b7d246405655fd5b" target="_blank" rel="noopener">51CTO · npm 创始人谈 AI 改写工程师工作</a></div>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MzI4NjY4MTU5Nw==&amp;mid=2247507104&amp;idx=1&amp;sn=1c11fb605f41b221c8d7dd3fc676c83f" target="_blank" rel="noopener">vivo互联网技术 · 从知识沉淀到编程范式：AI Coding 项目冷启动落地实践</a></div>
       </div>
 
       <div class="step">
-        <h3><span class="num">04</span>Agent 上线前，先过一遍网关与成本熔断</h3>
-        <p>Runlayer 的清单里，最容易被低估的是成本：一次模型切换就让周成本上涨超过 100 倍。权限问题往往在事故后才被发现，而成本问题会直接体现在账单上，两者都应该在网关层设硬约束。</p>
+        <h3><span class="num">04</span>高频“分类/选择”任务，交给轻量决策层</h3>
+        <p>得物技术在测试域的三个场景——用例打标、UI 自动化操作选择、知识库召回精排——共同点是最终只需要一个明确的分类或选择。用通用大模型也能做，但高频执行时响应时间、调用成本与输出处理都会拖后腿。他们引入 Jev 作为轻量决策层，工程化地承接这类任务，整体流程获得约 10 倍提速。</p>
         <ul>
-          <li>每个 Agent 独立身份；写操作默认需要审批，读操作按数据域收窄。</li>
-          <li>记录会话 ID、工具名、参数哈希、token 与成本，作为收敛权限的依据。</li>
-          <li>给每个会话设预算与调用次数上限，超限熔断并告警。</li>
+          <li>先盘点工作流里“只需要选一个答案”的节点，这些是决策层的候选。</li>
+          <li>把决策层与生成层分开：生成负责内容，决策负责路由、筛选与判定。</li>
+          <li>用固定评测集验证准确率，再谈替换通用模型。</li>
         </ul>
-        <div class="src">参考：<a href="https://www.youtube.com/watch?v=BgLdvF7Qkh8" target="_blank" rel="noopener">AI Engineer · 300 Agents, 60 People</a></div>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&amp;mid=2247547520&amp;idx=1&amp;sn=3f7c95f0028e9046f72b8ada98004064" target="_blank" rel="noopener">得物技术 · Jev 实战：为 AI 工作流引入轻量决策层 x10 倍提速</a></div>
       </div>
 
       <div class="step">
-        <h3><span class="num">05</span>训练与批处理任务：用 SOCI 把镜像下载移出关键路径</h3>
-        <p>AWS 为 SageMaker AI 的训练与处理任务推出 Seekable OCI（SOCI）索引：容器镜像改为懒加载，只取启动所需文件，其余在代码运行时后台流式传输，任务从“分钟级启动”变为“秒级启动”。对深度学习镜像来说，下载时间既是计费时间，也是团队等待时间。</p>
+        <h3><span class="num">05</span>把“一个人 + AI”拆成 Spec、Skill、Test Asset 三件套</h3>
+        <p>腾讯云开发者沈淦把 AI Coding 的现状概括为“欺骗性失望区”：看起来没那么神、处处是坑，跨过去靠的不是换方向，而是把工程细节做扎实。他拆出上下文工程的五个环节——知识库、工具调用、对话历史、项目记忆、现场清理——并给出“个体团队”的黄金三件套：Spec（规格）、Skill（可复用能力）、Test Asset（可复用的验证资产）。</p>
         <ul>
-          <li>给常用基础镜像建 SOCI 索引，并指向预索引的 AWS 深度学习镜像。</li>
-          <li>记录任务启动的 p50/p95 与计费分钟数，对比启用前后差异。</li>
-          <li>镜像层不要过度拆分，懒加载收益取决于启动路径所需文件的比例。</li>
+          <li>没有 Spec 的 Agent 任务，等于让它在模糊需求上自由发挥。</li>
+          <li>Skill 负责“怎么做”，Test Asset 负责“怎么证明做对了”，两者都要版本化。</li>
+          <li>“现场清理”常被忽略：会话结束前清理临时状态，避免污染下一次任务。</li>
         </ul>
-        <div class="src">参考：<a href="https://aws.amazon.com/blogs/machine-learning/announcing-soci-indexed-images-for-faster-sagemaker-ai-jobs/" target="_blank" rel="noopener">AWS ML Blog · Announcing SOCI-indexed images for faster SageMaker AI jobs</a></div>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697948&amp;idx=1&amp;sn=e1a100be78c3b43413ee3e979e69fc72" target="_blank" rel="noopener">腾讯云开发者 · 一个人+AI就是一个团队？拆开“个体团队”的黄金三件套</a></div>
       </div>
 
       <div class="step">
-        <h3><span class="num">06</span>tsrs 只做并行基准，不要急着替换 tsc</h3>
-        <p>8 倍与 2.7 倍的差距说明基准高度依赖版本与代码库。更稳妥的用法是在 CI 里并行跑一次全量检查，记录耗时与内存，作为未来迁移的决策依据；日常开发仍用支持 watch 与 LSP 的现有工具。</p>
+        <h3><span class="num">06</span>存量迁移用四条标准验收，而不是“看着差不多”</h3>
+        <p>百度好看视频把鸿蒙端存量功能迁移拆成四个问题：迁什么、怎么迁、怎么证明迁得对、怎么持续迁移，并对应四条标准——完整（行为建模保完整）、正确（语义映射保正确）、可验证（分层测试保可验证）、可持续（迁移飞轮保可持续）。配合源码行为建模、需求矩阵对账、多设备适配、质量门禁与状态落盘，形成一套不依赖个人经验的交付流程。</p>
         <ul>
-          <li>选一个真实的大仓库，分别用 tsc 与 tsrs 全量检查，记录 wall time 与峰值内存。</li>
-          <li>注意退出码差异：tsrs 类型错误时返回 2，脚本判断要相应调整。</li>
-          <li>没有 watch/LSP 意味着编辑器体验不变，不要向团队承诺“更快的类型提示”。</li>
+          <li>“完整”先做行为清单，再谈代码：未文档化的预期行为要从源端代码里界定。</li>
+          <li>“可验证”靠分层测试与需求矩阵对账，避免只测主路径。</li>
+          <li>“可持续”靠迁移飞轮：每次迁移沉淀规则与用例，下一批直接复用。</li>
+          <li>真实案例（随听频道）用 52 个行为点、65 条用例验证了这套机制。</li>
         </ul>
-        <div class="src">参考：<a href="https://www.infoq.com/news/2026/10/cloudflare-tsrs-ai-typescript/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Cloudflare and VoidZero Introduce tsrs</a></div>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&amp;mid=2247607730&amp;idx=1&amp;sn=f7ae4efd3270278f46340fc01e4abab9" target="_blank" rel="noopener">百度Geek说 · 好看视频鸿蒙端 AI 研发交付流程的建设思考与实践</a></div>
       </div>
 
     </div>
 
     <div class="callout">
-      <strong>延伸阅读 · 四个值得排期看完的材料：</strong>
-      <p><a href="https://www.youtube.com/watch?v=dAoOYFx7ZYw" target="_blank" rel="noopener">Stop Giving Your Agent Tools. Give It a Sandbox</a>（Arize AI）：把工具目录换成沙箱 + 代码组合，Harbor 评测显示 token 少 43%、成本低 31%，代价是密钥、权限、持久化与双重沙箱这些隐性成本。</p>
-      <p><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&amp;mid=2247562567&amp;idx=1&amp;sn=66f9aa9e8cfbbbb6bda19db56d51514b" target="_blank" rel="noopener">深度解析 Codex Harness 架构</a>（阿里云开发者）：Codex CLI 拆成约 118 个 crate 做逻辑隔离，核心模块明确要求克制加代码；文章重点讲新版 Memory 与上下文压缩机制。</p>
-      <p><a href="https://www.youtube.com/watch?v=xy_7SzwsIjM" target="_blank" rel="noopener">How to Build Agents That Improve Over Time</a>（LangChain）：把 Agent 拆成 model / harness / context 三层，分别用微调、trace 驱动修复与记忆来改进，共同底座是 traces 与 evals。</p>
-      <p><a href="https://www.infoq.com/news/2026/10/aws-ai-agents-linux-kernel-cves/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">AWS 用 AI Agent 分诊 Linux 内核 CVE</a>（InfoQ）：自动过滤 + Agent + 人工复核的流水线，同时提示需要迁移到更新的 LTS 内核，因为老分支有修复从未回合。</p>
-      <p><a href="https://www.freecodecamp.org/news/how-to-build-passkey-authentication-with-webauthn-next-js-and-nestjs/" target="_blank" rel="noopener">用 WebAuthn + Next.js + NestJS 实现 Passkey 登录</a>（freeCodeCamp）：从零搭一套无密码认证的完整教程，后端用 NestJS 保存凭证、校验 challenge 签名，适合作为替换密码登录的起步模板。</p>
+      <strong>延伸阅读 · 五个值得排期看完的材料：</strong>
+      <p><a href="https://latent.space/p/ainews-anthropic-ends-coding-interviews-hunger-beats-tenure/" target="_blank" rel="noopener">Anthropic 停止传统编码面试</a>（Latent.Space）：招聘经理 Felix Reiseberg 认为“Claude 在 React 小题和汇编上都更强了”，继续考这些题没有意义，提出“Hunger beats tenure”。对面试设计的启发大于结论本身。</p>
+      <p><a href="https://seangoedecke.com/getting-good-at-ai-takes-time-and-practice/" target="_blank" rel="noopener">Getting good at AI takes time and practice</a>（seangoedecke.com）：反驳“AI 不需要学习曲线”的说法，认为用好 AI 与其它技能一样，需要长期练习与反馈，而不是记住几个技巧。</p>
+      <p><a href="https://github.blog/news-insights/company-news/github-universe-2026-evolving-every-layer-of-the-stack/" target="_blank" rel="noopener">GitHub Universe 2026: Evolving every layer of the stack</a>（The GitHub Blog）：从“写每一行代码”到“编排 Agent 编队”，GitHub 认为交付物是完成的软件工作，而不是更多代码；文章还讲了为此重建基础设施的思路。</p>
+      <p><a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247523852&amp;idx=1&amp;sn=f753b63616a0f85bc2a12fab780e7d5d" target="_blank" rel="noopener">OpenViking 3D 内容理解</a>（字节跳动技术团队）：把 STEP 文件解析成六视图、摘要与明细并索引，给“多模态上下文”补上三维这一块。</p>
+      <p><a href="https://martinfowler.com/fragments/2026-10-28.html" target="_blank" rel="noopener">Fragments: October 28</a>（Martin Fowler）：引述 Karpathy 对 LLM 能力认知分层的观察——公众、多数专业人士与少数“曲线垂直上升”的人，正同时活在不同的世界里。</p>
     </div>
   </section>
 
-  <!-- ================= SOURCES ================= -->
   <section id="sources" class="sources">
     <h2>参考链接汇总</h2>
-    <p class="lead">本期共引用 25 条来源，按主题分组；正文中的每条新闻均标注了出处。</p>
+    <p class="lead">本期共引用 28 条来源，按主题分组；正文中的每条新闻均标注了出处。</p>
 
     <div class="src-group">
-      <h4>安全 · 框架 · 工具链</h4>
+      <h4>前端 · 构建 · CI/CD</h4>
       <ul>
-        <li><a href="https://nextjs.org/blog/upcoming-nextjs-security-release-november-2026" target="_blank" rel="noopener">Upcoming Next.js November Security Release</a><span class="feed">Next.js Blog</span></li>
-        <li><a href="https://www.infoq.com/news/2026/10/cloudflare-tsrs-ai-typescript/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Cloudflare and VoidZero Introduce tsrs: An AI-Generated Rust Port of TypeScript</a><span class="feed">InfoQ</span></li>
-        <li><a href="https://blog.cloudflare.com/php-ctf/" target="_blank" rel="noopener">Introducing the Cloudflare PHP Capture the Flag challenge</a><span class="feed">The Cloudflare Blog</span></li>
-        <li><a href="https://devblogs.microsoft.com/visualstudio/visual-studio-october-update-compare-commits-to-your-code-resolve-conflicts-in-bulk-keep-coding" target="_blank" rel="noopener">Visual Studio October Update – Compare Commits to Your Code, Resolve Conflicts in Bulk</a><span class="feed">Visual Studio Blog</span></li>
-        <li><a href="https://devblogs.microsoft.com/dotnet/blazor-welcomes-infragistics" target="_blank" rel="noopener">Blazor Welcomes Open-Source Contributions from Infragistics</a><span class="feed">Microsoft for Developers</span></li>
-        <li><a href="https://devblogs.microsoft.com/devops/azure-devops-server-rc-26h2-is-now-available" target="_blank" rel="noopener">Azure DevOps Server RC (26H2) Is Now Available</a><span class="feed">Microsoft for Developers</span></li>
-        <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.144-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.144 (Insiders)</a><span class="feed">Microsoft for Developers</span></li>
+        <li><a href="https://vercel.com/changelog/vercel-ci-is-now-in-beta" target="_blank" rel="noopener">Vercel CI is now in beta</a><span class="feed">Vercel News</span></li>
+        <li><a href="https://vercel.com/blog/introducing-vercel-ci" target="_blank" rel="noopener">Introducing Vercel CI</a><span class="feed">Vercel Blog</span></li>
+        <li><a href="https://nextjs.org/blog/ship-less-javascript-with-ai" target="_blank" rel="noopener">Ship less JavaScript in Next.js with your AI agent</a><span class="feed">Next.js Blog</span></li>
+        <li><a href="https://spring.io/blog/2026/10/28/spring-ai-message-parts-reasoning-replay" target="_blank" rel="noopener">Spring AI 2.1 Message Parts: Reasoning That Survives the Round Trip</a><span class="feed">Spring Blog</span></li>
       </ul>
     </div>
 
     <div class="src-group">
-      <h4>开发者体验 · 工程实践</h4>
+      <h4>基础设施 · 运行时 · 安全补丁</h4>
       <ul>
-        <li><a href="https://engineering.fb.com/2026/10/27/developer-tools/python-typing-survey-2026-ai-tools-checker-landscape/" target="_blank" rel="noopener">Python Typing Survey 2026: AI Tools and the Shifting Checker Landscape</a><span class="feed">Engineering at Meta</span></li>
-        <li><a href="https://www.infoq.com/news/2026/10/atlassian-devex-2026/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Developers Reporting Double-Digit Weekly Time Savings from AI Fell from 68% to 26%</a><span class="feed">InfoQ</span></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943485&amp;idx=1&amp;sn=88dba1815ee2dc60b7d246405655fd5b" target="_blank" rel="noopener">npm 创始人认为 AI 正在改写工程师这份工作</a><span class="feed">51CTO 技术栈</span></li>
-        <li><a href="https://blog.jetbrains.com/platform/2026/10/jetbrains-terminal-now-uses-ghostty/" target="_blank" rel="noopener">The Terminal in JetBrains IDEs Now Runs on libghostty</a><span class="feed">The JetBrains Blog</span></li>
-        <li><a href="https://www.freecodecamp.org/news/how-to-build-passkey-authentication-with-webauthn-next-js-and-nestjs/" target="_blank" rel="noopener">How to Build Passkey Authentication with WebAuthn, Next.js and NestJS</a><span class="feed">freeCodeCamp</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296150&amp;idx=3&amp;sn=009fcb5563707c2ffd75c6a09c7b007d" target="_blank" rel="noopener">Kubernetes 1.37 发布：稳定版 Metrics API 和 Beta 版 Rootless Kubelet</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/workers-kv-instant/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Cloudflare Opens Quicksilver to Customers as Workers KV Instant</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://developers.googleblog.com/smaller-apps-and-faster-gpu-inference-with-litert-in-google-play-services/" target="_blank" rel="noopener">Smaller apps and faster GPU inference with LiteRT in Google Play services</a><span class="feed">Google Developers Blog</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/microsoft-october-2026-patch/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Microsoft's October Security Update Fixes 1,400+ Vulnerabilities</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://nodejs.org/en/blog/release/v26.13.0" target="_blank" rel="noopener">Node.js 26.13.0 (LTS)</a><span class="feed">Node.js Blog</span></li>
+        <li><a href="https://nodejs.org/en/blog/release/v24.22.2" target="_blank" rel="noopener">Node.js 24.22.2 (LTS)</a><span class="feed">Node.js Blog</span></li>
       </ul>
     </div>
 
     <div class="src-group">
-      <h4>Agent · 模型 · 推理</h4>
+      <h4>Agent 工程 · 评测 · 鉴权</h4>
       <ul>
-        <li><a href="https://www.youtube.com/watch?v=BgLdvF7Qkh8" target="_blank" rel="noopener">300 Agents, 60 People: How We Secured Our Own AI Agents</a><span class="feed">AI Engineer · Runlayer</span></li>
-        <li><a href="https://www.youtube.com/watch?v=dAoOYFx7ZYw" target="_blank" rel="noopener">Stop Giving Your Agent Tools. Give It a Sandbox</a><span class="feed">AI Engineer · Arize AI</span></li>
-        <li><a href="https://www.youtube.com/watch?v=xy_7SzwsIjM" target="_blank" rel="noopener">How to Build Agents That Improve Over Time: Model, Harness, Context</a><span class="feed">LangChain</span></li>
-        <li><a href="https://www.qbitai.com/2026/10/505773.html" target="_blank" rel="noopener">KV Cache 被压成常数！OCR 开源新王：页数没上限，缓存砍 96%</a><span class="feed">量子位</span></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzI5NzUyMzM1Mg==&amp;mid=2247670434&amp;idx=1&amp;sn=56c5aed1c7365834218290917e580894" target="_blank" rel="noopener">OCR 界出了个魔法师？</a><span class="feed">百度文心</span></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296067&amp;idx=3&amp;sn=beb1f192ad02995c0c45a968e4f4ba8d" target="_blank" rel="noopener">决策模型也有专用推理引擎了：StartLux 开源 Prism</a><span class="feed">InfoQ</span></li>
-        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&amp;mid=2247562567&amp;idx=1&amp;sn=66f9aa9e8cfbbbb6bda19db56d51514b" target="_blank" rel="noopener">深度解析 Codex Harness 架构及其上下文压缩记忆体系</a><span class="feed">阿里云开发者</span></li>
-        <li><a href="https://www.infoq.com/news/2026/10/aws-ai-agents-linux-kernel-cves/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">AWS Shows Use of AI Agents to Triage Linux Kernel CVEs</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://developers.googleblog.com/hill-climbing-agent-quality-with-agents-cli-evaluation/" target="_blank" rel="noopener">Hill-Climbing Agent Quality with Agents CLI Evaluation</a><span class="feed">Google Developers Blog</span></li>
+        <li><a href="https://cloud.google.com/blog/topics/developers-practitioners/behind-the-scenes-two-months-later-how-we-ship-google-agent-skills-like-products/" target="_blank" rel="noopener">Behind the scenes, two months later: How we ship Google Agent Skills like products</a><span class="feed">Google Cloud Blog</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&amp;mid=2247562577&amp;idx=1&amp;sn=22122e51ba24f88c044e29669bafd9e7" target="_blank" rel="noopener">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a><span class="feed">阿里云开发者</span></li>
+        <li><a href="https://www.youtube.com/watch?v=YIhvrvHtonk" target="_blank" rel="noopener">We Kept Rebuilding Our AI Agent. Here's What Survived</a><span class="feed">AI Engineer · Arize AI</span></li>
+        <li><a href="https://www.youtube.com/watch?v=fdtkh30oFA8" target="_blank" rel="noopener">Claude Code is getting rid of SUB-AGENTS?</a><span class="feed">AICodeKing</span></li>
+        <li><a href="https://www.youtube.com/watch?v=58ulJViGFgU" target="_blank" rel="noopener">Who Is Making This Request? Agent Auth 101</a><span class="feed">AI Engineer · Keycard</span></li>
+        <li><a href="https://www.youtube.com/watch?v=xZX3pmaB8Hk" target="_blank" rel="noopener">Exploits Now Beat Patches: Open Source Security in the AI Era</a><span class="feed">AI Engineer · Chainguard</span></li>
       </ul>
     </div>
 
     <div class="src-group">
-      <h4>基础设施 · 架构信号</h4>
+      <h4>AI Coding 一线实践</h4>
       <ul>
-        <li><a href="https://www.infoq.com/news/2026/10/uber-cpu-stateful-workloads/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Uber Moves beyond CPU Cores with Performance-Aware Scheduling</a><span class="feed">InfoQ</span></li>
-        <li><a href="https://www.infoq.com/news/2026/10/anthropic-source-control/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">How Anthropic Redesigned Source Control for AI-Driven Development</a><span class="feed">InfoQ</span></li>
-        <li><a href="https://engineering.fb.com/2026/10/27/security/privacylib/" target="_blank" rel="noopener">PrivacyLib: Privacy Controls at the Data Access Boundary</a><span class="feed">Engineering at Meta</span></li>
-        <li><a href="https://aws.amazon.com/blogs/machine-learning/announcing-soci-indexed-images-for-faster-sagemaker-ai-jobs/" target="_blank" rel="noopener">Announcing SOCI-indexed images for faster SageMaker AI jobs</a><span class="feed">AWS Machine Learning Blog</span></li>
-        <li><a href="https://devblogs.microsoft.com/cosmosdb/inspecting-local-data-with-azure-cosmos-db-shell" target="_blank" rel="noopener">Inspecting Local Data with Azure Cosmos DB Shell</a><span class="feed">Microsoft for Developers</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzI4NjY4MTU5Nw==&amp;mid=2247507104&amp;idx=1&amp;sn=1c11fb605f41b221c8d7dd3fc676c83f" target="_blank" rel="noopener">从知识沉淀到编程范式：AI Coding 项目冷启动落地实践</a><span class="feed">vivo互联网技术</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&amp;mid=2247547520&amp;idx=1&amp;sn=3f7c95f0028e9046f72b8ada98004064" target="_blank" rel="noopener">Jev 实战：为 AI 工作流引入轻量决策层 x10 倍提速</a><span class="feed">得物技术</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697948&amp;idx=1&amp;sn=e1a100be78c3b43413ee3e979e69fc72" target="_blank" rel="noopener">一个人+AI 就是一个团队？拆开“个体团队”的黄金三件套</a><span class="feed">腾讯云开发者</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&amp;mid=2247607730&amp;idx=1&amp;sn=f7ae4efd3270278f46340fc01e4abab9" target="_blank" rel="noopener">好看视频鸿蒙端 AI 研发交付流程的建设思考与实践</a><span class="feed">百度Geek说</span></li>
       </ul>
     </div>
 
-    <div class="footnote">由 FreshRSS 24 小时抓取数据生成 · 276 条新闻 / 424 个来源 · 覆盖 2026-10-27 02:49 至 10-28 02:49 · 开发者实践版<span class="cursor"></span></div>
+    <div class="src-group">
+      <h4>模型 · 工具 · 开源项目</h4>
+      <ul>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzNDQxOTU2MQ==&amp;mid=2247522122&amp;idx=1&amp;sn=ac4209279baed5f2c01df064c3d7189d" target="_blank" rel="noopener">MiniCPM-OCR 开源：把 “Jev” 用在文字识别</a><span class="feed">赛博禅心</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&amp;mid=2650546617&amp;idx=1&amp;sn=70b04510e22050f467b360b1e971db3d" target="_blank" rel="noopener">Taobao3D 拓扑生成算法开源！让高保真 3D 更轻量</a><span class="feed">大淘宝技术</span></li>
+        <li><a href="https://blog.jetbrains.com/junie/2026/10/junie-local-splash-dflash2/" target="_blank" rel="noopener">Junie Local became 70% faster on Mac M5</a><span class="feed">The JetBrains Blog</span></li>
+        <li><a href="https://blog.jetbrains.com/junie/2026/10/junie-eco-mode/" target="_blank" rel="noopener">Junie Eco Mode</a><span class="feed">The JetBrains Blog</span></li>
+        <li><a href="https://vercel.com/changelog/fx-is-now-available-in-t3-code" target="_blank" rel="noopener">fx is now available in T3 Code</a><span class="feed">Vercel News</span></li>
+        <li><a href="https://vercel.com/changelog/vercel-plugin-now-available-in-opencode" target="_blank" rel="noopener">Vercel Plugin now available in OpenCode</a><span class="feed">Vercel News</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247523852&amp;idx=1&amp;sn=f753b63616a0f85bc2a12fab780e7d5d" target="_blank" rel="noopener">OpenViking 上线原生 3D 内容理解模型</a><span class="feed">字节跳动技术团队</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA5MzYyNzQ0MQ==&amp;mid=2247524749&amp;idx=1&amp;sn=5ff97486026dcbae38ad56f580feace1" target="_blank" rel="noopener">《HelloGitHub》第 127 期</a><span class="feed">HelloGitHub</span></li>
+      </ul>
+    </div>
+
+    <div class="src-group">
+      <h4>生态数据 · 社区 · 观点</h4>
+      <ul>
+        <li><a href="https://github.blog/news-insights/octoverse/octoverse-commits-pushes-reach-new-highs-in-2026-as-developers-build-with-agents/" target="_blank" rel="noopener">Octoverse: Commits, pushes, reach new highs in 2026 as developers build with agents</a><span class="feed">The GitHub Blog</span></li>
+        <li><a href="https://simonwillison.net/2026/Oct/28/github-octoverse-2026/" target="_blank" rel="noopener">GitHub Octoverse 2026</a><span class="feed">Simon Willison's Weblog</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247837720&amp;idx=1&amp;sn=4be2c1e2b802391ce246f696fe9774fb" target="_blank" rel="noopener">近 40 万人的 Reddit 开源社区宣布禁 AI</a><span class="feed">CSDN</span></li>
+        <li><a href="https://latent.space/p/ainews-anthropic-ends-coding-interviews-hunger-beats-tenure/" target="_blank" rel="noopener">Anthropic ends Coding Interviews: “Hunger beats tenure”</a><span class="feed">Latent.Space</span></li>
+        <li><a href="https://seangoedecke.com/getting-good-at-ai-takes-time-and-practice/" target="_blank" rel="noopener">Getting good at AI takes time and practice</a><span class="feed">seangoedecke.com</span></li>
+        <li><a href="https://martinfowler.com/fragments/2026-10-28.html" target="_blank" rel="noopener">Fragments: October 28</a><span class="feed">Martin Fowler</span></li>
+        <li><a href="https://github.blog/news-insights/company-news/github-universe-2026-evolving-every-layer-of-the-stack/" target="_blank" rel="noopener">GitHub Universe 2026: Evolving every layer of the stack</a><span class="feed">The GitHub Blog</span></li>
+      </ul>
+    </div>
+
+    <div class="footnote">
+      <span class="cursor"></span> generated from freshrss_24h_compact_20261028_215700.json · 278 articles / 424 sources · 2026-10-28
+    </div>
   </section>
 
 </div>
