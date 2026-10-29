@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 开发者实践版 | 2026-10-29</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --bg-elev: #121820;
+    --bg-code: #0a0e13;
+    --border: #22303c;
+    --border-soft: #1a2530;
+    --text: #d7e2ea;
+    --text-dim: #8b9aa8;
+    --text-faint: #5f6f7d;
+    --green: #4ade80;
+    --cyan: #38bdf8;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --purple: #c084fc;
+    --mono: "JetBrains Mono", "Fira Code", "Sarasa Mono SC", "Noto Sans Mono CJK SC", "SFMono-Regular", Consolas, "PingFang SC", "Microsoft YaHei", monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 500px at 15% -10%, rgba(56,189,248,.06), transparent 60%),
+      radial-gradient(900px 400px at 90% 0%, rgba(74,222,128,.05), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--cyan); text-decoration: none; border-bottom: 1px dotted rgba(56,189,248,.45); }
+  a:hover { color: #7dd3fc; border-bottom-color: var(--cyan); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  header {
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(18,24,32,.95), rgba(11,15,20,.95));
+    border-radius: 10px;
+    padding: 26px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--green), var(--cyan), transparent);
+  }
+  .term-line { color: var(--text-faint); font-size: 12.5px; letter-spacing: .3px; }
+  .term-line .prompt { color: var(--green); }
+  h1 {
+    margin: 10px 0 6px;
+    font-size: clamp(24px, 4vw, 34px);
+    line-height: 1.25;
+    letter-spacing: -.5px;
+    color: #eef6fb;
+  }
+  h1 .accent { color: var(--green); }
+  .subtitle { color: var(--text-dim); font-size: 14px; margin: 0; }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .meta-cell {
+    border: 1px solid var(--border-soft);
+    background: rgba(10,14,19,.6);
+    border-radius: 6px;
+    padding: 9px 12px;
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+  .meta-cell b { display: block; color: var(--text); font-size: 14px; font-weight: 600; margin-top: 2px; }
+
+  nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; }
+  nav a {
+    font-size: 12px;
+    border: 1px solid var(--border-soft);
+    border-radius: 999px;
+    padding: 4px 12px;
+    color: var(--text-dim);
+    background: rgba(18,24,32,.6);
+  }
+  nav a:hover { color: var(--green); border-color: var(--green); }
+
+  .tldr {
+    margin-top: 18px;
+    border: 1px solid var(--border);
+    background: var(--bg-code);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 12.8px;
+    line-height: 1.8;
+  }
+  .tldr .head { color: var(--text-faint); font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .tldr .head b { color: var(--green); font-weight: 600; }
+  .tldr ul { margin: 0; padding-left: 0; list-style: none; }
+  .tldr li { color: var(--text-dim); }
+  .tldr li::before { content: "> "; color: var(--green); }
+  .tldr li b { color: var(--text); font-weight: 600; }
+
+  section { margin-top: 46px; scroll-margin-top: 20px; }
+  .sec-head {
+    display: flex; align-items: baseline; gap: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+  }
+  .sec-idx { color: var(--green); font-size: 13px; }
+  h2 { font-size: 20px; margin: 0; color: #edf5fa; letter-spacing: -.2px; }
+  .sec-note { color: var(--text-faint); font-size: 12px; margin-left: auto; }
+
+  .news-list { display: grid; gap: 14px; counter-reset: item; }
+  .news {
+    counter-increment: item;
+    position: relative;
+    border: 1px solid var(--border-soft);
+    border-left: 3px solid var(--green);
+    background: linear-gradient(180deg, rgba(18,24,32,.75), rgba(13,18,24,.75));
+    border-radius: 8px;
+    padding: 16px 18px 14px 54px;
+  }
+  .news::before {
+    content: counter(item, decimal-leading-zero);
+    position: absolute;
+    left: 16px; top: 17px;
+    font-size: 12px;
+    color: var(--green);
+    opacity: .85;
+  }
+  .news h3 {
+    margin: 0 0 8px;
+    font-size: 15.5px;
+    line-height: 1.5;
+    color: #f0f7fc;
+    font-weight: 600;
+  }
+  .news p { margin: 0 0 8px; color: var(--text); font-size: 14px; }
+  .news p:last-of-type { margin-bottom: 10px; }
+  .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: 1px;
+  }
+  .tag.sec { color: var(--red); background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.3); }
+  .tag.infra { color: var(--cyan); background: rgba(56,189,248,.08); border: 1px solid rgba(56,189,248,.25); }
+  .tag.fw { color: var(--purple); background: rgba(192,132,252,.08); border: 1px solid rgba(192,132,252,.25); }
+  .tag.model { color: var(--amber); background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.25); }
+  .tag.tool { color: var(--green); background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.25); }
+  .src { font-size: 12px; color: var(--text-faint); }
+  .src a { color: var(--text-dim); border-bottom-color: rgba(139,154,168,.4); }
+  .src a:hover { color: var(--cyan); }
+  .src::before { content: "└─ "; color: var(--border); }
+
+  .callout {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    background: rgba(56,189,248,.045);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 16px 0;
+    font-size: 13.5px;
+  }
+  .callout strong { color: var(--cyan); }
+  .callout.warn { border-left-color: var(--amber); background: rgba(251,191,36,.045); }
+  .callout.warn strong { color: var(--amber); }
+  .callout p { margin: 0 0 8px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout .src { margin-top: 8px; }
+
+  .deep {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(18,24,32,.5);
+    padding: 22px 24px;
+    margin-bottom: 22px;
+  }
+  .deep h3 { margin: 0 0 4px; font-size: 18px; color: #f0f7fc; line-height: 1.45; }
+  .deep .kicker { color: var(--text-faint); font-size: 12px; margin-bottom: 14px; }
+  .deep h4 {
+    margin: 20px 0 8px;
+    font-size: 13px;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .deep p { margin: 0 0 10px; font-size: 14px; }
+  .deep ul, .deep ol { margin: 8px 0 12px; padding-left: 22px; font-size: 13.8px; }
+  .deep li { margin-bottom: 6px; }
+  .deep li::marker { color: var(--text-faint); }
+  .kbd {
+    font-family: var(--mono);
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 12.5px;
+    color: var(--amber);
+  }
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-size: 12.8px;
+    line-height: 1.65;
+    margin: 12px 0;
+    color: #c8d6e2;
+  }
+  pre .c { color: var(--text-faint); }
+  pre .g { color: var(--green); }
+  pre .y { color: var(--amber); }
+  pre .r { color: var(--red); }
+  code.inline {
+    background: var(--bg-code);
+    border: 1px solid var(--border-soft);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 12.8px;
+    color: var(--amber);
+  }
+
+  .tbl { width: 100%; border-collapse: collapse; margin: 12px 0 16px; font-size: 13px; }
+  .tbl th, .tbl td { border: 1px solid var(--border-soft); padding: 8px 11px; text-align: left; vertical-align: top; }
+  .tbl th { background: rgba(18,24,32,.9); color: var(--text-dim); font-weight: 600; font-size: 12px; letter-spacing: .4px; }
+  .tbl td { color: var(--text); }
+  .tbl tr:nth-child(even) td { background: rgba(18,24,32,.35); }
+
+  .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 14px; }
+  .tool {
+    border: 1px solid var(--border-soft);
+    background: linear-gradient(180deg, rgba(18,24,32,.8), rgba(13,18,24,.8));
+    border-radius: 8px;
+    padding: 16px 18px;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .tool:hover { border-color: rgba(74,222,128,.45); transform: translateY(-1px); }
+  .tool .name { font-size: 14.5px; color: #eef6fb; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .tool .name .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(74,222,128,.7); flex: none; }
+  .tool .why { color: var(--text-dim); font-size: 12px; margin: 3px 0 8px; }
+  .tool p { margin: 0 0 8px; font-size: 13.3px; }
+  .tool .src { font-size: 11.5px; }
+
+  .practice { display: grid; gap: 14px; }
+  .step {
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    background: rgba(18,24,32,.55);
+    padding: 16px 18px;
+  }
+  .step h3 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    color: #eef6fb;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .step h3 .num { color: var(--green); font-size: 12px; flex: none; }
+  .step p { margin: 0 0 8px; font-size: 13.8px; }
+  .step p:last-child { margin-bottom: 0; }
+  .step .src { margin-top: 4px; }
+  .step ul { margin: 6px 0 10px; padding-left: 20px; font-size: 13.5px; }
+  .step li { margin-bottom: 4px; }
+
+  .sources { border-top: 1px solid var(--border); padding-top: 22px; margin-top: 48px; }
+  .sources h2 { font-size: 17px; margin-bottom: 6px; }
+  .sources .lead { color: var(--text-faint); font-size: 12px; margin: 0 0 18px; }
+  .src-group { margin-bottom: 18px; }
+  .src-group h4 { color: var(--green); font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px; }
+  .src-group ul { list-style: none; padding: 0; margin: 0; }
+  .src-group li { font-size: 12.5px; color: var(--text-dim); padding: 4px 0; border-bottom: 1px solid rgba(34,48,60,.4); }
+  .src-group li:last-child { border-bottom: 0; }
+  .src-group li .feed { color: var(--text-faint); font-size: 11.5px; margin-left: 6px; }
+  .footnote { margin-top: 26px; color: var(--text-faint); font-size: 11.5px; text-align: center; }
+  .footnote .cursor { display: inline-block; width: 8px; height: 14px; background: var(--green); vertical-align: -2px; animation: blink 1.1s steps(2, start) infinite; }
+  @keyframes blink { to { visibility: hidden; } }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 20px 12px 60px; }
+    header { padding: 20px 18px; }
+    .news { padding: 14px 14px 12px 44px; }
+    .news::before { left: 12px; top: 15px; }
+    .deep { padding: 18px 16px; }
+    .sec-note { display: none; }
+    .tbl { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="term-line"><span class="prompt">dev@daily</span>:~$ ./generate --role developer_practice --date 2026-10-29</div>
+    <h1>科技日报 <span class="accent">//</span> 开发者实践版</h1>
+    <p class="subtitle">面向一线工程师：新工具、框架发布、性能优化与可落地的工程实践。</p>
+    <div class="meta-grid">
+      <div class="meta-cell">覆盖窗口<b>2026-10-28 22:06 → 10-29 22:06</b></div>
+      <div class="meta-cell">新闻条目<b>254 条 / 424 个来源</b></div>
+      <div class="meta-cell">本期精选<b>8 条热榜 · 2 篇深读 · 6 个工具</b></div>
+      <div class="meta-cell">生成时间<b>2026-10-29 22:06:33</b></div>
+    </div>
+
+    <div class="tldr">
+      <div class="head"><b>TL;DR</b> — 今天最值得动手处理的三件事</div>
+      <ul>
+        <li><b>AI Coding 的瓶颈转到“证明正确”</b>：Anthropic 约 90% 代码由 Claude 写，一个 PR 一晚跑 50 多轮评审；Meta 在合入前生成 JiTTests；美团给分布式存储划出 AI 与人的边界。先把 review、test、debug 三条门禁补齐，再谈提效。</li>
+        <li><b>Agent 上线后要“被看见”</b>：Prompt、Tool Call、Trace、Token 四维可观测性缺一不可；LangChain 直言“写操作 Agent”的评测仍是未解问题；美团白皮书把评测拆成 demo → 扩量 → 业务价值三关。</li>
+        <li><b>工具侧今天就能试</b>：React 19.3 的 <span class="kbd">browser()</span> 让组件正式退出 SSR；Cloudflare Web Search API 统一 AI 检索入口；Vercel Flags 冷启动快 7 倍；vcpkg、Rider Godot、CLion SEGGER 均有更新。</li>
+      </ul>
+    </div>
+
+    <nav>
+      <a href="#hot">今日技术热榜</a>
+      <a href="#deep">深度技术解读</a>
+      <a href="#tools">工具推荐</a>
+      <a href="#practice">实践指南</a>
+      <a href="#sources">参考链接汇总</a>
+    </nav>
+  </header>
+
+  <section id="hot">
+    <div class="sec-head">
+      <span class="sec-idx">[01]</span>
+      <h2>今日技术热榜</h2>
+      <span class="sec-note">按对一线开发的影响排序</span>
+    </div>
+
+    <div class="news-list">
+
+      <article class="news">
+        <h3><span class="tag tool">TOOLING</span>GitHub Universe 2026：Copilot 从“补全”走向“Agent 编队”</h3>
+        <p>GitHub 在 Universe 2026 开场主题演讲里把 Copilot 拆成了几层：独立的 GitHub Copilot app、第三方 connectors、Copilot Fusion（多模型编排，目标是把成本压下来）、Copilot Projects（跨多个仓库管理 Agent 编队），以及 Code Review Max。GitHub 还宣布对 Git 底层做深度架构升级，并称平台开发者规模已达 2.25 亿。</p>
+        <p>对一线团队，最值得关注的是 Projects 与 Fusion：前者把“一个 Agent 改一个仓库”扩展为“一组 Agent 跨仓库协作”，后者意味着模型路由与成本控制开始进入平台层。Code Review Max 则直接对准 Agent 生成 PR 之后的评审瓶颈，官方称它能抓住关键缺陷。</p>
+        <p>落地建议：先别急着全量接入，拿一个跨仓库的小需求做沙盒，重点观察 Projects 的权限边界、Fusion 的模型选择策略，以及 Code Review Max 的误报率与人工复核成本。</p>
+        <div class="src">来源：<a href="https://www.youtube.com/watch?v=xbCa0aa4tRM" target="_blank" rel="noopener">GitHub · Everything announced at GitHub Universe 2026</a> ·
+          <a href="https://www.youtube.com/shorts/A_N9HM237BA" target="_blank" rel="noopener">GitHub · Opening keynote recap in 90 seconds</a></div>
+      </article>
+
+      <article class="news">
+        <h3><span class="tag fw">AI-CODING</span>Anthropic：Claude 写了约 90% 的代码，“没人能保持完整心智模型”</h3>
+        <p>Anthropic 公开了 Claude Code 团队的代码评审方式：Claude 现在写约 90% 的代码，团队也承认没有人维护完整的代码库心智模型。一个 PR 曾在一夜之间跑了 50 多轮评审，评审器大部分精力花在已有代码上；团队还列出了一个“目前尚不具备的控制项”。</p>
+        <p>同一场 AI Engineer 分享里，Anthropic 的 Addy Osmani 与 Sonar 的 Manish Kapur 给出规模数据：合并变更从每天约 2,500 次增长到 30,000 次；Claude 做第一轮评审，但必须附带真实的验证证据。两人区分了 light 与 dark software factory：前者每个环节都有独立、多层的验证，后者只是让 Agent 不断产出。</p>
+        <p>这说明评审对象正在变化：不再只是“这段 diff 对不对”，而是“生成它的链路有没有证据”。对团队的直接影响是，评审、测试与发布门禁要按“变更量”扩容，而不是按人数。</p>
+        <div class="src">来源：<a href="https://www.infoq.com/news/2026/10/anthropic-code-review/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Anthropic Says Nobody Needs a Mental Model of Claude Code</a> ·
+          <a href="https://www.youtube.com/watch?v=AnsXWH2_EBU" target="_blank" rel="noopener">AI Engineer · How Anthropic Merges 30,000 Code Changes a Day</a></div>
+      </article>
+
+      <article class="news">
+        <h3><span class="tag sec">TESTING</span>Meta 把 JiTTesting 推上生产：在代码合入前生成“抓虫测试”</h3>
+        <p>Meta 公布了 Catching JiTTests 的生产部署结果：用 LLM 在代码合入前即时生成测试，主动捕捉风险。背景是数百亿行代码持续演进，传统测试节奏已经跟不上；论文《Just-in-Time Catching Test Generation at Meta》记录了初始部署与测试细节。</p>
+        <p>与“事后补测试”不同，JiTTesting 把测试生成放在变更落地的路径上，目标是更早识别风险。Meta 把这套方法描述为 human-on-the-loop：人不必逐条写测试，但仍要对系统行为与判定负责。</p>
+        <p>对团队的启发：如果你的 CI 只在合并后跑固定用例，可以评估把“针对本次 diff 的生成式测试”作为一道前置门禁；但必须配独立判定与人工抽检，避免生成测试与被测代码同源同错。</p>
+        <div class="src">来源：<a href="https://engineering.fb.com/2026/10/29/security/catching-bugs-before-they-land-jittestings-human-on-the-loop-approach-at-full-scale/" target="_blank" rel="noopener">Engineering at Meta · Catching Bugs Before They Land</a></div>
+      </article>
+
+      <article class="news">
+        <h3><span class="tag fw">FRONTEND</span>React 19.3 的 browser() API：让组件正式“退出 SSR”</h3>
+        <p>React 19.3 于 9 月 9 日发布，除了稳定的 View Transitions 与 Fragment Refs，还加入了 <code class="inline">react-dom</code> 的 <code class="inline">browser()</code> API，允许组件显式选择不参与服务端渲染。用法是在组件里调用 <code class="inline">use(browser())</code>，服务端会暂停该组件，客户端再接管。</p>
+        <p>它替代了两类常见写法：在 effect 里切换 mounted 标志，或用 <code class="inline">typeof window !== 'undefined'</code> 条件渲染。这两种做法都会在服务端与客户端首屏不一致时引发 hydration mismatch。</p>
+        <p>适用场景很明确：读取 localStorage、window 或设备时区的组件。迁移时注意，<code class="inline">browser()</code> 不是“跳过 hydration”，而是把该组件的渲染推迟到客户端；外层仍要提供稳定的 fallback，避免布局跳动。</p>
+        <div class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296173&amp;idx=3&amp;sn=da64a548971dbc6655e091f2982464fe" target="_blank" rel="noopener">InfoQ · React 19.3 新增 browser() API</a></div>
+      </article>
+
+      <article class="news">
+        <h3><span class="tag infra">INFRA</span>Cloudflare 推出 Web Search API：给 AI 应用一个统一的检索入口</h3>
+        <p>Cloudflare 通过 AI Gateway 上线 Web Search API 的 beta，可通过 REST API 与 Cloudflare Workers 调用。它提供统一的日志、访问控制与计费，并支持自带 provider key（bring-your-own-provider keys）。</p>
+        <p>对构建 RAG 或 Agent 的团队，价值不在于“又一个搜索 API”，而在于把检索调用纳入既有的网关治理：谁在调、调了多少、花了多少、是否越权，都能在同一处看到。</p>
+        <p>试点时建议先确认三件事：搜索结果的地域与语言覆盖是否满足业务；provider key 的配额与失败回退策略；以及日志中是否会落入用户查询等敏感内容。</p>
+        <div class="src">来源：<a href="https://www.infoq.com/news/2026/10/cloudflare-web-search-api/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Cloudflare Introduces Web Search API for AI Applications</a></div>
+      </article>
+
+      <article class="news">
+        <h3><span class="tag sec">SECURITY</span>Docker 的 Agent 安全故事：把爆炸半径做小，比事后检测更可靠</h3>
+        <p>Docker 的 “Coding Agent Horror Stories” 系列更新到第 6 篇，主题是 “The CVE That Did Not Exist”。系列里记录的真实事故包括：Agent 闯进 home 目录、误删生产数据库、泄漏凭据、执行与开发者预期完全不同的 shell 命令。共同点是 Agent 的触达范围超过了任务需要。</p>
+        <p>这一篇讲的是相反的情况：Agent 被刻意设计成“什么都够不到”，因此在事故当晚没有造成实际触达。Docker 的结论是，沙箱应该在执行边界上隔离 Agent，而不是在命令行层面做字符串检查。</p>
+        <p>对自建 Agent 平台的团队，这是一条可直接采用的设计原则：默认无网络、默认只读、写操作走显式授权与审计；不要把“Agent 很聪明”当作安全控制。</p>
+        <div class="src">来源：<a href="https://www.docker.com/blog/coding-agent-horror-stories-the-cve-that-did-not-exist/" target="_blank" rel="noopener">Docker Blog · Coding Agent Horror Stories: The CVE That Did Not Exist</a></div>
+      </article>
+
+      <article class="news">
+        <h3><span class="tag model">MODEL</span>NVIDIA 开源 Nemotron 3.5 Transcribe：一个模型包办转写、说话人、翻译与音频问答</h3>
+        <p>NVIDIA 发布开放权重语音模型 Nemotron 3.5 Transcribe，以 4B 激活参数在多项语音评测登顶。它支持 40 种语言转写、31 种语言与英语的双向翻译、13 种语言的说话人归属标注，音频问答使用英语数据训练。</p>
+        <p>单模型可处理最长 1 小时录音、最多 8 位说话人，并支持词级时间戳；通过自然语言指令即可切换任务，例如“转写并标注说话人”“翻译成英语”“这次会议做了哪些决定”。</p>
+        <p>配套发布 Granary v2 多语言数据清单与可复用的数据整理流水线，模型权重与 vLLM 部署指南已在 ModelScope 开放。适合会议记录、客服质检、多语种内容入库等场景，先用自己的口音与噪声样本验证再上线。</p>
+        <div class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&amp;mid=2247515097&amp;idx=1&amp;sn=0e42231255e86c0821eb6ee90424a1d5" target="_blank" rel="noopener">魔搭ModelScope社区 · NVIDIA 开源 Nemotron 3.5 Transcribe</a> ·
+          <a href="https://modelscope.cn/collections/nv-community/Nemotron-35-Transcribe" target="_blank" rel="noopener">ModelScope · 模型合集</a> ·
+          <a href="https://modelscope.cn/datasets/nv-community/Granary-v2" target="_blank" rel="noopener">ModelScope · Granary v2</a></div>
+      </article>
+
+      <article class="news">
+        <h3><span class="tag fw">PLATFORM</span>Vercel Flags 冷启动快 7 倍：把 feature flag 数据文件打进部署包</h3>
+        <p>Vercel Flags SDK 改了两处：客户端创建时即加载并解析随部署打包的 flags 数据文件；每次函数调用都带上当前 datafile revision，SDK 无需网络请求即可判断本地文件是否最新。内部测试中，p75 冷启动初始化从 70ms 以上降到 10ms，约 7 倍。</p>
+        <p>初始化后 flag 读取基本即时；同时 usage reporting 不再让函数在响应结束后继续运行，避免因上报拖长函数时长。</p>
+        <p>对高频调用且依赖 flag 的服务，这能直接减少冷启动尾延迟与计费时长。迁移时确认 datafile 的发布链路与 revision 注入方式，避免缓存了旧版本却以为已更新。</p>
+        <div class="src">来源：<a href="https://vercel.com/changelog/vercel-flags-starts-7x-faster-and-no-longer-extends-function-duration" target="_blank" rel="noopener">Vercel News · Vercel Flags starts 7x faster</a></div>
+      </article>
+
+    </div>
+
+    <div class="callout">
+      <strong>快讯 · 顺手记下的五条：</strong>
+      <p><b>Google OAuth 支持 DPoP</b>：OAuth 平台引入 Demonstrating Proof-of-Possession，用于缓解 token 被盗后的重放攻击，实现时要处理 nonce、jti 与密钥轮换。</p>
+      <p><b>Vercel Firewall 分开治理 AI 流量</b>：AI Bots 托管规则可分别 log 或 block “AI 爬虫”与“AI 助手”，例如拦截训练爬虫、放行回答用户问题的助手。</p>
+      <p><b>Vercel Connect 新增 webhook 触发器</b>：覆盖 Resend、X、Twilio、Notion、Telegram，代验请求并处理 provider heartbeat 与 verification challenge。</p>
+      <p><b>Syncfusion 开源 Blazor 组件工具包</b>：以 MIT 许可证提供图表、按钮等可复用 UI 组件，并向 ASP.NET Core 与 .NET scaffolding 提交修复与测试。</p>
+      <p><b>VS Code 1.145 Insiders 已发布</b>：详细变更见官方 release notes；Vercel Plugin 也已上架 Google Antigravity 市场，可为 Agent 提供 AI SDK、Functions、Workflow 等 skills。</p>
+      <div class="src">来源：<a href="https://www.infoq.com/news/2026/10/google-dpop-oauth2/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Google Adopts DPoP</a> ·
+        <a href="https://vercel.com/changelog/block-ai-crawlers-and-assistants-independently-with-managed-rules" target="_blank" rel="noopener">Vercel News · AI Bots managed rules</a> ·
+        <a href="https://vercel.com/changelog/vercel-connect-adds-webhook-triggers-for-more-providers" target="_blank" rel="noopener">Vercel News · Connect webhook triggers</a> ·
+        <a href="https://devblogs.microsoft.com/dotnet/blazor-welcomes-syncfusion" target="_blank" rel="noopener">Microsoft for Developers · Blazor x Syncfusion</a> ·
+        <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.145-(insiders)" target="_blank" rel="noopener">VS Code Blog · 1.145 Insiders</a> ·
+        <a href="https://vercel.com/changelog/vercel-plugin-is-now-available-in-antigravity" target="_blank" rel="noopener">Vercel News · Vercel Plugin in Antigravity</a></div>
+    </div>
+
+    <div class="callout warn">
+      <strong>架构信号 · 三条同向的“把约束前移”：</strong>GitHub 把多仓库 Agent 的编排与评审做进平台层；Meta 把测试生成前移到合入之前；Vercel Flags 把数据文件与 revision 前移到部署包和函数调用。共同点是：不要指望每个调用方都记得做对，把约束做进平台与协议层，才是可规模化的做法。
+    </div>
+  </section>
+
+  <section id="deep">
+    <div class="sec-head">
+      <span class="sec-idx">[02]</span>
+      <h2>深度技术解读</h2>
+      <span class="sec-note">AI Coding 的验证门禁，与 Agent 的可观测性缺口</span>
+    </div>
+
+    <article class="deep">
+      <h3>AI Coding 的下一道门槛：从“写得更快”到“证明它是对的”</h3>
+      <div class="kicker">Anthropic 90% 代码与 3 万次合入、Meta 合入前生成测试、美团存储系统的边界、Revolut 自托管降本</div>
+
+      <p>过去一年，AI Coding 的讨论焦点从“能不能写”转向“能不能信”。当生成代码的单位成本快速下降，瓶颈自然移动到评审、测试与发布：代码更多了，但验证带宽没有同比例增长。</p>
+
+      <h4>// 规模先到：90% 代码由 AI 写，评审成为新瓶颈</h4>
+      <p>Anthropic 的 Claude Code 团队给出了一个标志性数字：Claude 现在写约 90% 的代码。团队公开的评审记录里，一个 PR 在一夜之间跑了 50 多轮评审，评审器把大部分精力花在已有代码上；他们也承认没有人维护完整的代码库心智模型，并列出了一些“目前尚不具备的控制项”。这不是“AI 全自动交付”的宣言，反而是对评审复杂度的坦白。</p>
+      <p>在 AI Engineer 的分享中，Anthropic 的 Addy Osmani 与 Sonar 的 Manish Kapur 把规模说清楚：合并变更从每天约 2,500 次增长到 30,000 次。Claude 做第一轮评审，但必须附带真实的验证证据。两人用 light 与 dark software factory 区分两种做法：light 工厂的每个环节都有独立、多层的验证；dark 工厂只是让 Agent 持续产出，然后指望人来兜底。</p>
+      <p>Qodo 的 Cole Gannaway 给了一个更具体的失败样本：一行数据模型改动可以通过全部测试，却悄悄破坏 Web、移动端、CLI 与 MCP 客户端。原因是测试只覆盖了“已知调用方”，没有覆盖真实的爆炸半径。他建议建立仓库级软件图、把 PR 评论里的部落知识变成自定义规则，并且不要让写代码的 Agent 给自己的代码打分。</p>
+
+      <h4>// 合入前生成测试：Meta 的 JiTTesting</h4>
+      <p>Meta 的 Catching JiTTests 把测试生成放到变更落地的路径上：在代码合入前，用 LLM 即时生成针对本次变更的测试，主动捕捉风险。Meta 的规模是数百亿行代码持续演进，传统测试无法跟上每一次变更；论文记录了初始部署与生产测试的细节。</p>
+      <p>值得注意的是 human-on-the-loop 的定位：人不再逐条写测试，但要对“生成什么测试、什么算失败、失败后怎么处理”负责。这比“让 AI 写测试然后自动合并”更保守，也更接近可落地的工程现实。</p>
+
+      <h4>// 不能出错的系统：美团存储划出的三条边界</h4>
+      <p>美团基础技术部把问题放到了分布式存储上：代码规模大，一致性、并发、持久化、故障恢复与性能每一项都碰得到；一处看似局部的改动，平时正常，等到节点重启、磁盘异常、网络抖动或高并发时才暴露，影响的是上层业务的数据可用性，严重时波及数据正确性。</p>
+      <p>他们算了一笔质量账：即使 AI 写的代码千行缺陷率与人持平，一个版本交付的功能更多、改动更多，累计引入的缺陷绝对数量仍会上升。因此 AI Coding 的目标不能只是“更快”，代码质量与验证充分性必须比常规研发要求更高。对应的做法不是只让 AI 生成代码，而是把 AI 评审、AI 测试与验证、AI Debug、受控自动化一起建起来，让人把精力放在真正需要判断的环节。</p>
+
+      <table class="tbl">
+        <thead>
+          <tr><th>环节</th><th>AI 可以承担</th><th>人必须把关</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>评审</td><td>风格、明显缺陷、跨文件引用、历史模式比对</td><td>一致性、并发、持久化语义与故障恢复假设</td></tr>
+          <tr><td>测试</td><td>针对 diff 生成用例、补充边界条件、生成故障注入脚本</td><td>判定标准、失败注入设计、对“测试通过”的解释</td></tr>
+          <tr><td>排查</td><td>读日志、定位可疑路径、提出复现步骤、对比历史故障</td><td>根因确认、修复方案取舍、是否回滚</td></tr>
+          <tr><td>自动化</td><td>执行脚本、批量重跑、整理结果</td><td>生产变更审批、权限边界、回滚预案</td></tr>
+        </tbody>
+      </table>
+
+      <h4>// 成本侧：自托管不是“退而求其次”</h4>
+      <p>Revolut 的 David Abitbol 分享了 2,000 名工程师的使用数据：自托管开源 GLM 模型带来了最大的改善，交付速度提升约 60–70%，成本约为原先支付给前沿模型厂商的十分之一。他还讲了自托管需要什么：GPU 规模、让工程师愿意用的延迟目标、以及让同一批硬件快 88% 的调优；对于一家受欧盟监管的银行，合规与安全同样是硬约束。</p>
+      <p>这条经验不应被简化成“自托管一定更便宜”。它成立的前提是团队已经把编码之外的路由、评测、延迟与合规都算清楚；分享里也明确提到“编码本身不是瓶颈”，真正的收益来自整条交付链路。</p>
+
+      <h4>// 一个可落地的 AI Coding 门禁</h4>
+      <p>不必一开始就建平台，先把“生成之后必须发生什么”写进流水线。下面是一个与具体工具无关的示意：</p>
+      <pre><span class="c"># 示意：AI Coding 变更门禁，不是某个平台的真实配置</span>
+spec:
+  required: true            <span class="c"># 需求/工单先写清楚验收条件</span>
+  link_pr_to_ticket: true
+
+agent:
+  allowed_paths: [src/**, tests/**]
+  deny_paths: [infra/prod/**, migrations/**]
+  max_diff_lines: 800
+
+review:
+  first_pass: ai            <span class="c"># AI 先审，但必须输出证据</span>
+  second_pass: human        <span class="c"># 写者不评分：评审者与生成者分离</span>
+  require: [ticket_match, blast_radius, tests_evidence]
+
+test:
+  generated_for_diff: true  <span class="c"># 针对本次 diff 生成用例</span>
+  independent_runner: true  <span class="c"># 不在生成 Agent 的环境里自证</span>
+  flaky_retries: 2
+
+release:
+  canary: true
+  rollback_plan: required
+  human_approval_for: [schema_change, permission_change, data_migration]</pre>
+
+      <div class="callout">
+        <strong>落地建议：</strong>① 把“AI 写的 PR”显式标记，按变更类型而不是作者身份设置门禁；② 评审者与生成者分离，至少用不同模型或规则做二次判断；③ 生成测试必须能独立运行，不能依赖生成 Agent 的临时环境；④ 对一致性、并发、持久化这类“平时看不出来”的改动，强制要求故障注入或形式化检查；⑤ 用软件图或依赖分析估算爆炸半径，避免“测试全绿但客户端全挂”；⑥ 自托管前先测 p50/p95 延迟、GPU 利用率与合规成本，再算总账；⑦ 每次事故把修复经验写回规则与用例，否则下一轮 Agent 还会踩同一个坑。
+      </div>
+
+      <p class="src">来源：<a href="https://www.infoq.com/news/2026/10/anthropic-code-review/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Anthropic Says Nobody Needs a Mental Model of Claude Code</a> ·
+        <a href="https://www.youtube.com/watch?v=AnsXWH2_EBU" target="_blank" rel="noopener">AI Engineer · How Anthropic Merges 30,000 Code Changes a Day</a> ·
+        <a href="https://engineering.fb.com/2026/10/29/security/catching-bugs-before-they-land-jittestings-human-on-the-loop-approach-at-full-scale/" target="_blank" rel="noopener">Engineering at Meta · Catching Bugs Before They Land</a> ·
+        <a href="https://tech.meituan.com/2026/10/29/AI-Coding-IN-Distributed-Storage-System.html" target="_blank" rel="noopener">美团技术团队 · 如何在“不能出错”的系统里使用 AI Coding</a> ·
+        <a href="https://www.youtube.com/watch?v=YqxpPI7YUjE" target="_blank" rel="noopener">AI Engineer · Why a One-Line Change Can Break Your Whole Stack</a> ·
+        <a href="https://www.youtube.com/watch?v=Ok6QdZHCcI8" target="_blank" rel="noopener">AI Engineer · How Revolut Cut AI Coding Costs 90%</a></p>
+    </article>
+
+    <article class="deep">
+      <h3>Agent 上线之后：四维可观测性，和一场还没打完的评测战</h3>
+      <div class="kicker">Prompt / Tool Call / Trace / Token；写操作 Agent 的评测缺口；美团的三关与企业 Agent 的边界</div>
+
+      <p>传统软件有 APM、日志、指标与链路追踪，AI 系统却常常在“Prompt 是什么、调了哪些工具、整条链路长什么样、Token 花了多少”这四个问题上失明。dbaplus 的实战文章把这种状态称为“昂贵的黑盒”：同一个输入可能产生不同输出，一个用户请求可能触发 10 次以上 LLM 调用，Agent 还会访问外部 API、数据库与搜索引擎，成本直到月底账单才显现。</p>
+
+      <h4>// 四个维度，缺一不可</h4>
+      <table class="tbl">
+        <thead>
+          <tr><th>维度</th><th>记录什么</th><th>没有它会怎样</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Prompt</td><td>系统提示、用户输入、动态拼接的上下文、模板版本</td><td>复现不了线上问题，改版无法对比</td></tr>
+          <tr><td>Tool Call</td><td>工具名、参数、返回状态、耗时、重试次数</td><td>不知道 Agent 在哪一步走错，工具失败被静默吞掉</td></tr>
+          <tr><td>Trace</td><td>从输入到输出的完整调用链、父子步骤、决策分支</td><td>只能看到最终答案，定位不到检索、规划还是生成出错</td></tr>
+          <tr><td>Token</td><td>输入/输出/缓存 Token、单价、累计成本、延迟</td><td>成本不可预期，优化没有基线</td></tr>
+        </tbody>
+      </table>
+      <p>四个维度不是“有最好”，而是互相解释：Trace 告诉你哪一步慢，Tool Call 告诉你为什么慢，Prompt 告诉你模型看到了什么，Token 告诉你这一步值多少钱。缺任何一个，排查都会退化成猜测。</p>
+
+      <h4>// 写操作 Agent：评测的硬骨头</h4>
+      <p>LangChain 的产品经理 Ben Tannyhill 把问题说得很直接：像 Chat LangChain 这种只读 Agent 很容易分支与测试；而会触碰生产数据的写操作 Agent，对大多数团队来说仍是一个未解决的评测问题。只读 Agent 错了，用户再问一次；写操作 Agent 错了，可能已经下单、改了配置或动了真实业务。</p>
+      <p>InfoQ 与 QCon 的圆桌给出了一条边界原则：业务场景需要确定性与可靠性，而这是模型天然不具备的，所以要给模型一个明确的边界；关键环节仍用规则实现，只是让 AI 来描述和生成规则，这样成本、边界、准确性与可解释性都更可控。涉及用户钱包与权益的操作一定放在人这边；自由度高的部分，比如生成回复、澄清模糊意图、处理长尾表达，可以交给模型。</p>
+      <p>美团《Agent 评测白皮书》则把评测对象讲清楚了：不是单一模型，而是“模型 + 系统 + 工具 + 流程”的复杂系统。评测的核心目的是回答“好不好、哪里好、哪里不好”，并且必须服务于真实业务的研发、上线、回归与优化；他们给出的研发公式是“观测 + 评测 = 持续迭代”。文章还总结了 Agent 项目死亡的三种典型方式：停在 Demo、卡在扩量、说不清业务价值。</p>
+
+      <h4>// 一条最小可用的 trace</h4>
+      <p>如果今天只能做一件事，先把每一步写成结构化事件，落到你能查询的地方。字段不必多，但要能串起一次会话：</p>
+      <pre><span class="c">// 示意：一条 Agent 步骤事件，字段按需裁剪</span>
+{
+  <span class="y">"trace_id"</span>: <span class="y">"tr_8f3c..."</span>,
+  <span class="y">"session_id"</span>: <span class="y">"sess_42"</span>,
+  <span class="y">"step"</span>: 3,
+  <span class="y">"model"</span>: <span class="y">"claude-sonnet-4-6"</span>,
+  <span class="y">"prompt_hash"</span>: <span class="y">"sha256:..."</span>,
+  <span class="y">"prompt_template"</span>: <span class="y">"refund-v7"</span>,
+  <span class="y">"tool"</span>: { <span class="y">"name"</span>: <span class="y">"order_lookup"</span>, <span class="y">"args_hash"</span>: <span class="y">"sha256:..."</span> },
+  <span class="y">"result_status"</span>: <span class="y">"ok"</span>,
+  <span class="y">"tokens"</span>: { <span class="y">"in"</span>: 812, <span class="y">"out"</span>: 96, <span class="y">"cached"</span>: 640 },
+  <span class="y">"cost_usd"</span>: 0.0021,
+  <span class="y">"latency_ms"</span>: 1430,
+  <span class="y">"policy_decision"</span>: <span class="y">"allow"</span>,
+  <span class="y">"retry"</span>: 0
+}</pre>
+
+      <div class="callout warn">
+        <strong>上线前的最小检查单：</strong>① Prompt 与模板版本化，能按 trace 回放；② 每次工具调用记录参数哈希与结果状态，失败不能静默；③ 用 trace_id 串起多步调用，保留父子关系；④ Token 与成本按会话、用户、功能三个维度聚合；⑤ 写操作默认人工审批或二次确认，涉及资金与权益的操作强制人工；⑥ 评测集从真实失败样本里长出来，覆盖工具选择、参数、多轮终止与拒答；⑦ 非确定性任务重复跑取分布，不要用单次结果下结论；⑧ 上线前先过 demo、扩量、业务价值三关，每一关都有明确的退出标准。
+      </div>
+
+      <p class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638321&amp;idx=2&amp;sn=8d162a8c7adf0fc1172417ae70d7e186" target="_blank" rel="noopener">dbaplus社群 · 告别 AI 黑盒：Prompt、Tool Call、Trace、Token 全链路可观测实战</a> ·
+        <a href="https://www.youtube.com/shorts/oY1htTx_h9U" target="_blank" rel="noopener">LangChain · The Hardest Part of Testing Agents: Write Access</a> ·
+        <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296173&amp;idx=2&amp;sn=9cc3620aa4dbce8e15fcae2010a0787a" target="_blank" rel="noopener">InfoQ · 别再迷信 Agent 的自主性了</a> ·
+        <a href="https://tech.meituan.com/2026/09/10/Agent-Evaluation-White-Paper-01.html" target="_blank" rel="noopener">美团技术团队 · Agent 评测白皮书系列 01</a> ·
+        <a href="https://tech.meituan.com/2026/08/07/Agent-Evaluation.html" target="_blank" rel="noopener">美团技术团队 · Agent 评测漫谈</a></p>
+    </article>
+  </section>
+
+  <section id="tools">
+    <div class="sec-head">
+      <span class="sec-idx">[03]</span>
+      <h2>工具推荐</h2>
+      <span class="sec-note">今天就能装上试用的六项</span>
+    </div>
+
+    <div class="tools">
+
+      <div class="tool">
+        <div class="name"><span class="dot"></span>vcpkg 2026 年 10 月更新</div>
+        <div class="why">C/C++ 包管理：可配置二进制缓存压缩，Boost 1.92</div>
+        <p>本次更新对应 2026-10-16 的 registry 发布与 2026-09-26 的工具发布，内容包括可配置的二进制缓存压缩、缓存可靠性与诊断改进、Boost 1.92 升级，以及其它修复。策展 registry 目前有 2,877 个 port，自 7 月以来新增 41 个、更新 806 个。</p>
+        <p>vcpkg 的验证方式是：每次改动一个 port，都会为依赖它或被它依赖的 port 构建主 triplet，以减少“升级一个库，坏掉一片工程”的情况。对 CI 来说，值得同时打开二进制缓存与压缩，并把 baseline 固定到可复现的提交。</p>
+        <div class="src">参考：<a href="https://devblogs.microsoft.com/cppblog/whats-new-in-vcpkg-oct-2026" target="_blank" rel="noopener">Microsoft for Developers · What's New in vcpkg (Oct 2026)</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="name"><span class="dot"></span>JetBrains Rider × Godot</div>
+        <div class="why">一个 IDE 同时处理 GDScript、C# 与 C++ GDExtensions</div>
+        <p>JetBrains 自 2025 年 8 月起成为 Godot Foundation 的白金赞助商，并已续约到 2027 年。过去一年，Rider 把 Godot 支持扩展到 GDScript、C# 与 C++ GDExtensions 三种语言，非商业用途（爱好项目、学习、开源、内容创作）免费。</p>
+        <p>官方还打包了 GDScript 支持、扩展了调试与测试、推出 Godot 编辑器插件，并为 addon 开发者提供项目模板。很多开发者在 GodotCon 上才知道 Rider 能写 GDScript，也误以为必须付费；如果你把它只当 C# IDE，值得重新评估。</p>
+        <div class="src">参考：<a href="https://blog.jetbrains.com/dotnet/2026/10/29/from-gdscript-to-gdextensions-one-ide-for-your-godot-code/" target="_blank" rel="noopener">The JetBrains Blog · From GDScript to GDExtensions</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="name"><span class="dot"></span>CLion × SEGGER：AI 辅助的硬故障调试</div>
+        <div class="why">J-Link、Ozone、SystemView 进入同一个调试工作流</div>
+        <p>SEGGER 的嵌入式工具现在更深地集成进 JetBrains CLion：提供 J-Link 调试探针的专用配置，并可直接访问 Ozone 调试器与 SystemView 实时软件分析工具，把编码、快速烧录、调试与实时系统分析串起来。</p>
+        <p>CLion 新版本还加入 AI 辅助调试：针对 Cortex-M 设备的 hard-fault，AI skill 会自动解码 fault 寄存器并把问题追溯到源码，支持通过 J-Link 连接的目标。对嵌入式团队，这意味着“寄存器 dump → 人工查手册 → 猜根因”的流程可以部分自动化。</p>
+        <div class="src">参考：<a href="https://blog.jetbrains.com/clion/2026/10/segger-tools-gain-deeper-integration-in-clion-with-ai-assisted-debugging/" target="_blank" rel="noopener">The JetBrains Blog · SEGGER Tools Gain Deeper Integration in CLion</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="name"><span class="dot"></span>Bug0 QA Agent</div>
+        <div class="why">用自然语言写回归测试，缓存 Playwright 动作加速 CI</div>
+        <p>Bug0 发布 QA Agent，这是一个 source-available 的 Playwright 库，面向 Agent 驱动的浏览器回归测试。它把自然语言描述的测试指令映射为 UI 操作，在合适的时候缓存动作以加快 CI 回放，并在 UI 变化时把缓存动作重新映射回测试规格。</p>
+        <p>验证方式是多模型共识加视觉模型评估，而不是只靠一个模型的判断。适合已有 Playwright 基础、但维护回归用例成本高的团队；建议先从稳定的核心流程开始，UI 改版后重点检查缓存动作的重映射结果。</p>
+        <div class="src">参考：<a href="https://www.infoq.com/news/2026/10/bug0-agent-testing-cached-replay/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Bug0 Releases QA Agent</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="name"><span class="dot"></span>Vercel Firewall · AI Bots 托管规则</div>
+        <div class="why">把“训练爬虫”和“回答用户问题的助手”分开治理</div>
+        <p>Vercel Firewall 的 AI Bots 托管规则支持分别 log 或 block 两类流量：为索引与模型训练收集内容的 AI 爬虫，以及因用户操作或搜索查询而取页面的 AI 助手。你可以拦截前者，同时允许后者检索内容来回答用户问题。</p>
+        <p>规则会随新 bot 出现而更新。配置入口在项目的 Security &gt; Firewall &gt; Rules &gt; Bot Management，也可用 Vercel CLI 修改。上线前建议先只记录不拦截，确认业务依赖的助手没有被误伤。</p>
+        <div class="src">参考：<a href="https://vercel.com/changelog/block-ai-crawlers-and-assistants-independently-with-managed-rules" target="_blank" rel="noopener">Vercel News · Control AI crawlers and assistants separately</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="name"><span class="dot"></span>Mistral Large 4 更新权重</div>
+        <div class="why">编码与 Agent 能力增强，输入/缓存/输出价格下调</div>
+        <p>Mistral Large 4 在 AI Gateway 上切换到更新后的权重，输入、缓存输入与输出 Token 的价格均下调。官方称新权重提升了 Agent 编码与防御性网络安全能力，在编码任务上 Token 效率更高，同时改进了表格创建与编辑、网络调研以及抗提示注入能力。</p>
+        <p>如果你已经在用 <code class="inline">mistral/mistral-large-4</code>，无需更换模型 ID 即可使用新版本；在 fx、Pi、Claude Code、Codex、Cursor 等 harness 中也可通过最新 Vercel CLI 选择。升级后建议重跑编码评测，并重点测试提示注入相关用例。</p>
+        <div class="src">参考：<a href="https://vercel.com/changelog/mistral-large-4-updated-weights-and-lower-pricing-on-ai-gateway" target="_blank" rel="noopener">Vercel News · Mistral Large 4 updated weights</a> ·
+          <a href="https://huggingface.co/blog/mistral-large4" target="_blank" rel="noopener">Hugging Face · Welcome Le Chonk: Mistral Large 4</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="practice">
+    <div class="sec-head">
+      <span class="sec-idx">[04]</span>
+      <h2>实践指南</h2>
+      <span class="sec-note">六条可以排进本周工单的动作</span>
+    </div>
+
+    <div class="practice">
+
+      <div class="step">
+        <h3><span class="num">01</span>用 browser() 取代 mounted 标志，修掉 SSR hydration 抖动</h3>
+        <p>React 19.3 的 <code class="inline">browser()</code> 让组件显式退出服务端渲染。它针对的是读取 localStorage、window 或设备时区的组件：这些组件在服务端拿不到有意义的值，旧写法要么在 effect 里切换 mounted 标志，要么用 <code class="inline">typeof window</code> 判断，都会造成首屏不一致。</p>
+        <pre><span class="c">// 之前：mounted 标志，首屏会闪一下</span>
+const [mounted, setMounted] = useState(false);
+useEffect(() =&gt; setMounted(true), []);
+<span class="c">// 现在：服务端暂停，客户端接管</span>
+import { use } from <span class="y">'react'</span>;
+import { browser } from <span class="y">'react-dom'</span>;
+
+function LocalTime() {
+  use(browser());
+  return &lt;p&gt;{new Date().toLocaleString()}&lt;/p&gt;;
+}</pre>
+        <ul>
+          <li>只把真正依赖浏览器环境的组件包进去，不要用它绕过所有 SSR。</li>
+          <li>外层提供稳定的 fallback，避免布局跳动与 CLS 上升。</li>
+          <li>升级后用一次“禁用 JS + 开启 JS”的对比，确认没有 hydration 警告。</li>
+        </ul>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296173&amp;idx=3&amp;sn=da64a548971dbc6655e091f2982464fe" target="_blank" rel="noopener">InfoQ · React 19.3 新增 browser() API</a></div>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">02</span>给 AI Coding 补三道门禁：评审、测试、排查</h3>
+        <p>美团的存储实践说明，光让 AI 生成代码不够。AI 评审、AI 测试与验证、AI Debug、受控自动化要一起建起来，AI 生成的代码才能放心进入研发流程。重点不是“多写代码”，而是让代码和结论经得起验证。</p>
+        <ul>
+          <li>评审：AI 先审，但输出必须带证据；人审一致性、并发、持久化与故障恢复假设。</li>
+          <li>测试：针对本次 diff 生成用例，并在独立环境运行，避免自己证明自己。</li>
+          <li>排查：AI 可以读日志、提复现步骤，根因确认与修复取舍仍由人负责。</li>
+          <li>自动化：生产变更审批、权限边界与回滚预案不能交给 Agent 自行决定。</li>
+        </ul>
+        <div class="src">参考：<a href="https://tech.meituan.com/2026/10/29/AI-Coding-IN-Distributed-Storage-System.html" target="_blank" rel="noopener">美团技术团队 · 如何在“不能出错”的系统里使用 AI Coding</a></div>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">03</span>先把四维可观测性做出来，再谈 Agent 优化</h3>
+        <p>Prompt、Tool Call、Trace、Token 四个维度缺一不可。最小落地方式是：在每次模型调用与工具调用处打一条结构化事件，用 trace_id 串起来，落到可查询的日志或数仓；再按会话、用户、功能聚合成本与延迟。</p>
+        <ul>
+          <li>Prompt 与模板版本化，能按 trace 回放当时的输入。</li>
+          <li>工具调用记录参数哈希、结果状态、耗时与重试次数。</li>
+          <li>Token 同时记录输入、输出与缓存命中，成本才算得准。</li>
+          <li>先做“能查”，再做“告警”，最后做自动归因。</li>
+        </ul>
+        <div class="src">参考：<a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638321&amp;idx=2&amp;sn=8d162a8c7adf0fc1172417ae70d7e186" target="_blank" rel="noopener">dbaplus社群 · Prompt、Tool Call、Trace、Token 全链路可观测实战</a></div>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">04</span>写者不评分：把评审与生成拆开</h3>
+        <p>Qodo 的经验是，一行数据模型改动可以通过全部测试，却破坏 Web、移动端、CLI 与 MCP 客户端；评审正在成为新的瓶颈。两个直接可用的做法：不要让写代码的 Agent 给自己的代码打分；把 PR 评论里的部落知识变成可执行的自定义规则。</p>
+        <ul>
+          <li>用软件图或依赖分析估算爆炸半径，优先覆盖跨端调用方。</li>
+          <li>评审前把工单与验收条件带进上下文，检查 PR 是否真的解决了原问题。</li>
+          <li>至少用不同模型或规则做二次判断，避免同源同错。</li>
+          <li>对 Agent 写的 PR 显式标记，便于统计返工率与缺陷密度。</li>
+        </ul>
+        <div class="src">参考：<a href="https://www.youtube.com/watch?v=YqxpPI7YUjE" target="_blank" rel="noopener">AI Engineer · Why a One-Line Change Can Break Your Whole Stack</a></div>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">05</span>Agent 评测按三关推进：demo、扩量、业务价值</h3>
+        <p>美团《Agent 评测白皮书》总结了项目死亡的三种典型方式：停在 Demo，一接真实流量就覆盖不住；卡在扩量，问题说不清在哪一层；说不清业务价值，拿不出证据继续要资源。评测的对象不是单一模型，而是模型、系统、工具与流程的组合。</p>
+        <ul>
+          <li>Demo 关：用真实问法、脏数据与边界场景替换演示脚本。</li>
+          <li>扩量关：建立 golden set、trace diff 与分层指标，能定位是哪一层退化。</li>
+          <li>业务价值关：用在线实验、离线回放与人工复核证明收益，而不是“感觉变好”。</li>
+          <li>评测基石是观测：先有 trace 与日志，再谈自动评分。</li>
+        </ul>
+        <div class="src">参考：<a href="https://tech.meituan.com/2026/09/10/Agent-Evaluation-White-Paper-01.html" target="_blank" rel="noopener">美团技术团队 · Agent 评测白皮书系列 01</a> ·
+          <a href="https://tech.meituan.com/2026/08/07/Agent-Evaluation.html" target="_blank" rel="noopener">美团技术团队 · Agent 评测漫谈</a></div>
+      </div>
+
+      <div class="step">
+        <h3><span class="num">06</span>自托管模型前，先算延迟、利用率与合规三笔账</h3>
+        <p>Revolut 的数据很有吸引力：2,000 名工程师，自托管开源 GLM 后交付速度提升约 60–70%，成本约为前沿模型厂商的十分之一；同一批硬件通过调优快了 88%。但这些数字有前提：足够的 GPU、工程师愿意接受的延迟目标，以及受监管行业的合规与安全要求。</p>
+        <ul>
+          <li>先量 p50/p95 延迟与 GPU 利用率，再决定是否需要自托管。</li>
+          <li>把“编码不是瓶颈”纳入判断：收益可能来自路由、评审与交付链路，而不是模型本身。</li>
+          <li>合规、审计与数据驻留是硬约束，不能只看单价。</li>
+          <li>用同一套评测集对比自托管与前沿模型，确认质量没有隐性下降。</li>
+        </ul>
+        <div class="src">参考：<a href="https://www.youtube.com/watch?v=Ok6QdZHCcI8" target="_blank" rel="noopener">AI Engineer · How Revolut Cut AI Coding Costs 90% With Self-Hosted Open Models</a></div>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      <strong>延伸阅读 · 六个值得排期看完的材料：</strong>
+      <p><a href="https://mp.weixin.qq.com/s?__biz=MzI5ODYwMjI2MA==&amp;mid=2649807939&amp;idx=1&amp;sn=3f07a83e3ddf3f5bd3b97854077f66b1" target="_blank" rel="noopener">3 万字深入理解线性注意力机制</a>（腾讯技术工程）：从 DeltaNet、GDN 到 KDA，讲清模型层面的遗忘门设计与 AI Infra 层面如何把非线性 RNN 门控推导成仿射变换与下三角矩阵求解。</p>
+      <p><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496885&amp;idx=1&amp;sn=fcecfc62b3f876191ebaf931ace2ecc4" target="_blank" rel="noopener">拆解小红书存储底座：RedDTS 2.0</a>（小红书技术REDtech）：从多套独立传输服务走向统一数据总线，覆盖多源接入、多区双向、弱网传输与数据冲突。</p>
+      <p><a href="https://tech.meituan.com/2026/10/15/Small-Language-Model-in-meituan.html" target="_blank" rel="noopener">SLM 生成式高并发推理引擎</a>（美团技术团队）：面向“有界生成负载”重设在线执行路径，静态 DAG、AOTInductor、Packed Prefill、请求内 K/V 共享与选择性 FP8，在 20ms 约束下把吞吐做到 SGLang 的 10 倍。</p>
+      <p><a href="https://tech.meituan.com/2026/10/22/LOOP-AutoResearch.html" target="_blank" rel="noopener">从 LOOP 到图探索：AutoResearch 自进化系统</a>（美团技术团队）：用 CyclicGraph Engine 与状态机支撑长周期运行，两个业务项目中单任务耗时分别减少约 85% 与 83%。</p>
+      <p><a href="https://blog.bytebytego.com/p/data-movement-strategies-in-system" target="_blank" rel="noopener">Data Movement Strategies in System Design</a>（ByteByteGo）：梳理 pull 等数据移动策略、source/consumer/trigger 的取舍，适合做系统设计复习。</p>
+      <p><a href="https://martinfowler.com/rachels-ramblings/good-devs-wary.html" target="_blank" rel="noopener">Why are good developers so wary of agentic development?</a>（Martin Fowler）：核心观点是“built 不等于在 production 里 working”，优秀开发者的谨慎来自对生产复杂度的理解，而不是对写代码的执念。</p>
+    </div>
+  </section>
+
+  <section id="sources" class="sources">
+    <h2>参考链接汇总</h2>
+    <p class="lead">本期共引用 38 条来源，按主题分组；正文中的每条新闻均标注了出处。</p>
+
+    <div class="src-group">
+      <h4>前端 · 框架 · 工具链</h4>
+      <ul>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296173&amp;idx=3&amp;sn=da64a548971dbc6655e091f2982464fe" target="_blank" rel="noopener">React 19.3 新增 browser() API，使“仅客户端渲染”成为一等公民</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://devblogs.microsoft.com/cppblog/whats-new-in-vcpkg-oct-2026" target="_blank" rel="noopener">What's New in vcpkg (Oct 2026)</a><span class="feed">Microsoft for Developers</span></li>
+        <li><a href="https://blog.jetbrains.com/dotnet/2026/10/29/from-gdscript-to-gdextensions-one-ide-for-your-godot-code/" target="_blank" rel="noopener">From GDScript to GDExtensions: One IDE for Your Godot Code</a><span class="feed">The JetBrains Blog</span></li>
+        <li><a href="https://blog.jetbrains.com/clion/2026/10/segger-tools-gain-deeper-integration-in-clion-with-ai-assisted-debugging/" target="_blank" rel="noopener">SEGGER Tools Gain Deeper Integration in CLion with AI-assisted Debugging</a><span class="feed">The JetBrains Blog</span></li>
+        <li><a href="https://vercel.com/changelog/vercel-flags-starts-7x-faster-and-no-longer-extends-function-duration" target="_blank" rel="noopener">Vercel Flags starts 7x faster and no longer extends function duration</a><span class="feed">Vercel News</span></li>
+        <li><a href="https://vercel.com/changelog/block-ai-crawlers-and-assistants-independently-with-managed-rules" target="_blank" rel="noopener">Control AI crawlers and assistants separately in Vercel Firewall</a><span class="feed">Vercel News</span></li>
+        <li><a href="https://vercel.com/changelog/vercel-connect-adds-webhook-triggers-for-more-providers" target="_blank" rel="noopener">Vercel Connect adds webhook triggers for more providers</a><span class="feed">Vercel News</span></li>
+        <li><a href="https://vercel.com/changelog/vercel-plugin-is-now-available-in-antigravity" target="_blank" rel="noopener">Vercel Plugin is now available in Antigravity</a><span class="feed">Vercel News</span></li>
+        <li><a href="https://devblogs.microsoft.com/dotnet/blazor-welcomes-syncfusion" target="_blank" rel="noopener">Blazor Welcomes Open-Source Contributions from Syncfusion</a><span class="feed">Microsoft for Developers</span></li>
+        <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.145-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.145 (Insiders)</a><span class="feed">Microsoft for Developers</span></li>
+      </ul>
+    </div>
+
+    <div class="src-group">
+      <h4>平台 · 云 · 安全</h4>
+      <ul>
+        <li><a href="https://www.youtube.com/watch?v=xbCa0aa4tRM" target="_blank" rel="noopener">Everything announced at GitHub Universe 2026: opening keynote recap</a><span class="feed">GitHub</span></li>
+        <li><a href="https://www.youtube.com/shorts/A_N9HM237BA" target="_blank" rel="noopener">GitHub Universe 2026 opening keynote recap in 90 seconds</a><span class="feed">GitHub</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/cloudflare-web-search-api/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Cloudflare Introduces Web Search API for AI Applications</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/google-dpop-oauth2/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Google Adopts DPoP to Strengthen OAuth 2.0 Against Token Theft and Replay Attacks</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://www.docker.com/blog/coding-agent-horror-stories-the-cve-that-did-not-exist/" target="_blank" rel="noopener">Coding Agent Horror Stories: The CVE That Did Not Exist</a><span class="feed">Docker Blog</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/bug0-agent-testing-cached-replay/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Bug0 Releases QA Agent to Automate Regression Testing With Cached Playwright Replays</a><span class="feed">InfoQ</span></li>
+      </ul>
+    </div>
+
+    <div class="src-group">
+      <h4>AI Coding · Agent 工程</h4>
+      <ul>
+        <li><a href="https://www.infoq.com/news/2026/10/anthropic-code-review/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Anthropic Says Nobody Needs a Mental Model of Claude Code. Practitioners Are Testing That</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://www.youtube.com/watch?v=AnsXWH2_EBU" target="_blank" rel="noopener">How Anthropic Merges 30,000 Code Changes a Day</a><span class="feed">AI Engineer</span></li>
+        <li><a href="https://engineering.fb.com/2026/10/29/security/catching-bugs-before-they-land-jittestings-human-on-the-loop-approach-at-full-scale/" target="_blank" rel="noopener">Catching Bugs Before They Land: JiTTesting’s Human-on-the-Loop Approach at Full Scale</a><span class="feed">Engineering at Meta</span></li>
+        <li><a href="https://tech.meituan.com/2026/10/29/AI-Coding-IN-Distributed-Storage-System.html" target="_blank" rel="noopener">如何在“不能出错”的系统里使用 AI Coding？分布式存储实践与边界</a><span class="feed">美团技术团队</span></li>
+        <li><a href="https://www.youtube.com/watch?v=YqxpPI7YUjE" target="_blank" rel="noopener">Why a One-Line Change Can Break Your Whole Stack</a><span class="feed">AI Engineer · Qodo</span></li>
+        <li><a href="https://www.youtube.com/watch?v=Ok6QdZHCcI8" target="_blank" rel="noopener">How Revolut Cut AI Coding Costs 90% With Self-Hosted Open Models</a><span class="feed">AI Engineer · Revolut</span></li>
+        <li><a href="https://www.youtube.com/shorts/oY1htTx_h9U" target="_blank" rel="noopener">The Hardest Part of Testing Agents: Write Access</a><span class="feed">LangChain</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638321&amp;idx=2&amp;sn=8d162a8c7adf0fc1172417ae70d7e186" target="_blank" rel="noopener">告别 AI 黑盒：Prompt、Tool Call、Trace、Token 全链路可观测实战</a><span class="feed">dbaplus社群</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296173&amp;idx=2&amp;sn=9cc3620aa4dbce8e15fcae2010a0787a" target="_blank" rel="noopener">别再迷信 Agent 的自主性了</a><span class="feed">InfoQ</span></li>
+        <li><a href="https://tech.meituan.com/2026/09/10/Agent-Evaluation-White-Paper-01.html" target="_blank" rel="noopener">《Agent 评测白皮书》系列 01：Agent 评测全览</a><span class="feed">美团技术团队</span></li>
+        <li><a href="https://tech.meituan.com/2026/08/07/Agent-Evaluation.html" target="_blank" rel="noopener">Agent 评测漫谈 —— 由浅入深讲解 Agent 评测</a><span class="feed">美团技术团队</span></li>
+      </ul>
+    </div>
+
+    <div class="src-group">
+      <h4>模型 · 语音 · 开源</h4>
+      <ul>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&amp;mid=2247515097&amp;idx=1&amp;sn=0e42231255e86c0821eb6ee90424a1d5" target="_blank" rel="noopener">NVIDIA 开源 Nemotron 3.5 Transcribe：支持 40 语种转写</a><span class="feed">魔搭ModelScope社区</span></li>
+        <li><a href="https://modelscope.cn/collections/nv-community/Nemotron-35-Transcribe" target="_blank" rel="noopener">Nemotron 3.5 Transcribe 模型合集</a><span class="feed">ModelScope</span></li>
+        <li><a href="https://modelscope.cn/datasets/nv-community/Granary-v2" target="_blank" rel="noopener">Granary v2 多语言数据清单</a><span class="feed">ModelScope</span></li>
+        <li><a href="https://vercel.com/changelog/mistral-large-4-updated-weights-and-lower-pricing-on-ai-gateway" target="_blank" rel="noopener">Mistral Large 4 updated weights and lower pricing on AI Gateway</a><span class="feed">Vercel News</span></li>
+        <li><a href="https://huggingface.co/blog/mistral-large4" target="_blank" rel="noopener">Welcome Le Chonk: Mistral Large 4 on Hugging Face</a><span class="feed">Hugging Face - Blog</span></li>
+      </ul>
+    </div>
+
+    <div class="src-group">
+      <h4>深读 · 数据 · 方法论</h4>
+      <ul>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzI5ODYwMjI2MA==&amp;mid=2649807939&amp;idx=1&amp;sn=3f07a83e3ddf3f5bd3b97854077f66b1" target="_blank" rel="noopener">AI Infra 进阶：3 万字深入理解线性注意力机制</a><span class="feed">腾讯技术工程</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496885&amp;idx=1&amp;sn=fcecfc62b3f876191ebaf931ace2ecc4" target="_blank" rel="noopener">拆解小红书存储底座 01｜多源数据传输总线 RedDTS 2.0</a><span class="feed">小红书技术REDtech</span></li>
+        <li><a href="https://tech.meituan.com/2026/10/15/Small-Language-Model-in-meituan.html" target="_blank" rel="noopener">SLM 生成式高并发推理引擎：延迟约束下的有效吞吐优化</a><span class="feed">美团技术团队</span></li>
+        <li><a href="https://tech.meituan.com/2026/10/22/LOOP-AutoResearch.html" target="_blank" rel="noopener">从 LOOP 到图探索 —— 算法模型的 AutoResearch 自进化系统架构演进之路</a><span class="feed">美团技术团队</span></li>
+        <li><a href="https://blog.bytebytego.com/p/data-movement-strategies-in-system" target="_blank" rel="noopener">Data Movement Strategies In System Design</a><span class="feed">ByteByteGo Newsletter</span></li>
+        <li><a href="https://martinfowler.com/rachels-ramblings/good-devs-wary.html" target="_blank" rel="noopener">Why are good developers so wary of agentic development?</a><span class="feed">Martin Fowler</span></li>
+      </ul>
+    </div>
+
+    <div class="footnote">
+      <span class="cursor"></span> generated from freshrss_24h_compact_20261029_220633.json · 254 articles / 424 sources · 2026-10-29
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
