@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 用户研究版 · 2026-10-31</title>
+<style>
+  :root{
+    --orange:#f97316;
+    --orange-soft:#fb923c;
+    --purple:#7c3aed;
+    --purple-soft:#a855f7;
+    --ink:#2b2118;
+    --ink-soft:#5b4d42;
+    --cream:#fdf8f3;
+    --card:#ffffff;
+    --line:#f0e4d8;
+    --tag:#fdf0e6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 8% -10%, #fde8d6 0%, transparent 55%),
+      radial-gradient(900px 500px at 100% 0%, #efe3ff 0%, transparent 50%),
+      var(--cream);
+    color:var(--ink);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:40px 22px 72px;}
+
+  header.hero{
+    position:relative;
+    border-radius:26px;
+    padding:44px 40px 40px;
+    background:linear-gradient(130deg,#fb923c 0%,#f97316 38%,#a855f7 100%);
+    color:#fff;
+    box-shadow:0 22px 50px -22px rgba(168,85,247,.45);
+    overflow:hidden;
+  }
+  header.hero::after{
+    content:"";
+    position:absolute;right:-70px;top:-70px;width:260px;height:260px;
+    background:radial-gradient(circle,rgba(255,255,255,.35),transparent 70%);
+    border-radius:50%;
+  }
+  .kicker{
+    display:inline-block;font-size:13px;letter-spacing:.18em;
+    background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);
+    padding:5px 14px;border-radius:999px;font-weight:600;
+  }
+  header.hero h1{margin:18px 0 10px;font-size:34px;line-height:1.25;font-weight:800;letter-spacing:.01em;}
+  header.hero p.sub{margin:0;font-size:15.5px;opacity:.95;max-width:640px;}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;}
+  .meta span{
+    font-size:13px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+    padding:5px 13px;border-radius:999px;
+  }
+
+  section{margin-top:46px;}
+  .section-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .section-head .bar{width:6px;height:26px;border-radius:4px;background:linear-gradient(180deg,var(--orange),var(--purple));}
+  .section-head h2{margin:0;font-size:23px;font-weight:800;letter-spacing:.01em;}
+  .section-note{margin:0 0 20px 18px;color:var(--ink-soft);font-size:14px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:26px 28px;
+    box-shadow:0 10px 28px -22px rgba(43,33,24,.4);
+  }
+  .stack > .card + .card{margin-top:16px;}
+
+  /* 今日要点 */
+  .insight{display:flex;gap:18px;align-items:flex-start;}
+  .insight + .insight{margin-top:18px;padding-top:18px;border-top:1px dashed var(--line);}
+  .num{
+    flex:none;width:40px;height:40px;border-radius:13px;
+    background:linear-gradient(135deg,var(--orange-soft),var(--purple-soft));
+    color:#fff;font-weight:800;font-size:17px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 18px -10px rgba(168,85,247,.7);
+  }
+  .insight h3{margin:0 0 6px;font-size:17px;font-weight:750;line-height:1.5;}
+  .insight p{margin:0;font-size:15px;color:var(--ink-soft);}
+  .src{display:inline-block;margin-top:9px;font-size:12.5px;color:var(--purple);font-weight:600;}
+  .src a{color:var(--purple);text-decoration:none;border-bottom:1px dotted rgba(124,58,237,.5);}
+  .src a:hover{color:var(--orange);border-bottom-color:var(--orange);}
+
+  /* 趋势 */
+  .trend-label{
+    display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.08em;
+    color:#fff;background:linear-gradient(135deg,var(--orange),var(--purple));
+    padding:4px 12px;border-radius:8px;margin-bottom:12px;
+  }
+  .card h3.big{margin:0 0 12px;font-size:19px;font-weight:780;line-height:1.5;}
+  .card p{margin:0 0 12px;font-size:15px;color:var(--ink-soft);}
+  .card p:last-child{margin-bottom:0;}
+  .callout{
+    margin-top:16px;background:linear-gradient(120deg,#fff5ec,#f6efff);
+    border:1px solid #f3e2d5;border-left:4px solid var(--orange);
+    border-radius:12px;padding:15px 18px;font-size:14.5px;color:var(--ink);
+  }
+  .callout strong{color:var(--purple);}
+
+  /* 产品体验 */
+  .quote{
+    margin:14px 0;padding:12px 18px;border-left:3px solid var(--purple-soft);
+    background:#faf6ff;border-radius:0 10px 10px 0;color:var(--ink);font-size:14.5px;
+  }
+  .quote em{font-style:normal;color:var(--purple);font-weight:700;}
+
+  /* 方法 */
+  .method-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+  .pill{
+    display:inline-block;font-size:12px;font-weight:700;color:#b45309;
+    background:var(--tag);border:1px solid #f7dcc6;padding:3px 11px;border-radius:999px;margin-bottom:10px;
+  }
+  ol.clean,ul.clean{margin:10px 0 0;padding-left:22px;color:var(--ink-soft);font-size:14.7px;}
+  ol.clean li,ul.clean li{margin-bottom:8px;}
+
+  /* 雷达 */
+  .radar{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .radar .card{padding:22px 24px;}
+  .radar h3{margin:0 0 8px;font-size:16.5px;font-weight:750;line-height:1.5;}
+  .radar p{font-size:14.3px;color:var(--ink-soft);margin:0 0 10px;}
+  .tagline{
+    display:inline-block;font-size:12px;font-weight:700;color:var(--purple);
+    background:#f4ecff;border:1px solid #e6d8ff;padding:3px 10px;border-radius:999px;margin-bottom:10px;
+  }
+
+  /* 来源 */
+  .sources{background:#fffdfb;border:1px solid var(--line);border-radius:20px;padding:26px 28px;}
+  .sources h3{margin:0 0 6px;font-size:16px;color:var(--ink);}
+  .sources .grp{margin-top:18px;}
+  .sources .grp h4{margin:0 0 8px;font-size:13.5px;color:var(--orange);letter-spacing:.04em;}
+  .sources ol{margin:0;padding-left:22px;font-size:13.6px;color:var(--ink-soft);line-height:1.9;}
+  .sources a{color:var(--purple);text-decoration:none;border-bottom:1px dotted rgba(124,58,237,.45);}
+  .sources a:hover{color:var(--orange);border-bottom-color:var(--orange);}
+
+  footer.note{
+    margin-top:40px;text-align:center;font-size:12.8px;color:#9a8b7f;
+    line-height:1.9;
+  }
+  @media (max-width:720px){
+    .wrap{padding:26px 14px 56px;}
+    header.hero{padding:32px 24px;border-radius:20px;}
+    header.hero h1{font-size:26px;}
+    .radar{grid-template-columns:1fr;}
+    .card{padding:22px 20px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kicker">TECH DAILY · 用户研究版</span>
+    <h1>当 AI 从“入口”变成“环境”<br>体验设计的重心正在移动</h1>
+    <p class="sub">面向 UX 设计师、产品经理与用户研究员：从今日 111 条科技新闻中，筛选与用户体验、设计趋势、用户洞察和研究方法相关的内容，关注“用户需要什么”，而不是“技术能实现什么”。</p>
+    <div class="meta">
+      <span>📅 2026-10-31（周六）</span>
+      <span>🗂 数据窗口 24 小时</span>
+      <span>🧭 筛选自 111 条 / 424 个来源</span>
+      <span>🌡 人本视角 · 暖橙 × 紫</span>
+    </div>
+  </header>
+
+  <!-- 今日要点 -->
+  <section>
+    <div class="section-head"><span class="bar"></span><h2>今日要点</h2></div>
+    <p class="section-note">五条最值得带进下一次设计评审与用户访谈的用户体验洞察。</p>
+
+    <div class="card stack">
+
+      <div class="insight">
+        <div class="num">1</div>
+        <div>
+          <h3>用户说“想要”，不等于用户“会用”</h3>
+          <p>Bumble 产品经理 Supriya Subudhi 复盘了拥有 2000 万月活用户的约会 App 里一次 AI 照片反馈功能 A/B 测试：问卷中 78% 的用户表示想要这个功能，但真正使用的人只有 10–15%。更麻烦的是，“平均值提升”掩盖了长尾的诡异输出——系统会对已经在笑的人说“再笑一点”；效果最好的模型成本约为普通模型的 10 倍，换成便宜模型后效果又缩水；受监管限制，功能甚至无法在美国以外上线。这提醒研究团队：意向数据必须和行为数据交叉验证，且“平均胜利”不等于“每个用户都受益”。</p>
+          <span class="src">📎 来源：<a href="https://www.youtube.com/watch?v=CvmZtAPmAW4" target="_blank" rel="noopener">AI Engineer</a></span>
+        </div>
+      </div>
+
+      <div class="insight">
+        <div class="num">2</div>
+        <div>
+          <h3>AI 正在从“独立 App”搬进“系统功能”</h3>
+          <p>苹果正式宣布国行 Apple 智能首批功能：11 月 4 日随 iOS 开发者 Beta 开放测试，12 月随 iOS 27.3 面向中国用户推出，阿里千问接入 Siri、写作工具与视觉智能。用户无需打开聊天 App，即可在系统原生界面里完成改写、校对、摘要、照片消除、实时翻译与“询问千问”。设计含义很直接：AI 的价值不再取决于“多一个入口”，而在于降低切换成本——把能力放到问题发生的地方；同时“是否把内容交给外部模型”的同意流程，正在成为新的交互原语。</p>
+          <span class="src">📎 来源：<a href="https://www.ifanr.com/1687012" target="_blank" rel="noopener">爱范儿</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247638511&amp;idx=1&amp;sn=7a602736ddb800f788183bf136aa0fb4" target="_blank" rel="noopener">少数派</a> · <a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&amp;mid=2691573844&amp;idx=1&amp;sn=a137493eaa90f9d703bca869430445db" target="_blank" rel="noopener">腾讯科技</a></span>
+        </div>
+      </div>
+
+      <div class="insight">
+        <div class="num">3</div>
+        <div>
+          <h3>同样是“用 AI”，三种协作模式决定了学习结果</h3>
+          <p>哈佛商学院教授 Karim R. Lakhani 在访谈中介绍了对 244 名 BCG 顾问的研究：有人是持续与 AI 讨论、质疑、补充的 “Cyborgs”；有人保留清晰分工、把部分任务交出去的 “Centaurs”；还有人把任务整包自动化、只做复制粘贴的 “Self-Automators”。结果表现最差的恰恰是第三类，因为他们停止了思考与参与。他还提醒，风险更大的可能是抗拒改变的中层管理者，而非初级员工——“这是 AI 给我的”不是对结果负责的借口。对用户研究而言，这提示我们应把“是否使用 AI”升级为“以何种协作模式使用 AI”来给用户分层。</p>
+          <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&amp;mid=2247489359&amp;idx=1&amp;sn=8c38530d83ba65bdad5d17b156c5ac11" target="_blank" rel="noopener">晚点再听LaterCast</a></span>
+        </div>
+      </div>
+
+      <div class="insight">
+        <div class="num">4</div>
+        <div>
+          <h3>界面正在从“看见”走向“看懂”，再走向“办事”</h3>
+          <p>小米发布并开源 0.8B 参数的轻量文档理解模型 Xiaomi-OCR-0，在 OmniDocBench v1.6 上得分 96.83，为 1B 以下模型第一；它把文档解析、关键信息抽取与视觉问答合为一体。落到体验上，“超级小爱”的一键识屏可以把取餐码“上岛”、自动记账——手机不再只是显示屏幕内容，而是理解当前界面并顺手完成下一步。这类“上下文感知 + 主动行动”的能力，正在把语音助手式交互推向环境式计算，也对权限、确认与可撤销性提出更高要求。</p>
+          <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&amp;mid=2652813116&amp;idx=2&amp;sn=a299b57f8eecedd9c838cdd0385a197c" target="_blank" rel="noopener">智东西</a></span>
+        </div>
+      </div>
+
+      <div class="insight">
+        <div class="num">5</div>
+        <div>
+          <h3>AI 品牌的人设，其实由用户共同写完</h3>
+          <p>“DeepSeek 大肥鱼”在 B 站引发二创潮：用户把蓝鲸 Logo 变成穿女仆装、爱摸鱼、有粉丝阵营的角色；豆包被编排成“笨女孩”，Claude 被视为严肃可靠的工作搭档，Grok 被叫“老司机”。这些印象部分来自真实产品体验，又被表情包、翻车视频和二次创作放大。对产品与品牌设计来说，这意味着“人格设定”不是单向发布，而是官方设定与用户语义空间共同塑造的结果；产品团队需要管理的是预期与边界，而不是试图完全控制叙事。</p>
+          <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&amp;mid=2653115760&amp;idx=1&amp;sn=f6dbaf67947689c1efbdba315926a207" target="_blank" rel="noopener">极客公园</a></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 设计趋势洞察 -->
+  <section>
+    <div class="section-head"><span class="bar"></span><h2>设计趋势洞察</h2></div>
+    <p class="section-note">两个正在重塑交互范式的方向：环境式 AI，以及对话 Agent 的节奏设计。</p>
+
+    <div class="card stack">
+      <div>
+        <span class="trend-label">趋势一</span>
+        <h3 class="big">AI 从“目的地”变成“环境能力”</h3>
+        <p>苹果在中国落地的 Apple 智能，是“Ambient AI”最清晰的一次产品化示范：Siri、写作工具、视觉智能、照片消除、实时翻译都嵌在系统原生界面里，用户不需要先想到“我要打开一个 AI”。端侧模型承担照片消除等任务，千问的接入则采用需主动开通的扩展形态——在把问题、文档或图片发送给千问之前先征得同意，且请求与回复不用于模型训练。这里的体验关键是控制感：用户随时知道“哪一步交给了外部模型”，而不是被动地接受一个黑箱。</p>
+        <p>同一趋势的另一面是“屏幕即上下文”。小米把文档理解模型塞进手机，让“超级小爱”读取当前界面并把取餐码、账单信息转成下一步动作；DeepSeek 的 Super-agent 探索更进一步，试图让 Agent 跨 IM 与 GitHub 连续理解同一个任务。三者共同指向一个设计判断：未来的 AI 界面不一定是聊天框，而可能是任何正在发生任务的界面。</p>
+        <div class="callout">
+          <strong>设计启示：</strong>做 AI 功能时，先问“用户在哪个界面遇到这个问题”，而不是“我们让用户去哪里打开 AI”。同时把“同意、可见、可撤销”设计成流程的一部分：同意不等于一次性弹窗，而是用户对“哪些上下文被带走、带走后如何使用”的持续掌控。首发仅限 iPhone 也提醒我们，多端一致性仍是环境式 AI 的落地难点。
+        </div>
+      </div>
+
+      <div style="margin-top:26px;padding-top:26px;border-top:1px dashed var(--line);">
+        <span class="trend-label">趋势二</span>
+        <h3 class="big">对话式 Agent 的“节奏设计”比答案质量更难</h3>
+        <p>在 2026 iRTE 实时智能大会上，声网把这个命题概括得很准确：“如果 Coding Agent 是 AGI 的开卷笔试，那么 Convo Agent 是 AGI 的实时口试。”产品要交付的不是一段流畅回答，而是一次有效交互：Agent 何时开口、何时停下、能否接住业务语境、跨通道后上下文是否还在、真实流量下会不会崩。技术侧对应的关键词是全双工、语义 VAD（语音活动检测）、打断与恢复、IM 承载流式消息的负载升级。</p>
+        <p>这对体验设计提出了新的规范对象：过去我们设计“页面状态”，现在要设计“参与节奏”。打断是否被允许、沉默多久算冷场、用户改变主意后上下文如何回滚、多人共用同一个 Agent 时谁在说话——这些都需要像组件规范一样被定义和测试。仅用回答准确率评价对话 Agent，会系统性低估节奏与克制带来的体验差异。</p>
+        <div class="callout">
+          <strong>设计启示：</strong>把 turn-taking（轮次）、interruptibility（可打断性）、恢复策略和“不该说话的时刻”写进设计规范；在原型阶段就做多轮、含打断、含噪声的对话测试，而不是只测单轮回答质量。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 产品体验点评 -->
+  <section>
+    <div class="section-head"><span class="bar"></span><h2>产品体验点评</h2></div>
+    <p class="section-note">一个“做减法”的正面案例，和一个“个人助理”的跨市场对照。</p>
+
+    <div class="card stack">
+      <div>
+        <span class="trend-label">案例一</span>
+        <h3 class="big">Apple Sports：把注意力还给“比赛本身”</h3>
+        <p>少数派作者从资深体育迷的视角，复盘了 Apple Sports 为什么打动他：应用只回答四件事——几点开始、比分如何、比赛中发生了什么、最后的技术统计；围绕球员和球队的争论则留给用户“有兴趣时再去别处看”。这款应用已上线国区 App Store，完全免费，要求 iOS 18 或更新版本，支持简体中文。</p>
+        <p>在一众“信息越多越好”的体育产品里，它靠的是信息架构上的克制：明确什么不展示、把事实与情绪分离、让单一任务的心智足够干净。对当下被 AI 助手塞满的界面来说，这是一个很有价值的反例——并不是每个页面都需要一个副驾，清晰的层级和可预测的结构本身就是体验。</p>
+        <div class="quote">可迁移的做法：<em>先写“不展示清单”</em>，再决定首屏放什么；把“用户此刻要完成的一件事”作为信息取舍的唯一标准。</div>
+        <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247638456&amp;idx=1&amp;sn=87ff8f1e9ae1363ae855f99aacc8d9df" target="_blank" rel="noopener">少数派</a></span>
+      </div>
+
+      <div style="margin-top:26px;padding-top:26px;border-top:1px dashed var(--line);">
+        <span class="trend-label">案例二</span>
+        <h3 class="big">个人 AI 助理的中美差异：灵光 2.0 vs Meta Muse</h3>
+        <p>极客公园花两天实测了蚂蚁灵光 2.0，并与千问、Meta Muse、Claude Duet 横向对比。灵光的定位已从“30 秒用自然语言生成小应用”，转向“能管事的个人 AI 助理”，口号是“记得住、盯得牢、办得了”，并打通了支付宝账单、钉钉、飞书、米家等服务。作为参照，扎克伯格披露 Meta Muse 已有超过 1000 万人设置，购物是最常见用途，超过四分之一用户在用它买东西，平均客单价超过 200 美元，首周交易量甚至让 Meta 与 Stripe 临时上调了信用额度。</p>
+        <p>两者的差异不在模型，而在生态结构：美国电商分散在大量独立网站，助理可通过云端浏览器直达店铺；中国的消费与沟通高度集中在少数超级 App 内部，数据和交易链路彼此独立。于是“办事”能力被生态边界切碎，产品体验的胜负手变成服务连接与权限编排，而不是单一对话能力。</p>
+        <div class="quote">可迁移的做法：<em>先画用户任务链路，再决定接哪些服务</em>；把授权、可解释、可撤销做成体验的一部分，而不是藏在设置里的合规附件。</div>
+        <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&amp;mid=2653115761&amp;idx=1&amp;sn=58624dc451e8d995fddf0cdd7c31ae23" target="_blank" rel="noopener">极客公园</a></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 研究方法论 -->
+  <section>
+    <div class="section-head"><span class="bar"></span><h2>研究方法论</h2></div>
+    <p class="section-note">两个可以直接带进下周工作坊的工具：需求结构化与 AI 实验评测。</p>
+
+    <div class="method-grid">
+      <div class="card">
+        <span class="pill">方法 · 需求结构化</span>
+        <h3 class="big">场景卡七格法：把“想用 AI”变成“能立项”</h3>
+        <p>来自人人都是产品经理的一线复盘：50 多家企业都在问“我们能不能上个 Agent”，但往下聊三句就卡住——因为“想用 AI”和“能立项”之间隔着七格。七格分别是：一句话需求、痛点场景、频次、现在怎么干、时间多久、数据在哪、错了会怎样。填满七格，拿回去的不是 PPT，而是可以直接开工的现场证据。</p>
+        <p>它本质上是把模糊欲望转译成可观察、可验收的行为约束。对用户研究尤其有用的是“错了会怎样”这一格：它直接连到风险容忍度、人工兜底设计和责任边界，而这恰恰是很多 AI 需求在访谈中被跳过的部分。</p>
+        <ol class="clean">
+          <li>一句话需求：用户到底想完成什么，而不是想要什么功能。</li>
+          <li>痛点场景 + 频次：这个问题多久发生一次，值不值得做。</li>
+          <li>现在怎么干 + 时间多久：替代方案与真实成本基线。</li>
+          <li>数据在哪 + 错了会怎样：可行性与风险边界。</li>
+        </ol>
+        <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&amp;mid=2651933859&amp;idx=3&amp;sn=4690394f0d7650b905f24c1fd7322707" target="_blank" rel="noopener">人人都是产品经理</a></span>
+      </div>
+
+      <div class="card">
+        <span class="pill">方法 · AI 实验评测</span>
+        <h3 class="big">在说“这个 AI 实验成功”之前，先过五问</h3>
+        <p>Bumble 的 A/B 复盘给出了一个非常实用的成功判定清单：用户真的在用吗（而非只是说想要）？平均提升是否掩盖了长尾异常？成本是否翻了十倍？换成更便宜的模型效果是否缩水？合规是否允许全球上线？这五问把“指标上涨”还原成“体验是否可持续”。</p>
+        <p>当评测依赖自动评审时，还需要校准“评委”本身。Upstart 与 Coval 在贷款核验电话的语音 AI 项目中，把 LLM 评审与人工评审的一致率从 33% 提升到 92%：做法包括实时监控、人工复核队列、把问题重新模拟后修复、以及让 Agent 自愈，但每一次变更仍由人签字确认。对研究团队而言，评价自动评审器应看“与人类的一致率”而非单点准确率，并保留人工复核的闭环。</p>
+        <ul class="clean">
+          <li>意向 vs 行为：问卷“想要”必须由真实使用率交叉验证。</li>
+          <li>平均值 vs 长尾：单独抽检异常输出，避免“平均胜利”。</li>
+          <li>成本 vs 效果：模型升级带来的收益要能覆盖成本与合规代价。</li>
+          <li>自动评审 vs 人工：以一致率为核心指标，保留人类签字环节。</li>
+        </ul>
+        <span class="src">📎 来源：<a href="https://www.youtube.com/watch?v=CvmZtAPmAW4" target="_blank" rel="noopener">AI Engineer · Bumble</a> · <a href="https://www.youtube.com/watch?v=3osCbSufv8g" target="_blank" rel="noopener">AI Engineer · Upstart &amp; Coval</a></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- UX雷达 -->
+  <section>
+    <div class="section-head"><span class="bar"></span><h2>UX 雷达</h2></div>
+    <p class="section-note">值得提前关注、但尚未成为主流设计语言的早期信号。</p>
+
+    <div class="radar">
+      <div class="card">
+        <span class="tagline">SIGNAL 01 · Agent 生产化</span>
+        <h3>Agent 的“最后一公里”是组织与可观测性</h3>
+        <p>阿里云开源的《AI Agent Handbook》收录的 2026 开发者调研显示：46% 的团队已完成或正在开发 Agent，但真正部署到生产约 18%，持续迭代的不到 10%。主要卡点是工程配套——上下文与记忆、多模型路由与成本、评估与可观测。架构上单 Agent 约 40%、多 Agent 约 42%，约 15% 把人在回路当作生产原则；多 Agent 协作中状态与上下文衰减约 60%。</p>
+        <p>信号：Agent 的体验问题会越来越多地表现为“可观测、可干预、可回滚”，这会催生新的设计岗位能力。</p>
+        <span class="src">📎 来源：<a href="https://x.com/shao__meng/status/2116345470125543768" target="_blank" rel="noopener">meng shao（阿里云报告）</a></span>
+      </div>
+
+      <div class="card">
+        <span class="tagline">SIGNAL 02 · 注意力瓶颈</span>
+        <h3>多任务 Agent 的上限，是人的注意力</h3>
+        <p>DeepSeek Harness 团队的 Super-agent 探索认为，单任务能力已经够强，瓶颈变成了“人同时盯得住几个 Session”——一个人通常只能跟住大约 3–5 个活跃会话。他们用双层 Router/Worker、事件驱动、异步 ReAct、存算分离与端侧 daemon，把 Session 变成实现细节，让人只做高层决策与验收。该实例已用于内部研发协作，可在无人 @ 时识别缺陷并提交 PR。</p>
+        <p>信号：多 Agent 编排界面需要新的信息架构——“任务看板”可能比“聊天列表”更接近未来的主界面。</p>
+        <span class="src">📎 来源：<a href="https://x.com/shao__meng/status/2116541149443698968" target="_blank" rel="noopener">meng shao</a> · <a href="https://www.ifanr.com/1687026" target="_blank" rel="noopener">爱范儿</a></span>
+      </div>
+
+      <div class="card">
+        <span class="tagline">SIGNAL 03 · 记忆即产品</span>
+        <h3>“记住什么”正在成为可设计、可审计的对象</h3>
+        <p>Oracle 的 Wojciech Pluta 提出一个清晰区分：RAG 让 Agent 会“读”，记忆让它会“写”，而商业价值就在写入里。关键在于 memory promotion——判断什么值得保留、与既有记录核对、然后接纳、拒绝或升级给人工。演示中的房贷 Agent 能跨会话记住操作员偏好，但会拒绝存储“批准所有申请”这类规则。</p>
+        <p>信号：记忆的可见性、可编辑性与可删除性，将直接决定用户对 AI 产品的信任程度。</p>
+        <span class="src">📎 来源：<a href="https://www.youtube.com/watch?v=qq2Hm4XNRgI" target="_blank" rel="noopener">AI Engineer · Oracle</a></span>
+      </div>
+
+      <div class="card">
+        <span class="tagline">SIGNAL 04 · 目标驱动</span>
+        <h3>开放式目标需要“可验收”的界面</h3>
+        <p>GitLab 19.4 为 Duo CLI 增加 /goal 命令（公开测试）：接受一个开放式目标并持续执行，直到完成或达到迭代上限；一个模型负责实施变更，另一个模型对照既定目标检查进度，开发者可以停止、改目标或重新引导。官方特别说明这里的“验证”不是形式化验证，清晰的验收标准依然重要。</p>
+        <p>信号：目标—进度—验收的可视化，会成为目标驱动型 Agent 的核心设计对象。</p>
+        <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296315&amp;idx=3&amp;sn=ffa53f028f784343b6b1e6b81d7b48bc" target="_blank" rel="noopener">InfoQ</a></span>
+      </div>
+
+      <div class="card">
+        <span class="tagline">SIGNAL 05 · 信任设计</span>
+        <h3>透明与可审计，正在变成体验资产</h3>
+        <p>Cursor 披露其扩展市场分发的 Claude Code VS Code 扩展遭篡改并植入恶意软件，最多影响约 5000 名用户，官方建议升级至 2.1.314。与此同时，刘润重提“下一个红利是信任”——2023 年一张 AI 生成的图像获得索尼世界摄影奖，作者 Boris Eldagsen 主动拒奖，以此提醒真实性与出处的重要性。</p>
+        <p>信号：来源可见、变更可审计、权限最小化，会被用户当作产品体验质量的一部分，而不是安全团队的内部指标。</p>
+        <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650456074&amp;idx=1&amp;sn=a1a43d5026d0b4a0b624c28bb54191b3" target="_blank" rel="noopener">AINLP</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5NjM5MjQ4MQ==&amp;mid=2651789067&amp;idx=2&amp;sn=df352b01bb2fd30faddf2803226b5ce6" target="_blank" rel="noopener">刘润</a></span>
+      </div>
+
+      <div class="card">
+        <span class="tagline">SIGNAL 06 · 非工程师用户</span>
+        <h3>“不会写代码”正在变成使用 AI 的优势</h3>
+        <p>Replit CEO Amjad Masad 提到，超过 75% 的 Replit 用户不是工程师，而这恰恰是他们能拿到好结果的原因之一：最新前沿模型对非常简单的提示响应更好，越试图微观管理反而越差。他说自己的提示词越来越“懒”，使用的 skill 文件也越来越少。硅谷都知道不该微观管理优秀的工程师，但大多数工程师却本能地微观管理 AI。</p>
+        <p>信号：面向非专业用户的 AI 界面应减少参数暴露、降低术语门槛，把“少设置、直接说”作为默认体验。</p>
+        <span class="src">📎 来源：<a href="https://www.youtube.com/shorts/ftlO-Ts7BUU" target="_blank" rel="noopener">Product School</a></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 参考来源 -->
+  <section>
+    <div class="section-head"><span class="bar"></span><h2>参考来源</h2></div>
+    <p class="section-note">本期日报引用的全部原始内容，按主题归类，均可点击查看原文。</p>
+
+    <div class="sources">
+      <h3>用户行为与产品体验</h3>
+
+      <div class="grp">
+        <h4>AI 功能评测与协作模式</h4>
+        <ol>
+          <li>78% Wanted This AI Feature. Almost Nobody Used It — Supriya Subudhi, Bumble · <a href="https://www.youtube.com/watch?v=CvmZtAPmAW4" target="_blank" rel="noopener">AI Engineer</a></li>
+          <li>哈佛商学院教授：最容易受到 AI 冲击的人，可能和你想的不一样 · <a href="https://mp.weixin.qq.com/s?__biz=MzcxMDA5NTI0OA==&amp;mid=2247489359&amp;idx=1&amp;sn=8c38530d83ba65bdad5d17b156c5ac11" target="_blank" rel="noopener">晚点再听LaterCast</a></li>
+          <li>Replit CEO: Why Not Knowing How to Code Is Now an Advantage · <a href="https://www.youtube.com/shorts/ftlO-Ts7BUU" target="_blank" rel="noopener">Product School</a></li>
+          <li>DeepSeek，怎么就变成了一条「大肥鱼」 · <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&amp;mid=2653115760&amp;idx=1&amp;sn=f6dbaf67947689c1efbdba315926a207" target="_blank" rel="noopener">极客公园</a></li>
+        </ol>
+      </div>
+
+      <div class="grp">
+        <h4>系统级 AI 与移动体验</h4>
+        <ol>
+          <li>刚刚，国行 Apple 智能官宣，但满血 Siri AI 还得等 · <a href="https://www.ifanr.com/1687012" target="_blank" rel="noopener">爱范儿</a></li>
+          <li>Apple 智能官宣入华：阿里千问接入苹果生态 · <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247638511&amp;idx=1&amp;sn=7a602736ddb800f788183bf136aa0fb4" target="_blank" rel="noopener">少数派</a></li>
+          <li>来了！苹果智能，登陆中国大陆市场 · <a href="https://mp.weixin.qq.com/s?__biz=Mjc1NjM3MjY2MA==&amp;mid=2691573844&amp;idx=1&amp;sn=a137493eaa90f9d703bca869430445db" target="_blank" rel="noopener">腾讯科技</a></li>
+          <li>一组图看懂中国版 Apple 智能 · <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247638524&amp;idx=1&amp;sn=7935bcc06da05860b226119dacb841db" target="_blank" rel="noopener">少数派</a></li>
+          <li>0.8B！小米开源新模型，让超级小爱识屏主动办事 · <a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&amp;mid=2652813116&amp;idx=2&amp;sn=a299b57f8eecedd9c838cdd0385a197c" target="_blank" rel="noopener">智东西</a></li>
+          <li>只专注比赛本身，苹果这个看球的 App 有哪不同？ · <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247638456&amp;idx=1&amp;sn=87ff8f1e9ae1363ae855f99aacc8d9df" target="_blank" rel="noopener">少数派</a></li>
+          <li>个人灵光 2.0 实测：个人 AI 助理的机会和门槛 · <a href="https://mp.weixin.qq.com/s?__biz=MTMwNDMwODQ0MQ==&amp;mid=2653115761&amp;idx=1&amp;sn=58624dc451e8d995fddf0cdd7c31ae23" target="_blank" rel="noopener">极客公园</a></li>
+        </ol>
+      </div>
+
+      <div class="grp">
+        <h4>交互范式与研究方法</h4>
+        <ol>
+          <li>从一通电话到全球化 Agent：实时互动产品的五个工程关口 · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&amp;mid=2651933859&amp;idx=2&amp;sn=3a67208c4f3d48ba12231678f00c4431" target="_blank" rel="noopener">人人都是产品经理</a></li>
+          <li>场景卡七格法，把“想要”变成“能检验”的需求 · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&amp;mid=2651933859&amp;idx=3&amp;sn=4690394f0d7650b905f24c1fd7322707" target="_blank" rel="noopener">人人都是产品经理</a></li>
+          <li>Voice AI Where One Wrong Question Breaks the Rules — Upstart &amp; Coval · <a href="https://www.youtube.com/watch?v=3osCbSufv8g" target="_blank" rel="noopener">AI Engineer</a></li>
+          <li>How to Decide What Your AI Agent Should Remember — Wojciech Pluta, Oracle · <a href="https://www.youtube.com/watch?v=qq2Hm4XNRgI" target="_blank" rel="noopener">AI Engineer</a></li>
+        </ol>
+      </div>
+
+      <div class="grp">
+        <h4>Agent 工作流与早期信号</h4>
+        <ol>
+          <li>阿里云《AI Agent Handbook》· 2026 Agent 开发者调研报告 · <a href="https://x.com/shao__meng/status/2116345470125543768" target="_blank" rel="noopener">meng shao（X）</a></li>
+          <li>DeepSeek Harness 团队 Super-agent 设计探索 · <a href="https://x.com/shao__meng/status/2116541149443698968" target="_blank" rel="noopener">meng shao（X）</a> · <a href="https://www.ifanr.com/1687026" target="_blank" rel="noopener">爱范儿</a></li>
+          <li>GitLab 19.4 发布，新增目标驱动型智能体，强化成本控制 · <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296315&amp;idx=3&amp;sn=ffa53f028f784343b6b1e6b81d7b48bc" target="_blank" rel="noopener">InfoQ</a></li>
+          <li>Cursor Claude Code 扩展遭恶意篡改 · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650456074&amp;idx=1&amp;sn=a1a43d5026d0b4a0b624c28bb54191b3" target="_blank" rel="noopener">AINLP</a></li>
+          <li>下一个红利，是信任 · <a href="https://mp.weixin.qq.com/s?__biz=MjM5NjM5MjQ4MQ==&amp;mid=2651789067&amp;idx=2&amp;sn=df352b01bb2fd30faddf2803226b5ce6" target="_blank" rel="noopener">刘润</a></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <footer class="note">
+    本期从 2026-10-30 20:43 至 2026-10-31 20:43 的 111 条新闻中，筛选与用户体验、设计趋势、用户洞察与研究方法论相关的 20 余条内容整理而成。<br>
+    观点仅代表所选内容作者，摘要由编辑重新组织；链接均指向原始来源。用户研究版 · 生成于 2026-10-31。
+  </footer>
+
+</div>
+</body>
+</html>

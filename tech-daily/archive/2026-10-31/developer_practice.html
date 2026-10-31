@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践日报 · 2026-10-31</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-soft: #12181f;
+    --panel: #161b22;
+    --panel-2: #1c2230;
+    --border: #2a3240;
+    --text: #d7dee8;
+    --text-dim: #8b98a9;
+    --text-mute: #5f6b7a;
+    --green: #3fb950;
+    --cyan: #4dd0e1;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --orange: #ffa657;
+    --red: #ff7b72;
+    --yellow: #e3b341;
+    --mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", "Cascadia Code", Consolas, Menlo, "Liberation Mono", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background:
+      radial-gradient(1200px 500px at 80% -10%, rgba(88,166,255,0.10), transparent 60%),
+      radial-gradient(900px 500px at 0% 0%, rgba(63,185,80,0.07), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.75;
+    padding: 0 0 64px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; color: var(--cyan); }
+
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 22px; }
+
+  /* ---------- Header ---------- */
+  header.hero {
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(22,27,34,0.9), rgba(13,17,23,0.2));
+    padding: 46px 0 30px;
+    margin-bottom: 34px;
+  }
+  .term-bar {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 22px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
+  .term-path { color: var(--text-mute); font-size: 12px; margin-left: 8px; }
+  .role-badge {
+    display: inline-block; font-size: 12px; letter-spacing: 1px;
+    color: var(--green); border: 1px solid rgba(63,185,80,0.4);
+    background: rgba(63,185,80,0.08); padding: 3px 10px; border-radius: 4px;
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 30px; line-height: 1.3; letter-spacing: -0.3px; font-weight: 700; }
+  h1 .accent { color: var(--green); }
+  .meta { color: var(--text-dim); font-size: 13px; margin-top: 14px; }
+  .meta code {
+    background: var(--panel-2); border: 1px solid var(--border);
+    padding: 1px 7px; border-radius: 4px; color: var(--cyan); font-size: 12px;
+  }
+
+  /* ---------- Section ---------- */
+  section { margin-bottom: 46px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .sec-num { color: var(--green); font-size: 13px; letter-spacing: 2px; opacity: .8; }
+  .sec-title { font-size: 21px; font-weight: 700; letter-spacing: -0.2px; }
+  .sec-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+  /* ---------- Hot list ---------- */
+  .hot { display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    position: relative;
+    transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover {
+    border-color: #3a4658;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 26px rgba(0,0,0,0.35);
+  }
+  .card::before {
+    content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 3px;
+    border-radius: 0 3px 3px 0; background: var(--green);
+  }
+  .card .idx {
+    position: absolute; top: 20px; right: 22px;
+    font-size: 12px; color: var(--text-mute);
+    border: 1px solid var(--border); border-radius: 4px; padding: 1px 8px;
+  }
+  .card h3 { font-size: 16px; font-weight: 700; padding-right: 48px; line-height: 1.5; }
+  .card h3 .tag {
+    font-size: 11px; font-weight: 500; vertical-align: middle;
+    padding: 1px 7px; border-radius: 4px; margin-right: 8px;
+    border: 1px solid;
+  }
+  .t-sec { color: var(--red); border-color: rgba(255,123,114,0.4); background: rgba(255,123,114,0.08); }
+  .t-tool { color: var(--blue); border-color: rgba(88,166,255,0.4); background: rgba(88,166,255,0.08); }
+  .t-model { color: var(--purple); border-color: rgba(188,140,255,0.4); background: rgba(188,140,255,0.08); }
+  .t-infra { color: var(--orange); border-color: rgba(255,166,87,0.4); background: rgba(255,166,87,0.08); }
+  .card p { color: var(--text-dim); margin-top: 10px; font-size: 14px; }
+  .card p code, .body code, li code {
+    background: var(--panel-2); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 4px; color: var(--cyan);
+    font-size: 12.5px; white-space: nowrap;
+  }
+  .card p strong, .body strong { color: var(--text); font-weight: 600; }
+  .src {
+    margin-top: 12px; font-size: 12.5px; color: var(--text-mute);
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .src a { color: var(--blue); }
+  .src .sep { opacity: .4; }
+
+  /* ---------- Deep dive ---------- */
+  .deep {
+    background: linear-gradient(180deg, var(--panel), var(--bg-soft));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 26px 26px 24px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .deep::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+    background: linear-gradient(90deg, var(--green), var(--cyan), var(--blue));
+  }
+  .deep h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .deep .sub { color: var(--text-mute); font-size: 12.5px; margin-bottom: 16px; }
+  .deep p { color: var(--text-dim); margin-bottom: 12px; }
+  .deep h4 {
+    color: var(--cyan); font-size: 14px; margin: 18px 0 8px;
+    letter-spacing: .2px;
+  }
+  .deep ul { list-style: none; margin: 8px 0 12px; }
+  .deep li {
+    position: relative; padding-left: 20px; margin-bottom: 7px;
+    color: var(--text-dim); font-size: 14px;
+  }
+  .deep li::before {
+    content: "▸"; position: absolute; left: 2px; color: var(--green); font-size: 12px; top: 1px;
+  }
+  .kv {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px; margin: 16px 0;
+  }
+  .kv .box {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+  }
+  .kv .box .n { font-size: 20px; font-weight: 700; color: var(--green); display: block; }
+  .kv .box .l { font-size: 12px; color: var(--text-mute); margin-top: 2px; }
+
+  /* ---------- Tools ---------- */
+  .tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .tool {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 18px 16px;
+    transition: border-color .18s ease;
+  }
+  .tool:hover { border-color: #3a4658; }
+  .tool .head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .tool .head .ic { color: var(--orange); font-size: 15px; }
+  .tool h4 { font-size: 14.5px; font-weight: 700; }
+  .tool p { color: var(--text-dim); font-size: 13px; }
+  .tool .src { margin-top: 10px; }
+
+  /* ---------- Practice ---------- */
+  .practice { display: flex; flex-direction: column; gap: 12px; }
+  .tip {
+    display: grid; grid-template-columns: 34px 1fr; gap: 14px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .tip .num {
+    width: 34px; height: 34px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.3);
+    color: var(--green); font-size: 13px; font-weight: 700;
+  }
+  .tip h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 4px; }
+  .tip p { color: var(--text-dim); font-size: 13.5px; }
+  .tip .src { margin-top: 8px; }
+
+  /* ---------- Sources ---------- */
+  .sources {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .sources ol { margin-left: 20px; color: var(--text-dim); font-size: 13px; }
+  .sources li { margin-bottom: 8px; }
+  .sources li a { word-break: break-all; }
+  .sources .fname { color: var(--text-mute); font-size: 12px; }
+
+  footer {
+    text-align: center; color: var(--text-mute); font-size: 12px;
+    margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--border);
+  }
+  footer .heart { color: var(--red); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="term-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="term-path">~/tech-daily $ ./render --role developer_practice</span>
+    </div>
+    <span class="role-badge">// DEVELOPER PRACTICE</span>
+    <h1>开发者实践日报 <span class="accent">_</span></h1>
+    <div class="meta">
+      数据窗口 <code>2026-10-30 20:43</code> → <code>2026-10-31 20:43</code> ·
+      样本 <code>111</code> 条 / <code>424</code> 源 ·
+      生成于 2026-10-31
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ 01 今日技术热榜 ============ -->
+  <section id="hot">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-title">今日技术热榜</span>
+      <span class="sec-line"></span>
+    </div>
+
+    <div class="hot">
+
+      <article class="card">
+        <span class="idx">01</span>
+        <h3><span class="tag t-sec">安全</span>Node.js 26「Lithium」进入 Active LTS，Node2Shell 漏洞需紧急修补</h3>
+        <p>Node 26.13.0 正式把 Node 26 提升为 Active LTS，维护期持续到 <strong>2029 年 4 月</strong>，成为生产环境应当瞄准的新分支；同时 Node 24 已转入维护期，Node 22 维护到 2027 年 4 月。本月安全发布修复了 10 个 CVE，其中最值得警惕的是内置 Brotli 解码器中的「Node2Shell」漏洞，可导致<strong>远程代码执行</strong>。同期刊物还提到 RedMonk 分析师对 JavaScript 运行时单一化风险的讨论，以及 Reylo 借助 TypeScript 7.1 内容映射器实现 <code>.sql</code> 文件类型化导入、OpenTelemetry JS 3.0 与 Dependency Cruiser 18.7 发布等生态动向。</p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247550384&amp;idx=1&amp;sn=69df0ebb28e50395847ed3b762458e8d" target="_blank" rel="noopener">Node 中文周刊 #247 · 印记中文</a></div>
+      </article>
+
+      <article class="card">
+        <span class="idx">02</span>
+        <h3><span class="tag t-sec">供应链</span>Cursor 分发的 Claude Code VS Code 扩展遭投毒，被植入 SSH 后门</h3>
+        <p>Cursor 披露，其 IDE 扩展市场分发的 Claude Code VS Code 扩展被篡改并植入恶意软件，<strong>最多影响约 5000 名用户</strong>，恶意版本并非由 Anthropic 开发。受影响的是 Windows、macOS 上的 <code>2.1.312</code> 与 <code>2.1.313</code> 版本，官方已建议用户升级到 <code>2.1.314</code> 并按安全公告排查；扩展市场当日下午曾被下线，清理确认无进一步风险后恢复。据 HN 摘要与 Kevin Beaumont 援引 Phorion 报告，此次事件表现为<strong>远程访问后门（SSH 后门）</strong>，是典型的第三方分发渠道供应链攻击。</p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650456074&amp;idx=1&amp;sn=a1a43d5026d0b4a0b624c28bb54191b3" target="_blank" rel="noopener">AINLP</a><span class="sep">·</span><a href="https://supertechfans.com/cn/post/2026-10-31-HackerNews/" target="_blank" rel="noopener">Hacker News 每日摘要</a></div>
+      </article>
+
+      <article class="card">
+        <span class="idx">03</span>
+        <h3><span class="tag t-tool">DevOps</span>GitLab 19.4：Duo CLI 新增 /goal 目标驱动模式，托管三款开源权重模型</h3>
+        <p>GitLab DevSecOps 平台 19.4 为 GitLab Duo CLI 增加 <code>/goal</code> 命令（公开测试），接受一个开放式目标后持续执行，直到完成或达到迭代上限；一个模型负责实施变更，另一个模型对照自然语言目标检查进度（注意：这里的「验证」并非形式化验证，清晰验收标准仍然重要）。同时新增 Kimi K3、MiniMax M3、GLM 5.3 三款托管开源权重模型、更多 MCP 工具以及更精细的 AI 开销控制，且智能体操作仍受项目现有权限与审批规则约束。</p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651296315&amp;idx=3&amp;sn=ffa53f028f784343b6b1e6b81d7b48bc" target="_blank" rel="noopener">InfoQ · GitLab 19.4 发布</a></div>
+      </article>
+
+      <article class="card">
+        <span class="idx">04</span>
+        <h3><span class="tag t-model">模型</span>Mistral Large 4 开放万亿参数权重，编码 token 用量近乎减半</h3>
+        <p>Mistral AI 放出旗舰模型 Large 4（昵称 Le Chonk）的权重：总参数约 <strong>1 万亿</strong>、每 token 激活约 520 亿，支持文本与图像输入、<strong>100 万 token 上下文</strong>，在欧洲数据中心用 3800 张 NVIDIA Grace Blackwell GPU 从零训练。其在 Artificial Analysis Coding Agent Index 中搭配 Mistral Vibe 得 48 分，略低于 GLM-5.3 的 49 分、高于 DeepSeek V4.1 Flash 的 46 分，但每项任务平均只消耗约 <strong>850 万 token</strong>（另两套约 1590 万 / 1670 万），接近减半。Unsloth 已为其提供 1-bit GGUF 量化，最小一档约 233GB，可让高内存 Mac Studio 尝试运行。</p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650456096&amp;idx=1&amp;sn=60cdc745fb978989b288901647051e32" target="_blank" rel="noopener">AINLP · Mistral Large 4 开放权重</a></div>
+      </article>
+
+      <article class="card">
+        <span class="idx">05</span>
+        <h3><span class="tag t-model">开源</span>小米开源 Xiaomi-OCR-0：0.8B 文档理解模型，附 MCP 与 Agent Skill</h3>
+        <p>小米发布并开源轻量级文档理解模型 Xiaomi-OCR-0，仅 <strong>0.8B 参数</strong>，把文档解析、关键信息抽取与视觉问答三类能力融于一体，可处理复杂表格、论文与票据的结构化解析。在 OmniDocBench v1.6 上得分 <strong>96.83</strong>，为 1B 以下模型第一；五项文档 VQA 平均 83.2 分，优于 HunyuanOCR、TokenVL、Qwen3.5-2B 等，逼近参数更大的 Qwen3.5-4B。官方完整公开模型权重与推理代码，并提供浏览器 Demo、<strong>MCP 服务</strong>与 <strong>Agent Skill 工具包</strong>，Hugging Face 与 GitHub 均可直接取用。</p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&mid=2652813116&amp;idx=2&amp;sn=a299b57f8eecedd9c838cdd0385a197c" target="_blank" rel="noopener">智东西 · 小米开源 Xiaomi-OCR-0</a></div>
+      </article>
+
+      <article class="card">
+        <span class="idx">06</span>
+        <h3><span class="tag t-infra">框架</span>Spring 首波 RC 集中发布：Boot、Framework、Data、Security、AI、Modulith 齐发</h3>
+        <p>2026 年 10 月 19 日当周 Spring 生态出现密集发布潮，多个项目同时进入第一个候选发布版（RC）阶段：Spring Boot、Spring Framework、Spring Data、Spring Cloud、Spring Security、Spring for GraphQL、Spring Session、Spring Integration、Spring HATEOAS、Spring Modulith、Spring REST Docs、Spring AI、Spring Batch、Spring AMQP、Spring for Apache Kafka、Spring LDAP 与 Spring Web Services。对维护多模块 Spring 项目的团队而言，这是一次难得的版本对齐窗口，建议先在测试分支统一验证依赖兼容矩阵。</p>
+        <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/10/spring-news-roundup-oct19-2026/" target="_blank" rel="noopener">InfoQ · Spring News Roundup</a></div>
+      </article>
+
+      <article class="card">
+        <span class="idx">07</span>
+        <h3><span class="tag t-infra">系统</span>OpenBSD 8.0：更广硬件兼容、安全增强与虚拟化改进</h3>
+        <p>OpenBSD 8.0 是一次实质性升级，带来更广的硬件兼容性、更强的安全能力、扩展的虚拟地址空间，以及对现代架构的支持。具体包括 Intel Arc A 系列显卡支持、ARM64 休眠、RISC-V 改进与增强的虚拟机支持，对自建网关、网络设备与安全实验环境的使用者具备较高升级价值。</p>
+        <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/10/openbsd-8-released/" target="_blank" rel="noopener">InfoQ · OpenBSD 8.0</a></div>
+      </article>
+
+      <article class="card">
+        <span class="idx">08</span>
+        <h3><span class="tag t-tool">编辑器</span>Visual Studio Code 1.145（Insiders）更新</h3>
+        <p>VS Code 团队发布 1.145 Insiders 版本，按照惯例面向抢先体验渠道开放，官方博客提供了本次改动的完整说明。对日常依赖 Insiders 通道做扩展与工作区预演的同学可以先行评估，生产环境仍建议等稳定版跟随。</p>
+        <div class="src">📎 来源：<a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.145-(insiders)" target="_blank" rel="noopener">Microsoft for Developers · VS Code 1.145 (Insiders)</a></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ 02 深度技术解读 ============ -->
+  <section id="deep">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-title">深度技术解读</span>
+      <span class="sec-line"></span>
+    </div>
+
+    <article class="deep">
+      <h3>DeepSeek Super-agent：当「会话」变成实现细节</h3>
+      <div class="sub">// 单任务 Agent 已经够强，下一个瓶颈是人类注意力</div>
+
+      <p>DeepSeek Harness 团队发布技术文章《Super-agent 设计探索：迈向更自主的 Agent 系统》，核心判断很直接：单任务 Agent 的能力已经不再是瓶颈，真正的上限变成了「一个人能同时盯住几个 Session」。主流设计仍以单一 Session 为基本单位，并行几件事就要人手动切换、自己记上下文，一个人通常只能跟住大约 <strong>3–5 个活跃会话</strong>——于是单任务上限看模型，多任务上限看人的注意力。</p>
+
+      <p>团队提出 Super-agent 应具备四个基础特征，并据此把单个 ReAct Loop 拆解成多个模块：</p>
+      <ul>
+        <li><strong>连续</strong>：IM、GitHub 评论像同一个 Agent，不需要问「Session X 里有没有 Y」；</li>
+        <li><strong>高效</strong>：可并行多任务，不必等上一条做完才能说下一条；</li>
+        <li><strong>主动</strong>：持续观察环境，该出手才出手；</li>
+        <li><strong>持久</strong>：始终在线，异常能自愈。</li>
+      </ul>
+
+      <h4>五个工程模块</h4>
+      <ul>
+        <li><strong>双层 Router / Worker</strong>：解决连续性与吞吐的张力——全进一个 Session 上下文最连但串行慢、细节互相污染；每条事件新开 Session 吞吐高但缺全局上下文，于是用 Router 分发、Worker 执行。</li>
+        <li><strong>事件过滤与直通</strong>：只让真正需要处理的事件进入推理循环，避免噪声淹没注意力。</li>
+        <li><strong>异步 ReAct</strong>：把同步阻塞的推理循环改为事件驱动，任务之间不再互相卡死。</li>
+        <li><strong>存算分离 + 端侧 daemon</strong>：状态持久化，设备离线也不中断。</li>
+        <li><strong>外部 Watchdog</strong>：监控异常并触发自愈。</li>
+      </ul>
+
+      <p>更值得关注的是它已经跑在内部研发协作里：当团队成员在群聊中反馈问题时，即使没有人 <code>@</code> AI，它也能识别潜在缺陷，在后台尝试复现、寻找修复方案，甚至直接提交 GitHub Pull Request 等待审查；同一任务还能在群聊与 GitHub 之间连续推进——群聊定方案、GitHub 改要求，Agent 能理解前后变化并调整方向。需要说明的是，Super-agent 目前仍是面向工程实践的架构探索，部分设计已通过开源原型实现，并非 DeepSeek 正式产品。</p>
+
+      <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2116541149443698968" target="_blank" rel="noopener">meng shao · Super-agent 设计探索</a><span class="sep">·</span><a href="https://www.ifanr.com/1687026" target="_blank" rel="noopener">爱范儿 · DeepSeek 全新 Agent 架构</a></div>
+    </article>
+
+    <article class="deep">
+      <h3>自建 GPU 跑模型，到底什么时候比调 API 划算？</h3>
+      <div class="sub">// imec 的上千次基准测试：硬件成本是阶跃的，并发比准确率更重要</div>
+
+      <p>比利时半导体研究机构 imec 的 AI 负责人 Steven Latré 团队针对「长时运行的编码类 Agent」做了一项扎实的测算：把开源权重模型与三套编码 harness 放到 SWE-Bench Pro 上跑了成千上万次基准，回答从 API 转向自有 GPU 的真实成本问题。</p>
+
+      <div class="kv">
+        <div class="box"><span class="n">89% → 15%</span><span class="l">盈亏平衡 GPU 利用率：小系统约 89%，8×B200 机器约 15%</span></div>
+        <div class="box"><span class="n">≈50%</span><span class="l">选对 harness 可将相同结果的 GPU 时间减半</span></div>
+        <div class="box"><span class="n">阶跃</span><span class="l">硬件成本呈阶梯式跳变，而非平滑曲线</span></div>
+      </div>
+
+      <p>几个反直觉的结论值得记下来：第一，<strong>硬件成本是阶跃的</strong>，一旦跨过某个显存 / 卡数门槛，成本会突然跳变，规划容量时要按台阶算而不是线性外推；第二，<strong>并发比准确率更影响经济性</strong>，高吞吐批处理摊薄单任务成本的效果可能强于抠准确率；第三，<strong>harness 的选择能砍掉一半 GPU 时间</strong>，说明 Agent 框架层的工程优化与模型本身同样关键。对做长时 Agent、且调用量足够大的团队，这就是一张可直接拿来做容量与预算决策的参考表。</p>
+
+      <div class="src">📎 来源：<a href="https://www.youtube.com/watch?v=9-Y_oS9OBLc" target="_blank" rel="noopener">AI Engineer · When Running Your Own AI Models Beats Paying for APIs（Steven Latré, imec）</a></div>
+    </article>
+  </section>
+
+  <!-- ============ 03 工具推荐 ============ -->
+  <section id="tools">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-title">工具推荐</span>
+      <span class="sec-line"></span>
+    </div>
+
+    <div class="tools">
+
+      <article class="tool">
+        <div class="head"><span class="ic">{ }</span><h4>DeepSeek Stack</h4></div>
+        <p>开源打包的 29 个 DeepSeek Agent skill，用来修正 DeepSeek V4.1 Flash 的「坏习惯」，让它在日常工作中达到约 80% 的 Opus 表现，同时保持快和便宜。用一条 <code>npx skills</code> 命令即可安装，也提供了在 PandaCode、Cline 及 ClinePass 计划下的配置说明，适合想压低成本的编码工作流。</p>
+        <div class="src">📎 <a href="https://www.youtube.com/watch?v=Wbb5g_fJ9Pg" target="_blank" rel="noopener">AICodeKing</a></div>
+      </article>
+
+      <article class="tool">
+        <div class="head"><span class="ic">▣</span><h4>LocalStack for Azure（公开预览）</h4></div>
+        <p>LocalStack 把 Azure 模拟器开放为免费公开预览，可在本地运行 Azure 服务，并接受现有的 ARM、Bicep、Terraform 而无需改写。需要留意的坑：官方文档明确「配置会被存储并返回，但访问限制、TLS、网络规则等<strong>不执行</strong>」，所以只适合做开发联调，不能拿来做真实安全策略验证。</p>
+        <div class="src">📎 <a href="https://www.infoq.com/news/2026/10/localstack-azure-preview/" target="_blank" rel="noopener">InfoQ · LocalStack for Azure</a></div>
+      </article>
+
+      <article class="tool">
+        <div class="head"><span class="ic">▶</span><h4>nesformer（趣味）</h4></div>
+        <p>Drew Breunig 受 qwenputer 启发，把可运行的 NES 6502 CPU 模拟器「烘焙」进 Qwen3.5-4B 的模型权重里，现在可以在 Qwen 内部（非常慢地）玩《超级马里奥兄弟》等 NES ROM。作者在 HN 评论里公开了用 Opus 5.5 构建该系统时的完整提示词，是理解「模型即计算载体」这种奇技淫巧的绝佳案例。</p>
+        <div class="src">📎 <a href="https://simonwillison.net/2026/Oct/30/nesformer/" target="_blank" rel="noopener">Simon Willison's Weblog</a></div>
+      </article>
+
+      <article class="tool">
+        <div class="head"><span class="ic">▤</span><h4>GitHub 高质量数据集清单</h4></div>
+        <p>精选 6 个可直接上手的数据集：<code>chinese-poetry</code> 收录约 5.5 万首唐诗、26 万首宋诗、2.1 万首宋词及《诗经》《论语》等，以 JSON 保存便于程序读取；另有英伟达开源的 3D 资产集（约 472GB、2575 个 OpenUSD 资产，面向机器人训练与仿真）与 Scenario 3D Collection（约 38.7GB、1342 个 GLB 素材）。做小应用、机器人仿真或数据集练手都很好用。</p>
+        <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247538180&amp;idx=1&amp;sn=f8f37078438b90a2815051c5012a8acc" target="_blank" rel="noopener">逛逛GitHub</a></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ 04 实践指南 ============ -->
+  <section id="practice">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <span class="sec-title">实践指南</span>
+      <span class="sec-line"></span>
+    </div>
+
+    <div class="practice">
+
+      <article class="tip">
+        <div class="num">01</div>
+        <div>
+          <h4>用可达性分析给 Dependabot 告警降噪</h4>
+          <p>Dependabot 告诉你某个依赖有漏洞，但你的应用真的能<strong>到达</strong>那段脆弱代码吗？GitHub 的 reachability analysis 会沿调用路径判断应用是否可能调用到脆弱代码，把它当作一个优先级信号，与严重度、EPSS 和生产上下文一起使用，而不是见到告警就全量升级。这是把「漏洞数量」转化为「真实风险」的低成本方法。</p>
+          <div class="src">📎 <a href="https://www.youtube.com/shorts/6r9prGBlaSc" target="_blank" rel="noopener">GitHub · Security in 60 Seconds</a></div>
+        </div>
+      </article>
+
+      <article class="tip">
+        <div class="num">02</div>
+        <div>
+          <h4>给 Agent 设计「记忆晋升」策略，而不是无限追加上下文</h4>
+          <p>RAG 让 Agent 能「读」，而记忆让它能「写」，业务价值就在写进去的那部分。Oracle 的 Wojciech Pluta 提出的做法是「记忆晋升」：先判断哪些信息值得保留，再与既有记录比对，最后决定是<strong>接受、拒绝还是升级给人类</strong>。他演示的按揭 Agent 能跨会话记住操作员偏好，但会拒绝存储「批准所有申请」这类越权规则；同时用 context card 保持提示词精简，并区分短期、长期与共享记忆——用数据库承载记忆是更可控的选择。</p>
+          <div class="src">📎 <a href="https://www.youtube.com/watch?v=qq2Hm4XNRgI" target="_blank" rel="noopener">AI Engineer · How to Decide What Your AI Agent Should Remember（Oracle）</a></div>
+        </div>
+      </article>
+
+      <article class="tip">
+        <div class="num">03</div>
+        <div>
+          <h4>Agentic 负载的 Bedrock 成本，要按「工作负载」而非 token 单价管</h4>
+          <p>对话助手通常每轮一次模型调用，而 Agentic 工作流（如编码助手：规划、读文件、调工具、迭代）每个任务会发起多次调用并携带更大上下文，token 消耗呈量级差异。AWS 的 FinOps playbook 指出，只比较每模型 token 单价、让团队缩短提示词并不足以回答财务关心的三个问题：<strong>哪个团队花在哪、花了多少、是否在预算内</strong>。需要用标签化的团队 / 工作负载维度做归因与预算控制。</p>
+          <div class="src">📎 <a href="https://aws.amazon.com/blogs/machine-learning/managing-amazon-bedrock-costs-end-to-end-a-playbook-for-finops-and-platform-teams/" target="_blank" rel="noopener">AWS · Managing Amazon Bedrock costs end to end</a></div>
+        </div>
+      </article>
+
+      <article class="tip">
+        <div class="num">04</div>
+        <div>
+          <h4>让 AI 报漏洞，但必须由「确定性验证器」复现后才上报</h4>
+          <p>Google 披露其 AI 安全 Agent PageBreak 自今年 1 月全面运行以来，已在自家 Web 应用中挖出 <strong>500 多个 XSS 漏洞</strong>。它的关键设计不是「让模型直接告警」，而是用 Gemini 自主调查潜在漏洞后，只有<strong>确定性验证器在运行中的应用上成功复现 exploit</strong> 才上报——这把模型的高召回与验证的低误报结合起来，值得任何做自动化安全扫描的团队借鉴。</p>
+          <div class="src">📎 <a href="https://www.infoq.com/news/2026/10/google-pagebreak-security-agent/" target="_blank" rel="noopener">InfoQ · Google PageBreak AI Security Agent</a></div>
+        </div>
+      </article>
+
+      <article class="tip">
+        <div class="num">05</div>
+        <div>
+          <h4>Agent 上生产的真正卡点是工程配套，不是「要不要做」</h4>
+          <p>阿里云开源的《AI Agent Handbook》所附「2026 Agent 开发者调研报告」显示：近半团队在做 Agent，但真正进入生产约仅 <strong>18%</strong>，持续迭代的不到 10%；卡点集中在<strong>上下文与记忆、多模型路由与成本、评估与可观测</strong>这三类工程配套。架构上单 Agent（约 40%）与多 Agent（约 42%）会长期并存，另有约 15% 把人在回路当作生产原则；多 Agent 的典型痛点是状态与上下文在协作中衰减约 60%，还会出现死锁雪崩与成本失控。结论是可迁移的抽象比押注单一厂商更值钱。</p>
+          <div class="src">📎 <a href="https://x.com/shao__meng/status/2116345470125543768" target="_blank" rel="noopener">meng shao · 阿里云 AI Agent Handbook 调研</a></div>
+        </div>
+      </article>
+
+      <article class="tip">
+        <div class="num">06</div>
+        <div>
+          <h4>AI 功能的 A/B 测试：平均值会掩盖长尾里的坏输出</h4>
+          <p>Bumble 产品经理 Supriya Subudhi 复盘了一个月活超 2000 万的约会 App 中 AI 照片点评功能的五个教训：调查中 78% 用户说想要反馈，实际只有 10–15% 使用；平均指标的提升掩盖了「让微笑的人笑得更多」这类怪异输出；最好的模型成本约 10 倍，换成便宜模型结果也缩水；合规限制导致该功能无法在美国以外上线。上线前建议先问：用户真的会用吗、长尾输出是什么样、成本与效果如何权衡、能否全球发布。</p>
+          <div class="src">📎 <a href="https://www.youtube.com/watch?v=CvmZtAPmAW4" target="_blank" rel="noopener">AI Engineer · 78% Wanted This AI Feature（Bumble）</a></div>
+        </div>
+      </article>
+
+      <article class="tip">
+        <div class="num">07</div>
+        <div>
+          <h4>机密容器：把工作负载证明与解密密钥释放绑定</h4>
+          <p>Fortanix 为 Kubernetes 机密容器（CoCo）提供的集成，把工作负载证明（attestation）与解密密钥释放串起来，服务 AI 类负载；其中 GPU 验证相关的设置会直接影响防护强度。上游 Trustee 与 Azure Secure Key Release 提供了另一条基于证明的密钥释放路径。对需要「只有验证通过的 Enclave 才能解密模型或数据」的场景，这是落地的关键拼图。</p>
+          <div class="src">📎 <a href="https://www.infoq.com/news/2026/10/k8s-confidential-containers/" target="_blank" rel="noopener">InfoQ · Kubernetes Confidential Containers</a></div>
+        </div>
+      </article>
+
+      <article class="tip">
+        <div class="num">08</div>
+        <div>
+          <h4>同模型不同效果：把「模型外面那一层」握在自己手里</h4>
+          <p>LangChain 创始人 Harrison Chase 在伦敦 Interrupt 大会上给出的解释是：让 Agent 真正管用的不是中间那个 LLM，而是围绕它的技能、工具、上下文、控制与治理这一圈系统，里面装着公司自己的行业知识——即 <strong>own your intelligence</strong>。其 Engine 已扫描 7000 万条轨迹、找出 2.1 万个问题。对团队的含义是：与其不断换模型，不如把评估、工具编排与领域上下文工程沉淀为可迁移资产。</p>
+          <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=Mzg3NDc2MjQxMg==&mid=2247495664&amp;idx=1&amp;sn=fbce3e9063e4fd9d08cd192e9b7e6654" target="_blank" rel="noopener">深思圈 · LangChain 伦敦大会分享</a></div>
+        </div>
+      </article>
+
+      <article class="tip">
+        <div class="num">09</div>
+        <div>
+          <h4>额度情报：Claude Ultra 取消 5 小时限制，并附赠 API 额度</h4>
+          <p>Anthropic 将订阅改名：Max 5x → <strong>Max（$100/月）</strong>，Max 20x → <strong>Ultra（$200/月）</strong>，价格与权益不变、自动切换。已验证的 Ultra 账户开始解除 5 小时使用限制（新账户需先验证），周限额不变；同时计划每月赠送一笔 API 额度（Max $100、Ultra $200、Team 每团队最多 $500），需在「设置 → 账单 → 关联组织」手动领取，可用于 Messages API、Agent SDK 等，每个账单周期清零。常用 Claude Code / App 的开发者值得核对一下自己的档位与额度。</p>
+          <div class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzkzNDQxOTU2MQ==&mid=2247522161&amp;idx=1&amp;sn=114a742b9c5099810e0416749397e814" target="_blank" rel="noopener">赛博禅心</a><span class="sep">·</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650456089&amp;idx=1&amp;sn=0eeb42f47c91448f4e9731ede6759396" target="_blank" rel="noopener">AINLP</a></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ 05 参考链接汇总 ============ -->
+  <section id="sources">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <span class="sec-title">参考链接汇总</span>
+      <span class="sec-line"></span>
+    </div>
+
+    <div class="sources">
+      <ol>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247550384&amp;idx=1&amp;sn=69df0ebb28e50395847ed3b762458e8d" target="_blank" rel="noopener">Node 中文周刊 #247 - Node.js 26 正式进入 LTS，Node2Shell 漏洞修复</a> <span class="fname">// 印记中文</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650456074&amp;idx=1&amp;sn=a1a43d5026d0b4a0b624c28bb54191b3" target="_blank" rel="noopener">Cursor Claude Code 扩展遭恶意篡改</a> <span class="fname">// AINLP</span></li>
+        <li><a href="https://supertechfans.com/cn/post/2026-10-31-HackerNews/" target="_blank" rel="noopener">2026-10-31 Hacker News Top Stories</a> <span class="fname">// Hacker News 每日摘要</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651296315&amp;idx=3&amp;sn=ffa53f028f784343b6b1e6b81d7b48bc" target="_blank" rel="noopener">GitLab 19.4 发布，新增目标驱动型智能体，强化成本控制</a> <span class="fname">// InfoQ</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650456096&amp;idx=1&amp;sn=60cdc745fb978989b288901647051e32" target="_blank" rel="noopener">Mistral Large 4 开放万亿参数权重，西方最强开源模型</a> <span class="fname">// AINLP</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&mid=2652813116&amp;idx=2&amp;sn=a299b57f8eecedd9c838cdd0385a197c" target="_blank" rel="noopener">0.8B！小米开源新模型，让超级小爱识屏主动办事</a> <span class="fname">// 智东西</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/spring-news-roundup-oct19-2026/" target="_blank" rel="noopener">Spring News Roundup: First Release Candidates of Boot, Framework, Data, Security, Modulith, AI</a> <span class="fname">// InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/openbsd-8-released/" target="_blank" rel="noopener">OpenBSD 8.0 Brings Expanded Hardware Support, Security Enhancements, and Virtualization Improvements</a> <span class="fname">// InfoQ</span></li>
+        <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.145-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.145 (Insiders)</a> <span class="fname">// Microsoft for Developers</span></li>
+        <li><a href="https://x.com/shao__meng/status/2116541149443698968" target="_blank" rel="noopener">DeepSeek Harness 团队 Super-agent 设计探索：迈向更自主的 Agent 系统</a> <span class="fname">// meng shao</span></li>
+        <li><a href="https://www.ifanr.com/1687026" target="_blank" rel="noopener">DeepSeek 重磅发布全新 Agent 架构：AI 开始指挥 AI 干活</a> <span class="fname">// 爱范儿</span></li>
+        <li><a href="https://www.youtube.com/watch?v=9-Y_oS9OBLc" target="_blank" rel="noopener">When Running Your Own AI Models Beats Paying for APIs - Steven Latré, imec</a> <span class="fname">// AI Engineer</span></li>
+        <li><a href="https://www.youtube.com/watch?v=Wbb5g_fJ9Pg" target="_blank" rel="noopener">I Built Deepseek Stack that makes DS 4.1 Flash perform like Opus!</a> <span class="fname">// AICodeKing</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/localstack-azure-preview/" target="_blank" rel="noopener">LocalStack for Azure Enters Public Preview with Security Settings Stored but Not Enforced</a> <span class="fname">// InfoQ</span></li>
+        <li><a href="https://simonwillison.net/2026/Oct/30/nesformer/" target="_blank" rel="noopener">dbreunig/nesformer</a> <span class="fname">// Simon Willison's Weblog</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247538180&amp;idx=1&amp;sn=f8f37078438b90a2815051c5012a8acc" target="_blank" rel="noopener">我在 GitHub 上搜罗了 6 个高质量数据集，看看哪些会用到</a> <span class="fname">// 逛逛GitHub</span></li>
+        <li><a href="https://www.youtube.com/shorts/6r9prGBlaSc" target="_blank" rel="noopener">Security in 60 Seconds: Reachability Analysis for Dependabot</a> <span class="fname">// GitHub</span></li>
+        <li><a href="https://www.youtube.com/watch?v=qq2Hm4XNRgI" target="_blank" rel="noopener">How to Decide What Your AI Agent Should Remember - Wojciech Pluta, Oracle</a> <span class="fname">// AI Engineer</span></li>
+        <li><a href="https://aws.amazon.com/blogs/machine-learning/managing-amazon-bedrock-costs-end-to-end-a-playbook-for-finops-and-platform-teams/" target="_blank" rel="noopener">Managing Amazon Bedrock costs end to end: A playbook for FinOps and platform teams</a> <span class="fname">// Artificial Intelligence (AWS)</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/google-pagebreak-security-agent/" target="_blank" rel="noopener">Google Discloses PageBreak AI Security Agent That Found 500+ XSS Bugs</a> <span class="fname">// InfoQ</span></li>
+        <li><a href="https://x.com/shao__meng/status/2116345470125543768" target="_blank" rel="noopener">阿里云开源的 AI Agent Handbook · 2026 Agent 开发者调研报告</a> <span class="fname">// meng shao</span></li>
+        <li><a href="https://www.youtube.com/watch?v=CvmZtAPmAW4" target="_blank" rel="noopener">78% Wanted This AI Feature. Almost Nobody Used It - Supriya Subudhi, Bumble</a> <span class="fname">// AI Engineer</span></li>
+        <li><a href="https://www.infoq.com/news/2026/10/k8s-confidential-containers/" target="_blank" rel="noopener">Kubernetes Confidential Containers Get Fortanix Attestation and Key Management</a> <span class="fname">// InfoQ</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3NDc2MjQxMg==&mid=2247495664&amp;idx=1&amp;sn=fbce3e9063e4fd9d08cd192e9b7e6654" target="_blank" rel="noopener">同样用一个模型，为什么有的公司的 agent 更好用？</a> <span class="fname">// 深思圈</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzNDQxOTU2MQ==&mid=2247522161&amp;idx=1&amp;sn=114a742b9c5099810e0416749397e814" target="_blank" rel="noopener">Claude 20x 取消 5 小时限制，并赠送 $200/月 API 额度</a> <span class="fname">// 赛博禅心</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650456089&amp;idx=1&amp;sn=0eeb42f47c91448f4e9731ede6759396" target="_blank" rel="noopener">Claude 将 Max 20x 改名 Ultra，取消部分限制</a> <span class="fname">// AINLP</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <div>tech-daily · 开发者实践版 · 由 <span class="heart">♥</span> 基于 111 条新闻样本自动筛选生成</div>
+    <div style="margin-top:6px;">// 只挑能落地的工具、方案与踩坑经验 · 编译于 2026-10-31</div>
+  </footer>
+
+</div>
+</body>
+</html>
