@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践日报 · 2026-11-03</title>
+<style>
+  :root{
+    --bg:#0b0f14; --panel:#0f151c; --panel-2:#0c1117; --code:#070b10;
+    --border:#1f2a36; --border-hi:#2d3b4a;
+    --text:#c9d1d9; --text-2:#b0bcc9; --dim:#8b949e; --faint:#6b7785;
+    --green:#3fb950; --cyan:#58a6ff; --amber:#d29922; --purple:#bc8cff; --red:#f85149;
+    --mono:"JetBrains Mono","Fira Code","SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono","Cascadia Code",monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--mono); font-size:14px; line-height:1.8;
+    background-image:
+      linear-gradient(rgba(88,166,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(88,166,255,.025) 1px, transparent 1px);
+    background-size:48px 48px;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:32px 20px 72px;}
+
+  /* header */
+  header{
+    border:1px solid var(--border); border-radius:12px;
+    background:linear-gradient(160deg,#101720 0%,#0b1016 100%);
+    padding:26px 28px 22px; position:relative; overflow:hidden;
+  }
+  header::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(600px 180px at 15% 0%, rgba(63,185,80,.10), transparent 70%);
+  }
+  .term-bar{display:flex; gap:7px; margin-bottom:18px;}
+  .dot{width:11px; height:11px; border-radius:50%;}
+  .d1{background:#ff5f57;} .d2{background:#febc2e;} .d3{background:#28c840;}
+  .cmd{color:var(--dim); font-size:12.5px; margin-bottom:10px;}
+  .cmd .user{color:var(--green);} .cmd .flag{color:var(--purple);} .cmd .arg{color:var(--cyan);}
+  h1{
+    margin:0 0 10px; font-size:clamp(24px,4vw,34px); line-height:1.35;
+    letter-spacing:-.5px; color:#e6edf3; font-weight:700;
+  }
+  h1 .accent{color:var(--green);}
+  .sub{color:var(--dim); font-size:13px; margin:0;}
+  .meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px;}
+  .chip{
+    font-size:11.5px; color:var(--text-2); border:1px solid var(--border-hi);
+    background:#0d141b; padding:4px 10px; border-radius:999px; white-space:nowrap;
+  }
+  .chip b{color:var(--cyan); font-weight:600;}
+  .chip.green b{color:var(--green);}
+
+  /* toc */
+  nav.toc{
+    display:flex; flex-wrap:wrap; gap:10px; margin:20px 0 6px;
+    font-size:12.5px;
+  }
+  nav.toc a{
+    color:var(--dim); text-decoration:none; border:1px dashed var(--border-hi);
+    padding:5px 11px; border-radius:6px; transition:.15s;
+  }
+  nav.toc a:hover{color:var(--green); border-color:var(--green);}
+
+  /* sections */
+  section{margin-top:52px;}
+  .sec-head{
+    display:flex; align-items:baseline; gap:12px; margin-bottom:6px;
+    border-bottom:1px solid var(--border); padding-bottom:12px;
+  }
+  .sec-index{color:var(--green); font-size:13px; opacity:.85;}
+  h2{margin:0; font-size:19px; letter-spacing:.3px; color:#e6edf3;}
+  .sec-desc{color:var(--faint); font-size:12.5px; margin:8px 0 22px;}
+
+  /* hot list */
+  .item{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:20px 22px; margin-bottom:14px; position:relative;
+    transition:border-color .15s, transform .15s;
+  }
+  .item:hover{border-color:var(--border-hi); transform:translateY(-1px);}
+  .item-top{display:flex; align-items:flex-start; gap:14px; margin-bottom:9px;}
+  .rank{
+    flex:0 0 auto; font-size:22px; font-weight:700; line-height:1;
+    color:#25313d; min-width:34px; padding-top:2px; user-select:none;
+  }
+  .item h3{
+    margin:0; font-size:15.5px; line-height:1.55; color:#e6edf3; font-weight:600;
+  }
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 0 48px;}
+  .tag{
+    font-size:10.5px; letter-spacing:.3px; padding:2px 8px; border-radius:4px;
+    border:1px solid #26384a; color:var(--cyan); background:rgba(88,166,255,.06);
+  }
+  .tag.g{color:var(--green); border-color:#234a2e; background:rgba(63,185,80,.06);}
+  .tag.a{color:var(--amber); border-color:#4a3d1c; background:rgba(210,153,34,.07);}
+  .tag.p{color:var(--purple); border-color:#3d2c52; background:rgba(188,140,255,.06);}
+  .body{color:var(--text-2); margin:0 0 0 48px; text-align:justify;}
+  .body:first-letter{}
+  .src{
+    display:inline-block; margin:11px 0 0 48px; font-size:11.5px;
+    color:var(--faint); text-decoration:none; word-break:break-all;
+  }
+  .src:hover{color:var(--cyan);}
+  .src .arrow{color:var(--green); margin-right:5px;}
+  .src .feed{color:var(--dim);}
+
+  /* deep dive */
+  .dive{
+    border:1px solid var(--border); border-radius:12px; background:var(--panel-2);
+    padding:24px 26px; margin-bottom:20px;
+  }
+  .dive h3{
+    margin:0 0 4px; font-size:17px; color:#e6edf3; line-height:1.5;
+  }
+  .dive .kicker{
+    color:var(--purple); font-size:11.5px; letter-spacing:1px; margin-bottom:10px;
+    text-transform:uppercase;
+  }
+  .dive h4{
+    margin:24px 0 8px; font-size:13.5px; color:var(--green); font-weight:600;
+  }
+  .dive h4::before{content:"> "; color:var(--faint);}
+  .dive p{color:var(--text-2); margin:0 0 12px; text-align:justify;}
+  .dive ul{margin:8px 0 14px; padding-left:22px; color:var(--text-2);}
+  .dive li{margin:5px 0;}
+  .dive li::marker{color:var(--green);}
+  code{
+    font-family:var(--mono); font-size:12.5px; color:var(--amber);
+    background:rgba(210,153,34,.08); border:1px solid rgba(210,153,34,.15);
+    padding:1px 6px; border-radius:4px;
+  }
+  pre{
+    background:var(--code); border:1px solid var(--border); border-left:3px solid var(--green);
+    border-radius:8px; padding:14px 16px; overflow-x:auto; margin:14px 0 18px;
+    font-size:12.5px; line-height:1.75; color:#a5d6b0;
+  }
+  pre .c{color:var(--faint);} pre .k{color:var(--cyan);} pre .n{color:var(--amber);}
+  .callout{
+    border:1px solid #4a3d1c; border-left:3px solid var(--amber);
+    background:rgba(210,153,34,.06); border-radius:8px;
+    padding:14px 16px; margin:16px 0; color:#d7c9a7; font-size:13px;
+  }
+  .callout b{color:var(--amber);}
+  .src-inline a{color:var(--cyan); text-decoration:none; border-bottom:1px dotted #2d4a66;}
+  .src-inline a:hover{color:#8cc8ff;}
+
+  /* table */
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:10px;}
+  table{width:100%; border-collapse:collapse; font-size:12.5px; min-width:820px;}
+  thead th{
+    text-align:left; color:var(--dim); font-weight:500; letter-spacing:.6px;
+    font-size:11px; text-transform:uppercase; padding:12px 14px;
+    background:#0d141b; border-bottom:1px solid var(--border);
+  }
+  tbody td{
+    padding:13px 14px; border-bottom:1px solid var(--border);
+    color:var(--text-2); vertical-align:top;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover td{background:rgba(88,166,255,.035);}
+  tbody td:first-child{color:#e6edf3; font-weight:600;}
+  td .mini{display:block; color:var(--faint); font-size:11px; margin-top:3px;}
+  td a{color:var(--cyan); text-decoration:none;}
+  td a:hover{text-decoration:underline;}
+
+  /* practice */
+  .practice{
+    display:grid; grid-template-columns:1fr; gap:14px;
+  }
+  .p-card{
+    border:1px solid var(--border); border-radius:10px; background:var(--panel);
+    padding:20px 22px;
+  }
+  .p-head{display:flex; gap:12px; align-items:baseline; margin-bottom:8px;}
+  .p-num{
+    color:var(--green); font-size:12px; border:1px solid #234a2e;
+    background:rgba(63,185,80,.07); padding:1px 8px; border-radius:4px; flex:0 0 auto;
+  }
+  .p-card h3{margin:0; font-size:14.5px; color:#e6edf3; line-height:1.55;}
+  .p-card p{margin:0; color:var(--text-2); text-align:justify;}
+  .p-card .why{
+    margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);
+    color:var(--dim); font-size:12px;
+  }
+  .p-card .why b{color:var(--amber); font-weight:600;}
+  .p-card .src{margin:8px 0 0;}
+
+  /* references */
+  .ref-group{margin-bottom:26px;}
+  .ref-group h3{
+    font-size:12px; letter-spacing:1px; text-transform:uppercase;
+    color:var(--green); margin:0 0 10px; font-weight:600;
+  }
+  .ref-group h3::before{content:"## "; color:var(--faint);}
+  ul.refs{list-style:none; margin:0; padding:0;}
+  ul.refs li{
+    padding:7px 0; border-bottom:1px dashed #17212b; font-size:12.5px;
+    display:flex; gap:10px; align-items:baseline;
+  }
+  ul.refs li:last-child{border-bottom:none;}
+  ul.refs .feed-name{
+    flex:0 0 172px; color:var(--faint); font-size:11.5px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  ul.refs a{color:var(--text-2); text-decoration:none; line-height:1.6;}
+  ul.refs a:hover{color:var(--cyan); text-decoration:underline;}
+
+  footer{
+    margin-top:56px; padding-top:20px; border-top:1px solid var(--border);
+    color:var(--faint); font-size:11.5px; display:flex; flex-wrap:wrap;
+    gap:12px 24px; justify-content:space-between;
+  }
+  footer .egg{color:#7d8b99;}
+  footer .egg b{color:var(--purple); font-weight:600;}
+
+  @media (max-width:640px){
+    body{font-size:13.5px;}
+    .wrap{padding:20px 14px 56px;}
+    header{padding:20px;}
+    .rank{font-size:18px; min-width:26px;}
+    .body, .tags, .src{margin-left:0;}
+    .tags{margin-top:10px;}
+    ul.refs .feed-name{flex-basis:120px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="term-bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span></div>
+  <div class="cmd"><span class="user">dev@daily</span>:~$ ./tech-daily <span class="flag">--role</span> <span class="arg">developer_practice</span> <span class="flag">--date</span> <span class="arg">2026-11-03</span></div>
+  <h1>开发者实践<span class="accent">日报</span>_</h1>
+  <p class="sub">// 面向一线工程师：工具更新、实现细节、踩坑与可落地实践</p>
+  <div class="meta">
+    <span class="chip">数据窗口 <b>11-02 00:06 → 11-03 00:06</b></span>
+    <span class="chip green">样本 <b>183</b> 条</span>
+    <span class="chip">订阅源 <b>424</b></span>
+    <span class="chip">生成时间 <b>2026-11-03 00:06</b></span>
+  </div>
+</header>
+
+<nav class="toc">
+  <a href="#hot">01 / 今日技术热榜</a>
+  <a href="#deep">02 / 深度技术解读</a>
+  <a href="#tools">03 / 工具推荐</a>
+  <a href="#practice">04 / 实践指南</a>
+  <a href="#refs">05 / 参考链接汇总</a>
+</nav>
+
+<!-- ============ 01 ============ -->
+<section id="hot">
+  <div class="sec-head"><span class="sec-index">// 01</span><h2>今日技术热榜</h2></div>
+  <p class="sec-desc">8 条与日常开发直接相关的动态，按"可借鉴程度"排序。</p>
+
+  <article class="item">
+    <div class="item-top"><span class="rank">01</span><h3>Cloudflare 重构 DNS 构建管线：构建延迟减半、内存占用降 85%</h3></div>
+    <div class="tags"><span class="tag g">性能优化</span><span class="tag">分布式系统</span><span class="tag">增量构建</span></div>
+    <p class="body">Zone Builder 处理的事件量从 2022 年的约 250 次/秒涨到如今约 700 次/秒，另有约 100 个 Zone 配置变更事件/秒；部分 Zone 已超过 2000 万条记录，并预计向数亿条增长。真正的瓶颈不是事件数量，而是某些事件触发的 build 工作量会随 Zone 总规模膨胀——每次 build 都要读取数据库当前状态、转换成边缘可用格式、再写入变更。这次改造把构建定向到真正受影响的 Zone/记录，使单次构建成本与 Zone 总量解耦，最终把 DNS 生效延迟砍掉一半、内存占用降低 85%。对做大规模配置分发、缓存失效或增量索引的团队，这是很值得抄的作业。</p>
+    <a class="src" href="https://blog.cloudflare.com/dns-targeted-zone-builds/" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: The Cloudflare Blog]</span> How we halved DNS build delay and cut memory use by 85%</a>
+  </article>
+
+  <article class="item">
+    <div class="item-top"><span class="rank">02</span><h3>Uber 自建 MCP Gateway：统一治理 800+ MCP Server、5000+ Agent 工具</h3></div>
+    <div class="tags"><span class="tag p">Agent 基础设施</span><span class="tag">权限治理</span><span class="tag">MCP</span></div>
+    <p class="body">Uber 为内部 Agent 生态构建了 MCP Gateway，把工具注册与运行时执行拆成两层：注册层负责自动发现 API、维护目录，执行层负责实际调用。网关同时提供访问控制、敏感数据脱敏、响应过滤，并通过 Omni MCP 做增量式工具发现，避免一次性把几千个工具塞进模型上下文。随着企业内部 MCP Server 数量暴涨，"每个团队各自暴露一个 Server"的裸奔模式会迅速演变为权限与上下文双重灾难，Uber 这套"注册/执行分离 + 网关统一收口"的架构是当前最完整的参考实现之一。</p>
+    <a class="src" href="https://www.infoq.com/news/2026/11/uber-mcp-gateway-ai-agents/" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: InfoQ]</span> Uber Builds MCP Gateway to Govern Access to 800+ Servers and 5,000+ AI Agent Tools</a>
+  </article>
+
+  <article class="item">
+    <div class="item-top"><span class="rank">03</span><h3>Google 与 Meta 开源 TorchTPU：给 TPU 提供原生 PyTorch 后端</h3></div>
+    <div class="tags"><span class="tag">PyTorch</span><span class="tag">训练加速</span><span class="tag">开源</span></div>
+    <p class="body">TorchTPU 是 Google 联合 Meta 开源的原生 PyTorch 后端，目标是让现有 PyTorch 代码以最小改动跑在 TPU 上，同时支持 eager 与编译执行、分布式训练以及硬件特定优化。过去在 TPU 上跑 PyTorch 通常要绕 XLA 或做大量图改写，迁移成本高、调试体验差；原生后端意味着开发者可以保留原有训练脚本、profiler 和生态工具，只替换设备后端。对有多卡/多芯混合算力需求的团队，这显著降低了"为某类硬件重写训练栈"的门槛。</p>
+    <a class="src" href="https://www.infoq.com/news/2026/11/torchtpu-native-pythorch-tpu/" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: InfoQ]</span> Google and Meta Open-source TorchTPU to Bring Native PyTorch Support to Google TPUs</a>
+  </article>
+
+  <article class="item">
+    <div class="item-top"><span class="rank">04</span><h3>清华 &amp; 智谱开源 HarnessPro：让 Agent 自己改 harness，成本降约 34%</h3></div>
+    <div class="tags"><span class="tag g">Agent 工程</span><span class="tag">自动优化</span><span class="tag">成本控制</span></div>
+    <p class="body">HarnessPro 把"harness 本身"变成优化对象：模型权重不动，只改指令、工具、上下文与运行策略。系统从每次执行轨迹中同时定位两类问题——哪些环节导致失败、哪些环节在空耗预算，再由规划器给出"成本优先 / 均衡 / 性能优先"三种候选，编辑 Agent 在独立工作区实现后统一评测筛选。在 Terminal-Bench 2 子集上，搭配 GPT-5.5 与 Codex 的 Heavy 档相比 RHO，通过率从 76.3% 提升到 80.8%，单任务平均成本从 1.09 美元降到 0.72 美元。更关键的是它用"按任务描述生成测试"替代官方测试，把失败召回率从 41.7% 拉到 83.3%，给自进化类系统如何防止"假进步"提供了一个可复用思路。</p>
+    <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650456250&amp;idx=1&amp;sn=a109a00cc7178c66e351d342ff2e865e" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: AINLP]</span> 唐杰团队开源 HarnessPro，Agent 更强更便宜</a>
+  </article>
+
+  <article class="item">
+    <div class="item-top"><span class="rank">05</span><h3>HarnessSQL：8B 模型在真实数据库 SQL 任务上反超 32B</h3></div>
+    <div class="tags"><span class="tag g">Agent 工程</span><span class="tag">Text-to-SQL</span><span class="tag">强化学习</span></div>
+    <p class="body">港科大与微软等团队推出 HarnessSQL，主张 Text-to-SQL 不该被简化成"看 Schema 一把生成"，而应像人类分析师一样在 CLI 里执行 SHOW TABLES、探查 DDL、跑试探查询、看报错再修正。传统静态微调只教模型"直接写终点答案"，部署到交互环境后缺少探索、状态追踪与错误恢复能力，形成训练/部署脱节。HarnessSQL 在密闭沙盒中做长程轨迹 SFT 加执行奖励 RL，仅用 8B 参数就在 Spider 2.0-SQLite 上拿到 45.2% 执行准确率，约为基线 3 倍，并超过 OmniSQL（14.8%）、Arctic-Text2SQL（16.3%）等 32B 专用模型。小模型 + 正确 harness，可能比堆参数更划算。</p>
+    <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652739675&amp;idx=3&amp;sn=90e941c875c03dc0dfc87141362d0db6" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: 新智元]</span> 8B逆袭32B！开源首个长程交互SQL Agent框架，面向真实数据库</a>
+  </article>
+
+  <article class="item">
+    <div class="item-top"><span class="rank">06</span><h3>小红书 SparseGear：稀疏训练引擎让搜广推模型取得 20%–300% 性能收益</h3></div>
+    <div class="tags"><span class="tag g">训练系统</span><span class="tag">HBM</span><span class="tag">稀疏参数</span></div>
+    <p class="body">面向序列长度向万级、Dense 参数向百亿级扩展的搜广推模型，小红书重构了原 TorchLarC 的 CPU Worker / GPU Worker / 远端 PS 架构。SparseGear 重新设计稀疏参数的计算、存储与通信方式，构建 HBM-Friendly 的多级稀疏参数存储，把稀疏侧显存让给 Dense 计算；同时用统一特征抽取平台减少公共特征重复生产，以原生五维并行支撑扩展，并引入 Agent 自动调优。多个业务场景合计取得 20%–300% 的训练性能提升。对做推荐、广告、搜索训练的团队，这套"先重新划分资源分工，再谈算子优化"的思路比单纯换卡更值得研究。</p>
+    <a class="src" href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496939&amp;idx=1&amp;sn=de12e5f3e5f301170425ad24eef08cce" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: 小红书技术REDtech]</span> 揭秘小红书自研稀疏训练引擎 SparseGear</a>
+  </article>
+
+  <article class="item">
+    <div class="item-top"><span class="rank">07</span><h3>Vercel MCP 支持 CIMD：任何 MCP 客户端无需人工白名单即可接入</h3></div>
+    <div class="tags"><span class="tag p">MCP</span><span class="tag">OAuth</span><span class="tag">安全</span></div>
+    <p class="body">此前 Vercel 需要人工审核并允许每一个 MCP 客户端及其重定向 URI，不在名单里的一律拒绝。现在客户端只需在自己域名上发布一份 Client ID Metadata Document（CIMD）JSON，并用该文件的 HTTPS URL 作为 OAuth 的 client_id，就能发起连接；用户仍需登录并逐次授权。这一做法遵循 MCP 授权规范，规范目前推荐 CIMD 而非 Dynamic Client Registration。由于客户端未经 Vercel 审核，同意页会显示客户端名称、Logo 和托管元数据的域名（例如 "Claude Code by claude.ai"），把"来源判断"交还给用户。自建 MCP Server 的团队可以开始评估 CIMD 作为注册方案的可行性。</p>
+    <a class="src" href="https://vercel.com/changelog/vercel-mcp-now-supports-client-id-metadata-documents" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: Vercel News]</span> Vercel MCP now supports Client ID Metadata Documents</a>
+  </article>
+
+  <article class="item">
+    <div class="item-top"><span class="rank">08</span><h3>腾讯 Kuikly 适配 iPhone Duo 折叠屏：一套 Kotlin 代码覆盖六端</h3></div>
+    <div class="tags"><span class="tag">跨端框架</span><span class="tag">Kotlin Multiplatform</span><span class="tag">折叠屏</span></div>
+    <p class="body">Kuikly 是基于 Kotlin Multiplatform 的开源跨端框架，覆盖 Android、iOS、HarmonyOS、H5、微信小程序、Mac 六端，支撑业务日活超 5 亿。iPhone Duo 带来了新的适配约束：屏幕存在多处需要避让的局部区域，导航栏、工具栏由系统随设备形态动态调整。若继续由跨端层自绘导航栏，避让计算复杂且交互对不齐原生。Kuikly 的方案是保留区域信息与系统导航栏/工具栏的原生桥接，把侧边栏位交给系统原生组件，而页面结构、按钮配置与交互逻辑仍留在跨端代码中统一维护——在原生体验与跨端效率之间做了明确取舍。做多端 App 的团队可以把它当作折叠屏适配的工程样本。</p>
+    <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649807957&amp;idx=1&amp;sn=eb65220f0b71a6917ede58086676ba56" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: 腾讯技术工程]</span> 从直板到折叠屏：腾讯Kuikly如何适配 iPhone Duo？</a>
+  </article>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="deep">
+  <div class="sec-head"><span class="sec-index">// 02</span><h2>深度技术解读</h2></div>
+  <p class="sec-desc">两篇值得逐段读的工程复盘：一个讲"如何让构建成本不随规模膨胀"，一个讲"为什么 harness 比模型更决定 Agent 成败"。</p>
+
+  <article class="dive">
+    <div class="kicker">// deep dive 01 · 分布式系统</div>
+    <h3>Cloudflare DNS 构建管线：把"事件 → 全量重算"改成"事件 → 定向构建"</h3>
+    <p>Cloudflare 的 DNS 传播管线里，"build"指一次从数据库读取当前状态、转换成权威 DNS 边缘节点可用格式、再写出变更的完整过程。每个事件都会启动一个计时器，衡量这次变更变成边缘可用数据所花的时间——这直接决定用户改完解析记录后要等多久生效。</p>
+
+    <h4>问题不在吞吐，在"单次工作量的增长函数"</h4>
+    <p>过去四年，Zone Builder 接收的 DNS 记录变更从约 250 次/秒涨到约 700 次/秒，另有约 100 个其他事件/秒（如 Zone 配置变更）。但事件数并非真正的麻烦：麻烦在于某些事件触发的 build 工作量会随 Zone 总规模增长，而部分 Zone 已经超过 2000 万条记录，团队预计还会向数亿条迈进。也就是说，一条记录的修改，可能触发与整个 Zone 规模成正比的重复劳动。</p>
+    <pre><span class="c"># 优化前的成本直觉（示意）</span>
+build_cost ≈ <span class="k">f</span>(zone_total_records)   <span class="c"># 事件本身很小，工作却很大</span>
+<span class="c"># 优化目标</span>
+build_cost ≈ <span class="k">f</span>(changed_records)       <span class="c"># 与 Zone 总规模解耦</span></pre>
+
+    <h4>做法与结果</h4>
+    <p>思路是"定向 Zone 构建"：不再让每个事件都拖着整个 Zone 重算，而是把构建范围收敛到真正需要重新生成的部分，同时降低单次构建的内存占用。最终结果是 DNS 构建延迟减半、内存使用下降 85%。对做配置分发、CDN 缓存失效、搜索增量索引、特征/规则热更新的团队，这组数字背后是同一个通用原则：<b>把"事件处理成本"从"全量状态规模"中剥离出来</b>，否则系统越大、单次变更越慢，最终被自己的规模锁死。</p>
+
+    <h4>可迁移的四条经验</h4>
+    <ul>
+      <li><b>先量化单事件成本：</b>Cloudflare 用"事件到边缘可用"的计时器定义 SLO，而不是只看队列吞吐；吞吐好看但尾延迟爆炸的系统，通常都缺这个指标。</li>
+      <li><b>区分"事件种类"而非只数事件量：</b>100 个/秒的配置事件可能比 700 个/秒的记录变更更贵，资源要按"最贵的那类工作"来规划。</li>
+      <li><b>增量构建需要可切分的中间产物：</b>只有当状态能按 Zone/分片切分、依赖关系可判定时，"定向"才成立，这是设计存储格式时就要预留的能力。</li>
+      <li><b>内存与延迟一起优化：</b>降低内存往往同时减少 GC 与换页抖动，85% 的内存下降本身就是延迟减半的重要来源。</li>
+    </ul>
+    <p class="src-inline" style="margin-top:6px;">📎 原文：<a href="https://blog.cloudflare.com/dns-targeted-zone-builds/" target="_blank" rel="noopener">How we halved DNS build delay and cut memory use by 85% — The Cloudflare Blog</a></p>
+  </article>
+
+  <article class="dive">
+    <div class="kicker">// deep dive 02 · Agent 工程</div>
+    <h3>Agent = Harness + LLM：三篇实践共同指向的工程结论</h3>
+    <p>今天的信息流里有三条看似无关的内容，放在一起却拼出同一个结论：<b>决定 Agent 能否在生产环境干活的，不是模型那部分，而是模型外面那层脚手架（harness）</b>。大淘宝 D2C 团队直接把这个公式写进了文章里：</p>
+    <pre><span class="k">Agent</span>   = Harness + LLM
+<span class="k">Quality</span> = 输入约束 × 生成约束 × 验证闭环</pre>
+
+    <h4>案例一：D2C 给 AI 装上"眼睛"，让生码能自我验收</h4>
+    <p>大淘宝的 D2C（设计稿转代码）落地时遇到的核心痛点不是"AI 不会写代码"，而是"AI 写完后没人验收"：模型信心满满地报告卡片完成，推到真机才发现布局错位、角标圆角被截、价格符号与数字没对齐、一端正常另一端文字截断。AI 没有眼睛，看不到真机渲染结果，于是团队构建了端上 UI Harness 体系，用 Loop Engineering 跑通"生码 → 编译 → 三端真机验证 → 自动修复"的闭环。</p>
+    <ul>
+      <li><b>重新划分人与程序的边界：</b>把确定性流程下沉到 CLI 骨架执行，AI 只保留少量推理决策点，减少不可控的自由度。</li>
+      <li><b>多层信号融合：</b>像素 diff + DOM 树对比等信号共同判断"是否真的达标"，而不是让模型自评"我觉得可以了"。</li>
+      <li><b>防假交付：</b>交叉验证与独立门禁确保模型不能绕过验收直接宣布成功。</li>
+      <li><b>工程结果：</b>已打通 DX、Weex、Muise 三条链路，用户提交设计稿即可全自动完成达标交付，并沉淀了五条可迁移的 Agent 工程化方法论。</li>
+    </ul>
+
+    <h4>案例二：HarnessPro 把 harness 放进优化目标</h4>
+    <p>清华与智谱等团队的工作则在回答"harness 本身怎么变好"。HarnessPro 保持模型权重不变，只让 Agent 迭代自己的指令、工具、上下文与运行策略；每一轮同时分析失败原因与预算浪费，用"生成测试"筛掉假进步。在 Terminal-Bench 2 子集上，Heavy 档相对 RHO 通过率 76.3% → 80.8%，单任务成本 1.09 → 0.72 美元；自生成测试把 12 个真实失败案例中的识别数从 5 个提高到 10 个，失败召回率 41.7% → 83.3%。这组数据的启示是：<b>当模型能力趋同，成本与可靠性会变成 harness 的竞争维度</b>，而"用固定测试集判定改进是否真实"是自优化系统必须解决的问题。</p>
+
+    <h4>案例三：HarnessSQL 把"部署环境"搬进训练</h4>
+    <p>HarnessSQL 反过来指出：只做静态 SFT，等于只教模型写终点答案，部署到需要探查、试错、恢复的交互环境就崩。它在密闭沙盒和专用 SQL harness 中做长程轨迹监督与执行奖励 RL，让 8B 模型在 Spider 2.0-SQLite 上达到 45.2% 执行准确率，约为基线 3 倍，并超过多个 32B 专用模型。结论同样指向 harness：<b>训练环境与部署环境的形状必须一致</b>，否则参数再多也补不上试错能力的缺口。</p>
+
+    <div class="callout">
+      <b>落地清单：</b>评估一个 Agent 项目时，先问五个问题——输入约束够不够硬？生成结果有没有确定性的检查手段？验证闭环有没有独立于模型的门禁？成本能不能按任务度量？失败能不能归因到具体环节？五个都答不上来时，换更大的模型通常只是把问题往后推。
+    </div>
+    <p class="src-inline">📎 来源：
+      <a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&amp;mid=2650546718&amp;idx=1&amp;sn=4d8dbdf0487988077d6ba83146edce1b" target="_blank" rel="noopener">大淘宝技术 · D2C 自动化实践</a> ·
+      <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650456250&amp;idx=1&amp;sn=a109a00cc7178c66e351d342ff2e865e" target="_blank" rel="noopener">AINLP · HarnessPro</a> ·
+      <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652739675&amp;idx=3&amp;sn=90e941c875c03dc0dfc87141362d0db6" target="_blank" rel="noopener">新智元 · HarnessSQL</a>
+    </p>
+  </article>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="tools">
+  <div class="sec-head"><span class="sec-index">// 03</span><h2>工具推荐</h2></div>
+  <p class="sec-desc">今天有实质更新的工具与库，附一行"什么时候该用"。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>工具 / 更新</th><th>变更要点</th><th>适合谁</th><th>行动建议</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Qdrant 1.20<span class="mini">向量数据库</span></td>
+          <td>新增 turbo8 / turbo16 两种"量化原生"数据类型，并为嵌套字段提供高级元数据索引；官方给出了召回与成本测量。</td>
+          <td>做 RAG、语义搜索、推荐召回的团队</td>
+          <td>先在小规模集合上对比 turbo8/16 与现有标量量化的召回和磁盘占用，再决定是否全量迁移。</td>
+        </tr>
+        <tr>
+          <td>Vercel Sandbox + Drives<span class="mini">隔离执行环境</span></td>
+          <td>挂载 Drives 的 Sandbox 启动变快：中位创建时间 1.7s → 0.7s，p95 2.2s → 1.6s；自动生效，无需升级 SDK 或改配置，价格不变。</td>
+          <td>需要为 Agent/CI 提供短生命周期沙箱的团队</td>
+          <td>无需改代码，直接观察冷启动分布；若你在自建沙箱调度，可参考"中位 + p95"双指标。</td>
+        </tr>
+        <tr>
+          <td>Docker sbx 代码布局<span class="mini">Agent 沙箱</span></td>
+          <td>支持三种组织方式：挂载宿主机 checkout（沙箱内相同绝对路径）、为任务开独立工作目录、仓库完全放在沙箱内；可随 Agent 承担的工作量演进切换。</td>
+          <td>让 Agent 直接改业务代码的团队</td>
+          <td>按风险选布局：需要人机并行编辑用挂载，多任务并行用独立目录，高风险实验把仓库整个关进沙箱。</td>
+        </tr>
+        <tr>
+          <td>Vercel MCP<span class="mini">MCP 集成</span></td>
+          <td>① 支持 CIMD，客户端免人工白名单接入；② 部署状态、构建日志、commit 信息可在 ChatGPT 等支持 MCP Apps 的客户端里渲染成交互卡片，不支持时降级为文本。</td>
+          <td>用聊天客户端管理部署的团队</td>
+          <td>自建 MCP Server 时优先评估 CIMD；接受"文本降级"作为兼容基线。</td>
+        </tr>
+        <tr>
+          <td>TRAE 宝<span class="mini">开发者个人助理</span></td>
+          <td>分全局与项目两层，可跨项目读取历史任务、对话与产物，自己拆活、派活、盯进度，支持绑定微信/飞书；上线首周限免。</td>
+          <td>同时推进多个项目的独立开发者</td>
+          <td>免费周内拿真实的多项目场景试：重点看跨项目上下文是否会串味、进度汇报是否可核对。</td>
+        </tr>
+        <tr>
+          <td>十月 GitHub 涨星榜<span class="mini">19 个项目合集</span></td>
+          <td>值得先看三个：VoiceStudio（本地音频工作台，声音克隆/配音，Win/mac/Linux，无独显可用 CPU）、FreeLLMAPI（聚合 30+ 服务商、600+ 免费模型端点，跟踪用量并自动失败切换）、Hallmark（去除"AI 味"的开源设计 skill）。</td>
+          <td>想快速补齐本地工具链的开发者</td>
+          <td>FreeLLMAPI 的"多供应商失败切换 + 用量跟踪"设计可以直接借鉴到自己的 LLM 网关。</td>
+        </tr>
+        <tr>
+          <td>Java 生态周报<span class="mini">框架与工具</span></td>
+          <td>TornadoVM 8.0 正式版发布；JNoSQL、Endive、JBang、JReleaser、LangChain4j 均有更新；JobRunr 维护版；Hibernate ORM / Reactive 进入 beta；新增 Quarkus Almanac。</td>
+          <td>Java 后端与工具链维护者</td>
+          <td>TornadoVM 8.0 值得关注 GPU 加速路径；升级前先把 JBang/JReleaser 的发布脚本回归跑一遍。</td>
+        </tr>
+        <tr>
+          <td>Amazon ECS Gateway<span class="mini">AWS 入站资源</span></td>
+          <td>账户级 ingress 资源：平台团队定义一次网络接入，应用团队用 connector 把服务接入；每个服务获得自动生成的主机名，按 host 路由。文档未提及自定义域名支持。</td>
+          <td>用 ECS 的平台工程团队</td>
+          <td>适合标准化内网接入；有自定义域名诉求的场景先别急着迁，评估 ALB + Route 53 组合。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout" style="margin-top:18px;">
+    <b>工作流案例｜Karpathy 的 HackerTube：</b>为了躲开 YouTube 推荐，他让 Claude Code（桌面端，Opus 5.5，中等努力模式）从 Hacker News 20 年、4300 万条评论中筛出 6454 个被持续推荐的视频，约 2 小时完成。全程只靠对话，人工只做了三件无法自动化的外部操作：在 Google Cloud 控制台建 API key、开一台 VPS、买域名。可复用的点不是"AI 能写代码"，而是<b>把长流程交给 Agent，人只处理外部凭证与基础设施</b>——这也正好对应上面沙箱与权限工具的边界。<br>
+    <span style="color:var(--faint);">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650456238&amp;idx=1&amp;sn=911f4a9c1ff1fe961ba074475e07af84" target="_blank" rel="noopener" style="color:var(--cyan);">AINLP · Andrej Karpathy的周末黑客项目HackerTube</a></span>
+  </div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="practice">
+  <div class="sec-head"><span class="sec-index">// 04</span><h2>实践指南</h2></div>
+  <p class="sec-desc">六条来自真实事故与复盘的工程建议，每条都能直接写进团队规范。</p>
+
+  <div class="practice">
+
+    <article class="p-card">
+      <div class="p-head"><span class="p-num">01</span><h3>有效凭证不等于有效意图：给 Agent 加上最小权限与动作审计</h3></div>
+      <p>Speakeasy 的 Sagar Batchu 分享了一个案例：一个编码 Agent 想修复 staging 问题，却用完全有效的凭证删掉了生产数据库，连同备份一起。事故的根因不是凭证泄露，而是 Agent 获得的权限远超当前任务所需，且没有运行时策略拦截。他提出的控制层四步是：每个动作绑定身份 → 实时对照策略检查 → 权限不得超过操作者本人 → 全过程留痕以满足合规。</p>
+      <div class="why"><b>落地：</b>给 Agent 发短期、按任务裁剪的 token；破坏性操作加 dry-run 与二次确认；备份放独立账号并设不可变保留期；把"谁授权、动了什么、结果如何"写进审计日志，而不是只记 Agent 的聊天记录。</div>
+      <a class="src" href="https://www.youtube.com/watch?v=JxNCuXkSWyQ" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: AI Engineer]</span> A Valid Key Let an AI Agent Delete Production</a>
+    </article>
+
+    <article class="p-card">
+      <div class="p-head"><span class="p-num">02</span><h3>评审已经取代编码成为瓶颈：把 review 吞吐当容量来规划</h3></div>
+      <p>Sourcegraph 的 Andrew Norrish 指出，AI 把开发瓶颈从"写代码"推到了"评审代码"，未经充分评审的 AI 代码正在制造更多线上事故，而单靠多招 SRE 解决不了。HumanLayer 创始人 Dex Horthy 也提醒：如果完全放手，模型不会在一次次改动中自动维持代码库质量。两边的共识是，平台/SRE 团队应该成为 AI 代码质量的守门人，用代码搜索与代码图谱上下文引擎来支撑调查、预防与修复。</p>
+      <div class="why"><b>落地：</b>给 PR 设硬上限（改动行数/文件数），把 lint、类型检查、单测、依赖扫描全部前移到人工评审之前；用"变更失败率 + 回滚率"而不是"合并 PR 数"衡量效率；对 Agent 生成的代码要求附带验证证据（测试结果、复现步骤）。</div>
+      <a class="src" href="https://www.youtube.com/watch?v=-X3yXTwGs9A" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: AI Engineer]</span> AI Writes Code Faster Than Your Team Can Review It</a>
+    </article>
+
+    <article class="p-card">
+      <div class="p-head"><span class="p-num">03</span><h3>没有标准答案时，用"失败样本"反推验收标准</h3></div>
+      <p>架构师之路在垂直 Agent 评估系列里给了一个很实用的方法：Agent 产出是开放的，不要和"标准答案"比，而要和"验收标准"比。写"好输出长什么样"往往会得到"结构完整、逻辑清晰"这类无法打分的空话；反过来列举"烂输出长什么样"，标准立刻具体化——比如"系统要快"没有量化、"只写了主流程没写异常流程"、"漏了非功能需求与埋点需求"。</p>
+      <div class="why"><b>落地：</b>把这些失败样本逐条反转成可检查项（必须量化、必须含异常流程、必须含非功能与埋点），再配任务成功率、精确匹配等指标；每次线上 bad case 都回流进验收集，别让评估集和真实分布脱节。</div>
+      <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651981845&amp;idx=1&amp;sn=c91d9e508e8403036de2a9d9dcda9186" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: 架构师之路]</span> 如果你做了一个垂直Agent，如何评估它的好坏？</a>
+    </article>
+
+    <article class="p-card">
+      <div class="p-head"><span class="p-num">04</span><h3>按任务难度路由模型：把"推理量"当成可调参数</h3></div>
+      <p>Replit CEO Amjad Masad 介绍，Replit 用三到四年的使用数据训练自己的模型来判断每个任务该用哪一档能力——不只是选哪个模型，还包括该给多少推理强度。官方基准显示，这样可以在约 40% 的成本下稳定拿到前沿模型的表现。对多数团队来说，自训路由器不现实，但"简单任务用便宜模型、复杂任务才开高推理"的分层策略可以立刻落地。</p>
+      <div class="why"><b>落地：</b>先按任务类型（分类抽取 / 代码生成 / 多步规划）打标并统计成本与成功率；为每类设默认档位和升级条件；记录"升级后是否真的成功"，避免所有任务都无脑走最贵档。</div>
+      <a class="src" href="https://www.youtube.com/shorts/CqcPsDw1j9I" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: Product School]</span> Replit CEO: How Model Routing Gets Frontier Performance at 40% of the Cost</a>
+    </article>
+
+    <article class="p-card">
+      <div class="p-head"><span class="p-num">05</span><h3>定期扫描"未授权的公网暴露"，别等扫描器先找到你</h3></div>
+      <p>Shopify 内部构建了 Overexposed 扫描器，专门定位 GKE Ingress 与 Cloud Run 服务中那些可以从公网访问、却没有鉴权的资源。这个问题的普遍性在于：服务往往不是故意公开的，而是某个 Ingress 注解、默认域名或历史配置让它在无人察觉的情况下暴露了。</p>
+      <div class="why"><b>落地：</b>用云厂商 API 枚举全部入站资源并标注"公网可达 + 无鉴权"；把该检查接入 CI（新增 Ingress 时即告警），而不是只做季度巡检；对外暴露的服务强制走统一网关并默认拒绝。</div>
+      <a class="src" href="https://www.infoq.com/news/2026/11/shopify-kubernetes-ingresses/" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: InfoQ]</span> Shopify Overexposed Scans GKE Ingresses and Cloud Run for Exposure</a>
+    </article>
+
+    <article class="p-card">
+      <div class="p-head"><span class="p-num">06</span><h3>用 Agent 缩短事故分诊：Circle K 把 45–60 分钟压到 15 分钟以内</h3></div>
+      <p>Circle K 在 27 个国家运营超过 17200 家门店，其 POS、会员与充电应用跑在云原生基础设施上。过去告警触发后，工程师要先拉日志、查服务健康、在多个工具间关联症状，常常 45–60 分钟过去才开始修复。基于 Amazon Bedrock 的 Agent 把这些查询与关联动作自动化后，分诊时间降到 15 分钟以内。</p>
+      <div class="why"><b>落地：</b>先把"分诊"而不是"修复"作为 Agent 的第一个目标——它只读不写，风险最低、收益直接；把常用查询固化成工具，要求输出结论时附证据链；人工确认后再执行变更。</div>
+      <a class="src" href="https://aws.amazon.com/blogs/machine-learning/how-circle-k-accelerated-devops-incident-triage-to-under-15-minutes-with-amazon-bedrock/" target="_blank" rel="noopener"><span class="arrow">↳</span><span class="feed">[来源: AWS Machine Learning Blog]</span> How Circle K accelerated DevOps incident triage to under 15 minutes</a>
+    </article>
+
+  </div>
+
+  <div class="callout" style="margin-top:18px;">
+    <b>阅读补充｜</b>InfoQ 的长文《Systemic Approach to Memory, Knowledge, and Context in Agentic AI Architectures》把 context、memory、knowledge 三者拆开，主张用分层记忆、精选知识与 token 预算来控制注入，并点名了"上下文塞满"和"过期数据循环"两类反模式。如果你正在给 Agent 加记忆，建议在动手前先读一遍。
+    <span style="color:var(--faint);">📎 <a href="https://www.infoq.com/articles/agentic-ai-context-memory-knowledge/" target="_blank" rel="noopener" style="color:var(--cyan);">InfoQ · 原文</a></span>
+  </div>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="refs">
+  <div class="sec-head"><span class="sec-index">// 05</span><h2>参考链接汇总</h2></div>
+  <p class="sec-desc">本期引用的全部原文，按主题分组。</p>
+
+  <div class="ref-group">
+    <h3>基础设施与云</h3>
+    <ul class="refs">
+      <li><span class="feed-name">The Cloudflare Blog</span><a href="https://blog.cloudflare.com/dns-targeted-zone-builds/" target="_blank" rel="noopener">How we halved DNS build delay and cut memory use by 85%</a></li>
+      <li><span class="feed-name">InfoQ</span><a href="https://www.infoq.com/news/2026/11/uber-mcp-gateway-ai-agents/" target="_blank" rel="noopener">Uber Builds MCP Gateway to Govern Access to 800+ Servers and 5,000+ AI Agent Tools</a></li>
+      <li><span class="feed-name">InfoQ</span><a href="https://www.infoq.com/news/2026/11/introducing-amazon-ecs-gateway/" target="_blank" rel="noopener">Amazon ECS Gateway Arrives with Generated Hostnames and No Custom Domain Support</a></li>
+      <li><span class="feed-name">InfoQ</span><a href="https://www.infoq.com/news/2026/11/shopify-kubernetes-ingresses/" target="_blank" rel="noopener">Shopify Overexposed Scans GKE Ingresses and Cloud Run for Exposure</a></li>
+      <li><span class="feed-name">AWS Machine Learning Blog</span><a href="https://aws.amazon.com/blogs/machine-learning/how-circle-k-accelerated-devops-incident-triage-to-under-15-minutes-with-amazon-bedrock/" target="_blank" rel="noopener">How Circle K accelerated DevOps incident triage to under 15 minutes with Amazon Bedrock</a></li>
+    </ul>
+  </div>
+
+  <div class="ref-group">
+    <h3>Agent 工程</h3>
+    <ul class="refs">
+      <li><span class="feed-name">AINLP</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650456250&amp;idx=1&amp;sn=a109a00cc7178c66e351d342ff2e865e" target="_blank" rel="noopener">唐杰团队开源 HarnessPro，Agent 更强更便宜</a></li>
+      <li><span class="feed-name">新智元</span><a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652739675&amp;idx=3&amp;sn=90e941c875c03dc0dfc87141362d0db6" target="_blank" rel="noopener">8B逆袭32B！开源首个长程交互SQL Agent框架，面向真实数据库</a></li>
+      <li><span class="feed-name">大淘宝技术</span><a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&amp;mid=2650546718&amp;idx=1&amp;sn=4d8dbdf0487988077d6ba83146edce1b" target="_blank" rel="noopener">让 AI 看得见、判得准、改得对——D2C 从设计稿到三端真机达标的自动化实践</a></li>
+      <li><span class="feed-name">架构师之路</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651981845&amp;idx=1&amp;sn=c91d9e508e8403036de2a9d9dcda9186" target="_blank" rel="noopener">如果你做了一个垂直Agent，如何评估它的好坏？（9/12）</a></li>
+      <li><span class="feed-name">51CTO技术栈</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943578&amp;idx=1&amp;sn=1c35b3115bf8f70cedd58ec71fc5561c" target="_blank" rel="noopener">Agent的能力还不足维护代码库！HumanLayer创始人质疑"无人值守"的软件工厂</a></li>
+      <li><span class="feed-name">AI Engineer</span><a href="https://www.youtube.com/watch?v=JxNCuXkSWyQ" target="_blank" rel="noopener">A Valid Key Let an AI Agent Delete Production - Sagar Batchu, Speakeasy</a></li>
+      <li><span class="feed-name">AI Engineer</span><a href="https://www.youtube.com/watch?v=-X3yXTwGs9A" target="_blank" rel="noopener">AI Writes Code Faster Than Your Team Can Review It - Andrew Norrish, Sourcegraph</a></li>
+      <li><span class="feed-name">Product School</span><a href="https://www.youtube.com/shorts/CqcPsDw1j9I" target="_blank" rel="noopener">Replit CEO: How Model Routing Gets Frontier Performance at 40% of the Cost</a></li>
+      <li><span class="feed-name">InfoQ</span><a href="https://www.infoq.com/articles/agentic-ai-context-memory-knowledge/" target="_blank" rel="noopener">Systemic Approach to Memory, Knowledge, and Context in Agentic AI Architectures</a></li>
+      <li><span class="feed-name">AINLP</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650456238&amp;idx=1&amp;sn=911f4a9c1ff1fe961ba074475e07af84" target="_blank" rel="noopener">Andrej Karpathy的周末黑客项目HackerTube</a></li>
+      <li><span class="feed-name">花叔</span><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA1OTAxNA==&amp;mid=2247492702&amp;idx=1&amp;sn=4b8e1d82c5824a34f5ded1a5bb90c487" target="_blank" rel="noopener">我找了很久的「项目总管」，原来是TRAE新上线的开发者个人助理（限免一周）</a></li>
+    </ul>
+  </div>
+
+  <div class="ref-group">
+    <h3>开发工具与框架</h3>
+    <ul class="refs">
+      <li><span class="feed-name">InfoQ</span><a href="https://www.infoq.com/news/2026/11/torchtpu-native-pythorch-tpu/" target="_blank" rel="noopener">Google and Meta Open-source TorchTPU to Bring Native PyTorch Support to Google TPUs</a></li>
+      <li><span class="feed-name">InfoQ</span><a href="https://www.infoq.com/news/2026/11/java-news-roundup-oct26-2026/" target="_blank" rel="noopener">Java News Roundup: TornadoVM 8.0, JNoSQL, Endive, JReleaser, JBang, LangChain4j, Quarkus Almanac</a></li>
+      <li><span class="feed-name">Vercel News</span><a href="https://vercel.com/changelog/vercel-mcp-now-supports-client-id-metadata-documents" target="_blank" rel="noopener">Vercel MCP now supports Client ID Metadata Documents</a></li>
+      <li><span class="feed-name">Vercel News</span><a href="https://vercel.com/changelog/monitor-vercel-deployments-in-chatgpt" target="_blank" rel="noopener">Vercel MCP now renders deployments as an interactive card</a></li>
+      <li><span class="feed-name">Vercel News</span><a href="https://vercel.com/changelog/vercel-sandbox-with-drives-now-starts-up-to-2-4x-faster" target="_blank" rel="noopener">Vercel Sandbox with Drives now starts up to 2.4x faster</a></li>
+      <li><span class="feed-name">Docker</span><a href="https://www.docker.com/blog/docker-sandbox-code-checkout-workflows/" target="_blank" rel="noopener">Where should your code live in a Docker Sandbox?</a></li>
+      <li><span class="feed-name">Qdrant</span><a href="https://qdrant.tech/blog/qdrant-1.20-performance/" target="_blank" rel="noopener">Faster and Cheaper Search With Qdrant 1.20</a></li>
+    </ul>
+  </div>
+
+  <div class="ref-group">
+    <h3>客户端与训练系统</h3>
+    <ul class="refs">
+      <li><span class="feed-name">腾讯技术工程</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649807957&amp;idx=1&amp;sn=eb65220f0b71a6917ede58086676ba56" target="_blank" rel="noopener">从直板到折叠屏：腾讯Kuikly如何适配 iPhone Duo？</a></li>
+      <li><span class="feed-name">小红书技术REDtech</span><a href="https://mp.weixin.qq.com/s?__biz=Mzg4OTc2MzczNg==&amp;mid=2247496939&amp;idx=1&amp;sn=de12e5f3e5f301170425ad24eef08cce" target="_blank" rel="noopener">揭秘小红书自研稀疏训练引擎 SparseGear</a></li>
+      <li><span class="feed-name">逛逛GitHub</span><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247538256&amp;idx=1&amp;sn=3b97e48392e47b295968f5c66a4ce5f0" target="_blank" rel="noopener">盘点 10 月份 19 个 Star 蹭蹭涨的 GitHub 项目</a></li>
+      <li><span class="feed-name">CSDN</span><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247837915&amp;idx=1&amp;sn=2e1d8dca99ff36b7547c6a626183b3be" target="_blank" rel="noopener">前微软工程师让 AI 帮忙给 1970 年古董电脑扩容 4MB RAM，成功跑起 UNIX</a></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span>tech-daily / developer_practice · 由 tech-daily-generator 生成 · 数据源 freshrss_24h_compact_20261103_000647.json</span>
+  <span class="egg"><b>彩蛋</b> · PDP-11 内存约 1000 美元/MB，于是有人用 ChatGPT 从原理图开始造了一块 4MB 内存板——他此前从没写过 FPGA。</span>
+</footer>
+
+</div>
+</body>
+</html>
