@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 科技爱好者版 | 2026-11-05</title>
+<style>
+  :root {
+    --ink: #1c1735;
+    --muted: #6f6887;
+    --bg: #fdf8f3;
+    --card: #ffffff;
+    --purple: #7c4dff;
+    --pink: #ff5fa2;
+    --orange: #ff9f43;
+    --teal: #00b8a3;
+    --blue: #3d8bff;
+    --line: rgba(92, 60, 160, 0.12);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--purple); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 72px 24px 64px;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(255, 159, 67, 0.55), transparent 32%),
+      radial-gradient(circle at 88% 10%, rgba(0, 184, 163, 0.45), transparent 34%),
+      radial-gradient(circle at 74% 92%, rgba(255, 95, 162, 0.55), transparent 40%),
+      linear-gradient(135deg, #23104f 0%, #4a21b8 48%, #8a2ed6 100%);
+    color: #fff;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,.14) 1px, transparent 1px);
+    background-size: 26px 26px;
+    opacity: .45;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.26);
+    font-size: 13px;
+    letter-spacing: .12em;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+  }
+  .hero h1 {
+    margin: 24px 0 18px;
+    font-size: clamp(38px, 6.2vw, 68px);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 900;
+  }
+  .hero h1 span {
+    background: linear-gradient(100deg, #ffd166 0%, #ff9f43 42%, #ff5fa2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .lede {
+    max-width: 720px;
+    margin: 0 0 26px;
+    font-size: clamp(16px, 2vw, 19px);
+    color: rgba(255,255,255,.88);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    font-size: 14px;
+    color: rgba(255,255,255,.72);
+  }
+  .meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .chip {
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.22);
+  }
+
+  /* Layout */
+  main {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px 72px;
+  }
+  section { margin-top: 64px; }
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 26px;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 14px;
+  }
+  .section-head h2 {
+    margin: 0;
+    font-size: clamp(24px, 3.2vw, 34px);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+  .section-head h2 .emoji { margin-right: 8px; }
+  .section-head .sub {
+    color: var(--muted);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .accent-bar {
+    display: block;
+    width: 54px;
+    height: 5px;
+    margin-top: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--pink), var(--orange));
+  }
+
+  /* News cards */
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 24px 24px 20px;
+    box-shadow: 0 10px 28px rgba(64, 34, 130, 0.07);
+    transition: transform .18s ease, box-shadow .18s ease;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+  }
+  .card:nth-child(3n+2)::before { background: linear-gradient(90deg, var(--orange), var(--pink)); }
+  .card:nth-child(3n+3)::before { background: linear-gradient(90deg, var(--teal), var(--blue)); }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 38px rgba(64, 34, 130, 0.13);
+  }
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: #f3eeff;
+    color: #6b3fe0;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+  .tag.orange { background: #fff1e0; color: #c96900; }
+  .tag.teal { background: #e2faf6; color: #008577; }
+  .num {
+    font-size: 13px;
+    font-weight: 800;
+    color: #b9b1cf;
+    letter-spacing: .1em;
+  }
+  .card h3 {
+    margin: 0 0 12px;
+    font-size: 21px;
+    line-height: 1.42;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .card p {
+    margin: 0 0 14px;
+    color: #3f3857;
+    font-size: 15px;
+  }
+  .source {
+    margin: 14px 0 0;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .source a { color: #6b3fe0; font-weight: 600; }
+  .source a:hover { color: var(--pink); }
+
+  .featured {
+    grid-column: 1 / -1;
+    padding: 32px 34px 26px;
+    background:
+      radial-gradient(circle at 92% 8%, rgba(255, 159, 67, .18), transparent 38%),
+      linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+    border: 1px solid rgba(124, 77, 255, .22);
+  }
+  .featured::before { height: 6px; background: linear-gradient(90deg, #7c4dff, #ff5fa2 55%, #ff9f43); }
+  .featured h3 { font-size: clamp(24px, 3.2vw, 32px); }
+  .featured p { font-size: 16px; }
+  .featured .hl {
+    background: linear-gradient(transparent 62%, rgba(255, 209, 102, .65) 62%);
+    font-weight: 700;
+  }
+
+  /* Deep dive */
+  .deep-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 34px 34px 28px;
+    box-shadow: 0 12px 30px rgba(64, 34, 130, 0.07);
+    margin-bottom: 24px;
+  }
+  .deep-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .deep-badge {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    font-size: 26px;
+    background: linear-gradient(135deg, #f0e9ff, #ffe6f1);
+  }
+  .deep-card h3 {
+    margin: 0;
+    font-size: clamp(22px, 2.8vw, 28px);
+    line-height: 1.4;
+    font-weight: 900;
+  }
+  .deep-card h3 small {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: .02em;
+  }
+  .deep-card p { margin: 0 0 16px; font-size: 16px; color: #3f3857; }
+  .deep-card p:last-child { margin-bottom: 0; }
+  .deep-card strong { color: #2a2050; }
+  .callout {
+    margin: 20px 0 0;
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: #fff8e8;
+    border-left: 5px solid var(--orange);
+    font-size: 15px;
+    color: #5a4520;
+  }
+  .callout b { color: #b25d00; }
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 18px 0 20px;
+  }
+  .stat {
+    background: #f7f3ff;
+    border: 1px solid rgba(124, 77, 255, .14);
+    border-radius: 14px;
+    padding: 14px 16px;
+  }
+  .stat b {
+    display: block;
+    font-size: 24px;
+    line-height: 1.2;
+    color: #6b3fe0;
+    letter-spacing: -0.02em;
+  }
+  .stat span { font-size: 13px; color: var(--muted); }
+
+  /* Science class */
+  .classroom {
+    background:
+      radial-gradient(circle at 100% 0%, rgba(0, 184, 163, .12), transparent 38%),
+      #ffffff;
+    border: 1px solid rgba(0, 184, 163, .22);
+    border-radius: 24px;
+    padding: 34px;
+    box-shadow: 0 12px 30px rgba(0, 120, 110, 0.07);
+  }
+  .classroom h3 {
+    margin: 0 0 8px;
+    font-size: clamp(22px, 2.8vw, 28px);
+    font-weight: 900;
+  }
+  .classroom .kicker-line {
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: .08em;
+    margin-bottom: 10px;
+  }
+  .classroom p { margin: 0 0 16px; font-size: 16px; color: #3f3857; }
+  .analogy {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .analogy div {
+    background: #eefaf8;
+    border: 1px solid rgba(0, 184, 163, .18);
+    border-radius: 16px;
+    padding: 16px 18px;
+    font-size: 15px;
+  }
+  .analogy div b { display: block; color: #008577; margin-bottom: 4px; }
+  .classroom .bottom-line {
+    margin: 0;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: #f1fff9;
+    border: 1px dashed rgba(0, 184, 163, .4);
+    font-size: 15px;
+  }
+
+  /* Products */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .product {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 26px rgba(64, 34, 130, 0.06);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(64, 34, 130, 0.12);
+  }
+  .product-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .product-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 24px;
+    background: linear-gradient(135deg, #fff0e0, #ffe2ee);
+    flex: 0 0 auto;
+  }
+  .product h3 { margin: 0; font-size: 19px; font-weight: 800; line-height: 1.35; }
+  .product .category { font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+  .product p { margin: 0 0 14px; font-size: 15px; color: #3f3857; }
+  .price {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #fff1e0;
+    color: #b25d00;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* Sources */
+  .sources {
+    background: #1c1735;
+    color: #fff;
+    border-radius: 26px;
+    padding: 36px 34px;
+    margin-top: 64px;
+  }
+  .sources h2 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    font-weight: 900;
+  }
+  .sources .desc {
+    margin: 0 0 24px;
+    color: rgba(255,255,255,.6);
+    font-size: 14px;
+  }
+  .source-group { margin-bottom: 22px; }
+  .source-group:last-child { margin-bottom: 0; }
+  .source-group h4 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    letter-spacing: .08em;
+    color: #ffd166;
+    font-weight: 800;
+  }
+  .source-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 8px 22px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .source-list li {
+    font-size: 13.5px;
+    color: rgba(255,255,255,.72);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    line-height: 1.5;
+  }
+  .source-list a { color: #d9cbff; }
+  .source-list a:hover { color: #ffd166; }
+  .source-list .src-name { color: rgba(255,255,255,.5); }
+
+  footer {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 30px 24px 48px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.9;
+  }
+  footer b { color: #4a3d70; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 54px 18px 48px; }
+    main { padding: 0 16px 56px; }
+    .section-head { align-items: flex-start; flex-direction: column; gap: 4px; }
+    .section-head .sub { white-space: normal; }
+    .featured { padding: 26px 22px 22px; }
+    .deep-card, .classroom { padding: 26px 22px; }
+    .sources { padding: 28px 22px; }
+    .card, .product { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="kicker">🚀 科技日报 · 科技爱好者版</div>
+    <h1>等了两年，<br><span>国行 iPhone 终于有了 AI</span></h1>
+    <p class="lede">千问加持的 Siri、会替你打电话的 Grok Bot、一次塞进 9 个打印头的 3D 打印机，还有一天跑完三年路测的无人车——今天的科技圈，把好几个「未来」一起塞进了日常。</p>
+    <div class="meta">
+      <span>📅 2026 年 11 月 5 日</span>
+      <span>🕒 过去 24 小时</span>
+      <span>📰 491 条资讯 / 424 个来源</span>
+    </div>
+    <div class="chips">
+      <span class="chip">#国行 Apple 智能</span>
+      <span class="chip">#会打电话的 AI</span>
+      <span class="chip">#世界模型</span>
+      <span class="chip">#九头 3D 打印</span>
+      <span class="chip">#开源大模型</span>
+      <span class="chip">#AI 生图</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 今日头条 -->
+  <section id="headlines">
+    <div class="section-head">
+      <div>
+        <h2><span class="emoji">🔥</span>今日头条</h2>
+        <span class="accent-bar"></span>
+      </div>
+      <div class="sub">8 件今天最值得好奇的事</div>
+    </div>
+
+    <div class="news-grid">
+
+      <article class="card featured">
+        <div class="card-top">
+          <span class="tag">🍎 今日最炸</span>
+          <span class="num">01</span>
+        </div>
+        <h3>等了两年，国行 Apple 智能终于开测：Siri 牵手千问</h3>
+        <p>11 月 4 日凌晨，苹果随 iOS 27.3 开发者 Beta 向中国用户开放首批 Apple 智能功能测试，并计划在 12 月随正式版推送。首批支持 iPhone 15 Pro / 15 Pro Max、iPhone 16 及后续机型、iPhone Air 和 iPhone Duo；更新包约 <span class="hl">12GB</span>，需要开发者账号，装完还要再等系统处理一段时间。</p>
+        <p>这次能用的功能不少：信息、FaceTime 和电话里的实时翻译，AirPods 的面对面对话翻译，写作工具的改写、校对和摘要，视觉智能，照片消除、自然语言搜索和回忆影片，智绘表情，通知摘要，备忘录和通话转录摘要等。基础功能在手机本地跑，复杂任务则通过 Siri、写作工具和视觉智能调用阿里千问的云端能力。要注意的是，这一版<strong>不包含</strong> WWDC 2026 公布的下一代 Siri AI。</p>
+        <p>首批实测的口碑比较一致：功能齐了，但更像「补课」。Siri 遇到复杂请求会弹出调用千问的对话框，速度快、内容偏简单；写作工具已经能在微信、钉钉、飞书里直接用；整体体验被形容为「梦回 2024」，和国产手机已经玩出花的 AI 功能相比少一点惊喜。想尝鲜可以，但别拿唯一的主力机升开发者 Beta。</p>
+        <p class="source">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639268&amp;idx=1&amp;sn=57cb01abfdb367f3a3fc6c33ebfc20f0" target="_blank" rel="noopener">少数派</a> · <a href="https://www.ifanr.com/1687585?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">爱范儿</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&amp;mid=2650541527&amp;idx=1&amp;sn=30a1165964201a8c55e5756f986b3817" target="_blank" rel="noopener">网易科技</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&amp;mid=2247635073&amp;idx=2&amp;sn=978ec11913e6495394277108e2e0c9d2" target="_blank" rel="noopener">硅星人Pro</a></p>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <span class="tag orange">🎨 生图升级</span>
+          <span class="num">02</span>
+        </div>
+        <h3>ChatGPT 生图升到 2.6：能导出 SVG，会做 GIF，速度还快一半</h3>
+        <p>OpenAI 在 11 月 4 日发布 Images 2.6，ChatGPT 和 Codex 的所有档位都能在网页、桌面和手机端使用。最实用的变化在开发者侧：生成的图可以导出成 SVG 矢量图。以前 AI 图是「色点拼成的位图」，放大会糊，想做 Logo、App 图标或印刷品还得设计师重画；SVG 记录的是线条和形状，放大多少倍都清晰，还能单独改某根线的颜色和粗细。</p>
+        <p>新版本还能用一句话、一张照片或一张手绘草图生成循环播放的 GIF 动图，比如让吉祥物动起来、把商品图做成循环小动画；改图时能更准确地只改指定区域，出图速度比上一版快 50%。开发者可以通过 API 使用 GPT-Image-2.6 Flare 和 Sunburst 两个新模型。OpenAI 透露，全球用户每周在 ChatGPT、Codex 和 API 上生成 <strong>40 亿张图</strong>，平均每天超过 5 亿张。</p>
+        <p class="source">📎 来源：<a href="https://x.com/dotey/status/2118127825186177270" target="_blank" rel="noopener">宝玉</a> · <a href="https://x.com/OpenAI/status/2118124944928432327" target="_blank" rel="noopener">OpenAI</a> · <a href="https://x.com/OpenAI/status/2118124966055223755" target="_blank" rel="noopener">OpenAI</a></p>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <span class="tag teal">🖨️ 硬核玩具</span>
+          <span class="num">03</span>
+        </div>
+        <h3>拓竹 H3C 塞进 9 个打印头：3.4 秒换头，彩色打印不再堆废料</h3>
+        <p>3D 打印玩家最头疼的「废料山」，被拓竹用最直接的办法解决了：第三代旗舰 H3C 在机身里装了 9 个可自动切换的独立打印头。每个打印头都有自己的进料通道、加热器和硬化钢喷嘴，换头时把当前打印头放回挂架、换下一个继续打，机械切换只要 <strong>3.4 秒</strong>，最快 6 秒就能换到下一种材料。</p>
+        <p>更关键的是，9 个头可以分工：一次打印里同时使用不同粗细、不同软硬度甚至不同精度的耗材，支持超软 TPU 和软硬材料混打，做出拿起来就能用的「产品」，而不只是塑料模型。机器还会在当前打印头工作时提前给下一个打印头预热，减少等待。对爱折腾的玩家来说，这是把「多色」从折磨变成了玩法。</p>
+        <p class="source">📎 来源：<a href="https://www.ifanr.com/1687646?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">爱范儿</a> · <a href="https://www.ifanr.com/1687750?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">爱范儿</a></p>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <span class="tag">🤖 国产模型</span>
+          <span class="num">04</span>
+        </div>
+        <h3>腾讯 Hy4 正式版：会看图、会操作电脑，还能复刻《王者荣耀》</h3>
+        <p>腾讯混元 Hy4 从预览版转正，首次加入视觉理解和 Computer Use 能力：你可以直接上传一段录屏，让它从视频里学习并复刻界面和元素；它生成的结果也能持续截图，靠自己「看」效果再自我修正。官方称它在多个基准上进入最强开源模型之列，并超过了 DeepSeek V4.1 等对手。</p>
+        <p>爱范儿在 WorkBuddy 里实测，用一句提示词让它做「极其逼真的鹈鹕骑自行车可交互 3D 动画」，画面观感已经能和 Opus 5.5、GPT-6 一桌；它还尝试复刻《王者荣耀》这类复杂界面。不过 Arena 的 Agent 评测显示，目前上场的 Hy4 仍是专有版本，开源权重还在路上——「最强开源」这句话，还得等权重真正放出来才算数。</p>
+        <p class="source">📎 来源：<a href="https://www.ifanr.com/1687613?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">爱范儿</a> · <a href="https://x.com/TencentHunyuan/status/2117887087815139440" target="_blank" rel="noopener">Tencent HY</a> · <a href="https://x.com/arena/status/2117878267504103555" target="_blank" rel="noopener">Arena.ai</a></p>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <span class="tag orange">🌍 开源卷王</span>
+          <span class="num">05</span>
+        </div>
+        <h3>Kimi K3.1 Pro 开源：2.8 万亿参数，登顶开源 Agent 榜</h3>
+        <p>月之暗面放出 Kimi K3.1 Pro 的开放权重，总参数 2.8 万亿、每个 token 只激活 1040 亿，采用 896 个专家、每 token 选 16 个的稀疏结构，支持 100 万 token 上下文。它与 K3 一起，是 Hugging Face 上迄今最大的真实模型发布，体量超过 Qwen3.8-2.4T 和 DeepSeek-V4-Pro（1.6T）。</p>
+        <p>在 Agent Arena 里，Kimi K3.1 Pro（Max）跑了 1.75 万多个真实长任务会话，净提升 +5.1%，在 Work、Code、Chat 三个分类里都是开源第一，总榜第 13；相比上一代 K3 提升 4.2 个百分点。Bash 命令可靠性、用户好评度和「听得进纠正」三项也都是开源第一。对普通人来说，这意味着免费或便宜的开源助手，正在逼近付费闭源模型。</p>
+        <p class="source">📎 来源：<a href="https://x.com/arena/status/2118088183594541527" target="_blank" rel="noopener">Arena.ai</a> · <a href="https://x.com/Thom_Wolf/status/2118026565879844910" target="_blank" rel="noopener">Thomas Wolf</a> · <a href="https://x.com/ollama/status/2118068379378651192" target="_blank" rel="noopener">ollama</a></p>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <span class="tag teal">🚕 未来出行</span>
+          <span class="num">06</span>
+        </div>
+        <h3>百度 ApolloWorld：无人车「跑一天」，顶真实路测三年</h3>
+        <p>百度 Apollo 发布 ApolloWorld，自称首个面向物理 AI 的 Agent 驱动全模态世界模型。它把整座城市的路网、多模态传感器和车流博弈搬进云端，支持毫秒级实时交互和连续几十分钟的完整接单推演，不再像以前的世界模型只能模拟几十秒的孤立片段、播放单向「录像」。</p>
+        <p>在这个虚拟考场里，无人车平均每天能跑 10 万公里；跑一天相当于一辆配安全员的真车连续测试约 3 年，效率提升数百倍。靠着云端 24 小时陪练，萝卜快跑的 L4 级全无人端到端大模型已经正式上车，上百辆无安全员真车每天上街接单。新智元在深圳夜间实测，遇到突然占道的行人、乱窜的电动车和外卖骑手，车辆能提前预判、平顺让行。目前全球做到这一步的，只有百度和特斯拉两家。</p>
+        <p class="source">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652740261&amp;idx=1&amp;sn=3ae30a3d5d9466d8bfdcb5bd4820a9b9" target="_blank" rel="noopener">新智元</a> · <a href="https://www.ifanr.com/1687750?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">爱范儿</a></p>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <span class="tag orange">📞 生活黑科技</span>
+          <span class="num">07</span>
+        </div>
+        <h3>Grok Bot 学会打电话：替你排队、按语音菜单、跟客服周旋</h3>
+        <p>xAI 的 Grok Bot 上线了打电话功能：你批准后，它可以替你拨打商家电话，在线等待、按自动语音菜单、跟接电话的人对话，你可以在旁边看实时转写，挂断后收到一份通话摘要。官方演示的用途包括预约、取消订阅、和同事协调时间。目前仅限美国，华盛顿州和伊利诺伊州被排除在外。</p>
+        <p>这项功能让 Grok Bot 更像一支「个人 Agent 团队」：有负责研究的、写东西的、管日程的，可以同时干活，也能拉进同一个群交接任务。硅星人 Pro 报道，Grok Bot 测试版上线两个月，付费周用户达到 <strong>80 万</strong>，10 月环比增长超过一倍，马斯克称「从没见过增长这么快」。不过它并没有什么独占的新技术——真正的胜负手，是把已有能力包装成普通人愿意天天用的产品。</p>
+        <p class="source">📎 来源：<a href="https://x.com/TheRundownAI/status/2118057565607367147" target="_blank" rel="noopener">The Rundown AI</a> · <a href="https://x.com/mntruell/status/2118054007579296069" target="_blank" rel="noopener">Michael Truell</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&amp;mid=2247635073&amp;idx=1&amp;sn=b2a2a019c83df064814759db98e75aa1" target="_blank" rel="noopener">硅星人Pro</a></p>
+      </article>
+
+      <article class="card">
+        <div class="card-top">
+          <span class="tag teal">🔬 科学趣闻</span>
+          <span class="num">08</span>
+        </div>
+        <h3>Claude 帮科学家看清「穹窿体」：细菌里也藏着神秘桶状结构</h3>
+        <p>Anthropic 的生物研究团队用 Claude 解析出细菌生命中一种「穹窿体」（vault particle）的首个 3D 结构。穹窿体是细胞里最大的蛋白质结构之一，形状像一只桶，1986 年就被发现，但近 40 年来没人知道它到底干什么。</p>
+        <p>过去人们只在动物、植物等复杂生物的细胞里见过穹窿体；这次团队证明，细菌以及感染细菌的病毒里也有类似蛋白，能组装出同样的桶状结构。在更简单的生命形式里研究它，可能比直接研究人体细胞更容易揭开功能之谜。这不一定马上变成药，但它展示了 AI 在基础科学里越来越像一台「结构显微镜」。</p>
+        <p class="source">📎 来源：<a href="https://x.com/AnthropicAI/status/2118073665296228863" target="_blank" rel="noopener">Anthropic</a> · <a href="https://x.com/AnthropicAI/status/2118073667858887068" target="_blank" rel="noopener">Anthropic</a></p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 科技新鲜事 -->
+  <section id="deep-dive">
+    <div class="section-head">
+      <div>
+        <h2><span class="emoji">🔬</span>科技新鲜事</h2>
+        <span class="accent-bar"></span>
+      </div>
+      <div class="sub">两个话题，多聊五分钟</div>
+    </div>
+
+    <article class="deep-card">
+      <div class="deep-head">
+        <div class="deep-badge">🍎</div>
+        <div>
+          <h3>深度 ①｜国行 Apple 智能到底能干嘛？一份「该不该升」的冷静指南
+            <small>功能齐了，但更像补课；开发者 Beta 先别上主力机</small>
+          </h3>
+        </div>
+      </div>
+      <p>这次更新最值得注意的，不是「苹果终于有 AI 了」，而是它选择了怎样的合作方式。苹果自研模型负责照片消除、基础润色这类端侧任务；一旦任务变复杂，Siri、写作工具和视觉智能就会去调用阿里千问的云端能力。对用户来说，好处是中文理解和本地服务更接地气；代价是体验被切成「端侧」和「云端」两段，能力边界取决于千问。</p>
+      <p>实测里最顺手的是写作工具：选中文字就能改写、校对、摘要，而且已经能在微信、钉钉、飞书等第三方 App 里用。实时翻译覆盖信息、FaceTime 和电话，AirPods 也支持面对面对话翻译；照片消除、自然语言搜索、通知摘要、通话转录这些「日常小忙」也都在。最受期待的新 Siri 反而最保守：唤醒后有环绕式跑马灯光效，可以语音 / 打字切换，但复杂请求会跳转到千问对话框，回答速度快、内容偏简单。</p>
+      <div class="stat-row">
+        <div class="stat"><b>12GB</b><span>开发者 Beta 更新包大小</span></div>
+        <div class="stat"><b>2026.12</b><span>计划随正式版推送</span></div>
+        <div class="stat"><b>iPhone 15 Pro</b><span>起支持，含 16 系列及后续</span></div>
+        <div class="stat"><b>不含</b><span>下一代 Siri AI</span></div>
+      </div>
+      <p>该不该升？如果你有备用机和开发者账号，可以尝鲜；如果只有一台天天要用的主力机，建议等 12 月正式版。开发者 Beta 的 Bug、12GB 的更新包，以及部分功能需要登录千问账号，都是真实成本。还有一个背景值得知道：美国已经有用户因为「等了两年没等到宣传中的 Siri」发起集体诉讼并达成和解——苹果这次交出的是一份「终于来了」的答卷，但还不是「领先」的答卷。</p>
+      <div class="callout">
+        <b>一句话总结：</b>国行 Apple 智能的最大意义，是让 iPhone 用户不用再「外挂」一个 AI App；但它补的是基础课，不是加分题。
+      </div>
+      <p class="source">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639268&amp;idx=1&amp;sn=57cb01abfdb367f3a3fc6c33ebfc20f0" target="_blank" rel="noopener">少数派</a> · <a href="https://www.ifanr.com/1687585?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">爱范儿</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639261&amp;idx=1&amp;sn=7a6786a5be5b785c77d25d511cdf79b4" target="_blank" rel="noopener">少数派</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&amp;mid=2650541527&amp;idx=1&amp;sn=30a1165964201a8c55e5756f986b3817" target="_blank" rel="noopener">网易科技</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&amp;mid=2247635073&amp;idx=2&amp;sn=978ec11913e6495394277108e2e0c9d2" target="_blank" rel="noopener">硅星人Pro</a></p>
+    </article>
+
+    <article class="deep-card">
+      <div class="deep-head">
+        <div class="deep-badge">🧑‍💼</div>
+        <div>
+          <h3>深度 ②｜个人 Agent 走进现实：会打电话、会记事，但还不会替你生活
+            <small>一边是 80 万付费用户，一边是 Uber 一周只成交 4 单打车</small>
+          </h3>
+        </div>
+      </div>
+      <p>今天 Personal Agent 赛道最热闹的两条消息，恰好构成一组对照。Grok Bot 宣布能替用户打电话，官方数据显示上线两个月付费周用户达到 80 万；而另一组被疯转的数据是：Uber 在万圣节周处理了 3.2 亿次订单，其中通过 Agent 完成的只有 500 个外卖订单和 4 次打车。推特上的 Agent 很火，现实里的 Agent 还很冷。</p>
+      <p>差距不在「能不能」，而在「值不值得」。打电话、订票、取消订阅这类任务边界清楚、结果可验证，Agent 容易做出价值；但一旦要理解你的偏好、跨 App 操作、处理意外，可靠性就迅速下降。Comma 给出的解法是「长期记忆」：整个工作区只保留一条主会话，用一个快速决策模型维护所有 Agent 共享的事实清单，让 Agent 自己写监控程序，并根据人工验收和实际花费调整任务分配。这样换个对话、换个子 Agent，它还记得你上次说「订票要靠窗、优先上午」。</p>
+      <p>所以更准确的说法是：Agent 正在从「演示」变成「工具」，但还没变成「管家」。对普通用户，最值得先用的不是「全自动生活助理」，而是那些你本来就要做、又很烦的单项任务——比如让 AI 帮你等客服、整理会议纪要、把散落的灵感收进笔记。把边界划清楚，Agent 才真的省时间。</p>
+      <p class="source">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&amp;mid=2247635073&amp;idx=1&amp;sn=b2a2a019c83df064814759db98e75aa1" target="_blank" rel="noopener">硅星人Pro</a> · <a href="https://x.com/TheRundownAI/status/2118057565607367147" target="_blank" rel="noopener">The Rundown AI</a> · <a href="https://x.com/mntruell/status/2118054007579296069" target="_blank" rel="noopener">Michael Truell</a> · <a href="https://x.com/oran_ge/status/2118105193074356384" target="_blank" rel="noopener">Orange AI</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651072104&amp;idx=2&amp;sn=76f783cd421be6688eed397816487dfa" target="_blank" rel="noopener">机器之心</a></p>
+    </article>
+  </section>
+
+  <!-- 科普小课堂 -->
+  <section id="classroom">
+    <div class="section-head">
+      <div>
+        <h2><span class="emoji">🎓</span>科普小课堂</h2>
+        <span class="accent-bar"></span>
+      </div>
+      <div class="sub">今天只学一个概念</div>
+    </div>
+
+    <div class="classroom">
+      <div class="kicker-line">SCIENCE 101</div>
+      <h3>什么是「世界模型」？为什么它能让无人车一天跑完三年路测？</h3>
+      <p>今天新闻里，「世界模型」出现了好几次：百度用它训练无人车，LiberAI 用它让机器人做奶茶，天数智芯甚至把机器鸭的训练搬到了本地。听起来玄，其实可以把它想成一个「会预测下一秒」的模拟器。</p>
+      <p>普通视频模型的任务是「生成看起来像真的画面」；世界模型的任务是「如果我这样做，世界接下来会怎样」。它不仅要知道红灯长什么样，还要知道前车刹车后自己该减速、行人突然横穿时会发生什么。对自动驾驶和机器人来说，这等于一个可以无限重来、不会撞坏真车的飞行模拟器。</p>
+      <div class="analogy">
+        <div>
+          <b>视频模型 = 拍电影</b>
+          只要画面好看、前后连贯，观众不出戏就行；它不必真的遵守物理规律。
+        </div>
+        <div>
+          <b>世界模型 = 开模拟器</b>
+          你踩油门，它要算出车速、轮胎抓地、前车距离；你打方向盘，它要给出合理的下一个画面。
+        </div>
+        <div>
+          <b>闭环训练 = 无限陪练</b>
+          Agent 在虚拟世界里做动作、看结果、改策略，一天跑 10 万公里，错误只发生在云端。
+        </div>
+      </div>
+      <p>这也是为什么百度敢说「一天顶三年」：真实路测要油费、安全员、天气和路况，还要碰运气遇到罕见场景；世界模型可以把暴雨、夜间、突然窜出的行人这些「长尾」场景批量制造出来，让模型反复练。Liber-0 则是另一个方向：用 220 万小时人类经验，让机器人没见过的任务也能上手，甚至完成一杯奶茶的全流程。蚂蚁灵波的机器人已经在乌镇峰会和上海药店「上岗抓药」，背后同样是视觉、深度感知、世界模型和动作决策的组合。</p>
+      <p class="bottom-line">💡 记住这个比喻：<strong>世界模型就是给 AI 用的飞行模拟器</strong>——不是为了拍好看的视频，而是为了让它在真正上路之前，先在虚拟世界里把该犯的错都犯完。</p>
+      <p class="source">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652740261&amp;idx=1&amp;sn=3ae30a3d5d9466d8bfdcb5bd4820a9b9" target="_blank" rel="noopener">新智元</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5NDk5MTA0MQ==&amp;mid=2652333700&amp;idx=1&amp;sn=322923e67bb5e203d3d257d5c081bfff" target="_blank" rel="noopener">真格基金</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651072104&amp;idx=1&amp;sn=f11fab2e4f1f7e5c4204f3524123f1ee" target="_blank" rel="noopener">机器之心</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247669144&amp;idx=1&amp;sn=2d43de358366fbe915411a2ccfbd55a5" target="_blank" rel="noopener">AI前线</a></p>
+    </div>
+  </section>
+
+  <!-- 产品推荐 -->
+  <section id="products">
+    <div class="section-head">
+      <div>
+        <h2><span class="emoji">🛒</span>产品推荐</h2>
+        <span class="accent-bar"></span>
+      </div>
+      <div class="sub">值得摸一摸、装一装、玩一玩</div>
+    </div>
+
+    <div class="product-grid">
+
+      <article class="product">
+        <div class="product-top">
+          <div class="product-icon">🎙️</div>
+          <div>
+            <h3>Cicada 知了</h3>
+            <div class="category">开源软件 · macOS 会议助手</div>
+          </div>
+        </div>
+        <p>一款完全原生、Apache-2.0 开源的 macOS 实时翻译与 AI 会议助手。它能给 Zoom、腾讯会议、飞书、YouTube 等应用加实时双语字幕，每 45 秒更新一份带总结、议题和鱼骨图的会议纪要，每条结论和待办都标着原话出处和时间；还能克隆你的音色做同声传译，通过虚拟麦克风直接把翻译后的声音送进会议软件。配置只需注册 Ling 平台、创建 API Key、粘贴到设置里，免费额度约 50 小时 / 月，Windows、Linux、Android 版也在路上。</p>
+        <span class="price">免费开源</span>
+        <p class="source">📎 来源：<a href="https://x.com/dotey/status/2118052017755005210" target="_blank" rel="noopener">宝玉</a></p>
+      </article>
+
+      <article class="product">
+        <div class="product-top">
+          <div class="product-icon">🧍</div>
+          <div>
+            <h3>Manus 3D 游戏</h3>
+            <div class="category">AI 创作 · 3D / 游戏</div>
+          </div>
+        </div>
+        <p>Manus 现在能把你的一张照片变成可操控的 3D 版自己，让你走进自己创建的世界；也能直接做 3D 游戏，角色动作流畅，但它不再需要你逐帧学动画——骨骼绑定和动画由 Manus 自动处理。过去要请专人花几小时做的工作，现在成了默认能力。适合想试水 3D 小游戏、又不想啃建模软件的普通玩家。</p>
+        <span class="price">AI 创作</span>
+        <p class="source">📎 来源：<a href="https://x.com/ManusAI/status/2118015049772240980" target="_blank" rel="noopener">Manus</a></p>
+      </article>
+
+      <article class="product">
+        <div class="product-top">
+          <div class="product-icon">📝</div>
+          <div>
+            <h3>乔木闪记 Jot</h3>
+            <div class="category">开源工具 · 笔记 / Obsidian</div>
+          </div>
+        </div>
+        <p>一个把「随手记录」做到极简的开源小工具：⌘⇧J 唤出速记，Markdown 实时渲染；⌘⇧K 把选中的文字连同来源链接一起存进 Obsidian 今日日记；截图里的文字可以在本地识别。最友好的是，不装 Obsidian 也能用。对于灵感多、收藏夹乱、又不想在多个 App 之间来回切的人来说，它像个随叫随到的「收件箱」。</p>
+        <span class="price">免费开源</span>
+        <p class="source">📎 来源：<a href="https://x.com/vista8/status/2117825761667371432" target="_blank" rel="noopener">向阳乔木</a></p>
+      </article>
+
+      <article class="product">
+        <div class="product-top">
+          <div class="product-icon">🎬</div>
+          <div>
+            <h3>Kling 4.0 Flash</h3>
+            <div class="category">AI 视频 · 创作工具</div>
+          </div>
+        </div>
+        <p>可灵 4.0 Flash 现在向所有用户开放，网站和 API 都能用，还能通过 MCP、CLI 和 AI 插件接入工作流。最实用的是专业软件插件：Photoshop、Premiere Pro、After Effects 里可以直接调用视频生成，把「先生成再导入」的来回折腾省掉。对短视频创作者和设计师来说，这是一次把 AI 视频塞进现有工作台的低门槛更新。</p>
+        <span class="price">全量开放</span>
+        <p class="source">📎 来源：<a href="https://x.com/Kling_ai/status/2117995299591319932" target="_blank" rel="noopener">Kling AI</a></p>
+      </article>
+
+      <article class="product">
+        <div class="product-top">
+          <div class="product-icon">🏯</div>
+          <div>
+            <h3>麦积山第 4 窟网页复刻</h3>
+            <div class="category">开源教程 · AI + 3D</div>
+          </div>
+        </div>
+        <p>一位创作者用 Claude Code 把麦积山第 4 窟散花楼 1:1 搬进了网页：双击就能走进这座北周开凿、隋代地震塌掉前檐的崖阁，一键切回北周原貌，还能剖开量尺寸。流程是 Claude 调研考据 → 贴图 → Renoise 生图 → Tripo 造像 → Blender 修网格 → Three.js 上线，全过程开源成保姆级教程。作者也很坦诚：最难的不是建模而是考据，光一个面阔就有 7 种说法；造像只到中等精度，壁画是 AI 再现而非原作。</p>
+        <span class="price">免费教程</span>
+        <p class="source">📎 来源：<a href="https://x.com/berryxia/status/2117811665018531896" target="_blank" rel="noopener">Berryxia.AI</a></p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 信息来源 -->
+  <section class="sources" id="sources">
+    <h2>📚 延伸阅读</h2>
+    <p class="desc">今天的每一条内容都来自下面的公开报道与作者分享，点击可查看原文。信息窗口：2026-11-04 02:40 — 2026-11-05 02:40（共 491 条，424 个来源）。</p>
+
+    <div class="source-group">
+      <h4>今日头条</h4>
+      <ul class="source-list">
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639268&amp;idx=1&amp;sn=57cb01abfdb367f3a3fc6c33ebfc20f0" target="_blank" rel="noopener">Apple 智能国行版开放测试</a> <span class="src-name">· 少数派</span></li>
+        <li><a href="https://www.ifanr.com/1687585?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">连夜实测 iPhone 国行 AI，亮点和槽点都在这了</a> <span class="src-name">· 爱范儿</span></li>
+        <li><a href="https://www.ifanr.com/1687733?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">实测 iPhone 国行 AI：有亮点有槽点，还有一个惊喜点</a> <span class="src-name">· 爱范儿</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639261&amp;idx=1&amp;sn=7a6786a5be5b785c77d25d511cdf79b4" target="_blank" rel="noopener">国行 Apple 智能实测：问 Siri 只是开始，跳进千问 App 才是重头戏</a> <span class="src-name">· 少数派</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&amp;mid=2650541527&amp;idx=1&amp;sn=30a1165964201a8c55e5756f986b3817" target="_blank" rel="noopener">等了两年的国行 iPhone AI，一手实测后我劝你别急着升</a> <span class="src-name">· 网易科技</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&amp;mid=2247635073&amp;idx=2&amp;sn=978ec11913e6495394277108e2e0c9d2" target="_blank" rel="noopener">梦回 2024：国行 iPhone 终于用上 Apple 智能了，但它还不够好</a> <span class="src-name">· 硅星人Pro</span></li>
+        <li><a href="https://x.com/dotey/status/2118127825186177270" target="_blank" rel="noopener">OpenAI 推出 Images 2.6：SVG、GIF、出图快一半</a> <span class="src-name">· 宝玉</span></li>
+        <li><a href="https://x.com/OpenAI/status/2118124944928432327" target="_blank" rel="noopener">ChatGPT Images 2.6 is here</a> <span class="src-name">· OpenAI</span></li>
+        <li><a href="https://x.com/OpenAI/status/2118124966055223755" target="_blank" rel="noopener">GPT-Image-2.6 Flare and Sunburst in the API</a> <span class="src-name">· OpenAI</span></li>
+        <li><a href="https://www.ifanr.com/1687646?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">拓竹给 3D 打印机装了 9 个头，这次真能打印万物了？</a> <span class="src-name">· 爱范儿</span></li>
+        <li><a href="https://www.ifanr.com/1687750?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">早报｜苹果收紧员工 Token 预算 / 手机出货量降 19% / 小米机器人工厂实习</a> <span class="src-name">· 爱范儿</span></li>
+        <li><a href="https://www.ifanr.com/1687613?utm_source=rss&amp;utm_medium=rss&amp;utm_campaign=" target="_blank" rel="noopener">实测腾讯 Hy4：我用它复刻《王者荣耀》</a> <span class="src-name">· 爱范儿</span></li>
+        <li><a href="https://x.com/TencentHunyuan/status/2117887087815139440" target="_blank" rel="noopener">Introducing Hy4</a> <span class="src-name">· Tencent HY</span></li>
+        <li><a href="https://x.com/arena/status/2117878267504103555" target="_blank" rel="noopener">Hy4 lands #14 overall in Agent Arena</a> <span class="src-name">· Arena.ai</span></li>
+        <li><a href="https://x.com/arena/status/2118088183594541527" target="_blank" rel="noopener">Kimi K3.1 Pro open weights, #1 open model</a> <span class="src-name">· Arena.ai</span></li>
+        <li><a href="https://x.com/Thom_Wolf/status/2118026565879844910" target="_blank" rel="noopener">Kimi-K3.1-Pro: interesting facts</a> <span class="src-name">· Thomas Wolf</span></li>
+        <li><a href="https://x.com/ollama/status/2118068379378651192" target="_blank" rel="noopener">Kimi K3.1 Pro on Ollama Cloud</a> <span class="src-name">· ollama</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&amp;mid=2652740261&amp;idx=1&amp;sn=3ae30a3d5d9466d8bfdcb5bd4820a9b9" target="_blank" rel="noopener">全球唯二，百度抢先交卷！首个物理 AI 世界模型来了</a> <span class="src-name">· 新智元</span></li>
+        <li><a href="https://x.com/TheRundownAI/status/2118057565607367147" target="_blank" rel="noopener">Grok Bot can now place phone calls</a> <span class="src-name">· The Rundown AI</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&amp;mid=2247635073&amp;idx=1&amp;sn=b2a2a019c83df064814759db98e75aa1" target="_blank" rel="noopener">Grok Bot 成了所有 Personal Agent 想象中自己的样子</a> <span class="src-name">· 硅星人Pro</span></li>
+        <li><a href="https://x.com/AnthropicAI/status/2118073665296228863" target="_blank" rel="noopener">Mapping the first 3D structure of a vault particle with Claude</a> <span class="src-name">· Anthropic</span></li>
+        <li><a href="https://x.com/AnthropicAI/status/2118073667858887068" target="_blank" rel="noopener">Read the full preprint</a> <span class="src-name">· Anthropic</span></li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <h4>深度与科普</h4>
+      <ul class="source-list">
+        <li><a href="https://x.com/mntruell/status/2118054007579296069" target="_blank" rel="noopener">Ask Bot to schedule appointments, cancel subscriptions…</a> <span class="src-name">· Michael Truell</span></li>
+        <li><a href="https://x.com/oran_ge/status/2118105193074356384" target="_blank" rel="noopener">推特上 Agent 很火，但现实中 Agent 很冷</a> <span class="src-name">· Orange AI</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651072104&amp;idx=2&amp;sn=76f783cd421be6688eed397816487dfa" target="_blank" rel="noopener">Comma 已经把长期记忆做进 Agent「大管家」</a> <span class="src-name">· 机器之心</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5NDk5MTA0MQ==&amp;mid=2652333700&amp;idx=1&amp;sn=322923e67bb5e203d3d257d5c081bfff" target="_blank" rel="noopener">LiberAI 发布 Liber-0，长程 Zero-shot 涌现于 220 万小时人类数据</a> <span class="src-name">· 真格基金</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651072104&amp;idx=1&amp;sn=f11fab2e4f1f7e5c4204f3524123f1ee" target="_blank" rel="noopener">把黄仁勋的小黄鸭训练放在本地！国产端侧 600T 算力即将到来</a> <span class="src-name">· 机器之心</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&amp;mid=2247669144&amp;idx=1&amp;sn=2d43de358366fbe915411a2ccfbd55a5" target="_blank" rel="noopener">被李飞飞团队写进代码库的具身底座，现身乌镇峰会「上岗抓药」</a> <span class="src-name">· AI前线</span></li>
+      </ul>
+    </div>
+
+    <div class="source-group">
+      <h4>产品推荐</h4>
+      <ul class="source-list">
+        <li><a href="https://x.com/dotey/status/2118052017755005210" target="_blank" rel="noopener">Cicada：开源的 macOS 实时翻译与 AI 会议助手</a> <span class="src-name">· 宝玉</span></li>
+        <li><a href="https://x.com/ManusAI/status/2118015049772240980" target="_blank" rel="noopener">Turn your photos into a playable 3D version of yourself</a> <span class="src-name">· Manus</span></li>
+        <li><a href="https://x.com/vista8/status/2117825761667371432" target="_blank" rel="noopener">乔木闪记 Jot：随时记录文字、图片</a> <span class="src-name">· 向阳乔木</span></li>
+        <li><a href="https://x.com/Kling_ai/status/2117995299591319932" target="_blank" rel="noopener">Kling 4.0 Flash is now fully available</a> <span class="src-name">· Kling AI</span></li>
+        <li><a href="https://x.com/berryxia/status/2117811665018531896" target="_blank" rel="noopener">用 Claude Code 把麦积山第 4 窟 1:1 搬进网页</a> <span class="src-name">· Berryxia.AI</span></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div><b>科技日报 · 科技爱好者版</b></div>
+  <div>用好奇心看技术，用生活感读新闻。</div>
+  <div>数据窗口：2026-11-04 02:40 — 2026-11-05 02:40 · 491 条资讯 / 424 个来源</div>
+  <div>生成时间：2026-11-05 · 仅供学习与信息参考</div>
+</footer>
+
+</body>
+</html>

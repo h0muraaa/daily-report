@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践日报 · 2026-11-05</title>
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #11161d;
+    --panel-2: #151b24;
+    --border: #232c38;
+    --border-soft: #1a222c;
+    --text: #d7e0ea;
+    --text-strong: #f0f6fc;
+    --muted: #8b98a8;
+    --green: #3fb950;
+    --cyan: #58a6ff;
+    --amber: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 15% -10%, rgba(63, 185, 80, 0.09), transparent 38%),
+      radial-gradient(circle at 90% 0%, rgba(88, 166, 255, 0.08), transparent 34%),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(88, 166, 255, 0.28);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  a:hover { color: #9ecbff; border-color: #9ecbff; }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 28px 20px 72px;
+  }
+
+  /* ---------- terminal header ---------- */
+  .terminal {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #121820, #0e1319);
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  }
+  .term-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-soft);
+    background: #0d1218;
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .dot.r { background: #ff5f56; }
+  .dot.y { background: #ffbd2e; }
+  .dot.g { background: #27c93f; }
+  .term-title {
+    margin-left: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+  .term-body { padding: 26px 26px 30px; }
+  .prompt {
+    color: var(--green);
+    font-size: 13px;
+    margin-bottom: 14px;
+    word-break: break-all;
+  }
+  .prompt .dim { color: var(--muted); }
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(26px, 4.4vw, 40px);
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--text-strong);
+    font-weight: 700;
+  }
+  h1 .accent {
+    background: linear-gradient(90deg, var(--green), var(--cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .chip {
+    border: 1px solid var(--border);
+    background: #0e141b;
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+  }
+  .chip b { color: var(--text); font-weight: 600; }
+
+  /* ---------- tldr ---------- */
+  .tldr {
+    margin-top: 22px;
+    border: 1px solid rgba(63, 185, 80, 0.25);
+    border-left: 3px solid var(--green);
+    background: linear-gradient(90deg, rgba(63, 185, 80, 0.07), rgba(63, 185, 80, 0.01));
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .tldr h2 {
+    margin: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    font-weight: 600;
+  }
+  .tldr ul { margin: 0; padding-left: 18px; }
+  .tldr li { margin: 6px 0; color: var(--text); }
+  .tldr li b { color: var(--text-strong); }
+
+  /* ---------- sections ---------- */
+  .section { margin-top: 46px; }
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .sec-num {
+    color: var(--green);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+  }
+  .sec-head h2 {
+    margin: 0;
+    font-size: 21px;
+    letter-spacing: -0.02em;
+    color: var(--text-strong);
+  }
+  .sec-head .hint {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* ---------- hot list ---------- */
+  .hot {
+    display: grid;
+    gap: 12px;
+  }
+  .hot-card {
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    gap: 14px;
+    background: var(--panel);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 16px 18px 16px 14px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .hot-card:hover {
+    border-color: #314054;
+    transform: translateY(-1px);
+  }
+  .hot-num {
+    color: var(--green);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+  .hot-body h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-strong);
+    letter-spacing: -0.01em;
+  }
+  .hot-body p { margin: 0; color: #c3cfdc; }
+  .src {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .src a { color: var(--cyan); }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .tag {
+    font-size: 11px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    background: #0d1319;
+    border-radius: 4px;
+    padding: 2px 7px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- deep dive ---------- */
+  .deep {
+    background: var(--panel);
+    border: 1px solid var(--border-soft);
+    border-left: 3px solid var(--cyan);
+    border-radius: 10px;
+    padding: 24px 26px;
+    margin-bottom: 18px;
+  }
+  .deep h3 {
+    margin: 0 0 6px;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    color: var(--text-strong);
+  }
+  .deep .kicker {
+    color: var(--cyan);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .deep h4 {
+    margin: 22px 0 8px;
+    font-size: 14px;
+    color: var(--text-strong);
+    letter-spacing: 0.02em;
+  }
+  .deep p { margin: 0 0 12px; color: #c3cfdc; }
+  .deep ul { margin: 0 0 12px; padding-left: 20px; color: #c3cfdc; }
+  .deep li { margin: 5px 0; }
+  .deep strong { color: var(--text-strong); }
+
+  .callout {
+    margin: 16px 0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(210, 153, 34, 0.3);
+    background: rgba(210, 153, 34, 0.06);
+    color: #dcc58a;
+    font-size: 13.5px;
+  }
+  .callout b { color: var(--amber); }
+
+  pre.diagram {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: #0a0f15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow-x: auto;
+    color: #a8c7a0;
+    font-size: 12.5px;
+    line-height: 1.65;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 0.92em;
+    background: #0a0f15;
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: #e6edf3;
+  }
+  pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+
+  .table-wrap { overflow-x: auto; margin: 14px 0 18px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 560px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 9px 11px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #0e141b;
+    color: var(--text-strong);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  td { color: #c3cfdc; }
+  tr:nth-child(even) td { background: rgba(255, 255, 255, 0.015); }
+
+  /* ---------- tools ---------- */
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .tool {
+    background: var(--panel);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .tool .tool-top {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .tool h3 {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-strong);
+    line-height: 1.5;
+  }
+  .tool .kind {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .tool p { margin: 0 0 8px; font-size: 13.5px; color: #c3cfdc; }
+  .tool .src { margin-top: 4px; }
+
+  /* ---------- practice ---------- */
+  .practice {
+    counter-reset: step;
+    display: grid;
+    gap: 12px;
+  }
+  .step {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 18px 20px 18px 54px;
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 16px;
+    top: 17px;
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .step h3 {
+    margin: 0 0 8px;
+    font-size: 15.5px;
+    color: var(--text-strong);
+    line-height: 1.5;
+  }
+  .step p { margin: 0 0 8px; font-size: 13.5px; color: #c3cfdc; }
+  .step ul { margin: 0 0 8px; padding-left: 18px; font-size: 13.5px; color: #c3cfdc; }
+  .step li { margin: 3px 0; }
+  .action {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-top: 10px;
+    padding: 9px 12px;
+    background: rgba(63, 185, 80, 0.05);
+    border: 1px solid rgba(63, 185, 80, 0.18);
+    border-radius: 6px;
+    font-size: 13px;
+    color: #b8d7bc;
+  }
+  .action .arrow { color: var(--green); font-weight: 700; }
+
+  /* ---------- sources ---------- */
+  .sources {
+    background: var(--panel);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 22px 24px;
+  }
+  .source-group { margin-bottom: 20px; }
+  .source-group:last-child { margin-bottom: 0; }
+  .source-group h3 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .source-group ul { margin: 0; padding: 0; list-style: none; }
+  .source-group li {
+    padding: 5px 0;
+    border-bottom: 1px dashed var(--border-soft);
+    font-size: 13px;
+    color: #b7c3d0;
+  }
+  .source-group li:last-child { border-bottom: 0; }
+  .source-group .from {
+    color: var(--muted);
+    font-size: 12px;
+    margin-right: 8px;
+  }
+
+  .footer {
+    margin-top: 34px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .footer .kv { color: #a9b6c5; }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 18px 14px 56px; }
+    .term-body { padding: 20px 18px 22px; }
+    .hot-card { grid-template-columns: 40px 1fr; padding: 14px; }
+    .hot-num { font-size: 16px; }
+    .tool-grid { grid-template-columns: 1fr; }
+    .deep { padding: 20px 18px; }
+    .step { padding-left: 46px; }
+    .sec-head .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= HEADER ================= -->
+  <header class="terminal">
+    <div class="term-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="term-title">daily-report / developer_practice — zsh</span>
+    </div>
+    <div class="term-body">
+      <div class="prompt">$ <span class="dim">daily-report</span> --role developer_practice --date 2026-11-05 --input freshrss_24h_compact_20261105_024053.json</div>
+      <h1>开发者实践<span class="accent">日报</span></h1>
+      <p class="subtitle">给一线工程师的技术增量：工具更新、架构拆解、可落地实践。少看热闹，多看实现。</p>
+      <div class="meta-row">
+        <span class="chip">时间窗 <b>2026-11-04 02:40 → 11-05 02:40</b></span>
+        <span class="chip">新闻 <b>491</b> 条</span>
+        <span class="chip">来源 <b>424</b> 个</span>
+        <span class="chip">角色 <b>developer_practice</b></span>
+        <span class="chip">筛选 <b>20</b> 条</span>
+      </div>
+
+      <div class="tldr">
+        <h2>// 今日三条主线</h2>
+        <ul>
+          <li><b>开源权重与低价编码模型同时推进。</b>Kimi K3.1 Pro 开放 2.8T 参数权重并在 Agent Arena 拿到开源第一；Cognition 的 SWE-2 Flash 以 5 倍低价切入 Devin 工作流，编码模型的竞争开始从“分数”转向“每任务成本”。</li>
+          <li><b>基础设施正在为 Agent 的回调与突发创建重构。</b>X 用流式 SSR 把弱网首屏从 22 秒压到 2.7 秒；AlloyDB Express 主打秒级拉起、空闲自动暂停；Vercel Workflow SDK 把“准入运行 + 占用 hook”做成原子操作，直接消灭重复启动竞态。</li>
+          <li><b>Agent 工程化进入“约束与验证”阶段。</b>天猫国际把建场 Agent 做成 ReAct + 状态机 + 任务账本的可恢复系统；Google 的 PLE 评测则给出反直觉结论：平均满足 91% 约束，只有 41.3% 的设计能交付——对代码 Agent 同样成立。</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HOT ================= -->
+  <section class="section" id="hot">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>今日技术热榜</h2>
+      <span class="hint">8 条 / 按工程价值排序</span>
+    </div>
+
+    <div class="hot">
+
+      <article class="hot-card">
+        <div class="hot-num">01</div>
+        <div class="hot-body">
+          <h3>Kimi K3.1 Pro 开放权重：2.8T 总参数只激活 104B，Agent Arena 开源第一</h3>
+          <p>Moonshot 放出了 Kimi K3.1 Pro 的模型权重。它是一个极度稀疏的 MoE：总参数 2.8T，每 token 只激活 104B，896 个专家里选 16 个。为了撑住 1M token 上下文，93 层中大部分使用线性注意力（KDA），每第 4 层插入 DeepSeek 风格的稀疏注意力，只关注 top-2048 token；另外带一个 4.01 亿参数的 MoonViT-V2 视觉编码器，激活函数为 SiTU-GLU。在 Agent Arena 的 17.5K+ 真实长程会话上，K3.1 Pro 净提升 5.1%，开源模型排第 1、总榜第 13，并且在 Work、Code、Chat 三个分类里都是开源第一；Bash 可靠性提升 7.9%，对用户纠正的响应性提升 6.5%。对开发者更实际的是托管入口：Ollama Cloud 已提供 <code>kimi-k3.1-pro:cloud</code>，美国节点、零数据保留，不必自己扛 2.8T 的部署成本。</p>
+          <div class="tags"><span class="tag">开源权重</span><span class="tag">MoE 2.8T / 104B active</span><span class="tag">1M context</span><span class="tag">Agent Arena</span></div>
+          <span class="src">来源: <a href="https://x.com/arena/status/2118088183594541527" target="_blank" rel="noopener">Arena.ai</a> · <a href="https://x.com/Thom_Wolf/status/2118026565879844910" target="_blank" rel="noopener">Thomas Wolf(@Thom_Wolf)</a> · <a href="https://x.com/ollama/status/2118068379378651192" target="_blank" rel="noopener">ollama</a></span>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="hot-num">02</div>
+        <div class="hot-body">
+          <h3>SWE-2 Flash：比 SWE-2 便宜 5 倍的编码模型，Devin 用户免费用到 11 月底</h3>
+          <p>Cognition 发布 SWE-2 Flash，主打“更快、更便宜”的编码模型。官方称它在主要评测上超过所有美国开源权重模型，包括参数量大 3 倍的模型，而成本只有 SWE-2 的 1/5。11 月 30 日前，Pro、Max、Teams 用户在 Devin Desktop 和 Devin CLI 中可免费使用。值得注意的是它并非完全开放权重：Cognition 表示会建立“安全权重访问计划”，只向合作方与研究者分享权重，以平衡透明度和网络安全风险。对团队来说，这类模型真正的评估口径应该是“每个已解决任务的总成本”，而不是单 token 价格或榜单分数，最好拿自家仓库的失败用例跑一遍再切换。</p>
+          <div class="tags"><span class="tag">编码模型</span><span class="tag">成本 1/5</span><span class="tag">Devin</span><span class="tag">受限权重</span></div>
+          <span class="src">来源: <a href="https://x.com/cognition/status/2118069614521241739" target="_blank" rel="noopener">Cognition(@cognition_labs)</a> · <a href="https://x.com/cognition/status/2118069629713305678" target="_blank" rel="noopener">免费额度说明</a> · <a href="https://x.com/devindevelopers/status/2118102771429744733" target="_blank" rel="noopener">Windsurf(@windsurf_ai)</a></span>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="hot-num">03</div>
+        <div class="hot-body">
+          <h3>X 重写 Web：流式 SSR + 首条帖子前零 JS，弱网首屏 22 秒降到 2.7 秒</h3>
+          <p>X 的 Web 重写把首屏路径改成了服务端流式渲染：先把 HTML 流给浏览器，在第一条帖子出现之前不加载任何 JavaScript。效果是弱网下展示首条帖子的时间从 22 秒以上降到 2.7 秒，帖子与个人页加载快 8–13 倍，目前按国家逐步放量。这个案例的价值不在“又一个性能优化”，而在于它验证了一个常被前端架构忽视的顺序：关键内容先由服务端直出并流式送达，交互所需的 JS 延后水合。对内容型页面、控制台首屏、SSR 框架选型都有直接参考意义。注意测量必须在真实弱网与低端设备上做，本地 localhost 的 Lighthouse 分数说明不了这个问题。</p>
+          <div class="tags"><span class="tag">Streaming SSR</span><span class="tag">零 JS 首屏</span><span class="tag">Core Web Vitals</span></div>
+          <span class="src">来源: <a href="https://x.com/addyosmani/status/2118132652280783064" target="_blank" rel="noopener">Addy Osmani(@addyosmani)</a></span>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="hot-num">04</div>
+        <div class="hot-body">
+          <h3>Apache Spark 4.3 随 Databricks Runtime 19 发布：Real-Time Mode 支持有状态处理</h3>
+          <p>Databricks 发布 Runtime 19，内置 Apache Spark 4.3。官方摘要给出的核心变化是：Spark 4.3 把有状态处理带进了 Real-Time Mode，让这条面向低延迟的查询路径不再只能做无状态转换。这是 Spark 从批处理、微批走向“统一流批 + 状态”的又一步，对实时特征、会话聚合、持续 ETL 这类场景影响最大。不过目前公开摘要信息有限，状态后端、检查点语义、Exactly-once 边界以及和 Structured Streaming 现有 API 的差异，都需要以完整发布说明为准。计划升级的团队应先在 Databricks Runtime 19 的托管环境中验证，再评估开源 Spark 发行版的对应版本。</p>
+          <div class="tags"><span class="tag">Spark 4.3</span><span class="tag">Real-Time Mode</span><span class="tag">有状态流处理</span></div>
+          <span class="src">来源: <a href="https://www.databricks.com/blog/introducing-apache-spark-43-now-available-databricks-runtime-19" target="_blank" rel="noopener">Databricks</a></span>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="hot-num">05</div>
+        <div class="hot-body">
+          <h3>AlloyDB Express 预览：秒级拉起、空闲自动暂停的 PostgreSQL，面向编码 Agent</h3>
+          <p>Google 发布 AlloyDB Express 预览版，定位很明确：给开发者和 AI 编码 Agent 用的 PostgreSQL。它能在数秒内创建实例，空闲时自动暂停、按需恢复，直接针对当前 Agent 开发流程里的三个堵点——数据库供给慢导致编码 Agent 停等、CI/CD 测试流水线被复杂配置拖住、内部应用从沙箱走向生产时撞墙。Google 称此前市场上的 PostgreSQL 服务没有同时做到“Agent 就绪”和企业级安全/扩展性。对团队的直接用法是给每个 PR、每个 Agent 会话发一个短生命周期数据库，跑完即销毁，测试隔离和成本控制一起解决。仍需确认网络、IAM、备份与配额在预览版中的边界。</p>
+          <div class="tags"><span class="tag">PostgreSQL</span><span class="tag">Scale-to-zero</span><span class="tag">Agent 沙箱</span><span class="tag">CI/CD</span></div>
+          <span class="src">来源: <a href="https://cloud.google.com/blog/products/databases/introducing-alloydb-express-for-rapid-testing-and-prototyping/" target="_blank" rel="noopener">Cloud Blog</a></span>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="hot-num">06</div>
+        <div class="hot-body">
+          <h3>Qdrant 1.20：turbo8/turbo16 量化把向量压到 1/4 或 1/2，嵌套过滤 QPS 提升 4 倍</h3>
+          <p>Qdrant 1.20 从两个方向降低向量检索成本。存储侧新增 turbo8 与 turbo16：前者把向量压到 float32 的约 1/4，后者约 1/2，官方称召回率保持稳定；查询侧针对嵌套过滤（nested filters）做了优化，部分场景 QPS 提升最高 4 倍。对大规模 RAG、推荐和语义搜索来说，向量常驻内存是主要成本项，量化级别每降一档都可能直接换来可观的机器预算。实践上不要只看官方“召回稳定”的结论：用自家 embedding 和真实查询集测 recall@k，再决定是否从 float32 切到 turbo16 或 turbo8，尤其是长尾查询和过滤条件复杂的场景。</p>
+          <div class="tags"><span class="tag">向量数据库</span><span class="tag">量化</span><span class="tag">嵌套过滤</span></div>
+          <span class="src">来源: <a href="https://x.com/qdrant_engine/status/2118010384313639226" target="_blank" rel="noopener">Qdrant(@qdrant_engine)</a> · <a href="https://x.com/qdrant_engine/status/2118010385051881762" target="_blank" rel="noopener">技术博客</a></span>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="hot-num">07</div>
+        <div class="hot-body">
+          <h3>Vercel Workflow SDK：start() 原子化，重复启动从竞态变成可预期的失败</h3>
+          <p>Vercel Workflow SDK 的 <code>start()</code> 现在可以在一步内完成“准入运行 + 占用 hook”，重复启动会安全失败。此前常见写法是先 <code>getHookByToken()</code> 再 <code>start()</code>，两次调用之间的窗口存在官方文档承认的重复启动竞态。新模型下，hook 从运行被准入的那一刻起就存在，所以 <code>resumeHook</code> 可以在工作流真正开始执行前调用，提前到达的 payload 会按顺序缓冲；工作流内部用同一个 token 调 <code>createHook({ token })</code> 会 guaranteed 绑定到已占用的 hook，不注册新 hook、不新增 step，<code>getConflict()</code> 返回 null。最关键的是 <code>token</code> 本身就是幂等键，并且来自你自己的业务域，比如订单号——不需要额外维护一张幂等表。</p>
+          <div class="tags"><span class="tag">工作流</span><span class="tag">幂等</span><span class="tag">原子操作</span><span class="tag">竞态修复</span></div>
+          <span class="src">来源: <a href="https://vercel.com/changelog/atomic-start-hooks-in-the-workflow-sdk" target="_blank" rel="noopener">Vercel News</a></span>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="hot-num">08</div>
+        <div class="hot-body">
+          <h3>GPT-Image-2.6 进入 API 与 Codex：Flare 6 秒出图，Sunburst 保证多次编辑一致性</h3>
+          <p>OpenAI 把 Images 2.6 带到 Codex 和 API，提供两个新模型：Flare 生成速度最快约 6 秒，整体比上一代快 50%，适合草稿和批量场景；Sunburst 主打更高质量，以及在多次编辑之间保持细节一致。API 侧新增了“标记图”输入：你可以把要修改的区域直接画在图上再发给模型，而不是用长段文字描述位置；复杂度可分 low/medium/high，图片质量也可单独设置。输出侧支持 SVG 矢量导出，这对需要可缩放 UI 素材的工程流水线很实用。Codex 里也改成在图片覆盖层直接编辑，不再弹侧边面板。落到实践：本地化修改优先用标记图，生成管线用 Flare 出草稿、Sunburst 定稿，能明显减少反复重绘。</p>
+          <div class="tags"><span class="tag">图像 API</span><span class="tag">SVG 导出</span><span class="tag">标记编辑</span><span class="tag">Codex</span></div>
+          <span class="src">来源: <a href="https://x.com/OpenAIDevs/status/2118124753340756055" target="_blank" rel="noopener">OpenAI Developers</a> · <a href="https://x.com/OpenAI/status/2118124964197114039" target="_blank" rel="noopener">OpenAI</a> · <a href="https://x.com/OpenAIDevs/status/2118124761867845847" target="_blank" rel="noopener">标记图与画质参数</a></span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= DEEP DIVE ================= -->
+  <section class="section" id="deep">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>深度技术解读</h2>
+      <span class="hint">2 个话题 / 架构与可靠性</span>
+    </div>
+
+    <article class="deep">
+      <div class="kicker">// case study · agent harness</div>
+      <h3>天猫国际建场 Agent：用确定性外壳包住 ReAct 内核</h3>
+      <p>需求是一句话：“帮我搭一个七夕轻奢箱包会场。”对人来说这是一个完整业务目标，对系统来说却远不是可执行指令：商品数量、选品条件、模块结构、素材尺寸、文案要求都可能缺失；执行链路还要跨 U+ 圈品、图片生成、文案生成、页面装配和人工修改，其中既有秒级同步调用，也有靠 MetaQ 回调完成的分钟级异步任务。天猫国际的做法不是“让大模型直接吐一份页面 JSON”，而是把系统拆成一个 ReAct 驱动的生产 Agent，外加一层确定性机制来约束边界。</p>
+
+      <h4>架构：模型决定“做什么”，系统决定“写到哪、怎么恢复”</h4>
+      <pre class="diagram">用户自然语言目标
+      │
+      ▼
+┌──────────────────────────────┐
+│ ReAct 决策层                  │  理解目标 / 选工具 / 根据 Observation 继续
+└──────────────┬───────────────┘
+               │ 工具调用（受控）
+               ▼
+┌──────────────────────────────┐
+│ 确定性约束层                  │
+│  · 状态机：管控执行权限        │
+│  · 字段级生产计划：定位操作对象 │
+│  · 业务坐标：精确寻址          │
+│  · 任务账本：记录事实与恢复点   │
+└──────────────┬───────────────┘
+               ├── 同步工具（秒级）
+               └── MetaQ 异步回调（分钟级）
+               │
+               ▼
+前端 SSE / AG-UI：文本 + 工具事件 + 业务卡片</pre>
+
+      <h4>为什么这层“确定性外壳”是必要的</h4>
+      <ul>
+        <li><strong>授权边界。</strong>模型可以提出“修改这个模块”，但不能绕过状态机直接写生产数据；每个阶段允许哪些动作由状态机裁决，而不是由 prompt 自觉遵守。</li>
+        <li><strong>写入边界。</strong>字段级生产计划与业务坐标把“改哪个会场的哪个字段”变成可定位的坐标，避免模型生成看似合理但落错位置的 JSON。</li>
+        <li><strong>恢复边界。</strong>任务账本记录已完成的步骤与外部副作用，长流程中断后可以续跑；异步圈品在对话结束后仍能通过回调更新任务事实，而不是把结果硬塞回已关闭的会话。</li>
+        <li><strong>交互边界。</strong>前端通过 SSE/AG-UI 同时消费文本、工具事件和业务卡片，用户能看到“正在圈品/正在生成图片”，而不是一个长时间无响应的 loading。</li>
+      </ul>
+
+      <h4>可复用的部分比“建场”本身更值钱</h4>
+      <p>项目沉淀出的流式执行、AG-UI 事件协议、会话任务模型、工具执行与日志、异步任务续跑、Trace 和场景扩展点，都不绑定“会场”语义。换一个复杂 Agent 场景，比如 AI 设计或投放素材生成，可以直接复用同一套底座。这提示了一个很实际的架构判断：<strong>Agent 项目的第一次投入应该放在 harness，而不是 prompt。</strong>Prompt 会随模型升级重写，状态机、任务账本、事件协议和可观测性却会留下来。</p>
+
+      <div class="callout"><b>给工程团队的检查清单：</b>在接入第一个生产 Agent 前，先回答四个问题——失败后从哪里恢复？外部副作用如何幂等？模型能做哪些动作由谁裁决？前端如何展示中间过程？四个答案都没有，说明还停留在 demo。</div>
+
+      <span class="src">来源: <a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&amp;mid=2650546731&amp;idx=1&amp;sn=89c7e13972a8f1650003dba6cb46a967" target="_blank" rel="noopener">大淘宝技术</a></span>
+    </article>
+
+    <article class="deep">
+      <div class="kicker">// reliability · evaluation</div>
+      <h3>91% ≈ 0%：Google PLE 揭开的“可行域瓶颈”，对代码 Agent 同样致命</h3>
+      <p>Google 与 Mercor 发布了 Physical-Engineering's Last Exam（PLE），用 85 项机械、电气、土木与结构工程任务量化一个工程 Agent 的真实交付能力。结果很刺眼：在 56 项隐藏测试中，Claude Opus 5.5 搭配 Claude Code 得分 48.3%；在 41 项人机共同创作任务里，它平均能满足 91% 的单项约束，但只有 41.3% 的交付设计同时满足全部硬性安全与可行性要求。换句话说，模型把绝大多数题都“做对”了，却只有不到一半的方案能真正交付。</p>
+
+      <h4>为什么剩下的 9% 不是“再强一点就能补上”</h4>
+      <p>因为工程约束是耦合的。一条电缆桥架穿过消防管线，载流量算对、电压降达标、设备选型有依据都不够——几套系统争同一段净空，方案就得推倒重来。解决一个约束，可能触发另一个约束失效；刚核验过的结果也会随修订作废。PLE 把这种失败称为“可行域瓶颈”：局部能力已经足够强，难的是同时落在所有硬约束的交集里。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>指标</th><th>数值</th><th>说明了什么</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>隐藏测试得分</td><td>48.3%</td><td>单题能力尚未过半，且这是较强组合的成绩</td></tr>
+            <tr><td>平均单项约束满足率</td><td>91%</td><td>“看起来快成了”的错觉来源</td></tr>
+            <tr><td>全部硬约束通过率</td><td>41.3%</td><td>真正可交付的比例</td></tr>
+            <tr><td>任务规模</td><td>85 项 / 56 项隐藏测试</td><td>覆盖机械、电气、土木、结构</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>迁移到软件工程：PR 的 91% 通过率也可能是 0%</h4>
+      <p>同样的陷阱在代码 Agent 上天天发生：单元测试过了九成，但一个硬不变量被破坏——权限校验被绕过、幂等键冲突、迁移不可回滚——这个 PR 依然不可合并。用“平均通过率”做 Agent 评测，会系统性高估能力，因为它把“决定性失败”稀释成了几个百分点。更合理的做法是把硬约束做成 gate：全量测试、类型检查、安全扫描、数据迁移演练，任何一项失败即零分；再在 held-out 任务上测，避免 Agent 针对公开用例过拟合。模型侧也应接入约束检查器或求解器，让“检查是否满足全部约束”成为生成循环的一部分，而不是交付后的抽查。</p>
+
+      <div class="callout"><b>一句话结论：</b>Agent 的评分体系要从“做对了多少”改成“有没有一项没做对”。前者适合 demo，后者才适合上线。</div>
+
+      <span class="src">来源: <a href="https://mp.weixin.qq.com/s?__biz=MzA5ODEzMjIyMA==&amp;mid=2247748495&amp;idx=1&amp;sn=a771b1b52e000acebda514a8df7737bc" target="_blank" rel="noopener">AI科技评论</a></span>
+    </article>
+  </section>
+
+  <!-- ================= TOOLS ================= -->
+  <section class="section" id="tools">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2>工具推荐</h2>
+      <span class="hint">可直接试用的 8 个</span>
+    </div>
+
+    <div class="tool-grid">
+
+      <article class="tool">
+        <div class="tool-top">
+          <h3>TemPad Dev</h3>
+          <span class="kind">Figma MCP</span>
+        </div>
+        <p>一个 Chrome 扩展加本地 MCP 服务，让 Codex、Claude Code、Cursor 读取 Figma 设计并按项目规范实现代码，也能反向新建和修改原生 Figma 图层。读侧提供 <code>get_code</code>（默认 JSX/Vue + Tailwind，带素材和设计变量）、<code>get_structure</code>、<code>get_screenshot</code>、<code>get_design_system</code>；写侧 <code>apply_canvas</code> 会先校验、比对差异，应用后再做结构核对。即使没有 Dev Mode 编辑权限，也能手动选中元素查看 CSS、变量和布局。</p>
+        <span class="src">来源: <a href="https://x.com/shao__meng/status/2117969787993440649" target="_blank" rel="noopener">meng shao(@shao__meng)</a></span>
+      </article>
+
+      <article class="tool">
+        <div class="tool-top">
+          <h3>quiet.md</h3>
+          <span class="kind">编辑器</span>
+        </div>
+        <p>开源、本地优先的富文本编辑器，兼容飞书（Lark）文档的大部分块与交互。界面用 Rust + GPUI 直接由 GPU 绘制，不套 WebView：在 100 万字符的文档里打字约 5ms 一帧。笔记保存为普通 XML 文件，Claude Code 这类 Agent 可以直接读写；默认离线、无需账号。macOS 和 Windows 目前是 Beta。适合想要“飞书体验 + 本地纯文本存储 + Agent 可编辑”的团队做二次集成。</p>
+        <span class="src">来源: <a href="https://x.com/dotey/status/2118035176081015047" target="_blank" rel="noopener">宝玉(@dotey)</a></span>
+      </article>
+
+      <article class="tool">
+        <div class="tool-top">
+          <h3>Open WebUI v0.13.0</h3>
+          <span class="kind">Agent 工作台</span>
+        </div>
+        <p>把聊天前端升级成能“干活”的 Agent 工作台：模型拥有真实电脑，接上 Open Terminal 后可以在真实桌面打开应用，在共享浏览器里测试。一条 Docker 命令拉起，默认镜像约 4GB；slim/alpine 镜像不包含桌面环境，想用电脑操作能力要选完整镜像。适合本地搭建可观察的 Agent 实验环境，也适合作为团队内部的多模型入口。</p>
+        <span class="src">来源: <a href="https://x.com/geekbb/status/2117899261912510477" target="_blank" rel="noopener">Geek(@geekbb)</a></span>
+      </article>
+
+      <article class="tool">
+        <div class="tool-top">
+          <h3>Mole CLI</h3>
+          <span class="kind">运维 CLI</span>
+        </div>
+        <p>Mole CLI 正式登陆 Linux，和 macOS、Windows 一样免费开源。Linux 版从首个提交到 0.4.0 只用了四天，保留与 Mac 版相同的菜单、快捷键和安全规则；项目过去一个月发了 27 个 release、900+ commit。对需要跨平台一致清理/诊断体验的开发者来说，少了一套“Linux 上另找工具”的维护负担。</p>
+        <span class="src">来源: <a href="https://x.com/HiTw93/status/2117978672095514999" target="_blank" rel="noopener">Tw93(@HiTw93)</a></span>
+      </article>
+
+      <article class="tool">
+        <div class="tool-top">
+          <h3>Gemini API CLI Skill</h3>
+          <span class="kind">测试技能</span>
+        </div>
+        <p>用一条命令安装：<code>npx skills add google-gemini/gemini-skills --skill gemini-api-cli -y</code>。它让编码 Agent 在没有物理麦克风的情况下端到端测试语音/音频功能：先用 Gemini API CLI 的 TTS 生成 WAV，再用 headless Chrome 的 <code>--use-fake-ui-for-media-stream</code>、<code>--use-fake-device-for-media-stream</code> 和 <code>--use-file-for-fake-audio-capture=/abs/path/voice.wav%noloop</code> 让 <code>getUserMedia</code> 从 0 秒开始播放 WAV，点击麦克风按钮后校验转写文本与 DOM 状态。对语音交互的 CI 测试非常实用。</p>
+        <span class="src">来源: <a href="https://x.com/_philschmid/status/2118039309534072849" target="_blank" rel="noopener">Philipp Schmid(@_philschmid)</a> · <a href="https://x.com/_philschmid/status/2118039311648260384" target="_blank" rel="noopener">Prompt 模板</a></span>
+      </article>
+
+      <article class="tool">
+        <div class="tool-top">
+          <h3>MongoDB × Google ADK</h3>
+          <span class="kind">Agent 持久化</span>
+        </div>
+        <p>MongoDB 推出与 Google Agent Development Kit（ADK）的原生集成，为 Agent 状态提供“持久记忆”。ADK 是开源 Agent 开发框架，支持 Python、TypeScript、Go 等语言；这次集成的目标是让开发者不必自己拼一套数据存储来保存长期上下文，而是用 ADK 原生方式把 MongoDB 作为 Agent 数据平台。适合已经在用 ADK 且需要跨会话上下文的团队。</p>
+        <span class="src">来源: <a href="https://www.mongodb.com/company/blog/product-release-announcements/introducing-mongodb-google-adk-integration-durable-memory-agent-state" target="_blank" rel="noopener">MongoDB | Blog</a></span>
+      </article>
+
+      <article class="tool">
+        <div class="tool-top">
+          <h3>TwIL-8B</h3>
+          <span class="kind">小模型</span>
+        </div>
+        <p>8.8B 参数的开源模型，官方称在多个困难基准上接近前沿：编码达到前沿性能的 93%，指令遵循 92%，竞赛数学 90%，小到可以在自己的硬件上跑。对本地 Agent 的规划、分类、子任务执行或隐私敏感场景，这类小模型比调用大 API 更可控。不过“接近前沿”是按官方基准算的，替换前要用自己的任务集验证，尤其是长上下文和多步工具调用。</p>
+        <span class="src">来源: <a href="https://x.com/omarsar0/status/2118051377704296536" target="_blank" rel="noopener">elvis(@omarsar0)</a></span>
+      </article>
+
+      <article class="tool">
+        <div class="tool-top">
+          <h3>Rust × AI 实战经验</h3>
+          <span class="kind">阅读</span>
+        </div>
+        <p>JetBrains 对 OpenAI 工程师 Predrag Gruevski（cargo-semver-checks、Trustfall 作者）的访谈整理，主题是“我不用 AI 写更多代码，我用 AI 让代码更正确”。内容聚焦在 Rust 场景下哪些部分该重点 review、如何给编码 Agent 写提示、以及怎样在低容错系统里提高质量门槛。对把 AI 引入强类型、强约束代码库的团队，比泛泛的“AI 编程技巧”更有参考价值。</p>
+        <span class="src">来源: <a href="https://blog.jetbrains.com/rust/2026/11/04/ai-for-rust-development/" target="_blank" rel="noopener">The JetBrains Blog</a></span>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= PRACTICE ================= -->
+  <section class="section" id="practice">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2>实践指南</h2>
+      <span class="hint">今天就能改的 5 件事</span>
+    </div>
+
+    <div class="practice">
+
+      <article class="step">
+        <h3>分清 Playwright 的两种浏览器：测试用 Chrome for Testing，访问不可信页面用正式版 Chrome</h3>
+        <p>最近流传“Playwright 自带漏洞浏览器，应该删掉”，官方说明这是一个误解：Playwright 的任何安装包里都不带浏览器。真正的区别在于使用方式。</p>
+        <ul>
+          <li>用 Playwright MCP 或 CLI 的 Agent：调用的是你电脑上的正式 Chrome/Edge，正常接收安全更新，沙箱默认开启，无需改配置。</li>
+          <li>用测试运行器跑 <code>npx playwright install</code>：下载的是 Chrome for Testing，版本固定在当前 Playwright 验证过的那一版，且<strong>默认关闭沙箱</strong>。这是为了让开发机和 CI 跑同一个浏览器、避免自动更新搞挂测试。</li>
+          <li>直接调库 API：<code>chromium.launch()</code> 的默认行为与测试运行器一致——固定版本、沙箱关闭。</li>
+        </ul>
+        <p>因此，爬虫或 Agent 脚本一旦会访问不受你控制的页面，就应该改用正式版 Chrome 并显式打开沙箱：</p>
+        <pre class="diagram">const browser = await chromium.launch({
+  channel: 'chrome',        // 用系统安装的正式版 Chrome
+  chromiumSandbox: true     // 显式开启沙箱
+});</pre>
+        <div class="action"><span class="arrow">→</span><span>审计现有脚本：凡是 <code>chromium.launch()</code> 后访问第三方站点的，补上 <code>channel</code> 与 <code>chromiumSandbox</code>；测试用浏览器只用于可信应用的 E2E，并保持 Chrome 本身更新，因为部分漏洞可以突破沙箱。</span></div>
+        <span class="src">来源: <a href="https://x.com/shao__meng/status/2117811571674214571" target="_blank" rel="noopener">meng shao(@shao__meng)</a></span>
+      </article>
+
+      <article class="step">
+        <h3>工作流幂等：把“先查再启动”改成原子 start，用业务 ID 当幂等键</h3>
+        <p>重复启动是工作流系统最常见的线上事故之一。旧写法 <code>getHookByToken()</code> 再 <code>start()</code> 在两次调用之间留下窗口，同一订单可能被准入两次。Vercel Workflow SDK 的新语义值得作为通用设计模板：</p>
+        <ul>
+          <li><strong>一步原子化。</strong>准入运行和占用 hook 在同一步完成，重复启动安全失败，而不是靠分布式锁临场补救。</li>
+          <li><strong>token 即幂等键。</strong>token 由业务域生成（订单号、工单号、支付流水号），不额外维护幂等表；同一个 token 天然指向同一次运行。</li>
+          <li><strong>提前消息可缓冲。</strong>hook 在运行被准入时就存在，<code>resumeHook</code> 可以在执行开始前调用，早到的 payload 按顺序排队，不会丢。</li>
+          <li><strong>重复 createHook 不新增 step。</strong>工作流内部用同一 token 绑定已有 hook，<code>getConflict()</code> 返回 null，重试不会把 step 数量越滚越大。</li>
+        </ul>
+        <div class="action"><span class="arrow">→</span><span>检查你的事件驱动系统：入口是否用业务 ID 做幂等键？启动与资源占用是否原子？早到消息是否有缓冲队列？三者缺一，就该在下一版补上。</span></div>
+        <span class="src">来源: <a href="https://vercel.com/changelog/atomic-start-hooks-in-the-workflow-sdk" target="_blank" rel="noopener">Vercel News</a></span>
+      </article>
+
+      <article class="step">
+        <h3>上下文工程：把脚本执行移出上下文，把技能改为按需加载</h3>
+        <p>AWS 的参考实现给出了两个很直观的数字：一个 <code>write-and-execute</code> 工具，让每段脚本进入上下文的 token 减少约 95%；按需加载 skills，让系统提示词缩小约 97%。背景是 200K 窗口在数据分析、报告生成这类任务里几分钟就会被烧穿，随后出现中途失败、准确率下降和成本上升。可操作的层次：</p>
+        <ul>
+          <li><strong>工具输出整形。</strong>不要在上下文里塞完整脚本和完整日志；让工具在沙箱执行，只回传摘要、退出码和必要片段。</li>
+          <li><strong>技能按需挂载。</strong>常驻系统提示只保留路由信息，具体 skill 在被选中时加载，避免几十个技能把每轮请求都撑大。</li>
+          <li><strong>状态外置。</strong>把中间结果写进任务账本或文件，上下文只保留“去哪取”，而不是“全部内容”。</li>
+          <li><strong>分层而不是堆技巧。</strong>单独一个技巧容易看，组合起来才有可测量的收益；用同一任务对比改前改后的 token、时延和成功率。</li>
+        </ul>
+        <div class="action"><span class="arrow">→</span><span>先做最小改动：把最耗 token 的那个工具改成“执行后只回摘要”，再记录一周的平均输入 token。通常这是收益/风险比最高的一步。</span></div>
+        <span class="src">来源: <a href="https://aws.amazon.com/blogs/machine-learning/four-layers-of-context-engineering-for-production-ai-agents-how-deep-insight-applies-them-in-working-code/" target="_blank" rel="noopener">Artificial Intelligence / AWS ML Blog</a></span>
+      </article>
+
+      <article class="step">
+        <h3>.NET 并行循环在单 CPU 容器里会退化成串行：别让默认值替你做并发决策</h3>
+        <p>Stack Overflow 的文章指出一个很典型的容器化坑：<code>Parallel.For</code>/<code>Parallel.ForEach</code> 默认按 CPU 数量决定并发度。容器只分到 1 个 CPU 时，并行度就是 1；如果循环体是 I/O 密集型（调下游服务、读写队列），整个循环就退化成一条一条处理，吞吐骤降。解决不是简单把数字调大：</p>
+        <ul>
+          <li>显式设置 <code>MaxDegreeOfParallelism</code>，按 I/O 并发能力而不是 CPU 核数来定。</li>
+          <li>给每个下游服务单独设并发预算：连接池大小、限流阈值、超时和重试要一起算，否则只是把瓶颈推到下游。</li>
+          <li>在容器限制 CPU 的环境里做压测，别在 8 核开发机上得出结论。</li>
+        </ul>
+        <div class="action"><span class="arrow">→</span><span>搜索代码库里的 <code>Parallel.For</code>、<code>Parallel.ForEach</code> 和 <code>Task.WhenAll</code> 批次循环，确认它们是否依赖 CPU 核数；I/O 循环补上显式并发度和下游限流。</span></div>
+        <span class="src">来源: <a href="https://stackoverflow.blog/2026/11/04/your-net-parallel-loop-can-become-serial-in-a-one-cpu-container/" target="_blank" rel="noopener">Stack Overflow Blog</a></span>
+      </article>
+
+      <article class="step">
+        <h3>Agent 产出的合并门禁：用“全部硬约束通过”替代平均分</h3>
+        <p>PLE 的 91% 与 41.3% 说明，平均分会把决定性失败稀释掉。对代码 Agent 来说，一个 PR 即使 90% 的测试通过，只要一个硬不变量被破坏，就仍然是不可合并的 0%。建议把评审门禁写成可执行的规则：</p>
+        <ul>
+          <li><strong>硬门禁全量执行。</strong>全量测试、类型检查、安全扫描、迁移可回滚演练，任一失败即阻断，不参与“打分平均”。</li>
+          <li><strong>隐藏用例。</strong>保留一组 Agent 不可见的 held-out 测试，防止针对公开用例过拟合。</li>
+          <li><strong>记录违规类型。</strong>不只记“通过率”，还要记违反了哪条约束、耦合关系如何，方便定位是模型能力问题还是 harness 缺检查。</li>
+          <li><strong>把检查放进生成循环。</strong>让 Agent 在提交前自己跑约束检查器；能自动验证的约束不要留到人工 review。</li>
+        </ul>
+        <div class="action"><span class="arrow">→</span><span>给现有 Agent PR 流程加一个“零容忍清单”（安全、数据迁移、权限、幂等），先跑一周，统计被这个清单拦下的 PR 比例——这比看平均通过率更能说明 Agent 是否真的可交付。</span></div>
+        <span class="src">来源: <a href="https://mp.weixin.qq.com/s?__biz=MzA5ODEzMjIyMA==&amp;mid=2247748495&amp;idx=1&amp;sn=a771b1b52e000acebda514a8df7737bc" target="_blank" rel="noopener">AI科技评论</a></span>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= SOURCES ================= -->
+  <section class="section" id="sources">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <h2>参考链接汇总</h2>
+      <span class="hint">按来源类型分组</span>
+    </div>
+
+    <div class="sources">
+
+      <div class="source-group">
+        <h3>// 官方博客与工程团队</h3>
+        <ul>
+          <li><span class="from">Databricks</span><a href="https://www.databricks.com/blog/introducing-apache-spark-43-now-available-databricks-runtime-19" target="_blank" rel="noopener">Introducing Apache Spark 4.3 - Now available in Databricks Runtime 19</a></li>
+          <li><span class="from">Vercel News</span><a href="https://vercel.com/changelog/atomic-start-hooks-in-the-workflow-sdk" target="_blank" rel="noopener">Workflow SDK adds idempotent starts</a></li>
+          <li><span class="from">Cloud Blog</span><a href="https://cloud.google.com/blog/products/databases/introducing-alloydb-express-for-rapid-testing-and-prototyping/" target="_blank" rel="noopener">AlloyDB Express: Instant, scale-to-zero PostgreSQL for developers and coding agents</a></li>
+          <li><span class="from">MongoDB | Blog</span><a href="https://www.mongodb.com/company/blog/product-release-announcements/introducing-mongodb-google-adk-integration-durable-memory-agent-state" target="_blank" rel="noopener">Introducing the MongoDB Google ADK Integration: Durable Memory for Agent State</a></li>
+          <li><span class="from">AWS ML Blog</span><a href="https://aws.amazon.com/blogs/machine-learning/four-layers-of-context-engineering-for-production-ai-agents-how-deep-insight-applies-them-in-working-code/" target="_blank" rel="noopener">Four layers of context engineering for production AI agents</a></li>
+          <li><span class="from">Stack Overflow Blog</span><a href="https://stackoverflow.blog/2026/11/04/your-net-parallel-loop-can-become-serial-in-a-one-cpu-container/" target="_blank" rel="noopener">Your .NET parallel loop can become serial in a one-CPU container</a></li>
+          <li><span class="from">The JetBrains Blog</span><a href="https://blog.jetbrains.com/rust/2026/11/04/ai-for-rust-development/" target="_blank" rel="noopener">How to Use AI for Rust Development: Lessons From an OpenAI Engineer</a></li>
+        </ul>
+      </div>
+
+      <div class="source-group">
+        <h3>// 模型与厂商发布</h3>
+        <ul>
+          <li><span class="from">Arena.ai</span><a href="https://x.com/arena/status/2118088183594541527" target="_blank" rel="noopener">Kimi K3.1 Pro released open weights, #1 open model in Agent Arena</a></li>
+          <li><span class="from">Thomas Wolf</span><a href="https://x.com/Thom_Wolf/status/2118026565879844910" target="_blank" rel="noopener">Kimi-K3.1-Pro: 2.8T total / 104B active, 896 experts, KDA attention</a></li>
+          <li><span class="from">ollama</span><a href="https://x.com/ollama/status/2118068379378651192" target="_blank" rel="noopener">Kimi K3.1 Pro now available on Ollama Cloud</a></li>
+          <li><span class="from">Cognition</span><a href="https://x.com/cognition/status/2118069614521241739" target="_blank" rel="noopener">Introducing SWE-2 Flash</a></li>
+          <li><span class="from">Cognition</span><a href="https://x.com/cognition/status/2118069629713305678" target="_blank" rel="noopener">SWE-2 Flash free until end of month for Devin users</a></li>
+          <li><span class="from">OpenAI Developers</span><a href="https://x.com/OpenAIDevs/status/2118124753340756055" target="_blank" rel="noopener">GPT-Image-2.6 comes to Codex and the API</a></li>
+          <li><span class="from">OpenAI Developers</span><a href="https://x.com/OpenAIDevs/status/2118124761867845847" target="_blank" rel="noopener">Marked-up image input and quality controls</a></li>
+          <li><span class="from">Qdrant</span><a href="https://x.com/qdrant_engine/status/2118010384313639226" target="_blank" rel="noopener">Qdrant 1.20: turbo8/turbo16 and faster nested filters</a></li>
+        </ul>
+      </div>
+
+      <div class="source-group">
+        <h3>// 中文技术团队实践</h3>
+        <ul>
+          <li><span class="from">大淘宝技术</span><a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&amp;mid=2650546731&amp;idx=1&amp;sn=89c7e13972a8f1650003dba6cb46a967" target="_blank" rel="noopener">天猫国际 AI 智能建场 Agent 工程实践：从一句话到可投放的会场页面</a></li>
+          <li><span class="from">AI科技评论</span><a href="https://mp.weixin.qq.com/s?__biz=MzA5ODEzMjIyMA==&amp;mid=2247748495&amp;idx=1&amp;sn=a771b1b52e000acebda514a8df7737bc" target="_blank" rel="noopener">91% ≈ 0%？谷歌最新研究，戳破工程 Agent 的高正确率泡沫</a></li>
+        </ul>
+      </div>
+
+      <div class="source-group">
+        <h3>// 社区、个人与技术媒体</h3>
+        <ul>
+          <li><span class="from">Addy Osmani</span><a href="https://x.com/addyosmani/status/2118132652280783064" target="_blank" rel="noopener">X loads 8-13x faster on slow connections with streaming SSR</a></li>
+          <li><span class="from">meng shao</span><a href="https://x.com/shao__meng/status/2117969787993440649" target="_blank" rel="noopener">TemPad Dev：把 Figma 接进 Coding Agent</a></li>
+          <li><span class="from">meng shao</span><a href="https://x.com/shao__meng/status/2117811571674214571" target="_blank" rel="noopener">别急着删 Playwright：它和浏览器安全的关系</a></li>
+          <li><span class="from">宝玉</span><a href="https://x.com/dotey/status/2118035176081015047" target="_blank" rel="noopener">quiet.md 开源文档编辑器</a></li>
+          <li><span class="from">Geek</span><a href="https://x.com/geekbb/status/2117899261912510477" target="_blank" rel="noopener">Open WebUI v0.13.0 把聊天前端升级成 Agent 工作台</a></li>
+          <li><span class="from">Tw93</span><a href="https://x.com/HiTw93/status/2117978672095514999" target="_blank" rel="noopener">Mole CLI just landed on Linux</a></li>
+          <li><span class="from">Philipp Schmid</span><a href="https://x.com/_philschmid/status/2118039309534072849" target="_blank" rel="noopener">Testing voice features with Gemini API CLI and fake audio capture</a></li>
+          <li><span class="from">Philipp Schmid</span><a href="https://x.com/_philschmid/status/2118039311648260384" target="_blank" rel="noopener">Gemini API CLI skill prompt template</a></li>
+          <li><span class="from">elvis</span><a href="https://x.com/omarsar0/status/2118051377704296536" target="_blank" rel="noopener">TwIL-8B open-source model release</a></li>
+          <li><span class="from">Windsurf</span><a href="https://x.com/devindevelopers/status/2118102771429744733" target="_blank" rel="noopener">SWE-2 Flash 5x cheaper than SWE-2</a></li>
+          <li><span class="from">OpenAI</span><a href="https://x.com/OpenAI/status/2118124964197114039" target="_blank" rel="noopener">Two new image models for developers: Flare and Sunburst</a></li>
+          <li><span class="from">Qdrant</span><a href="https://x.com/qdrant_engine/status/2118010385051881762" target="_blank" rel="noopener">Qdrant 1.20 full breakdown</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div><span class="kv">数据窗口</span> 2026-11-04 02:40:53 → 2026-11-05 02:40:53 · <span class="kv">输入</span> freshrss_24h_compact_20261105_024053.json · <span class="kv">规模</span> 491 条 / 424 个来源</div>
+    <div><span class="kv">说明</span> 所有摘要基于输入 JSON 中的标题、摘要与链接重新组织；涉及发布、版本与性能的具体数字以原文为准。厂商自报的评测结果已注明口径，落地前请在自有数据上复测。</div>
+  </footer>
+
+</div>
+</body>
+</html>
