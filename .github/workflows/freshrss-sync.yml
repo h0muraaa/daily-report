@@ -93,53 +93,62 @@ jobs:
       - name: Generate Daily Reports with Claude
         if: ${{ github.event.inputs.mode != 'json-only' }}
         timeout-minutes: 15
-        continue-on-error: true
         run: |
           JSON_FILE=$(ls -t ./tech-daily/*.json | head -1)
           echo "📄 使用 JSON 文件: $JSON_FILE"
 
           ROLES="cto_insight developer_practice tech_enthusiast investment_analysis academic_research user_research"
 
-          # checkout 会带上仓库里上一次的 HTML，不清掉的话下面的存在性检查永远为真，
-          # 模型调用全失败也照样打出「6 个角色生成成功」并提交（2026-10-26 就踩了）。
-          # 只删角色页，index.html 等其他文件保持不动。
-          for ROLE in $ROLES; do rm -f "./tech-daily/${ROLE}.html"; done
+          # 先全部生成到暂存目录，六个角色齐了才覆盖线上页面。
+          # 旧做法是先在原地删掉角色页再生成：2026-11-04 上游模型 402 欠费、六次调用全失败，
+          # 被删掉的页面随后被 `git add .` 一起提交，首页六个角色入口全部 404。
+          STAGE="tech-daily/.staging"
+          rm -rf "$STAGE"
+          mkdir -p "$STAGE"
+          trap 'rm -rf "$STAGE"' EXIT
 
           echo "🚀 并行启动 6 个角色的日报生成..."
           for ROLE in $ROLES; do
             echo "  -> 启动 $ROLE"
-            claude -p --dangerously-skip-permissions "使用 tech-daily-generator Skill 读取文件 $JSON_FILE，生成 --role $ROLE 的科技日报，输出到 ./tech-daily/ 目录" &
+            claude -p --dangerously-skip-permissions "使用 tech-daily-generator Skill 读取文件 $JSON_FILE，生成 --role $ROLE 的科技日报，输出到 ./${STAGE}/ 目录" &
           done
 
           echo "⏳ 等待所有任务完成..."
           wait || true
 
           echo "📂 检查生成的文件："
-          ls -la ./tech-daily/*.html || true
+          ls -la "$STAGE"/*.html || true
 
-          SUCCESS_COUNT=0
+          MISSING=""
           for ROLE in $ROLES; do
-            if [ -f "./tech-daily/${ROLE}.html" ]; then
-              SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+            if [ -f "$STAGE/${ROLE}.html" ]; then
+              echo "✅ ${ROLE}.html"
             else
-              echo "⚠️ 缺少: tech-daily/${ROLE}.html"
+              echo "⚠️ 缺少: ${STAGE}/${ROLE}.html"
+              MISSING="$MISSING $ROLE"
             fi
           done
 
-          if [ "$SUCCESS_COUNT" -eq 0 ]; then
-            echo "❌ 没有任何角色的日报生成成功"
+          if [ -n "$MISSING" ]; then
+            echo "❌ 生成失败的角色:$MISSING"
+            echo "保留上一版页面不动，不发布残缺日报（避免首页 404 / 日期混排）"
             exit 1
           fi
 
-          echo "✅ 有 $SUCCESS_COUNT 个角色的日报生成成功，继续提交"
+          for ROLE in $ROLES; do
+            mv "$STAGE/${ROLE}.html" "./tech-daily/${ROLE}.html"
+          done
+
+          echo "✅ 6 个角色的日报全部生成成功"
 
       # 5. 归档当天日报，供主页历史回溯（按日期名清理，保留最近 15 天）
       - name: Archive Daily Reports
-        if: ${{ github.event.inputs.mode != 'json-only' }}
+        if: ${{ github.event.inputs.mode != 'json-only' && success() }}
         run: python3 scripts/tech_daily_archive.py save --keep 15
 
-      # 6. 提交变更
+      # 6. 提交变更（生成失败时不提交，避免把删除半套页面的改动推上线）
       - name: Commit All Changes
+        if: ${{ success() }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
