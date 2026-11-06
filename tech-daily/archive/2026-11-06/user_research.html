@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用户研究日报 · 2026-11-06</title>
+<style>
+  :root {
+    --ink: #2b2440;
+    --body: #554d66;
+    --muted: #6b647f;
+    --faint: #9a90ac;
+    --orange: #f97316;
+    --orange-deep: #c2410c;
+    --purple: #7c3aed;
+    --purple-deep: #4c1d95;
+    --bg: #fdf9f5;
+    --card: #ffffff;
+    --line: rgba(124, 58, 237, .12);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    color: var(--body);
+    background:
+      radial-gradient(circle at 10% -4%, rgba(249, 115, 22, .14), transparent 34rem),
+      radial-gradient(circle at 92% 6%, rgba(124, 58, 237, .12), transparent 32rem),
+      var(--bg);
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", sans-serif;
+    font-size: 16px;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: var(--purple); }
+
+  .page {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    padding: 42px 24px 76px;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 50px 52px 46px;
+    border: 1px solid rgba(124, 58, 237, .12);
+    border-radius: 30px;
+    background:
+      linear-gradient(135deg, rgba(255, 247, 237, .96) 0%, rgba(253, 242, 248, .92) 52%, rgba(245, 243, 255, .96) 100%);
+    box-shadow: 0 24px 70px rgba(76, 29, 149, .08);
+  }
+
+  .hero::before,
+  .hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero::before {
+    width: 320px;
+    height: 320px;
+    right: -110px;
+    top: -150px;
+    background: radial-gradient(circle, rgba(249, 115, 22, .2), transparent 70%);
+  }
+
+  .hero::after {
+    width: 360px;
+    height: 360px;
+    left: -150px;
+    bottom: -210px;
+    background: radial-gradient(circle, rgba(124, 58, 237, .16), transparent 70%);
+  }
+
+  .hero > * { position: relative; z-index: 1; }
+
+  .hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--purple);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  .hero-kicker::after {
+    content: "";
+    width: 42px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(124, 58, 237, .5), transparent);
+  }
+
+  .hero h1 {
+    margin: 16px 0 12px;
+    color: transparent;
+    background: linear-gradient(120deg, #c2410c 0%, #7c3aed 62%, #4c1d95 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    font-size: clamp(38px, 6vw, 62px);
+    line-height: 1.12;
+    letter-spacing: -.025em;
+  }
+
+  .hero-sub {
+    max-width: 760px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 16.5px;
+    line-height: 1.8;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .hero-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .hero-meta span::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), var(--purple));
+    flex: 0 0 auto;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+  }
+
+  .chip {
+    padding: 5px 12px;
+    border: 1px solid rgba(124, 58, 237, .16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .68);
+    color: #6d28d9;
+    font-size: 12px;
+  }
+
+  .section { margin-top: 54px; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(124, 58, 237, .14);
+  }
+
+  .section-num {
+    color: var(--orange-deep);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .14em;
+  }
+
+  .section-head h2 {
+    margin: 0;
+    color: var(--ink);
+    font-size: 28px;
+    line-height: 1.3;
+    letter-spacing: -.01em;
+  }
+
+  .section-en {
+    margin-left: auto;
+    color: var(--faint);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .brief-list { display: grid; gap: 16px; }
+
+  .brief {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 18px;
+    padding: 24px 26px;
+    border: 1px solid rgba(124, 58, 237, .1);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .8);
+    box-shadow: 0 12px 34px rgba(76, 29, 149, .045);
+  }
+
+  .brief-index {
+    color: var(--orange);
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .brief h3 {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .brief p {
+    margin: 0 0 12px;
+    font-size: 15.5px;
+    line-height: 1.9;
+  }
+
+  .source {
+    display: inline-block;
+    color: #6d28d9;
+    font-size: 12.5px;
+    line-height: 1.5;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(124, 58, 237, .35);
+  }
+
+  .source:hover {
+    color: var(--orange-deep);
+    border-bottom-color: rgba(234, 88, 12, .45);
+  }
+
+  .source-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 16px;
+  }
+
+  .deep-card,
+  .case-card {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 30px 32px;
+    border: 1px solid rgba(124, 58, 237, .12);
+    border-radius: 24px;
+    background: var(--card);
+    box-shadow: 0 18px 50px rgba(76, 29, 149, .06);
+  }
+
+  .deep-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 4px;
+    background: linear-gradient(90deg, var(--orange), var(--purple));
+  }
+
+  .deep-label,
+  .case-tag {
+    display: inline-block;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ffedd5, #ede9fe);
+    color: #6d28d9;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .12em;
+  }
+
+  .deep-card h3,
+  .case-card h3 {
+    margin: 14px 0 12px;
+    color: var(--ink);
+    font-size: 23px;
+    line-height: 1.48;
+  }
+
+  .deep-text p {
+    margin: 0 0 14px;
+    font-size: 15.5px;
+    line-height: 1.92;
+  }
+
+  .takeaway {
+    margin-top: 18px;
+    padding: 15px 18px;
+    border-left: 3px solid var(--orange);
+    border-radius: 0 12px 12px 0;
+    background: #fffaf5;
+    color: #4b435c;
+    font-size: 14.5px;
+    line-height: 1.85;
+  }
+
+  .takeaway strong { color: var(--orange-deep); }
+
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .case-block {
+    padding: 16px 18px;
+    border: 1px solid rgba(124, 58, 237, .08);
+    border-radius: 14px;
+    background: #fbf8ff;
+  }
+
+  .case-block.wide {
+    grid-column: 1 / -1;
+    border-color: rgba(249, 115, 22, .12);
+    background: #fffaf5;
+  }
+
+  .case-block h4 {
+    margin: 0 0 8px;
+    color: var(--purple);
+    font-size: 13px;
+    letter-spacing: .08em;
+  }
+
+  .case-block.wide h4 { color: var(--orange-deep); }
+
+  .case-block p {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.88;
+  }
+
+  .method-card {
+    margin-bottom: 18px;
+    padding: 26px 28px;
+    border: 1px solid rgba(124, 58, 237, .12);
+    border-radius: 20px;
+    background: linear-gradient(135deg, #fffdfb, #fbf7ff);
+  }
+
+  .method-num {
+    color: var(--orange-deep);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .12em;
+  }
+
+  .method-card h3 {
+    margin: 8px 0 10px;
+    color: var(--ink);
+    font-size: 20px;
+    line-height: 1.55;
+  }
+
+  .method-card p {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.92;
+  }
+
+  .method-note {
+    padding: 14px 16px;
+    border: 1px solid rgba(124, 58, 237, .1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .72);
+    color: #4b435c;
+    font-size: 14.5px;
+    line-height: 1.85;
+  }
+
+  .method-note strong { color: #6d28d9; }
+
+  .radar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .radar-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 22px;
+    border: 1px solid rgba(124, 58, 237, .1);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .82);
+    box-shadow: 0 10px 26px rgba(76, 29, 149, .035);
+  }
+
+  .radar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .radar-tag {
+    padding: 3px 9px;
+    border: 1px solid rgba(249, 115, 22, .14);
+    border-radius: 999px;
+    background: #fff7ed;
+    color: var(--orange-deep);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .radar-index {
+    color: #c4b5fd;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+  }
+
+  .radar-card h3 {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 16.5px;
+    line-height: 1.55;
+  }
+
+  .radar-card p {
+    flex: 1;
+    margin: 0 0 12px;
+    font-size: 14px;
+    line-height: 1.88;
+  }
+
+  .sources-section { margin-top: 58px; }
+
+  .sources-intro {
+    margin: -6px 0 18px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .ref-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 26px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ref-list li {
+    padding: 11px 0;
+    border-bottom: 1px dashed rgba(124, 58, 237, .12);
+    color: var(--body);
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  .ref-list a {
+    color: #6d28d9;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .ref-list a:hover { border-bottom-color: rgba(109, 40, 217, .35); }
+
+  .ref-source {
+    margin-left: 6px;
+    color: var(--faint);
+    font-size: 12px;
+  }
+
+  .footer {
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(124, 58, 237, .12);
+    color: var(--faint);
+    font-size: 12.5px;
+    line-height: 1.9;
+    text-align: center;
+  }
+
+  @media (max-width: 820px) {
+    .page { padding: 22px 14px 56px; }
+    .hero { padding: 32px 22px; border-radius: 22px; }
+    .hero h1 { font-size: 38px; }
+    .hero-sub { font-size: 15px; }
+    .brief { grid-template-columns: 1fr; gap: 8px; padding: 20px; }
+    .brief-index { font-size: 14px; letter-spacing: .12em; }
+    .deep-card, .case-card, .method-card { padding: 22px; border-radius: 20px; }
+    .deep-card h3, .case-card h3 { font-size: 20px; }
+    .case-grid, .radar-grid, .ref-list { grid-template-columns: 1fr; }
+    .section-en { display: none; }
+    .section-head h2 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="hero-kicker">User Research Daily · 2026.11.06</div>
+    <h1>用户研究日报</h1>
+    <p class="hero-sub">从 525 条资讯中，筛选与用户体验、设计趋势和用户洞察相关的信号。今天的关键词不是“AI 能做什么”，而是“用户如何理解、修改并信任 AI 替他们做的决定”。</p>
+    <div class="hero-meta">
+      <span>数据窗口 2026-11-05 22:28 — 2026-11-06 22:28</span>
+      <span>525 条资讯</span>
+      <span>424 个来源</span>
+    </div>
+    <div class="chips">
+      <span class="chip">可修改性</span>
+      <span class="chip">Agent 体验</span>
+      <span class="chip">自然交互</span>
+      <span class="chip">一线共创</span>
+      <span class="chip">AI Slop</span>
+      <span class="chip">可读性</span>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>今日要点</h2>
+        <span class="section-en">What Matters Today</span>
+      </div>
+
+      <div class="brief-list">
+
+        <article class="brief">
+          <div class="brief-index">01</div>
+          <div class="brief-body">
+            <h3>AI 生成的不是终点，而是设计的起点</h3>
+            <p>Cursor 前创始设计师 Ryo Lu 在 AI Engineer 上海的分享中，用一个 AI 生成的日记应用做演示：模型会自动加入情绪评分、连续记录、每日提醒和周报，但真正的问题是“哪些功能你会留下”。他指出，设计决策会悄悄藏进 AI 给出的答案里，好的工具必须让用户看见并修改这些默认值。这提醒我们，AI 产品的体验竞争力正在从“生成得多好”转向“用户能不能掌控”。</p>
+            <a class="source" href="https://www.youtube.com/watch?v=y9Sg--RDtks" target="_blank" rel="noopener">来源：AI Engineer</a>
+          </div>
+        </article>
+
+        <article class="brief">
+          <div class="brief-index">02</div>
+          <div class="brief-body">
+            <h3>当“你的 AI”开始对“我的 AI”说话，沟通密度反而下降</h3>
+            <p>腾讯研究院指出，2026 年 AI 正从“对话交互”走向“自主交付”：WorkBuddy 经过 100 余次版本迭代，累计承接超过 90 亿次任务请求；蒙牛跑出 45 个“数字员工”，把单牧场诊疗时效从 1.5 天缩短到 2 小时；上海家化把每月 4.5–6 人天的 6000 万行物流账单对账压缩到 20 分钟以内。但与此同时，汇报材料里的“AI 味”越来越浓：一个人用 AI 生成万字长文，另一个人再用 AI 浓缩成三条摘要，信息体积膨胀，真实的思想碰撞被稀释。效率提升之后，什么该慢下来，是产品设计需要回答的新问题。</p>
+            <a class="source" href="https://mp.weixin.qq.com/s?__biz=MjM5OTE0ODA2MQ==&amp;mid=2650999431&amp;idx=1&amp;sn=a0e7734d3e13739df3e1d0a9719d4c6b" target="_blank" rel="noopener">来源：腾讯研究院</a>
+          </div>
+        </article>
+
+        <article class="brief">
+          <div class="brief-index">03</div>
+          <div class="brief-body">
+            <h3>AI 文本的“难读”，已经从文风问题变成认知负担问题</h3>
+            <p>硅星人 Pro 引述 NYU 与 UT Austin 2026 年 10 月的联合研究指出，AI 生成语言难读，不只是生僻词或术语多，而是微观层面的意义压缩挤爆了人的认知带宽。文章用“句法压缩饼干”来形容这种文本：每个字都认识，读三行就太阳穴发紧，读完却记不住说了什么。对做 AI 写作、摘要和助手类产品的人来说，可读性不该是最后才打磨的文案问题，而应是评估模型输出质量的核心体验指标。</p>
+            <a class="source" href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&amp;mid=2247635110&amp;idx=3&amp;sn=5e3c54bbcf6507a1b59531763c9a6dbe" target="_blank" rel="noopener">来源：硅星人Pro</a>
+          </div>
+        </article>
+
+        <article class="brief">
+          <div class="brief-index">04</div>
+          <div class="brief-body">
+            <h3>一线员工正在成为产品设计者</h3>
+            <p>小米技术记录了海南一位汽车交付顾问的实践：用户提车前会从社交平台保存验车清单，但到现场后常遇到检查路线折返、单手拿手机不便、发现问题后照片和备注难以衔接等问题。这位不会写代码的交付顾问借助 AI，把静态清单做成了“提车不踩坑”小程序：按顺序逐项检查、现场记录备注和照片、检查结束自动生成报告并保留历史。这个案例的价值不只在“AI 帮忙写代码”，更在于一线经验被直接翻译成了可交互、可验证的用户流程。</p>
+            <a class="source" href="https://mp.weixin.qq.com/s?__biz=MzUxMDQxMDMyNg==&amp;mid=2247520698&amp;idx=1&amp;sn=975c6f08a443b35f791d062e98054e68" target="_blank" rel="noopener">来源：小米技术</a>
+          </div>
+        </article>
+
+        <article class="brief">
+          <div class="brief-index">05</div>
+          <div class="brief-body">
+            <h3>不“AI Slop”的设计，先把问题解决，再谈好看</h3>
+            <p>开发者 Tw93 分享了一套做“不丑且易用”产品的检查清单：优先级应是“能解决问题 &gt; 易于使用 &gt; 好看美观”；把自己当成完全不懂技术的小白，完整走一遍主链路，找出卡点和讲不清的地方；文案要符合当地人的使用习惯，而不是干巴巴的翻译；能用产品本身表达清楚的，就不要再加一段说明。他还建议把这份标准直接交给 Agent，让它帮忙 Review 产品代码仓库。</p>
+            <a class="source" href="https://x.com/HiTw93/status/2118624034334326902" target="_blank" rel="noopener">来源：Tw93 (@HiTw93)</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>设计趋势洞察</h2>
+        <span class="section-en">Design Signals</span>
+      </div>
+
+      <article class="deep-card">
+        <span class="deep-label">趋势 01</span>
+        <h3>从“一次生成”到“反复修改”：AI 产品的控制权设计</h3>
+        <div class="deep-text">
+          <p>AI 视频的变化是一个清晰信号。Google Gemini Omni 1.2 Flash 的演示不再只强调画质，而是强调“可反复修改的创作工具”：换角色、换场景、改动作、控制镜头，同时尽量保留原来的表演和风格；多人对话更自然，多轮动作迁移，一致性和控制力都更强。生成能力变成基础设施之后，竞争点转向“改得动、改得准”。</p>
+          <p>这与 Ryo Lu 的观察互为表里。AI 可以一键生成一个功能完整的日记应用，但情绪评分、连续记录、每日提醒、周报这些设计决策，是模型替用户做的。用户真正需要的不是更多功能，而是“哪些留下、哪些删掉、为什么”的控制权。好的 AI 产品应该把默认值、生成依据和可调整项暴露出来，让修改本身成为交互的一部分。</p>
+          <p>对用户研究的启示是：当 AI 能快速产出高保真原型——有产品经理已经用 AI 在 1 小时内出高保真原型图——研究重点会从“用户能不能完成任务”前移到“用户如何理解并校准 AI 的默认决策”。访谈提纲里应该增加一类问题：如果这个结果是 AI 替你做的，你最想改哪一处？为什么？</p>
+        </div>
+        <div class="takeaway"><strong>研究启示：</strong>把“可修改性”当成体验指标来测。除了完成率和满意度，还要观察用户是否知道哪里可以改、修改后是否能预测结果、以及是否愿意把修改过的版本再次交给 AI。</div>
+        <div class="source-row">
+          <a class="source" href="https://x.com/FinanceYF5/status/2118537565884252564" target="_blank" rel="noopener">来源：AI Will (@FinanceYF5)</a>
+          <a class="source" href="https://www.youtube.com/watch?v=y9Sg--RDtks" target="_blank" rel="noopener">来源：AI Engineer</a>
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&amp;mid=2651934138&amp;idx=2&amp;sn=ee1d2ea000c004188e69fb1df964ff1b" target="_blank" rel="noopener">来源：人人都是产品经理</a>
+        </div>
+      </article>
+
+      <article class="deep-card">
+        <span class="deep-label">趋势 02</span>
+        <h3>Agent 走出对话框：记忆、上下文与界面状态成为新的体验材料</h3>
+        <div class="deep-text">
+          <p>Agent 正在从“你问我答”变成“替你完成任务”。腾讯研究院的数据说明，AI 办公智能体已经进入规模化使用阶段；千问正在邀测的 Personal Agent「千问 Go！」则把“记忆”当成核心设计对象：用户说“月薪 8000 元”，系统要判断是记住这个数字，还是记住“有稳定收入”这个状态；用户问投资建议时，是只调用理财 context，还是也要同步家庭背景。它的思路是“需求驱动的记忆体系”——从“怎么用”反推“记什么”。</p>
+          <p>社交产品也在把 Agent 变成用户的代理。自然选择旗下的 Elys 让用户创建 AI 分身，按自己的兴趣和表达习惯发布动态、浏览动态、与人互动，再由本人决定是否进一步交流；高峰时日活一度达到 10 万，产品仍采用邀请制。即将到来的改版会更突出 Personal Agent：AI 助手记住用户在平台上的聊天和互动，如果听到用户要招人，就在看到合适求职帖时主动了解情况并留下招聘邮箱；如果得知用户要出差，就推荐当地值得见的人。</p>
+          <p>现实设备也在成为 Agent 的能力。openJiuwen 发布的 Agent Device Foundation 试图让家庭、办公、科研场景中的设备成为 Agent 可理解、可选择、可组织的统一能力：家庭 Agent 可以组合门锁、空调、灯光和扫地机器人；办公 Agent 可以配置投屏、摄像头和打印机；科研 Agent 接到“完成这一轮实验”后，要调用不同厂商的机械臂和检测仪器，并根据实时状态判断下一步。与此同时，Yelp 的 AI Assistant 用原生控件加服务端驱动会话渲染的混合架构，让界面配置和对话数据分离，从而不发布新版本也能快速更新 UI；腾讯技术工程团队分享的司内工具 Siboot 则把群聊协作重新定义为“上下文的流动、隔离和接力”，因为消息只是上下文被压缩后的产物，Agent 上桌后，上下文折损会按乘法叠加。</p>
+          <p>这些案例指向同一个设计命题：Agent 体验不只是聊天框。产品需要设计“记什么、忘什么”的记忆规则，“哪些上下文跟到下一步”的传递机制，“Agent 能替用户做什么、什么时候必须回来问”的权限边界，以及“当前状态、可执行动作、结果是否可信”的界面表达。</p>
+        </div>
+        <div class="takeaway"><strong>研究启示：</strong>做 Agent 相关研究时，别只测单轮问答。要设计跨会话、跨设备、跨人的任务脚本，观察用户如何纠正记忆、如何确认 Agent 的权限、以及在多 Agent 协作中是否还能追踪“这件事是谁决定的”。</div>
+        <div class="source-row">
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MjM5OTE0ODA2MQ==&amp;mid=2650999431&amp;idx=1&amp;sn=a0e7734d3e13739df3e1d0a9719d4c6b" target="_blank" rel="noopener">来源：腾讯研究院</a>
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MjM5NTg0NDE1Mw==&amp;mid=2652628408&amp;idx=1&amp;sn=58e7b7e62d6bab9cc8f6ce340167ff05" target="_blank" rel="noopener">来源：阿里研究院</a>
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&amp;mid=2247539722&amp;idx=2&amp;sn=591527b086e85ef5e28561bf0816cfba" target="_blank" rel="noopener">来源：晚点LatePost</a>
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296726&amp;idx=2&amp;sn=e295b91d9b0cc1ad76c137d9c4b4f9c0" target="_blank" rel="noopener">来源：InfoQ（openJiuwen）</a>
+          <a class="source" href="https://www.infoq.com/news/2026/11/yelp-assistant-hybrid-ui/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">来源：InfoQ（Yelp）</a>
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808052&amp;idx=1&amp;sn=b3d44a9aff307ff725a3300d14efe314" target="_blank" rel="noopener">来源：腾讯技术工程</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>产品体验点评</h2>
+        <span class="section-en">Product Experience</span>
+      </div>
+
+      <article class="case-card">
+        <span class="case-tag">案例 01</span>
+        <h3>小米“提车不踩坑”：把一线痛点翻译成可交互流程</h3>
+        <div class="case-grid">
+          <div class="case-block">
+            <h4>用户场景</h4>
+            <p>海南门店的待交付车辆普遍经历陆运和海运，用户在提车前会从社交平台保存验车清单，到现场逐项核对。真实困难不是“不知道检查什么”，而是检查路线容易折返、检查到一半难以确认哪些已完成、发现异常后照片、备注和最终记录之间缺少衔接；现场常常一只手拿手机、另一只手围车检查，表格字小、阅读困难，还要在车辆、手机和流程之间来回切换。</p>
+          </div>
+          <div class="case-block">
+            <h4>设计动作</h4>
+            <p>交付顾问刘润生先尝试把清单做成小程序：按顺序逐项检查、发现问题直接记录备注和照片、检查结束后自动生成报告并保留历史记录。他不会写代码，也没有开发经验，最初连软件安装、环境配置、页面跑起来都陌生；于是把整理好的验车流程、检查项和页面想法描述给 AI，逐步做成可用的工具。</p>
+          </div>
+          <div class="case-block wide">
+            <h4>体验启示</h4>
+            <p>这个案例展示了三个可复用的设计原则：第一，把“静态清单”改造成“跟着用户动作走的流程”，减少现场认知切换；第二，把记录动作放在问题发生的当下，避免事后补记造成信息丢失；第三，让一线员工直接参与工具创造，因为他们最清楚用户在哪一步卡住。AI 降低的是构建门槛，真正稀缺的仍是对场景的观察和流程设计能力。</p>
+          </div>
+        </div>
+        <div class="source-row">
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MzUxMDQxMDMyNg==&amp;mid=2247520698&amp;idx=1&amp;sn=975c6f08a443b35f791d062e98054e68" target="_blank" rel="noopener">来源：小米技术</a>
+        </div>
+      </article>
+
+      <article class="case-card">
+        <span class="case-tag">案例 02</span>
+        <h3>网易“叭哥说”：把输入摩擦降到接近说话</h3>
+        <div class="case-grid">
+          <div class="case-block">
+            <h4>体验观察</h4>
+            <p>网易有道的 AI 语音输入工具“叭哥说”主打“按住说话、松手出字”。一位用户的实测是：同一段九十多字，叭哥说 2.17 秒出字，友商 3.06 秒；按住 Fn+Shift 说中文可以直接出英文，翻译不是生硬的机翻腔；它还会记住用户的纠错，像 Claude、Vibe Coding 这类词第一次基本能纠对，认错后手动改一次就收进词库，并给出每天的纠错和记忆统计。产品永久免费、不限额度，直接降低了尝试门槛。</p>
+          </div>
+          <div class="case-block">
+            <h4>设计洞察</h4>
+            <p>这篇文章引用了一个认知科学常识：人脑思考和说话是低能耗的直觉反应，而手指机械打字、逐字斟酌是极度耗能的重度思考。过去几十年的计算机交互，本质上是“人在迁就机器”——学习语法、快捷键、删掉口水话；大模型时代，交互逻辑有机会反过来，让机器接住人最自然的表达习惯。语音输入的产品价值不只是“快”，而是把表达从“编辑模式”切回“思考模式”。</p>
+          </div>
+          <div class="case-block wide">
+            <h4>体验启示</h4>
+            <p>如果要评估这类产品，建议重点看四件事：首次使用是否零解释成本；识别延迟是否短到不打断思路；纠错是否能在一次交互后记住；以及免费或付费策略是否让用户愿意持续使用。它的风险也很明确：语音转写错误在高风险场景会被放大，产品需要用可视化确认和易修改的交互兜底。</p>
+          </div>
+        </div>
+        <div class="source-row">
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MzU2Njg0OTEyNQ==&amp;mid=2247497858&amp;idx=1&amp;sn=063ef3a78a0285a4a0832e9277f180ac" target="_blank" rel="noopener">来源：AI异类弗兰克</a>
+          <a class="source" href="https://x.com/berryxia/status/2118647163236610311" target="_blank" rel="noopener">来源：Berryxia.AI（实测）</a>
+          <a class="source" href="https://x.com/berryxia/status/2118679817273201051" target="_blank" rel="noopener">来源：Berryxia.AI（使用场景）</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2>研究方法论</h2>
+        <span class="section-en">Research Methods</span>
+      </div>
+
+      <article class="method-card">
+        <div class="method-num">方法 01</div>
+        <h3>需求翻译：把三方的“好”翻译成同一套用户场景</h3>
+        <p>业务方说“我们要做个像 ChatGPT 一样的 AGI 助手，能回答所有问题，下个月上线”；研发说“至少要 6 个月”；产品经理夹在中间。文章指出，90% 的需求冲突不是人的问题，而是三方对同一件事的理解不在一个频道：业务方的“好”是快速上线、签单、业绩；产品经理的“好”是解决核心问题、可复用、可长期维护；技术团队的“好”是技术先进、架构优雅、代码质量高。一个“智能推荐”的需求，可能被理解成基于规则的推荐，也可能被理解成协同过滤，三个月后才发现做的不是同一件事。</p>
+        <div class="method-note"><strong>怎么做：</strong>先还原用户真实场景和任务，而不是复述业务方给的功能名；再把“好”的定义写成可观察的成功标准，比如用户在多长时间内完成什么任务、错误率降低多少；最后让业务、产品、研发共同确认这些标准和取舍。研究的产出不应只是“用户说要什么”的记录，而应是一套三方都能使用的决策语言。</div>
+        <div class="source-row">
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&amp;mid=2651934138&amp;idx=3&amp;sn=33c0b77b1e991de3382897169f6f3aee" target="_blank" rel="noopener">来源：人人都是产品经理</a>
+        </div>
+      </article>
+
+      <article class="method-card">
+        <div class="method-num">方法 02</div>
+        <h3>AI 辅助的研究—原型闭环：快是优势，判断仍是核心</h3>
+        <p>《AI 产品经理成长指南》描述了一种正在发生的分层：有人还在用两三天写 PRD，也有人已经用 AI 在 10 分钟内生成高质量竞品分析报告、1 小时内出高保真原型图；有人用 Coze/Dify 搭建企业内部智能客服，成为业务部门争抢的“AI 赋能专家”。一线城市 AI 产品经理岗位平均月薪 35k–60k，而传统 B/C 端产品经理中位数仍在 20k 上下，说明市场在为“能把 AI 落到产品里”的能力付溢价。</p>
+        <p>另一个值得记录的实践来自一位开发者的观察：他在给录屏软件 Cap 增加美颜和美白功能时，先学习剪映的做法，用人眼分析加 AI 对比折腾了半天；最后发现，剪映的美颜效果还不如 Claude 直接调研后写出来的方案。这个例子不能证明 AI 研究总是更好，但提示我们：AI 可以显著压缩“查资料—比较—形成方案”的循环，前提是研究者能定义清楚比较维度和验收标准。</p>
+        <div class="method-note"><strong>实践建议：</strong>把 AI 放进研究流程时，保留三个人的判断节点——研究问题是否问对；AI 汇总的证据是否可追溯；最终洞察是否能解释用户行为，而不是只生成漂亮结论。</div>
+        <div class="source-row">
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&amp;mid=2651934138&amp;idx=2&amp;sn=ee1d2ea000c004188e69fb1df964ff1b" target="_blank" rel="noopener">来源：人人都是产品经理</a>
+          <a class="source" href="https://x.com/vista8/status/2118729792371802173" target="_blank" rel="noopener">来源：向阳乔木 (@vista8)</a>
+        </div>
+      </article>
+
+      <article class="method-card">
+        <div class="method-num">方法 03</div>
+        <h3>行为级验证：让 AI 写的界面先过“行为测试”</h3>
+        <p>Shopify 的 Reflex 架构把业务逻辑和界面分开，每个页面的 ViewModel 暴露统一接口：当前状态、可执行动作和子组件；Agent 通过命令行发送动作，再读取 JSON 状态，验证业务逻辑、输入校验、导航和错误处理。它运行的是真实业务代码，不启动模拟器；iOS 和 Android 仍各自写原生代码，但共享同一份行为测试——“共享测试，而不是共享代码”。</p>
+        <p>Shopify 报告超过 1,700 条行为测试在 CI 中双端约 4 分钟跑完；预热后无设备运行只需几百毫秒，同一测试在 iOS 模拟器上约需 2 秒。但它不验证像素，也不能证明界面按钮正确连接到了对应操作，视觉检查仍要靠设计系统对照、少量截图测试和实际使用；而且 Reflex 目前不是可直接安装的开源库，团队需要自行实现架构和适配层。</p>
+        <div class="method-note"><strong>研究启示：</strong>把“可用性”拆成行为层和感知层。行为层可以用自动化高频验证，感知层仍需要真人观察。AI 让界面生产成本下降后，验证会成为新的瓶颈；研究团队可以更早介入，定义哪些行为必须被测试、哪些视觉和情感体验必须由人判断。</div>
+        <div class="source-row">
+          <a class="source" href="https://x.com/shao__meng/status/2118622217525416174" target="_blank" rel="noopener">来源：meng shao (@shao__meng)</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <h2>UX 雷达</h2>
+        <span class="section-en">Early Signals</span>
+      </div>
+
+      <div class="radar-grid">
+
+        <article class="radar-card">
+          <div class="radar-top">
+            <span class="radar-tag">设计工具</span>
+            <span class="radar-index">01</span>
+          </div>
+          <h3>Figma：一键抠图与擦除进入设计工具主流程</h3>
+          <p>Figma 的 AI 图像编辑支持选中对象后一键隔离或擦除，目前已登陆 macOS 桌面端。它释放的信号是，“选中—AI 处理—继续排版”正在成为设计工具的默认交互，设计师对“一键完成”的预期会被进一步抬高。</p>
+          <a class="source" href="https://x.com/figma/status/2118751599312937096" target="_blank" rel="noopener">来源：Figma</a>
+        </article>
+
+        <article class="radar-card">
+          <div class="radar-top">
+            <span class="radar-tag">体验架构</span>
+            <span class="radar-index">02</span>
+          </div>
+          <h3>Yelp：AI 助手的界面可以不等 App 发版</h3>
+          <p>Yelp 的 AI Assistant 用 CHAOS 框架把原生移动控件和服务端驱动的会话渲染结合起来，把视图配置与对话数据分离，支持后端驱动聊天交互，从而不发布新版本也能更新 UI，并在 Biz Ask Anything 试点中复用。对体验团队来说，这意味着 AI 助手的界面迭代节奏可以更接近内容和策略的迭代节奏，但也对设计系统的约束能力提出更高要求。</p>
+          <a class="source" href="https://www.infoq.com/news/2026/11/yelp-assistant-hybrid-ui/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">来源：InfoQ</a>
+        </article>
+
+        <article class="radar-card">
+          <div class="radar-top">
+            <span class="radar-tag">模型基准</span>
+            <span class="radar-index">03</span>
+          </div>
+          <h3>腾讯混元 Hy4：设计任务开始有模型基准</h3>
+          <p>腾讯混元在 OpenDesign 的设计基准中测试了 23 个模型，任务基于真实用户请求；Hy4 得分仅落后 GPT-6.1 Sol 0.1 分，预估成本低 41%，排名第 4。设计类 AI 工具的选型，正在从“感觉哪个好用”走向“任务分、成本、可控性”的组合评估。</p>
+          <a class="source" href="https://x.com/TencentHunyuan/status/2118683762288697387" target="_blank" rel="noopener">来源：Tencent HY (@TXhunyuan)</a>
+        </article>
+
+        <article class="radar-card">
+          <div class="radar-top">
+            <span class="radar-tag">工具上手指南</span>
+            <span class="radar-index">04</span>
+          </div>
+          <h3>Local Code：用“少选项”降低本地 AI 的上手门槛</h3>
+          <p>Local Code 是 Mac 上的本地优先 AI Agent 工具，只提供三种本地模型，初始化时会根据设备配置自动匹配；例如 16GB 内存的 M4 MacBook Air 只能选择最低阶的 Qwen 3.8 27B。它把模型选择、推理强度、思考预算、空闲卸载等复杂参数收进设置，同时保留设备端/云端切换。相比成熟商业工具仍有差距，但“先替用户做对选择，再逐步开放高级选项”的思路值得产品设计借鉴。</p>
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639444&amp;idx=1&amp;sn=3e8598d01a4025f9a8580fb735dc4cb7" target="_blank" rel="noopener">来源：少数派</a>
+        </article>
+
+        <article class="radar-card">
+          <div class="radar-top">
+            <span class="radar-tag">性能体验</span>
+            <span class="radar-index">05</span>
+          </div>
+          <h3>Discord：内存占用本身也是体验</h3>
+          <p>Discord CTO 展示了正在开发的 Rust 版新客户端，Windows 11 任务管理器截图显示内存占用 290.2MB，而且当时同时登录了两个账号；现有 Electron 客户端闲置时可能占用 1–2GB，极端情况下达到 4GB。需要说明的是，这只是早期开发版本的单次运行数据，语音通话、视频、屏幕共享和长时间运行的表现尚未公开，不能直接等同于正式版体验。</p>
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247838214&amp;idx=2&amp;sn=0a74b7c77714db7bf0d6138cbea04535" target="_blank" rel="noopener">来源：CSDN</a>
+        </article>
+
+        <article class="radar-card">
+          <div class="radar-top">
+            <span class="radar-tag">轻量交互</span>
+            <span class="radar-index">06</span>
+          </div>
+          <h3>SideNotes：把“捕捉灵感”从切换 App 中解放出来</h3>
+          <p>SideNotes 是 macOS 的挂件式笔记工具，藏在屏幕左右两侧，按快捷键呼出，像通知中心一样随用随开，不需要在多个 App 之间切换；支持 Markdown、文件夹分类、置顶、颜色标记、全文搜索和自定义快捷键/主题。它对应的是一个很具体的用户时刻：写稿、改方案、敲代码或做设计时，灵感一闪而过，任何一次软件切换都可能让想法溜走。</p>
+          <a class="source" href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639437&amp;idx=1&amp;sn=5d21c7b2494322fd4dcff41e4dcbaeaf" target="_blank" rel="noopener">来源：少数派</a>
+        </article>
+
+        <article class="radar-card">
+          <div class="radar-top">
+            <span class="radar-tag">组织协作</span>
+            <span class="radar-index">07</span>
+          </div>
+          <h3>Smashing：in-house UX 的难点常在设计之外</h3>
+          <p>Paul Boag 与 Smashing Magazine 将在明年 1 月推出面向企业内部 UX 从业者的社区。他每年与数百位数字产品从业者交流后发现，最难的部分通常不是设计工作本身，而是围绕设计的一切——比如在评审会上直接改方案的干系人、业务约束等。对用户研究团队来说，这也是一个提醒：研究方法要能进入组织的决策流程，而不只是产出报告。</p>
+          <a class="source" href="https://smashingmagazine.com/2026/11/ux-insiders-community-in-house-ux-people/" target="_blank" rel="noopener">来源：Smashing Magazine</a>
+        </article>
+
+        <article class="radar-card">
+          <div class="radar-top">
+            <span class="radar-tag">用户心理</span>
+            <span class="radar-index">08</span>
+          </div>
+          <h3>少楠：答案越容易，信息焦虑未必越少</h3>
+          <p>flomo 联合创始人少楠在播客中谈到，AI 让获取答案变得容易，但信息焦虑并没有因此减少；他提出“焦虑的反义词是具体”，在无限可能性里选择其中一个下注，反而更能缓解焦虑。对笔记、知识管理和 AI 助手类产品来说，这可能意味着设计重点不该是“生成更多摘要”，而是帮助用户确认什么值得记住、什么可以放下。</p>
+          <a class="source" href="https://www.xiaoyuzhoufm.com/episode/6aed7b615b7c4709bfe1fe12" target="_blank" rel="noopener">来源：知行小酒馆</a>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="section sources-section">
+      <div class="section-head">
+        <span class="section-num">06</span>
+        <h2>参考来源</h2>
+        <span class="section-en">References</span>
+      </div>
+      <p class="sources-intro">本期共引用 25 条公开信息，覆盖 AI 产品体验、设计工具、用户研究方法与组织实践。</p>
+      <ul class="ref-list">
+        <li><a href="https://www.youtube.com/watch?v=y9Sg--RDtks" target="_blank" rel="noopener">当我们什么都能做，还知道自己想做什么吗？——Ryo Lu, ex-Cursor</a><span class="ref-source">AI Engineer</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTE0ODA2MQ==&amp;mid=2650999431&amp;idx=1&amp;sn=a0e7734d3e13739df3e1d0a9719d4c6b" target="_blank" rel="noopener">当 AI 在加速狂奔，什么反而应该“慢”下来？</a><span class="ref-source">腾讯研究院</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&amp;mid=2247635110&amp;idx=3&amp;sn=5e3c54bbcf6507a1b59531763c9a6dbe" target="_blank" rel="noopener">AI 写的东西越来越难懂，Gemini 是怎么做到“说人话”的？</a><span class="ref-source">硅星人Pro</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzUxMDQxMDMyNg==&amp;mid=2247520698&amp;idx=1&amp;sn=975c6f08a443b35f791d062e98054e68" target="_blank" rel="noopener">从静态清单到可交互工具：交付顾问用 AI 提升车主验车体验</a><span class="ref-source">小米技术</span></li>
+        <li><a href="https://x.com/HiTw93/status/2118624034334326902" target="_blank" rel="noopener">怎么用 AI 做出好看的产品设计，不那么 AI Slop</a><span class="ref-source">Tw93 (@HiTw93)</span></li>
+        <li><a href="https://x.com/FinanceYF5/status/2118537565884252564" target="_blank" rel="noopener">Gemini Omni 1.2 Flash：9 个 AI 视频演示</a><span class="ref-source">AI Will (@FinanceYF5)</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5NTg0NDE1Mw==&amp;mid=2652628408&amp;idx=1&amp;sn=58e7b7e62d6bab9cc8f6ce340167ff05" target="_blank" rel="noopener">对谈千问蒋冠军：从模型、记忆到生态，Personal Agent 的技术架构如何搭建？</a><span class="ref-source">阿里研究院</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU3Mjk1OTQ0Ng==&amp;mid=2247539722&amp;idx=2&amp;sn=591527b086e85ef5e28561bf0816cfba" target="_blank" rel="noopener">晚点独家：自然选择完成 A+ 轮融资，要靠社交网络参与 Personal Agent 竞赛</a><span class="ref-source">晚点LatePost</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651296726&amp;idx=2&amp;sn=e295b91d9b0cc1ad76c137d9c4b4f9c0" target="_blank" rel="noopener">openJiuwen 首发 Agent Device Foundation，重新定义 Agent 与物理世界的交互方式</a><span class="ref-source">InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/yelp-assistant-hybrid-ui/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Yelp Combines Native and Server-Driven UI for Its AI Assistant</a><span class="ref-source">InfoQ</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808052&amp;idx=1&amp;sn=b3d44a9aff307ff725a3300d14efe314" target="_blank" rel="noopener">多 Agent 协作的下一场竞争，不在模型，而在上下文</a><span class="ref-source">腾讯技术工程</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&amp;mid=2651934138&amp;idx=2&amp;sn=ee1d2ea000c004188e69fb1df964ff1b" target="_blank" rel="noopener">AI 产品经理成长指南</a><span class="ref-source">人人都是产品经理</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU2Njg0OTEyNQ==&amp;mid=2247497858&amp;idx=1&amp;sn=063ef3a78a0285a4a0832e9277f180ac" target="_blank" rel="noopener">登顶开源榜首的网易语音 Agent，居然终身免费？</a><span class="ref-source">AI异类弗兰克</span></li>
+        <li><a href="https://x.com/berryxia/status/2118647163236610311" target="_blank" rel="noopener">“叭哥说”实测：速度、翻译与纠错记忆</a><span class="ref-source">Berryxia.AI (@berryxia)</span></li>
+        <li><a href="https://x.com/berryxia/status/2118679817273201051" target="_blank" rel="noopener">语音输入在 Vibe Coding 与视频创作中的使用场景</a><span class="ref-source">Berryxia.AI (@berryxia)</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&amp;mid=2651934138&amp;idx=3&amp;sn=33c0b77b1e991de3382897169f6f3aee" target="_blank" rel="noopener">业务方要的 AI 功能和你规划的方向冲突，听谁的？</a><span class="ref-source">人人都是产品经理</span></li>
+        <li><a href="https://x.com/vista8/status/2118729792371802173" target="_blank" rel="noopener">用 Claude 直接调研美颜方案的一线观察</a><span class="ref-source">向阳乔木 (@vista8)</span></li>
+        <li><a href="https://x.com/shao__meng/status/2118622217525416174" target="_blank" rel="noopener">Shopify Reflex：让 AI 不靠模拟器，也能验证原生 App 的行为</a><span class="ref-source">meng shao (@shao__meng)</span></li>
+        <li><a href="https://x.com/figma/status/2118751599312937096" target="_blank" rel="noopener">Figma AI 图像编辑：一键隔离或擦除对象</a><span class="ref-source">Figma</span></li>
+        <li><a href="https://x.com/TencentHunyuan/status/2118683762288697387" target="_blank" rel="noopener">OpenDesign Design Benchmark：23 个模型的设计任务评测</a><span class="ref-source">Tencent HY (@TXhunyuan)</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639444&amp;idx=1&amp;sn=3e8598d01a4025f9a8580fb735dc4cb7" target="_blank" rel="noopener">Local Code：本地优先的 AI Agent 工具</a><span class="ref-source">少数派</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247838214&amp;idx=2&amp;sn=0a74b7c77714db7bf0d6138cbea04535" target="_blank" rel="noopener">弃用 Electron、4GB 内存占用直接砍到 290MB：Discord 宣布用 Rust 重写客户端</a><span class="ref-source">CSDN</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639437&amp;idx=1&amp;sn=5d21c7b2494322fd4dcff41e4dcbaeaf" target="_blank" rel="noopener">藏在屏幕一旁，轻松捕捉灵感的速记神器</a><span class="ref-source">少数派</span></li>
+        <li><a href="https://smashingmagazine.com/2026/11/ux-insiders-community-in-house-ux-people/" target="_blank" rel="noopener">A New Community For In-House UX People</a><span class="ref-source">Smashing Magazine</span></li>
+        <li><a href="https://www.xiaoyuzhoufm.com/episode/6aed7b615b7c4709bfe1fe12" target="_blank" rel="noopener">E257 对话少楠：明明 AI 有问必答，我怎么还总是信息焦虑？</a><span class="ref-source">知行小酒馆</span></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    本期基于 FreshRSS 24 小时资讯筛选生成，聚焦用户体验、设计趋势与用户洞察。<br>
+    内容为编辑视角的整理与解读，具体事实与数据请以原文为准。
+  </footer>
+
+</div>
+</body>
+</html>

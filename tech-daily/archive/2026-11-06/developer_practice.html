@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践日报 · 2026-11-06</title>
+<style>
+  :root {
+    --bg: #0a0e13;
+    --bg-elev: #10161e;
+    --bg-card: #121a24;
+    --bg-code: #0d131b;
+    --line: #223041;
+    --line-soft: #1a2633;
+    --text: #d7e0ea;
+    --muted: #8b9bad;
+    --dim: #64748b;
+    --green: #7ee787;
+    --cyan: #58a6ff;
+    --amber: #f2cc60;
+    --pink: #ff7b93;
+    --purple: #bc8cff;
+    --mono: "SFMono-Regular", "Cascadia Code", "JetBrains Mono", "Fira Code", Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 12% -10%, rgba(88, 166, 255, 0.13), transparent 32rem),
+      radial-gradient(circle at 88% 8%, rgba(126, 231, 135, 0.08), transparent 28rem),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(88, 166, 255, 0.32);
+    transition: color 0.18s ease, border-color 0.18s ease;
+  }
+
+  a:hover {
+    color: #9ecbff;
+    border-bottom-color: #9ecbff;
+  }
+
+  .page {
+    width: min(1120px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 42px 0 72px;
+  }
+
+  /* ---------- Header ---------- */
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #0d1117;
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    border-radius: 12px 12px 0 0;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #3b4654;
+  }
+
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+
+  .terminal-title {
+    margin-left: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  header {
+    position: relative;
+    overflow: hidden;
+    padding: 40px 38px 34px;
+    background:
+      linear-gradient(135deg, rgba(88, 166, 255, 0.08), transparent 52%),
+      var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: 0 0 12px 12px;
+  }
+
+  header::after {
+    content: "DEVELOPER_PRACTICE";
+    position: absolute;
+    right: -16px;
+    bottom: -28px;
+    color: rgba(88, 166, 255, 0.055);
+    font-family: var(--mono);
+    font-size: clamp(34px, 7vw, 78px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 9px;
+    color: var(--green);
+    background: rgba(126, 231, 135, 0.08);
+    border: 1px solid rgba(126, 231, 135, 0.22);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+  }
+
+  h1 {
+    position: relative;
+    z-index: 1;
+    margin: 18px 0 8px;
+    color: #f0f6fc;
+    font-family: var(--mono);
+    font-size: clamp(30px, 5vw, 48px);
+    line-height: 1.16;
+    letter-spacing: -1.4px;
+  }
+
+  .date {
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 15px;
+  }
+
+  .lede {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 20px 0 0;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .stats {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .stat {
+    min-width: 112px;
+    padding: 9px 13px;
+    background: rgba(13, 19, 27, 0.72);
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+  }
+
+  .stat strong {
+    display: block;
+    color: #f0f6fc;
+    font-family: var(--mono);
+    font-size: 20px;
+    line-height: 1.25;
+  }
+
+  .stat span {
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .keywords {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .keyword {
+    padding: 4px 9px;
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  /* ---------- Sections ---------- */
+  section {
+    margin-top: 46px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section-head h2 {
+    margin: 0;
+    color: #f0f6fc;
+    font-family: var(--mono);
+    font-size: 21px;
+    letter-spacing: -0.4px;
+  }
+
+  .section-head .index {
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: 12px;
+    opacity: 0.9;
+  }
+
+  .section-head .rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--line), transparent);
+  }
+
+  .section-note {
+    margin: -10px 0 20px;
+    color: var(--dim);
+    font-size: 13px;
+  }
+
+  /* ---------- Hot list ---------- */
+  .hot-list {
+    display: grid;
+    gap: 13px;
+  }
+
+  .hot-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    gap: 16px;
+    padding: 22px 24px 20px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 60%),
+      var(--bg-card);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    transition: border-color 0.18s ease, transform 0.18s ease;
+  }
+
+  .hot-card:hover {
+    border-color: #31455c;
+    transform: translateY(-1px);
+  }
+
+  .hot-card::before {
+    content: "";
+    position: absolute;
+    top: 18px;
+    bottom: 18px;
+    left: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--cyan), transparent);
+    border-radius: 2px;
+    opacity: 0.55;
+  }
+
+  .num {
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .hot-card h3 {
+    margin: 0 0 8px;
+    color: #eaf2fa;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  .hot-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .tag {
+    padding: 2px 7px;
+    color: var(--cyan);
+    background: rgba(88, 166, 255, 0.07);
+    border: 1px solid rgba(88, 166, 255, 0.18);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+  }
+
+  .tag.green {
+    color: var(--green);
+    background: rgba(126, 231, 135, 0.07);
+    border-color: rgba(126, 231, 135, 0.18);
+  }
+
+  .tag.amber {
+    color: var(--amber);
+    background: rgba(242, 204, 96, 0.07);
+    border-color: rgba(242, 204, 96, 0.18);
+  }
+
+  .tag.pink {
+    color: var(--pink);
+    background: rgba(255, 123, 147, 0.07);
+    border-color: rgba(255, 123, 147, 0.18);
+  }
+
+  .tag.purple {
+    color: var(--purple);
+    background: rgba(188, 140, 255, 0.07);
+    border-color: rgba(188, 140, 255, 0.18);
+  }
+
+  .source {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+
+  .source::before {
+    content: "source";
+    color: #4f6074;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .source a {
+    color: #8bb9e8;
+    border-bottom-color: rgba(139, 185, 232, 0.28);
+  }
+
+  /* ---------- Deep dive ---------- */
+  .deep-grid {
+    display: grid;
+    gap: 18px;
+  }
+
+  .deep-card {
+    padding: 26px 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+  }
+
+  .deep-card h3 {
+    margin: 0 0 4px;
+    color: #f0f6fc;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  .deep-sub {
+    margin: 0 0 18px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .deep-card h4 {
+    margin: 20px 0 8px;
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .deep-card p {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .deep-card strong {
+    color: #dfe9f3;
+    font-weight: 600;
+  }
+
+  .terminal {
+    margin: 16px 0 18px;
+    overflow: auto;
+    background: var(--bg-code);
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+  }
+
+  .terminal .bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 11px;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 10.5px;
+  }
+
+  .terminal pre {
+    margin: 0;
+    padding: 14px 16px;
+    color: #c9d6e3;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .terminal .prompt { color: var(--green); }
+  .terminal .comment { color: #5b6b7d; }
+  .terminal .flag { color: var(--amber); }
+  .terminal .str { color: #a5d6ff; }
+
+  .takeaway {
+    padding: 14px 16px;
+    background: rgba(126, 231, 135, 0.045);
+    border: 1px solid rgba(126, 231, 135, 0.16);
+    border-radius: 8px;
+    color: #c8d7c9;
+    font-size: 14px;
+  }
+
+  .takeaway strong { color: var(--green); }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 14px 0 18px;
+  }
+
+  .metric {
+    padding: 12px;
+    background: var(--bg-code);
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+  }
+
+  .metric strong {
+    display: block;
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .metric span {
+    color: var(--dim);
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  /* ---------- Tools ---------- */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .tool-card {
+    padding: 20px 21px;
+    background: var(--bg-card);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+  }
+
+  .tool-card h3 {
+    margin: 0 0 9px;
+    color: #eaf2fa;
+    font-size: 16.5px;
+    line-height: 1.45;
+  }
+
+  .tool-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .tool-card code {
+    padding: 1px 5px;
+    color: var(--amber);
+    background: rgba(242, 204, 96, 0.07);
+    border: 1px solid rgba(242, 204, 96, 0.14);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  /* ---------- Practices ---------- */
+  .practice-list {
+    display: grid;
+    gap: 12px;
+    counter-reset: practice;
+  }
+
+  .practice {
+    position: relative;
+    padding: 20px 22px 20px 62px;
+    background: var(--bg-card);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    counter-increment: practice;
+  }
+
+  .practice::before {
+    content: counter(practice, decimal-leading-zero);
+    position: absolute;
+    top: 21px;
+    left: 22px;
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .practice h3 {
+    margin: 0 0 7px;
+    color: #eaf2fa;
+    font-size: 16px;
+  }
+
+  .practice p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .practice ul {
+    margin: 8px 0 0;
+    padding-left: 18px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+
+  .practice li { margin: 3px 0; }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .footer h2 {
+    margin: 0 0 6px;
+    color: #f0f6fc;
+    font-family: var(--mono);
+    font-size: 18px;
+  }
+
+  .footer .note {
+    margin: 0 0 16px;
+    color: var(--dim);
+    font-size: 12.5px;
+  }
+
+  .source-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .source-list li {
+    padding: 7px 0;
+    border-bottom: 1px dashed rgba(34, 48, 65, 0.7);
+    color: var(--muted);
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+
+  .source-list .feed {
+    display: inline-block;
+    margin-right: 6px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 10.5px;
+  }
+
+  .end {
+    margin-top: 28px;
+    color: #4f6074;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-align: center;
+  }
+
+  @media (max-width: 760px) {
+    .page { width: min(100% - 24px, 1120px); padding-top: 20px; }
+    header { padding: 28px 22px 26px; }
+    .hot-card { grid-template-columns: 1fr; gap: 6px; padding: 19px 20px; }
+    .num { font-size: 11px; }
+    .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tools-grid, .source-list { grid-template-columns: 1fr; }
+    .deep-card { padding: 21px 20px; }
+    .practice { padding: 18px 18px 18px 50px; }
+    .practice::before { left: 17px; top: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="terminal-bar">
+    <span class="dot red"></span>
+    <span class="dot yellow"></span>
+    <span class="dot green"></span>
+    <span class="terminal-title">~/tech-daily $ generate --role developer_practice --date 2026-11-06</span>
+  </div>
+
+  <header>
+    <span class="eyebrow">daily report / developer practice</span>
+    <h1>开发者实践日报</h1>
+    <div class="date">2026-11-06 · Thursday</div>
+    <p class="lede">
+      从过去 24 小时的 <strong>525 条</strong>资讯、<strong>424 个</strong>来源中，筛出真正影响一线开发者的语言版本、工具链、CI/CD、Agent 基础设施与性能实践。今天的主线很集中：<strong>工具在变快，但验证与隔离正在变成更贵的能力。</strong>
+    </p>
+    <div class="stats">
+      <div class="stat"><strong>8</strong><span>技术热榜</span></div>
+      <div class="stat"><strong>2</strong><span>深度解读</span></div>
+      <div class="stat"><strong>5</strong><span>工具推荐</span></div>
+      <div class="stat"><strong>5</strong><span>实践清单</span></div>
+    </div>
+    <div class="keywords">
+      <span class="keyword">TypeScript 7.1</span>
+      <span class="keyword">Agent Sandbox</span>
+      <span class="keyword">Rust / GPUI</span>
+      <span class="keyword">Node 27</span>
+      <span class="keyword">Go 1.27</span>
+      <span class="keyword">CI Supply Chain</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <span class="index">01</span>
+      <h2>今日技术热榜</h2>
+      <span class="rule"></span>
+    </div>
+    <p class="section-note">按对日常开发的影响排序，优先保留可验证的版本、性能与工具链变化。</p>
+
+    <div class="hot-list">
+
+      <article class="hot-card">
+        <div class="num">01</div>
+        <div>
+          <div class="tags"><span class="tag">TypeScript</span><span class="tag green">工具链</span></div>
+          <h3>TypeScript 7.1 Beta：Compiler API 回归，Vue 与 Svelte 成为一等公民</h3>
+          <p>
+            TypeScript 7.1 Beta 于 2026 年 10 月 20 日公布，最重要的变化是恢复 7.0 中移除的编译器 API，并将其拆分为独立入口。新增的 content mappers 允许 Vue 等工具检查非标准文件；报道中的一个 Vue 项目类型检查时间从 <strong>14.19 秒降到 3.10 秒</strong>。不过仍有一个编辑器问题未关闭，部分团队可能需要同时保留 TypeScript 6 与 7 才能平稳迁移。
+          </p>
+          <div class="source"><a href="https://www.infoq.com/news/2026/11/typescript-7-1-beta/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · TypeScript 7.1 Beta</a></div>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="num">02</div>
+        <div>
+          <div class="tags"><span class="tag amber">CI/CD</span><span class="tag pink">供应链安全</span></div>
+          <h3>GitHub Actions Lockfiles GA：工作流依赖终于可以锁定并审计</h3>
+          <p>
+            GitHub 已于 2026 年 10 月 28 日将 GitHub Actions 的工作流依赖 lockfiles 正式开放，距公开预览仅两周。它让工作流在保留可读的 tag、branch 引用的同时，维护一份可复现的依赖锁定记录。对频繁使用第三方 action 的团队来说，这能减少“上游 tag 被移动”带来的漂移，也让依赖升级从隐式变化变成可审查的 diff。
+          </p>
+          <div class="source"><a href="https://www.infoq.com/news/2026/11/github-actions-lockfiles-ga/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · GitHub Actions Lockfiles</a></div>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="num">03</div>
+        <div>
+          <div class="tags"><span class="tag green">安全</span><span class="tag">AppSec</span></div>
+          <h3>AWS Continuum 正式可用：先在沙箱里跑真实漏洞利用，再自动提交修复 PR</h3>
+          <p>
+            AWS Continuum 已在两个区域正式可用，它通过沙箱中运行真实 exploit 来证明漏洞可利用性，然后把修复作为 pull request 提交。定价同时按处理的 finding 和代码行数计费，这也让“是否允许它自动合并修复”成为团队必须回答的治理问题。它适合作为 AppSec 流水线中的验证层，但不应替代人工对业务语义和修复风险的审查。
+          </p>
+          <div class="source"><a href="https://www.infoq.com/news/2026/11/aws-continuum-ga/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · AWS Continuum</a></div>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="num">04</div>
+        <div>
+          <div class="tags"><span class="tag purple">Agent</span><span class="tag pink">隔离</span></div>
+          <h3>Docker Sandboxes 与容器不是一回事：自治 Agent 需要 microVM 级隔离</h3>
+          <p>
+            普通容器只是共享宿主机内核的隔离进程；Docker Sandboxes 则是拥有独立 Linux 内核、文件系统、网络和 Docker Engine 的专用 microVM，面向需要完整开发环境的自治编码 Agent。Sandbox 内部还能再运行容器，所以两者很容易被混为一谈。选择原则可以很直接：执行不受信任的 Agent 代码时优先 microVM，构建可信工作负载时继续用容器。
+          </p>
+          <div class="source"><a href="https://www.docker.com/blog/docker-sandboxes-vs-containers/" target="_blank" rel="noopener">Docker Blog · Sandboxes vs Containers</a></div>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="num">05</div>
+        <div>
+          <div class="tags"><span class="tag">Go</span><span class="tag green">性能调优</span></div>
+          <h3>GoLand 2026.3：Profiler 接入 AI Agent，按症状自动采样</h3>
+          <p>
+            在 GoLand 2026.3 中，AI Agent 可以直接调用内置 profiler。你只需描述症状，例如“POST /reindex 的重建索引明显变慢，帮我 profile 一下”，Agent 就会带 profiler 启动应用、选择 profile 并分析结果。JetBrains 表示它定位到了与人工相同的瓶颈，而 token 消耗约为一半；真正的价值是把“记得怎么采、怎么读 pprof”的门槛降下来，而不是跳过基于证据的性能分析。
+          </p>
+          <div class="source"><a href="https://blog.jetbrains.com/go/2026/11/06/we-gave-ai-agents-goland-s-profiler-they-found-the-same-bottlenecks-with-half-the-tokens/" target="_blank" rel="noopener">JetBrains Blog · GoLand Profiler</a></div>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="num">06</div>
+        <div>
+          <div class="tags"><span class="tag amber">Rust</span><span class="tag">桌面端</span></div>
+          <h3>Discord 桌面端转向 Rust + GPUI：Electron 的 GB 级内存降到约 290MB</h3>
+          <p>
+            Discord 联合创始人兼 CTO 展示了正在开发的新桌面客户端：完全用 Rust 重写，界面层使用 GPUI 框架。早期 Windows 11 截图显示，同时登录两个账号时内存占用约 <strong>290.2MB</strong>；作为对比，现有 Electron 客户端闲置时可能占用 1–2GB，极端情况下接近 4GB。需要冷静看待的是，这只是早期开发版本的一次运行数据，语音、视频、屏幕共享和长时间运行后的表现尚未公布。
+          </p>
+          <div class="source"><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247838214&amp;idx=2&amp;sn=0a74b7c77714db7bf0d6138cbea04535" target="_blank" rel="noopener">CSDN · Discord Rust 客户端</a></div>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="num">07</div>
+        <div>
+          <div class="tags"><span class="tag green">Node.js</span><span class="tag">JavaScript</span></div>
+          <h3>Node.js 27 首个 Alpha：六个月 alpha 周期，V8 15.6 与 Parcel 3 同步变化</h3>
+          <p>
+            Node.js 27 发布了首个 Alpha，并采用新的发布模型：每个大版本先经历六个月 alpha 阶段，正式稳定版预计明年四月发布。该版本基于 main 构建且包含破坏性变更，主要面向库作者和测试场景，不建议上生产。同一期生态更新中，V8 15.6 默认带来 <code>Math.sumPrecise()</code> 与 <code>Iterator.zip()</code>，默认堆上限改为物理内存的一半；Postgres.js v4.0 彻底重写，Parcel 3 核心改用 Rust 实现。
+          </p>
+          <div class="source"><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&amp;mid=2247550475&amp;idx=1&amp;sn=a493116a284f45824f14d089c20c2fbb" target="_blank" rel="noopener">印记中文 · Node 中文周刊 #247</a></div>
+        </div>
+      </article>
+
+      <article class="hot-card">
+        <div class="num">08</div>
+        <div>
+          <div class="tags"><span class="tag green">Go</span><span class="tag amber">兼容性</span></div>
+          <h3>Go 1.27：encoding/json/v2 转正，默认拒绝非法 UTF-8 与重复键</h3>
+          <p>
+            Go 1.27 将 <code>encoding/json/v2</code> 与 <code>jsontext</code> 转为稳定 API，默认拒绝非法 UTF-8 和重复键；部分反序列化基准最高提升 10 倍，旧版 API 继续保留。这里的重点不是“更快”，而是行为语义变了：过去能静默接受的脏 JSON 可能开始报错。升级前应先用真实上游数据跑兼容性测试，尤其检查重复键、非法编码和错误处理路径。
+          </p>
+          <div class="source"><a href="https://supertechfans.com/cn/post/2026-11-06-HackerNews/" target="_blank" rel="noopener">Hacker News 每日摘要 · 2026-11-06</a></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="index">02</span>
+      <h2>深度技术解读</h2>
+      <span class="rule"></span>
+    </div>
+
+    <div class="deep-grid">
+
+      <article class="deep-card">
+        <h3>23 倍内核提升与被揪出的 Bug：AI 能写补丁，但不能替代最后一道审查</h3>
+        <p class="deep-sub">case study · linux kernel / claude code / human review</p>
+
+        <p>
+          Linux 创始人 Linus Torvalds 使用 Anthropic 的 Claude Code 处理了一个困扰社区两年多的页缓存性能问题：<strong>folio 引用计数争用</strong>。在 Core i7-8565U 的 8 线程测试中，这类争用曾占到跨核 HITM 开销的 <strong>99.92%</strong>。Linus 的代码树中出现了名为 <code>noref-filemap-read-with-llm</code> 的分支，他提交的一组补丁在 Ryzen Threadripper 的合成基准上把吞吐量提升了 <strong>23 倍</strong>。
+        </p>
+
+        <p>
+          但故事没有停在“AI 赢了”。补丁正式合入主线前，社区维护者发现了一个连 Linus 和 AI 都没抓到的 Bug。引用计数、对象生命周期和并发路径本来就是内核中最难通过“跑分”证明正确的部分；合成基准能证明快，却不能证明在所有竞态窗口下都安全。AI 降低了生成候选补丁的成本，也把瓶颈进一步推向了审查、复现和边界测试。
+        </p>
+
+        <h4>对一线团队的启示</h4>
+        <div class="takeaway">
+          <strong>把 AI 产出当作候选补丁，而不是最终补丁。</strong> 性能类改动至少要通过目标硬件复现、并发/生命周期测试、维护者交叉审查和可回滚发布四道门；基准结果只回答“是否更快”，不回答“是否仍然正确”。
+        </div>
+
+        <div class="terminal">
+          <div class="bar">review checklist · performance patch</div>
+          <pre><span class="comment"># 1. 先证明问题，再证明修复</span>
+<span class="prompt">$</span> reproduce_benchmark <span class="flag">--before</span> baseline.json <span class="flag">--after</span> patch.json
+<span class="comment"># 2. 在目标硬件上重复，不只看单次最优值</span>
+<span class="comment"># 3. 跑并发、生命周期、压力与错误注入测试</span>
+<span class="comment"># 4. 让不写这段代码的人做 adversarial review</span>
+<span class="comment"># 5. 保留独立回滚路径，灰度后再合入</span></pre>
+        </div>
+
+        <div class="source"><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638392&amp;idx=1&amp;sn=05c0dba4861117a09483a09a255c7ee3" target="_blank" rel="noopener">dbaplus 社群 · Linus 用 Claude Code 改内核</a></div>
+      </article>
+
+      <article class="deep-card">
+        <h3>Agent 上下文的两条路线：少塞一点，或把稳定事实写进权重</h3>
+        <p class="deep-sub">context engineering · retrieval · weight memory · model routing</p>
+
+        <p>
+          Optiver 的工程分享给出了一个很有代表性的数字：用户还没提问，上下文里已经塞进了 <strong>200K tokens</strong>。他们的处理方式不是继续扩上下文窗口，而是通过 tool search、缓存和更好的默认值削减 context bloat。LangChain 则把检索型 Agent 的典型故障拆成三类：<strong>笨拙的搜索、过大的结果、过期的文本</strong>。这三点指向同一个工程问题：Agent harness 需要主动管理“什么进入上下文、以多大粒度进入、什么时候失效”，而不是把检索结果原样倾倒给模型。
+        </p>
+
+        <p>
+          另一条路线是把稳定知识写进模型权重。Amazon 的一项工作对比了权重记忆与检索：在相同模型和用户数据下，普通微调存储用户事实的准确率为 <strong>36.9%</strong>，on-policy self-distillation 达到 <strong>59.9%</strong>。后者在 8 个 HaluMem-Long 用户上、不提供检索上下文时，也超过了 MemOS 风格检索（47.8%）、抽取上下文（51.9%）和原始对话（51.3%），并且在 4B、9B、27B 三个规模上都成立。方法上，教师模型读取用户记忆，学生模型必须在没有记忆上下文的情况下作答。
+        </p>
+
+        <div class="metrics">
+          <div class="metric"><strong>36.9%</strong><span>普通微调的权重记忆准确率</span></div>
+          <div class="metric"><strong>59.9%</strong><span>on-policy 自蒸馏</span></div>
+          <div class="metric"><strong>47.8%</strong><span>MemOS 风格检索</span></div>
+          <div class="metric"><strong>4×</strong><span>OpenRouter 新路由减少无效工具调用</span></div>
+        </div>
+
+        <p>
+          这并不意味着“检索已死”。权重记忆更适合变化慢、需要即时召回的用户偏好与事实；检索更适合项目状态、代码库、工单和今天刚发生的变化。更现实的架构是分层：稳定事实进权重，动态状态走向量库或工具查询，再用路由层按任务选择模型。OpenRouter 的新一代 router 提供了一个旁证：其 beta 数据显示无效工具调用降低 <strong>4 倍</strong>、Agent 响应截断减少 <strong>50%</strong>、延迟降低 <strong>3 倍</strong>；Auto Code 在基准上接近 Opus 5.5，但成本低 <strong>74%</strong>，p90 延迟 <strong>0.65 秒</strong>。
+        </p>
+
+        <h4>可以落地的上下文预算</h4>
+        <div class="takeaway">
+          <strong>先量后调：</strong>记录每次请求的 prefill tokens、检索命中率、结果长度和工具调用失败率。把“加载全部工具”改为“先搜索工具”，给检索结果设长度上限与 TTL，对稳定前缀做缓存；再用评测集验证记忆分层是否真的减少重复问答。
+        </div>
+
+        <div class="source">
+          <a href="https://x.com/aiDotEngineer/status/2118810656585498718" target="_blank" rel="noopener">AI Engineer · Optiver 上下文治理</a>
+          &nbsp;·&nbsp;
+          <a href="https://x.com/LangChain/status/2118766011289682169" target="_blank" rel="noopener">LangChain · Agent harness 设计</a>
+          &nbsp;·&nbsp;
+          <a href="https://x.com/omarsar0/status/2118715786152001580" target="_blank" rel="noopener">elvis · Weight memory vs. retrieval</a>
+          &nbsp;·&nbsp;
+          <a href="https://x.com/OpenRouter/status/2118740149106573670" target="_blank" rel="noopener">OpenRouter · Auto Code</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="index">03</span>
+      <h2>工具推荐</h2>
+      <span class="rule"></span>
+    </div>
+    <p class="section-note">今天值得加进工具箱的 5 个更新，按“能否立刻用上”筛选。</p>
+
+    <div class="tools-grid">
+
+      <article class="tool-card">
+        <div class="tags"><span class="tag green">CLI</span><span class="tag">Vercel</span></div>
+        <h3>Vercel CLI：给临时项目设置自动过期</h3>
+        <p>
+          部署时加上 <code>--delete-project-after</code> 即可让原型、demo 和测试应用到期自动删除，支持 <code>1h</code>、<code>1d</code>、<code>1w</code>、<code>2w</code>、<code>30d</code>。该参数只在 <code>vercel deploy</code> 创建新项目时生效；对已有项目使用会打印警告且不改变过期时间。需要取消过期时运行 <code>vercel project keep</code>，CLI 需升级到 v65.12.0 或更高。
+        </p>
+        <div class="terminal">
+          <div class="bar">terminal</div>
+          <pre><span class="prompt">$</span> vercel deploy <span class="flag">--delete-project-after</span> 1d
+<span class="prompt">$</span> vercel project keep</pre>
+        </div>
+        <div class="source"><a href="https://vercel.com/changelog/vercel-cli-can-now-set-new-projects-to-expire" target="_blank" rel="noopener">Vercel Changelog · CLI project expiry</a></div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tags"><span class="tag green">可观测性</span><span class="tag">Vercel</span></div>
+        <h3>Vercel Tracing GA：在 Dashboard 和 CLI 里查慢请求</h3>
+        <p>
+          Vercel Tracing 已面向所有套餐正式可用，新 Next.js 项目默认开启。Dashboard 新增 Traces 页面，可在一个地方查看项目和团队的全部 trace、span，支持 Spans/Traces 切换、过滤、KQL 查询和 Live 模式。CLI 的 <code>vercel traces search --query</code> 使用同一套 KQL，方便把排障查询脚本化。
+        </p>
+        <div class="terminal">
+          <div class="bar">terminal</div>
+          <pre><span class="prompt">$</span> vercel traces search <span class="flag">--query</span> <span class="str">'span.name:db* AND span.duration &gt; 500'</span></pre>
+        </div>
+        <div class="source"><a href="https://vercel.com/changelog/vercel-tracing-is-now-generally-available" target="_blank" rel="noopener">Vercel Changelog · Tracing GA</a></div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tags"><span class="tag amber">模型路由</span><span class="tag">Agent</span></div>
+        <h3>OpenRouter Auto Code：给编码 Agent 按请求选模型</h3>
+        <p>
+          OpenRouter 推出新一代路由器，Auto Code 面向编码 Agent，按请求展示路由决策。官方称其在基准上接近 Opus 5.5，成本低 74%，p90 延迟 0.65 秒；beta 期间无效工具调用降低 4 倍、Agent 响应截断减少 50%、延迟降低 3 倍。适合已有多个模型供应商、希望在不改业务代码的情况下优化成本与成功率的团队。
+        </p>
+        <div class="source"><a href="https://x.com/OpenRouter/status/2118740149106573670" target="_blank" rel="noopener">OpenRouter · Auto Code</a> &nbsp;·&nbsp; <a href="https://x.com/OpenRouter/status/2118740269302759597" target="_blank" rel="noopener">beta 数据</a></div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tags"><span class="tag purple">MCP</span><span class="tag">GitLab</span></div>
+        <h3>GitLab 19.5：MCP Server 正式可用，Agent 进入治理范围</h3>
+        <p>
+          GitLab 19.5 将 Agentic 软件开发与治理放到平台中心，GitLab MCP server 正式 GA，并扩展了外部 AI Agent 与 GitLab 交互的方式。对平台团队来说，重点不是“又多了一个 MCP 入口”，而是可以把 Agent 对仓库、Issue、合并请求的操作纳入现有权限与审计体系，而不是让每个团队各自直连 API。
+        </p>
+        <div class="source"><a href="https://www.infoq.com/news/2026/11/gitlab-19-5-agentic-platform/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · GitLab 19.5</a></div>
+      </article>
+
+      <article class="tool-card">
+        <div class="tags"><span class="tag green">本地优先</span><span class="tag">macOS</span></div>
+        <h3>Local Code：面向 Mac 的本地优先 AI Agent</h3>
+        <p>
+          Local Code 为 Mac 用户提供本地模型 Agent，初始化时会根据设备配置选择合适模型，并允许在设备端与云端模型之间切换。它支持调整推理强度、思考预算、模型预热与空闲卸载，以及为 8bit 模型启用 Apple Neural Engine。功能成熟度与商业 Agent 产品仍有差距，但适合对数据不出本机有要求、又不想手搓 Ollama 调用链的开发者。
+        </p>
+        <div class="source"><a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639444&amp;idx=1&amp;sn=3e8598d01a4025f9a8580fb735dc4cb7" target="_blank" rel="noopener">少数派 · Local Code</a></div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="index">04</span>
+      <h2>实践指南</h2>
+      <span class="rule"></span>
+    </div>
+    <p class="section-note">把今天的新闻转成明天就能执行的检查项。</p>
+
+    <div class="practice-list">
+
+      <article class="practice">
+        <h3>给 Agent 划清执行边界：不可信代码进 microVM，密钥不进沙箱</h3>
+        <p>
+          Docker Sandboxes 与容器的差异说明，共享宿主内核的容器并不适合承载任意自治 Agent 代码。执行边界应包括独立内核或 microVM、最小化出站网络、短期凭证和独立文件系统；长期云密钥不要挂进 Agent 环境，改用短 TTL 的委托令牌，并记录每次工具调用。
+        </p>
+      </article>
+
+      <article class="practice">
+        <h3>为 AI 生成的性能补丁建立“四道门”</h3>
+        <ul>
+          <li>目标硬件复现：记录基线、补丁后数据和波动范围，不只看最佳值。</li>
+          <li>并发与生命周期测试：引用计数、锁、对象释放路径必须有专门用例。</li>
+          <li>交叉审查：让未参与生成的人做 adversarial review，重点看边界条件。</li>
+          <li>可回滚发布：灰度、开关、独立回滚路径，避免一次性合入主线。</li>
+        </ul>
+      </article>
+
+      <article class="practice">
+        <h3>把 CI/CD 依赖从“隐式最新”改成“显式锁定”</h3>
+        <p>
+          GitHub Actions lockfiles 已 GA，建议把第三方 action 的版本升级纳入 code review：锁定解析结果、保留可读引用、限制 workflow token 权限、对外部 action 做来源审查。对安全修复则要保留快速升级通道，避免“锁死”变成“永不更新”。
+        </p>
+      </article>
+
+      <article class="practice">
+        <h3>建立上下文预算，而不是不断加大窗口</h3>
+        <p>
+          统计每次 Agent 请求的 prefill tokens、检索结果长度、工具定义数量和失败率。优先做四件事：按需搜索工具而不是全量注入；给检索结果设长度上限；对稳定前缀做缓存；为文档和记忆设置 TTL 与失效策略。每项优化都应在固定评测集上对比成功率、延迟和成本。
+        </p>
+      </article>
+
+      <article class="practice">
+        <h3>运行时升级要分三条线验证</h3>
+        <ul>
+          <li><strong>TypeScript 7.1：</strong>先验证编辑器问题与 Compiler API 消费方，必要时保留 TS 6 双版本过渡。</li>
+          <li><strong>Node.js 27 Alpha：</strong>只用于库作者和测试环境，不进入生产；关注破坏性变更与 V8 15.6 行为。</li>
+          <li><strong>Go 1.27：</strong>用真实数据测试 encoding/json/v2 对重复键、非法 UTF-8 和错误路径的处理变化，再评估 10 倍反序列化收益。</li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="section-head">
+      <span class="index">05</span>
+      <h2>参考链接汇总</h2>
+      <span class="rule"></span>
+    </div>
+    <p class="note">数据窗口：2026-11-05 22:28:03 至 2026-11-06 22:28:03 · 525 条资讯 / 424 个来源 · 以下为本文引用的原始链接。</p>
+
+    <ul class="source-list">
+      <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/typescript-7-1-beta/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">TypeScript 7.1 Beta: Restores the Compiler API and Makes Vue and Svelte First-Class</a></li>
+      <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/github-actions-lockfiles-ga/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">GitHub Actions Lockfiles Reach GA to Secure Workflow Dependencies</a></li>
+      <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/aws-continuum-ga/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">AWS Ships Continuum for Code Vulnerabilities</a></li>
+      <li><span class="feed">Docker Blog</span><a href="https://www.docker.com/blog/docker-sandboxes-vs-containers/" target="_blank" rel="noopener">Docker Sandboxes vs. Containers: Choosing the Right Isolation for AI Agents</a></li>
+      <li><span class="feed">JetBrains Blog</span><a href="https://blog.jetbrains.com/go/2026/11/06/we-gave-ai-agents-goland-s-profiler-they-found-the-same-bottlenecks-with-half-the-tokens/" target="_blank" rel="noopener">GoLand’s Profiler Now Works With AI Agents</a></li>
+      <li><span class="feed">CSDN</span><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247838214&amp;idx=2&amp;sn=0a74b7c77714db7bf0d6138cbea04535" target="_blank" rel="noopener">弃用 Electron、4GB 内存占用直接砍到 290MB！Discord 宣布用 Rust 重写客户端</a></li>
+      <li><span class="feed">印记中文</span><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&amp;mid=2247550475&amp;idx=1&amp;sn=a493116a284f45824f14d089c20c2fbb" target="_blank" rel="noopener">Node 中文周刊 #247 - Node 27 首个 Alpha 版本发布</a></li>
+      <li><span class="feed">Hacker News 每日摘要</span><a href="https://supertechfans.com/cn/post/2026-11-06-HackerNews/" target="_blank" rel="noopener">2026-11-06 Hacker News Top Stories</a></li>
+      <li><span class="feed">dbaplus 社群</span><a href="https://mp.weixin.qq.com/s?__biz=MzkzMjYzNjkzNw==&amp;mid=2247638392&amp;idx=1&amp;sn=05c0dba4861117a09483a09a255c7ee3" target="_blank" rel="noopener">Linus 现用 Claude Code 改内核：性能暴涨 23 倍，结果被维护者发现 Bug</a></li>
+      <li><span class="feed">AI Engineer</span><a href="https://x.com/aiDotEngineer/status/2118810656585498718" target="_blank" rel="noopener">200K tokens before the user asks a question — Optiver on cutting context bloat</a></li>
+      <li><span class="feed">LangChain</span><a href="https://x.com/LangChain/status/2118766011289682169" target="_blank" rel="noopener">Designing an agent harness: clumsy searches, oversized results, stale text</a></li>
+      <li><span class="feed">elvis</span><a href="https://x.com/omarsar0/status/2118715786152001580" target="_blank" rel="noopener">Weight memory vs. retrieval in agents — Amazon research</a></li>
+      <li><span class="feed">OpenRouter</span><a href="https://x.com/OpenRouter/status/2118740149106573670" target="_blank" rel="noopener">Introducing Auto Router and Auto Code</a></li>
+      <li><span class="feed">OpenRouter</span><a href="https://x.com/OpenRouter/status/2118740269302759597" target="_blank" rel="noopener">Auto Router beta: 4× lower invalid tool calls</a></li>
+      <li><span class="feed">Vercel News</span><a href="https://vercel.com/changelog/vercel-cli-can-now-set-new-projects-to-expire" target="_blank" rel="noopener">Vercel CLI can now set new projects to expire</a></li>
+      <li><span class="feed">Vercel News</span><a href="https://vercel.com/changelog/vercel-tracing-is-now-generally-available" target="_blank" rel="noopener">Vercel Tracing is now generally available</a></li>
+      <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/gitlab-19-5-agentic-platform/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">GitLab 19.5 Makes Agentic Development a Governed Part of the DevOps Platform</a></li>
+      <li><span class="feed">少数派</span><a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&amp;mid=2247639444&amp;idx=1&amp;sn=3e8598d01a4025f9a8580fb735dc4cb7" target="_blank" rel="noopener">Local Code：本地优先的 AI Agent 工具</a></li>
+    </ul>
+
+    <div class="end">generated for developer_practice · 2026-11-06 · enjoy the build</div>
+  </footer>
+
+</div>
+</body>
+</html>
