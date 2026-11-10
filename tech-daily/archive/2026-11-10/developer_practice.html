@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践版 · 科技日报 2026-11-10</title>
+<style>
+  :root{
+    --bg:#0b0f14;
+    --panel:#111820;
+    --panel-2:#0e141b;
+    --border:#1f2a36;
+    --text:#d6e2ee;
+    --muted:#8296a8;
+    --dim:#5b6b7c;
+    --accent:#3fb950;
+    --accent-2:#58a6ff;
+    --warn:#d29922;
+    --pink:#bc8cff;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Fira Code",Menlo,Consolas,"PingFang SC","Microsoft YaHei",monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(63,185,80,.07), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(88,166,255,.06), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--mono);
+    font-size:15px;
+    line-height:1.72;
+    letter-spacing:.1px;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent-2);text-decoration:none;border-bottom:1px dashed rgba(88,166,255,.35);}
+  a:hover{color:#9ecbff;border-bottom-color:#9ecbff;}
+  code{
+    font-family:var(--mono);
+    background:#0a1016;
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:1px 6px;
+    font-size:.9em;
+    color:#9fd8ff;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px 72px;}
+
+  /* ---------- header ---------- */
+  header.top{
+    padding:46px 0 30px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:38px;
+    position:relative;
+  }
+  .prompt-line{
+    color:var(--dim);
+    font-size:13px;
+    margin-bottom:18px;
+    user-select:none;
+  }
+  .prompt-line .sym{color:var(--accent);}
+  .badge{
+    display:inline-block;
+    font-size:11.5px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--accent);
+    border:1px solid rgba(63,185,80,.4);
+    background:rgba(63,185,80,.08);
+    border-radius:3px;
+    padding:4px 10px;
+    margin-bottom:16px;
+  }
+  h1{
+    font-size:clamp(26px,4.4vw,40px);
+    line-height:1.2;
+    margin:0 0 14px;
+    font-weight:700;
+    letter-spacing:-.5px;
+  }
+  h1 .accent{color:var(--accent);}
+  .subtitle{color:var(--muted);font-size:14px;margin:0;}
+  .meta-row{
+    display:flex;flex-wrap:wrap;gap:10px 22px;
+    margin-top:22px;font-size:12.5px;color:var(--dim);
+  }
+  .meta-row span b{color:var(--muted);font-weight:400;}
+
+  /* ---------- section heading ---------- */
+  section{margin:54px 0 0;}
+  .sec-head{
+    display:flex;align-items:baseline;gap:14px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:12px;margin-bottom:26px;
+  }
+  .sec-head .idx{
+    font-size:13px;color:var(--accent);letter-spacing:1px;
+  }
+  .sec-head h2{
+    font-size:20px;margin:0;font-weight:700;letter-spacing:.5px;
+  }
+  .sec-head .note{margin-left:auto;font-size:12px;color:var(--dim);}
+
+  /* ---------- hot list ---------- */
+  .hot{display:flex;flex-direction:column;gap:16px;}
+  .card{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--border);
+    border-left:3px solid var(--accent);
+    border-radius:6px;
+    padding:20px 22px;
+    transition:border-color .18s ease,transform .18s ease;
+  }
+  .card:hover{border-left-color:var(--accent-2);transform:translateX(2px);}
+  .card h3{
+    margin:0 0 9px;font-size:16.5px;font-weight:700;line-height:1.45;
+    display:flex;gap:12px;align-items:baseline;
+  }
+  .card h3 .n{
+    color:var(--accent);font-size:13px;font-weight:400;flex:0 0 auto;
+  }
+  .card p{margin:0;color:#b9c8d7;font-size:14px;}
+  .src{
+    display:inline-flex;flex-wrap:wrap;gap:6px 14px;
+    margin-top:12px;font-size:12px;color:var(--dim);
+  }
+  .src a{font-size:12px;}
+  .tag{
+    display:inline-block;font-size:11px;color:var(--pink);
+    border:1px solid rgba(188,140,255,.3);
+    background:rgba(188,140,255,.07);
+    border-radius:3px;padding:1px 7px;margin-left:8px;
+    vertical-align:middle;white-space:nowrap;
+  }
+
+  /* ---------- deep dive ---------- */
+  .dive{
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:26px 28px;
+    margin-bottom:26px;
+  }
+  .dive .dive-kicker{font-size:11.5px;letter-spacing:1.4px;color:var(--accent-2);text-transform:uppercase;margin-bottom:10px;}
+  .dive h3{margin:0 0 14px;font-size:19px;line-height:1.4;}
+  .dive h4{margin:22px 0 8px;font-size:14.5px;color:var(--accent);letter-spacing:.3px;}
+  .dive p{margin:0 0 12px;color:#b9c8d7;font-size:14px;}
+  .dive ul{margin:8px 0 14px;padding-left:20px;}
+  .dive li{margin-bottom:7px;color:#b9c8d7;font-size:14px;}
+  .dive li b{color:var(--text);}
+  .metrics{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;margin:16px 0 20px;
+  }
+  .metric{
+    background:#0a1016;border:1px solid var(--border);border-radius:6px;
+    padding:12px 14px;
+  }
+  .metric .k{font-size:11.5px;color:var(--dim);letter-spacing:.5px;}
+  .metric .v{font-size:19px;color:var(--accent);font-weight:700;margin-top:2px;}
+  .metric .s{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+  /* ---------- tools ---------- */
+  .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+  .tool{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--border);border-radius:6px;
+    padding:18px 20px;
+    border-top:2px solid var(--accent-2);
+  }
+  .tool h3{margin:0 0 8px;font-size:15.5px;}
+  .tool h3 .lang{font-size:11px;color:var(--dim);font-weight:400;margin-left:6px;}
+  .tool p{margin:0;font-size:13.5px;color:#b3c2d1;}
+  .tool .src{margin-top:10px;}
+
+  /* ---------- practice ---------- */
+  .prac{display:flex;flex-direction:column;gap:14px;}
+  .prac-item{
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:18px 20px 18px 58px;
+    position:relative;
+  }
+  .prac-item .pill{
+    position:absolute;left:16px;top:18px;
+    width:26px;height:26px;border-radius:5px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;color:#0b0f14;background:var(--accent);font-weight:700;
+  }
+  .prac-item h3{margin:0 0 7px;font-size:15.5px;}
+  .prac-item p{margin:0;font-size:13.8px;color:#b3c2d1;}
+  .prac-item p + p{margin-top:8px;}
+  pre{
+    margin:12px 0 0;background:#070c11;border:1px solid var(--border);
+    border-radius:5px;padding:13px 15px;overflow-x:auto;
+    font-size:12.6px;line-height:1.65;color:#a9c4dc;
+  }
+  pre .c{color:#5b7186;}
+  pre .kw{color:#ff7b72;}
+  pre .fn{color:#d2a8ff;}
+  pre .st{color:#7ee787;}
+
+  /* ---------- sources ---------- */
+  .sources{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:8px;
+    padding:24px 26px;
+  }
+  .sources ol{
+    margin:0;padding-left:22px;columns:1;
+    font-size:12.8px;line-height:1.9;
+  }
+  .sources li{color:var(--muted);margin-bottom:2px;break-inside:avoid;}
+  .sources li a{font-size:12.8px;}
+  .sources .feed{color:var(--dim);}
+  @media(min-width:720px){ .sources ol{columns:2;column-gap:34px;} }
+
+  footer{
+    margin-top:56px;padding-top:24px;border-top:1px solid var(--border);
+    color:var(--dim);font-size:12px;line-height:1.8;
+  }
+  footer .sig{color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="prompt-line"><span class="sym">$</span> tech-daily --role developer_practice --date 2026-11-10</div>
+    <span class="badge">Developer Practice · 开发者实践版</span>
+    <h1>代码会写了，<span class="accent">验证和成本</span>成了新瓶颈</h1>
+    <p class="subtitle">面向一线工程师：模型与工具更新、工程实践、可落地的踩坑经验。</p>
+    <div class="meta-row">
+      <span><b>数据窗口</b> 2026-11-09 00:55 → 2026-11-10 00:55</span>
+      <span><b>样本</b> 608 条 / 424 个来源</span>
+      <span><b>筛选视角</b> 技术细节 · 工具 · 最佳实践</span>
+    </div>
+  </header>
+
+  <!-- ============ 01 今日技术热榜 ============ -->
+  <section id="hot">
+    <div class="sec-head">
+      <span class="idx">01</span>
+      <h2>今日技术热榜</h2>
+      <span class="note">8 条 / 按开发者价值排序</span>
+    </div>
+
+    <div class="hot">
+
+      <article class="card">
+        <h3><span class="n">01</span>Claude Fable 5.2 上线：Coding 更强、单价更低，但很费 token<span class="tag">模型</span></h3>
+        <p>Anthropic 发布 Claude Fable 5.2（同步还有 Mythos 5.2），API 定价为 <code>$8/M</code> 输入、<code>$40/M</code> 输出，比 Fable 5.1 低 20%。在 CursorBench 上默认 effort 得分 56.9%（5.1 为 49.2%），max effort 以 60% 登顶；FrontierCode 2.0 早期测试中 High effort 约等于 Opus 5.5 Max，而单任务成本约为一半，Medium 是 Claude 应用与 Claude Code 的默认档。两个要注意的点：它输出最多快 30%，但 token 消耗明显更大，实测单任务成本与 5.1 基本持平；Cursor 也建议不要沿用旧模型的 effort 设置，先从默认值重新调。</p>
+        <div class="src">📎 来源：
+          <a href="https://x.com/cursor_ai/status/2119880841728000057" target="_blank" rel="noopener">Cursor（定价）</a>
+          <a href="https://x.com/cursor_ai/status/2119880829212172509" target="_blank" rel="noopener">Cursor（CursorBench）</a>
+          <a href="https://x.com/claudeai/status/2119867122683953298" target="_blank" rel="noopener">Claude（FrontierCode）</a>
+          <a href="https://x.com/addyosmani/status/2119907165007945813" target="_blank" rel="noopener">Addy Osmani（token 成本）</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="n">02</span>Meta Muse Ember：给 Agent 当“小工”的超低价模型<span class="tag">模型</span></h3>
+        <p>Meta 发布迄今最小、最省的 Muse Ember，定位是 agent 的“跑腿模型”——主模型负责拆解任务，把读文件、跑测试、改小毛病这类几百次的小活交给它。价格 <code>$0.10/M</code> 输入、<code>$0.50/M</code> 输出（缓存输入 <code>$0.004</code>），1M 上下文、单次最多 51.2 万输出，原生支持文本/图像/音频/视频，模型名 <code>muse-ember-1.0</code>。Artificial Analysis 智能指数 36 分（Muse Spark 1.3 为 37），单题成本 $0.14 对 $2.39，约 1/17；在 Code Arena 是表现最好的小模型，平均约 2 分钟、约 $0.04 一个任务。典型用法是“前沿模型规划、Ember 扇出执行”。</p>
+        <div class="src">📎 来源：
+          <a href="https://x.com/AIatMeta/status/2119853597542568405" target="_blank" rel="noopener">AI at Meta（价格）</a>
+          <a href="https://x.com/AIatMeta/status/2119853591703998787" target="_blank" rel="noopener">AI at Meta（能力）</a>
+          <a href="https://x.com/arena/status/2119858226867122459" target="_blank" rel="noopener">Arena（Code Arena）</a>
+          <a href="https://x.com/dotey/status/2119868647220842659" target="_blank" rel="noopener">宝玉（成本拆解）</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="n">03</span>TIOBE 11 月：Rust 跌出前十，Dart 首次进前二十<span class="tag">生态</span></h3>
+        <p>11 月 TIOBE 榜单中 Python 仍居首（20.86%），C 第二（11.48%），Java（8.89%）反超 C++（8.35%）升至第三。最受关注的变化是 Rust 从此前的 Top 10 回落至第 11（1.63%），被 Go 反超；Dart 首次进入 Top 20，把上个月刚回到前 20 的 Julia 挤了出去。榜单衡量的是搜索与讨论热度而非工程质量，但对技术选型、招聘和团队技能规划仍有参考意义。</p>
+        <div class="src">📎 来源：
+          <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247838271&idx=2&sn=9508f0e24d633dd759bb16aab97acc2f" target="_blank" rel="noopener">CSDN</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="n">04</span>Discord 客户端弃 Electron 转 Rust，内存降约七成<span class="tag">工程</span></h3>
+        <p>Discord 联合创始人兼 CTO 展示了正在迁移的新客户端 “Discord Phoenix”：桌面端移除 Electron，移动端放弃 React Native，全部转向 Rust。Windows 版本内存约 290.2MB，而旧客户端在多服务器场景下常达 1GB 以上；网页端将保留 HTML 渲染器，但逻辑层改用 WASM 而非 JS。目前未公布正式上线时间，只表示希望尽快开放用户测试。</p>
+        <div class="src">📎 来源：
+          <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651296873&idx=1&sn=f38dc6f8a6273f09af92b906c90ea8c5" target="_blank" rel="noopener">InfoQ</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="n">05</span>Vercel Sandbox 快照提速 10 倍，镜像层上限提到 2GB<span class="tag">工具链</span></h3>
+        <p>Vercel Sandbox 快照创建最高快 10 倍，中位耗时从 4.4 秒降到 0.4 秒以下，恢复速度从 p50 500ms 提升到 250ms。实现上改进了 VHS 快照格式的数据索引，让更多读写操作并行，并可与基础镜像并行恢复；持久沙箱默认自动快照、无需配置。同期 Vercel Container Registry 单层压缩镜像上限从 500MB 提升到 2GB（总大小仍为 15GB），兼容 <code>docker push/pull/tag</code>，可用 <code>vercel vcr</code>（CLI v58.3.0+）管理。</p>
+        <div class="src">📎 来源：
+          <a href="https://vercel.com/changelog/vercel-sandbox-snapshot-creation-is-now-up-to-10x-faster" target="_blank" rel="noopener">Vercel（Sandbox 快照）</a>
+          <a href="https://vercel.com/changelog/vercel-container-registry-now-supports-2-gb-compressed-image-layers" target="_blank" rel="noopener">Vercel（镜像层）</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="n">06</span>AWS TorchNeuron：PyTorch 模型几乎不改代码就能跑在 Trainium 上<span class="tag">训练</span></h3>
+        <p>在 PyTorch Conference North America 2026 上，Amazon 发布 TorchNeuron——一个原生 PyTorch 后端，让现有 PyTorch 代码几乎无需修改即可运行在 AWS Trainium 芯片上。对已经在 PyTorch 上投入的团队，这降低了把训练/推理迁到自研加速器的移植成本，也多了一个 GPU 之外的成本对照选项。</p>
+        <div class="src">📎 来源：
+          <a href="https://www.infoq.com/news/2026/11/aws-torchneuron-trainium-pytorch/" target="_blank" rel="noopener">InfoQ</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="n">07</span>GitHub Octoverse：近一半 PR 由 AI Agent 发起<span class="tag">生态</span></h3>
+        <p>GitHub 的 Octoverse 报告要点：平台上近一半 pull request 现在由 AI Agent 发起，其中 90% 会在两周内合并；TypeScript 继续是最流行语言；团队普遍在 GitHub Copilot 中混用多个前沿模型。报告同时提示开发者市场（marketplace）的供应链风险，提醒引入第三方 Action / 包时加强审查。</p>
+        <div class="src">📎 来源：
+          <a href="https://www.youtube.com/shorts/TNBTFejit2g" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="n">08</span>Mistral Cloud 上新：Workflows 正式可用，Managed Agents 进预览<span class="tag">平台</span></h3>
+        <p>Mistral 宣布 Apps（公开预览）、Managed Agents（公开预览）与 Workflows（正式可用）在 Mistral Cloud 上线，并将于 11 月底延伸到私有云和本地部署。对需要托管式 Agent 编排、同时又要求私有化落地的团队，这是新增的一个可选项。</p>
+        <div class="src">📎 来源：
+          <a href="https://x.com/MistralAI/status/2119813353363370134" target="_blank" rel="noopener">Mistral AI</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ 02 深度技术解读 ============ -->
+  <section id="deep">
+    <div class="sec-head">
+      <span class="idx">02</span>
+      <h2>深度技术解读</h2>
+      <span class="note">2 个话题 / 工程视角</span>
+    </div>
+
+    <div class="dive">
+      <div class="dive-kicker">Deep Dive #1 · Agent 工程</div>
+      <h3>让 Agent 连续重构三周，然后你去看代码：自治 Agent 的“验证陷阱”</h3>
+
+      <p>微软产品经理 Keiji Kanazawa 让 Claude Code 和 Codex 连续三周重构自己的研究助手，一天烧掉约 100 美元、是平时一周 token 预算的 5 倍。等他真正去读代码时才发现：所谓的“Agent”其实还是一个确定性工作流；多个 Skills 没有 <code>SKILL.md</code>；几个不同的架构概念其实是同一个东西的别名；每日反思任务一直产出空报告。更严重的是，coding agent 把单元测试直接接到了生产推理接口上，一天跑了约 30 轮。他复盘时承认，自己批准的是“计划”，却从未验证实现是否兑现了标签所承诺的含义。</p>
+
+      <div class="metrics">
+        <div class="metric"><div class="k">单日成本</div><div class="v">$100</div><div class="s">≈ 平时一周预算的 5 倍</div></div>
+        <div class="metric"><div class="k">重构周期</div><div class="v">3 周</div><div class="s">期间几乎没读过代码</div></div>
+        <div class="metric"><div class="k">误跑生产测试</div><div class="v">~30 轮</div><div class="s">单测直连生产推理</div></div>
+        <div class="metric"><div class="k">最终结果</div><div class="v">推倒重来</div><div class="s">重建为显式 agent runtime</div></div>
+      </div>
+
+      <p>同一周，腾讯技术工程的工程师 maple 从另一侧描述了同一个问题。他们团队的代码提交量涨到以前的几十倍，但可控性在整条链上下滑：需求评审时产品一句“这个边界先不用管，实际业务不会这么用”，传统开发里会被人默默裁掉，但 AI 不知道这条隐性约束，会认真地把边界展开成十几个状态、一堆异常路径和兼容分支。于是一个中等需求从过去的二三十次提交膨胀到六百多次，review 从“判断对不对”退化成“看着像不像”，测试追不上就用 AI 批量生成用例，开发再批量改，形成恶性循环。</p>
+
+      <h4>两个案例指向同一个根因</h4>
+      <ul>
+        <li><b>Agent 的自我报告不可信。</b>“我做完了”不等于真的完成；测试有没有真的跑、跑的是不是正确环境，需要外部证据。</li>
+        <li><b>隐性知识没有被显式化。</b>哪些边界不用管、哪些兼容可以放弃、哪些测试不值得开单，这些不在文档里，AI 默认“全部有效、全部覆盖”。</li>
+        <li><b>人的 review 带宽是真正的天花板。</b>变更一旦超过某个量级，review 就从质量判断退化为模式匹配。</li>
+      </ul>
+
+      <h4>可操作的收敛方式</h4>
+      <p>Keiji 的做法是把系统重建在显式的 agent runtime、更清晰的规格和“目标 rubric”之上，并在选框架前先横向比较了四种框架。对多数团队，更轻量的做法是先把验收标准写死：定义什么叫“完成”、让 agent 用新的 E2E case、截图甚至录屏自证、跑检查直到通过；同时把重复出现的纠正沉淀到 <code>agents.md</code>，避免同一个错误在长上下文里反复发生。核心原则只有一句：<b>看系统状态和事件日志，而不是看 agent 怎么说</b>。</p>
+
+      <div class="src">📎 来源：
+        <a href="https://www.youtube.com/watch?v=6TjFjHPjVH0" target="_blank" rel="noopener">AI Engineer（Keiji Kanazawa）</a>
+        <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247838271&idx=1&sn=9e5ef2673b98eab57155213e09cdb62e" target="_blank" rel="noopener">CSDN（事件还原）</a>
+        <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649808120&idx=1&sn=b007fdc7119e2018ef1a0ffda9a41b0a" target="_blank" rel="noopener">腾讯技术工程（加速陷阱）</a>
+      </div>
+    </div>
+
+    <div class="dive">
+      <div class="dive-kicker">Deep Dive #2 · AI 基础设施</div>
+      <h3>Google 同期重做了四层：长上下文训练、单控调度、推理状态层、动态切片</h3>
+
+      <p>这一波 Google 的基础设施更新看似分散，实际指向同一个目标：让大规模加速器集群在“百万 token、拆分式推理、持续 RL”的新负载下少空转。四块拼图分别是训练、调度、状态搬运和部署。</p>
+
+      <h4>① MaxText Context Parallelism：把长上下文训练推到 1400 万 token</h4>
+      <p>Cloud TPU 上的 MaxText 框架现在支持最高 1400 万 token 的长上下文训练，实现了四种上下文并行策略：All-gather、A2A、P2P 和 USP。它由 Tokamax Splash Attention kernel 支撑，能在不把完整 KV 序列物化到高带宽显存（HBM）的前提下，处理 attention 的计算与显存瓶颈。开发者可在 MaxText v0.2.4 中启用，目标是在大规模训练中维持较高的 MFU。</p>
+
+      <h4>② Pathways：用单控制器替代同步集合通信</h4>
+      <p>Pathways 是一个单控制器分布式训练系统，把计算表示成全局 dataflow 图，用异步派发和中心调度器协调多个加速器组。与 DDP、FSDP 这类 SPMD 依赖同步集合通信不同，它通过“虚拟设备”把模型定义与物理硬件解耦，更适合动态负载，例如 RL 后训练。</p>
+
+      <h4>③ TPU Sync：把 KV cache 和权重当成“模型状态层”</h4>
+      <p>TPU Sync 的出发点是：当负载从无状态单轮 prompt 转向百万 token agent、disaggregated serving 和持续 RL，瓶颈已从纯算力转移到“活模型状态”的编排——推理时的大规模 KV cache，以及 RL 中从 trainer 广播到 rollout sampler 的参数。它把 HBM、host DRAM、共享存储和数据中心网络统一成一层模型状态层，避免状态被困在单芯片显存里导致加速器空转。</p>
+
+      <h4>④ GKE Dynamic Slicing：逻辑切片与物理 nodepool 解耦</h4>
+      <p>GKE 的 Dynamic Slicing 正式 GA，把逻辑 TPU slice 的形成与物理 nodepool 供给解耦。相比为每个 slice 建静态 nodepool，AI 负载启动时间最高缩短 5 倍、故障恢复快 4.5 倍，并允许一个多主机 nodepool 承载多个负载。</p>
+
+      <p><b>给一线工程师的启示：</b>当你在做长上下文/RAG/RL 系统时，成本瓶颈很可能不在“模型单价”，而在状态搬运与调度空转。选型时除了看吞吐，也要看 KV cache 能否分层、能否并行恢复、切片是否随负载弹性伸缩。</p>
+
+      <div class="src">📎 来源：
+        <a href="https://developers.googleblog.com/announcing-long-context-training-on-tpus-with-maxtext-context-parallelism/" target="_blank" rel="noopener">Google Developers Blog（MaxText）</a>
+        <a href="https://developers.googleblog.com/what-is-pathways-single-controller-training-for-large-models/" target="_blank" rel="noopener">Google Developers Blog（Pathways）</a>
+        <a href="https://cloud.google.com/blog/topics/ai-infrastructure/introducing-tpu-sync-fast-kv-cache-and-weight-transfer-on-tpu/" target="_blank" rel="noopener">Cloud Blog（TPU Sync）</a>
+        <a href="https://cloud.google.com/blog/products/containers-kubernetes/gke-dynamic-slicing-on-tpus/" target="_blank" rel="noopener">Cloud Blog（Dynamic Slicing）</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 工具推荐 ============ -->
+  <section id="tools">
+    <div class="sec-head">
+      <span class="idx">03</span>
+      <h2>工具推荐</h2>
+      <span class="note">5 个 / 可直接上手</span>
+    </div>
+
+    <div class="tools">
+
+      <article class="tool">
+        <h3>gitmanual <span class="lang">repo → 安装手册</span></h3>
+        <p>很多仓库的 README 张口就是 <code>npm install</code>，却不告诉你需要哪个 Node 版本、数据库要不要自己起。gitmanual 会把仓库翻一遍，按你的操作系统生成一份能照着敲的安装手册，适合快速接手陌生项目。</p>
+        <div class="src">📎 <a href="https://x.com/geekbb/status/2119680133464314232" target="_blank" rel="noopener">Geek</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>T3 Code <span class="lang">多 Agent 会话前端</span></h3>
+        <p>界面与交互口碑不错，初始化时能把 Claude 和 Codex 的会话线程都导入进来，实现无缝衔接。适合同时使用多个 coding agent、又想把历史会话统一管理的人。</p>
+        <div class="src">📎 <a href="https://x.com/vista8/status/2119664801546916266" target="_blank" rel="noopener">向阳乔木</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>Capwise <span class="lang">开源录屏 / 内测</span></h3>
+        <p>录好视频自动生成双语字幕，鼠标点击自动缩放、展示快捷键，支持摄像头美颜与录屏背景美化。关键是对 agent 友好：提供 CLI，第三方 Agent 可调用自动录屏，适合把“录屏自证”接进自动化流程。</p>
+        <div class="src">📎 <a href="https://x.com/vista8/status/2119744512448987155" target="_blank" rel="noopener">向阳乔木</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>g-harness-evals <span class="lang">harness 横评</span></h3>
+        <p>Garry Tan 开源：同一个前沿模型、同一批任务，只换 agent harness（系统提示、工具、记忆），比谁更准、谁更省钱。任务不是编程题，而是虚构公司 Pemberline 的多人办公场景；判分看任务结束后的系统状态和事件日志，确认答案正确、没有泄密、没有越权读取，而不是听 agent 自述。他坦言通过率难以区分（约 71%–79%），真正拉开差距的是成本与速度。</p>
+        <div class="src">📎 <a href="https://x.com/shao__meng/status/2119715268393836956" target="_blank" rel="noopener">meng shao</a></div>
+      </article>
+
+      <article class="tool">
+        <h3>Ollama Usage 面板 <span class="lang">用量与花费</span></h3>
+        <p>新上线的用量页可以看每日/每周花费、按 API Key 的花费、各模型的输入输出 token 数，以及缓存命中率。对自建或本地推理的团队，是排查“钱花在哪”的第一站。</p>
+        <div class="src">📎 <a href="https://x.com/ollama/status/2119897229758788041" target="_blank" rel="noopener">ollama</a></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ 04 实践指南 ============ -->
+  <section id="practice">
+    <div class="sec-head">
+      <span class="idx">04</span>
+      <h2>实践指南</h2>
+      <span class="note">6 条 / 今天就能改</span>
+    </div>
+
+    <div class="prac">
+
+      <div class="prac-item">
+        <span class="pill">1</span>
+        <h3>不要相信 Agent 说“做完了”，给它外部验证机制</h3>
+        <p>明确什么才算验证通过；让它提供新的 E2E case 的通过流程、截图甚至录屏，并能自己跑检查直到通过。把“完成”的证据留在系统状态和日志里，而不是留在 agent 的总结里。</p>
+      </div>
+
+      <div class="prac-item">
+        <span class="pill">2</span>
+        <h3>把重复出现的纠正沉淀进 agents.md</h3>
+        <p>上下文一长，agent 容易反复犯同一个错。经验法则是：同一个问题你手动纠正两次，就把它持久化到 <code>agents.md</code>，下次不必再纠正。这是最低成本的“记忆”，比不断重写长提示词可靠。</p>
+      </div>
+
+      <div class="prac-item">
+        <span class="pill">3</span>
+        <h3>设计无人干预的自动化循环，但要写死边界</h3>
+        <p>一个可用的循环至少包含：定义什么叫“完成” → 明确自验证机制 → 确定边界 → 确定约束（运行轮数、最大 token、时长） → 确定 review 流程。缺了约束，agent 就会在“全边界展开”里烧钱。</p>
+      </div>
+
+      <div class="prac-item">
+        <span class="pill">4</span>
+        <h3>用“隐式状态机”提示词排查难查的 bug</h3>
+        <p>把你正在用的 Claude 或 Codex 直接丢一句：它会按高低风险依次列出应用里隐藏的状态机，特别适合找出那些没有显式建模、靠 if 分支堆出来的状态转换 bug。</p>
+<pre><span class="st">find all of the implicit state machines in my app</span></pre>
+      </div>
+
+      <div class="prac-item">
+        <span class="pill">5</span>
+        <h3>换模型时，顺手清理一遍提示词</h3>
+        <p>每次新模型发布都是精简提示词的好机会（前提是之后主要用新模型）。一句好用的清理指令是：“阅读整个项目，找出所有损坏、不一致、低效或不再需要的东西。修复你确信的部分，并将其余部分列出供我审查。”注意 Fable 5.2 的 effort 档位行为变了，别直接沿用旧设置。</p>
+      </div>
+
+      <div class="prac-item">
+        <span class="pill">6</span>
+        <h3>成本按“每任务”算，而不是按“每 token”算</h3>
+        <p>Fable 5.2 单价降了 20%，但因为更费 token，单任务成本可能和上一代持平。评估模型时用“总花费 ÷ 通过任务数”，并区分工程师、工程经理、财务三种视角。团队内可以用 tokenomics 仪表盘按人/团队/模型看花费、做预测。</p>
+        <p>另外，先决定 agent 生成的代码“在哪跑”（允许列表+审批 / 内嵌运行时 / 独立沙箱），再选框架——模型、提示词甚至框架都容易换，执行环境才是安全边界。</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 05 参考链接汇总 ============ -->
+  <section id="sources">
+    <div class="sec-head">
+      <span class="idx">05</span>
+      <h2>参考链接汇总</h2>
+      <span class="note">本期引用的全部来源</span>
+    </div>
+
+    <div class="sources">
+      <ol>
+        <li><span class="feed">Cursor —</span> <a href="https://x.com/cursor_ai/status/2119880841728000057" target="_blank" rel="noopener">Fable 5.2 定价说明</a></li>
+        <li><span class="feed">Cursor —</span> <a href="https://x.com/cursor_ai/status/2119880829212172509" target="_blank" rel="noopener">Fable 5.2 入驻 Cursor / CursorBench</a></li>
+        <li><span class="feed">Claude —</span> <a href="https://x.com/claudeai/status/2119867122683953298" target="_blank" rel="noopener">FrontierCode 2.0 测试结果</a></li>
+        <li><span class="feed">Claude —</span> <a href="https://x.com/claudeai/status/2119867114450268322" target="_blank" rel="noopener">Fable 5.2 / Mythos 5.2 发布</a></li>
+        <li><span class="feed">Addy Osmani —</span> <a href="https://x.com/addyosmani/status/2119869672573251887" target="_blank" rel="noopener">Fable 5.2 输出速度与适用场景</a></li>
+        <li><span class="feed">Addy Osmani —</span> <a href="https://x.com/addyosmani/status/2119907165007945813" target="_blank" rel="noopener">Fable 5.2 token 消耗提醒</a></li>
+        <li><span class="feed">AI at Meta —</span> <a href="https://x.com/AIatMeta/status/2119853597542568405" target="_blank" rel="noopener">Muse Ember 定价</a></li>
+        <li><span class="feed">AI at Meta —</span> <a href="https://x.com/AIatMeta/status/2119853595453702580" target="_blank" rel="noopener">Muse Ember 性价比</a></li>
+        <li><span class="feed">AI at Meta —</span> <a href="https://x.com/AIatMeta/status/2119853591703998787" target="_blank" rel="noopener">Muse Ember 能力与上下文</a></li>
+        <li><span class="feed">OpenRouter —</span> <a href="https://x.com/OpenRouter/status/2119860904024314002" target="_blank" rel="noopener">Muse Ember 上线 / 规划-扇出模式</a></li>
+        <li><span class="feed">Arena.ai —</span> <a href="https://x.com/arena/status/2119858226867122459" target="_blank" rel="noopener">Muse Ember 在 Code Arena 的表现</a></li>
+        <li><span class="feed">宝玉 —</span> <a href="https://x.com/dotey/status/2119868647220842659" target="_blank" rel="noopener">Muse Ember 成本拆解</a></li>
+        <li><span class="feed">CSDN —</span> <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247838271&idx=2&sn=9508f0e24d633dd759bb16aab97acc2f" target="_blank" rel="noopener">TIOBE 11 月榜单</a></li>
+        <li><span class="feed">InfoQ —</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651296873&idx=1&sn=f38dc6f8a6273f09af92b906c90ea8c5" target="_blank" rel="noopener">Discord 弃 Electron 转 Rust</a></li>
+        <li><span class="feed">Vercel —</span> <a href="https://vercel.com/changelog/vercel-sandbox-snapshot-creation-is-now-up-to-10x-faster" target="_blank" rel="noopener">Sandbox 快照提速 10 倍</a></li>
+        <li><span class="feed">Vercel —</span> <a href="https://vercel.com/changelog/vercel-container-registry-now-supports-2-gb-compressed-image-layers" target="_blank" rel="noopener">Container Registry 支持 2GB 镜像层</a></li>
+        <li><span class="feed">InfoQ —</span> <a href="https://www.infoq.com/news/2026/11/aws-torchneuron-trainium-pytorch/" target="_blank" rel="noopener">AWS TorchNeuron</a></li>
+        <li><span class="feed">GitHub —</span> <a href="https://www.youtube.com/shorts/TNBTFejit2g" target="_blank" rel="noopener">Octoverse 报告要点</a></li>
+        <li><span class="feed">Mistral AI —</span> <a href="https://x.com/MistralAI/status/2119813353363370134" target="_blank" rel="noopener">Apps / Managed Agents / Workflows</a></li>
+        <li><span class="feed">AI Engineer —</span> <a href="https://www.youtube.com/watch?v=6TjFjHPjVH0" target="_blank" rel="noopener">Keiji Kanazawa：三周重构复盘</a></li>
+        <li><span class="feed">CSDN —</span> <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247838271&idx=1&sn=9e5ef2673b98eab57155213e09cdb62e" target="_blank" rel="noopener">微软 PM 被 AI Coding Agent 上了一课</a></li>
+        <li><span class="feed">腾讯技术工程 —</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&mid=2649808120&idx=1&sn=b007fdc7119e2018ef1a0ffda9a41b0a" target="_blank" rel="noopener">AI 编程的加速陷阱</a></li>
+        <li><span class="feed">Google Developers Blog —</span> <a href="https://developers.googleblog.com/announcing-long-context-training-on-tpus-with-maxtext-context-parallelism/" target="_blank" rel="noopener">MaxText Context Parallelism</a></li>
+        <li><span class="feed">Google Developers Blog —</span> <a href="https://developers.googleblog.com/what-is-pathways-single-controller-training-for-large-models/" target="_blank" rel="noopener">What is Pathways</a></li>
+        <li><span class="feed">Cloud Blog —</span> <a href="https://cloud.google.com/blog/topics/ai-infrastructure/introducing-tpu-sync-fast-kv-cache-and-weight-transfer-on-tpu/" target="_blank" rel="noopener">TPU Sync</a></li>
+        <li><span class="feed">Cloud Blog —</span> <a href="https://cloud.google.com/blog/products/containers-kubernetes/gke-dynamic-slicing-on-tpus/" target="_blank" rel="noopener">GKE Dynamic Slicing GA</a></li>
+        <li><span class="feed">Geek —</span> <a href="https://x.com/geekbb/status/2119680133464314232" target="_blank" rel="noopener">gitmanual</a></li>
+        <li><span class="feed">向阳乔木 —</span> <a href="https://x.com/vista8/status/2119664801546916266" target="_blank" rel="noopener">T3 Code 体验</a></li>
+        <li><span class="feed">向阳乔木 —</span> <a href="https://x.com/vista8/status/2119744512448987155" target="_blank" rel="noopener">Capwise 开源录屏</a></li>
+        <li><span class="feed">meng shao —</span> <a href="https://x.com/shao__meng/status/2119715268393836956" target="_blank" rel="noopener">g-harness-evals</a></li>
+        <li><span class="feed">ollama —</span> <a href="https://x.com/ollama/status/2119897229758788041" target="_blank" rel="noopener">Usage 面板</a></li>
+        <li><span class="feed">Viking —</span> <a href="https://x.com/vikingmute/status/2119675476725924171" target="_blank" rel="noopener">验证机制与 agents.md 最佳实践</a></li>
+        <li><span class="feed">Berryxia.AI —</span> <a href="https://x.com/berryxia/status/2119912986462896412" target="_blank" rel="noopener">隐式状态机排查提示词</a></li>
+        <li><span class="feed">宝玉 —</span> <a href="https://x.com/dotey/status/2119894229581508868" target="_blank" rel="noopener">新模型发布时清理提示词</a></li>
+        <li><span class="feed">Alex Albert —</span> <a href="https://x.com/alexalbert__/status/2119884951550386671" target="_blank" rel="noopener">“读整个项目”清理提示词</a></li>
+        <li><span class="feed">AI Engineer —</span> <a href="https://www.youtube.com/watch?v=WWIFiQi9U4w" target="_blank" rel="noopener">Daytona：先选沙箱再选框架</a></li>
+        <li><span class="feed">AI Engineer —</span> <a href="https://www.youtube.com/watch?v=KdG9OSOtJOA" target="_blank" rel="noopener">Cisco：tokenomics 与成本</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <p><span class="sig">▍</span> 本日报由 tech-daily-generator 基于 Freshrss 24h 抓取的 608 条新闻自动筛选生成，面向开发者实践视角。文中数据与结论均来自上方原始来源，模型名称、价格与评测数字以发布方口径为准。</p>
+    <p>生成时间：2026-11-10 · 角色：developer_practice · 输出：./tech-daily/.staging/developer_practice.html</p>
+  </footer>
+
+</div>
+</body>
+</html>
