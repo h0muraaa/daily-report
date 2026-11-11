@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 开发者实践版 · 2026-11-11</title>
+<style>
+  :root{
+    --bg:#0a0e14; --panel:#11161d; --panel-2:#0d1219; --line:#21262d;
+    --text:#c9d1d9; --muted:#8b949e; --green:#3fb950; --cyan:#39c5cf;
+    --blue:#58a6ff; --orange:#ffa657; --purple:#bc8cff; --red:#ff7b72;
+    --mono:'JetBrains Mono','SFMono-Regular',Menlo,Consolas,'Liberation Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--mono); font-size:15px; line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--blue); text-decoration:none; border-bottom:1px dashed rgba(88,166,255,.4);}
+  a:hover{color:var(--cyan); border-bottom-color:var(--cyan);}
+  .wrap{max-width:900px; margin:0 auto; padding:32px 22px 64px;}
+
+  /* terminal header */
+  .term{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    overflow:hidden; margin-bottom:28px; box-shadow:0 12px 40px rgba(0,0,0,.45);
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px; padding:10px 14px;
+    background:var(--panel-2); border-bottom:1px solid var(--line);
+  }
+  .dot{width:12px;height:12px;border-radius:50%;}
+  .dot.r{background:#ff5f56;} .dot.y{background:#ffbd2e;} .dot.g{background:#27c93f;}
+  .term-title{margin-left:10px; color:var(--muted); font-size:12.5px;}
+  .term-body{padding:26px 26px 30px;}
+  .prompt{color:var(--green);}
+  .cmd{color:var(--text);}
+  h1{margin:14px 0 6px; font-size:25px; color:#fff; letter-spacing:.3px;}
+  h1 .accent{color:var(--cyan);}
+  .sub{color:var(--muted); font-size:13.5px; margin:0 0 16px;}
+  .meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
+  .chip{
+    font-size:12px; padding:3px 10px; border-radius:20px;
+    border:1px solid var(--line); background:#0d1117; color:var(--muted);
+  }
+  .chip b{color:var(--green); font-weight:600;}
+
+  /* sections */
+  section{margin-top:40px;}
+  .sec-head{display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:20px;}
+  .sec-num{color:var(--green); font-size:13px;}
+  .sec-head h2{margin:0; font-size:19px; color:#fff; font-weight:600;}
+  .sec-head .hint{margin-left:auto; color:var(--muted); font-size:12px;}
+
+  /* news */
+  .news{
+    background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--blue);
+    border-radius:8px; padding:16px 18px; margin-bottom:14px; transition:border-color .15s, transform .15s;
+  }
+  .news:hover{border-left-color:var(--cyan); transform:translateX(2px);}
+  .news-head{display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;}
+  .news-head .idx{color:var(--muted); font-size:12px; padding-top:3px; min-width:20px;}
+  .news-head h3{margin:0; font-size:15.5px; color:#e6edf3; font-weight:600; line-height:1.45;}
+  .badge{
+    margin-left:auto; flex:none; font-size:11px; color:var(--orange);
+    background:rgba(255,166,87,.08); border:1px solid rgba(255,166,87,.25);
+    padding:2px 8px; border-radius:5px; white-space:nowrap;
+  }
+  .news p{margin:0 0 10px; color:var(--text);}
+  .news p code, .inline-code{
+    background:#0d1117; border:1px solid var(--line); border-radius:4px;
+    padding:1px 6px; font-size:.9em; color:var(--cyan);
+  }
+  .src{font-size:12.5px; color:var(--muted); border:none;}
+  .src:hover{color:var(--cyan); border:none;}
+
+  /* deep dive */
+  .deep{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:22px 24px; margin-bottom:20px;
+  }
+  .deep-title{display:flex; align-items:center; gap:10px; margin:0 0 6px;}
+  .deep-title .tag{
+    font-size:11px; color:var(--purple); border:1px solid rgba(188,140,255,.3);
+    background:rgba(188,140,255,.08); padding:2px 8px; border-radius:5px;
+  }
+  .deep-title h3{margin:0; font-size:17px; color:#fff;}
+  .deep .lead{color:var(--muted); font-size:13.5px; margin:6px 0 16px;}
+  .point{margin:14px 0; padding-left:14px; border-left:2px solid var(--line);}
+  .point h4{margin:0 0 4px; font-size:14px; color:var(--cyan); font-weight:600;}
+  .point p{margin:4px 0; color:var(--text);}
+  .point .src{display:inline-block; margin-top:4px;}
+  .takeaway{
+    margin-top:18px; padding:12px 16px; border-radius:8px;
+    background:rgba(63,185,80,.06); border:1px solid rgba(63,185,80,.25);
+    font-size:13.5px;
+  }
+  .takeaway b{color:var(--green);}
+
+  /* tools grid */
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;}
+  .tool{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:16px 17px; display:flex; flex-direction:column;
+  }
+  .tool:hover{border-color:#30363d;}
+  .tool h4{margin:0 0 8px; font-size:14.5px; color:#fff; display:flex; align-items:center; gap:8px;}
+  .tool h4 .icon{color:var(--green); font-size:13px;}
+  .tool p{margin:0 0 10px; font-size:13.5px; color:var(--text); flex:1;}
+  .tool .src{font-size:12px;}
+
+  /* practice list */
+  .practice{list-style:none; padding:0; margin:0; counter-reset:p;}
+  .practice li{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:16px 18px 16px 54px; margin-bottom:12px; position:relative;
+  }
+  .practice li::before{
+    counter-increment:p; content:counter(p,decimal-leading-zero);
+    position:absolute; left:16px; top:16px; color:var(--green);
+    font-size:13px; font-weight:600;
+  }
+  .practice h4{margin:0 0 6px; font-size:14.5px; color:#e6edf3;}
+  .practice p{margin:0 0 8px; font-size:13.8px; color:var(--text);}
+  .practice .src{font-size:12px;}
+
+  /* footer */
+  footer{margin-top:48px; border-top:1px solid var(--line); padding-top:22px;}
+  footer h2{font-size:16px; color:#fff; margin:0 0 14px;}
+  .refs{list-style:none; padding:0; margin:0; display:grid; grid-template-columns:1fr; gap:6px;}
+  .refs li{font-size:12.5px; color:var(--muted); line-height:1.6;}
+  .refs li span{color:#484f58;}
+  .foot-note{margin-top:22px; color:#484f58; font-size:12px; text-align:center;}
+  .cursor{display:inline-block; width:8px; height:15px; background:var(--green); vertical-align:-2px; animation:blink 1.1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  @media(max-width:600px){
+    .wrap{padding:18px 12px 48px;}
+    .term-body{padding:20px 16px 24px;}
+    h1{font-size:20px;}
+    .badge{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="term">
+    <div class="term-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="term-title">~/daily-report · developer_practice</span>
+    </div>
+    <div class="term-body">
+      <div><span class="prompt">$</span> <span class="cmd">tech-daily --role developer_practice --date 2026-11-11</span></div>
+      <h1>科技日报 · <span class="accent">开发者实践版</span></h1>
+      <p class="sub">// 面向一线工程师：工具更新、实现细节、可落地的实践</p>
+      <div class="meta">
+        <span class="chip">抓取周期 <b>2026-11-10 → 11-11</b></span>
+        <span class="chip">原始条目 <b>647</b></span>
+        <span class="chip">信源 <b>424</b></span>
+        <span class="chip">本期精选 <b>26</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 01 热榜 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>今日技术热榜</h2>
+      <span class="hint">工具 / 框架 / 运行时 / 平台能力</span>
+    </div>
+
+    <article class="news">
+      <div class="news-head">
+        <span class="idx">01</span>
+        <h3>AWS 官方开源本地模拟器 aws-emulator：三周 29,684 次提交，Rust 编写</h3>
+        <span class="badge">Simon Willison</span>
+      </div>
+      <p>AWS 终于推出了官方本地模拟器 <code>aws-emulator</code>，让开发者可以在本地跑测试、对着 AWS 各服务的「克隆」验证行为，而不必先配置一个会产生费用的 API key。据 Simon Willison 记录，该项目由一大群 agent 用 Rust 写成，项目前三周就产生了 <b>29,684 次提交</b>。</p>
+      <p>目前 macOS 和 Windows 上仍需 Docker 才能运行，作者希望未来能直接下发单个二进制，这样其他语言、其他平台都能把它塞进标准测试套件里。对需要 mock AWS 依赖的集成测试来说，这是替代第三方 localstack 类方案的一个官方选项。</p>
+      <a class="src" href="https://simonwillison.net/2026/Nov/11/aws-emulator/" target="_blank" rel="noopener">📎 来源: Simon Willison's Weblog</a>
+    </article>
+
+    <article class="news">
+      <div class="news-head">
+        <span class="idx">02</span>
+        <h3>GitHub Agentic Workflows 正式 GA：默认只读 + 独立写权限 + 预算控制</h3>
+        <span class="badge">InfoQ</span>
+      </div>
+      <p>GitHub Agentic Workflows 进入正式可用阶段，可以在 GitHub Actions 里直接运行 coding agent。安全模型采用<b>默认只读</b>、写操作放到单独 scoped 的 job 中执行，并引入预算控制来约束 agent 的消耗。</p>
+      <p>需要注意的边界：这些保护<b>不覆盖直接写权限或自定义 job</b>，实际安全性取决于每条 workflow 的具体配置。落地时应把「读」与「写」严格拆到不同 job，并给 agent 任务设定明确的预算上限，避免误操作与成本失控。</p>
+      <a class="src" href="https://www.infoq.com/news/2026/11/github-agentic-workflows-ga/" target="_blank" rel="noopener">📎 来源: InfoQ</a>
+    </article>
+
+    <article class="news">
+      <div class="news-head">
+        <span class="idx">03</span>
+        <h3>Node.js 三线 LTS 同步发补丁：26.13.1 / 24.22.3 / 22.23.5</h3>
+        <span class="badge">Node.js Blog</span>
+      </div>
+      <p>Node.js 官方同时为三条维护线发布了补丁版本：当前版本线 <b>26.13.1</b>、LTS 线 <b>24.22.3</b> 与更早的 LTS 线 <b>22.23.5</b>。三线并行发版说明这是一次跨分支的例行维护同步。</p>
+      <p>建议按你的生产大版本对号入座升级，尤其是长期停留在 22.x / 24.x 的项目。补丁版本通常不改变 API，但仍建议回归依赖原生模块（node-gyp / N-API）与 CI 构建链，确认 ABI 兼容后再全量推送。</p>
+      <a class="src" href="https://nodejs.org/en/blog/release/v26.13.1" target="_blank" rel="noopener">📎 来源: Node.js Blog · 26.13.1</a>
+      &nbsp;·&nbsp;
+      <a class="src" href="https://nodejs.org/en/blog/release/v24.22.3" target="_blank" rel="noopener">24.22.3</a>
+      &nbsp;·&nbsp;
+      <a class="src" href="https://nodejs.org/en/blog/release/v22.23.5" target="_blank" rel="noopener">22.23.5</a>
+    </article>
+
+    <article class="news">
+      <div class="news-head">
+        <span class="idx">04</span>
+        <h3>Angular 编译器预处理器 ngp 进入 Beta：Rust + Oxc 重写，冷构建快 2–3 倍</h3>
+        <span class="badge">InfoQ</span>
+      </div>
+      <p>Angular 团队推出编译器预处理器 <code>ngp</code>，用 <b>Rust + Oxc</b> 重写了分析阶段，替代原先 <code>ngc</code> 对 TypeScript Transformer API 的依赖——而该 API 在 TypeScript 7.0 中已被移除。早期基准显示冷构建可提速 <b>2× 到 3×</b>。</p>
+      <p>这是前端工具链「Rust 化」浪潮的又一例。计划在某个 Angular 22 minor 版本中落地，但在此之前<b>生产构建仍应继续使用 ngc</b>。想提前评估收益的团队可以在非生产流水线先接 ngp 做基准对照。</p>
+      <a class="src" href="https://www.infoq.com/news/2026/11/angular-compiler-rust-typescript/" target="_blank" rel="noopener">📎 来源: InfoQ</a>
+    </article>
+
+    <article class="news">
+      <div class="news-head">
+        <span class="idx">05</span>
+        <h3>JetBrains Air 随 2026.3 正式可用：把 coding agent 收进 IDE</h3>
+        <span class="badge">JetBrains</span>
+      </div>
+      <p>JetBrains 在 2026.3 版本中正式推出 Air，把 coding agent 带进既有的 IDE 工作流：在一个地方跟踪 agent 进度、review 它改了什么、并回传反馈，同时保留「开发者最终掌控」的经典流程。</p>
+      <p>官方援引 Atlassian《2026 开发者体验报告》指出，<b>49% 的开发者每周要花 4 小时以上</b>去 review AI 输出、修正 prompt——瓶颈已从「写代码」转移到「审代码」。Air 的定位正是收敛这条 review 链路，而不是再造一个聊天窗。</p>
+      <a class="src" href="https://blog.jetbrains.com/ai/2026/11/air-in-jetbrains-ides-ga/" target="_blank" rel="noopener">📎 来源: The JetBrains Blog</a>
+    </article>
+
+    <article class="news">
+      <div class="news-head">
+        <span class="idx">06</span>
+        <h3>Visual Studio「Bring Your Own Model」正式 GA：本地 / 自托管模型直接接入</h3>
+        <span class="badge">Visual Studio Blog</span>
+      </div>
+      <p>BYOM（Bring Your Own Model）在 Visual Studio 18.12 正式 GA。无论团队自托管模型、持有一家模型厂商的 API key，还是想跑本机模型，都能在不离开 Visual Studio 的情况下使用，且<b>不要求 GitHub 登录</b>。</p>
+      <p>相较 8 月的预览，这次补齐了生产向能力：同一 provider 支持多套配置、独立的自定义 endpoint 体验（含本地模型）、更细的 API 兼容性控制以及更好的代理支持。对 GitHub 不可达或需要在隔离网络（air-gapped）里用内部模型的团队尤其关键。</p>
+      <a class="src" href="https://devblogs.microsoft.com/visualstudio/bring-your-own-model-is-now-generally-available-in-visual-studio/" target="_blank" rel="noopener">📎 来源: Visual Studio Blog</a>
+    </article>
+
+    <article class="news">
+      <div class="news-head">
+        <span class="idx">07</span>
+        <h3>Google 发布 A2UI 1.0：让 agent 渲染跨端原生界面的开放协议</h3>
+        <span class="badge">Google Developers</span>
+      </div>
+      <p>A2UI 1.0 是一个用于「生成式 UI」的开放协议，让 AI agent 能在 Web、移动端与桌面应用中渲染可交互的原生界面。它同时提供开源渲染器 SDK（React、Angular、Lit、Flutter、SwiftUI、Jetpack Compose）与 agent SDK（Python、TypeScript、Dart）。</p>
+      <p>1.0 新增<b>双向函数调用</b>、可替换的推理格式（swappable inference formats）以及安全数据绑定，方便团队把生成式 UI 接入现有产品栈。对前端同学来说，这是一条比「agent 只吐 markdown/JSON」更进一步的落地路径。</p>
+      <a class="src" href="https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/" target="_blank" rel="noopener">📎 来源: Google Developers Blog</a>
+    </article>
+
+    <article class="news">
+      <div class="news-head">
+        <span class="idx">08</span>
+        <h3>Cloudflare Meerkat 选用冷门共识算法 QuePaxa，而非 Raft / Paxos</h3>
+        <span class="badge">Cloudflare Blog</span>
+      </div>
+      <p>Cloudflare 公布了实验性分布式共识服务 Meerkat，用来管理内部全球控制面，其底层采用 2023 年由 Tennage、Băsescu 等人发表的新算法 <b>QuePaxa</b>。大多数系统会用 Raft、(Multi-)Paxos 或 Viewstamped Replication 这些成熟算法，QuePaxa 属于少见选择。</p>
+      <p>原因在于广域网场景：这些经典算法依赖单一 leader 常驻且延迟可预测，而 Meerkat 运行在互联网级别的网络里，连接与延迟都剧烈抖动。对做跨区域控制面、元数据服务的同学，这篇是理解「为什么换共识算法」的一手案例。</p>
+      <a class="src" href="https://blog.cloudflare.com/choosing-quepaxa/" target="_blank" rel="noopener">📎 来源: The Cloudflare Blog</a>
+    </article>
+  </section>
+
+  <!-- ============ 02 深度解读 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>深度技术解读</h2>
+      <span class="hint">两个正在成形的工程共识</span>
+    </div>
+
+    <div class="deep">
+      <div class="deep-title"><span class="tag">DEEP DIVE</span><h3>当 Agent 写了大半代码，测试与维护怎么做</h3></div>
+      <p class="lead">三场分享拼出了同一条主线：写代码变便宜了，但「如何确认它是对的、并且长期可维护」变得更贵。</p>
+
+      <div class="point">
+        <h4>Duolingo：用自治流水线给 200 万行 iOS 代码补测试</h4>
+        <p>Duolingo iOS 应用近 200 万行代码，单测覆盖率长期落后。他们搭了一条自治流水线：定时 workflow 挑出未被测试覆盖的代码 → coding agent 开 PR → 一个「生命周期管理器」监控 CI、修复失败、跑 AI review 并合并，工程师只做最终 reviewer。自 3 月以来合并了 <b>700+ 个 PR、22.5 万行测试</b>，整体覆盖率从 <b>11% 提升到 24%</b>。分享里还讲了架构、护栏、失败模式，以及如何把这套 loop 复用到其他迁移任务。</p>
+        <a class="src" href="https://www.youtube.com/watch?v=D_4Rn6uLdQM" target="_blank" rel="noopener">📎 Kush Agrawal, Duolingo · AI Engineer</a>
+      </div>
+
+      <div class="point">
+        <h4>Maersk：测试全绿，生产照崩</h4>
+        <p>Dmitry Buykin 复盘了「agent 写了大部分大型生产代码库、几个月之后」的真实状态：测试通过但线上出问题、没人要过的工作被做出来、规则互相矛盾、代码膨胀到没人 review 得动。有效的做法包括<b>回放真实任务</b>、把 eval 交给<b>领域专家拥有</b>、加运行时护栏、以及<b>每周修剪</b>；最后给出一份 18 问的 AI 代码仓库自审清单。</p>
+        <a class="src" href="https://www.youtube.com/watch?v=oeknLUsN_GE" target="_blank" rel="noopener">📎 Dmitry Buykin, Maersk · AI Engineer</a>
+      </div>
+
+      <div class="point">
+        <h4>Martin Fowler / Matteo Vaccari：把测试当成「数据」，而不是「代码」</h4>
+        <p>当 AI 同时写生产代码和测试代码，开发者会失去「自动化测试能挡住功能错误」的那层保障。文章给出三个论点：(1) AI 写代码后，开发者变成代码的<b>客户</b>；(2) 因此<b>客户测试（customer tests）</b>而非开发者测试，才是人与 AI 之间的主契约；(3) 把这份契约放进<b>测试数据</b>而非测试代码里，更容易防止被 coding agent 意外改掉。过去写 DSL 解析器和自定义 runner 成本高，现在 AI 让这件事变便宜了。</p>
+        <a class="src" href="https://martinfowler.com/articles/tests-as-data.html" target="_blank" rel="noopener">📎 Martin Fowler · Tests as data</a>
+      </div>
+
+      <div class="takeaway">
+        <b>落地要点：</b>别只让 agent 写单测。把「验收契约」外置成人类可读的数据、由领域专家拥有；用真实任务回放替代纯单测；给 agent 产物加运行时护栏并定期修剪。覆盖率高不等于可信——Maersk 的教训正是「测试全绿、生产照崩」。
+      </div>
+    </div>
+
+    <div class="deep">
+      <div class="deep-title"><span class="tag">DEEP DIVE</span><h3>Agent 的「输入端」也需要测试：Skill 瘦身与 Spec 校验</h3></div>
+      <p class="lead">我们习惯测试输出，却很少测试喂给模型的 Skill 和 Spec —— 而它们同样会「带 bug」。</p>
+
+      <div class="point">
+        <h4>Intel：你的 SKILL.md 里 70% 是模型已经会的东西</h4>
+        <p>Nikolay Petrov 指出一个反直觉的现实：给 skill 加一行只要几秒，删一行却令人害怕，于是 skill 只增不减。他的方法是把 skill 拆成一条条<b>可检验的声明</b>，逐条做「加 / 不加」的对照测试，得到一张逐行地图——哪些是 skill 真正教会模型的、哪些模型本来就懂、哪些反而让效果变差。他们测的第一个 skill 里，<b>70% 是模型已知内容</b>；真正的价值在另外 30%，恰恰是那些「粗暴缩写会最先删掉」的精确细节。</p>
+        <a class="src" href="https://www.youtube.com/watch?v=yzx4IuEh_tU" target="_blank" rel="noopener">📎 Nikolay Petrov, Intel · AI Engineer</a>
+      </div>
+
+      <div class="point">
+        <h4>AWS Kiro：Spec 里有静默 bug，agent 会忠实实现它们</h4>
+        <p>Rajath Mahendrappa Kotyal 强调：spec-driven development 只有在 spec 正确时才成立，而 spec 里满是「安静的 bug」——两条无法同时成立的规则、缺失的失败路径、一句两义的表述。coding agent 会一丝不苟地把每个 bug 都实现出来。Kiro 的做法是在生成任何设计或代码之前，用 <b>LLM + SMT solver</b> 配对校验，把「模型自身对 spec 的分歧」当作需求存在歧义的信号；分享还讨论了 solver 相比 LLM-as-judge 在哪些地方更强、哪些地方不行。</p>
+        <a class="src" href="https://www.youtube.com/watch?v=0EnLxIbAvYk" target="_blank" rel="noopener">📎 Rajath M. Kotyal, AWS · AI Engineer</a>
+      </div>
+
+      <div class="takeaway">
+        <b>落地要点：</b>Skill 做「消融实验」（逐条增删对比效果），别让 prompt 无限膨胀；Spec 做「可满足性检查」，用形式化求解器把矛盾规则和歧义提前暴露。输入端的缺陷会被下游按比例放大。
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 工具推荐 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2>工具推荐</h2>
+      <span class="hint">可直接上手</span>
+    </div>
+    <div class="grid">
+
+      <div class="tool">
+        <h4><span class="icon">▸</span>Kiri · 轻量容器运行时</h4>
+        <p>Rust 编写，支持 macOS / Windows / Linux，兼容现有 <code>docker</code> CLI、Compose 与 buildx，容器跑在一个小型 Linux VM 里。比 OrbStack、Docker Desktop 更轻、号称秒启，适合「只想拉个镜像测项目」的日常场景，已支持中文。</p>
+        <a class="src" href="https://x.com/geekbb/status/2120502201168830513" target="_blank" rel="noopener">📎 来源: Geek @geekbb</a>
+      </div>
+
+      <div class="tool">
+        <h4><span class="icon">▸</span>Kaku · 为 AI coding 设计的 Mac 终端</h4>
+        <p>开源。同时跑多个 agent 时，某个 tab 上的小圆点亮起表示它需要你，<code>Cmd+J</code> 直接跳过去；手机端还有远程页面，列出每个 tab 及其 agent 状态。多 agent 并行时省去来回找窗口。</p>
+        <a class="src" href="https://x.com/HiTw93/status/2120531568179749198" target="_blank" rel="noopener">📎 来源: Tw93 @HiTw93</a>
+      </div>
+
+      <div class="tool">
+        <h4><span class="icon">▸</span>Rider 2026.3 · 游戏开发</h4>
+        <p>新增 Lua（5.1–5.4 / LuaJIT / Luau）与 Verse 插件 Beta，可在 C++/C# 项目里直接写脚本；改进 Unreal Engine 与自研 C++ 引擎调试，支持 Unity CoreCLR Player，并与 Godot 编辑器更紧密集成。</p>
+        <a class="src" href="https://blog.jetbrains.com/dotnet/2026/11/11/rider-2026-3-for-gamedev/" target="_blank" rel="noopener">📎 来源: The JetBrains Blog</a>
+      </div>
+
+      <div class="tool">
+        <h4><span class="icon">▸</span>MongoDB × Vercel AI SDK</h4>
+        <p>为 Vercel AI SDK 应用提供持久记忆：安装后自动把记忆存进 MongoDB Atlas 的 document，跨会话、跨用户、跨重启保留对话上下文、用户事实与历史事件。已开源并在 npm 上 GA，TypeScript 项目接入成本低。</p>
+        <a class="src" href="https://www.mongodb.com/company/blog/product-release-announcements/introducing-mongodb-vercel-ai-sdk-integration-persistent-memory-applications" target="_blank" rel="noopener">📎 来源: MongoDB Blog</a>
+      </div>
+
+      <div class="tool">
+        <h4><span class="icon">▸</span>OpenRouter Extractions API（alpha）</h4>
+        <p>描述你需要的字段，从文本、图片、PDF 中抽取结构化数据——比如一封邮件里的人名、一张收据上的总金额，每个字段都以结构化结果返回。适合做批量文档信息抽取，省掉自建 prompt + 解析 + 重试的胶水代码。</p>
+        <a class="src" href="https://x.com/OpenRouter/status/2120542766191276199" target="_blank" rel="noopener">📎 来源: OpenRouter @OpenRouterAI</a>
+      </div>
+
+      <div class="tool">
+        <h4><span class="icon">▸</span>GigaEdge Spench · 流式语音增强 SDK</h4>
+        <p>开源，可在 CPU 服务器、移动端与浏览器做流式语音增强。神经降噪、归一化、动态处理、重采样、回声消除可自由组合；含 8 kHz INT8 降噪器与 48 kHz FP32 模型。共享 C++ core 支持 ONNX Runtime / TFLite，提供 Android / iOS SDK 与 WebAssembly，多流间共享模型资源。</p>
+        <a class="src" href="https://arxiv.org/abs/2611.13243" target="_blank" rel="noopener">📎 来源: arXiv (eess.AS)</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 04 实践指南 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2>实践指南</h2>
+      <span class="hint">可落地 / 有截止日期 / 有清单</span>
+    </div>
+    <ol class="practice">
+
+      <li>
+        <h4>GitHub：2026-12-08 起，闲置仓库将自动暂停 Dependabot 提醒</h4>
+        <p>GitHub 宣布，自 12 月 8 日起，对过去一年没有活动的仓库自动暂停 Dependabot 安全漏洞提醒。历史漏洞记录不会删除，只是转为归档；重新推送代码或在仓库设置里手动开启即可恢复。这适用于 github.com 与 GitHub Enterprise Cloud，不含 GHES。对企业意味着要主动排查「长期不更新但仍在生产运行」的仓库，避免形成安全监控盲区；也可用强制安全配置兜底。</p>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU2NjU3Nzg2Mg==&mid=2247548450&idx=1&sn=c8c2f870cf14187b76ca0d93ee6a7fb1" target="_blank" rel="noopener">📎 来源: 稀土掘金技术社区</a>
+      </li>
+
+      <li>
+        <h4>llm 0.37.2 安全修复：自定义 endpoint 可能泄露 OpenAI API Key</h4>
+        <p>Simon Willison 的 <code>llm</code> 发布 0.37.2，修复 <code>extra-openai-models.yaml</code>（由 0.37 新增的 <code>llm openai endpoint add</code> 命令管理）的两个问题：当 <code>api_key_name</code> 指向的 key 从未被存储，或对 <code>responses: true</code> 的模型使用 <code>-o chat_completions 1</code> 时，可能把配置的 OpenAI API key 误发给第三方 provider。使用该特性的请立即升级，并检查是否曾向非 OpenAI endpoint 发送过请求。</p>
+        <a class="src" href="https://simonwillison.net/2026/Nov/11/llm/" target="_blank" rel="noopener">📎 来源: Simon Willison's Weblog</a>
+      </li>
+
+      <li>
+        <h4>给 coding agent 选检索方式：结构化搜索 vs 语义检索要按任务配</h4>
+        <p>JioHotstar 用 SWE、CodeScale Bench 与内部 QA harness 评估了 6 种面向 AI coding agent 的代码检索方式。结论是：结构化搜索在<b>具体明确的任务</b>上表现好，语义检索在<b>需求模糊</b>时更有帮助；不同方案在准确率、token 消耗和工具设计上各有取舍。实践上应按任务类型准备多套检索工具，而不是一套打天下。</p>
+        <a class="src" href="https://www.infoq.com/news/2026/11/jiohotstar-codingagent-retrieval/" target="_blank" rel="noopener">📎 来源: InfoQ</a>
+      </li>
+
+      <li>
+        <h4>用 18 问清单给 AI 写过的仓库做一次体检</h4>
+        <p>借 Maersk 的复盘，把这几件事变成常规动作：用<b>真实任务回放</b>替代只看单测通过率；让<b>领域专家拥有关键 eval</b>；上线<b>运行时护栏</b>拦截危险操作；<b>每周修剪</b>无人 review 的陈积代码。重点排查「测试全绿但生产崩」的盲区，以及互相矛盾的规则和无来源的「没人要的工作」。</p>
+        <a class="src" href="https://www.youtube.com/watch?v=oeknLUsN_GE" target="_blank" rel="noopener">📎 来源: Dmitry Buykin, Maersk · AI Engineer</a>
+      </li>
+
+      <li>
+        <h4>生产级 agent 的参考议程：QCon AI New York（12/15–16）</h4>
+        <p>QCon AI New York 公布了完整议程，LinkedIn、Netflix、DoorDash、Figma、Pinterest、Honeycomb、Harvey、Google DeepMind、OpenAI 的工程师将分享生产环境中的 AI 系统。议题覆盖 <b>agent 权限与护栏、eval 闭环、推理成本、AI 代码评审、团队落地</b>——适合在设计自己的 agent 平台前先对齐行业做法，可当技术选型清单来读。</p>
+        <a class="src" href="https://www.infoq.com/news/2026/11/qcon-ai-newyork-2026-program/" target="_blank" rel="noopener">📎 来源: InfoQ</a>
+      </li>
+
+    </ol>
+  </section>
+
+  <footer>
+    <h2>参考链接汇总</h2>
+    <ul class="refs">
+      <li><span>[01]</span> AWS 本地模拟器 aws-emulator — <a href="https://simonwillison.net/2026/Nov/11/aws-emulator/" target="_blank" rel="noopener">Simon Willison's Weblog</a></li>
+      <li><span>[02]</span> GitHub Agentic Workflows GA — <a href="https://www.infoq.com/news/2026/11/github-agentic-workflows-ga/" target="_blank" rel="noopener">InfoQ</a></li>
+      <li><span>[03]</span> Node.js 26.13.1 / 24.22.3 / 22.23.5 — <a href="https://nodejs.org/en/blog/release/v26.13.1" target="_blank" rel="noopener">Node.js Blog</a></li>
+      <li><span>[04]</span> Angular ngp（Rust + Oxc）— <a href="https://www.infoq.com/news/2026/11/angular-compiler-rust-typescript/" target="_blank" rel="noopener">InfoQ</a></li>
+      <li><span>[05]</span> JetBrains Air GA — <a href="https://blog.jetbrains.com/ai/2026/11/air-in-jetbrains-ides-ga/" target="_blank" rel="noopener">The JetBrains Blog</a></li>
+      <li><span>[06]</span> Visual Studio BYOM GA — <a href="https://devblogs.microsoft.com/visualstudio/bring-your-own-model-is-now-generally-available-in-visual-studio/" target="_blank" rel="noopener">Visual Studio Blog</a></li>
+      <li><span>[07]</span> Google A2UI 1.0 — <a href="https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/" target="_blank" rel="noopener">Google Developers Blog</a></li>
+      <li><span>[08]</span> Cloudflare 选用 QuePaxa — <a href="https://blog.cloudflare.com/choosing-quepaxa/" target="_blank" rel="noopener">The Cloudflare Blog</a></li>
+      <li><span>[09]</span> Duolingo 自治测试流水线 — <a href="https://www.youtube.com/watch?v=D_4Rn6uLdQM" target="_blank" rel="noopener">AI Engineer (YouTube)</a></li>
+      <li><span>[10]</span> Maersk·维护 AI 代码 — <a href="https://www.youtube.com/watch?v=oeknLUsN_GE" target="_blank" rel="noopener">AI Engineer (YouTube)</a></li>
+      <li><span>[11]</span> Tests as data — <a href="https://martinfowler.com/articles/tests-as-data.html" target="_blank" rel="noopener">martinfowler.com</a></li>
+      <li><span>[12]</span> Skill 消融测试（Intel）— <a href="https://www.youtube.com/watch?v=yzx4IuEh_tU" target="_blank" rel="noopener">AI Engineer (YouTube)</a></li>
+      <li><span>[13]</span> Spec 形式化校验（AWS Kiro）— <a href="https://www.youtube.com/watch?v=0EnLxIbAvYk" target="_blank" rel="noopener">AI Engineer (YouTube)</a></li>
+      <li><span>[14]</span> Kiri 容器运行时 — <a href="https://x.com/geekbb/status/2120502201168830513" target="_blank" rel="noopener">Geek @geekbb (X)</a></li>
+      <li><span>[15]</span> Kaku 终端 — <a href="https://x.com/HiTw93/status/2120531568179749198" target="_blank" rel="noopener">Tw93 @HiTw93 (X)</a></li>
+      <li><span>[16]</span> Rider 2026.3 — <a href="https://blog.jetbrains.com/dotnet/2026/11/11/rider-2026-3-for-gamedev/" target="_blank" rel="noopener">The JetBrains Blog</a></li>
+      <li><span>[17]</span> MongoDB × Vercel AI SDK — <a href="https://www.mongodb.com/company/blog/product-release-announcements/introducing-mongodb-vercel-ai-sdk-integration-persistent-memory-applications" target="_blank" rel="noopener">MongoDB Blog</a></li>
+      <li><span>[18]</span> OpenRouter Extractions API — <a href="https://x.com/OpenRouter/status/2120542766191276199" target="_blank" rel="noopener">OpenRouter (X)</a></li>
+      <li><span>[19]</span> GigaEdge Spench SDK — <a href="https://arxiv.org/abs/2611.13243" target="_blank" rel="noopener">arXiv</a></li>
+      <li><span>[20]</span> GitHub 闲置仓库暂停 Dependabot 提醒 — <a href="https://mp.weixin.qq.com/s?__biz=MzU2NjU3Nzg2Mg==&mid=2247548450&idx=1&sn=c8c2f870cf14187b76ca0d93ee6a7fb1" target="_blank" rel="noopener">稀土掘金技术社区</a></li>
+      <li><span>[21]</span> llm 0.37.2 安全修复 — <a href="https://simonwillison.net/2026/Nov/11/llm/" target="_blank" rel="noopener">Simon Willison's Weblog</a></li>
+      <li><span>[22]</span> JioHotstar 代码检索基准 — <a href="https://www.infoq.com/news/2026/11/jiohotstar-codingagent-retrieval/" target="_blank" rel="noopener">InfoQ</a></li>
+      <li><span>[23]</span> QCon AI New York 2026 议程 — <a href="https://www.infoq.com/news/2026/11/qcon-ai-newyork-2026-program/" target="_blank" rel="noopener">InfoQ</a></li>
+    </ul>
+    <p class="foot-note">科技日报 · 开发者实践版 · 由 tech-daily-generator 生成于 2026-11-11 <span class="cursor"></span></p>
+  </footer>
+
+</div>
+</body>
+</html>
