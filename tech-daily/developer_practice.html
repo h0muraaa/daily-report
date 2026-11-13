@@ -3,455 +3,553 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>科技日报 · 开发者实践版 · 2026-11-12</title>
+<title>科技日报 · 开发者实践版 · 2026-11-13</title>
 <style>
   :root{
-    --bg:#0a0e14; --panel:#11161d; --panel-2:#0d1219; --line:#21262d;
-    --text:#c9d1d9; --muted:#8b949e; --green:#3fb950; --cyan:#39c5cf;
-    --blue:#58a6ff; --orange:#ffa657; --purple:#bc8cff; --red:#ff7b72;
-    --mono:'JetBrains Mono','SFMono-Regular',Menlo,Consolas,'Liberation Mono',monospace;
+    --bg:#0d1117;
+    --bg-soft:#161b22;
+    --bg-card:#1c2128;
+    --border:#30363d;
+    --border-soft:#21262d;
+    --fg:#c9d1d9;
+    --fg-dim:#8b949e;
+    --fg-strong:#f0f6fc;
+    --accent:#58a6ff;
+    --accent-2:#7ee787;
+    --accent-3:#ffa657;
+    --accent-4:#d2a8ff;
+    --danger:#ff7b72;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,Monaco,"Courier New",monospace;
   }
-  *{box-sizing:border-box;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
   body{
-    margin:0; background:var(--bg); color:var(--text);
-    font-family:var(--mono); font-size:15px; line-height:1.75;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:var(--mono);
+    font-size:15px;
+    line-height:1.75;
     -webkit-font-smoothing:antialiased;
   }
-  a{color:var(--blue); text-decoration:none; border-bottom:1px dashed rgba(88,166,255,.4);}
-  a:hover{color:var(--cyan); border-bottom-color:var(--cyan);}
-  .wrap{max-width:900px; margin:0 auto; padding:32px 22px 64px;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px 80px;}
 
-  /* terminal header */
-  .term{
-    background:var(--panel); border:1px solid var(--line); border-radius:10px;
-    overflow:hidden; margin-bottom:28px; box-shadow:0 12px 40px rgba(0,0,0,.45);
+  /* Header */
+  header{
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg,#11161d 0%,var(--bg) 100%);
+    padding:46px 0 34px;
+    margin-bottom:34px;
   }
-  .term-bar{
-    display:flex; align-items:center; gap:8px; padding:10px 14px;
-    background:var(--panel-2); border-bottom:1px solid var(--line);
+  .prompt-line{color:var(--fg-dim);font-size:13px;margin-bottom:6px;}
+  .prompt-line .caret{color:var(--accent-2);}
+  h1{
+    font-size:30px;
+    color:var(--fg-strong);
+    letter-spacing:-.5px;
+    margin:6px 0 14px;
+    font-weight:700;
   }
-  .dot{width:12px;height:12px;border-radius:50%;}
-  .dot.r{background:#ff5f56;} .dot.y{background:#ffbd2e;} .dot.g{background:#27c93f;}
-  .term-title{margin-left:10px; color:var(--muted); font-size:12.5px;}
-  .term-body{padding:26px 26px 30px;}
-  .prompt{color:var(--green);}
-  .cmd{color:var(--text);}
-  h1{margin:14px 0 6px; font-size:25px; color:#fff; letter-spacing:.3px;}
-  h1 .accent{color:var(--cyan);}
-  .sub{color:var(--muted); font-size:13.5px; margin:0 0 16px;}
-  .meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
-  .chip{
-    font-size:12px; padding:3px 10px; border-radius:20px;
-    border:1px solid var(--line); background:#0d1117; color:var(--muted);
-  }
-  .chip b{color:var(--green); font-weight:600;}
-
-  /* sections */
-  section{margin-top:40px;}
-  .sec-head{display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:20px;}
-  .sec-num{color:var(--green); font-size:13px;}
-  .sec-head h2{margin:0; font-size:19px; color:#fff; font-weight:600;}
-  .sec-head .hint{margin-left:auto; color:var(--muted); font-size:12px;}
-
-  /* news */
-  .news{
-    background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--blue);
-    border-radius:8px; padding:16px 18px; margin-bottom:14px; transition:border-color .15s, transform .15s;
-  }
-  .news:hover{border-left-color:var(--cyan); transform:translateX(2px);}
-  .news-head{display:flex; align-items:flex-start; gap:10px; margin-bottom:8px;}
-  .news-head .idx{color:var(--muted); font-size:12px; padding-top:3px; min-width:20px;}
-  .news-head h3{margin:0; font-size:15.5px; color:#e6edf3; font-weight:600; line-height:1.45;}
+  h1 .tilde{color:var(--accent-2);}
+  .meta-row{display:flex;flex-wrap:wrap;gap:18px;color:var(--fg-dim);font-size:13px;}
+  .meta-row b{color:var(--fg);font-weight:600;}
   .badge{
-    margin-left:auto; flex:none; font-size:11px; color:var(--orange);
-    background:rgba(255,166,87,.08); border:1px solid rgba(255,166,87,.25);
-    padding:2px 8px; border-radius:5px; white-space:nowrap;
+    display:inline-block;
+    background:rgba(88,166,255,.12);
+    border:1px solid rgba(88,166,255,.35);
+    color:var(--accent);
+    border-radius:6px;
+    padding:1px 9px;
+    font-size:12px;
   }
-  .news p{margin:0 0 10px; color:var(--text);}
-  .news p code, .inline-code{
-    background:#0d1117; border:1px solid var(--line); border-radius:4px;
-    padding:1px 6px; font-size:.9em; color:var(--cyan);
-  }
-  .src{font-size:12.5px; color:var(--muted); border:none;}
-  .src:hover{color:var(--cyan); border:none;}
 
-  /* deep dive */
-  .deep{
-    background:var(--panel); border:1px solid var(--line); border-radius:10px;
-    padding:22px 24px; margin-bottom:20px;
+  /* Section */
+  section{margin:44px 0;}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;}
+  .sec-num{color:var(--accent-2);font-size:15px;opacity:.85;}
+  h2{
+    font-size:21px;
+    color:var(--fg-strong);
+    font-weight:700;
+    letter-spacing:-.3px;
   }
-  .deep-title{display:flex; align-items:center; gap:10px; margin:0 0 6px;}
-  .deep-title .tag{
-    font-size:11px; color:var(--purple); border:1px solid rgba(188,140,255,.3);
-    background:rgba(188,140,255,.08); padding:2px 8px; border-radius:5px;
+  h2::after{content:"";display:block;width:44px;height:3px;background:var(--accent);margin-top:8px;border-radius:2px;}
+
+  /* TLDR */
+  .tldr{
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-left:3px solid var(--accent-2);
+    border-radius:8px;
+    padding:20px 22px;
+    margin-bottom:8px;
   }
-  .deep-title h3{margin:0; font-size:17px; color:#fff;}
-  .deep .lead{color:var(--muted); font-size:13.5px; margin:6px 0 16px;}
-  .point{margin:14px 0; padding-left:14px; border-left:2px solid var(--line);}
-  .point h4{margin:0 0 4px; font-size:14px; color:var(--cyan); font-weight:600;}
-  .point p{margin:4px 0; color:var(--text);}
-  .point .src{display:inline-block; margin-top:4px;}
-  .takeaway{
-    margin-top:18px; padding:12px 16px; border-radius:8px;
-    background:rgba(63,185,80,.06); border:1px solid rgba(63,185,80,.25);
+  .tldr h3{color:var(--fg-strong);font-size:14px;margin-bottom:10px;letter-spacing:.3px;}
+  .tldr ul{list-style:none;}
+  .tldr li{padding:4px 0 4px 22px;position:relative;color:var(--fg);font-size:14px;}
+  .tldr li::before{content:"▸";position:absolute;left:2px;color:var(--accent-2);}
+  .tldr code{background:#0b0f14;border:1px solid var(--border-soft);border-radius:4px;padding:1px 5px;font-size:12.5px;color:var(--accent-3);}
+
+  /* News cards */
+  .card{
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 22px;
+    margin-bottom:16px;
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .card:hover{border-color:#3d4651;transform:translateY(-1px);}
+  .card-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:9px;}
+  .idx{
+    flex:0 0 auto;
+    color:var(--accent-3);
+    font-size:13px;
+    border:1px solid rgba(255,166,87,.3);
+    border-radius:6px;
+    padding:0 7px;
+    line-height:22px;
+    margin-top:1px;
+  }
+  .card h3{font-size:16px;color:var(--fg-strong);font-weight:650;line-height:1.5;}
+  .card p{color:var(--fg);font-size:14px;margin-top:2px;}
+  .card p + p{margin-top:8px;}
+  .src{
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px dashed var(--border-soft);
+    font-size:12.5px;
+    color:var(--fg-dim);
+  }
+  .src a{color:var(--accent);}
+  .tag{
+    display:inline-block;
+    font-size:11.5px;
+    padding:0 7px;
+    border-radius:4px;
+    line-height:20px;
+    margin-right:6px;
+    border:1px solid var(--border);
+    color:var(--fg-dim);
+    background:#0b0f14;
+  }
+  code.inline{background:#0b0f14;border:1px solid var(--border-soft);border-radius:4px;padding:1px 5px;font-size:12.5px;color:var(--accent-3);}
+
+  /* Deep dive */
+  .dive{
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:24px 26px;
+    margin-bottom:20px;
+  }
+  .dive .dive-tag{font-size:12px;color:var(--accent-4);letter-spacing:1px;text-transform:uppercase;}
+  .dive h3{font-size:18px;color:var(--fg-strong);margin:6px 0 14px;}
+  .dive p{font-size:14px;margin-bottom:12px;}
+  .dive .callout{
+    background:#0b0f14;
+    border:1px solid var(--border-soft);
+    border-left:3px solid var(--accent);
+    border-radius:6px;
+    padding:12px 16px;
     font-size:13.5px;
+    color:var(--fg);
+    margin:14px 0;
   }
-  .takeaway b{color:var(--green);}
+  .dive .callout b{color:var(--accent-2);}
+  .dive ul{margin:6px 0 14px 4px;list-style:none;}
+  .dive ul li{padding:3px 0 3px 20px;position:relative;font-size:14px;}
+  .dive ul li::before{content:"–";position:absolute;left:2px;color:var(--accent-3);}
+  .stat-row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0;}
+  .stat{
+    flex:1 1 140px;
+    background:#0b0f14;
+    border:1px solid var(--border-soft);
+    border-radius:8px;
+    padding:12px 14px;
+  }
+  .stat .n{font-size:22px;color:var(--accent-2);font-weight:700;}
+  .stat .l{font-size:12px;color:var(--fg-dim);margin-top:2px;}
 
-  /* tools grid */
-  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px;}
+  /* Tools grid */
+  .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
   .tool{
-    background:var(--panel); border:1px solid var(--line); border-radius:8px;
-    padding:16px 17px; display:flex; flex-direction:column;
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:16px 18px;
+    display:flex;
+    flex-direction:column;
   }
-  .tool:hover{border-color:#30363d;}
-  .tool h4{margin:0 0 8px; font-size:14.5px; color:#fff; display:flex; align-items:center; gap:8px;}
-  .tool h4 .icon{color:var(--green); font-size:13px;}
-  .tool p{margin:0 0 10px; font-size:13.5px; color:var(--text); flex:1;}
-  .tool .src{font-size:12px;}
+  .tool .tname{color:var(--fg-strong);font-size:15px;font-weight:650;margin-bottom:6px;}
+  .tool .tname .dot{color:var(--accent-2);}
+  .tool .tdesc{font-size:13.5px;color:var(--fg);flex:1;}
+  .tool .tsrc{font-size:12px;color:var(--fg-dim);margin-top:10px;}
 
-  /* practice list */
-  .practice{list-style:none; padding:0; margin:0; counter-reset:p;}
-  .practice li{
-    background:var(--panel); border:1px solid var(--line); border-radius:8px;
-    padding:16px 18px 16px 54px; margin-bottom:12px; position:relative;
+  /* Guide */
+  .guide{
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:22px 24px;
+    margin-bottom:16px;
   }
-  .practice li::before{
-    counter-increment:p; content:counter(p,decimal-leading-zero);
-    position:absolute; left:16px; top:16px; color:var(--green);
-    font-size:13px; font-weight:600;
-  }
-  .practice h4{margin:0 0 6px; font-size:14.5px; color:#e6edf3;}
-  .practice p{margin:0 0 8px; font-size:13.8px; color:var(--text);}
-  .practice .src{font-size:12px;}
+  .guide h3{color:var(--fg-strong);font-size:16px;margin-bottom:10px;display:flex;gap:9px;align-items:center;}
+  .guide h3 .chk{color:var(--accent-2);}
+  .guide p{font-size:14px;color:var(--fg);margin-bottom:8px;}
+  .guide ul{list-style:none;margin-left:2px;}
+  .guide ul li{position:relative;padding:4px 0 4px 24px;font-size:14px;}
+  .guide ul li::before{content:"✔";position:absolute;left:0;color:var(--accent-2);font-size:12px;}
 
-  /* footer */
-  footer{margin-top:48px; border-top:1px solid var(--line); padding-top:22px;}
-  footer h2{font-size:16px; color:#fff; margin:0 0 14px;}
-  .refs{list-style:none; padding:0; margin:0; display:grid; grid-template-columns:1fr; gap:6px;}
-  .refs li{font-size:12.5px; color:var(--muted); line-height:1.6;}
-  .refs li span{color:#484f58;}
-  .foot-note{margin-top:22px; color:#484f58; font-size:12px; text-align:center;}
-  .cursor{display:inline-block; width:8px; height:15px; background:var(--green); vertical-align:-2px; animation:blink 1.1s steps(1) infinite;}
+  /* Sources */
+  .sources{
+    background:var(--bg-soft);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:22px 24px;
+  }
+  .sources ol{list-style:none;counter-reset:src;}
+  .sources li{
+    counter-increment:src;
+    padding:7px 0;
+    border-bottom:1px solid var(--border-soft);
+    font-size:13px;
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+  }
+  .sources li:last-child{border-bottom:none;}
+  .sources li::before{
+    content:"[" counter(src,decimal-leading-zero) "]";
+    color:var(--accent-3);
+    flex:0 0 auto;
+    font-size:12px;
+  }
+  .sources .sfeed{color:var(--fg-dim);flex:0 0 auto;}
+  .sources .sfeed::after{content:"·";margin:0 8px;color:var(--border);}
+
+  footer{
+    text-align:center;
+    color:var(--fg-dim);
+    font-size:12.5px;
+    border-top:1px solid var(--border);
+    padding-top:26px;
+    margin-top:50px;
+  }
+  footer .cursor{display:inline-block;width:9px;height:16px;background:var(--accent-2);vertical-align:-3px;animation:blink 1.1s steps(1) infinite;}
   @keyframes blink{50%{opacity:0;}}
-  @media(max-width:600px){
-    .wrap{padding:18px 12px 48px;}
-    .term-body{padding:20px 16px 24px;}
-    h1{font-size:20px;}
-    .badge{display:none;}
+  @media(max-width:640px){
+    h1{font-size:23px;}
+    .wrap{padding:0 16px 60px;}
+    .card{padding:16px 16px;}
+    .dive{padding:18px 18px;}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-
-  <div class="term">
-    <div class="term-bar">
-      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-      <span class="term-title">~/daily-report · developer_practice</span>
-    </div>
-    <div class="term-body">
-      <div><span class="prompt">$</span> <span class="cmd">tech-daily --role developer_practice --date 2026-11-12</span></div>
-      <h1>科技日报 · <span class="accent">开发者实践版</span></h1>
-      <p class="sub">// 面向一线工程师：工具更新、实现细节、可落地的实践</p>
-      <div class="meta">
-        <span class="chip">抓取周期 <b>2026-11-11 → 11-12</b></span>
-        <span class="chip">原始条目 <b>624</b></span>
-        <span class="chip">信源 <b>424</b></span>
-        <span class="chip">本期精选 <b>21</b></span>
-      </div>
+<header>
+  <div class="wrap">
+    <div class="prompt-line"><span class="caret">$</span> daily-report --role developer_practice --date 2026-11-13</div>
+    <h1><span class="tilde">~/</span>科技日报 · 开发者实践版</h1>
+    <div class="meta-row">
+      <span><b>日期</b> 2026-11-13</span>
+      <span><b>窗口</b> 11-12 22:57 → 11-13 22:57</span>
+      <span><b>数据源</b> 424 个 / 536 条</span>
+      <span class="badge">面向一线工程师</span>
     </div>
   </div>
+</header>
 
-  <!-- ============ 01 热榜 ============ -->
-  <section>
-    <div class="sec-head">
-      <span class="sec-num">01</span>
-      <h2>今日技术热榜</h2>
-      <span class="hint">Agent 架构 / 推理引擎 / 测试 / 平台能力</span>
-    </div>
+<div class="wrap">
 
-    <article class="news">
-      <div class="news-head">
-        <span class="idx">01</span>
-        <h3>Anthropic 复盘企业级部署：单 Agent + Skills 往往优于复杂子 Agent 架构</h3>
-        <span class="badge">大模型智能</span>
-      </div>
-      <p>Anthropic 的 Applied AI 团队在对比多个企业级 Agent 部署后给出一个反直觉结论：配备 Skills 的<b>单 Agent</b>，在输出质量上往往优于由路由器、规划器和多个领域子 Agent 组成的复杂架构，且单任务的成本与延迟更低。很多团队习惯按业务或部门拆出十几个甚至上百个子 Agent 层层嵌套，结果带来提示词重复、工具漂移和跨边界调试困难。</p>
-      <p>文章给出的拆分判据是「上下文独立性」：只有子任务真正拥有独立上下文、独立权限边界时才值得保留为独立 Agent，否则应并回主循环。迁移路径也很具体——把原提示词转成 Skills、把 API 调用转成工具，逐步合并子 Agent，最后用端到端评测确认行为没有回退。</p>
-      <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247557713&amp;idx=1&amp;sn=ce5e392fb2c83e8791211dac04bbd69a" target="_blank" rel="noopener">📎 来源: 大模型智能（Datawhale 编译）</a>
-    </article>
-
-    <article class="news">
-      <div class="news-head">
-        <span class="idx">02</span>
-        <h3>TokenSpeed：为 Agentic 多轮短请求重新设计 LLM 推理引擎</h3>
-        <span class="badge">InfoQ</span>
-      </div>
-      <p>Agent 负载和 Chat 有本质区别：以 coding agent 为例，它是「思考 → 调工具 → 读结果 → 再思考」的多轮短请求循环，首轮可能携带几十 K 的前缀上下文，后续每轮输出往往只有几百 token。传统推理引擎以「打满 batch、最大化吞吐」为目标，KV Cache 加载一次就释放，在这种场景下优化目标失效、缓存利用率偏低。</p>
-      <p>TokenSpeed 独立贡献者尚旭春在 AICon 2026 深圳站分享了完整技术路径：分层解耦的系统架构、自动并行编译系统、KV Cache 演进路线、Kernel 优化策略与跨平台抽象设计，并给出 Blackwell 平台上的阶段性性能数据。对自建推理栈的团队，值得关注的是它把「前缀复用」和「多轮短输出」当作一等公民，而不是事后打补丁。</p>
-      <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297121&amp;idx=2&amp;sn=581c2713a2454f4a2552996367834fce" target="_blank" rel="noopener">📎 来源: InfoQ</a>
-    </article>
-
-    <article class="news">
-      <div class="news-head">
-        <span class="idx">03</span>
-        <h3>TestPrism：Coding Agent 写的测试被系统性高估，合格率虚高一倍</h3>
-        <span class="badge">新智元</span>
-      </div>
-      <p>现有测试生成 Benchmark 多采用「单一参考评测」：生成的测试只要在原始代码上失败、在唯一标准答案上通过，就算成功。但同一需求往往存在多种正确实现，也存在许多看似合理却暗含缺陷的错误实现。一份测试可能刚好「认得」标准答案，却放过了真正有 Bug 的代码，也可能把标准答案的实现细节当成需求本身。</p>
-      <p>南京大学刘佳恒团队提出 TestPrism：覆盖 17 个来源、300 个测试任务、3000 个候选实现，每个任务都配有经过验证的正确/错误实现面板。其核心指标 <b>Joint Success Function（JSF）</b>要求测试同时在原始代码上失败、接受所有正确实现、拒绝所有错误实现。研究对 14 种 Coding Agent 做了评测，结论是现有做法把 AI 代码合格率明显高估。对一线团队的直接启示：CI 里「测试全绿」不等于「实现正确」，关键路径仍需人工审查与多实现对照。</p>
-      <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652742394&amp;idx=3&amp;sn=83658d4b00ddad5b7c7b414c0a4b64f4" target="_blank" rel="noopener">📎 来源: 新智元</a>
-    </article>
-
-    <article class="news">
-      <div class="news-head">
-        <span class="idx">04</span>
-        <h3>Google 开源 TPU Sync：在 HBM / DRAM / 存储 / 网络间搬运 KV Cache 与权重</h3>
-        <span class="badge">InfoQ</span>
-      </div>
-      <p>Google Cloud 开源了 <b>TPU Sync</b>，一个原生 C++ 库，用于在 TPU HBM、主机 DRAM、共享存储和数据中心网络之间搬运 KV Cache 块与模型权重。它解决的是大规模推理里的数据搬运问题：前缀缓存复用、Prefill/Decode 分离、权重热更新，都依赖高效且可控的跨层传输。</p>
-      <p>对做推理基础设施的团队，这类底层库的价值在于把「搬数据」从业务代码里抽出来，交给统一的传输原语和调度策略。开源意味着可以读实现、按自己的集群拓扑改，但也意味着要自己承担集成与压测成本；建议先在非关键链路验证吞吐与尾延迟，再考虑接入主服务。</p>
-      <a class="src" href="https://www.infoq.com/news/2026/11/google-tpu-sync/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ</a>
-    </article>
-
-    <article class="news">
-      <div class="news-head">
-        <span class="idx">05</span>
-        <h3>Vercel《WTF are evals》：把 Agent 当用户，测「任务是否真的完成」</h3>
-        <span class="badge">Vercel</span>
-      </div>
-      <p>Vercel 把 Agent 视为「软件的用户」：无论你是在做 Agent，还是在做被 Agent 调用的 API、CLI、MCP server 或 SDK，都需要 evals 来衡量任务完成度。文章借用人类产品的漏斗——发现、选择、访问、成功——指出最难验证的是最后一环：Agent 可能给用户下了一杯热拿铁，而用户要的是冰的；请求成功了，可观测性日志也一切正常。</p>
-      <p>更麻烦的是 LLM 输出本身有波动，单次通过不能说明稳定。实践上应为漏斗每一层建立可重复的 eval：工具描述是否让 Agent 选得中、鉴权与调用是否顺畅、任务结果是否正确。把 evals 当成 CI 的一部分，而不是上线前的一次性演示。</p>
-      <a class="src" href="https://vercel.com/blog/wtf-are-evals" target="_blank" rel="noopener">📎 来源: Vercel News</a>
-    </article>
-
-    <article class="news">
-      <div class="news-head">
-        <span class="idx">06</span>
-        <h3>GitHub stacked PRs 实操：用 gh CLI 把大改动拆成依赖链</h3>
-        <span class="badge">GitHub</span>
-      </div>
-      <p>GitHub Universe 2026 的这场 session 用一个完整 demo 展示 stacked PR：把一个大改动拆成若干相互依赖的小 PR，每个 PR 保持可审查的上下文，用 GitHub CLI 创建与维护栈，在 github.com 上逐层 review，获批后立即合并。</p>
-      <p>大 PR 的问题是众所周知的：review 排队、反馈回路变长、开发者上下文被反复打断。stacked PR 不是新概念，但工具链成熟后落地成本明显下降。建议从「一个功能拆 2–3 层」开始，先约定分支命名与合并顺序，再逐步扩大规模。</p>
-      <a class="src" href="https://www.youtube.com/watch?v=6bv4VZUM2kg" target="_blank" rel="noopener">📎 来源: GitHub（GitHub Universe 2026）</a>
-    </article>
-
-    <article class="news">
-      <div class="news-head">
-        <span class="idx">07</span>
-        <h3>LinkedIn 用自研 GitOps 引擎替换 Argo CD：250+ 集群、每周 10 万次部署</h3>
-        <span class="badge">InfoQ</span>
-      </div>
-      <p>LinkedIn 披露已用自研 GitOps 引擎替换 Argo CD，新系统覆盖 <b>250 多个 Kubernetes 集群</b>、<b>4000 多个服务</b>，每周管理超过 <b>10 万次部署</b>。在这个量级下，多集群编排、发布策略和权限模型的自定义需求会迅速放大通用方案的边界成本。</p>
-      <p>这不是一个「Argo CD 不行」的结论，而是一个 build-vs-buy 的边界案例：只有当你对多集群发布有极强定制需求、且团队有能力长期维护控制面时，自研才划算。多数团队更现实的路径是先把 Argo CD 的 repo 结构、同步策略和权限模型治理好，再评估是否真的需要造轮子。</p>
-      <a class="src" href="https://www.infoq.com/news/2026/11/kubernetes-argocd-linkedin/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ</a>
-    </article>
-
-    <article class="news">
-      <div class="news-head">
-        <span class="idx">08</span>
-        <h3>Gemini 4 Hydrogen 上线 Vercel AI Gateway：强化 agentic coding 与工具编排</h3>
-        <span class="badge">Vercel</span>
-      </div>
-      <p>Gemini 4 Hydrogen 已上线 Vercel AI Gateway，接替 Gemini 3.8 Flash，官方定位是在同一延迟档位下强化 agentic coding、知识工作与工具调用。它能处理更长的工程任务，并在更少的 agent 步骤内产出调研更充分的文档、表格和演示。</p>
-      <p>对开发者更实际的变化是指令遵循与工具编排更稳：更遵守系统指令、格式要求和任务边界，长对话中工具调用更可靠；更强的 grounding 也减少了搜索场景的无依据结论，以及 coding report 里编造工具或测试结果的情况。可以通过模型名 <code>google/gemini-4-hydrogen</code> 在 Claude Code、Codex 等客户端中试用，建议用你自己的 eval 集做 A/B，而不是只看榜单。</p>
-      <a class="src" href="https://vercel.com/changelog/gemini-4-hydrogen-now-available-on-ai-gateway" target="_blank" rel="noopener">📎 来源: Vercel News</a>
-    </article>
-  </section>
-
-  <!-- ============ 02 深度解读 ============ -->
-  <section>
-    <div class="sec-head">
-      <span class="sec-num">02</span>
-      <h2>深度技术解读</h2>
-      <span class="hint">2 个值得展开的话题</span>
-    </div>
-
-    <div class="deep">
-      <div class="deep-title">
-        <span class="tag">ARCHITECTURE</span>
-        <h3>多 Agent 还是单 Agent？用「上下文独立性」做减法</h3>
-      </div>
-      <p class="lead">过去一年「按部门拆专家 Agent」几乎成了企业级 Agent 的默认姿势，但 Anthropic 的复盘指向相反方向：先把架构简化，再谈能力扩展。</p>
-
-      <div class="point">
-        <h4>问题：拆得越细，系统越难调试</h4>
-        <p>典型的多 Agent 系统会有一个路由器、一个规划器，再挂上十几个领域子 Agent，子 Agent 还可能继续嵌套。每一层都要维护自己的提示词、工具集和状态约定；一旦输出不对，排查要跨越多个上下文边界。Anthropic 观察到，把路由器、规划器和领域子 Agent 并回主循环后，不少企业反而取得了明显收益。</p>
-      </div>
-
-      <div class="point">
-        <h4>判据：这个子任务是否拥有独立上下文</h4>
-        <p>如果子任务与主流程共享同一份上下文、同一组工具、同一套权限，那它作为独立 Agent 只会增加转发和同步成本，应该合并。只有当子任务确实拥有独立上下文（例如独立的代码库、独立的数据域）或独立权限边界（例如需要不同审批与沙箱）时，独立 Agent 才有意义。</p>
-      </div>
-
-      <div class="point">
-        <h4>迁移：提示词变 Skills，API 变工具，逐步并回主循环</h4>
-        <p>落地时不必一次性重写。可以先把子 Agent 的提示词沉淀为 Skills，把它的外部调用封装成工具，再让主 Agent 直接使用；确认行为一致后删除中间层，最后用端到端评测验证质量、成本与延迟没有回退。这个过程本身就是一次架构梳理。</p>
-        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247557713&amp;idx=1&amp;sn=ce5e392fb2c83e8791211dac04bbd69a" target="_blank" rel="noopener">📎 来源: 大模型智能（Datawhale 编译）</a>
-      </div>
-
-      <div class="point">
-        <h4>反例：跨组织边界时，协议仍然必要</h4>
-        <p>「简化内部架构」和「跨组织互操作」是两件事。当 Agent 需要跨越公司边界、与不同框架实现的 Agent 协作时，A2A 这类协议解决的是发现、通信与任务交换的问题，避免为每个客户写定制集成代码。内部能合并的合并，外部该用协议的用协议，不要混为一谈。</p>
-        <a class="src" href="https://aws.amazon.com/blogs/machine-learning/build-composable-interoperable-multi-agent-systems-with-a2a-on-aws/" target="_blank" rel="noopener">📎 来源: AWS Machine Learning Blog</a>
-      </div>
-
-      <div class="takeaway">
-        <b>Takeaway：</b>多 Agent 不是架构清晰度的证明。先按「上下文是否独立」做减法，把共享上下文的部分并回主循环；只有在权限、数据域真正隔离时才拆。每次合并后用端到端评测兜底，而不是靠感觉。
-      </div>
-    </div>
-
-    <div class="deep">
-      <div class="deep-title">
-        <span class="tag">TESTING</span>
-        <h3>Agent 的测试与评测为什么会被高估：从 TestPrism 到生产化 Agent DLC</h3>
-      </div>
-      <p class="lead">当 Coding Agent 开始自己写测试、自己看测试结果，测试就不再只是质量保障，而成了 Agent 自我验证与代码评审的证据。问题在于，我们对「测试通过」的信任可能建立在一个有缺陷的评测假设上。</p>
-
-      <div class="point">
-        <h4>单参考评测的结构性缺陷</h4>
-        <p>「在原始代码上失败、在标准答案上通过」看似合理，但它只验证了测试与某一份实现的关系。测试可能过度拟合标准答案的实现细节，从而拒绝其他正确写法；也可能过于宽松，放过所有错误实现。TestPrism 用 300 个任务、3000 个候选实现构造了正确/错误实现面板，JSF 指标要求测试同时满足「拒绝原实现、接受全部正确实现、拒绝全部错误实现」，这才逼近我们真正想要的测试质量。</p>
-        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652742394&amp;idx=3&amp;sn=83658d4b00ddad5b7c7b414c0a4b64f4" target="_blank" rel="noopener">📎 来源: 新智元</a>
-      </div>
-
-      <div class="point">
-        <h4>从「测试」扩展到「任务成功」的 evals</h4>
-        <p>单元测试只覆盖代码层。Agent 作为软件的用户，还要验证它是否选对工具、能否完成鉴权、最终交付是否满足用户意图。Vercel 把这拆成发现、选择、访问、成功四层漏斗，并指出最后一层最容易被日志掩盖——HTTP 200 不代表任务成功。评测用例需要覆盖「用户要冰拿铁，Agent 下了热拿铁」这类语义错误。</p>
-        <a class="src" href="https://vercel.com/blog/wtf-are-evals" target="_blank" rel="noopener">📎 来源: Vercel News</a>
-      </div>
-
-      <div class="point">
-        <h4>Agent DLC：把评估做成可重复的发布门禁</h4>
-        <p>AWS 提出的 Agent Development Life Cycle 类比传统 CI/CD：发布前需要回答的不是「demo 能不能跑」，而是「这个 Agent 是否满足约定要求」，并且要能低成本、可重复地评估当前行为以及最新改动是否带来提升。这要求把评测集、评分器、回归基线纳入版本管理，让每次变更都有对照数据。</p>
-        <a class="src" href="https://aws.amazon.com/blogs/machine-learning/from-prototype-to-production-engineering-agents-with-agent-dlc/" target="_blank" rel="noopener">📎 来源: AWS Machine Learning Blog</a>
-      </div>
-
-      <div class="point">
-        <h4>更接近真实的仿真环境</h4>
-        <p>Plurai Simulation 这类工具尝试用「数字孪生」重建 Agent 的工具与环境，再注入模拟用户和任务，让 Agent 在见到真实用户前先失败、修复、回归。对高风险业务，这比在生产上试错安全得多；对一般团队，至少应把历史工单与生产流量重放纳入评测，而不是只用团队手写的十几个 happy path。</p>
-        <a class="src" href="https://x.com/omarsar0/status/2120668217911792115" target="_blank" rel="noopener">📎 来源: elvis (@omarsar0)</a>
-      </div>
-
-      <div class="takeaway">
-        <b>Takeaway：</b>把「测试通过」升级为「任务成功」：单元测试用多实现面板校验，Agent 行为用分层 evals 校验，发布前用可重复的 Agent DLC 门禁兜底。三者缺一，都会让 AI 代码的合格率看起来比实际更高。
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ 03 工具推荐 ============ -->
-  <section>
-    <div class="sec-head">
-      <span class="sec-num">03</span>
-      <h2>工具推荐</h2>
-      <span class="hint">今天值得试用的 6 个工具 / 库</span>
-    </div>
-
-    <div class="grid">
-      <div class="tool">
-        <h4><span class="icon">▸</span>GitHub CLI · stacked PRs</h4>
-        <p>用 <code>gh</code> 创建和维护 PR 栈，把大改动拆成可逐层 review 的依赖链。适合功能跨多个模块、但希望保持每次 review 上下文完整的团队。先从 2–3 层的小栈开始，约定好分支命名与合并顺序。</p>
-        <a class="src" href="https://www.youtube.com/watch?v=6bv4VZUM2kg" target="_blank" rel="noopener">📎 来源: GitHub</a>
-      </div>
-
-      <div class="tool">
-        <h4><span class="icon">▸</span>finprim</h4>
-        <p>MIT 许可的 TypeScript 金融校验库，一个 API 覆盖 IBAN、BIC、卡号、sort code、VAT、routing number 与贷款相关函数，<b>零运行时依赖</b>。只做校验与格式化，不处理支付。适合同一套规则要在 Web 与移动端复用的场景，避免多份校验器各自漂移。</p>
-        <a class="src" href="https://www.infoq.com/news/2026/11/finprim-validation-qanda/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ</a>
-      </div>
-
-      <div class="tool">
-        <h4><span class="icon">▸</span>Kiji Inspector</h4>
-        <p>Dataiku 开源的 Agent 工具选择解释器，把 Sparse Autoencoder 直接作用在决策 token 上，绕过表面的 chain-of-thought 叙述。支持因果消融、通过 patched vLLM 引擎提取层激活，并面向生产监控流程。适合需要回答「Agent 为什么选了这个工具」的团队。</p>
-        <a class="src" href="https://www.infoq.com/presentations/explainable-ai-llm-agent-decisions/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ</a>
-      </div>
-
-      <div class="tool">
-        <h4><span class="icon">▸</span>Azure Logic Apps Standard CLI</h4>
-        <p>Azure CLI 的 <code>logicapp</code> 扩展进入 public preview，把原本依赖 VS Code 扩展的工作搬进终端：本地创建项目、编写 workflow、运行时生命周期管理、连接器管理、运行检查与测试脚手架。官方将其定位为 AI 辅助开发的「确定性」入口，适合把 Logic Apps 纳入脚本化 CI。</p>
-        <a class="src" href="https://www.infoq.com/news/2026/11/logic-apps-local-cli/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">📎 来源: InfoQ</a>
-      </div>
-
-      <div class="tool">
-        <h4><span class="icon">▸</span>Rex 终端</h4>
-        <p>Ghostty 作者 Mitchell Hashimoto 新公司 Superlogical 推出的终端，支持 Lua 配置与 <code>rex</code> 命令行，内置 Tailscale 远程能力，并针对 Claude Code、Codex、OpenCode、Pi 等 coding agent 做了集成。适合把「终端 + Agent 会话」作为主要工作流的开发者尝鲜。</p>
-        <a class="src" href="https://www.youtube.com/watch?v=8GtOKXm1meU" target="_blank" rel="noopener">📎 来源: AICodeKing</a>
-      </div>
-
-      <div class="tool">
-        <h4><span class="icon">▸</span>MiniMax-H3-Image</h4>
-        <p>MiniMax 开源的图像模型，把文生图、参考图生成与图像编辑统一在一个模型里，支持原生 4096×4096（约 16MP）、最多 16 张参考图与 6 步蒸馏。配合剪枝（约减 39% 参数）与平均 3bit 混合量化，可在 <b>24GB 显存 + 8GB 内存</b>本地运行，提供 ComfyUI 工作流与 SGLang Diffusion 多卡部署方案。</p>
-        <a class="src" href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247515693&amp;idx=1&amp;sn=462294c92590debbde2a43e96d7827f5" target="_blank" rel="noopener">📎 来源: 魔搭 ModelScope 社区</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ 04 实践指南 ============ -->
-  <section>
-    <div class="sec-head">
-      <span class="sec-num">04</span>
-      <h2>实践指南</h2>
-      <span class="hint">可直接落地到团队的 5 条建议</span>
-    </div>
-
-    <ol class="practice">
-      <li>
-        <h4>给 Agent 建 CI/CD：用「发布前证据」代替 demo 演示</h4>
-        <p>参照 Agent DLC 的思路，把 Agent 的评测集、评分器和回归基线纳入版本管理。每次改动后自动跑一遍固定评测，记录质量、成本与延迟；发布决策基于对照数据，而不是某次演示效果好。先从一个核心场景的 20–50 条评测用例起步，再逐步扩展。</p>
-        <a class="src" href="https://aws.amazon.com/blogs/machine-learning/from-prototype-to-production-engineering-agents-with-agent-dlc/" target="_blank" rel="noopener">📎 来源: AWS Machine Learning Blog</a>
-      </li>
-
-      <li>
-        <h4>给 SKILL.md 做减法：逐条 claim 做 A/B，而不是只加不删</h4>
-        <p>把 Skill 拆成一条条可检查的声明，分别测试「有这条」与「没这条」时模型的表现。Intel 的分享提到，他们测的第一个 Skill 里约 <b>70% 是模型已经知道的内容</b>，真正的价值在剩下的 30%——通常是那些看起来琐碎、却被简单压缩器优先删掉的具体细节。定期做这种消融，能让 Skill 更短也更有效。</p>
-        <a class="src" href="https://www.youtube.com/watch?v=yzx4IuEh_tU" target="_blank" rel="noopener">📎 来源: AI Engineer（Nikolay Petrov, Intel）</a>
-      </li>
-
-      <li>
-        <h4>用 LLM 生成领域术语表，补齐模型的「组织黑话」</h4>
-        <p>大型组织内部有大量专有词汇，这些词及其特定含义不在模型训练集里，会直接影响 LLM 在业务任务上的表现。Martin Fowler 建议用 LLM 从组织内的文档、邮件、聊天记录中生成术语表（Generated Glossary），再把它提供给所有在该领域工作的 LLM。成本低、见效快，尤其适合客服、运维、合规等术语密集的场景。</p>
-        <a class="src" href="https://martinfowler.com/bliki/GeneratedGlossary.html" target="_blank" rel="noopener">📎 来源: Martin Fowler</a>
-      </li>
-
-      <li>
-        <h4>回归测试重放生产流量，而不是只靠 mock 依赖</h4>
-        <p>AWS 的案例把每次回归测试做成一次「模拟」：把请求/响应捕获到 DynamoDB Streams 这类流中，重放一段生产流量到新代码，再比较结果是否一致。这样能绕开不稳定依赖导致的假阳性和流水线变慢。落地时先选一条高价值、可回放的链路，做好敏感数据脱敏与采样比例控制，再逐步扩大覆盖。</p>
-        <a class="src" href="https://aws.amazon.com/blogs/architecture/modular-regression-testing-framework-built-on-aws-for-large-scale-systems/" target="_blank" rel="noopener">📎 来源: AWS Architecture Blog</a>
-      </li>
-
-      <li>
-        <h4>拆多 Agent 之前，先问「上下文是否独立」</h4>
-        <p>如果子任务与主流程共享上下文、工具和权限，拆成独立 Agent 只会增加转发与同步成本。先把这类子 Agent 并回主循环，把它的提示词沉淀为 Skill、外部调用封装为工具；只有在数据域或权限边界真正隔离时才保留独立 Agent。每次合并后用端到端评测确认没有行为回退。</p>
-        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247557713&amp;idx=1&amp;sn=ce5e392fb2c83e8791211dac04bbd69a" target="_blank" rel="noopener">📎 来源: 大模型智能（Datawhale 编译）</a>
-      </li>
-    </ol>
-  </section>
-
-  <!-- ============ 参考链接汇总 ============ -->
-  <footer>
-    <h2>参考链接汇总</h2>
-    <ul class="refs">
-      <li><span>01</span> <a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247557713&amp;idx=1&amp;sn=ce5e392fb2c83e8791211dac04bbd69a" target="_blank" rel="noopener">Anthropic 最新长文：请谨慎使用子智能体！</a> — 大模型智能（Datawhale）</li>
-      <li><span>02</span> <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297121&amp;idx=2&amp;sn=581c2713a2454f4a2552996367834fce" target="_blank" rel="noopener">构建面向 Agentic 推理的下一代 LLM 推理引擎</a> — InfoQ</li>
-      <li><span>03</span> <a href="https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTk1MA==&mid=2652742394&amp;idx=3&amp;sn=83658d4b00ddad5b7c7b414c0a4b64f4" target="_blank" rel="noopener">Coding agent 写测试集体失败！AI 代码合格率被高估一倍</a> — 新智元</li>
-      <li><span>04</span> <a href="https://www.infoq.com/news/2026/11/google-tpu-sync/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Google Open-Sources TPU Sync for KV Cache and Weight Transfer on TPUs</a> — InfoQ</li>
-      <li><span>05</span> <a href="https://vercel.com/blog/wtf-are-evals" target="_blank" rel="noopener">WTF are evals? How to test agents and the software they use</a> — Vercel News</li>
-      <li><span>06</span> <a href="https://www.youtube.com/watch?v=6bv4VZUM2kg" target="_blank" rel="noopener">Stop waiting on your own pull requests: GitHub stacked PRs in practice</a> — GitHub</li>
-      <li><span>07</span> <a href="https://www.infoq.com/news/2026/11/kubernetes-argocd-linkedin/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">LinkedIn Replaces Argo CD with a Custom GitOps Engine for Kubernetes Deployments</a> — InfoQ</li>
-      <li><span>08</span> <a href="https://vercel.com/changelog/gemini-4-hydrogen-now-available-on-ai-gateway" target="_blank" rel="noopener">Gemini 4 Hydrogen now available on AI Gateway</a> — Vercel News</li>
-      <li><span>09</span> <a href="https://aws.amazon.com/blogs/machine-learning/from-prototype-to-production-engineering-agents-with-agent-dlc/" target="_blank" rel="noopener">From prototype to production: Engineering agents with Agent DLC</a> — AWS Machine Learning Blog</li>
-      <li><span>10</span> <a href="https://www.youtube.com/watch?v=yzx4IuEh_tU" target="_blank" rel="noopener">Your SKILL.md Is 70% Stuff the Model Already Knows</a> — AI Engineer（Nikolay Petrov, Intel）</li>
-      <li><span>11</span> <a href="https://martinfowler.com/bliki/GeneratedGlossary.html" target="_blank" rel="noopener">Bliki: Generated Glossary</a> — Martin Fowler</li>
-      <li><span>12</span> <a href="https://aws.amazon.com/blogs/architecture/modular-regression-testing-framework-built-on-aws-for-large-scale-systems/" target="_blank" rel="noopener">Modular regression testing framework built on AWS for large-scale systems</a> — AWS Architecture Blog</li>
-      <li><span>13</span> <a href="https://aws.amazon.com/blogs/machine-learning/build-composable-interoperable-multi-agent-systems-with-a2a-on-aws/" target="_blank" rel="noopener">Build composable, interoperable multi-agent systems with A2A on AWS</a> — AWS Machine Learning Blog</li>
-      <li><span>14</span> <a href="https://www.infoq.com/presentations/explainable-ai-llm-agent-decisions/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Opening the Black Box: Critical Explainability for AI Agent Tool Selection with Kiji Inspector</a> — InfoQ</li>
-      <li><span>15</span> <a href="https://www.infoq.com/news/2026/11/finprim-validation-qanda/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Author Q+A: finprim is a Case for One Financial Validation Library in TypeScript</a> — InfoQ</li>
-      <li><span>16</span> <a href="https://www.infoq.com/news/2026/11/logic-apps-local-cli/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Azure Logic Apps Standard Gets a Local CLI in Preview</a> — InfoQ</li>
-      <li><span>17</span> <a href="https://www.youtube.com/watch?v=8GtOKXm1meU" target="_blank" rel="noopener">Ghostty's creator made an Agent GUI &amp; it's quite good!</a> — AICodeKing</li>
-      <li><span>18</span> <a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&mid=2247515693&amp;idx=1&amp;sn=462294c92590debbde2a43e96d7827f5" target="_blank" rel="noopener">MiniMax-H3-Image：原生 4K 图像生成，24GB 显存部署教程</a> — 魔搭 ModelScope 社区</li>
-      <li><span>19</span> <a href="https://x.com/omarsar0/status/2120668217911792115" target="_blank" rel="noopener">Agent evals need to feel more real-world（Plurai Simulation）</a> — elvis (@omarsar0)</li>
+  <!-- TL;DR -->
+  <div class="tldr">
+    <h3>▍ 今日要点速览</h3>
+    <ul>
+      <li><b>llama.cpp 冲到 v1.0.0</b> —— 本地推理库迎来里程碑版本，开源生态再添稳定基座。</li>
+      <li><b>Harness 比模型更关键</b>：同一模型只换浏览器 harness，得分从 62.4 拉到 77.5；缓存命中率修到 96% 后更便宜更快。</li>
+      <li><b>Agent 别自评</b>：Google 开源 AQuA 排查线上 Agent 失败，Stack Overflow 喊话"别让编码 Agent 给自己判卷"。</li>
+      <li><b>性能优化的另一半</b>：MongoDB Atlas Search 不改算法，仅去掉核心操作周围的冗余工作，查询快 5 倍。</li>
+      <li><b>工具井喷</b>：Cloudflare Kitesurf、Meta Astryx、DeepSeek 全家桶 API、Vercel Workflow SDK 5 均可直接上手。</li>
     </ul>
-    <p class="foot-note">Generated at 2026-11-12 · 数据窗口 2026-11-11 22:55 → 11-12 22:55 · 624 条原始条目中精选<span class="cursor"></span></p>
+  </div>
+
+  <!-- 1. 热榜 -->
+  <section id="hot">
+    <div class="sec-head"><span class="sec-num">01</span><h2>今日技术热榜</h2></div>
+
+    <div class="card">
+      <div class="card-head"><span class="idx">01</span><h3>llama.cpp 发布 v1.0.0 —— 本地推理的里程碑</h3></div>
+      <p>维护者 Georgi Gerganov 正式发布 <code class="inline">llama.cpp v1.0.0</code>，Hugging Face 同步发布了配套博客。这个以纯 C/C++ 实现、几乎零依赖著称的推理库，长期是本地跑大模型、量化部署、边缘设备落地的首选底座。</p>
+      <p>冲到 1.0 意味着 API 与工程成熟度进入"可长期依赖"的阶段。对一线开发者而言，做端侧推理、私有化部署、或给工具链嵌一个轻量推理后端时，可以更放心地把它当作稳定依赖，而不是需要频繁跟 breaking change 的实验性项目。</p>
+      <div class="src">
+        <span class="tag">开源 / 推理</span>
+        📎 来源：<a href="https://x.com/Thom_Wolf/status/2121273122301046974" target="_blank" rel="noopener">Thomas Wolf(@Thom_Wolf)</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="idx">02</span><h3>Cloudflare Kitesurf 开源（Apache 2.0）—— 跑在 Workers 上的 Agent 浏览器</h3></div>
+      <p>Kitesurf 是 Cloudflare 为 AI Agent 打造的无状态浏览器，完全运行在 Workers 之上：它自己解析 HTML、应用 CSS、执行页面 JavaScript 并渲染截图，<b>不需要浏览器容器</b>。现在已按 Apache 2.0 协议在 GitHub 开源，可本地运行、修改，并部署到自己的 Cloudflare 账户。</p>
+      <p>关键点在于它支持 Chrome DevTools Protocol（CDP）。这意味着你在 Agent 里常用的 Playwright/Puppeteer 风格自动化可以对接，但底层是边缘无服务器运行，冷启动和运维成本显著不同。做网页 Agent、抓取或自动化测试的团队值得评估。</p>
+      <div class="src">
+        <span class="tag">开源 / Agent</span>
+        📎 来源：<a href="https://blog.cloudflare.com/kitesurf-open-source/" target="_blank" rel="noopener">The Cloudflare Blog</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="idx">03</span><h3>DeepSeek 开放"全家桶"应用 API —— 一个接口复刻完整 App</h3></div>
+      <p>DeepSeek 把 App 里的联网搜索、深度思考搜索、文件输入、阅读链接、语音交互（含 OCR/ASR/TTS）等能力整合进原有 API，开启对应参数后，<b>工具调用与上下文拼接由服务端自动完成</b>。开发者不必再自己对接一堆外部工具和调用衔接。</p>
+      <p>目前 <code class="inline">deepseek-flash</code>（V4.1-Flash）已在 Messages、Responses、Chat Completions 三类接口下支持上述能力，语音与底层能力也可独立或组合调用。官方称可 1:1 复刻出完整的 DeepSeek App 对话体验，做 RAG、文档问答、语音助手的团队可直接省掉大量脏活。</p>
+      <div class="src">
+        <span class="tag">API / 平台</span>
+        📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=Mzk0OTYwNzc3NQ==&mid=2247485910&idx=1&sn=529f50ba3b37e39319dad1faf7a122cf" target="_blank" rel="noopener">DeepSeek</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="idx">04</span><h3>Google Antigravity 推出 Dynamic Workflows —— 让 Agent 写脚本编排自己</h3></div>
+      <p>在 Antigravity 里输入 <code class="inline">/run-workflow</code>，Agent 会写一个 Python 脚本来编排并行与串行的子 Agent，并通过结构化 handoff 传递结果，从而用<b>确定性的控制流取代 prompt 漂移</b>。脚本在运行前可人工审阅，并保存下来重复执行同一流程。</p>
+      <p>Google 工程师 Varun Mohan 补充：动态工作流内部使用极多，核心价值是"给 Agent 写程序来编排 Hydrogen 和 Carbon 的能力"，甚至无需显式触发，模型可像 swarm 一样自行决定。这是把"编排逻辑"从自然语言 prompt 下沉到可审查代码的一个明确信号。</p>
+      <div class="src">
+        <span class="tag">Agent / 编排</span>
+        📎 来源：<a href="https://x.com/antigravity/status/2121327669534933025" target="_blank" rel="noopener">Google Antigravity(@antigravity)</a> · <a href="https://x.com/_mohansolo/status/2121330487956500615" target="_blank" rel="noopener">Varun Mohan</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="idx">05</span><h3>Meta 开源 Astryx 设计系统（MIT）—— 人写代码和 Agent 用同一套文档</h3></div>
+      <p>Astryx 是 Meta 内部打磨八年的设计系统，现以 MIT 协议开源，定位很直接：<b>让你和你的编码 Agent 从同一份文档、用同一套系统</b>。它提供 150+ 无障碍 React 组件与页面模板、无需构建配置的 StyleX、CSS 变量主题，以及 swizzle 命令。</p>
+      <p>Agent 侧集成也做全了：<code class="inline">init</code> 会把规则写进 <code class="inline">CLAUDE.md</code>，build 命令优先选模板而非"自由发挥"生成代码，并附带托管 MCP server 与 Agent skill。对想给内部团队统一 UI 规范、同时约束 AI 产出质量的工程师，这是一套可直接抄的思路。</p>
+      <div class="src">
+        <span class="tag">开源 / 前端</span>
+        📎 来源：<a href="https://www.youtube.com/watch?v=VpYEFW5Yn7k" target="_blank" rel="noopener">AICodeKing</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="idx">06</span><h3>Vercel 三连更：Sandbox 启动快 4 倍、构建缓存上限 5 GB、Workflow SDK 5</h3></div>
+      <p>Vercel Sandbox 在华盛顿特区（iad1）以外区域初始化最高快 4 倍，原因是改为从<b>区域缓存</b>就近读取镜像数据，避免回源到 iad1 的原始镜像存储；内部端到端基准显示巴黎区域启动时间下降约 75%。同时构建缓存上限统一提升到 5 GB，可缓存更多依赖与框架文件，减少重复安装。</p>
+      <p>此外 Workflow SDK 5 与 Vercel Workflows 发布：首个步骤延迟、步骤间延迟大幅改善，加倍加密与安全投入，并且把底层持久化日志做成可复用的 <code class="inline">durable-harness</code>，可服务任意 Agent harness。做长流程、可恢复任务的团队可关注这套持久化原语。</p>
+      <div class="src">
+        <span class="tag">平台 / 构建</span>
+        📎 来源：<a href="https://vercel.com/changelog/vercel-sandbox-starts-up-to-four-times-faster" target="_blank" rel="noopener">Vercel News · Sandbox</a> · <a href="https://vercel.com/changelog/build-cache-size-limit-on-vercel-increased-to-five-gb" target="_blank" rel="noopener">Vercel News · 构建缓存</a> · <a href="https://x.com/rauchg/status/2121277727940776114" target="_blank" rel="noopener">Guillermo Rauch</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="idx">07</span><h3>PyCharm 2026.3：303 项修复，Python 3.15 惰性导入 + 类型推断增强</h3></div>
+      <p>PyCharm 2026.3 除 JetBrains Air、workspaces、重做过的解释器控件等大功能外，还包含 <b>303 项针对日常 Python 开发的修复与改进</b>，部分修复可追溯到十多年前就被报告的问题。</p>
+      <p>值得关注的是代码洞察与类型推断的增强：对 <code class="inline">functools.partial</code> 现在能正确推断剩余参数签名，不再丢失参数信息或误报警告。此外新增 Python 3.15 惰性导入支持，对大型项目的启动与导入开销有实际帮助。</p>
+      <div class="src">
+        <span class="tag">IDE / Python</span>
+        📎 来源：<a href="https://blog.jetbrains.com/pycharm/2026/11/what-s-fixed-and-improved-in-pycharm-2026-3/" target="_blank" rel="noopener">The JetBrains Blog</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="idx">08</span><h3>VS Code 1.147 Insiders &amp; GitHub Copilot 接入 Gemini 4 Hydrogen</h3></div>
+      <p>VS Code 1.147 Insiders 带来 Agent 会话管理、chat 资源以及 Markdown 编辑方面的更新，方向明显偏向"多 Agent、长会话"的日常使用体验。</p>
+      <p>同时 GitHub 宣布 Gemini 4 Hydrogen 在 Copilot 中正式可用，定位是快速、高效的 Agent 编码、工具调用与多步工作流，指令遵循相比 Gemini 3.8 Flash 有所提升，可在 Copilot App、CLI 中使用。装 Insiders 的工程师可以同步试新的会话管理与模型搭配。</p>
+      <div class="src">
+        <span class="tag">IDE / 工具</span>
+        📎 来源：<a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147-(insiders)" target="_blank" rel="noopener">Microsoft for Developers</a> · <a href="https://x.com/github/status/2121319695626518823" target="_blank" rel="noopener">GitHub(@github)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 深度解读 -->
+  <section id="deep">
+    <div class="sec-head"><span class="sec-num">02</span><h2>深度技术解读</h2></div>
+
+    <div class="dive">
+      <div class="dive-tag">Deep Dive 01 / Agent 工程</div>
+      <h3>Harness 比模型更关键：Agent 工程化的三个硬信号</h3>
+      <p>今天有两条独立消息指向同一个结论：<b>在 Agent 里，围绕模型的那层"脚手架"（harness）决定成败，往往比换模型更有效。</b></p>
+      <p>第一是 Browser Use 的对照实验。他们用同一个模型（gpt 6.1 terra medium）、同一批 200 个超难长程任务、同一个裁判，<b>只更换浏览器 harness</b>：codex 内置的 6 个浏览器工具得分 62.4，而 Browser Use 1.0 agent 达到 77.5。进一步，他们发现缓存命中率只有 78%，修好 harness 后升到 96%，结果每任务成本从 $0.67 降到 $0.45（省 33%）、耗时从 5.0 分钟降到 4.6 分钟，分数不变。一行 <code class="inline">uv add "browser-use==1.0.4"</code> 即可复现。</p>
+      <div class="stat-row">
+        <div class="stat"><div class="n">62.4 → 77.5</div><div class="l">仅换 harness 的得分</div></div>
+        <div class="stat"><div class="n">78% → 96%</div><div class="l">缓存命中率修复</div></div>
+        <div class="stat"><div class="n">-33%</div><div class="l">每任务成本</div></div>
+      </div>
+      <p>第二是"验证"问题。Stack Overflow 直接发问：编码 Agent 能写设计文档、搭前端、端到端实现项目，但<b>它能可信地验证自己的代码真的能跑吗？</b>言下之意是不能——自评会产生盲区。与之呼应，Google 开源了 AQuA（Ambient Quality Agent），专门分析线上 Agent 会话、验证重复出现的失败模式、并对部署源码快照做根因分析；在一组 32 次会话回放中，把"选座流程被绕过"从 15 次降到 2 次，"饮食偏好遗漏"从 7 次降到 0 次。</p>
+      <p>第三是组织层面的证据。JetBrains 对 9 个真实案例的研究发现：某组织 AI 采用率高达 95%，开发者速度却没有提升；另一家却把 PR 吞吐翻了三倍、缺陷积压下降 54%。差别不在"用没用 Agent"，而在是否有配套的流程、验证与度量。</p>
+      <div class="callout">
+        <b>落地要点：</b>把"模型选择"降级为可替换变量，把投入放到 harness 上——缓存策略、工具封装、结构化 handoff、以及一套<b>独立于生成方的验证/评测回路</b>。Agent 自评不可信，评测必须由外部裁判或真实回归来兜底。
+      </div>
+      <div class="src" style="border-top:none;padding-top:0;">
+        📎 <a href="https://x.com/browser_use/status/2121327290466586632" target="_blank" rel="noopener">Browser Use 基准</a> · <a href="https://x.com/browser_use/status/2121345707219288396" target="_blank" rel="noopener">harness 修复</a> · <a href="https://stackoverflow.blog/2026/11/13/your-coding-agent-shouldn-t-grade-its-own-homework/" target="_blank" rel="noopener">Stack Overflow</a> · <a href="https://www.infoq.com/news/2026/11/google-ambient-agent-prod/" target="_blank" rel="noopener">InfoQ · AQuA</a> · <a href="https://blog.jetbrains.com/blog/2026/11/13/scaling-ai-agents-what-we-learned-from-9-real-world-cases/" target="_blank" rel="noopener">JetBrains</a>
+      </div>
+    </div>
+
+    <div class="dive">
+      <div class="dive-tag">Deep Dive 02 / 性能优化</div>
+      <h3>性能优化的另一半：不改算法，只消除"核心操作周围的冗余"</h3>
+      <p>MongoDB 团队给了一个反直觉但很实用的经验：<b>最大的性能收益，常常来自干掉核心操作周围那些不必要的工作，而不是把核心本身做得更快。</b>他们在优化 Atlas Search 与 Vector Search 的文档查找链路时，没有改动底层搜索算法，只是去掉了冗余的查询计划与执行开销，就让 <code class="inline">$search</code> / <code class="inline">$vectorSearch</code> 查询<b>最高快了 5 倍</b>。</p>
+      <p>理解这条链路是关键：<code class="inline">mongot</code>（基于 Apache Lucene）先执行搜索、找出并排序最相关文档，然后 <code class="inline">mongod</code> 再用这些文档的 <code class="inline">_id</code> 回表 join 出完整 BSON 文档。冗余就藏在这两步的衔接里——重复的查询规划、重复的执行开销。删掉它们，端到端延迟直接受益。</p>
+      <p>同样的模式在今天的其它更新里反复出现：Vercel Sandbox 不是把镜像加载做得更快，而是<b>把镜像数据缓存到离沙箱更近的区域</b>，避免回源，启动时间降约 75%；Vercel 把构建缓存上限提到 5 GB，本质是让下一次构建少做重复安装。三者都是"减少无谓工作"而非"加速必要工作"。</p>
+      <div class="callout">
+        <b>方法论：</b>做性能剖析时先画清"必要工作"与"周边开销"的边界。优先问三个问题——这段查询计划是否重复计算？这份数据是否在跨区回源？这次构建是否在重复安装？往往比换更快的硬件或重写算法更省力、见效更快。
+      </div>
+      <div class="src" style="border-top:none;padding-top:0;">
+        📎 <a href="https://www.mongodb.com/company/blog/engineering/optimizing-document-lookup-making-atlas-search-vector-search-up-to-5x-faster" target="_blank" rel="noopener">MongoDB Blog</a> · <a href="https://vercel.com/changelog/vercel-sandbox-starts-up-to-four-times-faster" target="_blank" rel="noopener">Vercel News</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 工具推荐 -->
+  <section id="tools">
+    <div class="sec-head"><span class="sec-num">03</span><h2>工具推荐</h2></div>
+    <div class="tool-grid">
+
+      <div class="tool">
+        <div class="tname"><span class="dot">▸</span> Kitesurf</div>
+        <div class="tdesc">跑在 Cloudflare Workers 上的无状态 Agent 浏览器，自带 HTML/CSS/JS 解析与截图，支持 CDP，Apache 2.0 开源可自托管。</div>
+        <div class="tsrc">📎 <a href="https://blog.cloudflare.com/kitesurf-open-source/" target="_blank" rel="noopener">The Cloudflare Blog</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname"><span class="dot">▸</span> Astryx</div>
+        <div class="tdesc">Meta 开源（MIT）设计系统：150+ 无障碍 React 组件、StyleX 零构建、MCP server 与 Agent skill，让编码 Agent 和人类共用同一份文档。</div>
+        <div class="tsrc">📎 <a href="https://www.youtube.com/watch?v=VpYEFW5Yn7k" target="_blank" rel="noopener">AICodeKing</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname"><span class="dot">▸</span> llama.cpp v1.0.0</div>
+        <div class="tdesc">成熟的本地/端侧大模型推理库，进入 1.0 稳定阶段，适合私有化部署与工具链内嵌推理后端。</div>
+        <div class="tsrc">📎 <a href="https://x.com/Thom_Wolf/status/2121273122301046974" target="_blank" rel="noopener">Thomas Wolf(@Thom_Wolf)</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname"><span class="dot">▸</span> DeepSeek 全家桶 API</div>
+        <div class="tdesc">联网搜索、深度思考搜索、文件输入、阅读链接、语音/OCR/ASR/TTS 全部整合进 API，服务端自动拼上下文，deepseek-flash 可直连。</div>
+        <div class="tsrc">📎 <a href="https://mp.weixin.qq.com/s?__biz=Mzk0OTYwNzc3NQ==&mid=2247485910&idx=1&sn=529f50ba3b37e39319dad1faf7a122cf" target="_blank" rel="noopener">DeepSeek</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname"><span class="dot">▸</span> durable-harness</div>
+        <div class="tdesc">Vercel Workflow SDK 5 把底层持久化日志抽成可复用原语，可服务任意 Agent harness，适合长流程、可恢复的 Agent 任务。</div>
+        <div class="tsrc">📎 <a href="https://x.com/rauchg/status/2121277727940776114" target="_blank" rel="noopener">Guillermo Rauch(@rauchg)</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname"><span class="dot">▸</span> AQuA</div>
+        <div class="tdesc">Google 开源的线上 Agent 失败诊断参考实现：分析会话、验证失败模式、对部署快照做根因定位，可直接借鉴其回放评测思路。</div>
+        <div class="tsrc">📎 <a href="https://www.infoq.com/news/2026/11/google-ambient-agent-prod/" target="_blank" rel="noopener">InfoQ</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname"><span class="dot">▸</span> browser-use 1.0.4</div>
+        <div class="tdesc">浏览器 Agent 框架，1.0.4 修复了 harness 缓存问题，同一模型下得分显著高于通用内置工具，<code class="inline">uv add</code> 即可安装。</div>
+        <div class="tsrc">📎 <a href="https://x.com/browser_use/status/2121345707219288396" target="_blank" rel="noopener">Browser Use</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname"><span class="dot">▸</span> PyCharm 2026.3</div>
+        <div class="tdesc">303 项修复 + Python 3.15 惰性导入 + functools.partial 类型推断增强，长期维护的 Python 项目值得升级。</div>
+        <div class="tsrc">📎 <a href="https://blog.jetbrains.com/pycharm/2026/11/what-s-fixed-and-improved-in-pycharm-2026-3/" target="_blank" rel="noopener">The JetBrains Blog</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. 实践指南 -->
+  <section id="guide">
+    <div class="sec-head"><span class="sec-num">04</span><h2>实践指南</h2></div>
+
+    <div class="guide">
+      <h3><span class="chk">▸</span> 给 Agent 建一条"不自评"的验证回路</h3>
+      <p>编码 Agent 能端到端实现功能，但让它给自己的产出打分会产生系统性盲区。把验证从生成流程里拆出来：</p>
+      <ul>
+        <li>用独立的外部裁判或真实回归 / 集成测试作为最终判据，而非模型自评。</li>
+        <li>对线上 Agent 做会话回放，像 AQuA 那样把失败模式量化（本次案例：选座绕过 15→2、饮食遗漏 7→0）。</li>
+        <li>把评测脚本固定下来、可重复执行，分数变化才是可信的改进信号。</li>
+      </ul>
+      <div class="src" style="border-top:none;padding-top:8px;">📎 <a href="https://stackoverflow.blog/2026/11/13/your-coding-agent-shouldn-t-grade-its-own-homework/" target="_blank" rel="noopener">Stack Overflow</a> · <a href="https://www.infoq.com/news/2026/11/google-ambient-agent-prod/" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="guide">
+      <h3><span class="chk">▸</span> 先调 Harness，再考虑换模型</h3>
+      <p>同一模型只改 harness 就能大幅提升得分与成本效率。上线前按这份清单过一遍：</p>
+      <ul>
+        <li>测缓存命中率：Browser Use 从 78% 修到 96%，直接省 33% 成本、快 ~8%。</li>
+        <li>统一评测口径：固定模型、任务集与裁判，只变 harness，否则无法归因。</li>
+        <li>把编排逻辑从 prompt 下沉到可审查脚本（如 Antigravity 的 <code class="inline">/run-workflow</code>），用确定性控制流替代 prompt 漂移。</li>
+      </ul>
+      <div class="src" style="border-top:none;padding-top:8px;">📎 <a href="https://x.com/browser_use/status/2121345707219288396" target="_blank" rel="noopener">Browser Use</a> · <a href="https://x.com/antigravity/status/2121327669534933025" target="_blank" rel="noopener">Google Antigravity</a></div>
+    </div>
+
+    <div class="guide">
+      <h3><span class="chk">▸</span> 性能剖析：先找冗余，再谈加速</h3>
+      <p>MongoDB 不改算法靠"删除周边开销"拿到 5 倍提升。做性能优化时优先排查三类冗余：</p>
+      <ul>
+        <li>重复的查询规划 / 执行：搜索与回表衔接处是否被计算了两遍？</li>
+        <li>跨区回源：缓存是否离计算更近？Vercel 靠区域缓存把启动降 ~75%。</li>
+        <li>重复安装 / 重复构建：缓存上限是否限制了复用（Vercel 提到 5 GB）？</li>
+      </ul>
+      <div class="src" style="border-top:none;padding-top:8px;">📎 <a href="https://www.mongodb.com/company/blog/engineering/optimizing-document-lookup-making-atlas-search-vector-search-up-to-5x-faster" target="_blank" rel="noopener">MongoDB Blog</a> · <a href="https://vercel.com/changelog/vercel-sandbox-starts-up-to-four-times-faster" target="_blank" rel="noopener">Vercel News</a></div>
+    </div>
+
+    <div class="guide">
+      <h3><span class="chk">▸</span> 用 Playwright 做跨区域合规巡检（可复用的测试模式）</h3>
+      <p>Dropbox 用一个基于 Playwright 的 Cookie 审计器，在 200+ 个 Web 界面验证同意行为：每页跑 US 访客、EU 访客、Global Privacy Control 三个用例，<b>规则留在代码之外</b>，配套工具自动发现活跃 URL，周报区分疑似违规与误报。这套"规则外置 + 多身份用例 + 定期报告"的模式，可直接迁移到任何需要跨环境校验的自动化巡检。</p>
+      <div class="src" style="border-top:none;padding-top:8px;">📎 <a href="https://www.infoq.com/news/2026/11/dropbox-cookie-auditor/" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="guide">
+      <h3><span class="chk">▸</span> 给 AI 工具做"零埋点"成本归因</h3>
+      <p>AI 工具规模上来后，"每个用户真实花多少钱、哪个团队在烧钱"是绕不开的问题。Amazon Bedrock 提供内置、零埋点的成本归因：每次推理调用都能追溯到发起它的 IAM principal，身份与组织标签一起流入 CUR 2.0 与 Cost Explorer，数据不出 AWS 安全边界。自建 AI 平台可借鉴这个"身份即成本维度"的设计。</p>
+      <div class="src" style="border-top:none;padding-top:8px;">📎 <a href="https://aws.amazon.com/blogs/machine-learning/cost-attribution-and-controls-for-ai-developer-and-productivity-tools-on-amazon-bedrock/" target="_blank" rel="noopener">Artificial Intelligence (AWS)</a></div>
+    </div>
+
+    <div class="guide">
+      <h3><span class="chk">▸</span> 流处理选型：多数团队先用 Spark，再按场景引 Flink</h3>
+      <p>Databricks 的选型建议很务实：对大多数团队，Apache Spark 是更合适的选择，它覆盖批处理 ETL、SQL 分析等主流场景；真正的实时流处理需求再考虑 Apache Flink。别为了"架构先进"提前引入两套引擎，运维和一致性成本往往被低估。</p>
+      <div class="src" style="border-top:none;padding-top:8px;">📎 <a href="https://www.databricks.com/blog/spark-vs-flink" target="_blank" rel="noopener">Databricks</a></div>
+    </div>
+  </section>
+
+  <!-- 5. 来源汇总 -->
+  <section id="sources">
+    <div class="sec-head"><span class="sec-num">05</span><h2>参考链接汇总</h2></div>
+    <div class="sources">
+      <ol>
+        <li><span class="sfeed">Thomas Wolf(@Thom_Wolf)</span><a href="https://x.com/Thom_Wolf/status/2121273122301046974" target="_blank" rel="noopener">llama.cpp v1.0.0 is now available</a></li>
+        <li><span class="sfeed">The Cloudflare Blog</span><a href="https://blog.cloudflare.com/kitesurf-open-source/" target="_blank" rel="noopener">Kitesurf is now open source</a></li>
+        <li><span class="sfeed">DeepSeek</span><a href="https://mp.weixin.qq.com/s?__biz=Mzk0OTYwNzc3NQ==&mid=2247485910&idx=1&sn=529f50ba3b37e39319dad1faf7a122cf" target="_blank" rel="noopener">DeepSeek 发布全家桶应用 API</a></li>
+        <li><span class="sfeed">Google Antigravity(@antigravity)</span><a href="https://x.com/antigravity/status/2121327669534933025" target="_blank" rel="noopener">Rolling out Dynamic Workflows in Google Antigravity</a></li>
+        <li><span class="sfeed">Varun Mohan(@_mohansolo)</span><a href="https://x.com/_mohansolo/status/2121330487956500615" target="_blank" rel="noopener">Dynamic workflows are another extremely used feature internally</a></li>
+        <li><span class="sfeed">AICodeKing</span><a href="https://www.youtube.com/watch?v=VpYEFW5Yn7k" target="_blank" rel="noopener">Meta just open-sourced a 100-File Skill Library for Better UI Designs (Astryx)</a></li>
+        <li><span class="sfeed">Vercel News</span><a href="https://vercel.com/changelog/vercel-sandbox-starts-up-to-four-times-faster" target="_blank" rel="noopener">Vercel Sandbox starts up to 4x faster</a></li>
+        <li><span class="sfeed">Vercel News</span><a href="https://vercel.com/changelog/build-cache-size-limit-on-vercel-increased-to-five-gb" target="_blank" rel="noopener">Build cache size limit on Vercel increased to 5 GB</a></li>
+        <li><span class="sfeed">Guillermo Rauch(@rauchg)</span><a href="https://x.com/rauchg/status/2121277727940776114" target="_blank" rel="noopener">Workflow SDK 5 and Vercel Workflows</a></li>
+        <li><span class="sfeed">The JetBrains Blog</span><a href="https://blog.jetbrains.com/pycharm/2026/11/what-s-fixed-and-improved-in-pycharm-2026-3/" target="_blank" rel="noopener">What's Fixed and Improved in PyCharm 2026.3</a></li>
+        <li><span class="sfeed">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.147 (Insiders)</a></li>
+        <li><span class="sfeed">GitHub(@github)</span><a href="https://x.com/github/status/2121319695626518823" target="_blank" rel="noopener">Gemini 4 Hydrogen now generally available in GitHub Copilot</a></li>
+        <li><span class="sfeed">Browser Use(@browser_use)</span><a href="https://x.com/browser_use/status/2121327290466586632" target="_blank" rel="noopener">We measured 7 browser harnesses on 200 very hard tasks</a></li>
+        <li><span class="sfeed">Browser Use(@browser_use)</span><a href="https://x.com/browser_use/status/2121345707219288396" target="_blank" rel="noopener">Harness cache hit rate fixed 78% → 96%</a></li>
+        <li><span class="sfeed">Stack Overflow Blog</span><a href="https://stackoverflow.blog/2026/11/13/your-coding-agent-shouldn-t-grade-its-own-homework/" target="_blank" rel="noopener">Your coding agent shouldn't grade its own homework</a></li>
+        <li><span class="sfeed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/google-ambient-agent-prod/" target="_blank" rel="noopener">Google Open Sources Ambient Quality Agent (AQuA)</a></li>
+        <li><span class="sfeed">The JetBrains Blog</span><a href="https://blog.jetbrains.com/blog/2026/11/13/scaling-ai-agents-what-we-learned-from-9-real-world-cases/" target="_blank" rel="noopener">Scaling AI Agents: What We Learned From 9 Real-World Cases</a></li>
+        <li><span class="sfeed">MongoDB | Blog</span><a href="https://www.mongodb.com/company/blog/engineering/optimizing-document-lookup-making-atlas-search-vector-search-up-to-5x-faster" target="_blank" rel="noopener">Optimizing Document Lookup: Making Atlas Search and Vector Search Up to 5x Faster</a></li>
+        <li><span class="sfeed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/dropbox-cookie-auditor/" target="_blank" rel="noopener">Dropbox Shares How Its In-House Cookie Auditor Tests Consent Behaviour</a></li>
+        <li><span class="sfeed">Artificial Intelligence (AWS)</span><a href="https://aws.amazon.com/blogs/machine-learning/cost-attribution-and-controls-for-ai-developer-and-productivity-tools-on-amazon-bedrock/" target="_blank" rel="noopener">Cost attribution and controls for AI developer and productivity tools on Amazon Bedrock</a></li>
+        <li><span class="sfeed">Databricks</span><a href="https://www.databricks.com/blog/spark-vs-flink" target="_blank" rel="noopener">Apache Spark vs Apache Flink: which should you use?</a></li>
+        <li><span class="sfeed">Engineering at Meta</span><a href="https://engineering.fb.com/2026/11/13/android/cuttlefish-on-mac/" target="_blank" rel="noopener">Cuttlefish on Mac: Running Android's Virtual Device Framework Natively on Apple Silicon</a></li>
+        <li><span class="sfeed">GitHub</span><a href="https://www.youtube.com/watch?v=3Qyd9cIuULA" target="_blank" rel="noopener">How a personal AI productivity hack became Slack's internal tool</a></li>
+        <li><span class="sfeed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/netflix-ai-driven-observability/" target="_blank" rel="noopener">Netflix Turns Operational Data Into a Knowledge Graph for AI-Driven Observability</a></li>
+        <li><span class="sfeed">Stack Overflow Blog</span><a href="https://stackoverflow.blog/2026/11/13/agentic-doesn-t-find-pages-it-assembles-answers/" target="_blank" rel="noopener">Agentic search doesn't find pages, it assembles answers</a></li>
+        <li><span class="sfeed">大模型智能</span><a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&mid=2247557734&idx=1&sn=f04d25c011cf4dda6637e82fdfaa3ba8" target="_blank" rel="noopener">DeepInfer 后，社区推理框架何去何从？</a></li>
+        <li><span class="sfeed">Anthropic(@AnthropicAI)</span><a href="https://x.com/AnthropicAI/status/2121317227618340990" target="_blank" rel="noopener">10 recommendations for designing, running and reporting safety evaluations</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <div>科技日报 · 开发者实践版 &nbsp;|&nbsp; 2026-11-13 &nbsp;|&nbsp; 从 536 条资讯中筛选 &nbsp;|&nbsp; 面向一线工程师</div>
+    <div style="margin-top:8px;"><span class="cursor"></span> generated by tech-daily-generator</div>
   </footer>
 
 </div>
