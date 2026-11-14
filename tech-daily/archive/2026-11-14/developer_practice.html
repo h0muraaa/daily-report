@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践日报 · 2026-11-14</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --bg-alt:#161b22;
+    --card:#161b22;
+    --border:#30363d;
+    --text:#c9d1d9;
+    --text-dim:#8b949e;
+    --accent:#3fb950;
+    --accent2:#58a6ff;
+    --accent3:#d2a8ff;
+    --warn:#d29922;
+    --code-bg:#0b0f14;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono","Courier New",monospace;
+    line-height:1.75;
+    font-size:15px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:48px 24px 80px;}
+  header.hero{
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(63,185,80,.10), transparent 45%),
+      radial-gradient(circle at 88% 0%, rgba(88,166,255,.10), transparent 45%),
+      var(--bg-alt);
+    padding:36px 32px;
+    margin-bottom:40px;
+  }
+  .prompt-line{color:var(--text-dim);font-size:13px;margin-bottom:14px;}
+  .prompt-line .caret{color:var(--accent);}
+  header.hero h1{
+    margin:0 0 6px;
+    font-size:30px;
+    line-height:1.25;
+    color:#e6edf3;
+    letter-spacing:-.5px;
+  }
+  header.hero h1 .tag{
+    color:var(--accent);
+  }
+  .meta{
+    display:flex;flex-wrap:wrap;gap:8px 18px;
+    margin-top:18px;font-size:13px;color:var(--text-dim);
+  }
+  .meta .dot{color:var(--accent);}
+  .toc{
+    display:flex;flex-wrap:wrap;gap:8px;
+    margin-top:22px;
+  }
+  .toc a{
+    color:var(--accent2);
+    text-decoration:none;
+    font-size:12.5px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:4px 12px;
+    transition:all .15s ease;
+  }
+  .toc a:hover{background:var(--bg);border-color:var(--accent2);}
+  section{margin-bottom:52px;}
+  h2{
+    font-size:20px;
+    color:#e6edf3;
+    margin:0 0 22px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  h2 .idx{
+    color:var(--accent);
+    font-size:13px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:1px 8px;
+  }
+  .card{
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--card);
+    padding:20px 22px;
+    margin-bottom:16px;
+    transition:border-color .15s ease;
+  }
+  .card:hover{border-color:#3d444d;}
+  .card h3{
+    margin:0 0 10px;
+    font-size:16px;
+    color:#e6edf3;
+    line-height:1.4;
+  }
+  .card h3 .num{
+    color:var(--accent);
+    margin-right:6px;
+  }
+  .card p{margin:0 0 12px;color:var(--text);}
+  .card p:last-of-type{margin-bottom:0;}
+  .src{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:12px;
+    color:var(--text-dim);
+    border-top:1px dashed var(--border);
+    padding-top:10px;
+    margin-top:14px;
+    width:100%;
+  }
+  .src a{
+    color:var(--accent2);
+    text-decoration:none;
+    word-break:break-all;
+  }
+  .src a:hover{text-decoration:underline;}
+  .badge{
+    display:inline-block;
+    font-size:11px;
+    padding:1px 8px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    margin-left:6px;
+    vertical-align:middle;
+  }
+  .badge.g{color:var(--accent);border-color:rgba(63,185,80,.4);}
+  .badge.b{color:var(--accent2);border-color:rgba(88,166,255,.4);}
+  .badge.p{color:var(--accent3);border-color:rgba(210,168,255,.4);}
+  ul.points{margin:6px 0 12px;padding-left:20px;}
+  ul.points li{margin-bottom:7px;color:var(--text);}
+  ul.points li::marker{color:var(--accent);}
+  code{
+    background:var(--code-bg);
+    border:1px solid var(--border);
+    border-radius:5px;
+    padding:1px 6px;
+    font-size:13px;
+    color:var(--accent3);
+  }
+  pre{
+    background:var(--code-bg);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px 16px;
+    overflow-x:auto;
+    margin:10px 0 14px;
+  }
+  pre code{background:none;border:none;padding:0;color:#a5d6ff;font-size:13px;}
+  .callout{
+    border-left:3px solid var(--accent);
+    background:rgba(63,185,80,.06);
+    border-radius:0 8px 8px 0;
+    padding:12px 16px;
+    margin:12px 0;
+    font-size:13.5px;
+    color:var(--text);
+  }
+  .callout.warn{border-left-color:var(--warn);background:rgba(210,153,34,.07);}
+  .callout strong{color:#e6edf3;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.two-col{grid-template-columns:1fr;}}
+  footer{
+    border-top:1px solid var(--border);
+    padding-top:28px;
+    margin-top:20px;
+  }
+  footer h2{border:none;font-size:17px;margin-bottom:18px;}
+  .refs{list-style:none;margin:0;padding:0;}
+  .refs li{
+    font-size:13px;
+    padding:8px 0;
+    border-bottom:1px dashed var(--border);
+    color:var(--text-dim);
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+  }
+  .refs li:last-child{border-bottom:none;}
+  .refs .fk{color:var(--accent);white-space:nowrap;font-size:12px;}
+  .refs a{color:var(--accent2);text-decoration:none;word-break:break-all;}
+  .refs a:hover{text-decoration:underline;}
+  .endmark{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:12px;
+    margin-top:36px;
+  }
+  .endmark .blink{color:var(--accent);animation:blink 1.2s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="prompt-line"><span class="caret">$</span> cat ./tech-daily/developer_practice.md <span class="caret">▊</span></div>
+    <h1>开发者实践日报 <span class="tag">// dev-practice</span></h1>
+    <div class="meta">
+      <span><span class="dot">◆</span> 2026-11-14</span>
+      <span><span class="dot">◆</span> 覆盖窗口 11-13 21:44 → 11-14 21:44</span>
+      <span><span class="dot">◆</span> 294 条资讯 · 精选 22 条</span>
+    </div>
+    <nav class="toc">
+      <a href="#hot">① 技术热榜</a>
+      <a href="#deep">② 深度解读</a>
+      <a href="#tools">③ 工具推荐</a>
+      <a href="#practice">④ 实践指南</a>
+      <a href="#refs">⑤ 参考链接</a>
+    </nav>
+  </header>
+
+  <!-- ============ 热榜 ============ -->
+  <section id="hot">
+    <h2><span class="idx">01</span> 今日技术热榜</h2>
+
+    <div class="card">
+      <h3><span class="num">01</span>Node.js 26.10.0 把 debounce / throttle 和 PKCS#12 解析搬进核心</h3>
+      <p>Node.js 26.10.0 新增 <code>util.debounce()</code> 与 <code>util.throttle()</code>，以及 <code>util.markPromiseAsHandled()</code>，直接进核心库；同时引入 <code>crypto.parsePKCS12()</code> 用于读取 <code>.p12</code> / <code>.pfx</code> 证书包，并把实验性的 Virtual File System 扩展到了 <code>node:ffi</code>。</p>
+      <p>对一线开发者的意义很直接：debounce/throttle 几乎每个项目都在手写或用 <code>lodash</code> 顶一下，如今可以少一个依赖、少一类"每个库实现边界不一致"的坑；PKCS#12 解析进核心则让证书链/客户端证书的加载不再依赖 OpenSSL 命令行或第三方包。Node.js 26 现已进入 Active LTS，适合新项目起步。</p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/nodejs-debounce-throttle/" target="_blank" rel="noopener">InfoQ · Node.js Brings Debounce, Throttle, and PKCS#12 Parsing Into Core Modules</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">02</span>DeepSeek 开放"全家桶" API：搜索、OCR、ASR、TTS 可按量单独买<span class="badge g">API</span></h3>
+      <p>DeepSeek 把自家 App 背后的整套能力拆成独立 API 对外售卖：联网搜索 <code>$0.75/千次</code>、OCR <code>$0.225/千页</code>、ASR <code>$0.06/小时</code>、TTS <code>$0.225/万字符</code>，token 本身 <code>$0.15 / $0.60 per 1M</code>。官方还开源了聊天客户端 Demo，并支持导入你在 App 内的全部对话记录。</p>
+      <p>实现层面，据稀土掘金整理，开发者只需在原有 API 中开启对应参数即可获得这些能力，甚至能 1:1 复刻一个完整的 DeepSeek App，无需从零搭界面和基础交互。两点必须注意：工具调用与 token 分开计费（Search/Fetch 当前为 5 元/千次成功请求）；对外提供 AI 服务时，审核、备案、AI 标识等合规责任仍在开发者自己身上。</p>
+      <div class="src">📎 来源：<a href="https://x.com/berryxia/status/2121487460467421381" target="_blank" rel="noopener">Berryxia.AI</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzU2NjU3Nzg2Mg==&mid=2247548482&idx=1&sn=71da78e59ef106b125ff84a1462431ef" target="_blank" rel="noopener">稀土掘金技术社区</a> · <a href="https://www.qbitai.com/2026/11/510003.html" target="_blank" rel="noopener">量子位</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">03</span>Google Cloud Compute Engine API 改为不可变的日期版本</h3>
+      <p>Compute Engine API 的日期版本化正式 GA：用不可变的季度快照（如 <code>2026-09-01</code>）取代单一可变的 <code>/v1</code> 面，调用方可通过请求头或查询参数按请求选择版本。</p>
+      <p>这解决了老 API 版本策略的核心痛点——新版本可以改默认值、错误格式和 IAM 校验，而不会悄无声息地影响 <code>/v1</code> 的老调用方。这套"按日期冻结"的模式 Azure Resource Manager 和 Stripe 已经用了多年，对做多云/API 兼容层的团队来说是个值得抄的版本治理范式。</p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/compute-engine-api-versioning/" target="_blank" rel="noopener">InfoQ · Google Cloud Moves the Compute Engine API to Immutable Date-Based Versions</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">04</span>开源 DocumentDB 1.0 GA：基于 PostgreSQL、兼容 MongoDB 线协议</h3>
+      <p>DocumentDB 1.0 是这款 MIT 许可文档数据库的首个 GA 版本，底层基于 PostgreSQL 构建，兼容 MongoDB 的线协议（wire protocol）。</p>
+      <p>按官方说明，多数 MongoDB 驱动、工具和查询无需修改即可运行。对想用 Mongo 的文档模型、但又不想被单一厂商锁定的团队，这是一个值得评估的迁移目标——尤其适合已有 PostgreSQL 运维经验的团队把两套存储收敛成一套。</p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/mongodb-compatible-documentdb/" target="_blank" rel="noopener">InfoQ · Open Source DocumentDB 1.0 Reaches General Availability</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">05</span>Claude Code 支持自定义主题（mods）</h3>
+      <p>桌面版 Claude Code 现在可以基于 mods 系统构建自定义主题：改配色、加动态背景，甚至直接告诉 Claude 你想要什么样子让它生成整套主题，也提供了 <code>theme-examples</code> 插件快速起步。</p>
+      <p>Addy Osmani 指出这套主题本质上是"带干净 UI 表面的 mods"，说明 Claude Code 的可扩展面正在从单纯的插件能力，扩展到可编排的客户端外观与交互层。对喜欢把工具打磨成顺手形态的工程师，这是又一个可以"用 Claude 生成 Claude 配置"的入口。</p>
+      <div class="src">📎 来源：<a href="https://x.com/addyosmani/status/2121489809453776909" target="_blank" rel="noopener">Addy Osmani</a> · <a href="https://x.com/dotey/status/2121407633089245442" target="_blank" rel="noopener">宝玉</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">06</span>React 中文周刊 #299：声明式拖拽 · 面向 Agent 的 UI SDK · 元框架基准</h3>
+      <p>本期几个值得动手看的点：Vercel 与 shadcn 联手推出 UI SDK，定位是"面向智能体的无头 UI 行为库"；<strong>Dragology</strong> 是一个面向 SVG 界面的实验性 React 库，思路反转——不再按需设计拖放交互，而是"声明可能的结果，让库去推导交互本身"。</p>
+      <p>此外，e18e 启动了对 Next.js / Nuxt / Astro 等元框架的持续基准测试（涵盖安装与构建成本、SSR 吞吐，并附 Core Web Vitals 数据，可按版本持续追踪，已促成 Nuxt、React、Solid 的修复）；X 用 React、Relay 与 Vite 重建了 Web 应用；Expo 联合创始人的 Rust 新框架 Exact 发布，并有 5 项版本发布。</p>
+      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247550576&idx=1&sn=bbef1ece0b617ab412efa3aa051e8120" target="_blank" rel="noopener">印记中文 · React 中文周刊 #299</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">07</span>GitHub Copilot 十月更新：automations、Projects 与 Fusion</h3>
+      <p>GitHub 官方回顾了 10 月 Copilot 的三项新能力：用于 issue 分诊的 <strong>Copilot automations</strong>；Copilot 应用内的 <strong>Projects</strong>，支持跨多个仓库（甚至不绑定仓库）地推进工作；以及用于把请求路由到前沿模型的 <strong>Copilot Fusion</strong>。</p>
+      <p>三个方向分别对应"自动化重复维护工作""跨仓任务编排""按需选模型"，也呼应了本期反复出现的主线：工具正在从"补全代码"走向"承接任务"。GitHub 还附带了一段自家团队如何用这些功能的工作方式视频。</p>
+      <div class="src">📎 来源：<a href="https://x.com/github/status/2121361459582025982" target="_blank" rel="noopener">GitHub</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">08</span>Cursor 公布近期安全事件复盘</h3>
+      <p>Cursor 就近期的一起安全事件发布了更新，给出了"发生了什么"的详细说明以及相应的修复/补救措施。</p>
+      <p>对正在生产环境依赖 Cursor 的团队，这类厂商安全事件值得点进去核对时间线与影响面，并复核自己在这期间是否有相关凭证、仓库或 CI 权限需要轮换。安全通告本身就是可执行的信息：先读 remediation，再决定要不要动自己的配置。</p>
+      <div class="src">📎 来源：<a href="https://x.com/cursor_ai/status/2121411147714970092" target="_blank" rel="noopener">Cursor · Security Incident Update</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 深度解读 ============ -->
+  <section id="deep">
+    <h2><span class="idx">02</span> 深度技术解读</h2>
+
+    <div class="card">
+      <h3>Anthropic 的"常驻 Agent"架构：把 always-on 拆成五个部件</h3>
+      <p>Anthropic 发布了一份可以照着搭的架构说明，讲的是"始终在线"的 Agent 到底由哪些核心原语组成。按社区提炼，它把常驻能力拆成几块各自职责清晰的部件：<strong>事件收件箱（inbox）</strong>负责接收外部事件，<strong>计时器（timers）</strong>提供主动触发能力，<strong>记忆（memory）</strong>保证跨会话的连续性，再加上<strong>权限（permissions）</strong>与<strong>发件箱（outbox）</strong>。</p>
+      <p>这份文档真正有价值的地方不在"这五样东西有多新"——收件箱、计时器、记忆、权限、发件箱单独看，很多团队早用"队列 + 定时任务"拼出过类似结构。它的价值在于<strong>把每个部件的职责边界划清楚</strong>，并明确一个容易被误解的点：</p>
+      <div class="callout"><strong>"始终在线"是一种使用体验，不等于让模型一直挂在线上烧 token。</strong>常驻 Agent 大部分时间应该在睡觉、等待 inbox 事件或 timer 唤醒，只在真正有活时才调用模型。</div>
+      <p>给一线开发的落地建议：照这份文档搭骨架时，先落"事件驱动的空转循环"——inbox 收事件、timer 兜底、状态写进 memory，模型调用放在被事件唤起的分支里；权限做成显式的 gate，而不是散落在 prompt 里。配套工程上，记住另一条同日的观点：<em>"没有 eval factory，就没有 software factory"</em>——常驻 Agent 的行为一旦上线就长期运行，没有可回归的评测集，你无法判断某次"记忆写入"或"权限放宽"是否让整体质量退化。</p>
+      <div class="src">📎 来源：<a href="https://x.com/omarsar0/status/2121656194465243164" target="_blank" rel="noopener">elvis (@omarsar0) · Anthropic always-on agents guide</a> · <a href="https://x.com/shao__meng/status/2121427594260398327" target="_blank" rel="noopener">meng shao · Claude 团队架构说明</a> · <a href="https://x.com/omarsar0/status/2121644490188374081" target="_blank" rel="noopener">elvis · eval factory</a></div>
+    </div>
+
+    <div class="card">
+      <h3>Shopify Cyber Chaos Monkey：用 AI Agent 在生产环境"打自己"</h3>
+      <p>Shopify Engineering 公开了内部系统 <strong>Cyber Chaos Monkey（CCM）</strong>：把攻防模型、源码、基础设施知识和真实测试店铺的凭证交给 AI Agent，让它们在<strong>生产环境</strong>里主动寻找绕过防护的新方法。名字致敬 Netflix 2011 年的 Chaos Monkey——思路是把混沌工程（主动制造故障来检验系统韧性）迁移到安全领域。</p>
+      <p>动机来自一个现实压力：前沿模型让"发现漏洞"的成本越来越低，全行业收到的漏洞报告都在猛增。Shopify 称自家漏洞赏金计划的报告量自 2024 年以来增加了近 <strong>300%</strong>。他们的判断是——同样的模型也能帮防守方，且 Shopify 比外部研究者更了解自家系统，应该抢先找到影响最大的问题，抬高外部挖到漏洞的难度。攻击者瞄准生产环境，测试也就必须对着生产环境做。</p>
+      <ul class="points">
+        <li><strong>先定方向再动手：</strong>CCM 像一名赏金研究员，手里有源码、威胁情报、历史漏洞报告、部署记录，还能用真实测试店铺调用线上接口。</li>
+        <li><strong>两段式结构：</strong>系统分"发现模块"和"沙箱"。一个想法先进发现模块，由最新攻防模型缩小范围，有价值的线索才交给沙箱。</li>
+        <li><strong>任务来源多样：</strong>可来自安全工程师、上游的其他安全 Agent，也可以来自发现模块自身的反馈。</li>
+        <li><strong>硬约束：</strong>不能影响服务可用性，也不能危及商家数据。</li>
+      </ul>
+      <p>对工程团队的启发不在于"照抄一个红队"，而在于它示范了一种<strong>把第二个 Agent 当裁判</strong>的闭环：让 Agent 去试探，再让另一个 Agent 判定结果是否成立，从而把"AI 找漏洞"这件高风险动作约束在可控沙箱里。想落地的话，第一步不是接模型，而是先把"测试凭证的隔离"和"允许触碰的边界"定义清楚。</p>
+      <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2121438053755683224" target="_blank" rel="noopener">meng shao · Shopify Cyber Chaos Monkey 解读</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 工具推荐 ============ -->
+  <section id="tools">
+    <h2><span class="idx">03</span> 工具推荐</h2>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Kiri <span class="badge b">Rust</span></h3>
+        <p>Rust 写的容器运行时，主打一个"快"：启动 Docker 容器约 <strong>22ms</strong>，对比 OrbStack 的 279ms、Docker Desktop 的 178ms，快了十几倍。VM 空闲 60 秒自动关机并有唤醒机制，适合本地开发省资源。</p>
+        <p>目前是 beta，可能有些 bug；作者已用它替换 OrbStack。适合愿意尝鲜、对本地容器启动速度敏感的后端/DevOps 同学。</p>
+        <div class="src">📎 来源：<a href="https://x.com/vikingmute/status/2121444970225881096" target="_blank" rel="noopener">Viking</a></div>
+      </div>
+
+      <div class="card">
+        <h3>Mole CLI <span class="badge b">跨平台</span></h3>
+        <p>Tw93 的电脑清理工具近期大幅更新，Mac / Windows / Linux 三端同步。Mac 端补齐了约 900 款软件的卸载残留清理，开发工具与编译过期内容、iOS/Android 模拟器缓存都能清；Windows 补上 360、夸克、QQ、飞书、剪映、Trae 等常用软件缓存，卸载时保留游戏存档、Epic 游戏与 WSL 磁盘，并新增 <code>mo installer</code> 挑出久置安装包。</p>
+        <p>Linux CLI 支持 Arch、Omarchy、Debian、Ubuntu，<code>clean / uninstall / analyze / status / purge</code> 与 Mac 一致。一个实用细节：对会打 btrfs 快照的 Omarchy，删掉的旧包要等快照轮换后空间才回来，Mole 会如实显示清理现状。建议先 <code>mo update</code> 升级到最新。</p>
+        <div class="src">📎 来源：<a href="https://x.com/HiTw93/status/2121521233221275758" target="_blank" rel="noopener">Tw93 · github.com/tw93/Mole</a></div>
+      </div>
+
+      <div class="card">
+        <h3>Cloudflare 实验性浏览器引擎 <span class="badge b">Edge</span></h3>
+        <p>在没有 Chrome、没有浏览器容器的情况下，解析 HTML、应用 CSS、执行页面 JavaScript 并输出截图，把整条渲染链塞进 Cloudflare Workers。</p>
+        <p>适合"边缘侧截图 / 服务端渲染校验 / 无头页面抓取"这类场景——过去往往要拉一个几百 MB 的 headless Chromium，现在可能一个 Worker 就能扛。项目仍在实验阶段，值得关注其 API 与资源限制。</p>
+        <div class="src">📎 来源：<a href="https://x.com/geekbb/status/2121426467016130908" target="_blank" rel="noopener">Geek · Cloudflare 实验性浏览器引擎</a></div>
+      </div>
+
+      <div class="card">
+        <h3>hairline figures <span class="badge p">前端交互</span></h3>
+        <p>一套 33 个线稿插画的 SVG figure，按主题排列，每个都是纯 SVG 绘制。鼠标靠近时触发非常丝滑的响应式交互，并可调节 <code>intensity</code> 控制反应强度。</p>
+        <p>对喜欢 Linear 那种细腻互动效果的前端同学，这是一个很好的可抄作业对象：纯 SVG + 鼠标邻近度驱动的实现思路，比堆一堆动画库更轻、更可控。</p>
+        <div class="src">📎 来源：<a href="https://x.com/vikingmute/status/2121607129547043219" target="_blank" rel="noopener">Viking · hairline.lucasmarkes.com/figures</a></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📚 延伸学习：两个可动手的课程 / 资源</h3>
+      <ul class="points">
+        <li><strong>Stanford CS329A · Self-Improving AI Agents：</strong>讲"自我改进的 AI Agent"，内容质量高、参考文献丰富，适合作为系统性补课的入口。</li>
+        <li><strong>freeCodeCamp · 用 Python 从零构建并训练 GLM-5.3-Flash：</strong>GLM-5.3-Flash 结合了线性注意力与稀疏注意力、MoE 设计以及流形约束超连接；课程用一个 <strong>2500 万参数</strong>的缩小版，在普通 CPU 上就能跑通预训练与后训练。模型用 260-token 字节级词表、192-token 上下文，再加一个小视觉编码器把 32×32 图像编码为 16 个 token。全部代码、幻灯片和实验都在配套 GitHub 仓库里。</li>
+        <li><strong>GitHub Universe 2026 圆桌 · The view from the labs：</strong>Anthropic、OpenAI、Google Cloud、GitHub Copilot 的负责人一起谈未来两年 AI 辅助开发会怎样重塑软件架构、代码安全与日常流程，是理解"工具往哪走"的一手信号。</li>
+      </ul>
+      <div class="src">📎 来源：<a href="https://x.com/omarsar0/status/2121638797419118619" target="_blank" rel="noopener">elvis · CS329A</a> · <a href="https://www.freecodecamp.org/news/build-and-train-a-glm-53-flash-model-from-scratch-with-python/" target="_blank" rel="noopener">freeCodeCamp</a> · <a href="https://www.youtube.com/watch?v=eYPxL3pTylk" target="_blank" rel="noopener">GitHub Universe 2026</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 实践指南 ============ -->
+  <section id="practice">
+    <h2><span class="idx">04</span> 实践指南</h2>
+
+    <div class="card">
+      <h3>① 多模型分工的 CLAUDE.md：Claude 规划、Codex 干重活、Codex 交叉审查</h3>
+      <p>数字生命卡兹克分享了一套自己长期在用的多 Agent 协作分工：跟 Claude 对话做规划与前端，把成块的后端/算法/数据处理/性能活派给本机的 Codex（GPT-6.1 Sol），再让 Claude 收尾，最后启动 Codex 做最多三轮审查。核心是把"你定接口和验收标准、Codex 写实现"这条边界固定进 CLAUDE.md。</p>
+      <pre><code>## 派活
+- 成块的后端、算法、数据处理和性能活（不是一两行的修补）
+  交给本机的 Codex（GPT-6.1 Sol）写，你定接口和验收标准；
+  前端、视觉、文案、拆解和验收自己做。
+- 用 `codex-worker &lt;工作树&gt; "任务"` 派；
+  追加用 `codex-worker --resume &lt;会话ID&gt; &lt;工作树&gt; "追加"`，
+  放后台跑，会话 ID 在输出最后。
+- 它只能写工作树和临时目录，提交不了、联不了网：
+  装依赖、联网测试、提交推送由你做。
+  它只看得到任务和工作树，接口、验收标准、要一起改的同类都写进任务。
+- Codex 交回后你读 diff、自己跑测试（合并前的审查也是 GPT，
+  你这步才是换家模型的交叉检查）。PR 里有 Codex 写的代码就是混合来源，交付不带 --agent。</code></pre>
+      <p>这套流程有两个值得抄的设计点：<strong>权限最小化</strong>（worker 只能写工作树、不能联网/提交，装依赖和推送由人来做，天然把"不可逆动作"留在人手里）和<strong>交叉检查</strong>（写代码和审代码用不同家的模型，避免同一模型的盲区）。作者也坦言用的是自建 <code>codex-worker</code> 脚本而非官方插件，因为官方插件"有点麻烦，问题也有点多"。</p>
+      <div class="src">📎 来源：<a href="https://x.com/Khazix0918/status/2121602766976237610" target="_blank" rel="noopener">数字生命卡兹克</a></div>
+    </div>
+
+    <div class="card">
+      <h3>② 换模型后跑一遍 prompt-audit：审计 CLAUDE.md / skills / commands</h3>
+      <p>Peter Yang 给了两个可以直接用在新模型上的审计提示词：</p>
+      <ul class="points">
+        <li><code>/doctor prompt-audit</code>：审计你的整个 Claude Code 配置（CLAUDE.md、skills、commands），并给出修复建议。</li>
+        <li><code>/claude-api prompt-audit [skill name]</code>：对单个 skill 做深度审计。</li>
+      </ul>
+      <p>他的建议是"每次 Anthropic 发布新模型都应该跑一遍"——新模型的理解力和指令遵循方式可能变化，旧 prompt 里为迁就旧模型写下的大量补丁，往往在新模型上要么冗余、要么反而拉低效果。把这一步固化成"换模型后的 checklist"，比拍脑袋重写整个 CLAUDE.md 更省事。</p>
+      <div class="src">📎 来源：<a href="https://x.com/petergyang/status/2121649295950762363" target="_blank" rel="noopener">Peter Yang</a></div>
+    </div>
+
+    <div class="card">
+      <h3>③ 主会话 + 任务双层设计：让"老板"能越过总监看细节</h3>
+      <p>宝玉抛出了一个很实际的 Agent 交互设计问题：只盯主会话，你就无法干预子任务细节、看不到执行过程、不方便补上下文；而像 Claude Code 那样开一堆 Session，管理起来又很累，人得自己记住每个 session 在干什么。他给的比喻很到位：前者像"老板只能通过部门总监了解情况"，后者像"老板自己当每个项目的项目经理"。</p>
+      <p>理想形态是两者结合：<strong>人只盯主对话</strong>，每次发消息时由会话的协调器判断这是普通对话、还是属于某个任务；对具体任务<strong>能点开去干预</strong>——既能透过主会话看任务细节，又能直接指挥。同一天他另一条补充指出：从主会话里应当能"沉淀"出两样东西——<strong>任务</strong>（让 Agent 去做的某件事）和<strong>成果</strong>（这件事做完产生了哪些结果），否则主会话会退化成"微信群"，有价值的话题和文件都难找。</p>
+      <div class="src">📎 来源：<a href="https://x.com/dotey/status/2121434782433190063" target="_blank" rel="noopener">宝玉 · 主会话与 Session</a> · <a href="https://x.com/dotey/status/2121463293936103613" target="_blank" rel="noopener">宝玉 · 沉淀任务与成果</a></div>
+    </div>
+
+    <div class="card">
+      <h3>④ 当 Agent 写 PR 比你看 PR 快：把重要 PR 做成带旁白的分镜短片</h3>
+      <p>Matt Pocock 预告了一个 <code>/animatic</code> Skill，解决他自己遇到的瓶颈："Agent 写 PR 的速度已经超过我审 PR 的速度，大段 diff 也读得很慢。"他的办法不是全程录屏，而是做成 animatic（分镜短片）：每一帧一张静态画面、配一句旁白，由 Agent 做好贴回 PR。整个流程由一条构建命令串起来：</p>
+      <ul class="points">
+        <li>先写一份 JSON 格式的分镜脚本，每一拍对应一句台词和一帧画面；</li>
+        <li>用 <strong>Playwright</strong> 渲染画面，代码直接取自 diff，并保留真实行号；</li>
+        <li>用选定语音逐句朗读，最后用 <strong>ffmpeg</strong> 合成 MP4，并逐帧检查画面与音频；</li>
+        <li>生成后按仓库配置贴回 PR（GitHub、GitLab 或本地目录均可）。</li>
+      </ul>
+      <p>工程优化也有参考价值：同一支视频的优化前后对比，总耗时从 <strong>397 秒降到 96 秒</strong>，模型耗时 244s→85s，对话轮次 27→12，费用 <strong>$1.38→$0.49</strong>，每轮脚本处理时间从约 50s 降到约 6s，并改为逐帧检查；平均完成约 4 分钟。<code>/setup-animatic</code> 负责逐项只问一次工具选择（语音可选 ElevenLabs / OpenAI 等），把答案存进文档，避免重复配置。</p>
+      <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2121431531130617947" target="_blank" rel="noopener">meng shao · Matt Pocock /animatic Skill</a></div>
+    </div>
+
+    <div class="card">
+      <h3>⑤ 成本工程：按"每个解决任务的成本"选模型，而不是按每 token 价</h3>
+      <p>同一天有两条互相印证的观察。AWS 博客在介绍用 NVIDIA NeMo Switchyard 给编程 Agent 做模型路由时指出：开发者真正为"任务"付费，而不是为单次调用付费；一个任务可能要几次到几十次模型调用，总成本取决于需要多少轮、每轮重放多少历史、以及任务是否反复重试或永远不完成——<strong>没做完的任务你也一样付费</strong>。因此模型路由应当用 <code>cost per solved task</code>（总成本 ÷ 测试通过的任务数）来衡量，而不是只看 token 单价。</p>
+      <p>另一条来自 Google Antigravity 的 Orchestrator：它让一个前沿模型（Carbon）出计划，把代码编辑与测试交给快速执行模型（Hydrogen），遇阻时前沿模型再回来修计划；官方称在 Terminal-Bench 4.0 上接近 Carbon 的任务成功率，同时<strong>少消耗 24% 配额、平均快 19%</strong>。这类"规划模型 + 执行模型"的分层，本质上也是在优化同一个指标。</p>
+      <div class="callout warn">实践提醒：在成本报表里，把"平均 token 单价"换成"每个通过测试的任务成本"，你会立刻发现哪些重试、长历史重放和未完成任务正在悄悄吃掉预算。</div>
+      <div class="src">📎 来源：<a href="https://aws.amazon.com/blogs/machine-learning/route-coding-agent-requests-to-the-right-model-on-amazon-bedrock-with-nvidia-nemo-switchyard/" target="_blank" rel="noopener">AWS ML Blog · NeMo Switchyard</a> · <a href="https://x.com/dingyi/status/2121393423592939959" target="_blank" rel="noopener">Ding · Antigravity Orchestrator</a> · <a href="https://x.com/shao__meng/status/2121393784546267486" target="_blank" rel="noopener">meng shao · 单任务成本</a></div>
+    </div>
+
+    <div class="card">
+      <h3>⑥ SDD 规范驱动开发：用"约束"压住 AI 产出的方差</h3>
+      <p>58 沈剑在《代码都被 AI 写了，那人的价值在哪里》里给了一个清晰的问题拆解。传统研发是"人驱动、流程为人设计"，前半段（需求→设计→架构→用例→开发联调→测试→上线）最花时间；AI 时代这些步骤的时间被极大缩短，如果流程不变，人与人之间的沟通反而成了瓶颈。</p>
+      <p>但直接把流程丢给 AI 会出问题：AI 不知道你公司的具体业务、不知道团队的设计约束与规范、不知道特定技术栈的架构约束——不是能力不行，而是知识太广、幻觉太多，<strong>不约束就会让产出质量的"方差"特别大</strong>。他的解法是 SDD（Specification-Driven Development，规范驱动开发）：让研发流程从"人工驱动"进化到"约束与规范驱动"，AI 不再只是执行，而是在约束与规范的范围内执行。他建议把研发生命周期拆成四个阶段，第一阶段是"需求约束（需求结构化）"。</p>
+      <p>对想落地 AI 编码的团队，这条的实用价值是把"写更好的 prompt"升级成"建更好的约束"——把业务规则、设计规范、架构约束显式化、结构化，才是压低 AI 产出波动的根。这在思路上和上文的 eval factory 是一对：<strong>约束管输入端，eval 管输出端。</strong></p>
+      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651981897&idx=1&sn=b23e2d29c3549d440746eed75f236842" target="_blank" rel="noopener">架构师之路 · SDD 规范驱动开发</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 参考链接 ============ -->
+  <footer id="refs">
+    <h2>参考链接汇总</h2>
+    <ul class="refs">
+      <li><span class="fk">[01]</span><a href="https://www.infoq.com/news/2026/11/nodejs-debounce-throttle/" target="_blank" rel="noopener">InfoQ · Node.js Brings Debounce, Throttle, and PKCS#12 Parsing Into Core Modules</a></li>
+      <li><span class="fk">[02]</span><a href="https://x.com/berryxia/status/2121487460467421381" target="_blank" rel="noopener">Berryxia.AI · DeepSeek 全家桶 API 拆解</a></li>
+      <li><span class="fk">[03]</span><a href="https://mp.weixin.qq.com/s?__biz=MzU2NjU3Nzg2Mg==&mid=2247548482&idx=1&sn=71da78e59ef106b125ff84a1462431ef" target="_blank" rel="noopener">稀土掘金技术社区 · 开发者可以手动 1:1 还原 DeepSeek？</a></li>
+      <li><span class="fk">[04]</span><a href="https://www.qbitai.com/2026/11/510003.html" target="_blank" rel="noopener">量子位 · 突发！DeepSeek 开放全家桶 API</a></li>
+      <li><span class="fk">[05]</span><a href="https://www.infoq.com/news/2026/11/compute-engine-api-versioning/" target="_blank" rel="noopener">InfoQ · Google Cloud Moves the Compute Engine API to Immutable Date-Based Versions</a></li>
+      <li><span class="fk">[06]</span><a href="https://www.infoq.com/news/2026/11/mongodb-compatible-documentdb/" target="_blank" rel="noopener">InfoQ · Open Source DocumentDB 1.0 Reaches General Availability</a></li>
+      <li><span class="fk">[07]</span><a href="https://x.com/addyosmani/status/2121489809453776909" target="_blank" rel="noopener">Addy Osmani · Claude Code themes</a></li>
+      <li><span class="fk">[08]</span><a href="https://x.com/dotey/status/2121407633089245442" target="_blank" rel="noopener">宝玉 · 桌面版 Claude Code 自定义主题</a></li>
+      <li><span class="fk">[09]</span><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247550576&idx=1&sn=bbef1ece0b617ab412efa3aa051e8120" target="_blank" rel="noopener">印记中文 · React 中文周刊 #299</a></li>
+      <li><span class="fk">[10]</span><a href="https://x.com/github/status/2121361459582025982" target="_blank" rel="noopener">GitHub · Copilot 10 月新能力</a></li>
+      <li><span class="fk">[11]</span><a href="https://x.com/cursor_ai/status/2121411147714970092" target="_blank" rel="noopener">Cursor · Security Incident Update</a></li>
+      <li><span class="fk">[12]</span><a href="https://x.com/omarsar0/status/2121656194465243164" target="_blank" rel="noopener">elvis (@omarsar0) · Anthropic always-on agents guide</a></li>
+      <li><span class="fk">[13]</span><a href="https://x.com/shao__meng/status/2121427594260398327" target="_blank" rel="noopener">meng shao · Claude 团队架构说明</a></li>
+      <li><span class="fk">[14]</span><a href="https://x.com/omarsar0/status/2121644490188374081" target="_blank" rel="noopener">elvis (@omarsar0) · no software factory without eval factory</a></li>
+      <li><span class="fk">[15]</span><a href="https://x.com/shao__meng/status/2121438053755683224" target="_blank" rel="noopener">meng shao · Shopify Cyber Chaos Monkey 解读</a></li>
+      <li><span class="fk">[16]</span><a href="https://x.com/vikingmute/status/2121444970225881096" target="_blank" rel="noopener">Viking · Kiri（Rust 容器运行时）</a></li>
+      <li><span class="fk">[17]</span><a href="https://x.com/HiTw93/status/2121521233221275758" target="_blank" rel="noopener">Tw93 · Mole CLI 更新</a></li>
+      <li><span class="fk">[18]</span><a href="https://x.com/geekbb/status/2121426467016130908" target="_blank" rel="noopener">Geek · Cloudflare 实验性浏览器引擎</a></li>
+      <li><span class="fk">[19]</span><a href="https://x.com/vikingmute/status/2121607129547043219" target="_blank" rel="noopener">Viking · hairline figures</a></li>
+      <li><span class="fk">[20]</span><a href="https://x.com/omarsar0/status/2121638797419118619" target="_blank" rel="noopener">elvis (@omarsar0) · Stanford CS329A Self-Improving AI Agents</a></li>
+      <li><span class="fk">[21]</span><a href="https://www.freecodecamp.org/news/build-and-train-a-glm-53-flash-model-from-scratch-with-python/" target="_blank" rel="noopener">freeCodeCamp · Build and Train a GLM-5.3-Flash Model From Scratch with Python</a></li>
+      <li><span class="fk">[22]</span><a href="https://www.youtube.com/watch?v=eYPxL3pTylk" target="_blank" rel="noopener">GitHub Universe 2026 · The view from the labs</a></li>
+      <li><span class="fk">[23]</span><a href="https://x.com/Khazix0918/status/2121602766976237610" target="_blank" rel="noopener">数字生命卡兹克 · 多模型分工 CLAUDE.md</a></li>
+      <li><span class="fk">[24]</span><a href="https://x.com/petergyang/status/2121649295950762363" target="_blank" rel="noopener">Peter Yang · prompt-audit 提示词</a></li>
+      <li><span class="fk">[25]</span><a href="https://x.com/dotey/status/2121434782433190063" target="_blank" rel="noopener">宝玉 · 主会话与 Session 的设计取舍</a></li>
+      <li><span class="fk">[26]</span><a href="https://x.com/dotey/status/2121463293936103613" target="_blank" rel="noopener">宝玉 · 从主会话沉淀任务与成果</a></li>
+      <li><span class="fk">[27]</span><a href="https://x.com/shao__meng/status/2121431531130617947" target="_blank" rel="noopener">meng shao · Matt Pocock /animatic Skill</a></li>
+      <li><span class="fk">[28]</span><a href="https://aws.amazon.com/blogs/machine-learning/route-coding-agent-requests-to-the-right-model-on-amazon-bedrock-with-nvidia-nemo-switchyard/" target="_blank" rel="noopener">AWS ML Blog · Route coding agent requests with NVIDIA NeMo Switchyard</a></li>
+      <li><span class="fk">[29]</span><a href="https://x.com/dingyi/status/2121393423592939959" target="_blank" rel="noopener">Ding · Antigravity Orchestrator</a></li>
+      <li><span class="fk">[30]</span><a href="https://x.com/shao__meng/status/2121393784546267486" target="_blank" rel="noopener">meng shao · Agent 产品的单任务成本</a></li>
+      <li><span class="fk">[31]</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651981897&idx=1&sn=b23e2d29c3549d440746eed75f236842" target="_blank" rel="noopener">架构师之路 · 代码都被 AI 写了，人的价值在哪里（SDD）</a></li>
+    </ul>
+    <div class="endmark">— 日报生成完毕 · data window 2026-11-13 21:44 → 2026-11-14 21:44 · <span class="blink">▊</span></div>
+  </footer>
+
+</div>
+</body>
+</html>
