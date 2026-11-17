@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践版 · 科技日报 2026-11-17</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel-2: #1c2128;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --green: #3fb950;
+    --cyan: #58a6ff;
+    --amber: #d29922;
+    --purple: #bc8cff;
+    --mono: "JetBrains Mono", "Fira Code", "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0 16px 64px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; }
+
+  header.hero {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #161b22 0%, #0f141b 100%);
+    padding: 28px 26px;
+    margin: 32px 0 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  header.hero::before {
+    content: "";
+    position: absolute; inset: 0 0 auto 0; height: 3px;
+    background: linear-gradient(90deg, var(--green), var(--cyan), var(--purple));
+  }
+  .prompt {
+    color: var(--green);
+    font-size: 13px;
+    letter-spacing: .5px;
+  }
+  .prompt .cursor {
+    display: inline-block; width: 8px; height: 15px;
+    background: var(--green); margin-left: 4px; vertical-align: -2px;
+    animation: blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  h1 {
+    font-size: 26px; margin: 10px 0 6px; color: #e6edf3;
+    letter-spacing: -.4px;
+  }
+  .subtitle { color: var(--muted); font-size: 13px; margin: 0; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    margin-top: 16px; font-size: 12px; color: var(--muted);
+  }
+  .meta b { color: var(--cyan); font-weight: 600; }
+
+  section { margin: 40px 0; }
+  .sec-head {
+    display: flex; align-items: baseline; gap: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px; margin-bottom: 20px;
+  }
+  .sec-num {
+    font-size: 12px; color: var(--bg); background: var(--green);
+    padding: 1px 8px; border-radius: 4px; font-weight: 700;
+  }
+  .sec-title { font-size: 19px; color: #e6edf3; margin: 0; font-weight: 700; }
+  .sec-note { color: var(--muted); font-size: 12px; margin-left: auto; }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .card:hover { border-color: #3d444d; }
+  .card h3 {
+    margin: 0 0 8px; font-size: 16px; color: #e6edf3; line-height: 1.5;
+  }
+  .card p { margin: 8px 0; color: var(--text); }
+  .src {
+    display: inline-block; font-size: 11px; color: var(--amber);
+    border: 1px solid #3a2f14; background: #1f1a0d;
+    border-radius: 4px; padding: 1px 7px; margin-right: 8px;
+    vertical-align: 2px; white-space: nowrap;
+  }
+  .src.cyan { color: var(--cyan); border-color: #16324f; background: #0d1b2a; }
+  .src.purple { color: var(--purple); border-color: #34204f; background: #170f26; }
+  .src.green { color: var(--green); border-color: #1b3a22; background: #0e1f13; }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .link-line { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .link-line a { color: var(--cyan); }
+
+  .deep {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--purple);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+  }
+  .deep h3 { margin: 0 0 4px; font-size: 18px; color: #e6edf3; }
+  .deep .kicker { color: var(--purple); font-size: 12px; margin-bottom: 12px; }
+  .deep h4 { color: var(--green); font-size: 14px; margin: 18px 0 6px; }
+  .deep ul { margin: 6px 0; padding-left: 22px; }
+  .deep li { margin: 5px 0; }
+  code {
+    background: #010409; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px; font-size: 13px;
+    color: var(--amber);
+  }
+  pre {
+    background: #010409; border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px; overflow-x: auto;
+    font-size: 12.5px; line-height: 1.6; color: var(--text);
+    margin: 14px 0;
+  }
+  pre .c { color: var(--muted); }
+  pre .g { color: var(--green); }
+  pre .b { color: var(--cyan); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+
+  .tool { position: relative; }
+  .tool .tag {
+    position: absolute; top: 14px; right: 16px;
+    font-size: 10px; letter-spacing: .5px;
+    color: var(--green); border: 1px solid #1b3a22; background: #0e1f13;
+    border-radius: 4px; padding: 1px 6px;
+  }
+
+  .practice { counter-reset: step; }
+  .practice .card { padding-left: 56px; position: relative; }
+  .practice .card::before {
+    counter-increment: step; content: counter(step, decimal-leading-zero);
+    position: absolute; left: 18px; top: 18px;
+    color: var(--green); font-size: 13px; font-weight: 700;
+    border-right: 1px solid var(--border); padding-right: 12px;
+  }
+
+  .sources {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .sources ol { margin: 0; padding-left: 22px; }
+  .sources li { margin: 7px 0; font-size: 13px; color: var(--muted); }
+  .sources li a { color: var(--cyan); }
+  .sources .feed { color: var(--amber); font-size: 11px; }
+
+  footer {
+    text-align: center; color: var(--muted); font-size: 11px;
+    margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="prompt">$ ./daily-report --role developer_practice<span class="cursor"></span></div>
+    <h1>开发者实践版 · 科技日报</h1>
+    <p class="subtitle">一线开发者视角 · 工具更新 · 架构原理 · 可落地的最佳实践</p>
+    <div class="meta">
+      <span>日期 <b>2026-11-17</b></span>
+      <span>时间窗 <b>11-16 01:11 → 11-17 01:11</b></span>
+      <span>扫描 <b>542</b> 条 / <b>424</b> 个源</span>
+      <span>精选后 <b>15</b> 条</span>
+    </div>
+  </header>
+
+  <!-- ============ 01 热榜 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">今日技术热榜</h2>
+      <span class="sec-note">// 工具 / 基础设施 / Agent 工程</span>
+    </div>
+
+    <article class="card">
+      <h3><span class="src green">Microsoft for Developers</span>VS Code 1.147 Insiders：把「Agent 会话管理」做进编辑器</h3>
+      <p>VS Code Insiders 更新到 1.147，这一版的重点不在编辑器本身，而在 AI 工作流：新增 Agent 会话管理、Chat 资源（resources）与 Markdown 编辑改进。所谓「会话管理」，指向的是多轮、长程 Agent 交互里绕不开的痛点——多个会话如何切换、上下文如何组织，而不是把每一次提问都当成一次性请求。</p>
+      <p>对每天把编辑器当 Agent 工作台用的开发者，这类更新比新语法高亮更值得关注：它决定了你能否在一个窗口里稳定跑长任务、并在多个任务之间保持隔离。Insiders 渠道意味着功能还会变，但方向已经明确——IDE 正在从「写代码的地方」变成「编排、观察、复盘 Agent 的地方」。</p>
+      <div class="link-line">📎 <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147-(insiders)" target="_blank" rel="noopener">来源: Microsoft for Developers — Visual Studio Code Team</a></div>
+    </article>
+
+    <article class="card">
+      <h3><span class="src cyan">meng shao / Berryxia</span>腾讯开源 LoopForge：让 Coding Agents 按 SOP 交付，而不是靠提示词碰运气</h3>
+      <p>腾讯开源了 LoopForge（MIT 协议），定位不是「再做一个编程助手」，而是给 CodeBuddy、Codex、Claude Code、Cursor CLI、OpenCode、Kimi Code、DeepSeek Harness 等现有 Agent 套一层「组织交付流程」。核心判断很反直觉：代码从来不是瓶颈，交接才是——让 Agent「修个 bug」，跑一次靠运气，可能跳过计划、忘测试、自己审自己、跑到一半停了没人发现。</p>
+      <p>LoopForge 把计划、写代码、审代码、测试拆成四个不同角色（写的人不审），用脚本退出码裁决编译/测试是否通过，关键节点停下等人签字，并在运行结束后用 <code>runeval</code> 给整条流程打分、提出改进建议。仓库和密钥留在自己的服务器，也提供了本地模式，一行命令即可在 Claude Code 里试：<code>npx -y loopforge-cli@latest install claude</code>，然后用 <code>/start-devflow</code> 起流程。目前是 v0.3，平台版需要 Docker、模型 key 自理。</p>
+      <div class="link-line">📎 <a href="https://x.com/shao__meng/status/2122473384403710005" target="_blank" rel="noopener">来源: meng shao (@shao__meng)</a> · <a href="https://x.com/berryxia/status/2122361955453452651" target="_blank" rel="noopener">Berryxia.AI (@berryxia)</a></div>
+    </article>
+
+    <article class="card">
+      <h3><span class="src purple">The JetBrains Blog</span>TeamCity 实验性 AI Agents 插件：在 CI 构建里直接跑 Codex / Claude Code</h3>
+      <p>JetBrains 发布 TeamCity 的实验性 AI Agents 插件，让编码 Agent 不再只跑在开发者本机，而是进入 CI/CD：可以用来审查代码、排查失败构建、更新文档。插件会把 Codex 或 Claude Code 安装到 TeamCity 构建代理上，在构建期间安全地注入凭证，并收集用量统计与 Agent 轨迹（trajectories）。</p>
+      <p>用法很直接：构建开始时插件检查客户端是否可用、缺失则安装；之后就能像普通 Command Line 构建步骤一样调用 <code>codex</code> 或 <code>claude</code>，LLM 供应商可自选。对想把「AI 做事」纳入可审计流水线的团队，这是把 Agent 变成标准构建步骤的信号——凭证生命周期跟着构建走，轨迹可回看，而不是散落在每台开发机上。</p>
+      <div class="link-line">📎 <a href="https://blog.jetbrains.com/teamcity/2026/11/run-ai-agents-in-teamcity/" target="_blank" rel="noopener">来源: The JetBrains Blog — Olga Bedrina</a></div>
+    </article>
+
+    <article class="card">
+      <h3><span class="src">InfoQ</span>AWS 开源 Emulator：不用云账号，本地就能测 200+ 个 AWS 服务</h3>
+      <p>AWS 开源并正式可用了一套本地 Emulator：一个本地 HTTPS 端点，由公开的 Smithy API 模型生成，让开发者和编码 Agent 在没有 AWS 账号的情况下，对 200 多个 AWS 服务做本地测试。它公开了各服务的「保真度分数」（fidelity scores），并明确记录了在 IAM、region、内存态（in-memory state）等方面的限制。</p>
+      <p>这条对两类人价值最大：一是写集成测试不想每次打真实云、也不想维护 Moto 之类手写 mock 的团队；二是让编码 Agent 在完全离线、可重复的环境里自验证代码——不用给它真实云凭证。需要留意的是，保真度分数和局限是官方自己标注的，涉及 IAM 鉴权语义、跨 region、持久化状态的用例，仍要回到真实环境验证。</p>
+      <div class="link-line">📎 <a href="https://www.infoq.com/news/2026/11/aws-emulator-agents/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">来源: InfoQ — Daniel Dominguez</a></div>
+    </article>
+
+    <article class="card">
+      <h3><span class="src">InfoQ</span>GitHub 重建 Copilot App 的 Diff 视图：2200 文件、百万行 PR 不卡顿</h3>
+      <p>GitHub 工程师重写了 Copilot App 的 diff 视图，目标是一个极端 PR：2200 个文件、超过一百万行改动、400 条行内评论。设计上的关键取舍是把「固定高度的代码行」和「可变高度的评论块」分开处理——评论块只在视口附近分批测量，从而避免一次性布局整个百万行文档。</p>
+      <p>性能不是靠感觉，而是靠约束：通过 CI 性能预算（budgets）和自动化 App 运行来卡回归。对做大型列表/虚拟滚动的前端团队，这是很典型的「混合高度虚拟化」范式——难的不是渲染代码行，而是夹在代码之间、高度不定的注释/评论块，如何在不全量测量的前提下保持滚动稳定。</p>
+      <div class="link-line">📎 <a href="https://www.infoq.com/news/2026/11/github-pull-requests-rebuild/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">来源: InfoQ — Daniel Curtis</a></div>
+    </article>
+
+    <article class="card">
+      <h3><span class="src green">Microsoft Research</span>TokenEconomizer：复用历史会话，让编码 Agent 少花 18.4–30.9% 的 token</h3>
+      <p>微软研究院开源了 TokenEconomizer 插件：因为开发者天天在同一个代码库里用编码 Agent，而 Agent 每次都从零开始——重新发现熟悉的事实、加载用不到的工具、重复失败过的尝试。这个插件从仓库里过去的会话中学习，在不修改 Agent 或其底层模型的前提下，减少未来会话的浪费。</p>
+      <p>在 277 个真实 bug 修复任务上，它在多个 AI 编码 Agent 上把成本降低了 18.4%–30.9%，所测每个仓库成本都下降，而任务成功率总体稳定。这条的价值在于它承认了一个现实：Agent 的浪费很大一部分来自「不记得上次学过什么」，而这件事可以在模型之外、用一层可插拔的记忆/经验来治。</p>
+      <div class="link-line">📎 <a href="https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/" target="_blank" rel="noopener">来源: Microsoft Research Blog</a> · <a href="https://x.com/MSFTResearch/status/2122435510463242401" target="_blank" rel="noopener">Microsoft Research (@MSFTResearch)</a></div>
+    </article>
+
+    <article class="card">
+      <h3><span class="src purple">Docker</span>Docker Sandboxes + Firecrawl kit：给沙箱里的 Agent 一条受控的上网通道</h3>
+      <p>Docker Sandboxes 里的编码 Agent 跑在隔离 VM 中，沙箱控制它能访问哪些主机，凭证留在宿主机、经由代理注入。问题也随之而来：这层控制同时挡住了 Agent 去读文档、看 changelog、查训练截止之后才发布的 API，于是它只能照着记忆里的旧版本写代码。常规「放开白名单」的解法，又把沙箱的安全收益还了回去。</p>
+      <p>Firecrawl kit 给出一条更收敛的路：只新增一个出口主机 <code>api.firecrawl.dev</code>，Agent 便获得网页搜索、页面抓取、站点爬取能力，且每个页面都以干净的 Markdown 返回。这是一个值得抄的模式——不是把整个互联网放进来，而是把「读网页」抽象成一个受控服务，用单点出口换取可审计与可限流。</p>
+      <div class="link-line">📎 <a href="https://www.docker.com/blog/docker-sandboxes-firecrawl-web-access/" target="_blank" rel="noopener">来源: Docker — Jennifer Kohl</a></div>
+    </article>
+
+    <article class="card">
+      <h3><span class="src cyan">Vercel News</span>AI Gateway 支持 Private Inference：自托管/微调模型走同一套 API、鉴权与日志</h3>
+      <p>Vercel 的 AI Gateway 新增 Private Inference：企业可以把自托管、微调或预发布模型接到网关的私有端点，用与目录模型相同的鉴权、SDK、API 和可观测性来调用。请求会被网关翻译成你端点的格式，所以「在私有模型和目录模型之间切换」只需要改 model ID。</p>
+      <p>工程含义有三点：私有模型只对所属团队可见、不进公共目录，凭证加密存储，并支持零数据保留（ZDR）；Chat Completions / Responses / Messages 三种协议都能调私有模型。它把「模型选择」从代码里抽出来变成一层网关配置，和下面实践指南里「用 Gateway 掌控模型选择、自己拥有 traces」是同一条主张。</p>
+      <div class="link-line">📎 <a href="https://vercel.com/changelog/ai-gateway-now-supports-private-inference" target="_blank" rel="noopener">来源: Vercel News — Sam Chitgopekar, Jerilyn Zheng</a></div>
+    </article>
+  </section>
+
+  <!-- ============ 02 深度解读 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">深度技术解读</h2>
+      <span class="sec-note">// 架构原理拆解</span>
+    </div>
+
+    <div class="deep">
+      <h3>LoopForge：把「团队交付流程」编译成 Agent 能执行的 SOP</h3>
+      <div class="kicker">// 关键词：角色分离 · 退出码裁决 · 检查点 · runeval 两层循环</div>
+      <p>大多数「AI 写代码」的方案都在优化模型这一步，LoopForge 反过来假设模型会犯错、会偷懒，于是把可控性放到模型外面。它的核心对象是「流程」：由 Agent 节点、脚本节点、人工审批节点、子流程节点组成一张有向图，按依赖推进，支持并行分支。规划、开发、测试、评审因此从「提示词里的提醒」变成「流程里的硬步骤」。</p>
+
+      <h4>四条硬约束</h4>
+      <ul>
+        <li><b>角色分离</b>：计划、写代码、审代码、测试是四个不同的 Agent，写的人不审自己。</li>
+        <li><b>脚本说了算</b>：编译和测试过没过，看退出码，而不是听 Agent 自己说「好了」。</li>
+        <li><b>人来签字</b>：关键检查点停下来等人批准，可以打回到任意一步重做。</li>
+        <li><b>沙箱与留痕</b>：每个任务在 Docker 沙箱里跑，全过程有运行记录，可追溯。</li>
+      </ul>
+
+      <h4>两层循环：先修好这次，再改进下次</h4>
+      <p>第一层在任务执行中发生：脚本和检查节点根据执行结果判断是否通过，失败后可以定向修复或重跑，并受最大尝试次数、返工次数限制；人也可以补充信息、批准结果或退回指定步骤。第二层在运行结束后发生：<code>runeval</code> 把运行轨迹整理成结构化事实，再由模型从<b>控制流、耗时、工具浪费、Token 效率、错误恢复、交付完整性</b>六个维度打分，并给出「流程补丁」——比如调整重试策略、增删角色检查规则、补充角色提示词。</p>
+
+      <pre><span class="c"># 概念上的执行循环（非官方伪代码）</span>
+for task in tasks:
+    plan  <span class="g">←</span> agent_plan(task)
+    code  <span class="g">←</span> agent_code(plan)            <span class="c"># 写的人不审</span>
+    review<span class="g">←</span> agent_review(code)
+    ok    <span class="g">←</span> run_tests(code).exit_code == 0  <span class="c"># 退出码裁决</span>
+    <span class="b">if</span> not ok: retry_or_human(code, max_retry)  <span class="c"># 定向修复/返工</span>
+    <span class="b">if</span> checkpoint: wait_for_human_approval()      <span class="c"># 关键节点签字</span>
+
+score, patches <span class="g">←</span> runeval(run_trace)   <span class="c"># 6 维打分</span>
+propose(patches); <span class="c"># 补丁待人工应用，不自动改 SOP</span></pre>
+
+      <h4>边界要说清楚</h4>
+      <p>官方口中的「自进化」，主要是根据执行反馈改进流程和角色规则，<b>不是训练模型</b>，也不等于系统会无人干预地持续变强——提示词明确禁止整份重写 SOP、修改连线或删节点，建议先以「待应用」状态存在，由人审后再生效。仓库的验收文档记录了一次真实用例：CodeBuddy 配合 <code>deepseek-v4.1-flash</code> 跑通了规划、编码、测试。对想给团队 Agent 加「流程护栏」的人，这是目前少见的、把「谁来验收」讲明白的开源实现。</p>
+      <div class="link-line">📎 <a href="https://x.com/shao__meng/status/2122473384403710005" target="_blank" rel="noopener">来源: meng shao (@shao__meng) — 机制拆解</a> · <a href="https://x.com/berryxia/status/2122361955453452651" target="_blank" rel="noopener">Berryxia.AI (@berryxia) — 上手与限制</a></div>
+    </div>
+
+    <div class="deep">
+      <h3>百万行 PR 怎么不卡：GitHub Copilot App 的混合高度 diff 渲染</h3>
+      <div class="kicker">// 关键词：固定行高 · 可变高评论块 · 视口批测 · CI 性能预算</div>
+      <p>一个有 2200 个文件、超过一百万行改动、400 条行内评论的 PR，会同时击穿两类假设：一次性布局整个文档会爆内存；而简单的固定行高虚拟滚动，又容不下夹在代码之间、高度不定的评论块。GitHub 团队的做法是承认这两种元素性质不同，分开处理。</p>
+
+      <h4>核心取舍</h4>
+      <ul>
+        <li><b>代码行固定高度</b>：可预测，适合虚拟化——只渲染视口内的一小段，滚动位置直接算偏移量。</li>
+        <li><b>评论块可变高度</b>：内容长度不定，无法预先算总高度；只在接近视口时<b>分批测量</b>（batched measurement），把测量成本摊到滚动过程中，而不是一次性全量。</li>
+        <li><b>性能写成预算</b>：把渲染耗时、滚动帧率等指标做成 CI budget，回归即失败；配合自动化 App 运行，防止「本地看着还行」蒙混过关。</li>
+      </ul>
+
+      <pre><span class="c"># 混合高度虚拟滚动的心智模型</span>
+rows   = pr.diff_rows              <span class="c"># 固定高度，可预算偏移</span>
+blocks = pr.inline_comments        <span class="c"># 可变高度，需测量</span>
+
+visible = viewport_range(scrollTop)
+for block in near(visible, margin): <span class="c"># 只测视口附近的评论块</span>
+    block.height <span class="g">←</span> measure(block)     <span class="c"># 分批，不阻塞首屏</span>
+render(visible_rows + measured_blocks)
+<span class="b">assert</span> perf <span class="g">≤</span> ci_budget             <span class="c"># 性能预算卡回归</span></pre>
+
+      <h4>为什么值得借鉴</h4>
+      <p>这套模式适用于任何「大小元素混排 + 超长列表」的场景：日志查看器（固定行 + 可展开的堆栈）、聊天记录（消息 + 可变附件卡）、文档（段落 + 代码块 + 图片）。要点不是某个库，而是三条工程纪律——按可预测性给元素分类、把不可预测的测量推迟并批量化、把性能指标固化进 CI。三者缺一，百万行级别的输入就会把「看起来的流畅」打回原形。</p>
+      <div class="link-line">📎 <a href="https://www.infoq.com/news/2026/11/github-pull-requests-rebuild/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">来源: InfoQ — Daniel Curtis</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 03 工具推荐 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">工具推荐</h2>
+      <span class="sec-note">// 本周值得上手</span>
+    </div>
+
+    <div class="grid">
+      <article class="card tool">
+        <span class="tag">OSS</span>
+        <h3>TokenEconomizer：给编码 Agent 装上「经验记忆」</h3>
+        <p>微软研究院开源插件，从仓库里过去的 Agent 会话中学习，减少重复发现事实、加载无用工具、重复失败尝试。不修改 Agent 也不改模型，277 个真实 bug 任务上省 18.4%–30.9% 成本、成功率基本不变。适合天天在同一代码库跑同一个 Agent 的团队，装上即用。</p>
+        <div class="link-line">📎 <a href="https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/" target="_blank" rel="noopener">来源: Microsoft Research Blog</a></div>
+      </article>
+
+      <article class="card tool">
+        <span class="tag">SANDBOX</span>
+        <h3>Docker Sandboxes 的 Firecrawl kit</h3>
+        <p>给隔离沙箱里的 Agent 一条受控上网通道：只新增 <code>api.firecrawl.dev</code> 一个出口主机，就能获得网页搜索、抓取、站点爬取，页面统一转成干净 Markdown。解决「沙箱太严读不到新文档、白名单一放开又失去安全收益」的两难，可直接插进已有的 Docker 沙箱。</p>
+        <div class="link-line">📎 <a href="https://www.docker.com/blog/docker-sandboxes-firecrawl-web-access/" target="_blank" rel="noopener">来源: Docker</a></div>
+      </article>
+
+      <article class="card tool">
+        <span class="tag">MCP</span>
+        <h3>Qdrant MCP 集成</h3>
+        <p>通过 MCP 让 AI Agent 直接管理/监控 Qdrant Cloud 集群、检查健康与性能、搜索官方文档并取回代码示例，还能用自然语言操作。作者强调的分工很清楚：MCP 提供「工具」，Agent Skills 提供「怎么用好工具」的知识——两者配合而不是互相替代，适合做向量检索相关 Agent 的团队。</p>
+        <div class="link-line">📎 <a href="https://x.com/qdrant_engine/status/2122321283413324041" target="_blank" rel="noopener">来源: Qdrant (@qdrant_engine)</a></div>
+      </article>
+
+      <article class="card tool">
+        <span class="tag">CLI</span>
+        <h3>llm 0.37.3：一次 SQLite 行为变更引发的 bug fix</h3>
+        <p>Simon Willison 的 LLM 发布 0.37.3，修复 Homebrew 新版 SQLite（3.54.1）导致的日志代码问题。<code>json_object('a', (select json_array(1)))</code> 在 3.54.1 返回 <code>{"a":"[1]"}</code> 而非 <code>{"a":[1]}</code>——按文档子查询返回的是 SQL 文本，3.54.1 才是对的。修法：<code>json_object('a', json((select json_array(1))))</code>，给所有依赖嵌套 JSON 的代码提了个醒。</p>
+        <div class="link-line">📎 <a href="https://simonwillison.net/2026/Nov/16/llm/" target="_blank" rel="noopener">来源: Simon Willison's Weblog</a></div>
+      </article>
+
+      <article class="card tool">
+        <span class="tag">COURSE</span>
+        <h3>斯坦福 CS329Z《Engineering AI Agents》</h3>
+        <p>课程资料全部公开，视频在 Stanford Online YouTube 每日更新，官网 <code>cs329z.stanford.edu</code> 有教学安排、作业与项目资料。最大亮点是实操门槛低：用不到 5 美元的 API 额度，就能亲手搭一个类似 Claude Code 的编程 Agent。适合想系统补齐 Agent 工程心智、又不想只看理论的开发者按周跟练。</p>
+        <div class="link-line">📎 <a href="https://x.com/FinanceYF5/status/2122183339826466964" target="_blank" rel="noopener">来源: AI Will (@FinanceYF5)</a></div>
+      </article>
+
+      <article class="card tool">
+        <span class="tag">REPO</span>
+        <h3>NVIDIA auto-ontology：给 Agent 一层「数据结构语义层」</h3>
+        <p>这个仓库几天内涨了 8000+ stars，做的事很实在：构建一层语义层，把业务概念映射到数据库表，帮 AI Agent 校验 SQL、理解「这张表到底是什么意思」。可通过 MCP、CLI 或 API 接入你的 Agent。对做 Text-to-SQL / 数据问答的团队，它补的正是模型最缺的那块「业务语义」。</p>
+        <div class="link-line">📎 <a href="https://www.youtube.com/shorts/W9-Y00v5C3I" target="_blank" rel="noopener">来源: GitHub — The Download</a></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 04 实践指南 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title">实践指南</h2>
+      <span class="sec-note">// 可直接落地</span>
+    </div>
+
+    <div class="practice">
+      <article class="card">
+        <h3>把 Agent 当「会话」，而不是「请求」来分配资源</h3>
+        <p>Google 的 GKE 实践给出一个反直觉结论：AI Agent 会话一天里大部分时间既在活动、也在空转，传统「一个 Pod 一个会话」的分配方式极度浪费集群资源。做法是用 Agent Substrate + AX on GKE，把空闲会话「停泊」到对象存储里释放算力，需要时再恢复会话状态。结果是 Kubernetes 节点成本最高可降 40%。落到你自己的部署上：先统计会话的活跃/空闲比例，再决定是常驻还是可挂起/恢复，别默认「一直开着」。</p>
+        <div class="link-line">📎 <a href="https://developers.googleblog.com/agents-are-sessions-not-requests-size-gke-node-pools-for-ai-agent-sessions/" target="_blank" rel="noopener">来源: Google Developers Blog</a></div>
+      </article>
+
+      <article class="card">
+        <h3>沙箱 Agent 联网：单一出口 + 凭证留宿主</h3>
+        <p>不要让「能读文档」变成「能访问一切」。参照 Docker + Firecrawl 的做法：只放行一个受控出口主机（如 <code>api.firecrawl.dev</code>），由它代理搜索/抓取并返回干净 Markdown；凭证留在宿主机、经代理注入，不进入沙箱环境。这样既让 Agent 拿到训练截止之后的新文档，又保留了可审计、可限流、可一键关停的边界。凡是需要「更宽的网」，优先加一个受控服务，而不是加一条通配白名单。</p>
+        <div class="link-line">📎 <a href="https://www.docker.com/blog/docker-sandboxes-firecrawl-web-access/" target="_blank" rel="noopener">来源: Docker</a></div>
+      </article>
+
+      <article class="card">
+        <h3>在 CI 里跑编码 Agent 的正确姿势</h3>
+        <p>TeamCity 的插件示范了三个要点，可迁移到任何 CI：① Agent 客户端装到构建代理上，构建开始前检查、缺失则安装，保证环境可复现；② 凭证只在构建期间注入，用完即失效，不落到镜像或日志；③ 采集用量统计与 Agent 轨迹，让「AI 在流水线里做了什么」可回看、可审计。适合先从不写回主干的任务切入——代码审查、失败构建排查、文档更新。</p>
+        <div class="link-line">📎 <a href="https://blog.jetbrains.com/teamcity/2026/11/run-ai-agents-in-teamcity/" target="_blank" rel="noopener">来源: The JetBrains Blog</a></div>
+      </article>
+
+      <article class="card">
+        <h3>本地集成测试别再依赖真实云账号</h3>
+        <p>AWS 开源 Emulator 提供本地 HTTPS 端点、覆盖 200+ 服务、无需账号，由公开 Smithy 模型生成，并公开了每个服务的保真度分数。落地建议：先在 CI 和 Agent 自验证环节用它替代「必须连真实云」的集成测试；同时把它文档化的限制（IAM、region、内存态）当成边界——鉴权语义、跨区、持久化这类用例仍回真实环境验证。收益是测试可离线、可重复，Agent 也拿不到真实云凭证。</p>
+        <div class="link-line">📎 <a href="https://www.infoq.com/news/2026/11/aws-emulator-agents/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">来源: InfoQ</a></div>
+      </article>
+
+      <article class="card">
+        <h3>让 Agent 复用「上次学到的东西」来省 token</h3>
+        <p>成本优化不一定靠换更便宜的模型。TokenEconomizer 的思路是：把同一仓库历史会话里的经验沉淀下来，在后续会话中提前告诉 Agent「这个代码库里已经确认过什么、哪些工具用不上、哪些路子试过失败」。实测 277 个 bug 任务、多个 Agent 上省 18.4%–30.9% 且成功率稳定。自己实现时，从「仓库级事实 + 失败尝试记录」两类最小经验做起，注意及时失效，避免把过时结论当事实喂回去。</p>
+        <div class="link-line">📎 <a href="https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/" target="_blank" rel="noopener">来源: Microsoft Research Blog</a> · <a href="https://x.com/MSFTResearch/status/2122435510463242401" target="_blank" rel="noopener">Microsoft Research</a></div>
+      </article>
+
+      <article class="card">
+        <h3>工具定义塞满上下文时，让 Agent「写代码」来编排</h3>
+        <p>AI Engineer Code Summit 上，mitsuhiko（@earendilworks）主张：与其在上下文窗口里塞几千条工具定义、让模型逐个挑，不如给 Agent 一个能跑 JavaScript 的沙箱，让它把多次工具调用编成一段工作流。好处和 Claude Code 的 Code Mode 一脉相承——独立调用可并行、上一步结果在代码里直接传给下一步不必绕经模型、中间输出先在代码里过滤再回传以省 token。适用信号很明确：工具数量爆炸、且经常需要「连续调好几个再汇总」的场景。</p>
+        <div class="link-line">📎 <a href="https://x.com/aiDotEngineer/status/2122434537796010126" target="_blank" rel="noopener">来源: AI Engineer (@aiDotEngineer)</a></div>
+      </article>
+
+      <article class="card">
+        <h3>把 Traces 当成和 Git 同级的新原语来「拥有」</h3>
+        <p>Vercel 的 Guillermo Rauch 提出：Git 用「代码增量」让人类协作，而 Traces 更强——它记录了上游意图、提示词、推理、用到的技能与工具，是团队的「智能资产」。可落地的动作：① 先安全地采集并自持 traces；② 基于其中的摩擦、延迟、结果反馈，搭建递归自我改进的回路。配合「开放 SDK/harness → 用网关掌控模型选择 → 拥有 traces 与数据并强制 ZDR → 私有推理拥有模型」这条路线，避免把最关键的过程数据留在别人手里。</p>
+        <div class="link-line">📎 <a href="https://x.com/rauchg/status/2122391135129858507" target="_blank" rel="noopener">来源: Guillermo Rauch (@rauchg)</a></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 05 来源 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <h2 class="sec-title">参考链接汇总</h2>
+      <span class="sec-note">// 原文可点击</span>
+    </div>
+    <div class="sources">
+      <ol>
+        <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.147 (Insiders)</a> <span class="feed">— Microsoft for Developers</span></li>
+        <li><a href="https://x.com/shao__meng/status/2122473384403710005" target="_blank" rel="noopener">腾讯开源 LoopForge：让 Coding Agents 按流程交付</a> <span class="feed">— meng shao (@shao__meng)</span></li>
+        <li><a href="https://x.com/berryxia/status/2122361955453452651" target="_blank" rel="noopener">LoopForge 上手与限制（MIT / 本地版 / v0.3）</a> <span class="feed">— Berryxia.AI (@berryxia)</span></li>
+        <li><a href="https://blog.jetbrains.com/teamcity/2026/11/run-ai-agents-in-teamcity/" target="_blank" rel="noopener">Run AI Agents in TeamCity</a> <span class="feed">— The JetBrains Blog</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/aws-emulator-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">AWS Open-Sources Emulator for Local Testing of 200+ Services by Coding Agents</a> <span class="feed">— InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/github-pull-requests-rebuild/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">GitHub Rebuilds the Copilot App's Diff Surface to Open Million-Line Pull Requests Without Jank</a> <span class="feed">— InfoQ</span></li>
+        <li><a href="https://www.microsoft.com/en-us/research/blog/tokeneconomizer-learning-from-experience-to-make-ai-coding-agents-more-efficient/" target="_blank" rel="noopener">TokenEconomizer: Learning from Experience to Make AI Coding Agents More Efficient</a> <span class="feed">— Microsoft Research Blog</span></li>
+        <li><a href="https://x.com/MSFTResearch/status/2122435510463242401" target="_blank" rel="noopener">TokenEconomizer 开源插件发布</a> <span class="feed">— Microsoft Research (@MSFTResearch)</span></li>
+        <li><a href="https://www.docker.com/blog/docker-sandboxes-firecrawl-web-access/" target="_blank" rel="noopener">Give sandboxed agents live web access with the Firecrawl kit for Docker Sandboxes</a> <span class="feed">— Docker</span></li>
+        <li><a href="https://vercel.com/changelog/ai-gateway-now-supports-private-inference" target="_blank" rel="noopener">AI Gateway now supports Private Inference</a> <span class="feed">— Vercel News</span></li>
+        <li><a href="https://developers.googleblog.com/agents-are-sessions-not-requests-size-gke-node-pools-for-ai-agent-sessions/" target="_blank" rel="noopener">Agents are sessions, not requests: size GKE node pools for AI agent sessions</a> <span class="feed">— Google Developers Blog</span></li>
+        <li><a href="https://x.com/qdrant_engine/status/2122321283413324041" target="_blank" rel="noopener">Qdrant 的 MCP 集成：让 Agent 管理与监控集群</a> <span class="feed">— Qdrant (@qdrant_engine)</span></li>
+        <li><a href="https://simonwillison.net/2026/Nov/16/llm/" target="_blank" rel="noopener">llm 0.37.3（SQLite 3.54.1 行为变更修复）</a> <span class="feed">— Simon Willison's Weblog</span></li>
+        <li><a href="https://x.com/aiDotEngineer/status/2122434537796010126" target="_blank" rel="noopener">mitsuhiko：给 Agent 一个 JS 运行时来编排工具调用</a> <span class="feed">— AI Engineer (@aiDotEngineer)</span></li>
+        <li><a href="https://x.com/rauchg/status/2122391135129858507" target="_blank" rel="noopener">Traces are the essential new primitive of software development</a> <span class="feed">— Guillermo Rauch (@rauchg)</span></li>
+        <li><a href="https://x.com/FinanceYF5/status/2122183339826466964" target="_blank" rel="noopener">斯坦福 CS329Z《Engineering AI Agents》公开课程</a> <span class="feed">— AI Will (@FinanceYF5)</span></li>
+        <li><a href="https://www.youtube.com/shorts/W9-Y00v5C3I" target="_blank" rel="noopener">The unexpected reason Nvidia is trending on GitHub（auto-ontology）</a> <span class="feed">— GitHub</span></li>
+        <li><a href="https://developers.googleblog.com/securing-your-agents-a-hands-on-guide-to-agent-anomaly-detection/" target="_blank" rel="noopener">Securing Your Agents: A Hands-On Guide to Agent Anomaly Detection</a> <span class="feed">— Google Developers Blog</span></li>
+        <li><a href="https://developers.googleblog.com/tpu-model-design-considerations-and-optimization-guide/" target="_blank" rel="noopener">TPU Model Design Considerations and Optimization Guide</a> <span class="feed">— Google Developers Blog</span></li>
+        <li><a href="https://vercel.com/blog/agent-evals" target="_blank" rel="noopener">Agents are users, so your software needs evals</a> <span class="feed">— Vercel News</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    developer_practice · generated 2026-11-17 · data window 11-16 01:11 → 11-17 01:11 · 542 articles / 424 sources
+  </footer>
+
+</div>
+</body>
+</html>
