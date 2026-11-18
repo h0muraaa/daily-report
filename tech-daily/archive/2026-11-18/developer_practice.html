@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 开发者实践版 · 2026-11-18</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-elev: #161b22;
+    --bg-card: #1c2128;
+    --border: #30363d;
+    --fg: #c9d1d9;
+    --fg-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent-2: #7ee787;
+    --accent-3: #d2a8ff;
+    --warn: #f0883e;
+    --danger: #ff7b72;
+    --code-bg: #0b0f14;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "JetBrains Mono", "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* Header */
+  header.hero {
+    border-bottom: 1px solid var(--border);
+    padding: 40px 0 28px;
+    margin-bottom: 36px;
+    background: radial-gradient(circle at 15% -10%, rgba(88,166,255,0.12), transparent 55%);
+  }
+  .prompt-line { color: var(--accent-2); font-size: 13px; letter-spacing: .5px; }
+  .prompt-line .cursor {
+    display: inline-block; width: 8px; height: 15px;
+    background: var(--accent-2); margin-left: 4px; vertical-align: -2px;
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  header.hero h1 {
+    font-size: 28px; margin: 14px 0 6px; font-weight: 700;
+    color: #f0f6fc; letter-spacing: -0.3px;
+  }
+  header.hero h1 .accent { color: var(--accent); }
+  .subtitle { color: var(--fg-dim); font-size: 13.5px; }
+  .meta-chips { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-size: 12px; padding: 3px 10px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--bg-elev); color: var(--fg-dim);
+  }
+  .chip b { color: var(--accent-2); font-weight: 600; }
+
+  /* TOC */
+  nav.toc {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 40px;
+  }
+  nav.toc h2 { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--fg-dim); margin: 0 0 10px; font-weight: 600; }
+  nav.toc ol { margin: 0; padding-left: 20px; }
+  nav.toc li { margin: 4px 0; font-size: 14px; }
+  nav.toc a { color: var(--accent); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+
+  /* Sections */
+  section { margin-bottom: 56px; }
+  .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+  .sec-num {
+    font-size: 13px; font-weight: 700; color: var(--bg);
+    background: var(--accent); border-radius: 6px; padding: 2px 9px;
+  }
+  .sec-head h2 { font-size: 21px; margin: 0; color: #f0f6fc; letter-spacing: -0.2px; }
+  .sec-head .line { flex: 1; height: 1px; background: var(--border); }
+
+  /* News cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    transition: border-color .15s, transform .15s;
+  }
+  .card:hover { border-left-color: var(--accent-2); }
+  .card h3 {
+    margin: 0 0 8px; font-size: 16.5px; color: #e6edf3; font-weight: 700;
+    line-height: 1.45;
+  }
+  .card .rank {
+    display: inline-block; font-size: 11px; font-weight: 700; color: var(--accent-2);
+    border: 1px solid rgba(126,231,135,0.35); border-radius: 4px;
+    padding: 0 7px; margin-right: 8px; vertical-align: 1px;
+  }
+  .card p { margin: 0 0 10px; color: var(--fg); }
+  .card p:last-of-type { margin-bottom: 8px; }
+  .src { font-size: 12.5px; }
+  .src a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed rgba(88,166,255,0.4); }
+  .src a:hover { color: var(--accent-2); border-bottom-color: var(--accent-2); }
+  .tag {
+    display: inline-block; font-size: 11px; color: var(--accent-3);
+    background: rgba(210,168,255,0.1); border: 1px solid rgba(210,168,255,0.25);
+    border-radius: 4px; padding: 0 7px; margin-left: 6px;
+  }
+
+  /* Deep dive */
+  .deep {
+    background: linear-gradient(180deg, rgba(88,166,255,0.06), transparent 140px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 26px 26px 12px;
+    margin-bottom: 28px;
+  }
+  .deep .deep-label {
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--accent-3); font-weight: 700;
+  }
+  .deep h3 { font-size: 20px; color: #f0f6fc; margin: 8px 0 14px; }
+  .deep h4 {
+    font-size: 14px; color: var(--accent-2); margin: 22px 0 8px;
+    padding-left: 10px; border-left: 3px solid var(--accent-2);
+  }
+  .deep p { margin: 0 0 12px; }
+  .deep ul { margin: 0 0 14px; padding-left: 22px; }
+  .deep li { margin: 6px 0; }
+  .deep code, .card code, .guide code {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 6px; font-size: 13px; color: var(--accent-2);
+  }
+
+  /* code block */
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px; overflow-x: auto;
+    font-size: 13px; line-height: 1.6; margin: 0 0 16px;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--fg); }
+  .tok-c { color: var(--fg-dim); }
+  .tok-k { color: #ff7b72; }
+  .tok-s { color: #a5d6ff; }
+  .tok-f { color: #d2a8ff; }
+  .tok-n { color: #79c0ff; }
+
+  /* Tool grid */
+  .tool {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px; margin-bottom: 14px;
+    display: grid; grid-template-columns: 1fr; gap: 6px;
+  }
+  .tool .tool-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .tool .tool-name { font-weight: 700; font-size: 16px; color: #f0f6fc; }
+  .tool .tool-lang {
+    font-size: 11px; color: var(--accent-2);
+    border: 1px solid rgba(126,231,135,0.3); border-radius: 4px; padding: 0 6px;
+  }
+  .tool p { margin: 0; color: var(--fg); font-size: 14px; }
+  .tool .src { margin-top: 2px; }
+
+  /* Guide */
+  .guide {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-top: 3px solid var(--accent-3);
+    border-radius: 8px; padding: 18px 20px; margin-bottom: 16px;
+  }
+  .guide h3 { margin: 0 0 10px; font-size: 16px; color: #e6edf3; }
+  .guide p { margin: 0 0 10px; }
+  .guide .takeaway {
+    margin-top: 6px; padding: 10px 14px; border-radius: 6px;
+    background: rgba(126,231,135,0.07); border: 1px solid rgba(126,231,135,0.2);
+    font-size: 13.5px; color: var(--accent-2);
+  }
+  .guide .takeaway::before { content: "▸ 落地建议："; font-weight: 700; }
+
+  /* Sources */
+  #sources { border-top: 1px solid var(--border); padding-top: 32px; }
+  #sources h2 { font-size: 18px; color: #f0f6fc; margin: 0 0 18px; }
+  .src-list { list-style: none; padding: 0; margin: 0; }
+  .src-list li {
+    font-size: 13px; padding: 7px 0; border-bottom: 1px dashed var(--border);
+    display: flex; gap: 10px; align-items: baseline;
+  }
+  .src-list li .idx { color: var(--fg-dim); min-width: 26px; }
+  .src-list li a { color: var(--accent); text-decoration: none; word-break: break-all; }
+  .src-list li a:hover { color: var(--accent-2); text-decoration: underline; }
+  .src-list li .feed { color: var(--accent-3); white-space: nowrap; font-size: 12px; }
+
+  footer { margin-top: 44px; color: var(--fg-dim); font-size: 12px; text-align: center; line-height: 1.8; }
+
+  @media (max-width: 600px) {
+    body { font-size: 14px; }
+    header.hero h1 { font-size: 22px; }
+    .wrap { padding: 0 14px 60px; }
+    .deep { padding: 20px 16px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="prompt-line">~/tech-daily $ cat developer_practice.md<span class="cursor"></span></div>
+    <h1>科技日报 · <span class="accent">开发者实践版</span></h1>
+    <div class="subtitle">面向程序员与工程师 · 关注技术实现、工具更新与最佳实践</div>
+    <div class="meta-chips">
+      <span class="chip">📅 <b>2026-11-18</b></span>
+      <span class="chip">🕐 窗口 11-17 → 11-18</span>
+      <span class="chip">📰 扫描 <b>653</b> 条 / <b>424</b> 源</span>
+      <span class="chip">🎯 role: <b>developer_practice</b></span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h2>Index</h2>
+    <ol>
+      <li><a href="#hot">今日技术热榜</a></li>
+      <li><a href="#deep">深度技术解读</a></li>
+      <li><a href="#tools">工具推荐</a></li>
+      <li><a href="#guide">实践指南</a></li>
+      <li><a href="#sources">参考链接汇总</a></li>
+    </ol>
+  </nav>
+
+  <!-- ============ 1. 今日技术热榜 ============ -->
+  <section id="hot">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>今日技术热榜</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="rank">01</span>.NET 11 正式发布：C# 15 联合类型、Native AOT CLI 宿主、MAUI 默认 CoreCLR</h3>
+      <p>微软发布了 <b>.NET 11</b>，这是一个标准期限支持（STS）版本，提供两年支持周期。语言层面最大的变化是 <b>C# 15 引入联合类型（union types）与封闭层次结构（closed hierarchies）</b>，让类型系统能更精确地表达互斥的数据形态；工具链上新增 <b>Native AOT CLI 宿主</b>，并带来 Runtime Async 预览。</p>
+      <p>框架侧，ASP.NET Core 加入 Zstandard 压缩、异步验证与 OpenAPI 3.2 支持；.NET MAUI 将 <b>CoreCLR 设为默认运行时</b>；EF Core 11 则带来实验性的向量搜索（vector search）。对需要把 LLM/检索能力下沉到数据层的团队，EF Core 的向量支持值得提前做 PoC。<span class="tag">#release</span><span class="tag">#csharp</span></p>
+      <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/11/dotnet-11-release/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="rank">02</span>Qwik 2.0 RC：用两个 script 块取代 HTML 注释标记，基准降到 1.23x</h3>
+      <p>Qwik 2.0 候选版（2026-10-01 发布）重构了状态序列化方式：<b>用两个 script 块分别承载 state 与虚拟节点数据，取代 v1 的 HTML 注释标记</b>，从而减少 DOM 噪声并提速响应式。它同时引入实验性的<b>乱序流式渲染（out-of-order streaming）</b>、异步 <code>useComputed$</code> 以及可缓存的 route loader。</p>
+      <p>官方基准显示 Qwik 2 的开销已从 v1 的 <b>2.59x 原生 JS 降到 1.23x</b>。项目提供了迁移命令，是评估"可恢复性（resumability）框架"成本的一个不错时间点。<span class="tag">#framework</span><span class="tag">#frontend</span></p>
+      <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/11/quik-2-streaming/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="rank">03</span>VS Code 1.147 Insiders：Agent 会话管理与 chat 资源</h3>
+      <p>Visual Studio Code 1.147 Insiders 带来三处与日常开发强相关的更新：<b>Agent 会话管理</b>、<b>chat 资源</b>以及 Markdown 编辑体验改进。会话管理意味着你可以更系统地组织多个 Agent 交互上下文，而 chat 资源让对话产物能像文件一样被引用和管理。</p>
+      <p>对重度使用 Copilot / 对话式编程的工程师来说，这类 IDE 内建的上下文管理能力，往往比换模型更能影响实际体验，值得在 Insiders 通道先行体验。<span class="tag">#ide</span><span class="tag">#tooling</span></p>
+      <div class="src">📎 来源: <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147-(insiders)" target="_blank" rel="noopener">Microsoft for Developers</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="rank">04</span>GPT-6.2 Astra / Sol 进入 Codex 与 API：Ultrafast 五折，Astra 输入输出降价 20%</h3>
+      <p>OpenAI 在 Codex 与 API 中上线了 <b>gpt-6.2-astra</b> 与 <b>gpt-6.2-sol</b> 两款模型，均支持 Fast 与 Ultrafast 模式。定价上，Astra 的标准输入与输出 token 价格比 GPT-6 Astra <b>低 20%</b>；Sol 在维持与 GPT-6.1 Sol 相同单 token 价格的同时提升了能力。未来三个月 Ultrafast 价格<b>下调 50%</b>，相当于标准档的 3 倍。</p>
+      <p>选型建议来自官方数据：日常编码优先用 Sol——在 Cognition 的 FrontierCode 2.0 最大推理档下，Sol 仅落后 Astra 半分，而每任务 API 成本约为其 1/5；Astra 则在 Terminal-Bench Science 0.1 上比 GPT-6 Astra 高 9 个百分点、成本不到 1/3。两款模型都以更少的输出 token 完成复杂任务。<span class="tag">#llm</span><span class="tag">#api</span><span class="tag">#cost</span></p>
+      <div class="src">📎 来源: <a href="https://x.com/OpenAIDevs/status/2122752256923873753" target="_blank" rel="noopener">OpenAI Developers (Codex/API)</a> · <a href="https://x.com/OpenAIDevs/status/2122752394002071717" target="_blank" rel="noopener">定价</a> · <a href="https://x.com/OpenAIDevs/status/2122752473723175256" target="_blank" rel="noopener">Sol vs Astra 成本</a> · <a href="https://x.com/OpenAIDevs/status/2122752500877144461" target="_blank" rel="noopener">Ultrafast 五折</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="rank">05</span>GitHub Copilot 接入 MAI Code 2 / Flash；Fusion Max 在 Terminal-Bench 4.1 拿到 71.2%</h3>
+      <p>Microsoft AI 的两款编码模型 <b>MAI Code 2</b> 与 <b>MAI Code 2 Flash</b> 已在 GitHub Copilot 中正式可用（GA）。Code 2 定位通用强模型，主打深度调试、多文件实现、重构与仓库级推理；Flash 则是轻量低成本的日常档，适合代码解释、定向修改和快速迭代，覆盖 Copilot app 与 CLI。</p>
+      <p>GitHub 同时公布了 <b>Copilot Fusion Max</b> 在 Terminal-Bench 4.1 上的成绩：<b>71.2% 解决率</b>，比 Opus 5.5、Fable 5.2 等前沿模型高 5.4 个百分点，而成本比 Fable 5.2 低 88%、比 Opus 5.5 低 57%。"更强且更便宜"的组合对 CI 里跑自动化 Agent 的团队尤其关键。<span class="tag">#copilot</span><span class="tag">#benchmark</span></p>
+      <div class="src">📎 来源: <a href="https://x.com/github/status/2122814155979706846" target="_blank" rel="noopener">GitHub (MAI Code 2)</a> · <a href="https://x.com/github/status/2122756587073028306" target="_blank" rel="noopener">GitHub (Fusion Max 基准)</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="rank">06</span>Amazon SageMaker 实时端点支持 KV cache 感知路由</h3>
+      <p>SageMaker AI 为实时端点新增 <b>KV cache-aware routing</b>：路由策略会读取模型容器上报的缓存状态，把每个请求发给<b>已持有长缓存匹配、且当前不太繁忙</b>的实例。它专为多轮对话、长共享 prompt、高负载这类 LLM 服务场景设计。</p>
+      <p>启用方式很小：给模型加一个环境变量让容器上报缓存内容，并在端点配置里把 <code>RoutingStrategy</code> 设为 <code>KV_AWARE</code>，客户端 API 完全不变。对已有 RAG / Agent 服务的团队，这是几乎零改造的延迟优化点。<span class="tag">#inference</span><span class="tag">#performance</span></p>
+      <div class="src">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/amazon-sagemaker-ai-real-time-endpoints-now-support-kv-cache-aware-routing/" target="_blank" rel="noopener">Artificial Intelligence (AWS)</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="rank">07</span>Datadog 给 AI Agent 可观测性加上线上实验能力</h3>
+      <p>Datadog 在其 Agent Observability 平台中引入 <b>Online Experiments</b>，允许工程团队<b>用真实生产流量对比不同版本的 AI Agent</b>，而不必只依赖预先构建的评测数据集。这意味着 Agent 的版本回归、prompt/模型切换可以在真实分布上做 A/B 验证。</p>
+      <p>对把 Agent 推向生产的团队，这是把"离线评测 → 线上实验"闭环补齐的一步，也提示我们：Agent 的可观测性正从"看 trace"走向"跑实验"。<span class="tag">#observability</span><span class="tag">#agent</span></p>
+      <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/11/datadog-ai-agent-observability/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="rank">08</span>Qdrant × FastEmbed：35 分钟生成 3280 万个 embedding</h3>
+      <p>Qdrant 披露了一组吞吐数据：使用 Minish 的 <b>potion 静态 embedding 模型</b>（已集成进其本地推理框架 <b>FastEmbed</b>），在 <b>35 分钟内生成了 3280 万个 embedding</b>。静态模型不像 Transformer 那样逐 token 过注意力，因而在批量场景下吞吐极高。</p>
+      <p>官方同时强调需要权衡<b>检索质量</b>——静态 embedding 适合对延迟/成本敏感、可接受一定精度损失的大规模召回初筛。对向量库做全量回填或大规模离线建索引的团队，这是一条值得评估的路径。<span class="tag">#vector</span><span class="tag">#embedding</span><span class="tag">#performance</span></p>
+      <div class="src">📎 来源: <a href="https://x.com/qdrant_engine/status/2122721432711106635" target="_blank" rel="noopener">Qdrant</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 2. 深度技术解读 ============ -->
+  <section id="deep">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>深度技术解读</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="deep">
+      <div class="deep-label">Deep Dive · 01</div>
+      <h3>给 Coding Agent 的代码上沙箱：external sandbox 模式</h3>
+      <p>Simon Willison 与 Prime Radiant 合作，提出了 <b>external sandbox（外部沙箱）</b>模式：Agent 本身运行在你的主机（如 Mac）上，但<b>它生成并执行的代码运行在一个专用沙箱内</b>。这样可以在试用本地模型时不必担心模型出错或遭遇 prompt injection 而在机器上造成破坏性操作。该模式已开源出三个沙箱服务器实现用于演示。</p>
+
+      <h4>三种沙箱实现</h4>
+      <ul>
+        <li><b>external-sandbox-v86</b>：跑一个 Node.js 服务，再用 <b>v86 在 WebAssembly 中运行 Alpine Linux</b>——纯用户态虚拟化，跨平台、无需内核权限。</li>
+        <li><b>external-sandbox-container</b>：基于容器（Container）隔离，贴近生产环境。</li>
+        <li>第三个实现（QEMU / Apple Container 路线）：在 macOS 上借助系统级虚拟化运行完整隔离环境。</li>
+      </ul>
+      <p>文中还给出了对 <b>Claude Code、Codex 与 Pi</b> 的接入 demo，说明这个模式不是绑定某一家 Agent，而是可复用的执行层抽象。</p>
+
+      <h4>安全边界：出网白名单 + 凭据替换</h4>
+      <p>三个沙箱服务器都带一个<b>可选的 HTTP/HTTPS allow-list 代理</b>，让你精确控制 Agent 代码能访问哪些主机；更进一步，它还提供<b>凭据替换机制</b>——Agent 可以在不持有真实密钥的情况下发起需要鉴权的 API 调用，真实凭证由沙箱侧注入。这两点合起来，直接对应 prompt injection 最常见的两类危害：<code>数据外泄</code>与<code>密钥滥用</code>。</p>
+
+      <h4>为什么这种设计值得借鉴</h4>
+      <p>核心思想是<b>把"思考"与"执行"分成两个信任域</b>：Agent（可能被注入、可能出错）只负责产出代码；执行发生在权限受限、默认断网、凭证隔离的沙箱里。相比"给 Agent 一台完整的开发机再祈祷它别乱来"，external sandbox 用很小的接入成本换来了可审计、可回滚的安全边界。对任何要在 CI 或本地跑自动化代码生成的团队，这都是一套可以直接照搬的架构范式。</p>
+      <div class="src">📎 来源: <a href="https://simonwillison.net/2026/Nov/17/external-sandboxes-for-coding-agents/" target="_blank" rel="noopener">Simon Willison's Weblog</a> · <a href="https://x.com/simonw/status/2122500307557265651" target="_blank" rel="noopener">Simon Willison（模式说明）</a> · <a href="https://x.com/simonw/status/2122500317187330279" target="_blank" rel="noopener">白名单代理与凭据替换</a> · <a href="https://x.com/simonw/status/2122500313886396840" target="_blank" rel="noopener">实现索引仓库</a></div>
+    </div>
+
+    <div class="deep">
+      <div class="deep-label">Deep Dive · 02</div>
+      <h3>LLM 成本与延迟工程三件套：规则优先、载荷瘦身、缓存路由</h3>
+      <p>今天有三条来自 AWS 的实践恰好构成一条完整的成本-延迟优化链路，串起来看很有价值。</p>
+
+      <h4>① 能用代码就别调模型</h4>
+      <p>AWS 在《Cut generative AI costs: Code for rules, models for judgment》中给出的核心判断是：<b>生成式系统里最大的成本杠杆，是"到底要不要调模型"本身</b>。很多团队把输入校验、格式化、路由全部交给 LLM，单次看似便宜，规模化后会成为架构中最大的一笔开销。正确做法是按步骤做决策：</p>
+      <ul>
+        <li>确定性规则能完成的 → <b>用普通代码</b>，省钱、降延迟、去除非确定性；</li>
+        <li>需要判断但选项有限 → 用<b>受约束的决策调用</b>；</li>
+        <li>确实需要生成/理解 → 选<b>合适尺寸的 Bedrock 模型</b>，而非默认上最大模型。</li>
+      </ul>
+
+      <h4>② 大 JSON 载荷会反复撑爆上下文</h4>
+      <p>《Reducing token costs and latency in Amazon Bedrock AgentCore JSON workloads》指出一个隐蔽陷阱：<b>Agent 每调用一次工具，就把整份载荷重新注入 LLM 上下文</b>。当载荷是 20MB+ 的 JSON 且多轮对话时，token 与延迟会被成倍放大。文中用三种可组合策略为 Flightscape 的生产 Agent 处理 20MB+ JSON，把上下文压力压了下来——这类"工具调用 = 全量重放"的成本，是很多 Agent 上线后才暴露的。</p>
+
+      <h4>③ 让请求落到"缓存热"的实例上</h4>
+      <p>前面热榜提到的 <b>KV cache-aware routing</b> 是同一思路的服务侧延伸：多轮对话/长共享 prompt 的 KV 缓存若落到不同实例就被浪费，按缓存状态路由能把命中率最大化。启用只需一个环境变量加 <code>RoutingStrategy=KV_AWARE</code>。</p>
+
+      <div class="takeaway" style="background: rgba(210,168,255,0.07); border-color: rgba(210,168,255,0.25); color:#d2a8ff;">落地上按顺序排查：先砍掉不必要的模型调用 → 再压缩工具载荷与上下文 → 最后用缓存路由榨干已有算力。前两步是纯代码改造，收益通常最大。</div>
+      <div class="src" style="margin-top: 12px;">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/cut-generative-ai-costs-code-for-rules-models-for-judgment/" target="_blank" rel="noopener">AWS (规则优先)</a> · <a href="https://aws.amazon.com/blogs/machine-learning/reducing-token-costs-and-latency-in-amazon-bedrock-agentcore-json-workloads/" target="_blank" rel="noopener">AWS (JSON 载荷优化)</a> · <a href="https://aws.amazon.com/blogs/machine-learning/amazon-sagemaker-ai-real-time-endpoints-now-support-kv-cache-aware-routing/" target="_blank" rel="noopener">AWS (KV 缓存路由)</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 3. 工具推荐 ============ -->
+  <section id="tools">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2>工具推荐</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-top">
+        <span class="tool-name">rust-anything</span>
+        <span class="tool-lang">AI 编码助手 · 迁移工具</span>
+      </div>
+      <p>把一个跑得慢的老项目（TypeScript / Python / Go / Java 均可）逐步改写成 Rust，最大风险是"改完行为变了"。rust-anything 的思路很工程化：<b>先给老程序喂一批输入并记录全部输出，形成黄金基准；AI 每改写一块，就把同一批输入重放到新代码，逐条对比输出</b>。它本质上是给 AI 编码助手用的"改写说明书 + 验收工具"，把"行为不变"从口头承诺变成了可执行的回归校验。</p>
+      <div class="src">📎 来源: <a href="https://x.com/geekbb/status/2122697767688532379" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-top">
+        <span class="tool-name">skwir</span>
+        <span class="tool-lang">Rust · 跨平台文件管理器</span>
+      </div>
+      <p>当人和 AI Agent 同时操作同一批文件时很容易互相踩。skwir 把<b>每个文件操作都建模成可撤销、可审核的"计划"</b>，人和 Agent 都从同一命令入口下发，从而避免并发冲突、并让每一步都能回溯。用 Rust + GUI 构建，适合把"Agent 参与文件操作"纳入可控流程的场景。</p>
+      <div class="src">📎 来源: <a href="https://x.com/geekbb/status/2122514308487610850" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-top">
+        <span class="tool-name">开源加密邮件客户端</span>
+        <span class="tool-lang">Rust + React + Tauri</span>
+      </div>
+      <p>一个用 <b>Rust 写引擎、React 写界面、基于 Tauri</b> 的跨平台桌面邮件客户端：邮件全部<b>加密存储于本地（SQLite + SQLCipher）</b>，支持把 Gmail 与任意 IMAP 账号合并到一个收件箱，自带全文搜索、追踪器清除与钓鱼预警。免费开源，卖点是数据不经过任何第三方服务器——也是学习 Tauri 本地加密存储实践的好样板。</p>
+      <div class="src">📎 来源: <a href="https://x.com/geekbb/status/2122618998416429410" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-top">
+        <span class="tool-name">Datasette Lite（重写版）</span>
+        <span class="tool-lang">Python · Pyodide · Service Worker</span>
+      </div>
+      <p>Simon Willison 用 <b>Service Worker + Pyodide</b> 彻底重写了 Datasette Lite——把完整的服务端 Python 应用搬进浏览器，如今"几乎与真正的服务端版本无法区分"。你可以在浏览器里浏览任意 SQLite / JSON / CSV / SQL 文件，从 PyPI 选择 Datasette 版本、从 GitHub 加载指定 commit/tag/branch、在 100+ 个 SQLite 版本间切换，还能从 PyPI 或 wheel URL 安装插件。它是理解 WASM 里跑 Python 应用的一座极佳参考实现。</p>
+      <div class="src">📎 来源: <a href="https://simonwillison.net/2026/Nov/17/datasette-lite/" target="_blank" rel="noopener">Simon Willison's Weblog</a> · <a href="https://x.com/simonw/status/2122746008736276734" target="_blank" rel="noopener">Simon Willison</a></div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-top">
+        <span class="tool-name">Vercel AI 组件库 (ui-sdk.dev)</span>
+        <span class="tool-lang">设计 · Prompt 生成</span>
+      </div>
+      <p>Vercel 出了一套<b>专门给 AI 用的设计组件库</b>：点选技术栈即可生成对应的 UI Prompt，也可以直接让 Agent 访问该站点获取。社区经验是——想让 AI 生成的界面不像 "Slop"，最稳的配色是学 Vercel 的黑白灰风格，并避免让模型随意发挥或使用系统默认的丑组件。适合把"AI 生成前端的审美约束"标准化。</p>
+      <div class="src">📎 来源: <a href="https://x.com/vista8/status/2122749977281835500" target="_blank" rel="noopener">向阳乔木(@vista8)</a> · <a href="https://x.com/vista8/status/2122749798348698021" target="_blank" rel="noopener">配色实践</a></div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-top">
+        <span class="tool-name">SqlPackage 170.6 预览版</span>
+        <span class="tool-lang">.NET · 数据库部署</span>
+      </div>
+      <p>数据库部署应当可重复：SQL 项目构建出 <code>.dacpac</code>，SqlPackage 再与目标库比对生成变更。问题是即便"无变化"，重复发布也要做一次完整 schema 比对。新预览版带来两项能力：<b>Deployment history</b>（<code>LogDeployment</code>，把部署记录写进目标库）与 <b>fast comparison</b>（<code>EnableFastComparison</code>，借助兼容的部署历史跳过全量比对）。对反复发布同一模型的 CI 流水线，能明显省下时间。</p>
+      <div class="src">📎 来源: <a href="https://devblogs.microsoft.com/azure-sql/sqlpackage-deployment-history-and-fast-comparison-preview" target="_blank" rel="noopener">Microsoft for Developers</a></div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-top">
+        <span class="tool-name">Vercel Blob TTL</span>
+        <span class="tool-lang">存储 · 自动过期</span>
+      </div>
+      <p>Vercel Blob 现在支持自动删除：写入时传 <code>ttlDays</code>（1–730 天，从上传日算起），到期自动删除。它适用于原本要自己清理的会话记录、导出文件、临时上传。覆盖 <code>put()</code>/<code>copy()</code>/<code>putImage()</code>/分片上传/预签名上传 URL，写入结果与 <code>head()</code> 都会返回 <code>expiresAt</code>；<code>setTtl()</code> 可批量修改已有 blob（一次最多 1000 个）。CLI 65.16.0+ 支持 <code>--ttl-days</code> 与 <code>vercel blob set-ttl</code>。</p>
+      <div class="src">📎 来源: <a href="https://vercel.com/changelog/vercel-blob-now-supports-ttls-for-automatic-deletion" target="_blank" rel="noopener">Vercel News</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 4. 实践指南 ============ -->
+  <section id="guide">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2>实践指南</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="guide">
+      <h3>AI 省时在缩水：瓶颈已从"写代码"转向"管理 AI"</h3>
+      <p>Atlassian 的《2026 年开发者体验现状报告》给出一个反直觉的数据：过去一年，<b>每周靠 AI 节省 10 小时以上的开发者比例从 68% 暴跌至 26%</b>；而 AI 的渗透率已接近饱和——95% 的开发者、96% 的工程负责人称组织已在工程中积极使用 AI。该报告基于 1,155 名个人贡献者与 405 名工程负责人的调查，Atlassian 也明确提示这些是自报告的体验数据、相关性不等于因果。</p>
+      <p>局部收益仍在：87% 的开发者称 AI 让他们更快交付，80% 称在不延长工时的情况下完成更多工作。但<b>只有 28% 觉得摩擦明显减少，50% 认为摩擦与之前持平</b>——报告称之为"不同类型的摩擦"。一部分摩擦恰恰来自 AI 本身：<b>49% 的开发者现在每周要花 4 小时以上管理 AI 工具</b>。Atlassian AI 与协作部门 CTO Taroon Mandhana 的结论是："瓶颈已经转移到管理 AI 的工作上。"</p>
+      <div class="takeaway">别只统计"AI 帮我们省了多少"，要开始度量"管理 AI 本身花了多少"。把 prompt/工具/权限的维护成本当成真实的工程开销来优化，而不是默认它免费。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651297422&amp;idx=3&amp;sn=f5c42a08f5148c063a9f39fc8cd6c941" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="guide">
+      <h3>阿里 Qoder 的 AI Native 研发流程：SPEC 先行 + 团队级 Harness</h3>
+      <p>阿里巴巴 Qoder 高级技术专家宋文龙（闻可）在 AICon 2026 的分享，讨论了 Coding Agent 从"个人工具"走向"团队级生产系统"必须跨过的坎。其路径可归纳为：<b>SPEC 先行</b>（先写清规格再让 Agent 动手）、<b>团队级 Harness</b>（统一的执行/约束/评测框架）、<b>Agent team 与组织转型</b>，从"许愿式编程"迁移到 <b>on the loop</b> 的研发范式。</p>
+      <p>一个值得注意的方法论前提来自他们自己的实践——<b>用 Coding Agent 开发 Coding Agent</b>，并分享了高德、闪购以及 Qoder 内部的一手案例。"Agent 越强，人的重要性不是降低，而是重要性的方式发生了改变。"</p>
+      <div class="takeaway">团队引入 Agent 时，先补 SPEC 和 Harness 这两块基础设施，再谈扩大使用范围；否则规模一上来，产出会因缺乏约束而变得不可控。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651297422&amp;idx=2&amp;sn=72a66207636a8cda7cf517864246f809" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="guide">
+      <h3>Vercel 两个待处理的流水线变更（含硬性截止日）</h3>
+      <p><b>1）原生 lint / typecheck Deployment Checks 即将下线。</b>这些检查原本在 Vercel 侧与部署构建并行运行；<b>2026-11-30 之后将被移除</b>，新检查已无法再添加。受影响项在项目的 Build &amp; Deployment 设置里显示为 provider 为 Vercel 的 Lint / Typecheck 条目。迁移方式是把命令挪到 Vercel CI 或自有 CI 工作流；对于会阻断生产发布的检查，需确认新流程如何传递失败。</p>
+      <p><b>2）新增"仅对 PR 构建预览"预设。</b>这是 Ignored Build Step 的新预设：<b>没有打开 PR 的分支跳过预览构建</b>，生产部署与有 PR 的分支照常构建；被跳过的预览会在消耗 Build CPU 分钟之前就被取消。在 GitHub/GitLab 项目上通过 Deployments &gt; Configuration 启用。</p>
+      <div class="takeaway">把 11-30 这个日期加入日历：在此之前把 lint/typecheck 命令搬进 CI，并顺手用 PR-only 预设砍掉无谓的预览构建成本。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://vercel.com/changelog/native-lint-and-typecheck-deployment-checks-are-being-deprecated" target="_blank" rel="noopener">Vercel News (下线公告)</a> · <a href="https://vercel.com/changelog/pull-request-only-preset-now-available-for-preview-builds" target="_blank" rel="noopener">Vercel News (PR-only 预设)</a></div>
+    </div>
+
+    <div class="guide">
+      <h3>Shopify 的 Remote Dev：让 AI Agent 在远端跑移动端开发</h3>
+      <p>AI 开发工作流很容易把开发者机器的资源耗尽。Shopify 构建了 <b>Remote Dev</b>——一个远程移动开发环境，使 <b>AI Agent 能独立地、并行地构建、测试与维护 iOS 和 Android 应用</b>，而不占用本地机器。这是"把 Agent 的重活挪到远端"这一思路的典型落地。</p>
+      <div class="takeaway">如果你在本地跑移动端 Agent 流水线频繁遇到机器过热/资源争抢，考虑把构建与测试迁到远程开发环境，让本地只保留编辑与轻量交互。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://www.infoq.com/news/2026/11/shopify-remote-ai-dev/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="guide">
+      <h3>把 LLM 排序塞进 P99 SLA：LinkedIn 的延迟工程清单</h3>
+      <p>LinkedIn 的分享讲的是如何在严格的 P99 延迟 SLA 下生产化 LLM 排序。几条可直接复用的技巧：把 <b>7B 模型蒸馏到 400M 参数</b>；把职位上下文<b>压缩成单 token embedding</b>，换来约 <b>10x 吞吐</b>；以及消除各种"隐藏瓶颈"——自定义 flash attention mask、<b>Python GIL 绕行</b>、<code>gc.freeze</code>、<b>非阻塞 CUDA 显存拷贝</b>。</p>
+      <div class="takeaway">延迟优化往往不在模型本身，而在这些"看不见"的运行时与拷贝开销上。做 LLM 服务时，把 GIL、GC、显存拷贝、attention mask 逐项列入排查清单。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://www.infoq.com/presentations/scale-llm-ranking-systems-linkedin/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+
+    <div class="guide">
+      <h3>Google 十年后重写 SRE 书：面向 AI 负载与平台工程</h3>
+      <p>距原版出版十年，Google 宣布由 O'Reilly 推出《Site Reliability Engineering》<b>完全重写的第二版</b>，把 SRE 重新框定在现代云架构、平台工程与 AI 负载之上，同时保留"用软件工程方法做运维"的原始内核。对正在把 SRE 实践迁移到 AI 系统的团队，这是一份及时更新的方法论参考。</p>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://www.infoq.com/news/2026/11/google-sre-book-ai-era/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 5. 参考链接汇总 ============ -->
+  <section id="sources">
+    <h2>🔗 参考链接汇总</h2>
+    <ul class="src-list">
+      <li><span class="idx">[01]</span><a href="https://www.infoq.com/news/2026/11/dotnet-11-release/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">.NET 11 正式发布：C# 15 联合类型等</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[02]</span><a href="https://www.infoq.com/news/2026/11/quik-2-streaming/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Qwik 2.0 RC：取代 HTML 注释标记</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[03]</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.147 (Insiders)</a><span class="feed">Microsoft for Developers</span></li>
+      <li><span class="idx">[04]</span><a href="https://x.com/OpenAIDevs/status/2122752256923873753" target="_blank" rel="noopener">GPT-6.2 Astra / Sol 进入 Codex 与 API</a><span class="feed">OpenAI Developers</span></li>
+      <li><span class="idx">[05]</span><a href="https://x.com/github/status/2122814155979706846" target="_blank" rel="noopener">MAI Code 2 / Flash 在 GitHub Copilot GA</a><span class="feed">GitHub</span></li>
+      <li><span class="idx">[06]</span><a href="https://x.com/github/status/2122756587073028306" target="_blank" rel="noopener">Copilot Fusion Max 在 Terminal-Bench 4.1 达 71.2%</a><span class="feed">GitHub</span></li>
+      <li><span class="idx">[07]</span><a href="https://aws.amazon.com/blogs/machine-learning/amazon-sagemaker-ai-real-time-endpoints-now-support-kv-cache-aware-routing/" target="_blank" rel="noopener">SageMaker 实时端点支持 KV cache 感知路由</a><span class="feed">Artificial Intelligence (AWS)</span></li>
+      <li><span class="idx">[08]</span><a href="https://www.infoq.com/news/2026/11/datadog-ai-agent-observability/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Datadog 为 AI Agent 可观测性加入线上实验</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[09]</span><a href="https://x.com/qdrant_engine/status/2122721432711106635" target="_blank" rel="noopener">Qdrant × FastEmbed：35 分钟生成 3280 万 embedding</a><span class="feed">Qdrant</span></li>
+      <li><span class="idx">[10]</span><a href="https://simonwillison.net/2026/Nov/17/external-sandboxes-for-coding-agents/" target="_blank" rel="noopener">External sandboxes for coding agents</a><span class="feed">Simon Willison's Weblog</span></li>
+      <li><span class="idx">[11]</span><a href="https://x.com/simonw/status/2122500307557265651" target="_blank" rel="noopener">external sandbox 模式说明（WASM/QEMU/Apple Container）</a><span class="feed">Simon Willison</span></li>
+      <li><span class="idx">[12]</span><a href="https://x.com/simonw/status/2122500317187330279" target="_blank" rel="noopener">沙箱的出网白名单代理与凭据替换</a><span class="feed">Simon Willison</span></li>
+      <li><span class="idx">[13]</span><a href="https://x.com/simonw/status/2122500313886396840" target="_blank" rel="noopener">external sandbox 实现索引仓库</a><span class="feed">Simon Willison</span></li>
+      <li><span class="idx">[14]</span><a href="https://aws.amazon.com/blogs/machine-learning/cut-generative-ai-costs-code-for-rules-models-for-judgment/" target="_blank" rel="noopener">Cut generative AI costs: Code for rules, models for judgment</a><span class="feed">Artificial Intelligence (AWS)</span></li>
+      <li><span class="idx">[15]</span><a href="https://aws.amazon.com/blogs/machine-learning/reducing-token-costs-and-latency-in-amazon-bedrock-agentcore-json-workloads/" target="_blank" rel="noopener">Reducing token costs and latency in Bedrock AgentCore JSON workloads</a><span class="feed">Artificial Intelligence (AWS)</span></li>
+      <li><span class="idx">[16]</span><a href="https://x.com/geekbb/status/2122697767688532379" target="_blank" rel="noopener">rust-anything：AI 辅助迁移到 Rust 的验收工具</a><span class="feed">Geek(@geekbb)</span></li>
+      <li><span class="idx">[17]</span><a href="https://x.com/geekbb/status/2122514308487610850" target="_blank" rel="noopener">skwir：Rust + GUI 的人机协同文件管理器</a><span class="feed">Geek(@geekbb)</span></li>
+      <li><span class="idx">[18]</span><a href="https://x.com/geekbb/status/2122618998416429410" target="_blank" rel="noopener">开源加密邮件客户端（Rust + React + Tauri）</a><span class="feed">Geek(@geekbb)</span></li>
+      <li><span class="idx">[19]</span><a href="https://simonwillison.net/2026/Nov/17/datasette-lite/" target="_blank" rel="noopener">Running the full server-side Datasette Python app in the browser</a><span class="feed">Simon Willison's Weblog</span></li>
+      <li><span class="idx">[20]</span><a href="https://x.com/vista8/status/2122749977281835500" target="_blank" rel="noopener">Vercel AI 组件库（ui-sdk.dev）</a><span class="feed">向阳乔木(@vista8)</span></li>
+      <li><span class="idx">[21]</span><a href="https://devblogs.microsoft.com/azure-sql/sqlpackage-deployment-history-and-fast-comparison-preview" target="_blank" rel="noopener">SqlPackage 部署历史与快速比对预览</a><span class="feed">Microsoft for Developers</span></li>
+      <li><span class="idx">[22]</span><a href="https://vercel.com/changelog/vercel-blob-now-supports-ttls-for-automatic-deletion" target="_blank" rel="noopener">Vercel Blob 支持 TTL 自动删除</a><span class="feed">Vercel News</span></li>
+      <li><span class="idx">[23]</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651297422&amp;idx=3&amp;sn=f5c42a08f5148c063a9f39fc8cd6c941" target="_blank" rel="noopener">Atlassian 2026 开发者体验现状报告解读</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[24]</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651297422&amp;idx=2&amp;sn=72a66207636a8cda7cf517864246f809" target="_blank" rel="noopener">企业 AI Native 研发流程升级与重塑（阿里 Qoder）</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[25]</span><a href="https://vercel.com/changelog/native-lint-and-typecheck-deployment-checks-are-being-deprecated" target="_blank" rel="noopener">原生 lint / typecheck Deployment Checks 即将下线</a><span class="feed">Vercel News</span></li>
+      <li><span class="idx">[26]</span><a href="https://vercel.com/changelog/pull-request-only-preset-now-available-for-preview-builds" target="_blank" rel="noopener">仅对 PR 构建预览的新预设</a><span class="feed">Vercel News</span></li>
+      <li><span class="idx">[27]</span><a href="https://www.infoq.com/news/2026/11/shopify-remote-ai-dev/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Shopify Remote Dev：远端 AI 移动端开发环境</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[28]</span><a href="https://www.infoq.com/presentations/scale-llm-ranking-systems-linkedin/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">LinkedIn：在 P99 SLA 下规模化 LLM 排序</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[29]</span><a href="https://www.infoq.com/news/2026/11/google-sre-book-ai-era/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Google 面向 AI 时代重写 SRE 书（第二版）</a><span class="feed">InfoQ</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    科技日报 · 开发者实践版 · 生成于 2026-11-18<br>
+    基于 653 条新闻 / 424 个来源筛选 · 面向程序员与工程师视角<br>
+    所有外部链接均指向原文，点击在新标签页打开
+  </footer>
+
+</div>
+</body>
+</html>
