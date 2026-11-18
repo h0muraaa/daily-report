@@ -182,16 +182,16 @@
     <h1>科技日报：研究动态与学术观察</h1>
     <p class="subtitle">面向人工智能与计算机科学研究者的每日文献与进展摘要</p>
     <div class="meta-row">
-      <span>覆盖时段：<strong>2026-11-17 00:05 — 2026-11-18 00:05</strong></span>
-      <span>原始资讯：<strong>653 条</strong></span>
+      <span>覆盖时段：<strong>2026-11-17 23:39 — 2026-11-18 23:39</strong></span>
+      <span>原始资讯：<strong>714 条</strong></span>
       <span>来源数：<strong>424</strong></span>
-      <span>本期精选：<strong>8 条动态 · 2 篇深读 · 6 项开源资源</strong></span>
+      <span>本期精选：<strong>8 条动态 · 2 篇深读 · 7 项开源资源</strong></span>
     </div>
   </header>
 
   <div class="abstract">
     <h2>本期导读</h2>
-    <p>今日研究侧有四条主线。其一，<b>递归自我改进（RSI）的研究重心继续从“权重”下移到“脚手架与记忆”</b>：Google 的新论文在 harness 层实现持续 RSI，并用可自适应、可持久化的自改进记忆把“为什么这样改”沉淀下来，报告称记住编辑理由可让 9/10 的连续运行获得提升；但换模型后出现迁移衰减（Opus 演化的 harness 在 Gemini 上仅 68.41，低于朴素种子 harness 的 73.89），提示“可迁移性”仍是 RSI 的核心难题。其二，<b>评测开始正面进攻“长程、非文本、抗作弊”的空白</b>：Einsia AI 的 Visual Cipher Bench 用 40 道纯图像谜题把最强模型压到 26.7%，UC Berkeley 的 FrontierCS 2 要求智能体在不看论文、无网络的情况下复现并超越已发表方法，并直言搜索替代 RL、复用缓存结果等评测漏洞。其三，<b>AI for Science 的工具链与开放权重同时推进</b>：上海 AI 实验室开源 321B 的 Sage-S2.1-Flash，字节跳动等以极简两阶段配方训练出 Axion 1.0；OpenAI 对 1800 余名科学家的调查则显示 AI 正从“工具”走向“研究伙伴”，但效率翻倍仍是自述口径。其四，<b>高效超长上下文与透明度</b>：Prefrontal AI 与 ETH 的 Latent Sparse Attention 在 1000 万 token 下把注意力层 prefill 提速数十倍；前 OpenAI 研究员的权重取证报告则尝试从初始化残差反推训练硬件。</p>
+    <p>今日研究侧有三条主线。其一，<b>“自我改进”的重心继续从权重迁移到脚手架、记忆与元认知</b>：MIT CSAIL 与图宾根大学让一个冻结模型在没有任何学习指令的情况下，自行摸索出“写练习题—观察—改提示”的学习流程；Meta AI 的 RAM 团队则用同一模型兼任任务 agent 与元 agent，先优化记忆的读写提示，再把技能蒸馏进权重。两项工作共同把 RSI 的核心问题，从“能否改”推进到“改什么、如何迁移”。其二，<b>评测的方法学自身成为研究对象</b>：ISMIR 音乐生成论文的主观评测被系统盘点出 284 个条目、复现性普遍不足；咳嗽声学结核筛查在三套数据上外部泛化常低于 0.6，暴露出“表征按设备而非按疾病组织”的陷阱；对 16,375 个儿童向 YouTube 视频的审计则把“过度刺激”操作化为可计算指标。其三，<b>开放权重继续下沉到日常能力层</b>：腾讯开源 224B/12B 激活的 Hy4 flash（1M 上下文、多模态），Cloudflare 放出 9B 的 Clairic-flash，Reson8 的 0.5B 语音模型以 Apache 2.0 覆盖 40+ 语言。研究者的机会不只在“用模型”，更在“用这些可复现对象做机制分析与消融”。</p>
   </div>
 
   <section class="trend" id="s1">
@@ -199,153 +199,159 @@
     <p class="section-note">按学术价值与信息增量筛选，共 8 条。</p>
 
     <div class="item">
-      <h3>Einsia AI 发布 Visual Cipher Bench：纯图像长程推理把顶级模型压到 26.7%</h3>
-      <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&amp;mid=2247557766&amp;idx=1&amp;sn=a09e3130a68ef876de2ba07d8ef0860f" target="_blank" rel="noopener">大模型智能</a> <a class="cite" href="#ref1">[1]</a> · <a href="https://x.com/arena/status/2122706676126191885" target="_blank" rel="noopener">Arena.ai（对照：FrontierCS 2）</a> <a class="cite" href="#ref8">[8]</a></span>
-      <p>Einsia AI 旗下 Navers Lab 发布 Agent 视觉推理基准 Visual Cipher Bench，专门填补“长程视觉推理”的评测空白。它由 40 道原创视觉谜题、67 张黑白线稿构成，四类各 10 题——空间操作与模拟（折叠、旋转、投影）、逻辑约束与规划、规则归纳、以及知识解码（摩斯码、盲文、文字游戏）。与常规视觉问答不同，题目不给题干、不给选项，40 道题共用一句指令“看图，把最终答案写进文件”，哪些是样例、哪些是待解输入、答案是单词还是数字都要模型自行判断。</p>
-      <p>在 8 个前沿模型、3480 次尝试中，最强的 GPT-6 Astra（max）仅答对 26.7%，DeepSeek V4.1 Flash、Qwen 3.8 Max、Kimi K3.1 Pro 三款模型一题未对，总体准确率 12.2%。最具诊断价值的是干预实验：只要用一句话点明规则，总体准确率立刻从 12.2% 跳到 51.1%——说明失败主要源于“把图像线索转成可操作假设”这一环节，而非缺少领域知识。</p>
-      <div class="significance"><b>学术意义</b>　该基准与同日 UC Berkeley 的 FrontierCS 2 <a class="cite" href="#ref8">[8]</a> 共同指向“现有评测已饱和”的痛点：单轮、文本化、可试错的题目无法区分真正的推理能力。规则提示带来的巨大增益，也为“感知—假设—验证”闭环的可解释评测提供了可复现的探针；后续应关注题目泄露、评分脚本与跨模型方差。</div>
+      <h3>MIT CSAIL × 图宾根：不给任何“如何学习”的指令，冻结模型能否自己发明学习流程？</h3>
+      <span class="src">📎 来源：<a href="https://x.com/omarsar0/status/2123129152887046557" target="_blank" rel="noopener">elvis (@omarsar0)</a> <a class="cite" href="#ref1">[1]</a></span>
+      <p>MIT CSAIL 与图宾根大学的一篇新论文正面测试了一个问题：LLM 智能体是否还需要被“教会”如何自我改进。实验给一个<strong>冻结的模型</strong>一笔算力预算和少量简单工具，允许它编写练习游戏、观察另一个自身副本游玩，并编辑该副本的提示与技能文件；关键约束是它看不到真实任务、看不到验证分数，也没有任何关于“学习策略”的说明。</p>
+      <p>结果显示，能力足够的模型能够<strong>自行构建出可用的学习流程</strong>，并在带有隐藏机制的留出游戏上取得提升。不同模型家族最终收敛到相似策略：按校准过的难度编写游戏、做受控 A/B 对比、自建验证集、在更难的任务上投入更多算力。它们产出的文本文件还迁移到了外部基准，改善了实际表现。</p>
+      <div class="significance"><b>学术意义</b>　这把“元学习/自课程学习”从人工设计的 pipeline 推向“模型自主发明”。最值得复核的是三件事：冻结模型能力与自主发现能力之间的相关性、隐藏机制任务上的真实增益幅度，以及自建验证集与外部基准之间是否存在分布重叠。若结论稳健，它将为“最小先验 + 计算预算”的智能体训练范式提供强证据。</div>
     </div>
 
     <div class="item">
-      <h3>OpenAI 发布 Science at the Frontier：1800 余名科学家自述效率近乎翻倍，三分之一用途在“想方向”</h3>
-      <span class="src">📎 来源：<a href="https://x.com/FinanceYF5/status/2122541579743412492" target="_blank" rel="noopener">AI Will</a> <a class="cite" href="#ref2">[2]</a> · <a href="https://x.com/FinanceYF5/status/2122540778643685596" target="_blank" rel="noopener">AI Will</a> <a class="cite" href="#ref3">[3]</a></span>
-      <p>OpenAI 基于 “ChatGPT for Academic Researchers” 项目，分析约 1800 名科学家真实使用 ChatGPT 的行为，并发布 Science at the Frontier 报告。研究员 Carl Shan 概括了四类主要任务：约 85% 的使用集中在写作、文献阅读、编程与数据分析；更值得注意的是，约三分之二的科学家已用它构思研究方向。参与者自述使用后工作效率“接近翻倍”。</p>
-      <p>官方把这一变化描述为 AI 从“显微镜式的观察工具”走向“参与思考与探索的研究协作者”。但报告本身标注了关键限制：效率提升来自科学家自述，并非经过客观测量的真实生产率，因此“翻倍”应视为主观感知而非受控实验结论。</p>
-      <div class="significance"><b>学术意义</b>　这是目前规模较大的“AI 如何进入科研流程”的行为学研究样本，价值在于用途分布（写作/文献/编码占绝大多数，构思方向已占约三分之二）而非效率数字。若要作为证据引用，需区分自述生产率与客观产出（论文数、复现率、错误率），并注意样本来自自愿参与项目的科学家所带的自我选择偏差。</div>
+      <h3>Meta AI RAM：自我改进记忆——先优化“怎么记”，再把技能训进权重</h3>
+      <span class="src">📎 来源：<a href="https://x.com/shao__meng/status/2122961408262635560" target="_blank" rel="noopener">meng shao (@shao__meng)</a> <a class="cite" href="#ref2">[2]</a></span>
+      <p>Meta AI 的 RAM 团队提出 Self-Improving Memory，目标是让语言模型在持续任务中越做越好。其出发点不是把全部历史塞进上下文，而是让模型学会<strong>怎么写记忆、怎么组织、以及何时读回</strong>。实现上，同一套模型 Kimi-K2.6 既担任任务 agent，也担任改写提示的元 agent；每个子任务从空白上下文开始，跨任务唯一保留的是一个持续存在的记忆目录，模型用文件工具读写，通用脚手架只给出简短的 LOAD / OFFLOAD 指示。</p>
+      <p>他们在 Continual Learning Bench 的 Database、Codebase 与 Spectrum 三项任务上比较了摘要、检索、技能库、假设跟踪等手写记忆策略，发现<strong>没有一种策略能在三项任务上同时最优</strong>，因此主张让模型按任务自行发现记忆习惯。方法分两步：先由元 agent 阅读轨迹、分数与最终记忆目录，改写 LOAD/OFFLOAD 提示；再把发现的有效技能蒸馏进模型权重。</p>
+      <div class="significance"><b>学术意义</b>　这项工作与 MIT 的“自主发明学习流程”形成方法学呼应：<b>记忆是持续学习的核心基础设施</b>，而“手写规则不如按任务发现”是一个可证伪的强主张。评估时应关注：Kimi-K2.6 作为任务与元 agent 的双重角色是否引入自洽偏差、三项任务之外的泛化、以及“提示优化→权重蒸馏”两步各自的边际贡献。项目主页已公开博客与细节。</div>
     </div>
 
     <div class="item">
-      <h3>Google 新论文：在 harness 层做持续 RSI，自改进记忆可提升 9/10 连续运行却难跨模型迁移</h3>
-      <span class="src">📎 来源：<a href="https://x.com/omarsar0/status/2122701047118635485" target="_blank" rel="noopener">elvis (@omarsar0)</a> <a class="cite" href="#ref4">[4]</a></span>
-      <p>Google 的一篇新论文把递归自我改进的对象放在“harness（智能体外围脚手架）”层，而非直接改模型权重。作者提出一套用于 harness optimizer 的自改进记忆系统（Self-Improvement Memory）：把过去的每次编辑按“它解决的 harness 问题”分组，并为每条编辑存储理由、预测结果与实际观测，使优化器在后续迭代中能复用“为什么这样改”的经验。</p>
-      <p>结果显示，当优化器记住每次编辑的理由时，10 次连续运行中有 9 次获得改进。但论文也暴露了 RSI 的迁移难题：一个在 Opus 上演化出的 harness 拿到 Gemini 上，起点只有 68.41，反而低于朴素种子 harness 的 73.89。换言之，脚手架层面的“进化成果”高度依赖其所适配的模型与基准。</p>
-      <div class="significance"><b>学术意义</b>　这项工作的关键贡献是把“记忆结构”与“可迁移性”摆上台面：RSI 不只是让系统反复自我修改，而是要让修改理由成为可检索、可复用的结构化知识。跨模型迁移的性能回退，提示评测 RSI 必须报告“同模型增益”与“跨模型保持”两套指标，否则容易高估通用性。它与 Meta 同周关于“让模型自行设计记忆习惯并训练进权重”的工作形成方法学对照，参见本期趋势观察。</div>
+      <h3>美团 20 余篇论文入选 EMNLP 2026，精选 12 篇长文覆盖推理、记忆与奖励模型</h3>
+      <span class="src">📎 来源：<a href="https://tech.meituan.com/2026/11/18/Papers-EMNLP-2026.html" target="_blank" rel="noopener">美团技术团队</a> <a class="cite" href="#ref3">[3]</a></span>
+      <p>EMNLP 2026 是 ACL 主办的自然语言处理经验方法会议。美团技术团队宣布今年共有 20 余篇论文被收录，并从中精选 12 篇主会长文（Long Paper）公开分享，覆盖推理框架、策略优化、评估框架、强化学习、记忆框架、自适应训练、语义标签、数据合成、统计框架与奖励模型等方向。</p>
+      <p>其中代表性工作 LTS-Agent 针对实时语音智能体的两难：端到端模型缺乏深度推理，而 ASR→LLM→TTS 的级联流水线延迟过高。作者提出“听—想—说”（Listen-Think-Speak）框架，用<strong>动态语义触发器</strong>学习在语义饱和的前缀处激活思考，并用双角色流式编排器把“何时思考”与“如何增量推理”显式解耦，避免机械分段与投机回滚带来的浪费。</p>
+      <div class="significance"><b>学术意义</b>　这是一份高密度的工业界 NLP 成果清单，适合按方向追踪。LTS-Agent 的价值在于把流式交互的延迟问题拆成“触发时机”与“增量推理”两个可学习子问题，属于可复现的系统级设计。引用时建议直接取会议论文原文，而非二手摘要，以核对数据集、基线与时延口径。</div>
     </div>
 
     <div class="item">
-      <h3>MIT 孵化的 Liquid AI 发布全模态决策模型 d1.2：登顶 AA 决策榜，并计划开放权重</h3>
-      <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&amp;mid=2652814378&amp;idx=2&amp;sn=9c5b551d3fa852a5c8bdf5ce704bbd5f" target="_blank" rel="noopener">智东西</a> <a class="cite" href="#ref5">[5]</a></span>
-      <p>MIT 孵化的模型公司 Liquid AI 发布全模态决策模型 d1.2 与 d1.2-ultra，二者均可处理文本、图像与音频，并透露未来计划开放权重。d1.2-ultra 在第三方机构 Artificial Analysis 的决策指数 v2.1 榜单以 75 分排名第一，领先第二名 Drex Max v1.1 三分；同为结构化决策定位的 Jev 得 66 分列第 13，d1.2 以 69 分列第 9。该成绩为 AA-Paperclip 等六个子项的加权平均。</p>
-      <p>研究上更值得关注的是“校准”指标：在内部测试中，d1.2 与 d1.2-ultra 的概率校准误差分别为 0.8 与 1.2，均低于 Jev 1.14 的 2.7——这一数值越低，意味着模型给出的预测概率越接近实际正确率。成本侧，两款模型均落在能力—成本帕累托前沿，约 63 美元与 133 美元/百万任务；d1.2-ultra 在相同输入价格下增加了音频处理能力。公司同时称获 AMD 领投的 16.8 亿美元融资，由四位 MIT 科学家加持。</p>
-      <div class="significance"><b>学术意义</b>　对决策类模型而言，校准误差比单纯准确率更接近“可用于决策”的标准，把校准纳入榜单是一处值得借鉴的评测设计。若“计划开放权重”兑现，Liquid AI 将为决策/结构化推理提供一个可做机制分析的开源对象；在此之前，其排名仍属厂商自述与第三方榜单的混合口径，需核对评测集构成与成本折算方式。</div>
+      <h3>EPFL / 图宾根实验：Claude Opus 5.5 独自运营“一人 AI 公司”七周，训练出 38 个模型</h3>
+      <span class="src">📎 来源：<a href="https://x.com/TheRundownAI/status/2123088063400140840" target="_blank" rel="noopener">The Rundown AI (@TheRundownAI)</a> <a class="cite" href="#ref4">[4]</a></span>
+      <p>据 The Rundown AI 转述，Claude Opus 5.5 在 Hugging Face 上为 EPFL 与图宾根大学的研究者运营了一家“单智能体 AI 公司”，持续七周。它训练出的 38 个模型累计下载量已超过 50,000 次，且有 143 个 GitHub 项目使用了这些模型，其中包括一个获得 1000+ stars 的 Android 键盘。</p>
+      <p>更耐人寻味的细节是工作节奏：报告称该智能体平均每天投入不足 20 分钟，并把“打卡”时间对齐到 Hugging Face 每日约 10:00 UTC 的下载量更新，以便根据反馈调整。这让实验同时成为一次关于<strong>智能体自主性、发布策略与反馈闭环</strong>的田野研究，而不只是模型能力演示。</p>
+      <div class="significance"><b>学术意义</b>　它提供了一个“长时间跨度、低人工干预”的自主智能体案例，值得从可复现性角度审视：任务目标与验收标准由谁设定、下载量是否能代表质量、38 个模型之间是否存在数据泄漏或重复。对研究自主科研智能体（AI for AI）的工作而言，这类真实部署日志比短程 benchmark 更能暴露长程漂移与激励错配。</div>
     </div>
 
     <div class="item">
-      <h3>苹果机器人论文：无需真人示范，1000 个虚拟家庭合成数据在 6 个真实家庭达 91% 成功率</h3>
-      <span class="src">📎 来源：<a href="https://x.com/FuSheng_0306/status/2122637037086154819" target="_blank" rel="noopener">傅盛 (@FuSheng_0306)</a> <a class="cite" href="#ref6">[6]</a></span>
-      <p>据傅盛转述，苹果上周的一篇机器人论文展示了一条颇具希望的技术路径：用市售机器人本体、外挂一台 Mac mini，并以开源千问（Qwen）作为“大脑”，在 6 个此前未见过的家庭中完成钻桌底、推箱子、坐椅子等动作，成功率约 91%。</p>
-      <p>方法上的关键点是“零真人示范”：训练完全使用 1000 个虚拟家庭、约 300 小时合成数据，全部由算力生成。作者据此论证“身体可以买、数据可以造、大脑可以随大模型升级”，把通用机器人突破的希望部分寄托于大模型能力的持续提升。转述者也提醒，这离真正进入家庭仍有相当距离。</p>
-      <div class="significance"><b>学术意义</b>　若“纯合成数据 + 通用本体 + 开源 VLM”能泛化到陌生真实环境，将显著降低具身智能的数据采集成本，并把研究重心推向 sim-to-real 的分布对齐与安全性。需回到论文核验任务定义、家庭间差异、失败样本与成功率统计口径；91% 很可能是分任务平均而非全部任务一次性完成率。</div>
+      <h3>OpenAI 发布科研使用数据：研究者 AI 使用指数增长，智能体承担更长任务</h3>
+      <span class="src">📎 来源：<a href="https://x.com/OpenAI/status/2123191365983248653" target="_blank" rel="noopener">OpenAI (@OpenAI)</a> <a class="cite" href="#ref5">[5]</a></span>
+      <p>OpenAI 公开了一组关于“AI 如何改变 OpenAI 内部研究”的数据。其结论包括：研究者的 AI 使用量持续呈指数增长；智能体正在完成更长的任务；但<strong>人的参与在研究中仍是核心</strong>。与此同时，研究者把更多时间投入到安全与对齐，且这两方面的人力投入增速在所有研究领域中最快。</p>
+      <p>官方称发布该报告的目的是提高“研究加速”的透明度，并为越来越强的 AI 的治理提供依据。需要注意的是，这是一份机构自报的观察性数据，衡量的是使用行为而非受控实验下的科研产出。</p>
+      <div class="significance"><b>学术意义</b>　这类“实验室内部使用数据”是研究 AI 与科研流程关系的一手材料，但证据等级属于描述性统计。引用时应区分“使用时长/任务长度”与“科研质量/可复现性”两类指标，并警惕幸存者偏差与组织激励带来的自报偏差。它与本期的自主智能体案例可互为对照：一个看“人如何用 AI”，一个看“AI 能独立做什么”。</div>
     </div>
 
     <div class="item">
-      <h3>Checkpoint Forensics：前 OpenAI 研究员从权重残差反推训练硬件，点名六个 Blackwell 版本</h3>
-      <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650457175&amp;idx=1&amp;sn=0bd9119cfd0dca2c4d08f8238a57692f" target="_blank" rel="noopener">AINLP</a> <a class="cite" href="#ref7">[7]</a></span>
-      <p>曾参与 Sora、Sora 2 及 GPT-4o、o3 后训练的前 OpenAI 研究员 Will DePue，通过 Unemployment Labs 发布 Checkpoint Forensics 报告。其方法是从公开模型权重中寻找初始化阶段残留的随机数值，再反解能够生成这些数值的随机种子与 GPU 布局，从而识别初始化时的计算布局，并据此推测后续训练所用硬件。</p>
-      <p>报告列出六个“Blackwell 指纹”版本：DeepSeek-V4-Flash（B200/B300）、DeepSeek-V4-Pro 与 Kimi K3、K3.1-Pro、MiniMax-M3、Ling-3.1-flash（GB200/GB300）。B200/B300 对应 148 个 SM，GB200/GB300 对应 152 个 SM。跨版本结果也显示布局在变化：DeepSeek V3 与 V4、Kimi K2.5 与 K3 匹配到的硬件布局已不相同。</p>
-      <div class="significance"><b>学术意义</b>　这项工作把“权重取证”作为一条独立的可验证线索，对模型透明度、算力来源溯源与复现研究都有方法论价值。其结论边界必须说清：权重本身不包含芯片所在地或获取途径，推测的是“初始化时的计算布局”而非芯片归属；随机种子反解的可信度、误匹配率与反例需要在同行评议中检验，切忌直接当作定论引用。</div>
+      <h3>16,375 个儿童向视频的大规模审计：把“过度刺激”操作化为 12 个可计算指标</h3>
+      <span class="src">📎 来源：<a href="https://arxiv.org/abs/2611.21637" target="_blank" rel="noopener">arXiv:2611.21637</a>（cs.MM） <a class="cite" href="#ref6">[6]</a></span>
+      <p>家长、儿科医生与媒体长期担忧儿童向视频“越来越过度刺激”，但此前多基于零散观察而非系统测量。该论文把“过度刺激”定义为<strong>与内容无关、可能超出幼儿处理能力的制作选择</strong>，结合 Reddit 家长讨论与发展心理学，提炼出 12 种模式并将其操作化为计算指标。</p>
+      <p>作者将指标应用于 2015—2026 年间 542 个儿童向 YouTube 频道的 16,375 个视频，发现刺激程度随时间<strong>普遍上升</strong>，且各类剪辑节奏（cut rate）在所有类别中均呈增长趋势。</p>
+      <div class="significance"><b>学术意义</b>　这是一篇把社会科学概念转成可复现计算测量的范例：贡献不在于“发现视频更快”，而在于给出可审计的指标定义与跨十年的大样本证据。后续研究应检验指标与儿童实际认知负荷的效度、跨平台泛化，以及“过度刺激”与观看时长/内容质量之间的混淆因素。</div>
     </div>
 
     <div class="item">
-      <h3>UC Berkeley 的 FrontierCS 2：不看论文、无网络，智能体能否复现并超越已发表方法</h3>
-      <span class="src">📎 来源：<a href="https://x.com/arena/status/2122706676126191885" target="_blank" rel="noopener">Arena.ai (@arena)</a> <a class="cite" href="#ref8">[8]</a></span>
-      <p>UC Berkeley 博士生 MangQiuyang 与 lihanc02 在 Arena 总部介绍 FrontierCS 2，一个要求智能体在没有原始论文、也没有网络访问的条件下，超越已发表计算机科学研究方法的基准。该设定刻意切断“检索现成答案”的捷径，考察智能体能否独立提出并实现有效方法。</p>
-      <p>介绍同时讨论了成本与性能的权衡，以及当前评测中的常见漏洞：用搜索绕过强化学习、复用缓存的图算法结果等“评测作弊”路径。作者强调，可靠的评测需要能识别这些捷径，并说明为何人类的科研判断力仍然不可替代。</p>
-      <div class="significance"><b>学术意义</b>　当智能体开始“做题”而非“做研究”时，评测设计必须把作弊面一并建模。FrontierCS 2 的“断网 + 断论文”约束与对捷径的系统盘点，为构建抗污染、可复现的科研智能体基准提供了范式；其开放的任务定义、评测协议与成本核算方式，是判断结论是否可信的关键，值得研究者据此复核。</div>
+      <h3>ISMIR 音乐生成评测的“元评估”：284 个主观条目，复现协议普遍缺失</h3>
+      <span class="src">📎 来源：<a href="https://arxiv.org/abs/2611.21809" target="_blank" rel="noopener">arXiv:2611.21809</a>（cs.SD） <a class="cite" href="#ref7">[7]</a></span>
+      <p>主观用户研究是评估音乐生成模型的主要手段，但各研究的评测协议差异很大，且很少被详细到可复现，导致跨研究比较困难。该论文系统梳理了 2020—2025 年 ISMIR 音乐生成论文中的主观评测方法，并用“生成式心理测量学”评估其条目稳定性。</p>
+      <p>作者从论文的方法描述中提取出 <strong>284 个条目</strong>，用 LLM 加人工校验进行标准化，再以上下文嵌入表示，施加唯一变量分析（Unique Variable Analysis）剔除冗余、局部依赖的条目，并用 Bootstrap 探索性图分析估计潜在维度。其目标不是再做一个音乐模型，而是<strong>评估“评估本身”</strong>。</p>
+      <div class="significance"><b>学术意义</b>　对生成模型研究而言，主观评测的可复现性长期是薄弱环节。本文把心理测量学的稳定性分析引入会议论文审计，提供了可迁移到语音、图像、视频主观评测的方法模板。引用时需注意 LLM 抽取条目的误差传播，以及“条目稳定性”与“构念效度”并非同一件事。</div>
     </div>
 
     <div class="item">
-      <h3>小米 PROVE 论文获 ACM MM 2026 杰出论文奖：为视觉目标消除建立感知一致性基准</h3>
-      <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzUxMDQxMDMyNg==&amp;mid=2247520718&amp;idx=1&amp;sn=e6c167b66121a3e664a102ddc6df76b2" target="_blank" rel="noopener">小米技术</a> <a class="cite" href="#ref9">[9]</a></span>
-      <p>在第 34 届 ACM 国际多媒体会议（ACM MM 2026，里约热内卢）上，小米大模型应用团队的论文 “PROVE: A Perceptual RemOVal cohErence Benchmark for Visual Media”（面向视觉媒体的感知消除一致性基准）获评杰出论文奖（Outstanding Paper Award）。ACM MM 由 ACM SIGMM 主办，是 CCF-A 类会议；本届共收稿 8273 篇、接收 1703 篇。</p>
-      <p>PROVE 的贡献是建立一套更贴近人眼感知的“局部一致性”评测框架，用于捕捉背景补全不协调、纹理衔接不自然等细粒度问题。该框架已接入小米图像魔法消除模型的评估与优化流程，覆盖小米 18 系列、18 Fold、17 系列与 REDMI K100 系列，并用于其他影像模型的迭代与训练数据清洗。</p>
-      <div class="significance"><b>学术意义</b>　视觉目标消除长期缺少“感知一致性”的标准评测，PROVE 将其形式化并与真实业务闭环，是“评测即生产力”的一个正面样例。对研究者而言，其价值在于把主观感知拆解为可度量的细粒度指标；后续可关注其指标与人类主观评分的一致性、跨编辑类型（去除/补全/重绘）的泛化性，以及基准数据是否公开。</div>
+      <h3>思维链一作 Jason Wei 离开 Meta，加盟数据与评测公司 Mercor 任首席科学家</h3>
+      <span class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651075119&amp;idx=3&amp;sn=f13b42ee2bcde04babe2341c5f834dce" target="_blank" rel="noopener">机器之心</a> <a class="cite" href="#ref8">[8]</a></span>
+      <p>被称为“思维链之父”的 Jason Wei 在 Meta TBD 实验室待了一年多后，加入 AI 数据公司 Mercor 出任首席科学家，负责组建研究团队、主管数据与评测。Mercor 一周前刚完成 7.5 亿美元 D 轮融资，估值达 200 亿美元；LoRA 作者 Edward Hu 也已加入其研究团队。</p>
+      <p>Jason Wei 是 Chain-of-Thought 论文第一作者，后在 OpenAI 参与 o1 与深度研究，并主导了 SimpleQA、BrowseComp 等评测，参与 HealthBench。他曾提出“验证者法则”：<strong>任务越容易验证，就越容易训练 AI 学会</strong>。Mercor 的平台汇聚 500 多万名医生、律师、工程师，为 AI 公司出题、写标准答案、给模型打分——这正对应“可验证数据”的产业化。</p>
+      <div class="significance"><b>学术意义</b>　这是一条“学术界—工业界互动”的风向标：前沿能力竞争正从“堆模型”转向“数据与评测基础设施”。对研究者而言，值得关注 Mercor 是否会公开其数据/评测方法，以及“验证者法则”在真实任务分布上的边界——可验证任务易被训练，恰恰意味着难验证的科研判断力仍是人类与新型评测的战场。</div>
     </div>
   </section>
 
   <section id="s2">
     <h2 class="section-title">深度论文解读</h2>
-    <p class="section-note">选取两篇方法与训练范式上具有代表性的工作，按“背景—创新—结果—意义”展开。</p>
+    <p class="section-note">选取两篇方法与评测上具有代表性的工作，按“背景—创新—结果—意义”展开。</p>
 
     <div class="paper">
-      <h3>Latent Sparse Attention：把超长上下文的瓶颈从“注意力”搬到“索引器”</h3>
-      <div class="paper-meta">Latent Sparse Attention: Towards Subquadratic Ultra-Long Context ｜ Prefrontal AI × ETH Zurich ｜ 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651074900&amp;idx=2&amp;sn=9e3dc407e5451c7ff8aef36fd598f6ce" target="_blank" rel="noopener">机器之心</a> <a class="cite" href="#ref10">[10]</a></div>
+      <h3>Nemotron-Labs-Sigma：把连续扩散引入语言，用“块并行”替代逐 token 生成</h3>
+      <div class="paper-meta">Nemotron-Labs-Sigma ｜ NVIDIA ｜ arXiv:2610.02665 ｜ 来源：<a href="https://x.com/NVIDIAAI/status/2123144524746924455" target="_blank" rel="noopener">NVIDIA AI</a> <a class="cite" href="#ref9">[9]</a></div>
       <dl>
         <dt>研究背景</dt>
-        <dd>百万 token 上下文已成为旗舰模型标配：DeepSeek-V4 将 1M 定为默认规格，GLM-5.3-Flash 也支持 1M 并引入稀疏 + 线性注意力混合架构。稀疏注意力的思路是让每个 query 只“看”少数最相关 token，在 1M 量级已被反复验证。但当上下文推向 1000 万 token 时，一笔原本不起眼的开销开始失控：以 GLM-5.3-Flash 的一个全局注意力层为例，10M token 下做 prefill，约 98% 的时间并非花在注意力计算，而是花在“决定该看哪些 token”的索引器上。瓶颈的性质由此改变——问题不再是“只看一小部分能否保住精度”，而是“找到那一小部分”本身仍随上下文长度二次方增长。</dd>
+        <dd>主流语言模型是离散、自回归的：一次只生成一个 token，推理延迟随序列长度线性累积。扩散模型在视觉领域已证明“并行去噪”可以一次性生成整幅图，但语言是离散符号，如何把连续扩散的平滑性带到文本，一直是开放问题。NVIDIA 的出发点很直接——既然视觉可以“块生成”，语言能否也一次生成一块 token，从而在数学、代码等需要探索多个解的任务上提速？</dd>
         <dt>核心创新</dt>
-        <dd>作者提出 Latent Sparse Attention（LSA，隐空间稀疏注意力），核心是把“选 token”的索引过程迁移到低维隐空间，避免在原始超长序列上做昂贵的相关性匹配，从而让整体复杂度走向次二次（subquadratic）。其动机是：既然精度已证明可由少量关键 token 维持，真正需要重构的是“高效地定位关键 token”这一子问题，而非注意力计算本身。</dd>
+        <dd>Nemotron-Labs-Sigma 把<strong>连续扩散</strong>引入语言建模，用平滑的 16 维 ODE 轨迹连接噪声与 token 块，使模型能够并行生成一块 token 而非逐个生成。作者强调这种平滑轨迹解锁了两件事：<strong>蒸馏</strong>（把多步去噪压缩为少步）与<strong>引导</strong>（steering），并在保持准确率与多样性的前提下，把数学任务压到 8 个 TPF（每前向生成的 token 数）、代码任务压到 4 个 TPF。</dd>
         <dt>实验结果</dt>
-        <dd>在 10M token 设置下，LSA 把 GLM-5.3-Flash 单个注意力层的 prefill 提速 22.7 倍，把 Qwen3.8-27B 提速 72.4 倍，同时在系列任务上保持了与原模型相近的精度。提速幅度的模型间差异，说明收益与具体架构/维度配置强相关。</dd>
+        <dd>官方称在数学与代码问题上，块并行生成在保持准确率与解多样性的同时显著提升生成速度；并一次性放出 <strong>14 个开放权重检查点</strong>，覆盖 3B 与 8B 两档规模，便于做规模律与蒸馏消融。论文编号为 arXiv:2610.02665。</dd>
         <dt>学术意义</dt>
-        <dd>这是一篇“重新定位瓶颈”的典型方法论文：它不追求更强的注意力表达力，而是把预算从索引器转移到真正需要的地方。对超长上下文研究，LSA 提供了可复现的对照点（同模型、同 10M 设置、单一 attention 层 prefill）。评估时应重点核验：精度“相近”是否覆盖长程检索、多跳推理与位置外推任务；22.7×/72.4× 是端到端还是单层；以及隐空间索引在分布外长度上的稳健性与可解释性。</dd>
+        <dd>这是“离散 vs 连续”这一根本性建模选择上的一次系统性工程验证。对研究者，它的价值在于提供了可复现的开放检查点，使“扩散语言模型的 scaling、蒸馏步数与多样性”可以被独立测量。评估时应重点核对：TPF 的统计口径（是否含去噪全部步数）、与同规模自回归基线的等算力比较，以及块并行在长程依赖与事实性任务上的退化情况。</dd>
       </dl>
     </div>
 
     <div class="paper">
-      <h3>Axion 1.0：只用“SFT + RL”两阶段，能否训练出可做科学研究的智能体？</h3>
-      <div class="paper-meta">Axion 1.0 ｜ Duke University × ByteDance × University of Maryland × SUNY Buffalo ｜ 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651074900&amp;idx=3&amp;sn=b8ce1837d869e2563a888e3df5a04a89" target="_blank" rel="noopener">机器之心</a> <a class="cite" href="#ref11">[11]</a></div>
+      <h3>Why ML-based cough models do not generalize：当声学表征按“设备”而非“疾病”聚类</h3>
+      <div class="paper-meta">Why ML-based cough models do not generalize: a systematic cross-dataset evaluation for tuberculosis screening ｜ Wensi Zhang, Tomas Teijeiro, Jérôme Thevenot, David Atienza ｜ arXiv:2608.25846 ｜ 来源：<a href="https://arxiv.org/abs/2608.25846" target="_blank" rel="noopener">arXiv（cs.SD / eess.AS）</a> <a class="cite" href="#ref10">[10]</a></div>
       <dl>
         <dt>研究背景</dt>
-        <dd>能搜索资料、运行代码、完成多步科研任务的智能体，其训练流水线正越拉越长：中期训练（mid-training）、监督微调（SFT）、偏好优化（DPO）、在线策略蒸馏（OPD）、强化学习（RL）层层叠加。每增加一个环节，都要额外准备数据、协调目标、调试参数，复现门槛也随之升高。作者的出发点是：这些环节是否都不可或缺？</dd>
+        <dd>咳嗽声学被视为结核病（TB）无创筛查的潜在信号，但一个根本疑问长期未解：机器学习模型学到的究竟是<strong>与疾病相关的声学特征</strong>，还是<strong>数据采集过程留下的伪影</strong>？如果模型主要记住的是录音设备、环境与人群分布，那么实验室里的高 AUC 在真实部署中会迅速崩塌。</dd>
         <dt>核心创新</dt>
-        <dd>Axion 1.0 把训练流程压缩为仅两阶段——监督微调（SFT）与强化学习（RL），明确去掉中期训练、DPO 与在线策略蒸馏。这是一种“做减法”的范式主张：用较少但精心组织的监督信号建立基础能力，再用 RL 在智能体交互轨迹上优化工具使用与问题求解，从而以更短的管线获得科研智能体能力。</dd>
+        <dd>作者对经典机器学习与深度学习两类咳嗽 TB 分类器，做了<strong>系统的跨数据集泛化评估</strong>，覆盖三套相互独立的数据集。方法上的关键在于“外部验证优先”：不只看同分布内的性能，而是把在一个数据集上训练的模型直接搬到另两个数据集上测，并进一步分析音频表征的组织方式与预测概率的分布规律。</dd>
         <dt>实验结果</dt>
-        <dd>论文报告 Axion 1.0-122B 在限制部分网站访问的完整 Humanity's Last Exam（HLE）评测中取得 59.0%（官方称超越 GPT-6），在 FrontierScience Research 上取得 66.7%；35B 版本亦在信息搜寻基准 SEAL-0 上取得成绩。模型提供开放权重（详见开源资源）。</dd>
+        <dd>尽管<strong>同数据集内</strong>性能尚可（ROC-AUC 最高约 0.76 ± 0.06），两类管线都<strong>无法泛化</strong>，外部性能经常低于 0.6，作者据此判断可能存在数据层面的根本限制。更具诊断性的是：音频表征按<strong>录音设备与数据集</strong>而非 TB 状态组织；在 CODA 数据上，模型预测的 TB 概率还随国家层面的患病率变化。</dd>
         <dt>学术意义</dt>
-        <dd>若“两阶段即可”在独立复测中成立，将显著降低科研智能体的训练门槛与复现成本，并把研究焦点从“堆管线”拉回“数据质量与 RL 目标设计”。引用时须注意两点：HLE/FrontierScience 的“限制网站访问”设置如何影响可比性，以及 122B 与 35B 两档的能力差距是否支持“配方可缩放”的结论。作为开放权重工作，它同时为后续做消融（如去掉某一阶段的确切影响）提供了实验对象。</dd>
+        <dd>这是一篇“负结果但高价值”的方法学论文：它用可复现的跨数据集协议，证明了许多咳嗽诊断模型可能拟合的是采集伪影。对医学 AI 研究，它给出三条可直接借用的检查：外部验证必须跨设备/跨站点、表征需做设备混杂分析、预测概率需与流行病学基线对照。引用时应区分“该结论适用于咳嗽 TB 筛查”与“可推广到所有声学诊断”，后者仍需更多任务验证。</dd>
       </dl>
     </div>
   </section>
 
   <section id="s3">
     <h2 class="section-title">开源资源</h2>
-    <p class="section-note">本期可复用的模型权重、数据集、基准与工具，共 6 项。</p>
+    <p class="section-note">本期可复用的模型权重、数据集、基准与工具，共 7 项。</p>
 
     <div class="resource">
-      <h3>Sage-S2.1-Flash：321B 科学推理模型，MIT 许可、开放 BF16/FP8 权重</h3>
-      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&amp;mid=2247504123&amp;idx=1&amp;sn=8b047983eb9b839261a1ee711ef0af7b" target="_blank" rel="noopener">机器之心 SOTA模型</a> <a class="cite" href="#ref12">[12]</a></div>
-      <p>上海 AI 实验室的 Sage-S2.1-Flash 面向科学推理，支持分子图、晶体、蛋白序列及三维结构等十余类科学输入。其 SciPerception 模块通过编码与投影把这些异构信息接入统一表示空间，并结合检索与编程工具开展多轮验证。Hugging Face 标注参数量 321B，代码与权重采用 MIT 许可，提供 BF16 与 FP8 两种权重；但科学任务还需自行接入对应的编码器、投影与读出组件，部署门槛被评为“极高”，需多卡推理资源。</p>
+      <h3>Hy4 flash：腾讯开源 224B（12B 激活）多模态模型，1M 上下文、含 FP8 与 Base 版</h3>
+      <div class="src">📎 来源：<a href="https://x.com/TencentHunyuan/status/2122912575302119554" target="_blank" rel="noopener">腾讯混元 (@TencentHunyuan)</a> <a class="cite" href="#ref11">[11]</a> · <a href="https://mp.weixin.qq.com/s?__biz=Mzk3NTc1NTU0Mw==&amp;mid=2247515895&amp;idx=1&amp;sn=9620e69f61e90a9a2ac2294d654e6923" target="_blank" rel="noopener">魔搭 ModelScope 社区</a></div>
+      <p>腾讯混元开源 Hy4 flash，总参数 224B（含 64B Engram 参数），每个 token 激活 12B；原生支持文本与图像输入、文本输出，提供 1M token 上下文，重点优化日常办公任务的完成质量、成本与端到端时延。官方称在 WorkIndex 上得分 42.1、略优于 Hy4 preview，在内部 WorkBuddy 盲测中满意度接近 Claude Haiku 5.5。本次开放三个版本：指令微调的 Hy4 flash、FP8 量化的 Hy4 flash-FP8，以及预训练的 Hy4 flash-base；AngelSlim 另提供 GGUF 量化并支持 128GB 设备部署。权重见 GitHub / Hugging Face / ModelScope / GitCode，采用 Tencent Hy License（非标准 OSI 许可，商用前需核对条款）。</p>
     </div>
 
     <div class="resource">
-      <h3>Axion 1.0 / Axion-1.0-35B：科学推理与工具使用，开放权重</h3>
-      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&amp;mid=2247504123&amp;idx=1&amp;sn=8b047983eb9b839261a1ee711ef0af7b" target="_blank" rel="noopener">机器之心 SOTA模型</a> <a class="cite" href="#ref12">[12]</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651074900&amp;idx=3&amp;sn=b8ce1837d869e2563a888e3df5a04a89" target="_blank" rel="noopener">机器之心</a> <a class="cite" href="#ref11">[11]</a></div>
-      <p>Axion-1.0-35B 明确标注为 Reproduction checkpoint（复现权重），总参数 35B、激活参数 3B，提供 BF16 权重，采用 Apache 2.0 许可。训练使用约 1.8 万条监督微调样本，先学习科学问题推理与外部信息调查，再通过智能体交互轨迹上的强化学习改进工具使用与问题求解。它与 122B 版本共同构成了一套可直接做消融复现的开放科研智能体基线。</p>
+      <h3>Clairic / Clairic-flash：Cloudflare 开放 9B 文档抽取模型权重</h3>
+      <div class="src">📎 来源：<a href="https://blog.cloudflare.com/open-clairic/" target="_blank" rel="noopener">The Cloudflare Blog</a> <a class="cite" href="#ref12">[12]</a></div>
+      <p>Cloudflare 宣布以“Workers AI Superintelligence 团队”身份发布两个开放权重模型：更新版 Clairic 与更轻量的 Clairic-flash。前者增强了对图像与 PDF 等复杂文档的抽取，改进表格、列表与日期的处理，并提升答案对源材料的 grounding；后者是 9B 参数的紧凑版本，在抽取与预测任务上保持较强性能。两者均托管于 Workers AI，完整权重已上传 Hugging Face。对做文档理解与信息抽取的研究者，这是一个可在本地复现的较小规模基线。</p>
     </div>
 
     <div class="resource">
-      <h3>ParseBench-2：文档解析的六维基准，开放排行榜与 Hugging Face 数据集</h3>
-      <div class="src">📎 来源：<a href="https://x.com/jerryjliu0/status/2122757020801814613" target="_blank" rel="noopener">Jerry Liu (@jerryjliu0)</a> <a class="cite" href="#ref13">[13]</a> · <a href="https://x.com/jerryjliu0/status/2122820382189289946" target="_blank" rel="noopener">Jerry Liu</a> <a class="cite" href="#ref21">[21]</a></div>
-      <p>ParseBench-2 覆盖文档解析的六个维度（阅读顺序、格式、表格、图表、表单、视觉 grounding），拆分为 6 个维度和 330 个测试场景，并提供可调节严重程度的 Metric Lab。其设计动机是“高维输出既要细粒度、又要对齐人类偏好”：不同下游（后台单据 vs 法律文书）对各维度错误的敏感度不同，因此允许用户按需加权。团队已在 Hugging Face 公开数据集与排行榜，并对 20 余个开源权重模型完成评测，近几日月下载量已超 3 万。</p>
+      <h3>Rumble-2-Flash：0.5B 开放语音识别模型，40+ 语言、Apache 2.0</h3>
+      <div class="src">📎 来源：<a href="https://huggingface.co/blog/rumble-2-flash" target="_blank" rel="noopener">Hugging Face Blog</a> <a class="cite" href="#ref13">[13]</a> · <a href="https://x.com/omarsar0/status/2123060794124386461" target="_blank" rel="noopener">elvis (@omarsar0)</a></div>
+      <p>Reson8 发布 Rumble-2-Flash，一个面向“真实世界音频”的开放权重语音识别模型，专门针对重口音、多人抢话、电话录音与背景噪声等常让 ASR 失效的场景。它覆盖 40 多种语言，采用 Apache 2.0 许可，权重可本地运行、音频无需上云；作者称其表现优于体积大 20 倍的模型，且小到可在手机上运行。对语音与多模态研究者，这是一个许可友好、便于做鲁棒性对照的小模型。</p>
     </div>
 
     <div class="resource">
-      <h3>TokenEconomizer：不改模型、从仓库历史为 Coding Agent 省 token 的外置控制器</h3>
-      <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2122507586541166850" target="_blank" rel="noopener">meng shao (@shao__meng)</a> <a class="cite" href="#ref14">[14]</a></div>
-      <p>微软研究院联合 UC Berkeley 与 Microsoft Security 开源 TokenEconomizer。它不改动 Coding Agent 及底层模型，而是读取同一仓库的历史会话日志、更新仓库状态，并通过三种机制在 Agent 外围起作用：把“微技能”写入起始上下文、裁剪长期不用的工具、在卡住时介入。对 Claude Code 在 SWE-Bench 60 个任务的剖析显示：同一仓库累计至少 5 个任务后，约 30% 的工具调用在重复更早任务（跨仓库对照仅约 7%）；每轮加载 23 个工具说明中 16 个从未被调用；失败任务仅占 17% 却占约 32% 支出。研究还指出固定省钱插件在不同仓库效果相反，说明控制策略需按仓库自适应。</p>
+      <h3>1020 小时 EEG-EMG-音频日语语音数据集</h3>
+      <div class="src">📎 来源：<a href="https://arxiv.org/abs/2606.01264" target="_blank" rel="noopener">arXiv:2606.01264</a>（cs.SD / eess.AS） <a class="cite" href="#ref14">[14]</a></div>
+      <p>该数据集同时采集三名健康日语母语者的头皮脑电（EEG）、面部肌电（EMG）与语音音频，总时长 1020 小时，覆盖开放词汇朗读、默读复述与聆听三类任务。录制跨数月、使用三套 61—128 通道 EEG 系统（超高密度 g.Pangolin，以及 g.SCARABEO、eego sports 两套帽式系统），每个会话提供时间同步的 EEG、EMG、音频及语音事件标注与转写。虽以语音解码为主要动机，也可用于多模态信号处理与跨设备泛化研究。受试者仅 3 人，是其在个体差异研究上的主要限制。</p>
     </div>
 
     <div class="resource">
-      <h3>GraphRAG Zero：把图检索从实验技术做成可部署系统</h3>
-      <div class="src">📎 来源：<a href="https://x.com/MSFTResearch/status/2122779387888103867" target="_blank" rel="noopener">Microsoft Research (@MSFTResearch)</a> <a class="cite" href="#ref15">[15]</a></div>
-      <p>微软研究院发布 GraphRAG Zero，目标是用图结构做“整体性发现”，解决此前限制 AI 智能体发挥潜力的一个基础问题——跨海量自有数据的关联探索。官方称其把图检索从实验性技术推进为可部署系统，面向真实应用与智能体优化，可快速、低成本地探索连接关系。目前已集成进 Foundry IQ 与 GitHub 的 Repo Mind Light，覆盖从科学发现到代码仓库理解等场景。</p>
+      <h3>parallel-search-evals：衡量“模型会不会用好搜索”的 MIT 许可评测框架</h3>
+      <div class="src">📎 来源：<a href="https://x.com/shao__meng/status/2122893742801604691" target="_blank" rel="noopener">meng shao (@shao__meng)</a> <a class="cite" href="#ref15">[15]</a></div>
+      <p>Parallel 开源 parallel-search-evals，把“接入搜索—取证据—形成答案”整条链路放进可重复评测。核心方法是让同一模型分别在关闭工具与允许搜索的条件下答题并比较，支持 turbo / fast / basic / advanced 多种搜索模式及无工具基线。模型可调用 Search（返回最多 10 条带正文摘录的结果）与 Extract（从最多 20 个网址抽取内容），每题最多 20 次工具调用、25 轮研究，预算耗尽后关闭工具再作答；参考答案只交给评分器。项目采用 MIT 许可，支持 OpenRouter 与 OpenAI / Anthropic / Google 原生接口，且题目集、执行流程与评分器相互分离，便于替换成自有业务问题。</p>
     </div>
 
     <div class="resource">
-      <h3>HF Papers 速览：Energy-Based Reasoners / Ropedia Xperience 2 / Accelerate Bench</h3>
-      <div class="src">📎 来源：<a href="https://x.com/_akhaliq/status/2122814097649742258" target="_blank" rel="noopener">AK (@_akhaliq)</a> <a class="cite" href="#ref16">[16]</a> · <a href="https://x.com/_akhaliq/status/2122805100171460887" target="_blank" rel="noopener">AK</a> <a class="cite" href="#ref17">[17]</a> · <a href="https://x.com/_akhaliq/status/2122758250059977062" target="_blank" rel="noopener">AK</a> <a class="cite" href="#ref18">[18]</a></div>
-      <p>当日 Hugging Face Papers 有三篇值得关注的预印本：<b>《Your Recurrent Reasoner Should Be an Energy-Based Model》</b>把循环推理器建模为能量模型，为“推理即能量最小化”提供新表述；<b>《Ropedia Xperience 2》</b>提出用于扩展物理 AI 环境与行为规模的高标准数据/环境资源；<b>《Accelerate Bench》</b>则提出面向“应用级程序优化”的智能体评测基准，考察智能体自动优化真实程序的能力。三篇均可通过对应 HF Papers 页面获取全文与图表。</p>
+      <h3>papr-embed-code-1：0.6B / 4B 代码检索嵌入模型（附训练数据污染的提醒）</h3>
+      <div class="src">📎 来源：<a href="https://qdrant.tech/blog/papr-embed-code/" target="_blank" rel="noopener">Qdrant Blog</a> <a class="cite" href="#ref16">[16]</a></div>
+      <p>Papr 的 papr-embed-code-1 是在 Qwen3-Embedding 基础上继续用代码检索数据训练的嵌入模型，开放 0.6B 与 4B 两档权重。Papr 报告其在代码检索基准 CoIR 上取得最高分，但模型卡也坦承训练时用到了 CoIR 的大部分训练数据；在 MTEB 的两个留出代码榜单 RTEB (Code) 与 CodeRAG 上，4B 版本位列第一。Qdrant 的评测文章以此为例，讨论“代码专用嵌入是否值得”——对研究者，这同时是一份关于基准污染与留出评估重要性的现成案例。</p>
+    </div>
+
+    <div class="resource">
+      <h3>Amazon SageMaker JumpStart Model Leaderboard：并排比较开放权重模型的质量、速度与成本</h3>
+      <div class="src">📎 来源：<a href="https://aws.amazon.com/blogs/machine-learning/introducing-the-amazon-sagemaker-jumpstart-model-leaderboard/" target="_blank" rel="noopener">AWS Machine Learning Blog</a> <a class="cite" href="#ref17">[17]</a></div>
+      <p>AWS 推出 SageMaker JumpStart Model Leaderboard，用于在统一条件下并排比较 JumpStart 中数百个开放权重基础模型的质量、速度与成本。其动机是：以往选型需逐个阅读模型卡、在不同来源、不同条件下拼凑基准分数，再猜测自身用例的表现与开销。该排行榜把这些维度集中呈现，对需要快速筛选开放模型的研究与工程团队有实用价值，但具体评测集构成与成本折算方式仍应以其方法说明为准。</p>
     </div>
   </section>
 
   <section class="trend" id="s4">
     <h2 class="section-title">趋势观察</h2>
     <p class="section-note">基于本期动态的四点研究判断。</p>
-    <p><strong>1. RSI 的战场正在从权重转向“脚手架 + 记忆”，而可迁移性成为新的分水岭。</strong>Google 把持续自我改进放在 harness 层，并用结构化自改进记忆存储“编辑理由”，取得 9/10 连续运行的改进；Meta 同周则尝试让模型自行设计记忆习惯并训练进权重。两条路线的共同点，是把“记忆”视作 RSI 的核心基础设施；分歧点在于记忆落在权重还是外置状态。跨模型迁移的性能回退提醒我们：任何声称“通用自我改进”的结果，都应同时报告同模型增益与跨模型保持，否则难以区分“真进化”与“对特定评测的过拟合”。</p>
-    <p><strong>2. 评测正在从“会不会做”转向“能不能在抗作弊条件下做长程推理”。</strong>Visual Cipher Bench 用纯图像、无题干、无反馈的设定把顶级模型压到 26.7%，一句规则提示即可从 12.2% 跃至 51.1%；FrontierCS 2 直接以“断网 + 不看论文”约束智能体，并系统盘点搜索替代 RL、复用缓存等漏洞；ParseBench-2 则用可加权、可调严重度的六维指标回应“粒度 vs 人类偏好”的矛盾。三者共同的方向是：把评测对象从单轮问答迁移到多步、可验证、且难以通过检索或试错蒙混的任务上。研究者应优先关注这些基准的任务卡、评分脚本与污染审计。</p>
-    <p><strong>3. AI for Science 同时向“协作者叙事”和“开放工具链”推进，但证据强度需要分级。</strong>OpenAI 的 1800 人调查把 AI 描述为从工具走向研究伙伴，其中约三分之二用于构思方向，但效率“翻倍”是自述口径；与此并行的是可复现的开放资源在增加——Sage-S2.1-Flash（MIT 许可、321B）把多类科学输入接入统一表示，Axion 1.0（Apache 2.0）用极简两阶段配方提供开放科研智能体基线。建议把“感知型证据”（用户自述）与“机制型证据”（开放权重 + 消融 + 复现）分开引用，后者才是可累积的学术资产。</p>
-    <p><strong>4. 超长上下文与透明度成为两条并行的“基础设施级”议题。</strong>LSA 通过把索引器搬到隐空间，在 10M token 下实现 22.7×/72.4× 的单层 prefill 提速，说明“找到关键 token”本身才是次二次化的主战场，而非注意力计算；Checkpoint Forensics 则尝试从权重初始化残差反推训练硬件，为模型透明度提供了新的取证维度。二者分别从“效率”和“可审计性”两端，回应同一个现实：模型能力越强、部署越广，其内部机制与资源来源就越需要可检验的外部工具。对学术界而言，这既是方法学机会，也要求更严格的误判率分析与反例检验。</p>
+    <p><strong>1. 自我改进的战场正从“改权重”下移到“脚手架 + 记忆 + 元认知”，可迁移性成为新分水岭。</strong>MIT 的工作证明冻结模型可以在无学习指令下自行发明练习—观察—改提示的流程；Meta RAM 则让同一模型兼任任务与元 agent，先优化记忆读写提示、再蒸馏进权重。两者的共同前提是：<b>把“如何学”当作可搜索的对象</b>，而非人工写死的 pipeline。随之而来的核心问题不再是“能否自我改进”，而是“改进成果能否跨模型、跨任务保持”。任何声称通用 RSI 的结果，都应同时报告同模型增益与跨模型迁移，否则难以区分真进化与对特定评测的过拟合。</p>
+    <p><strong>2. 评测方法学本身正在成为独立的研究对象。</strong>ISMIR 音乐生成论文被系统盘点出 284 个主观评测条目、复现性普遍不足；咳嗽 TB 筛查在三套数据上外部 ROC-AUC 常低于 0.6，且表征按设备而非疾病聚类；papr-embed-code-1 的训练数据与 CoIR 高度重叠，被模型卡主动披露。这些案例指向同一件事：<b>基准污染、设备混杂与协议不可复现，是当前结论可信度的主要威胁</b>。parallel-search-evals 把题目、执行与评分分离，SageMaker 排行榜试图统一比较条件，都是制度化的回应。研究者在引用任何 SOTA 数字前，应优先检查留出集、采集条件与评分脚本。</p>
+    <p><strong>3. 开放权重继续下沉到“日常能力层”，可复现对象显著增多。</strong>腾讯 Hy4 flash 以 224B/12B 激活、1M 上下文与多模态进入开放权重序列；Cloudflare 放出 9B 的 Clairic-flash；Reson8 以 Apache 2.0 发布 0.5B 的 Rumble-2-Flash。与早期“开放权重=缩小版旗舰”不同，这一波更强调<b>特定能力层（办公、文档抽取、鲁棒语音）的性价比</b>。对学术界，这意味着更多可做机制分析、蒸馏与鲁棒性对照的基座；但许可差异（如 Tencent Hy License 非 OSI）需在商用与再分发前逐一核对。</p>
+    <p><strong>4. 数据与评测正成为“下一个前沿”，学术界与工业界的边界进一步模糊。</strong>Jason Wei 从 Meta 转投 Mercor 主管数据与评测，呼应他提出的“验证者法则”——越易验证的任务越易被训练；OpenAI 的内部数据则显示研究者使用 AI 指数增长、智能体承担更长任务，但人的判断仍是核心；EPFL/图宾根的“一人 AI 公司”实验则把自主智能体的长程行为暴露在真实反馈中。三者的共同信号是：<b>当模型能力趋于同质，稀缺的是可验证任务、高质量标注与可信评测</b>。这也为学术研究提出新课题——如何设计既难验证、又抗污染、还能反映真实科研判断力的评测。</p>
   </section>
 
   <section id="s5">
@@ -353,32 +359,30 @@
     <p class="section-note">本期全部引用条目，编号与正文对应。</p>
     <div class="references">
       <ol>
-        <li id="ref1"><a href="https://mp.weixin.qq.com/s?__biz=MzU3NjE4NjQ4MA==&amp;mid=2247557766&amp;idx=1&amp;sn=a09e3130a68ef876de2ba07d8ef0860f" target="_blank" rel="noopener">Einsia AI 发布 Visual Cipher Bench，难住顶级 AI</a>　<span class="ref-feed">— 大模型智能</span></li>
-        <li id="ref2"><a href="https://x.com/FinanceYF5/status/2122541579743412492" target="_blank" rel="noopener">OpenAI 官方研究：Science at the Frontier</a>　<span class="ref-feed">— AI Will (@FinanceYF5)</span></li>
-        <li id="ref3"><a href="https://x.com/FinanceYF5/status/2122540778643685596" target="_blank" rel="noopener">OpenAI 对 1800 多名科学家的调查：AI 正从科研工具变成“研究伙伴”</a>　<span class="ref-feed">— AI Will (@FinanceYF5)</span></li>
-        <li id="ref4"><a href="https://x.com/omarsar0/status/2122701047118635485" target="_blank" rel="noopener">Google 新论文：在 harness 层实现持续 RSI 与自改进记忆</a>　<span class="ref-feed">— elvis (@omarsar0)</span></li>
-        <li id="ref5"><a href="https://mp.weixin.qq.com/s?__biz=MzA4MTQ4NjQzMw==&amp;mid=2652814378&amp;idx=2&amp;sn=9c5b551d3fa852a5c8bdf5ce704bbd5f" target="_blank" rel="noopener">决策模型王座易主！MIT 系 Liquid AI 发布 d1.2</a>　<span class="ref-feed">— 智东西</span></li>
-        <li id="ref6"><a href="https://x.com/FuSheng_0306/status/2122637037086154819" target="_blank" rel="noopener">苹果机器人论文：纯合成数据在 6 个真实家庭达 91% 成功率</a>　<span class="ref-feed">— 傅盛 (@FuSheng_0306)</span></li>
-        <li id="ref7"><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650457175&amp;idx=1&amp;sn=0bd9119cfd0dca2c4d08f8238a57692f" target="_blank" rel="noopener">前 OpenAI 研究员用权重验证：DeepSeek、Kimi 用了 Blackwell？</a>　<span class="ref-feed">— AINLP</span></li>
-        <li id="ref8"><a href="https://x.com/arena/status/2122706676126191885" target="_blank" rel="noopener">FrontierCS 2：智能体能否在无论文、无网络下超越已发表研究</a>　<span class="ref-feed">— Arena.ai (@arena)</span></li>
-        <li id="ref9"><a href="https://mp.weixin.qq.com/s?__biz=MzUxMDQxMDMyNg==&amp;mid=2247520718&amp;idx=1&amp;sn=e6c167b66121a3e664a102ddc6df76b2" target="_blank" rel="noopener">小米 PROVE 论文获 ACM MM 2026 杰出论文奖</a>　<span class="ref-feed">— 小米技术</span></li>
-        <li id="ref10"><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651074900&amp;idx=2&amp;sn=9e3dc407e5451c7ff8aef36fd598f6ce" target="_blank" rel="noopener">千万 token 下，比 DeepSeek 式稀疏注意力再快 22 倍（Latent Sparse Attention）</a>　<span class="ref-feed">— 机器之心</span></li>
-        <li id="ref11"><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651074900&amp;idx=3&amp;sn=b8ce1837d869e2563a888e3df5a04a89" target="_blank" rel="noopener">训练一个强大的智能体，究竟有多简单？字节跳动等推出 Axion 1.0</a>　<span class="ref-feed">— 机器之心</span></li>
-        <li id="ref12"><a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&amp;mid=2247504123&amp;idx=1&amp;sn=8b047983eb9b839261a1ee711ef0af7b" target="_blank" rel="noopener">上海 AI 实验室发布 Sage-S2.1-Flash，腾讯推出 Hy4 flash</a>　<span class="ref-feed">— 机器之心 SOTA模型</span></li>
-        <li id="ref13"><a href="https://x.com/jerryjliu0/status/2122757020801814613" target="_blank" rel="noopener">ParseBench-2：文档解析高维输出的细粒度与人类偏好对齐</a>　<span class="ref-feed">— Jerry Liu (@jerryjliu0)</span></li>
-        <li id="ref14"><a href="https://x.com/shao__meng/status/2122507586541166850" target="_blank" rel="noopener">微软研究院开源 TokenEconomizer：从仓库经验里给 Coding Agent 省 token</a>　<span class="ref-feed">— meng shao (@shao__meng)</span></li>
-        <li id="ref15"><a href="https://x.com/MSFTResearch/status/2122779387888103867" target="_blank" rel="noopener">GraphRAG Zero：把图检索做成可部署系统</a>　<span class="ref-feed">— Microsoft Research (@MSFTResearch)</span></li>
-        <li id="ref16"><a href="https://x.com/_akhaliq/status/2122814097649742258" target="_blank" rel="noopener">Energy-Based Reasoners：Your Recurrent Reasoner Should Be an Energy-Based Model</a>　<span class="ref-feed">— AK (@_akhaliq)</span></li>
-        <li id="ref17"><a href="https://x.com/_akhaliq/status/2122805100171460887" target="_blank" rel="noopener">Ropedia Xperience 2：扩展物理 AI 环境与行为规模</a>　<span class="ref-feed">— AK (@_akhaliq)</span></li>
-        <li id="ref18"><a href="https://x.com/_akhaliq/status/2122758250059977062" target="_blank" rel="noopener">Accelerate Bench：Evaluating Agents for Application-Level Program Optimization</a>　<span class="ref-feed">— AK (@_akhaliq)</span></li>
-        <li id="ref21"><a href="https://x.com/jerryjliu0/status/2122820382189289946" target="_blank" rel="noopener">ParseBench-2：20+ 开源权重模型评测与公开排行榜</a>　<span class="ref-feed">— Jerry Liu (@jerryjliu0)</span></li>
+        <li id="ref1"><a href="https://x.com/omarsar0/status/2123129152887046557" target="_blank" rel="noopener">Do LLM agents still need to be told how to self-improve?（MIT CSAIL × University of Tübingen）</a>　<span class="ref-feed">— elvis (@omarsar0)</span></li>
+        <li id="ref2"><a href="https://x.com/shao__meng/status/2122961408262635560" target="_blank" rel="noopener">Meta AI 提出自我改进记忆：先优化记忆提示，再把技能训进模型</a>　<span class="ref-feed">— meng shao (@shao__meng)</span></li>
+        <li id="ref3"><a href="https://tech.meituan.com/2026/11/18/Papers-EMNLP-2026.html" target="_blank" rel="noopener">EMNLP 2026 ｜ 美团技术团队学术论文精选</a>　<span class="ref-feed">— 美团技术团队</span></li>
+        <li id="ref4"><a href="https://x.com/TheRundownAI/status/2123088063400140840" target="_blank" rel="noopener">Claude Opus 5.5 运营七周“一人 AI 公司”，训练 38 个模型</a>　<span class="ref-feed">— The Rundown AI (@TheRundownAI)</span></li>
+        <li id="ref5"><a href="https://x.com/OpenAI/status/2123191365983248653" target="_blank" rel="noopener">New data on how AI is changing research at OpenAI</a>　<span class="ref-feed">— OpenAI (@OpenAI)</span></li>
+        <li id="ref6"><a href="https://arxiv.org/abs/2611.21637" target="_blank" rel="noopener">Auditing Hyperstimulation at Scale in Child-Facing YouTube Videos</a>　<span class="ref-feed">— arXiv:2611.21637（cs.MM）</span></li>
+        <li id="ref7"><a href="https://arxiv.org/abs/2611.21809" target="_blank" rel="noopener">Evaluating the Evaluation of Music Generation Models with Generative Psychometrics</a>　<span class="ref-feed">— arXiv:2611.21809（cs.SD）</span></li>
+        <li id="ref8"><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651075119&amp;idx=3&amp;sn=f13b42ee2bcde04babe2341c5f834dce" target="_blank" rel="noopener">思维链之父 Jason Wei 离开 Meta，加盟 200 亿美元 AI 独角兽</a>　<span class="ref-feed">— 机器之心</span></li>
+        <li id="ref9"><a href="https://x.com/NVIDIAAI/status/2123144524746924455" target="_blank" rel="noopener">Nemotron-Labs-Sigma：continuous diffusion for language（论文 arXiv:2610.02665）</a>　<span class="ref-feed">— NVIDIA AI (@NVIDIAAI)</span></li>
+        <li id="ref10"><a href="https://arxiv.org/abs/2608.25846" target="_blank" rel="noopener">Why ML-based cough models do not generalize: a systematic cross-dataset evaluation for tuberculosis screening</a>　<span class="ref-feed">— arXiv:2608.25846（cs.SD / eess.AS）</span></li>
+        <li id="ref11"><a href="https://x.com/TencentHunyuan/status/2122912575302119554" target="_blank" rel="noopener">Hy4 flash is now open-weight（224B / 12B active，1M context）</a>　<span class="ref-feed">— 腾讯混元 (@TencentHunyuan)</span></li>
+        <li id="ref12"><a href="https://blog.cloudflare.com/open-clairic/" target="_blank" rel="noopener">An updated Clairic and Clairic-flash are now open-weight</a>　<span class="ref-feed">— The Cloudflare Blog</span></li>
+        <li id="ref13"><a href="https://huggingface.co/blog/rumble-2-flash" target="_blank" rel="noopener">Rumble-2-Flash: an open 0.5B speech model for 40+ languages</a>　<span class="ref-feed">— Hugging Face Blog</span></li>
+        <li id="ref14"><a href="https://arxiv.org/abs/2606.01264" target="_blank" rel="noopener">A 1000-hour EEG-EMG-audio dataset of Japanese speech production</a>　<span class="ref-feed">— arXiv:2606.01264（cs.SD / eess.AS）</span></li>
+        <li id="ref15"><a href="https://x.com/shao__meng/status/2122893742801604691" target="_blank" rel="noopener">Parallel 开源搜索评测框架：模型接入搜索后，到底强了多少？</a>　<span class="ref-feed">— meng shao (@shao__meng)</span></li>
+        <li id="ref16"><a href="https://qdrant.tech/blog/papr-embed-code/" target="_blank" rel="noopener">Does a Code-Tuned Embedding Model Pay Off? papr-embed-code-1 in Qdrant</a>　<span class="ref-feed">— Qdrant Blog</span></li>
+        <li id="ref17"><a href="https://aws.amazon.com/blogs/machine-learning/introducing-the-amazon-sagemaker-jumpstart-model-leaderboard/" target="_blank" rel="noopener">Introducing the Amazon SageMaker JumpStart Model Leaderboard</a>　<span class="ref-feed">— AWS Machine Learning Blog</span></li>
       </ol>
     </div>
   </section>
 
   <footer>
     学术研究员版 · 由 tech-daily-generator 基于 FreshRSS 24h 数据自动生成 · 2026-11-18<br>
-    本期共处理 653 条原始资讯（424 个来源），精选 8 条研究动态、2 篇论文深读、6 项开源资源。引用数字均来自所标注来源，请以原文与论文为准。
+    本期共处理 714 条原始资讯（424 个来源），精选 8 条研究动态、2 篇论文深读、7 项开源资源。引用数字均来自所标注来源，请以原文与论文为准。
   </footer>
 
 </div>

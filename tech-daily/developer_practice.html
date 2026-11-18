@@ -192,6 +192,14 @@
   .src-list li a:hover { color: var(--accent-2); text-decoration: underline; }
   .src-list li .feed { color: var(--accent-3); white-space: nowrap; font-size: 12px; }
 
+  /* Notice */
+  .notice {
+    border: 1px solid rgba(240,136,62,0.35);
+    background: rgba(240,136,62,0.08);
+    border-radius: 8px; padding: 14px 18px; margin-bottom: 22px;
+    font-size: 13.5px; color: var(--warn);
+  }
+
   footer { margin-top: 44px; color: var(--fg-dim); font-size: 12px; text-align: center; line-height: 1.8; }
 
   @media (max-width: 600px) {
@@ -199,6 +207,7 @@
     header.hero h1 { font-size: 22px; }
     .wrap { padding: 0 14px 60px; }
     .deep { padding: 20px 16px 8px; }
+    .src-list li { flex-wrap: wrap; }
   }
 </style>
 </head>
@@ -212,7 +221,7 @@
     <div class="meta-chips">
       <span class="chip">📅 <b>2026-11-18</b></span>
       <span class="chip">🕐 窗口 11-17 → 11-18</span>
-      <span class="chip">📰 扫描 <b>653</b> 条 / <b>424</b> 源</span>
+      <span class="chip">📰 扫描 <b>714</b> 条 / <b>424</b> 源</span>
       <span class="chip">🎯 role: <b>developer_practice</b></span>
     </div>
   </header>
@@ -236,60 +245,62 @@
       <div class="line"></div>
     </div>
 
+    <div class="notice">⚠️ 优先级最高的今天只有一条：<b>Java4Shell（CVE-2026-114938）</b>。若你在跑 OpenJDK 11/17/21/25，请先把它升级完，再回头看下面的内容。</div>
+
     <div class="card">
-      <h3><span class="rank">01</span>.NET 11 正式发布：C# 15 联合类型、Native AOT CLI 宿主、MAUI 默认 CoreCLR</h3>
-      <p>微软发布了 <b>.NET 11</b>，这是一个标准期限支持（STS）版本，提供两年支持周期。语言层面最大的变化是 <b>C# 15 引入联合类型（union types）与封闭层次结构（closed hierarchies）</b>，让类型系统能更精确地表达互斥的数据形态；工具链上新增 <b>Native AOT CLI 宿主</b>，并带来 Runtime Async 预览。</p>
-      <p>框架侧，ASP.NET Core 加入 Zstandard 压缩、异步验证与 OpenAPI 3.2 支持；.NET MAUI 将 <b>CoreCLR 设为默认运行时</b>；EF Core 11 则带来实验性的向量搜索（vector search）。对需要把 LLM/检索能力下沉到数据层的团队，EF Core 的向量支持值得提前做 PoC。<span class="tag">#release</span><span class="tag">#csharp</span></p>
-      <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/11/dotnet-11-release/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+      <h3><span class="rank">01</span>Java4Shell（CVE-2026-114938）：OpenJDK Base64 解码器内存破坏，CVSS 9.2，可预认证 RCE</h3>
+      <p>2026-11-17，安全公司 Calif 披露了 OpenJDK 的 <b>Java4Shell（CVE-2026-114938）</b>：漏洞位于 Base64 解码器，未认证的远程攻击者可以向 Java 应用发送畸形的 Base64 数据，<b>覆写解码输出旁的内存</b>。CVSS 4.0 评分 <b>9.2 / 10（Critical）</b>，Calif 已演示了预认证远程代码执行，以及类似 Heartbleed 的堆内存泄露。</p>
+      <p>OpenJDK 同日发布安全公告，Oracle 在 11 月 CPU（Critical Patch Update）中给出修复构建；Microsoft Build of OpenJDK 也同步发布了 <b>OpenJDK 25.0.5.1 / 21.0.13.1 / 17.0.21.1 / 11.0.33.1</b>，源码已在 GitHub 公开。Cloudflare 也已上线 WAF 规则缓解。<b>命令行先自查</b>：<code>java -version</code>，受影响版本尽快升级；WAF 只是临时缓解，不能替代打补丁。<span class="tag">#security</span><span class="tag">#jvm</span><span class="tag">#urgent</span></p>
+      <div class="src">📎 来源: <a href="https://blog.cloudflare.com/java4shell-waf-protection/" target="_blank" rel="noopener">Cloudflare Blog</a> · <a href="https://devblogs.microsoft.com/java/java-openjdk-november-2026-critical-patch-update" target="_blank" rel="noopener">Microsoft for Developers</a> · <a href="https://spring.io/blog/2026/11/18/this-week-in-spring-november-18th-2026" target="_blank" rel="noopener">Spring Blog</a></div>
     </div>
 
     <div class="card">
-      <h3><span class="rank">02</span>Qwik 2.0 RC：用两个 script 块取代 HTML 注释标记，基准降到 1.23x</h3>
-      <p>Qwik 2.0 候选版（2026-10-01 发布）重构了状态序列化方式：<b>用两个 script 块分别承载 state 与虚拟节点数据，取代 v1 的 HTML 注释标记</b>，从而减少 DOM 噪声并提速响应式。它同时引入实验性的<b>乱序流式渲染（out-of-order streaming）</b>、异步 <code>useComputed$</code> 以及可缓存的 route loader。</p>
-      <p>官方基准显示 Qwik 2 的开销已从 v1 的 <b>2.59x 原生 JS 降到 1.23x</b>。项目提供了迁移命令，是评估"可恢复性（resumability）框架"成本的一个不错时间点。<span class="tag">#framework</span><span class="tag">#frontend</span></p>
-      <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/11/quik-2-streaming/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+      <h3><span class="rank">02</span>GitHub Copilot 模型矩阵扩容：GPT-6.2 Astra / Sol 与 Gemini 4 Neon 同日 GA</h3>
+      <p>GitHub 宣布 <b>GPT-6.2 Astra 与 GPT-6.2 Sol</b> 在 Copilot 中正式可用（GA），定位 agentic coding 与 code review。官方早期测试称：Astra 在代码审查中<b>发现的问题显著多于 GPT-6 Astra，且完成 agentic 任务用的 token 更少</b>；Sol 在代码审查中发现的真实问题约为 GPT-6.1 Sol 的<b>两倍</b>，同时保持结论准确。两者均可在 Copilot app、CLI 与代码托管界面使用。</p>
+      <p>同一天，<b>Gemini 4 Neon</b> 也在 Copilot GA：Google 称其为 Gemini 4 家族的中间档，面向 agentic coding、多步工具调用与知识工作，<b>任务质量接近 Gemini 4 Carbon 而单任务 token 成本更低、响应更快、在编码任务上更少做未经请求的改动</b>。对日常编码与审查流水线，这意味着可以按任务形态在"强模型 / 低成本快模型"之间做更细的路由。<span class="tag">#copilot</span><span class="tag">#model</span><span class="tag">#tooling</span></p>
+      <div class="src">📎 来源: <a href="https://x.com/github/status/2122860022895952311" target="_blank" rel="noopener">GitHub (GPT-6.2 GA)</a> · <a href="https://x.com/github/status/2123181574116233646" target="_blank" rel="noopener">GitHub (Gemini 4 Neon GA)</a></div>
     </div>
 
     <div class="card">
-      <h3><span class="rank">03</span>VS Code 1.147 Insiders：Agent 会话管理与 chat 资源</h3>
-      <p>Visual Studio Code 1.147 Insiders 带来三处与日常开发强相关的更新：<b>Agent 会话管理</b>、<b>chat 资源</b>以及 Markdown 编辑体验改进。会话管理意味着你可以更系统地组织多个 Agent 交互上下文，而 chat 资源让对话产物能像文件一样被引用和管理。</p>
-      <p>对重度使用 Copilot / 对话式编程的工程师来说，这类 IDE 内建的上下文管理能力，往往比换模型更能影响实际体验，值得在 Insiders 通道先行体验。<span class="tag">#ide</span><span class="tag">#tooling</span></p>
-      <div class="src">📎 来源: <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147-(insiders)" target="_blank" rel="noopener">Microsoft for Developers</a></div>
+      <h3><span class="rank">03</span>Vercel 发布 UI SDK（beta）：让 Agent 用 50+ 个可复用行为拼装 UI</h3>
+      <p>Vercel 发布 <b>UI SDK</b>（beta），一个 <b>Apache 2.0 的 TypeScript 库</b>，核心 <code>@ui-sdk/core</code> 提供 <b>50 多个 UI 行为</b>，并提供 React、Vue、Svelte、Solid 与 Web Components 五种适配器。它的目标不是给 AI 一套组件皮肤，而是让 Agent 能<b>组合出可访问的组件，并通过一个有文档的 agent bridge 去操作它们</b>。</p>
+      <p>对做"AI 生成前端"的团队，这补上了此前最缺的一层：模型能调用稳定行为而不是即兴发挥样式，交互也可被程序化驱动。它比让 Agent 直接写裸 HTML/CSS 更可控，也更容易接入现有的设计系统与测试流程。<span class="tag">#frontend</span><span class="tag">#sdk</span><span class="tag">#agent</span></p>
+      <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/11/vercel-ui-sdk/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
     </div>
 
     <div class="card">
-      <h3><span class="rank">04</span>GPT-6.2 Astra / Sol 进入 Codex 与 API：Ultrafast 五折，Astra 输入输出降价 20%</h3>
-      <p>OpenAI 在 Codex 与 API 中上线了 <b>gpt-6.2-astra</b> 与 <b>gpt-6.2-sol</b> 两款模型，均支持 Fast 与 Ultrafast 模式。定价上，Astra 的标准输入与输出 token 价格比 GPT-6 Astra <b>低 20%</b>；Sol 在维持与 GPT-6.1 Sol 相同单 token 价格的同时提升了能力。未来三个月 Ultrafast 价格<b>下调 50%</b>，相当于标准档的 3 倍。</p>
-      <p>选型建议来自官方数据：日常编码优先用 Sol——在 Cognition 的 FrontierCode 2.0 最大推理档下，Sol 仅落后 Astra 半分，而每任务 API 成本约为其 1/5；Astra 则在 Terminal-Bench Science 0.1 上比 GPT-6 Astra 高 9 个百分点、成本不到 1/3。两款模型都以更少的输出 token 完成复杂任务。<span class="tag">#llm</span><span class="tag">#api</span><span class="tag">#cost</span></p>
-      <div class="src">📎 来源: <a href="https://x.com/OpenAIDevs/status/2122752256923873753" target="_blank" rel="noopener">OpenAI Developers (Codex/API)</a> · <a href="https://x.com/OpenAIDevs/status/2122752394002071717" target="_blank" rel="noopener">定价</a> · <a href="https://x.com/OpenAIDevs/status/2122752473723175256" target="_blank" rel="noopener">Sol vs Astra 成本</a> · <a href="https://x.com/OpenAIDevs/status/2122752500877144461" target="_blank" rel="noopener">Ultrafast 五折</a></div>
+      <h3><span class="rank">04</span>VS Code 1.147 / 1.148 Insiders：Agent 会话管理 + tab 改进，Copilot harness 迁移</h3>
+      <p>Visual Studio Code 连续放出 <b>1.147 正式版</b>与 <b>1.148 Insiders</b>。Insiders 的亮点是 <b>Agent 会话管理与编辑器 tab 改进</b>——会话管理让你可以系统化地组织多轮 Agent 交互的上下文，而不是把历史都堆在同一个对话框里。对重度使用对话式编程的人，这类上下文组织能力往往比换一个模型更直接影响日常体验。</p>
+      <p>更值得关注的是官方单独发文解释的 <b>Copilot harness 迁移</b>：VS Code 正在从 <code>Local harness</code> 转向 <b>Copilot harness</b>，官方称这一决策基于数据与用户反馈。harness 是决定"Agent 如何读取上下文、调用工具、执行与验证"的外壳，这次迁移意味着 IDE 内的 Agent 行为边界会随之改变，值得在 Insiders 通道先摸清差异。<span class="tag">#ide</span><span class="tag">#harness</span></p>
+      <div class="src">📎 来源: <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.148-(insiders)" target="_blank" rel="noopener">Microsoft for Developers (1.148)</a> · <a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147" target="_blank" rel="noopener">Microsoft for Developers (1.147)</a> · <a href="https://devblogs.microsoft.com/vscode-blog/the-copilot-harness:-building-on-a-shared-foundation" target="_blank" rel="noopener">Microsoft for Developers (harness)</a></div>
     </div>
 
     <div class="card">
-      <h3><span class="rank">05</span>GitHub Copilot 接入 MAI Code 2 / Flash；Fusion Max 在 Terminal-Bench 4.1 拿到 71.2%</h3>
-      <p>Microsoft AI 的两款编码模型 <b>MAI Code 2</b> 与 <b>MAI Code 2 Flash</b> 已在 GitHub Copilot 中正式可用（GA）。Code 2 定位通用强模型，主打深度调试、多文件实现、重构与仓库级推理；Flash 则是轻量低成本的日常档，适合代码解释、定向修改和快速迭代，覆盖 Copilot app 与 CLI。</p>
-      <p>GitHub 同时公布了 <b>Copilot Fusion Max</b> 在 Terminal-Bench 4.1 上的成绩：<b>71.2% 解决率</b>，比 Opus 5.5、Fable 5.2 等前沿模型高 5.4 个百分点，而成本比 Fable 5.2 低 88%、比 Opus 5.5 低 57%。"更强且更便宜"的组合对 CI 里跑自动化 Agent 的团队尤其关键。<span class="tag">#copilot</span><span class="tag">#benchmark</span></p>
-      <div class="src">📎 来源: <a href="https://x.com/github/status/2122814155979706846" target="_blank" rel="noopener">GitHub (MAI Code 2)</a> · <a href="https://x.com/github/status/2122756587073028306" target="_blank" rel="noopener">GitHub (Fusion Max 基准)</a></div>
+      <h3><span class="rank">05</span>Aspire 17 正式 "ready for primetime"：从跑应用走向建平台</h3>
+      <p>微软发布 <b>Aspire 17</b>，官方定调为 "ready for primetime"。这一版的背景很有意思：团队发现用户早已不止在跑应用——他们在<b>一个 AppHost 里跑几十个服务、共享内部集成、给新同事做 onboarding、并部署到别的团队拥有的基础设施上</b>，即把 Aspire 当平台底座用。Aspire 17 因此围绕"平台构建"重新定了方向。</p>
+      <p>对 .NET / 分布式应用团队，Aspire 的定位正在从"本地编排工具"变成"服务与集成的统一宿主"。如果你已经在用 Aspire 管多服务调试，这版值得评估；如果还没上手，它是理解"应用即平台"这套工程理念的一个入口。<span class="tag">#dotnet</span><span class="tag">#platform</span></p>
+      <div class="src">📎 来源: <a href="https://devblogs.microsoft.com/aspire/whats-new-aspire-17" target="_blank" rel="noopener">Microsoft for Developers</a></div>
     </div>
 
     <div class="card">
-      <h3><span class="rank">06</span>Amazon SageMaker 实时端点支持 KV cache 感知路由</h3>
-      <p>SageMaker AI 为实时端点新增 <b>KV cache-aware routing</b>：路由策略会读取模型容器上报的缓存状态，把每个请求发给<b>已持有长缓存匹配、且当前不太繁忙</b>的实例。它专为多轮对话、长共享 prompt、高负载这类 LLM 服务场景设计。</p>
-      <p>启用方式很小：给模型加一个环境变量让容器上报缓存内容，并在端点配置里把 <code>RoutingStrategy</code> 设为 <code>KV_AWARE</code>，客户端 API 完全不变。对已有 RAG / Agent 服务的团队，这是几乎零改造的延迟优化点。<span class="tag">#inference</span><span class="tag">#performance</span></p>
-      <div class="src">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/amazon-sagemaker-ai-real-time-endpoints-now-support-kv-cache-aware-routing/" target="_blank" rel="noopener">Artificial Intelligence (AWS)</a></div>
+      <h3><span class="rank">06</span>Cloudflare 开源 Clairic 与 Clairic-flash：9B 参数文档抽取模型，权重上 Hugging Face</h3>
+      <p>Cloudflare 宣布自建前沿模型，并放出两个<b>开放权重</b>的文档抽取模型：更新版 <b>Clairic</b> 增强了对图片与 PDF 的抽取（新增能力），对表格、列表、日期的处理更可靠，答案也更贴合原文；<b>Clairic-flash</b> 是更轻快的版本，在 <b>90 亿参数</b>的紧凑体积下提供强抽取与预测性能。</p>
+      <p>两个模型都托管在 <b>Workers AI</b>，完整权重发布在 <b>Hugging Face</b>。对做本地/私有化文档解析、RAG ingestion 的团队，开放的 9B 模型意味着可以在自己的环境里跑抽取，而不必把敏感文档发往外部 API——这是继 OCR、版面理解之外又一条可选路径。<span class="tag">#open-weights</span><span class="tag">#extraction</span><span class="tag">#rag</span></p>
+      <div class="src">📎 来源: <a href="https://blog.cloudflare.com/open-clairic/" target="_blank" rel="noopener">Cloudflare Blog</a></div>
     </div>
 
     <div class="card">
-      <h3><span class="rank">07</span>Datadog 给 AI Agent 可观测性加上线上实验能力</h3>
-      <p>Datadog 在其 Agent Observability 平台中引入 <b>Online Experiments</b>，允许工程团队<b>用真实生产流量对比不同版本的 AI Agent</b>，而不必只依赖预先构建的评测数据集。这意味着 Agent 的版本回归、prompt/模型切换可以在真实分布上做 A/B 验证。</p>
-      <p>对把 Agent 推向生产的团队，这是把"离线评测 → 线上实验"闭环补齐的一步，也提示我们：Agent 的可观测性正从"看 trace"走向"跑实验"。<span class="tag">#observability</span><span class="tag">#agent</span></p>
-      <div class="src">📎 来源: <a href="https://www.infoq.com/news/2026/11/datadog-ai-agent-observability/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+      <h3><span class="rank">07</span>Dataify AI Web API 1.0：给 Agent 的"干净网页数据"接口，P50 &lt; 1.5s</h3>
+      <p>Dataify 发布 <b>AI Web API 1.0</b>，定位为 AI Agent / 应用提供实时、结构化、可接入的公开网页数据。它要解决的是一个很实际的问题：今天的网页是给人眼设计的，导航、广告、弹窗、动态渲染都要让模型为无效 token 买单；而模型记忆停在过去，Agent 要回答的却是此刻。接口拆成 <b>Search</b>（带标题、摘要、来源）、<b>正文按需转 Markdown</b>、<b>站点先整理成清单</b>三类能力。</p>
+      <p>官方实测指标：<b>P50 &lt; 1.5s、P90 &lt; 3s、成功率 &gt; 99.9%</b>。Search 通过 <code>unique_id=search_web</code> 指定工具，用 <code>query</code> 传关键词，<code>max_results</code> / <code>country</code> / <code>language</code> 控制返回范围。对自建 Deep Research、浏览器 Agent 的团队，这类"搜索 + 正文提取"托管接口可以省掉一大块抓取与清洗工程。<span class="tag">#api</span><span class="tag">#agent</span><span class="tag">#scraping</span></p>
+      <div class="src">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247838663&amp;idx=1&amp;sn=d95c254b6a1d49d558cd1bdfa55935ad" target="_blank" rel="noopener">CSDN</a></div>
     </div>
 
     <div class="card">
-      <h3><span class="rank">08</span>Qdrant × FastEmbed：35 分钟生成 3280 万个 embedding</h3>
-      <p>Qdrant 披露了一组吞吐数据：使用 Minish 的 <b>potion 静态 embedding 模型</b>（已集成进其本地推理框架 <b>FastEmbed</b>），在 <b>35 分钟内生成了 3280 万个 embedding</b>。静态模型不像 Transformer 那样逐 token 过注意力，因而在批量场景下吞吐极高。</p>
-      <p>官方同时强调需要权衡<b>检索质量</b>——静态 embedding 适合对延迟/成本敏感、可接受一定精度损失的大规模召回初筛。对向量库做全量回填或大规模离线建索引的团队，这是一条值得评估的路径。<span class="tag">#vector</span><span class="tag">#embedding</span><span class="tag">#performance</span></p>
-      <div class="src">📎 来源: <a href="https://x.com/qdrant_engine/status/2122721432711106635" target="_blank" rel="noopener">Qdrant</a></div>
+      <h3><span class="rank">08</span>Vercel Drives 冷读最高快 6 倍：read-ahead 提前预取，无需改 SDK</h3>
+      <p>Vercel 更新了 <b>Drives</b> 的读取性能，冷读最高可提升 <b>6 倍</b>。实现方式是新的 <b>read-ahead 算法</b>：根据应用的访问模式，在数据真正被需要之前就从持久存储里预取，从而减少代码等待 IO 的时间。</p>
+      <p>关键在"自动生效"——<b>所有 drive 自动获得该更新，无需升级 SDK 或改配置，读取计费不变</b>。这类"免费的性能提升"值得纳入你的回归基准：如果你的服务大量读 Vercel Drives，升级后可以重新跑一遍冷启动延迟测试，确认收益是否落在你的访问模式上。<span class="tag">#performance</span><span class="tag">#storage</span></p>
+      <div class="src">📎 来源: <a href="https://vercel.com/changelog/vercel-drives-now-reads-files-up-to-6x-faster" target="_blank" rel="noopener">Vercel News</a></div>
     </div>
   </section>
 
@@ -303,46 +314,41 @@
 
     <div class="deep">
       <div class="deep-label">Deep Dive · 01</div>
-      <h3>给 Coding Agent 的代码上沙箱：external sandbox 模式</h3>
-      <p>Simon Willison 与 Prime Radiant 合作，提出了 <b>external sandbox（外部沙箱）</b>模式：Agent 本身运行在你的主机（如 Mac）上，但<b>它生成并执行的代码运行在一个专用沙箱内</b>。这样可以在试用本地模型时不必担心模型出错或遭遇 prompt injection 而在机器上造成破坏性操作。该模式已开源出三个沙箱服务器实现用于演示。</p>
+      <h3>代码审查成了真正的瓶颈：agentic review 要解决的三个问题</h3>
+      <p>Google Cloud 分享了为 Linux 内核构建 agentic code review 系统 <b>Sashiko</b> 的经验，开头就点破一个常被忽略的事实：<b>大型开源项目的开发速度，长期受限于代码审查，而不是代码生成</b>。即使 coding agent 越来越会写代码，单靠"写得快"并不会让项目更快——因为如果没有办法让人信任这些改动，生成的代码只会堆在同样那一小撮维护者面前。</p>
 
-      <h4>三种沙箱实现</h4>
-      <ul>
-        <li><b>external-sandbox-v86</b>：跑一个 Node.js 服务，再用 <b>v86 在 WebAssembly 中运行 Alpine Linux</b>——纯用户态虚拟化，跨平台、无需内核权限。</li>
-        <li><b>external-sandbox-container</b>：基于容器（Container）隔离，贴近生产环境。</li>
-        <li>第三个实现（QEMU / Apple Container 路线）：在 macOS 上借助系统级虚拟化运行完整隔离环境。</li>
-      </ul>
-      <p>文中还给出了对 <b>Claude Code、Codex 与 Pi</b> 的接入 demo，说明这个模式不是绑定某一家 Agent，而是可复用的执行层抽象。</p>
+      <h4>问题一：AI slop 与重复报告淹没维护者</h4>
+      <p>Sashiko 的出发点正是这种结构性拥堵：一部分 patch 本身是好的、只是写得更快；但很多是<b>看起来合理、提交者却并不真正理解所改系统的 "AI slop"</b>。与此同时，AI 生成的安全报告大量涌入，其中不少是重复或不准确的，进一步加重了维护者负担。换到任何有一定规模的项目，这都是同一个剧本：生成成本下降后，<b>审查侧的人力成了新的稀缺资源</b>。</p>
 
-      <h4>安全边界：出网白名单 + 凭据替换</h4>
-      <p>三个沙箱服务器都带一个<b>可选的 HTTP/HTTPS allow-list 代理</b>，让你精确控制 Agent 代码能访问哪些主机；更进一步，它还提供<b>凭据替换机制</b>——Agent 可以在不持有真实密钥的情况下发起需要鉴权的 API 调用，真实凭证由沙箱侧注入。这两点合起来，直接对应 prompt injection 最常见的两类危害：<code>数据外泄</code>与<code>密钥滥用</code>。</p>
+      <h4>问题二：信任链被一个概率模型打断</h4>
+      <p>腾讯云开发者的一线复盘把这个问题讲得更直白。传统 CR 建立在人与人的协同信任之上，有时可以"闭眼通过"，因为<b>我信任这个人</b>；而 AI 入场后，人与人之间夹进了一个概率模型，信任上叠加概率，信息链就断了。作者的体感是"AI 来了后更累了、更慢了"——AI 在写代码上的速度优势，在 CR 环节统统还了回去。这不是工具问题，而是<b>旧的生产关系（分工、SOP、信任与考核机制）容纳不下新生产力</b>。</p>
 
-      <h4>为什么这种设计值得借鉴</h4>
-      <p>核心思想是<b>把"思考"与"执行"分成两个信任域</b>：Agent（可能被注入、可能出错）只负责产出代码；执行发生在权限受限、默认断网、凭证隔离的沙箱里。相比"给 Agent 一台完整的开发机再祈祷它别乱来"，external sandbox 用很小的接入成本换来了可审计、可回滚的安全边界。对任何要在 CI 或本地跑自动化代码生成的团队，这都是一套可以直接照搬的架构范式。</p>
-      <div class="src">📎 来源: <a href="https://simonwillison.net/2026/Nov/17/external-sandboxes-for-coding-agents/" target="_blank" rel="noopener">Simon Willison's Weblog</a> · <a href="https://x.com/simonw/status/2122500307557265651" target="_blank" rel="noopener">Simon Willison（模式说明）</a> · <a href="https://x.com/simonw/status/2122500317187330279" target="_blank" rel="noopener">白名单代理与凭据替换</a> · <a href="https://x.com/simonw/status/2122500313886396840" target="_blank" rel="noopener">实现索引仓库</a></div>
+      <h4>问题三：审查者注意力被稀释</h4>
+      <p>当一次需求能在一分钟内产出几百行代码，审查者的注意力就成了瓶颈。文中引用《深度工作》的观点：知识经济时代，<b>深度专注的认知能力是最稀缺、最不可替代的生产资料</b>。从这个角度看，CR AI 代码消耗的正是这种最贵的资源，必须想办法把它花在真正需要判断的地方。</p>
+
+      <h4>平台侧的回应：让"审查是否有用"可度量</h4>
+      <p>GitHub 这一轮 Copilot code review 的升级，方向也是把审查变成可衡量的工程对象：新上线的 <b>Repo Insights</b> 页面会展示 Copilot 审查反馈在该仓库的落地情况，<b>包括有多少评论被处理、哪些已合并 PR 跳过了 Copilot 审查</b>，并且已经 GA 可查。配合前面热榜里 Astra / Sol 在代码审查中"发现更多真实问题"的早期数据，可以看到一条清晰路线：<b>先让 Agent 的审查结论可被追踪，再用数据决定它在流水线里的位置</b>。</p>
+
+      <div class="takeaway" style="background: rgba(210,168,255,0.07); border-color: rgba(210,168,255,0.25); color:#d2a8ff;">别把 agentic review 当成"自动点通过"。先定三件事：它负责拦哪类问题（风格、明显 bug、还是安全）、哪些结论必须人复核、以及用什么指标证明它减少了而非转移了负担。Repo Insights 这类"审查结果追踪"应尽早接入。</div>
+      <div class="src" style="margin-top: 12px;">📎 来源: <a href="https://cloud.google.com/blog/products/application-development/lessons-from-building-sashiko-an-agentic-code-review-system/" target="_blank" rel="noopener">Google Cloud Blog (Sashiko)</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247698248&amp;idx=1&amp;sn=231ec6d5f27becee1515974608c85cfd" target="_blank" rel="noopener">腾讯云开发者</a> · <a href="https://x.com/github/status/2123093132212367601" target="_blank" rel="noopener">GitHub (Repo Insights)</a> · <a href="https://x.com/github/status/2123093114676265290" target="_blank" rel="noopener">GitHub (code review 升级)</a></div>
     </div>
 
     <div class="deep">
       <div class="deep-label">Deep Dive · 02</div>
-      <h3>LLM 成本与延迟工程三件套：规则优先、载荷瘦身、缓存路由</h3>
-      <p>今天有三条来自 AWS 的实践恰好构成一条完整的成本-延迟优化链路，串起来看很有价值。</p>
+      <h3>Harness 才是工程边界：跨模型评测、可复现基准与被低估的验证成本</h3>
+      <p>今天多条线索指向同一个词：<b>harness</b>（外壳）。它指模型之外、决定 Agent 如何读上下文、调工具、执行与验证的那套工程结构。当模型每周都在换，真正能沉淀成团队资产的反而是 harness。</p>
 
-      <h4>① 能用代码就别调模型</h4>
-      <p>AWS 在《Cut generative AI costs: Code for rules, models for judgment》中给出的核心判断是：<b>生成式系统里最大的成本杠杆，是"到底要不要调模型"本身</b>。很多团队把输入校验、格式化、路由全部交给 LLM，单次看似便宜，规模化后会成为架构中最大的一笔开销。正确做法是按步骤做决策：</p>
-      <ul>
-        <li>确定性规则能完成的 → <b>用普通代码</b>，省钱、降延迟、去除非确定性；</li>
-        <li>需要判断但选项有限 → 用<b>受约束的决策调用</b>；</li>
-        <li>确实需要生成/理解 → 选<b>合适尺寸的 Bedrock 模型</b>，而非默认上最大模型。</li>
-      </ul>
+      <h4>① 跨模型交付，靠的是 harness 而不是模型</h4>
+      <p>GitHub 在 Universe 2026 的分享里给出了一个直白的命题：要交付一个能在 <b>OpenAI、Claude、Gemini 以及下周才发布的模型</b>上都顺滑工作的 coding agent，你就要建一个 harness。Copilot 团队的评估框架包含<b>可复现的基准、成千上万次自主编码运行、以及用 LLM 打分的断言</b>，目标是在开发者之前抓到回归。换句话说，模型是可替换件，<b>围绕它的评测与执行框架才是护城河</b>。</p>
 
-      <h4>② 大 JSON 载荷会反复撑爆上下文</h4>
-      <p>《Reducing token costs and latency in Amazon Bedrock AgentCore JSON workloads》指出一个隐蔽陷阱：<b>Agent 每调用一次工具，就把整份载荷重新注入 LLM 上下文</b>。当载荷是 20MB+ 的 JSON 且多轮对话时，token 与延迟会被成倍放大。文中用三种可组合策略为 Flightscape 的生产 Agent 处理 20MB+ JSON，把上下文压力压了下来——这类"工具调用 = 全量重放"的成本，是很多 Agent 上线后才暴露的。</p>
+      <h4>② 把一次性的 prompt 变成可验证的循环</h4>
+      <p>Google 在 Antigravity 的实践文里把话说得更重：<b>prompt engineering 已经从"单个任务"转向"系统设计"，模型周围的 harness（而不是模型本身）成了软件工程的主要约束</b>。文章把交给 Agent 的工作分成从"简单提问"到"持续系统"的五档，主张先构建并<b>验证</b>这些 harness，才能从单轮指令走向耐久（durable）的 agentic 循环。核心变化是：从"写一句好 prompt"变成"设计一个能自我检查、可回滚的执行回路"。</p>
 
-      <h4>③ 让请求落到"缓存热"的实例上</h4>
-      <p>前面热榜提到的 <b>KV cache-aware routing</b> 是同一思路的服务侧延伸：多轮对话/长共享 prompt 的 KV 缓存若落到不同实例就被浪费，按缓存状态路由能把命中率最大化。启用只需一个环境变量加 <code>RoutingStrategy=KV_AWARE</code>。</p>
+      <h4>③ 代码变便宜后，验证才是难点</h4>
+      <p>微软 CEO 纳德拉在访谈里的判断与此呼应：模型能力不是一点点往上走的，一旦突然跃升，开发工具也得迅速换一种形态；他承认围绕"人坐在 IDE 里写代码"设计的工具，遇上能接手整项任务的 Agent，原来的优势可能不管用。<b>"代码生成已经变便宜了，难的是验证它到底对不对。"</b>这句话正是 harness 存在的理由：把验证、评测、回滚做进工程结构，而不是寄希望于模型一次就对。</p>
 
-      <div class="takeaway" style="background: rgba(210,168,255,0.07); border-color: rgba(210,168,255,0.25); color:#d2a8ff;">落地上按顺序排查：先砍掉不必要的模型调用 → 再压缩工具载荷与上下文 → 最后用缓存路由榨干已有算力。前两步是纯代码改造，收益通常最大。</div>
-      <div class="src" style="margin-top: 12px;">📎 来源: <a href="https://aws.amazon.com/blogs/machine-learning/cut-generative-ai-costs-code-for-rules-models-for-judgment/" target="_blank" rel="noopener">AWS (规则优先)</a> · <a href="https://aws.amazon.com/blogs/machine-learning/reducing-token-costs-and-latency-in-amazon-bedrock-agentcore-json-workloads/" target="_blank" rel="noopener">AWS (JSON 载荷优化)</a> · <a href="https://aws.amazon.com/blogs/machine-learning/amazon-sagemaker-ai-real-time-endpoints-now-support-kv-cache-aware-routing/" target="_blank" rel="noopener">AWS (KV 缓存路由)</a></div>
+      <div class="takeaway" style="background: rgba(210,168,255,0.07); border-color: rgba(210,168,255,0.25); color:#d2a8ff;">如果你在给团队引入 coding agent，先投资三样东西：一套跨模型可复现的评测集、一个能记录每次运行与失败模式的 harness、以及明确的验证证据标准（测试、截图、性能数据）。模型换代时，这三样让你换的是"引擎"而不是"整车"。</div>
+      <div class="src" style="margin-top: 12px;">📎 来源: <a href="https://www.youtube.com/watch?v=JSC8eVojIWY" target="_blank" rel="noopener">GitHub (Copilot harness 评测)</a> · <a href="https://devblogs.microsoft.com/vscode-blog/the-copilot-harness:-building-on-a-shared-foundation" target="_blank" rel="noopener">Microsoft for Developers (Copilot harness)</a> · <a href="https://cloud.google.com/blog/topics/developers-practitioners/how-to-build-durable-agentic-systems-with-google-antigravity-from-instructions-to-loops/" target="_blank" rel="noopener">Google Cloud Blog (Antigravity)</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943775&amp;idx=1&amp;sn=9140df64daa7865df6ee56f8fe2dfc09" target="_blank" rel="noopener">51CTO技术栈 (纳德拉访谈)</a></div>
     </div>
   </section>
 
@@ -356,65 +362,48 @@
 
     <div class="tool">
       <div class="tool-top">
-        <span class="tool-name">rust-anything</span>
-        <span class="tool-lang">AI 编码助手 · 迁移工具</span>
+        <span class="tool-name">Pake</span>
+        <span class="tool-lang">Rust · CLI + GUI · 桌面打包</span>
       </div>
-      <p>把一个跑得慢的老项目（TypeScript / Python / Go / Java 均可）逐步改写成 Rust，最大风险是"改完行为变了"。rust-anything 的思路很工程化：<b>先给老程序喂一批输入并记录全部输出，形成黄金基准；AI 每改写一块，就把同一批输入重放到新代码，逐条对比输出</b>。它本质上是给 AI 编码助手用的"改写说明书 + 验收工具"，把"行为不变"从口头承诺变成了可执行的回归校验。</p>
-      <div class="src">📎 来源: <a href="https://x.com/geekbb/status/2122697767688532379" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
+      <p>把任意网页一键打包成 <b>Mac / Windows / Linux 桌面应用</b>，内置 500 个常用网站配置，并新增了去广告插件能力。CLI 已持续开源 4 年，覆盖 123 个国家、6 万多名开发者；这次补齐了桌面端 GUI，喜欢命令行的继续免费用 CLI，喜欢界面的可以直接用 GUI。适合做内部工具的桌面壳、或是把常用 Web 服务本地化。</p>
+      <div class="src">📎 来源: <a href="https://x.com/HiTw93/status/2122960402665668728" target="_blank" rel="noopener">Tw93(@HiTw93)</a></div>
     </div>
 
     <div class="tool">
       <div class="tool-top">
-        <span class="tool-name">skwir</span>
-        <span class="tool-lang">Rust · 跨平台文件管理器</span>
+        <span class="tool-name">Lumio</span>
+        <span class="tool-lang">Rust + SwiftUI · 开源 · macOS 启动器</span>
       </div>
-      <p>当人和 AI Agent 同时操作同一批文件时很容易互相踩。skwir 把<b>每个文件操作都建模成可撤销、可审核的"计划"</b>，人和 Agent 都从同一命令入口下发，从而避免并发冲突、并让每一步都能回溯。用 Rust + GUI 构建，适合把"Agent 参与文件操作"纳入可控流程的场景。</p>
-      <div class="src">📎 来源: <a href="https://x.com/geekbb/status/2122514308487610850" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
+      <p>一个<b>免费开源</b>的 Spotlight / Raycast 轻量平替：<b>Rust 内核做本地搜索、SwiftUI 做界面</b>，可搜索 App、文件、剪贴板历史，以及图片 / PDF 里的文字。对想研究"本地全文检索 + 原生 UI"组合的开发者，它也是一个结构清晰的参考实现。仓库在 GitHub 的 cavaldos/Lumio。</p>
+      <div class="src">📎 来源: <a href="https://x.com/geekbb/status/2123062984310468918" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
     </div>
 
     <div class="tool">
       <div class="tool-top">
-        <span class="tool-name">开源加密邮件客户端</span>
-        <span class="tool-lang">Rust + React + Tauri</span>
+        <span class="tool-name">strands-mongodb</span>
+        <span class="tool-lang">Python · 开源 SDK · Agent 记忆</span>
       </div>
-      <p>一个用 <b>Rust 写引擎、React 写界面、基于 Tauri</b> 的跨平台桌面邮件客户端：邮件全部<b>加密存储于本地（SQLite + SQLCipher）</b>，支持把 Gmail 与任意 IMAP 账号合并到一个收件箱，自带全文搜索、追踪器清除与钓鱼预警。免费开源，卖点是数据不经过任何第三方服务器——也是学习 Tauri 本地加密存储实践的好样板。</p>
-      <div class="src">📎 来源: <a href="https://x.com/geekbb/status/2122618998416429410" target="_blank" rel="noopener">Geek(@geekbb)</a></div>
+      <p>MongoDB 为 AWS 开源的 agent 框架 <b>Strands</b> 推出官方集成，以开源 Python 包 <code>strands-mongodb</code> 发布。它让 MongoDB 成为 Strands agent 的统一数据层，提供<b>会话持久化</b>（重启或换实例后继续任务）、<b>跨会话的长期记忆</b>（事实与经验）以及<b>按语义检索历史交互的向量搜索</b>。分工很清楚：<code>MemoryManager</code> 决定记什么、何时召回，MongoDB 负责存哪里、怎么取——你不需要自己写记忆代码。</p>
+      <div class="src">📎 来源: <a href="https://www.mongodb.com/company/blog/product-release-announcements/persistent-sessions-memory-for-strands" target="_blank" rel="noopener">MongoDB Blog</a></div>
     </div>
 
     <div class="tool">
       <div class="tool-top">
-        <span class="tool-name">Datasette Lite（重写版）</span>
-        <span class="tool-lang">Python · Pyodide · Service Worker</span>
+        <span class="tool-name">parallel-search-evals</span>
+        <span class="tool-lang">MIT · 开源 · 搜索能力评测</span>
       </div>
-      <p>Simon Willison 用 <b>Service Worker + Pyodide</b> 彻底重写了 Datasette Lite——把完整的服务端 Python 应用搬进浏览器，如今"几乎与真正的服务端版本无法区分"。你可以在浏览器里浏览任意 SQLite / JSON / CSV / SQL 文件，从 PyPI 选择 Datasette 版本、从 GitHub 加载指定 commit/tag/branch、在 100+ 个 SQLite 版本间切换，还能从 PyPI 或 wheel URL 安装插件。它是理解 WASM 里跑 Python 应用的一座极佳参考实现。</p>
-      <div class="src">📎 来源: <a href="https://simonwillison.net/2026/Nov/17/datasette-lite/" target="_blank" rel="noopener">Simon Willison's Weblog</a> · <a href="https://x.com/simonw/status/2122746008736276734" target="_blank" rel="noopener">Simon Willison</a></div>
+      <p>Parallel 开源了搜索评测框架 <b>parallel-search-evals</b>，用来回答一个具体问题：<b>模型接入搜索后，到底强了多少</b>。方法是让同一模型分别在"关闭工具"和"允许搜索"下答题再比较；每次运行固定一个模型、一套题目和一种搜索模式，支持 turbo / fast / basic / advanced 及无工具基线。模型可调两个工具：<code>Search</code>（返回最多 10 条带正文摘录的结果）与 <code>Extract</code>（从最多 20 个网址提取内容），每题最多 20 次工具调用、25 轮研究。</p>
+      <p>更实用的是它<b>题库、执行流程与评分器相互分离</b>，你可以换成自己的业务问题、参考答案和评分规则；支持 OpenRouter 及 OpenAI / Anthropic / Google 原生接口，还附带供 Claude Code、Codex 使用的技能说明。想量化"搜索到底有没有用"的团队可以直接拿来跑。</p>
+      <div class="src">📎 来源: <a href="https://x.com/shao__meng/status/2122893742801604691" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
     </div>
 
     <div class="tool">
       <div class="tool-top">
-        <span class="tool-name">Vercel AI 组件库 (ui-sdk.dev)</span>
-        <span class="tool-lang">设计 · Prompt 生成</span>
+        <span class="tool-name">OCRia-1.5</span>
+        <span class="tool-lang">LlamaIndex · OCR · 两档模型</span>
       </div>
-      <p>Vercel 出了一套<b>专门给 AI 用的设计组件库</b>：点选技术栈即可生成对应的 UI Prompt，也可以直接让 Agent 访问该站点获取。社区经验是——想让 AI 生成的界面不像 "Slop"，最稳的配色是学 Vercel 的黑白灰风格，并避免让模型随意发挥或使用系统默认的丑组件。适合把"AI 生成前端的审美约束"标准化。</p>
-      <div class="src">📎 来源: <a href="https://x.com/vista8/status/2122749977281835500" target="_blank" rel="noopener">向阳乔木(@vista8)</a> · <a href="https://x.com/vista8/status/2122749798348698021" target="_blank" rel="noopener">配色实践</a></div>
-    </div>
-
-    <div class="tool">
-      <div class="tool-top">
-        <span class="tool-name">SqlPackage 170.6 预览版</span>
-        <span class="tool-lang">.NET · 数据库部署</span>
-      </div>
-      <p>数据库部署应当可重复：SQL 项目构建出 <code>.dacpac</code>，SqlPackage 再与目标库比对生成变更。问题是即便"无变化"，重复发布也要做一次完整 schema 比对。新预览版带来两项能力：<b>Deployment history</b>（<code>LogDeployment</code>，把部署记录写进目标库）与 <b>fast comparison</b>（<code>EnableFastComparison</code>，借助兼容的部署历史跳过全量比对）。对反复发布同一模型的 CI 流水线，能明显省下时间。</p>
-      <div class="src">📎 来源: <a href="https://devblogs.microsoft.com/azure-sql/sqlpackage-deployment-history-and-fast-comparison-preview" target="_blank" rel="noopener">Microsoft for Developers</a></div>
-    </div>
-
-    <div class="tool">
-      <div class="tool-top">
-        <span class="tool-name">Vercel Blob TTL</span>
-        <span class="tool-lang">存储 · 自动过期</span>
-      </div>
-      <p>Vercel Blob 现在支持自动删除：写入时传 <code>ttlDays</code>（1–730 天，从上传日算起），到期自动删除。它适用于原本要自己清理的会话记录、导出文件、临时上传。覆盖 <code>put()</code>/<code>copy()</code>/<code>putImage()</code>/分片上传/预签名上传 URL，写入结果与 <code>head()</code> 都会返回 <code>expiresAt</code>；<code>setTtl()</code> 可批量修改已有 blob（一次最多 1000 个）。CLI 65.16.0+ 支持 <code>--ttl-days</code> 与 <code>vercel blob set-ttl</code>。</p>
-      <div class="src">📎 来源: <a href="https://vercel.com/changelog/vercel-blob-now-supports-ttls-for-automatic-deletion" target="_blank" rel="noopener">Vercel News</a></div>
+      <p>LlamaIndex 发布 <b>OCRia-1.5</b>，在复杂表格、图表与表单上比 OCRia-1 更准，<b>边界框（bounding box）定位也更精确</b>——每个表单字段都有自己的框，页面多元素时不再互相污染。它分两档：<b>OCRia-1.5-2B</b> 主打规模化解析的成本效率，<b>OCRia-1.5-4B</b> 是升级旗舰、面向最难页面的 agentic 解析。两档维持原有价位，属于"同价换更好模型"。做文档 ingestion 的可以按页面难度做分层调度。</p>
+      <div class="src">📎 来源: <a href="https://x.com/llama_index/status/2123102126372999662" target="_blank" rel="noopener">LlamaIndex</a></div>
     </div>
   </section>
 
@@ -427,47 +416,48 @@
     </div>
 
     <div class="guide">
-      <h3>AI 省时在缩水：瓶颈已从"写代码"转向"管理 AI"</h3>
-      <p>Atlassian 的《2026 年开发者体验现状报告》给出一个反直觉的数据：过去一年，<b>每周靠 AI 节省 10 小时以上的开发者比例从 68% 暴跌至 26%</b>；而 AI 的渗透率已接近饱和——95% 的开发者、96% 的工程负责人称组织已在工程中积极使用 AI。该报告基于 1,155 名个人贡献者与 405 名工程负责人的调查，Atlassian 也明确提示这些是自报告的体验数据、相关性不等于因果。</p>
-      <p>局部收益仍在：87% 的开发者称 AI 让他们更快交付，80% 称在不延长工时的情况下完成更多工作。但<b>只有 28% 觉得摩擦明显减少，50% 认为摩擦与之前持平</b>——报告称之为"不同类型的摩擦"。一部分摩擦恰恰来自 AI 本身：<b>49% 的开发者现在每周要花 4 小时以上管理 AI 工具</b>。Atlassian AI 与协作部门 CTO Taroon Mandhana 的结论是："瓶颈已经转移到管理 AI 的工作上。"</p>
-      <div class="takeaway">别只统计"AI 帮我们省了多少"，要开始度量"管理 AI 本身花了多少"。把 prompt/工具/权限的维护成本当成真实的工程开销来优化，而不是默认它免费。</div>
-      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651297422&amp;idx=3&amp;sn=f5c42a08f5148c063a9f39fc8cd6c941" target="_blank" rel="noopener">InfoQ</a></div>
+      <h3>Chrome × Policybazaar：把"生成 → 浏览器验证 → 修复"接成闭环</h3>
+      <p>Coding Agent 能写前端代码，不代表它知道页面实际渲染成什么样。Chrome 官方介绍的 Policybazaar 案例补的正是这一步：用 <b>Modern Web Guidance</b> 约束代码写法，再用 <b>Chrome DevTools for agents</b> 检查真实页面。其中 Modern Web Guidance 提供现代 Web 开发规则，并以 Baseline 兼容性范围约束实现——例如同一张图片不应同时设置高加载优先级和懒加载，首屏关键图片与普通图片也不能一视同仁。</p>
+      <p>两条工作流值得借鉴：关联品牌 Pensionbazaar 在 Claude Code 中通过 <b>Figma MCP 读取设计稿</b>，生成代码后启动一个干净浏览器，检查视觉一致性、响应式布局、控制台报错与性能，发现问题再改；交给 QA 的不只是代码，还包括设计稿对比、多尺寸截图、性能诊断与交互检查结果。Policybazaar 寿险团队则用 Agent 做上线前性能审计，覆盖约 <b>30 个落地页及营销变体</b>（日均 20 万~30 万访问），在 Kiro 内对预发页面分别发起移动端与桌面端审计，Agent 执行 Lighthouse 与性能追踪。<b>结果：复杂前端验证从 4 天缩到数小时，性能审计工作量减少 92%。</b></p>
+      <div class="takeaway">给前端 Agent 的验收标准里加上"在浏览器里跑一遍"：视觉对比、多尺寸截图、控制台、Lighthouse。让 Agent 自己看渲染结果再改，比人工逐页兜底便宜得多。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://x.com/shao__meng/status/2122983021129425047" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
     </div>
 
     <div class="guide">
-      <h3>阿里 Qoder 的 AI Native 研发流程：SPEC 先行 + 团队级 Harness</h3>
-      <p>阿里巴巴 Qoder 高级技术专家宋文龙（闻可）在 AICon 2026 的分享，讨论了 Coding Agent 从"个人工具"走向"团队级生产系统"必须跨过的坎。其路径可归纳为：<b>SPEC 先行</b>（先写清规格再让 Agent 动手）、<b>团队级 Harness</b>（统一的执行/约束/评测框架）、<b>Agent team 与组织转型</b>，从"许愿式编程"迁移到 <b>on the loop</b> 的研发范式。</p>
-      <p>一个值得注意的方法论前提来自他们自己的实践——<b>用 Coding Agent 开发 Coding Agent</b>，并分享了高德、闪购以及 Qoder 内部的一手案例。"Agent 越强，人的重要性不是降低，而是重要性的方式发生了改变。"</p>
-      <div class="takeaway">团队引入 Agent 时，先补 SPEC 和 Harness 这两块基础设施，再谈扩大使用范围；否则规模一上来，产出会因缺乏约束而变得不可控。</div>
-      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651297422&amp;idx=2&amp;sn=72a66207636a8cda7cf517864246f809" target="_blank" rel="noopener">InfoQ</a></div>
+      <h3>CI 测试加速组合拳：只跑受影响的测试，再谈并行</h3>
+      <p>一条被低估的实用技巧：Vitest 有 <code>--changed</code> 命令，只跑与变更文件相关的测试。原理是让 <b>Git 给出变更文件列表，再找出 import 了这些文件的测试文件</b>——只要某个测试的 import graph 里包含该文件，就运行对应测试。这比"全量跑一遍"在 PR 场景下省得多。</p>
+      <p>把它放进一套完整的加速方案里效果更好：<b>① 按历史耗时智能分片并行</b>——平均分配会让分片时间极不均衡，所以先记录每个测试的历史耗时，再按耗时重新分配，让各分片总时间尽量接近；<b>② PR 只跑受影响的测试</b>——在 CI 上做静态 import graph 分析，根据代码 diff 决定跑哪些；<b>③ 换更快的工具</b>——例如 <code>tsc</code> 换成 <code>bun check</code>，lint 用 <code>oxlint</code>；<b>④ 全面并行</b>——lint、类型检查、build、test 同时跑。</p>
+      <pre><code><span class="tok-c"># 只运行与变更文件相关的测试（Git diff + import graph 定位）</span>
+npx vitest --changed
+
+<span class="tok-c"># 结合分片时，历史耗时数据决定分片权重，而不是简单取模</span>
+npx vitest run --shard=1/4</code></pre>
+      <div class="takeaway">先做"少跑"（--changed / diff 分析），再做"快跑"（换工具），最后才做"并行"。顺序反了，往往只是把浪费的算力并行化。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://x.com/vikingmute/status/2123026797852053861" target="_blank" rel="noopener">Viking(@vikingmute)</a></div>
     </div>
 
     <div class="guide">
-      <h3>Vercel 两个待处理的流水线变更（含硬性截止日）</h3>
-      <p><b>1）原生 lint / typecheck Deployment Checks 即将下线。</b>这些检查原本在 Vercel 侧与部署构建并行运行；<b>2026-11-30 之后将被移除</b>，新检查已无法再添加。受影响项在项目的 Build &amp; Deployment 设置里显示为 provider 为 Vercel 的 Lint / Typecheck 条目。迁移方式是把命令挪到 Vercel CI 或自有 CI 工作流；对于会阻断生产发布的检查，需确认新流程如何传递失败。</p>
-      <p><b>2）新增"仅对 PR 构建预览"预设。</b>这是 Ignored Build Step 的新预设：<b>没有打开 PR 的分支跳过预览构建</b>，生产部署与有 PR 的分支照常构建；被跳过的预览会在消耗 Build CPU 分钟之前就被取消。在 GitHub/GitLab 项目上通过 Deployments &gt; Configuration 启用。</p>
-      <div class="takeaway">把 11-30 这个日期加入日历：在此之前把 lint/typecheck 命令搬进 CI，并顺手用 PR-only 预设砍掉无谓的预览构建成本。</div>
-      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://vercel.com/changelog/native-lint-and-typecheck-deployment-checks-are-being-deprecated" target="_blank" rel="noopener">Vercel News (下线公告)</a> · <a href="https://vercel.com/changelog/pull-request-only-preset-now-available-for-preview-builds" target="_blank" rel="noopener">Vercel News (PR-only 预设)</a></div>
+      <h3>给 Agent 做韧性测试：工具失败时它到底是重试、降级，还是"自信地用脏数据回答"</h3>
+      <p>AWS 在 Architecture Blog 里提出一个常被跳过的问题：当 Agent 的工具开始失败（数据库查询超时、API 返回错误数据、搜索调用静默丢字段）时，你的 Agent 会怎么做？是重试、降级，还是承认无法完成？还是<b>基于损坏的数据给出一个看似自信的答案</b>、把原始错误抛给用户、或静默失败且不告警？这些都是生产环境的真实场景：工具会失败、网络会分区、上游会降级、Agent 生成的查询会返回不完整结果。</p>
+      <p>如果你从没测试过这些条件下的行为，那你的可靠性就是建立在假设而非证据上。做法是用 <b>AWS Fault Injection Service（FIS）</b>主动注入工具级故障，观察 Strands agent 的反应。这里的核心不是"让 Agent 不出错"，而是<b>明确它在出错时的行为契约</b>：哪些错误该重试、哪些该降级到缓存、哪些必须显式失败并告警。</p>
+      <div class="takeaway">给 Agent 写一份"故障行为表"：对每类工具故障（超时 / 错误数据 / 丢字段）定义期望动作，然后用故障注入验证它真的按表执行。没有这份表，你的 Agent 在故障时的行为就是随机的。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://aws.amazon.com/blogs/architecture/resilience-testing-your-agents-on-amazon-bedrock-agentcore/" target="_blank" rel="noopener">AWS Architecture Blog</a></div>
     </div>
 
     <div class="guide">
-      <h3>Shopify 的 Remote Dev：让 AI Agent 在远端跑移动端开发</h3>
-      <p>AI 开发工作流很容易把开发者机器的资源耗尽。Shopify 构建了 <b>Remote Dev</b>——一个远程移动开发环境，使 <b>AI Agent 能独立地、并行地构建、测试与维护 iOS 和 Android 应用</b>，而不占用本地机器。这是"把 Agent 的重活挪到远端"这一思路的典型落地。</p>
-      <div class="takeaway">如果你在本地跑移动端 Agent 流水线频繁遇到机器过热/资源争抢，考虑把构建与测试迁到远程开发环境，让本地只保留编辑与轻量交互。</div>
-      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://www.infoq.com/news/2026/11/shopify-remote-ai-dev/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+      <h3>得物 Akashic：把研发对话回写成可复用的团队知识库</h3>
+      <p>AI 参与研发后，团队知识会分散到三处：代码承载实现方式，文档沉淀架构与规则，对话保留问题背后的取舍、边界与经验。得物技术发现，仅靠人工很难把代码变更与对话结论及时沉淀：代码改完后说明可能遗漏，研发中确认的结论可能只停在某次对话里，换个任务或同事又要重新补上下文、核对边界。</p>
+      <p>他们的 <b>Akashic 知识工程</b> 用一条闭环解决：先按统一结构建立工程知识库，为 AI 研发任务提供可靠上下文；代码变更时检查相关知识是否需要同步更新；研发会话归档后，从对话中提取可复用经验，<b>经确认后回写</b>到知识库。系统由 Akashic CLI、本地研发、工程知识、会话管理、知识演进、对话洞察六个模块组成；本机基座 <b>Akashic CLI</b> 统一管理配置、Skill 与 Git Hook，负责扫描、筛选并上传 Codex 与 Claude 的会话。让一个人走通的路径或踩过的坑，成为团队后续任务里可复用的经验。</p>
+      <div class="takeaway">别指望"写了 wiki 就会有人用"。把知识沉淀挂到研发动作上：代码变更触发同步检查、会话归档触发经验回写，并且回写前必须人工确认——否则知识库会迅速被噪声淹没。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&amp;mid=2247547753&amp;idx=1&amp;sn=cb228982ab9aa9a11b41ef7523b1e460" target="_blank" rel="noopener">得物技术</a></div>
     </div>
 
     <div class="guide">
-      <h3>把 LLM 排序塞进 P99 SLA：LinkedIn 的延迟工程清单</h3>
-      <p>LinkedIn 的分享讲的是如何在严格的 P99 延迟 SLA 下生产化 LLM 排序。几条可直接复用的技巧：把 <b>7B 模型蒸馏到 400M 参数</b>；把职位上下文<b>压缩成单 token embedding</b>，换来约 <b>10x 吞吐</b>；以及消除各种"隐藏瓶颈"——自定义 flash attention mask、<b>Python GIL 绕行</b>、<code>gc.freeze</code>、<b>非阻塞 CUDA 显存拷贝</b>。</p>
-      <div class="takeaway">延迟优化往往不在模型本身，而在这些"看不见"的运行时与拷贝开销上。做 LLM 服务时，把 GIL、GC、显存拷贝、attention mask 逐项列入排查清单。</div>
-      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://www.infoq.com/presentations/scale-llm-ranking-systems-linkedin/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
-    </div>
-
-    <div class="guide">
-      <h3>Google 十年后重写 SRE 书：面向 AI 负载与平台工程</h3>
-      <p>距原版出版十年，Google 宣布由 O'Reilly 推出《Site Reliability Engineering》<b>完全重写的第二版</b>，把 SRE 重新框定在现代云架构、平台工程与 AI 负载之上，同时保留"用软件工程方法做运维"的原始内核。对正在把 SRE 实践迁移到 AI 系统的团队，这是一份及时更新的方法论参考。</p>
-      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://www.infoq.com/news/2026/11/google-sre-book-ai-era/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ</a></div>
+      <h3>Airbnb 用 Presidio 做文本去标识：把真实信息换成"可训练的假数据"</h3>
+      <p>训练模型前，Airbnb 会先处理消息、评价和客服对话里的个人信息：按公司统一分类，把姓名、住址、支付信息等<b>替换成尽量逼真的模拟数据</b>——既减少真实信息的副本与泄露风险，又尽量保留训练价值。政策由 Privacy Architecture 团队会同法务、政策和工程制定，再落实为代码。</p>
+      <p>工程实现上以开源库 <b>Presidio</b> 为基础（最初由微软开发，现由社区治理，以 Python 包形式在调用进程内运行）。关键设计有几点：把它做成<b>共享机器学习工作流中的可复用步骤</b>，而不是另建中心服务，使用方只需标明哪些字段含 PII；处理后的数据集打上去标识标记并进入模型注册表，用来把关生产部署、记录所用版本与配置；训练前先过滤已选择退出的记录。<b>识别</b>用正则 + 上下文词处理固定形态的标识，姓名与地点改用可在推理时指定"街道地址"的 GLiNER；<b>替换</b>不用占位符或空白，以免模型把"这里被删过"也学成一种模式，大多数类型用 faker 生成。</p>
+      <div class="takeaway">去标识不是"删掉 PII"，而是"换成分布相近的假数据"，并让处理结果可追溯。把去标识做成流水线里的强制步骤、给产出打标记并用模型注册表把关，比依赖每个团队自觉更可靠。</div>
+      <div class="src" style="margin-top:12px;">📎 来源: <a href="https://x.com/shao__meng/status/2122957621263302910" target="_blank" rel="noopener">meng shao(@shao__meng)</a></div>
     </div>
   </section>
 
@@ -475,42 +465,43 @@
   <section id="sources">
     <h2>🔗 参考链接汇总</h2>
     <ul class="src-list">
-      <li><span class="idx">[01]</span><a href="https://www.infoq.com/news/2026/11/dotnet-11-release/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">.NET 11 正式发布：C# 15 联合类型等</a><span class="feed">InfoQ</span></li>
-      <li><span class="idx">[02]</span><a href="https://www.infoq.com/news/2026/11/quik-2-streaming/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Qwik 2.0 RC：取代 HTML 注释标记</a><span class="feed">InfoQ</span></li>
-      <li><span class="idx">[03]</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.147 (Insiders)</a><span class="feed">Microsoft for Developers</span></li>
-      <li><span class="idx">[04]</span><a href="https://x.com/OpenAIDevs/status/2122752256923873753" target="_blank" rel="noopener">GPT-6.2 Astra / Sol 进入 Codex 与 API</a><span class="feed">OpenAI Developers</span></li>
-      <li><span class="idx">[05]</span><a href="https://x.com/github/status/2122814155979706846" target="_blank" rel="noopener">MAI Code 2 / Flash 在 GitHub Copilot GA</a><span class="feed">GitHub</span></li>
-      <li><span class="idx">[06]</span><a href="https://x.com/github/status/2122756587073028306" target="_blank" rel="noopener">Copilot Fusion Max 在 Terminal-Bench 4.1 达 71.2%</a><span class="feed">GitHub</span></li>
-      <li><span class="idx">[07]</span><a href="https://aws.amazon.com/blogs/machine-learning/amazon-sagemaker-ai-real-time-endpoints-now-support-kv-cache-aware-routing/" target="_blank" rel="noopener">SageMaker 实时端点支持 KV cache 感知路由</a><span class="feed">Artificial Intelligence (AWS)</span></li>
-      <li><span class="idx">[08]</span><a href="https://www.infoq.com/news/2026/11/datadog-ai-agent-observability/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Datadog 为 AI Agent 可观测性加入线上实验</a><span class="feed">InfoQ</span></li>
-      <li><span class="idx">[09]</span><a href="https://x.com/qdrant_engine/status/2122721432711106635" target="_blank" rel="noopener">Qdrant × FastEmbed：35 分钟生成 3280 万 embedding</a><span class="feed">Qdrant</span></li>
-      <li><span class="idx">[10]</span><a href="https://simonwillison.net/2026/Nov/17/external-sandboxes-for-coding-agents/" target="_blank" rel="noopener">External sandboxes for coding agents</a><span class="feed">Simon Willison's Weblog</span></li>
-      <li><span class="idx">[11]</span><a href="https://x.com/simonw/status/2122500307557265651" target="_blank" rel="noopener">external sandbox 模式说明（WASM/QEMU/Apple Container）</a><span class="feed">Simon Willison</span></li>
-      <li><span class="idx">[12]</span><a href="https://x.com/simonw/status/2122500317187330279" target="_blank" rel="noopener">沙箱的出网白名单代理与凭据替换</a><span class="feed">Simon Willison</span></li>
-      <li><span class="idx">[13]</span><a href="https://x.com/simonw/status/2122500313886396840" target="_blank" rel="noopener">external sandbox 实现索引仓库</a><span class="feed">Simon Willison</span></li>
-      <li><span class="idx">[14]</span><a href="https://aws.amazon.com/blogs/machine-learning/cut-generative-ai-costs-code-for-rules-models-for-judgment/" target="_blank" rel="noopener">Cut generative AI costs: Code for rules, models for judgment</a><span class="feed">Artificial Intelligence (AWS)</span></li>
-      <li><span class="idx">[15]</span><a href="https://aws.amazon.com/blogs/machine-learning/reducing-token-costs-and-latency-in-amazon-bedrock-agentcore-json-workloads/" target="_blank" rel="noopener">Reducing token costs and latency in Bedrock AgentCore JSON workloads</a><span class="feed">Artificial Intelligence (AWS)</span></li>
-      <li><span class="idx">[16]</span><a href="https://x.com/geekbb/status/2122697767688532379" target="_blank" rel="noopener">rust-anything：AI 辅助迁移到 Rust 的验收工具</a><span class="feed">Geek(@geekbb)</span></li>
-      <li><span class="idx">[17]</span><a href="https://x.com/geekbb/status/2122514308487610850" target="_blank" rel="noopener">skwir：Rust + GUI 的人机协同文件管理器</a><span class="feed">Geek(@geekbb)</span></li>
-      <li><span class="idx">[18]</span><a href="https://x.com/geekbb/status/2122618998416429410" target="_blank" rel="noopener">开源加密邮件客户端（Rust + React + Tauri）</a><span class="feed">Geek(@geekbb)</span></li>
-      <li><span class="idx">[19]</span><a href="https://simonwillison.net/2026/Nov/17/datasette-lite/" target="_blank" rel="noopener">Running the full server-side Datasette Python app in the browser</a><span class="feed">Simon Willison's Weblog</span></li>
-      <li><span class="idx">[20]</span><a href="https://x.com/vista8/status/2122749977281835500" target="_blank" rel="noopener">Vercel AI 组件库（ui-sdk.dev）</a><span class="feed">向阳乔木(@vista8)</span></li>
-      <li><span class="idx">[21]</span><a href="https://devblogs.microsoft.com/azure-sql/sqlpackage-deployment-history-and-fast-comparison-preview" target="_blank" rel="noopener">SqlPackage 部署历史与快速比对预览</a><span class="feed">Microsoft for Developers</span></li>
-      <li><span class="idx">[22]</span><a href="https://vercel.com/changelog/vercel-blob-now-supports-ttls-for-automatic-deletion" target="_blank" rel="noopener">Vercel Blob 支持 TTL 自动删除</a><span class="feed">Vercel News</span></li>
-      <li><span class="idx">[23]</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651297422&amp;idx=3&amp;sn=f5c42a08f5148c063a9f39fc8cd6c941" target="_blank" rel="noopener">Atlassian 2026 开发者体验现状报告解读</a><span class="feed">InfoQ</span></li>
-      <li><span class="idx">[24]</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&amp;mid=2651297422&amp;idx=2&amp;sn=72a66207636a8cda7cf517864246f809" target="_blank" rel="noopener">企业 AI Native 研发流程升级与重塑（阿里 Qoder）</a><span class="feed">InfoQ</span></li>
-      <li><span class="idx">[25]</span><a href="https://vercel.com/changelog/native-lint-and-typecheck-deployment-checks-are-being-deprecated" target="_blank" rel="noopener">原生 lint / typecheck Deployment Checks 即将下线</a><span class="feed">Vercel News</span></li>
-      <li><span class="idx">[26]</span><a href="https://vercel.com/changelog/pull-request-only-preset-now-available-for-preview-builds" target="_blank" rel="noopener">仅对 PR 构建预览的新预设</a><span class="feed">Vercel News</span></li>
-      <li><span class="idx">[27]</span><a href="https://www.infoq.com/news/2026/11/shopify-remote-ai-dev/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Shopify Remote Dev：远端 AI 移动端开发环境</a><span class="feed">InfoQ</span></li>
-      <li><span class="idx">[28]</span><a href="https://www.infoq.com/presentations/scale-llm-ranking-systems-linkedin/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">LinkedIn：在 P99 SLA 下规模化 LLM 排序</a><span class="feed">InfoQ</span></li>
-      <li><span class="idx">[29]</span><a href="https://www.infoq.com/news/2026/11/google-sre-book-ai-era/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Google 面向 AI 时代重写 SRE 书（第二版）</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[01]</span><a href="https://blog.cloudflare.com/java4shell-waf-protection/" target="_blank" rel="noopener">How Cloudflare WAF helps protect against Java4Shell (CVE-2026-114938)</a><span class="feed">Cloudflare Blog</span></li>
+      <li><span class="idx">[02]</span><a href="https://devblogs.microsoft.com/java/java-openjdk-november-2026-critical-patch-update" target="_blank" rel="noopener">Java OpenJDK November 2026 Critical Patch Update</a><span class="feed">Microsoft for Developers</span></li>
+      <li><span class="idx">[03]</span><a href="https://spring.io/blog/2026/11/18/this-week-in-spring-november-18th-2026" target="_blank" rel="noopener">This Week in Spring - November 18th, 2026</a><span class="feed">Spring Blog</span></li>
+      <li><span class="idx">[04]</span><a href="https://x.com/github/status/2122860022895952311" target="_blank" rel="noopener">GPT-6.2 Astra / Sol now GA in GitHub Copilot</a><span class="feed">GitHub</span></li>
+      <li><span class="idx">[05]</span><a href="https://x.com/github/status/2123181574116233646" target="_blank" rel="noopener">Gemini 4 Neon now GA in GitHub Copilot</a><span class="feed">GitHub</span></li>
+      <li><span class="idx">[06]</span><a href="https://www.infoq.com/news/2026/11/vercel-ui-sdk/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Vercel Releases UI SDK for Agents to Compose UI from Reusable Behaviors</a><span class="feed">InfoQ</span></li>
+      <li><span class="idx">[07]</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.148-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.148 (Insiders)</a><span class="feed">Microsoft for Developers</span></li>
+      <li><span class="idx">[08]</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.147" target="_blank" rel="noopener">Visual Studio Code 1.147</a><span class="feed">Microsoft for Developers</span></li>
+      <li><span class="idx">[09]</span><a href="https://devblogs.microsoft.com/vscode-blog/the-copilot-harness:-building-on-a-shared-foundation" target="_blank" rel="noopener">The Copilot harness: Building on a shared foundation</a><span class="feed">Microsoft for Developers</span></li>
+      <li><span class="idx">[10]</span><a href="https://devblogs.microsoft.com/aspire/whats-new-aspire-17" target="_blank" rel="noopener">Aspire 17 is ready for primetime</a><span class="feed">Microsoft for Developers</span></li>
+      <li><span class="idx">[11]</span><a href="https://blog.cloudflare.com/open-clairic/" target="_blank" rel="noopener">Updated Clairic and Clairic-flash are now open-weight</a><span class="feed">Cloudflare Blog</span></li>
+      <li><span class="idx">[12]</span><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&amp;mid=2247838663&amp;idx=1&amp;sn=d95c254b6a1d49d558cd1bdfa55935ad" target="_blank" rel="noopener">Dataify 发布 AI Web API 1.0，一手实测</a><span class="feed">CSDN</span></li>
+      <li><span class="idx">[13]</span><a href="https://vercel.com/changelog/vercel-drives-now-reads-files-up-to-6x-faster" target="_blank" rel="noopener">Vercel Drives now reads files up to 6x faster</a><span class="feed">Vercel News</span></li>
+      <li><span class="idx">[14]</span><a href="https://cloud.google.com/blog/products/application-development/lessons-from-building-sashiko-an-agentic-code-review-system/" target="_blank" rel="noopener">Sashiko: Lessons from building an agentic code review system for Linux</a><span class="feed">Google Cloud Blog</span></li>
+      <li><span class="idx">[15]</span><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247698248&amp;idx=1&amp;sn=231ec6d5f27becee1515974608c85cfd" target="_blank" rel="noopener">AI时代，代码Review还有必要吗？</a><span class="feed">腾讯云开发者</span></li>
+      <li><span class="idx">[16]</span><a href="https://x.com/github/status/2123093132212367601" target="_blank" rel="noopener">Repo Insights：按仓库追踪 Copilot 审查结果</a><span class="feed">GitHub</span></li>
+      <li><span class="idx">[17]</span><a href="https://x.com/github/status/2123093114676265290" target="_blank" rel="noopener">Copilot code review 重大升级（MS Ignite）</a><span class="feed">GitHub</span></li>
+      <li><span class="idx">[18]</span><a href="https://www.youtube.com/watch?v=JSC8eVojIWY" target="_blank" rel="noopener">How we optimize GitHub Copilot for every new model</a><span class="feed">GitHub (YouTube)</span></li>
+      <li><span class="idx">[19]</span><a href="https://cloud.google.com/blog/topics/developers-practitioners/how-to-build-durable-agentic-systems-with-google-antigravity-from-instructions-to-loops/" target="_blank" rel="noopener">How to Build Durable Agentic Systems with Google Antigravity</a><span class="feed">Google Cloud Blog</span></li>
+      <li><span class="idx">[20]</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&amp;mid=2655943775&amp;idx=1&amp;sn=9140df64daa7865df6ee56f8fe2dfc09" target="_blank" rel="noopener">IDE还没到退场的时候！纳德拉谈AI冲击</a><span class="feed">51CTO技术栈</span></li>
+      <li><span class="idx">[21]</span><a href="https://x.com/HiTw93/status/2122960402665668728" target="_blank" rel="noopener">Pake 支持桌面端，一键打包网页为桌面应用</a><span class="feed">Tw93(@HiTw93)</span></li>
+      <li><span class="idx">[22]</span><a href="https://x.com/geekbb/status/2123062984310468918" target="_blank" rel="noopener">Lumio：Rust + SwiftUI 开源启动器</a><span class="feed">Geek(@geekbb)</span></li>
+      <li><span class="idx">[23]</span><a href="https://www.mongodb.com/company/blog/product-release-announcements/persistent-sessions-memory-for-strands" target="_blank" rel="noopener">Persistent Sessions and Memory for Strands with MongoDB</a><span class="feed">MongoDB Blog</span></li>
+      <li><span class="idx">[24]</span><a href="https://x.com/shao__meng/status/2122893742801604691" target="_blank" rel="noopener">Parallel 开源搜索评测框架 parallel-search-evals</a><span class="feed">meng shao(@shao__meng)</span></li>
+      <li><span class="idx">[25]</span><a href="https://x.com/llama_index/status/2123102126372999662" target="_blank" rel="noopener">LlamaIndex 发布 OCRia-1.5</a><span class="feed">LlamaIndex</span></li>
+      <li><span class="idx">[26]</span><a href="https://x.com/shao__meng/status/2122983021129425047" target="_blank" rel="noopener">Chrome 官方案例：Policybazaar 用 Agent 做前端验证</a><span class="feed">meng shao(@shao__meng)</span></li>
+      <li><span class="idx">[27]</span><a href="https://x.com/vikingmute/status/2123026797852053861" target="_blank" rel="noopener">vitest --changed 与 CI 测试加速经验</a><span class="feed">Viking(@vikingmute)</span></li>
+      <li><span class="idx">[28]</span><a href="https://aws.amazon.com/blogs/architecture/resilience-testing-your-agents-on-amazon-bedrock-agentcore/" target="_blank" rel="noopener">Resilience testing your agents on Amazon Bedrock AgentCore</a><span class="feed">AWS Architecture Blog</span></li>
+      <li><span class="idx">[29]</span><a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&amp;mid=2247547753&amp;idx=1&amp;sn=cb228982ab9aa9a11b41ef7523b1e460" target="_blank" rel="noopener">从研发经验到团队知识：Akashic 知识工程实践</a><span class="feed">得物技术</span></li>
+      <li><span class="idx">[30]</span><a href="https://x.com/shao__meng/status/2122957621263302910" target="_blank" rel="noopener">Airbnb 用 Presidio 做文本去标识</a><span class="feed">meng shao(@shao__meng)</span></li>
     </ul>
   </section>
 
   <footer>
-    科技日报 · 开发者实践版 · 生成于 2026-11-18<br>
-    基于 653 条新闻 / 424 个来源筛选 · 面向程序员与工程师视角<br>
-    所有外部链接均指向原文，点击在新标签页打开
+    <div>科技日报 · 开发者实践版 · 由 tech-daily-generator 生成</div>
+    <div>数据窗口：2026-11-17 23:39 → 2026-11-18 23:39 · 共 714 条 / 424 源</div>
+    <div>面向程序员与工程师 · 关注技术实现、工具更新与最佳实践</div>
   </footer>
 
 </div>
