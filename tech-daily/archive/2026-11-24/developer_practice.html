@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 开发者实践版 | 2026-11-24</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+    --text:#c9d1d9; --muted:#8b949e; --dim:#6e7681;
+    --blue:#58a6ff; --green:#3fb950; --yellow:#d29922; --red:#f85149;
+    --purple:#bc8cff; --cyan:#39c5cf; --orange:#ffa657;
+    --mono:'JetBrains Mono','Fira Code','SF Mono','Cascadia Code',Consolas,'Liberation Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--mono); font-size:15px; line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--blue); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 20px 80px;}
+
+  /* terminal header */
+  .term{max-width:1040px; margin:28px auto 0; background:var(--panel);
+    border:1px solid var(--border); border-radius:10px 10px 0 0; overflow:hidden;}
+  .term-bar{display:flex; align-items:center; gap:8px; padding:10px 14px;
+    background:var(--panel2); border-bottom:1px solid var(--border);}
+  .dot{width:12px; height:12px; border-radius:50%;}
+  .dot.r{background:#ff5f56;} .dot.y{background:#ffbd2e;} .dot.g{background:#27c93f;}
+  .term-title{margin-left:10px; color:var(--muted); font-size:12.5px;}
+  .hero{max-width:1040px; margin:0 auto; padding:30px 34px 26px;
+    background:var(--panel); border:1px solid var(--border); border-top:0;}
+  .hero h1{font-size:25px; margin:0 0 6px; color:#e6edf3; letter-spacing:.5px;}
+  .hero h1 .accent{color:var(--green);}
+  .hero .sub{color:var(--muted); font-size:13px; margin-bottom:18px;}
+  .hero .sub .k{color:var(--blue);}
+  .stats{display:flex; flex-wrap:wrap; gap:10px;}
+  .stat{background:var(--panel2); border:1px solid var(--border); border-radius:8px;
+    padding:8px 14px; font-size:12.5px; color:var(--muted);}
+  .stat b{color:var(--text); font-size:15px; display:block; line-height:1.3;}
+
+  /* section */
+  section{margin-top:46px;}
+  .sec-h{display:flex; align-items:baseline; gap:12px; margin-bottom:22px;
+    padding-bottom:12px; border-bottom:1px dashed var(--border);}
+  .sec-h .num{color:var(--green); font-size:13px; opacity:.9;}
+  .sec-h h2{font-size:20px; margin:0; color:#e6edf3; font-weight:600; letter-spacing:.3px;}
+
+  /* news cards */
+  .news{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px 16px; margin-bottom:14px; border-left:3px solid var(--border);
+    transition:border-color .15s, transform .15s;}
+  .news:hover{border-left-color:var(--blue); transform:translateX(2px);}
+  .news .idx{color:var(--green); font-size:12.5px; margin-right:8px;}
+  .news h3{display:inline; font-size:16px; color:#e6edf3; font-weight:600; margin:0; line-height:1.5;}
+  .news p{margin:10px 0 12px; color:var(--text); font-size:14px;}
+  .news p b{color:var(--yellow); font-weight:600;}
+  .news .hl{color:var(--cyan);}
+  .src{font-size:12px; color:var(--dim);}
+  .src a{color:var(--blue);}
+  .src .tag{display:inline-block; background:var(--panel2); border:1px solid var(--border);
+    border-radius:5px; padding:1px 7px; margin-right:6px; color:var(--muted);}
+  .src .tag::before{content:"📎 ";}
+
+  /* deep dive */
+  .deep{background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:24px 26px; margin-bottom:22px;}
+  .deep .dnum{color:var(--purple); font-size:12.5px; letter-spacing:1px;}
+  .deep h2{font-size:19px; color:#e6edf3; margin:6px 0 16px; font-weight:600;}
+  .deep h4{font-size:14.5px; color:var(--orange); margin:20px 0 8px; font-weight:600;}
+  .deep p{margin:0 0 12px; font-size:14px;}
+  .deep ul{margin:8px 0 14px; padding-left:22px;}
+  .deep li{margin-bottom:7px; font-size:14px;}
+  .deep li b{color:var(--yellow);}
+  pre{background:#010409; border:1px solid var(--border); border-radius:8px;
+    padding:14px 16px; overflow-x:auto; font-size:12.8px; line-height:1.6;
+    color:#e6edf3; margin:12px 0 16px;}
+  pre .c{color:var(--dim);} pre .kw{color:#ff7b72;} pre .s{color:#a5d6ff;}
+  pre .fn{color:#d2a8ff;} pre .n{color:var(--orange);}
+  .callout{background:rgba(88,166,255,.08); border-left:3px solid var(--blue);
+    border-radius:0 8px 8px 0; padding:12px 16px; font-size:13.5px; color:var(--text); margin:14px 0;}
+  .callout b{color:var(--blue);}
+
+  /* tool grid */
+  .tools{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .tool{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:18px 18px 14px;}
+  .tool .tname{font-size:15px; color:var(--green); font-weight:600; margin-bottom:4px;}
+  .tool .tname::before{content:"> "; color:var(--dim);}
+  .tool p{margin:6px 0 10px; font-size:13.5px; color:var(--text);}
+  .tool .src{font-size:11.5px;}
+
+  /* practice */
+  .practice{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:20px 22px; margin-bottom:14px;}
+  .practice h3{font-size:15.5px; color:#e6edf3; margin:0 0 8px; font-weight:600;}
+  .practice h3 .pn{color:var(--green); margin-right:8px;}
+  .practice p{margin:0 0 8px; font-size:13.8px;}
+  .practice p:last-child{margin-bottom:0;}
+  .practice code, .news code, .deep code{background:var(--panel2); border:1px solid var(--border);
+    border-radius:4px; padding:1px 6px; font-size:12.8px; color:var(--orange);}
+
+  /* sources */
+  .sources{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:8px 20px 18px;}
+  .sources ol{margin:0; padding-left:24px;}
+  .sources li{margin:9px 0; font-size:13px; color:var(--text);}
+  .sources li .feed{color:var(--muted); font-size:11.5px; display:inline-block;
+    background:var(--panel2); border:1px solid var(--border); border-radius:4px;
+    padding:0 6px; margin-right:7px;}
+
+  footer{margin-top:40px; text-align:center; color:var(--dim); font-size:12px;
+    border-top:1px dashed var(--border); padding-top:20px;}
+
+  @media (max-width:720px){
+    .tools{grid-template-columns:1fr;}
+    .hero{padding:22px 20px;}
+    .wrap{padding:0 14px 60px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="term">
+  <div class="term-bar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="term-title">~/tech-daily — developer_practice.html — 2026-11-24</span>
+  </div>
+  <div class="hero">
+    <h1><span class="accent">$</span> tech_daily <span style="color:var(--muted)">--role</span> developer_practice</h1>
+    <div class="sub">
+      数据窗口 <span class="k">2026-11-23 03:31 → 2026-11-24 03:31</span> ·
+      导出时间 <span class="k">2026-11-24 03:31</span> · mode <span class="k">parallel_compact</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>185</b>原始新闻</div>
+      <div class="stat"><b>424</b>信息来源</div>
+      <div class="stat"><b>7</b>热榜条目</div>
+      <div class="stat"><b>2</b>深度解读</div>
+      <div class="stat"><b>6</b>工具推荐</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 01 热榜 -->
+  <section>
+    <div class="sec-h"><span class="num">// 01</span><h2>今日技术热榜</h2></div>
+
+    <div class="news">
+      <span class="idx">01</span>
+      <h3>GLM-5.4 发布：首个 Loop Transformer，正式瞄准"泛 Coding"</h3>
+      <p>智谱发布 GLM-5.4，这是其第一代采用 <b>Loop Transformer</b> 架构的旗舰模型——一组权重共享的层循环执行，在参数量不变的前提下做更深度的推理，官方称智能水平达到 2-3T 级模型效果。定位从"会写代码"升级为<span class="hl">"泛 Coding"</span>：代码成为完成更广泛任务的基础能力，并新增视觉能力，已上线 ZCode、Trae、WorkBuddy、Qoder 等编码平台，API 待安全评估后开放、权重计划开源。Simon Willison 指出这是一周内第二个 looped transformer；实测（夕小瑶）用 Three.js 从零搭出 450㎡ 火锅店 3D 场景，并能靠截图自检修正穿模。</p>
+      <div class="src"><span class="tag">智谱</span><a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&amp;mid=2247494345&amp;idx=1&amp;sn=0ea26a769f134fefec42e33d59558c73" target="_blank" rel="noopener">原文</a> · <span class="tag">Simon Willison</span><a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">原文</a> · <span class="tag">夕小瑶科技说</span><a href="https://mp.weixin.qq.com/s?__biz=MjIwNzc2NTk0NQ==&amp;mid=2247623643&amp;idx=1&amp;sn=823a1a530eca4789c05138007017724b" target="_blank" rel="noopener">实测</a></div>
+    </div>
+
+    <div class="news">
+      <span class="idx">02</span>
+      <h3>Ladybird 浏览器发布首个 alpha：从零实现的浏览器内核可以装了</h3>
+      <p>Ladybird 是一个 2026 年仍从零造轮子的浏览器项目：自带 HTML 解析、CSS 引擎、布局、JavaScript 甚至 WebAssembly 实现，只借用 HarfBuzz（文字整形）、Skia（2D 图形）、ffmpeg、SQLite 等少数外部组件，其余来自项目本身或其更激进的前身 SerenityOS。首个 alpha 意味着 macOS / Linux 用户<span class="hl">无需自行编译即可安装</span>。Simon Willison 实测评价"很快、UI 轻量直观"，对浏览器内核与前端渲染感兴趣的开发者值得围观。</p>
+      <div class="src"><span class="tag">Simon Willison's Weblog</span><a href="https://simonwillison.net/2026/Nov/23/ladybird/" target="_blank" rel="noopener">原文</a></div>
+    </div>
+
+    <div class="news">
+      <span class="idx">03</span>
+      <h3>Claude Code 加入实验性 Code Mode：用 JavaScript 编排工具调用</h3>
+      <p>Anthropic 的实验性 <b>Code Mode</b> 让 Claude Code 直接编写 JavaScript，用来链式、并行、过滤 <code>Bash</code> / <code>Read</code> / <code>Edit</code> 等工具调用，同时调整了 auto 模式与 hooks 审查这些调用的方式。核心思路是把"多步工具往返"折叠成"一段可编程的编排脚本"，减少来回次数与中间态——这对构建长链路 agent 的开发者是一个值得关注的新范式。</p>
+      <div class="src"><span class="tag">InfoQ</span><a href="https://www.infoq.com/news/2026/11/claude-code-mode/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">原文</a></div>
+    </div>
+
+    <div class="news">
+      <span class="idx">04</span>
+      <h3>OpenAI 开源 Shirudo：让 Agent 用 eBPF 动态防御 Linux</h3>
+      <p>OpenAI 与 Cisco 合作推出开源 Linux runtime <b>Shirudo</b>，允许 Agent 编写动态 <b>eBPF</b> 控制逻辑来屏蔽漏洞利用，在不中断服务的前提下为防御者争取测试和推送补丁的时间。这是"自防御基础设施"的第一步：目标是由人类与 AI agent 协同定位受影响系统、测试并共享防护规则、再在不打断工作负载的情况下部署。</p>
+      <div class="src"><span class="tag">OpenAI</span><a href="https://x.com/OpenAI/status/2124980590717911527" target="_blank" rel="noopener">原文</a></div>
+    </div>
+
+    <div class="news">
+      <span class="idx">05</span>
+      <h3>JDK 28 集成 JEP 545：ZGC 把内存准备移出启动路径</h3>
+      <p>JEP 545 已并入 JDK 28：把堆内存准备移到并发 worker 线程，ZGC 随扩展预触碰内存，并在 Linux 6.1+ 将小页升级为大页。官方给出 <b>38% 启动</b>、<b>90% 预热</b>的提升，但该 JEP 的 2 MB 初始堆依赖 JEP 546 的自适应堆大小标志（默认关闭）。同周 Java 生态还有 Java4Shell RCE 漏洞、Oracle CSPU、Lazy Constants 进入 JDK 28、LangChain4j / Micrometer 等点版本发布。</p>
+      <div class="src"><span class="tag">InfoQ · JEP 545</span><a href="https://www.infoq.com/news/2026/11/jep-545-jdk-28/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">原文</a> · <span class="tag">InfoQ · Java 周报</span><a href="https://www.infoq.com/news/2026/11/java-news-roundup-nov16-2026/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">原文</a></div>
+    </div>
+
+    <div class="news">
+      <span class="idx">06</span>
+      <h3>VS Code 1.148 (Insiders)：Agent 会话管理与编辑器标签改进</h3>
+      <p>最新 Insiders 构建带来 <b>agent session management</b>（agent 会话管理）与编辑器标签体验改进。这透露出 IDE 的一个方向：把"多个 agent 会话"当作一等公民来管理，而不是塞进单一聊天窗口——对日常在 IDE 内跑 coding agent 的开发者，值得提前关注交互变化。</p>
+      <div class="src"><span class="tag">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.148-(insiders)" target="_blank" rel="noopener">原文</a></div>
+    </div>
+
+    <div class="news">
+      <span class="idx">07</span>
+      <h3>rust-anything 开源不到 7 天破 7000 Star：用 AI 把老项目逐块迁到 Rust</h3>
+      <p>作者用 Claude Code 约 17 小时，把代码格式化工具 Prettier 分批迁到 Rust：同样逐个启动命令行程序格式化 2000+ 文件，从 ~2 分钟降到 ~7 秒（约 19 倍）。工具工作流是——先找出最慢的代码块 → 用一批测试输入记录原实现行为与报错 → 生成 Rust 版 → 逐字节比对约 1.7 万条用例（全部对上）。同样方法也把 Node.js 的 json-server 重写成可打包的独立 Rust 程序。这是"AI + 对拍测试"做渐进式重写的可复用范式。</p>
+      <div class="src"><span class="tag">逛逛GitHub</span><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247538733&amp;idx=1&amp;sn=c33f37cdf7fec28606ddd9bfd5c87997" target="_blank" rel="noopener">原文</a></div>
+    </div>
+  </section>
+
+  <!-- 02 深度解读 -->
+  <section>
+    <div class="sec-h"><span class="num">// 02</span><h2>深度技术解读</h2></div>
+
+    <div class="deep">
+      <div class="dnum">DEEP DIVE · 01</div>
+      <h2>Loop Transformer：不堆参数，用"循环"换深度</h2>
+      <p>标准 Transformer 里，每一层在前向过程中只运行一次。而 <b>Loop Transformer</b> 让一组<b>权重共享</b>的层循环执行多次，每一轮在上一轮输出的 hidden state 上继续精炼。这样可以在<span class="hl">参数量不增加的前提下</span>获得更深的有效网络——本质上是用"每个 token 更多的串行计算"去换取"更少的参数与显存"。</p>
+
+      <pre><span class="c"># 概念示意（非真实实现）</span>
+<span class="kw">def</span> <span class="fn">forward</span>(x):
+    x = <span class="fn">embed</span>(x)
+    <span class="kw">for</span> layer <span class="kw">in</span> layers_before:        <span class="c"># 常规层，各跑一次</span>
+        x = layer(x)
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="n">range</span>(loop_iters):        <span class="c"># 同一组共享权重，跑 N 次</span>
+        x = shared_block(x)            <span class="c"># 每轮精炼 hidden state</span>
+    <span class="kw">for</span> layer <span class="kw">in</span> layers_after:
+        x = layer(x)
+    <span class="kw">return</span> <span class="fn">lm_head</span>(x)</pre>
+
+      <h4>一周内出现两个样本</h4>
+      <ul>
+        <li><b>GLM-5.4</b>（智谱 / Z.ai）：首个 Loop Transformer 旗舰，官方称智能水平对标 2-3T 级模型；实测中它会出现"雷霆大思考"式超长思考，但团队认为这种反思与自我修正恰是长程任务所需的能力。</li>
+        <li><b>Inkling 2 Mini</b>（Thinking Machines Lab，Mira Murati 创办）：总参数 <b>26.4B</b>，对每个 token 把中间层<b>跑三遍</b>；原生低精度权重约 20GB，官方称可在至少 32GB 内存的 Mac 上本地运行，能读图、写代码、搜索和调用工具。</li>
+      </ul>
+
+      <div class="callout">
+        <b>工程视角：</b>Loop 架构把"参数量 / 显存"和"推理算力"解耦开来。对端侧与本地部署尤其友好——Inkling 2 Mini 能塞进个人电脑就是例证；代价是每 token 的串行计算变多，延迟与算力开销上升。选型时先问：你是被<b>显存</b>卡住，还是被<b>吞吐/延迟</b>卡住？
+      </div>
+      <p class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&amp;mid=2247494345&amp;idx=1&amp;sn=0ea26a769f134fefec42e33d59558c73" target="_blank" rel="noopener">智谱</a> · <a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">Simon Willison</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650457504&amp;idx=1&amp;sn=4ef9019cd406bb4dc750db443f0ebf29" target="_blank" rel="noopener">AINLP（Inkling 2 Mini）</a></p>
+    </div>
+
+    <div class="deep">
+      <div class="dnum">DEEP DIVE · 02</div>
+      <h2>Agent 沙箱的"数据恢复"瓶颈：腾讯 EROX 统一数据面</h2>
+      <p>AI Agent 是<b>有状态、长会话</b>的：装依赖、跑任务、等大模型返回，状态要跨会话、跨节点延续。计算资源可以随时重建，数据却必须"随用随到"。腾讯技术工程给出的具体场景很扎心——<span class="hl">4000 台 Agent 沙箱，每台挂一个 50GB 工作区</span>，任务结束还要跨节点继续。若每次启动都先把 50GB 从远端搬下来，启动等待就会从秒级拉长到分钟级。</p>
+
+      <h4>EROX 的做法：把数据面串成一条链</h4>
+      <p>EROX 用一套<b>统一数据面</b>，把内核直挂、按需拉取、P2P、增量快照与节点侧降本串起来，加速镜像启动与快照分发。结果是：<b>50GB 工作区 1 秒就绪</b>、冷启动缩减 50%+，核心价值被概括为"读取即启动、状态可复制"。</p>
+
+      <h4>配套的 CubeSandbox v0.8.0</h4>
+      <ul>
+        <li>新增 <b>JuiceFS 存储后端</b>（预览）：模板跨节点共享，无需逐节点分发；元数据支持 Redis / MySQL / TiKV，对象存储支持 MinIO / 腾讯云 COS。</li>
+        <li><b>调度策略插件化</b>，可按业务定制装箱率与碎片率；运行状态统一采集（指标与日志不再散落各节点）。</li>
+        <li>异常恢复交还给沙箱自身（不再只靠上层心跳拉起），并增强沙箱间通信与 E2B 兼容性。</li>
+        <li>这一版共 128 个 PR、46 位贡献者、8 项核心特性。</li>
+      </ul>
+
+      <div class="callout">
+        <b>可复用结论：</b>做 agent 沙箱 / 代码执行平台时，瓶颈往往不在"冷启动本身"，而在<b>工作区数据的搬运</b>。优先设计<b>增量快照 + 按需拉取 + P2P 分发</b>，而不是每次全量恢复镜像。
+      </div>
+      <p class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808258&amp;idx=1&amp;sn=4954a3eef1bc7617fc57abd0fafbd0c3" target="_blank" rel="noopener">腾讯技术工程 · EROX</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808258&amp;idx=2&amp;sn=5ac2a5154f7b50cbda4ca96997130515" target="_blank" rel="noopener">CubeSandbox v0.8.0</a></p>
+    </div>
+  </section>
+
+  <!-- 03 工具推荐 -->
+  <section>
+    <div class="sec-h"><span class="num">// 03</span><h2>工具推荐</h2></div>
+    <div class="tools">
+
+      <div class="tool">
+        <div class="tname">rust-anything</div>
+        <p>AI 辅助的渐进式 Rust 迁移工具。先 profile 找出最慢的代码块，用一批测试输入记录原实现行为，生成 Rust 版后逐字节对拍。Prettier 迁移案例提速约 19 倍。</p>
+        <div class="src"><span class="tag">逛逛GitHub</span><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247538733&amp;idx=1&amp;sn=c33f37cdf7fec28606ddd9bfd5c87997" target="_blank" rel="noopener">了解详情</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname">munger-skill</div>
+        <p>把芒格的多元思维模型做成可装载的 Agent Skill（v2.0.0，MIT）。可用于分析激励结构、检查"能力圈"、以及先推演一个计划会怎样失败，再给建议。非官方作品，输出非芒格原话。</p>
+        <div class="src"><span class="tag">山行AI</span><a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&amp;mid=2247491315&amp;idx=1&amp;sn=4f0d3a0b5b06e0e5f8cacce8a0866a9b" target="_blank" rel="noopener">了解详情</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname">Vercel AI Gateway · Extraction</div>
+        <p>新增抽取模型（首个 ScaleDown <code>extract-1</code>）：从文本 / 图片 / PDF 中抽取字段并返回 0-1 置信度，便于标记不确定结果。通过 <code>ai@7.0.176+</code> 的 <code>experimental_extract</code> 调用，目前仅 AI SDK 可用。</p>
+        <div class="src"><span class="tag">Vercel</span><a href="https://vercel.com/changelog/ai-gateway-now-supports-extraction-models" target="_blank" rel="noopener">了解详情</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname">Vercel Drives · CLI / SDK</div>
+        <p>Drives 新增 <code>vercel drives</code> 命令与独立 SDK（<code>@vercel/drives</code> / <code>vercel-drives</code>），并有 REST 接口 <code>/v1/drives</code> 与独立权限，管理不再依赖 Sandbox API。</p>
+        <div class="src"><span class="tag">Vercel</span><a href="https://vercel.com/changelog/vercel-drives-adds-cli-commands-and-standalone-sdks" target="_blank" rel="noopener">了解详情</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname">LangChain Content Studio</div>
+        <p>已开源的"设计 agent"：每张图形是 HTML 页面、每段视频是动画时间线，产物保持可编辑、符合品牌；已产出 3000+ 素材。运行在 Deep Agents + Managed Deep Agents 上，可部署到 Slack。</p>
+        <div class="src"><span class="tag">LangChain</span><a href="https://www.youtube.com/watch?v=emId9_O2sU8" target="_blank" rel="noopener">了解详情</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname">Ladybird (alpha)</div>
+        <p>独立实现的浏览器内核，自带 HTML 解析、CSS、布局、JS、WASM。首个 alpha 提供 macOS / Linux 可安装包，免编译即可体验。</p>
+        <div class="src"><span class="tag">Simon Willison</span><a href="https://simonwillison.net/2026/Nov/23/ladybird/" target="_blank" rel="noopener">了解详情</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 实践指南 -->
+  <section>
+    <div class="sec-h"><span class="num">// 04</span><h2>实践指南</h2></div>
+
+    <div class="practice">
+      <h3><span class="pn">01</span>供应链安全：5400 个恶意 npm 包说明了什么</h3>
+      <p>Databricks 分析了 5400 个恶意 npm 包，系统梳理 2026 年的供应链威胁态势。配合 freeCodeCamp 的观点：企业 AI 流量难防护，是因为"安全相关信息藏在合法连接内部"——开发者把源码发给 coding assistant、内部应用把检索到的客户数据发给模型 API、agent 通过合规端点执行了业务从未意图的动作。评估 AI 网络防火墙时，要看它能否把一次 AI 交互绑定到足够上下文：<code>用户/负载身份</code>、<code>应用</code>、<code>模型</code>、<code>数据敏感度</code>、<code>目的地</code>、<code>提示意图</code>、<code>工具访问</code>、<code>下游动作</code>。</p>
+      <p class="src">来源：<a href="https://www.databricks.com/blog/what-5400-malicious-npm-packages-reveal-about-software-supply-chain-risk-2026" target="_blank" rel="noopener">Databricks</a> · <a href="https://www.freecodecamp.org/news/ai-network-firewalls-for-enterprise-security-architecture/" target="_blank" rel="noopener">freeCodeCamp</a></p>
+    </div>
+
+    <div class="practice">
+      <h3><span class="pn">02</span>防"意图劫持"：Semantic governance policies</h3>
+      <p>Google 的方案在每次工具调用执行前，用自然语言约束校验"这是否符合用户意图"，以拦截间接提示注入与意图劫持。在 AgentDojo 基准、Gemini 2.5 Flash agent 上，<b>攻击成功率从 48.7% 降到 0.9%</b>，同时保持较高任务可用性。开发者可在 Gemini 平台通过 Agent Gateway 预览使用。思路值得借鉴：<span class="hl">把"用户到底要什么"编码成可在运行时逐次校验的策略</span>，而不是只在输入端做过滤。</p>
+      <p class="src">来源：<a href="https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/" target="_blank" rel="noopener">Google Developers Blog</a></p>
+    </div>
+
+    <div class="practice">
+      <h3><span class="pn">03</span>Git 性能：三个"看起来无害"的操作会拖垮仓库</h3>
+      <p>微软给出 Azure Repos 的优化建议，同样适用于任何 Git 仓库：<br>
+      ① <b>直接提交二进制</b>——二进制版本间差异大、delta 压缩失效，仓库增长更快；<br>
+      ② <b>生成内容顺序不稳定</b>——每次增删少量数据但顺序不一致，Git 会存下额外数据；<br>
+      ③ <b>默认 clone 拉全部数据</b>——<code>git clone &lt;url&gt;</code> 默认拉取所有分支，某个开发者分支上的大文件会拖慢所有人。应对：partial clone、sparse-checkout、避免二进制入库。</p>
+      <p class="src">来源：<a href="https://devblogs.microsoft.com/devops/new-guidance-to-optimize-git-performance-in-azure-repos" target="_blank" rel="noopener">Microsoft for Developers</a></p>
+    </div>
+
+    <div class="practice">
+      <h3><span class="pn">04</span>给 agent 写 API：REST 还是 RPC 没那么重要，文档才重要</h3>
+      <p>微软用 6 个模型、2 家厂商、<b>1356 次运行</b>做了对照：<b>在有文档时</b>，REST、POST-only、RPC 风格 API 的成功率、失败调用数和 token 成本几乎一样；<b>在无文档时</b>，REST 大幅领先——因为 agent 能从 HTTP 方法"猜"出意图（PATCH 改、DELETE 删），而 RPC 端点（<code>/updateBin</code>、<code>/deleteBin</code>）必须查文档。结论：想服务 agent，<span class="hl">先把文档喂好，再谈风格</span>。</p>
+      <p class="src">来源：<a href="https://devblogs.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis" target="_blank" rel="noopener">Microsoft for Developers</a></p>
+    </div>
+
+    <div class="practice">
+      <h3><span class="pn">05</span>为 coding agent 改造 SDLC：三个真实案例</h3>
+      <p><b>Netflix</b>：为人和 agent 写了 45 份架构决策记录（ADR），加了一个"只贴已验证阻塞项"的 review agent，并通过单一 MCP 工具提供按域的 GraphRAG 上下文。<br>
+      <b>Agoda</b>：用模块化单体（domain components、Data Mapper、typed builders、ArchUnit 边界测试）在不大重写的前提下降低耦合——框架化改动使代码评审中位时间<b>缩短 64%</b>、初次反馈快 34%。<br>
+      <b>Slop Code Bench</b>：最强模型仅约 16% 分，说明 agent 长期演进代码库仍很难——所以"评审仍然重要"不是保守，而是数据结论。</p>
+      <p class="src">来源：<a href="https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Netflix</a> · <a href="https://www.infoq.com/news/2026/11/agoda-modular-monolith-framework/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Agoda</a> · <a href="https://www.youtube.com/watch?v=-NFMsM2y0Vk" target="_blank" rel="noopener">AI Engineer · Slop Bench</a></p>
+    </div>
+
+    <div class="practice">
+      <h3><span class="pn">06</span>CI 选型：GitHub Actions 的替代选项</h3>
+      <p>JetBrains 调研了 <b>838 个组织</b>实际在用哪些 CI/CD 工具、为什么。2026 年给团队换 CI 的理由变得具体：7 月 9 日托管 runner 故障超 9 小时、5 月 Megalodon 活动一下午把恶意 workflow 推进 5500+ 仓库、以及自托管 runner 收费风波（后因反弹推迟）。"替代"其实有四种含义——从"换一个执行器"到"整套迁移"，先想清楚你要解决哪一层问题。</p>
+      <p class="src">来源：<a href="https://blog.jetbrains.com/teamcity/2026/11/github-actions-alternatives/" target="_blank" rel="noopener">The JetBrains Blog</a></p>
+    </div>
+  </section>
+
+  <!-- 05 参考链接 -->
+  <section>
+    <div class="sec-h"><span class="num">// 05</span><h2>参考链接汇总</h2></div>
+    <div class="sources">
+      <ol>
+        <li><span class="feed">智谱</span><a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&amp;mid=2247494345&amp;idx=1&amp;sn=0ea26a769f134fefec42e33d59558c73" target="_blank" rel="noopener">GLM-5.4：瞄向泛Coding，首个Loop Transformer带来的惊喜</a></li>
+        <li><span class="feed">Simon Willison's Weblog</span><a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">GLM-5.4: Toward Generalized Coding with Our First Loop Transformer</a></li>
+        <li><span class="feed">夕小瑶科技说</span><a href="https://mp.weixin.qq.com/s?__biz=MjIwNzc2NTk0NQ==&amp;mid=2247623643&amp;idx=1&amp;sn=823a1a530eca4789c05138007017724b" target="_blank" rel="noopener">上手实测GLM-5.4，国模出了个手感顶级的Coding旗舰</a></li>
+        <li><span class="feed">Simon Willison's Weblog</span><a href="https://simonwillison.net/2026/Nov/23/ladybird/" target="_blank" rel="noopener">Ladybird's first alpha release</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/claude-code-mode/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Claude Code Adds Experimental Code Mode to Orchestrate Tool Calls with JavaScript</a></li>
+        <li><span class="feed">OpenAI</span><a href="https://x.com/OpenAI/status/2124980590717911527" target="_blank" rel="noopener">Introducing Shirudo, an open-source Linux runtime for agent-driven defense</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/jep-545-jdk-28/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">JEP 545 Moves ZGC Memory Preparation off the Startup Path in JDK 28</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/java-news-roundup-nov16-2026/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Java News Roundup: Java4Shell, Oracle CSPUs, OpenJDK, Azul Payara, BellSoft, Helidon, LangChain4j</a></li>
+        <li><span class="feed">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.148-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.148 (Insiders)</a></li>
+        <li><span class="feed">逛逛GitHub</span><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247538733&amp;idx=1&amp;sn=c33f37cdf7fec28606ddd9bfd5c87997" target="_blank" rel="noopener">GitHub 上开源不到 7 天拿下 7000 Star，让 AI 给旧项目性能提速</a></li>
+        <li><span class="feed">腾讯技术工程</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808258&amp;idx=1&amp;sn=4954a3eef1bc7617fc57abd0fafbd0c3" target="_blank" rel="noopener">50GB工作区秒级可访问，腾讯EROX破解Agent恢复难题</a></li>
+        <li><span class="feed">腾讯技术工程</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808258&amp;idx=2&amp;sn=5ac2a5154f7b50cbda4ca96997130515" target="_blank" rel="noopener">CubeSandbox v0.8.0 发布：跨机流动再进化，调度可定制，运行可观测</a></li>
+        <li><span class="feed">山行AI</span><a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&amp;mid=2247491315&amp;idx=1&amp;sn=4f0d3a0b5b06e0e5f8cacce8a0866a9b" target="_blank" rel="noopener">有人把芒格的决策方法，做成了一个开源 Skill</a></li>
+        <li><span class="feed">Vercel News</span><a href="https://vercel.com/changelog/ai-gateway-now-supports-extraction-models" target="_blank" rel="noopener">AI Gateway now supports extraction models</a></li>
+        <li><span class="feed">Vercel News</span><a href="https://vercel.com/changelog/vercel-drives-adds-cli-commands-and-standalone-sdks" target="_blank" rel="noopener">Vercel Drives adds CLI commands and standalone SDKs</a></li>
+        <li><span class="feed">LangChain</span><a href="https://www.youtube.com/watch?v=emId9_O2sU8" target="_blank" rel="noopener">We Open Sourced Our Design Brain</a></li>
+        <li><span class="feed">Databricks</span><a href="https://www.databricks.com/blog/what-5400-malicious-npm-packages-reveal-about-software-supply-chain-risk-2026" target="_blank" rel="noopener">What 5,400 Malicious npm Packages Reveal about Software Supply Chain Risk in 2026</a></li>
+        <li><span class="feed">freeCodeCamp</span><a href="https://www.freecodecamp.org/news/ai-network-firewalls-for-enterprise-security-architecture/" target="_blank" rel="noopener">AI Network Firewalls for Enterprise Security Architecture</a></li>
+        <li><span class="feed">Google Developers Blog</span><a href="https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/" target="_blank" rel="noopener">Securing AI agents against intent hijacking with Semantic governance policies</a></li>
+        <li><span class="feed">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/devops/new-guidance-to-optimize-git-performance-in-azure-repos" target="_blank" rel="noopener">New guidance to optimize Git performance in Azure Repos</a></li>
+        <li><span class="feed">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis" target="_blank" rel="noopener">Do AI coding agents struggle with non-REST APIs?</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Netflix at QConSF 2026: Retrofitting the SDLC for AI Coding Agents</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/agoda-modular-monolith-framework/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Agoda Reduces API Code Review Time by 64% with Modular Architecture</a></li>
+        <li><span class="feed">AI Engineer</span><a href="https://www.youtube.com/watch?v=-NFMsM2y0Vk" target="_blank" rel="noopener">12 Rules for a Software Factory That Doesn't Ship Slop — Dex Horthy, Factory</a></li>
+        <li><span class="feed">AINLP</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650457504&amp;idx=1&amp;sn=4ef9019cd406bb4dc750db443f0ebf29" target="_blank" rel="noopener">前 OpenAI CTO 开源 Inkling 2 Mini，循环模型也能拿来干活了</a></li>
+        <li><span class="feed">The JetBrains Blog</span><a href="https://blog.jetbrains.com/teamcity/2026/11/github-actions-alternatives/" target="_blank" rel="noopener">Best GitHub Actions Alternatives in 2026: What 838 Organizations Actually Use</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    tech_daily · developer_practice · generated 2026-11-24 · 数据窗口 2026-11-23 03:31 → 2026-11-24 03:31 · 185 篇新闻 / 424 来源
+  </footer>
+
+</div>
+</body>
+</html>

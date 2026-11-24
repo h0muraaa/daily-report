@@ -3,365 +3,384 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>开发者实践版 · 科技日报 2026-11-22</title>
+<title>科技日报 · 开发者实践版 | 2026-11-24</title>
 <style>
   :root{
-    --bg:#0d1117; --bg-panel:#161b22; --bg-code:#0a0e14;
-    --border:#30363d; --text:#c9d1d9; --text-dim:#8b949e; --text-bright:#e6edf3;
-    --accent:#58a6ff; --green:#3fb950; --purple:#bc8cff; --orange:#ffa657; --red:#ff7b72; --cyan:#76e3ea;
-    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,"Courier New",monospace;
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+    --text:#c9d1d9; --muted:#8b949e; --dim:#6e7681;
+    --blue:#58a6ff; --green:#3fb950; --yellow:#d29922; --red:#f85149;
+    --purple:#bc8cff; --cyan:#39c5cf; --orange:#ffa657;
+    --mono:'JetBrains Mono','Fira Code','SF Mono','Cascadia Code',Consolas,'Liberation Mono',monospace;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
   body{
-    background:var(--bg); color:var(--text);
-    font-family:var(--mono);
-    line-height:1.65; font-size:15px;
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--mono); font-size:15px; line-height:1.7;
     -webkit-font-smoothing:antialiased;
-    padding:0 0 60px;
   }
-  .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
+  a{color:var(--blue); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 20px 80px;}
 
-  /* Header */
-  header{
-    border-bottom:1px solid var(--border);
-    padding:38px 0 26px; margin-bottom:34px;
-    background:linear-gradient(180deg,rgba(88,166,255,0.06),transparent);
-  }
-  .kicker{
-    color:var(--green); font-size:12.5px; letter-spacing:2px;
-    text-transform:uppercase; margin-bottom:12px;
-  }
-  .kicker::before{content:"~/ ";opacity:.6;}
-  header h1{
-    font-size:29px; color:var(--text-bright); letter-spacing:-.5px;
-    margin-bottom:14px; font-weight:700;
-  }
-  header h1 .prompt{color:var(--green);}
-  header h1 .cursor{color:var(--accent);animation:blink 1.1s steps(1) infinite;}
-  @keyframes blink{50%{opacity:0;}}
-  .meta{color:var(--text-dim); font-size:13px; display:flex;flex-wrap:wrap;gap:8px 18px;}
-  .meta span{display:inline-flex;align-items:center;gap:6px;}
-  .meta b{color:var(--text);font-weight:600;}
-  .badge{
-    display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;
-    border:1px solid var(--border);color:var(--accent);background:rgba(88,166,255,.08);
-  }
+  /* terminal header */
+  .term{max-width:1040px; margin:28px auto 0; background:var(--panel);
+    border:1px solid var(--border); border-radius:10px 10px 0 0; overflow:hidden;}
+  .term-bar{display:flex; align-items:center; gap:8px; padding:10px 14px;
+    background:var(--panel2); border-bottom:1px solid var(--border);}
+  .dot{width:12px; height:12px; border-radius:50%;}
+  .dot.r{background:#ff5f56;} .dot.y{background:#ffbd2e;} .dot.g{background:#27c93f;}
+  .term-title{margin-left:10px; color:var(--muted); font-size:12.5px;}
+  .hero{max-width:1040px; margin:0 auto; padding:30px 34px 26px;
+    background:var(--panel); border:1px solid var(--border); border-top:0;}
+  .hero h1{font-size:25px; margin:0 0 6px; color:#e6edf3; letter-spacing:.5px;}
+  .hero h1 .accent{color:var(--green);}
+  .hero .sub{color:var(--muted); font-size:13px; margin-bottom:18px;}
+  .hero .sub .k{color:var(--blue);}
+  .stats{display:flex; flex-wrap:wrap; gap:10px;}
+  .stat{background:var(--panel2); border:1px solid var(--border); border-radius:8px;
+    padding:8px 14px; font-size:12.5px; color:var(--muted);}
+  .stat b{color:var(--text); font-size:15px; display:block; line-height:1.3;}
 
-  /* Section heading */
-  section{margin-bottom:44px;}
-  h2{
-    font-size:19px;color:var(--text-bright);margin-bottom:20px;
-    padding-bottom:10px;border-bottom:1px dashed var(--border);
-    display:flex;align-items:center;gap:10px;
-  }
-  h2 .idx{
-    font-size:12px;color:var(--bg);background:var(--accent);
-    padding:2px 8px;border-radius:5px;font-weight:700;
-  }
+  /* section */
+  section{margin-top:46px;}
+  .sec-h{display:flex; align-items:baseline; gap:12px; margin-bottom:22px;
+    padding-bottom:12px; border-bottom:1px dashed var(--border);}
+  .sec-h .num{color:var(--green); font-size:13px; opacity:.9;}
+  .sec-h h2{font-size:20px; margin:0; color:#e6edf3; font-weight:600; letter-spacing:.3px;}
 
-  /* News cards */
-  .card{
-    background:var(--bg-panel);border:1px solid var(--border);border-radius:9px;
-    padding:18px 20px;margin-bottom:16px;position:relative;
-    transition:border-color .18s,transform .18s;
-  }
-  .card:hover{border-color:var(--accent);transform:translateY(-1px);}
-  .card::before{
-    content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;
-    border-radius:3px;background:var(--accent);
-  }
-  .card h3{
-    font-size:15.5px;color:var(--text-bright);margin-bottom:9px;
-    padding-left:6px;line-height:1.4;
-  }
-  .card h3 .tag{
-    font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:4px;
-    margin-right:9px;vertical-align:middle;letter-spacing:.5px;
-  }
-  .t-tool{background:rgba(63,185,80,.14);color:var(--green);border:1px solid rgba(63,185,80,.35);}
-  .t-db{background:rgba(188,140,255,.14);color:var(--purple);border:1px solid rgba(188,140,255,.35);}
-  .t-sec{background:rgba(255,123,114,.14);color:var(--red);border:1px solid rgba(255,123,114,.35);}
-  .t-infra{background:rgba(255,166,87,.14);color:var(--orange);border:1px solid rgba(255,166,87,.35);}
-  .t-fe{background:rgba(118,227,234,.14);color:var(--cyan);border:1px solid rgba(118,227,234,.35);}
-  .card p{color:var(--text);padding-left:6px;font-size:14px;margin-bottom:10px;}
-  .card p:last-of-type{margin-bottom:8px;}
-  .card code{
-    background:var(--bg-code);color:var(--orange);padding:1px 6px;border-radius:4px;
-    font-size:13px;border:1px solid var(--border);
-  }
-  .src{
-    padding-left:6px;font-size:12px;color:var(--text-dim);
-  }
-  .src a{color:var(--accent);text-decoration:none;border-bottom:1px dotted rgba(88,166,255,.4);}
-  .src a:hover{border-bottom-color:var(--accent);color:var(--cyan);}
+  /* news cards */
+  .news{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px 16px; margin-bottom:14px; border-left:3px solid var(--border);
+    transition:border-color .15s, transform .15s;}
+  .news:hover{border-left-color:var(--blue); transform:translateX(2px);}
+  .news .idx{color:var(--green); font-size:12.5px; margin-right:8px;}
+  .news h3{display:inline; font-size:16px; color:#e6edf3; font-weight:600; margin:0; line-height:1.5;}
+  .news p{margin:10px 0 12px; color:var(--text); font-size:14px;}
+  .news p b{color:var(--yellow); font-weight:600;}
+  .news .hl{color:var(--cyan);}
+  .src{font-size:12px; color:var(--dim);}
+  .src a{color:var(--blue);}
+  .src .tag{display:inline-block; background:var(--panel2); border:1px solid var(--border);
+    border-radius:5px; padding:1px 7px; margin-right:6px; color:var(--muted);}
+  .src .tag::before{content:"📎 ";}
 
-  /* Deep dive */
-  .deep{
-    background:var(--bg-panel);border:1px solid var(--border);border-radius:9px;
-    padding:22px;margin-bottom:20px;
-  }
-  .deep h3{
-    font-size:17px;color:var(--text-bright);margin-bottom:14px;
-  }
-  .deep h3 .h-num{color:var(--purple);margin-right:8px;}
-  .deep p{font-size:14px;margin-bottom:12px;}
-  .deep ul{margin:0 0 12px 4px;padding-left:20px;}
-  .deep li{font-size:14px;margin-bottom:8px;color:var(--text);}
-  .deep li::marker{color:var(--accent);}
-  .deep pre{
-    background:var(--bg-code);border:1px solid var(--border);border-radius:7px;
-    padding:14px 16px;overflow-x:auto;margin:6px 0 16px;font-size:12.8px;line-height:1.6;
-  }
-  .deep pre .c-com{color:#6e7681;font-style:italic;}
-  .deep pre .c-kw{color:var(--purple);}
-  .deep pre .c-fn{color:var(--accent);}
-  .deep pre .c-str{color:var(--green);}
-  .deep pre .c-num{color:var(--orange);}
-  .deep .note{
-    border-left:3px solid var(--orange);background:rgba(255,166,87,.06);
-    padding:10px 14px;border-radius:0 6px 6px 0;font-size:13.5px;color:var(--text);margin-bottom:12px;
-  }
-  .deep .note b{color:var(--orange);}
+  /* deep dive */
+  .deep{background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:24px 26px; margin-bottom:22px;}
+  .deep .dnum{color:var(--purple); font-size:12.5px; letter-spacing:1px;}
+  .deep h2{font-size:19px; color:#e6edf3; margin:6px 0 16px; font-weight:600;}
+  .deep h4{font-size:14.5px; color:var(--orange); margin:20px 0 8px; font-weight:600;}
+  .deep p{margin:0 0 12px; font-size:14px;}
+  .deep ul{margin:8px 0 14px; padding-left:22px;}
+  .deep li{margin-bottom:7px; font-size:14px;}
+  .deep li b{color:var(--yellow);}
+  pre{background:#010409; border:1px solid var(--border); border-radius:8px;
+    padding:14px 16px; overflow-x:auto; font-size:12.8px; line-height:1.6;
+    color:#e6edf3; margin:12px 0 16px;}
+  pre .c{color:var(--dim);} pre .kw{color:#ff7b72;} pre .s{color:#a5d6ff;}
+  pre .fn{color:#d2a8ff;} pre .n{color:var(--orange);}
+  .callout{background:rgba(88,166,255,.08); border-left:3px solid var(--blue);
+    border-radius:0 8px 8px 0; padding:12px 16px; font-size:13.5px; color:var(--text); margin:14px 0;}
+  .callout b{color:var(--blue);}
 
-  /* Tool grid */
-  .tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
-  @media(max-width:640px){.tool-grid{grid-template-columns:1fr;}}
-  .tool{
-    background:var(--bg-panel);border:1px solid var(--border);border-radius:9px;
-    padding:16px 18px;transition:border-color .18s;
-  }
-  .tool:hover{border-color:var(--green);}
-  .tool h4{font-size:14.5px;color:var(--text-bright);margin-bottom:7px;display:flex;align-items:center;gap:8px;}
-  .tool h4 .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;box-shadow:0 0 8px rgba(63,185,80,.7);}
-  .tool p{font-size:13px;color:var(--text);margin-bottom:8px;}
+  /* tool grid */
+  .tools{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .tool{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:18px 18px 14px;}
+  .tool .tname{font-size:15px; color:var(--green); font-weight:600; margin-bottom:4px;}
+  .tool .tname::before{content:"> "; color:var(--dim);}
+  .tool p{margin:6px 0 10px; font-size:13.5px; color:var(--text);}
   .tool .src{font-size:11.5px;}
 
-  /* Practice */
-  .practice{
-    background:var(--bg-panel);border:1px solid var(--border);border-left:3px solid var(--cyan);
-    border-radius:0 9px 9px 0;padding:18px 20px;margin-bottom:16px;
-  }
-  .practice h3{font-size:15px;color:var(--text-bright);margin-bottom:9px;}
-  .practice p{font-size:14px;margin-bottom:9px;}
-  .practice .takeaway{
-    font-size:13px;color:var(--cyan);background:rgba(118,227,234,.07);
-    padding:8px 12px;border-radius:6px;border:1px solid rgba(118,227,234,.2);margin-bottom:4px;
-  }
-  .practice .takeaway::before{content:"▶ ";opacity:.8;}
+  /* practice */
+  .practice{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:20px 22px; margin-bottom:14px;}
+  .practice h3{font-size:15.5px; color:#e6edf3; margin:0 0 8px; font-weight:600;}
+  .practice h3 .pn{color:var(--green); margin-right:8px;}
+  .practice p{margin:0 0 8px; font-size:13.8px;}
+  .practice p:last-child{margin-bottom:0;}
+  .practice code, .news code, .deep code{background:var(--panel2); border:1px solid var(--border);
+    border-radius:4px; padding:1px 6px; font-size:12.8px; color:var(--orange);}
 
-  /* Sources footer */
-  .sources{
-    background:var(--bg-panel);border:1px solid var(--border);border-radius:9px;
-    padding:22px;margin-top:10px;
-  }
-  .sources h2{border:none;margin-bottom:14px;padding:0;}
-  .sources ol{margin-left:20px;}
-  .sources li{font-size:12.8px;color:var(--text-dim);margin-bottom:8px;line-height:1.5;}
-  .sources li a{color:var(--accent);text-decoration:none;}
-  .sources li a:hover{color:var(--cyan);text-decoration:underline;}
-  .sources .feed{color:var(--green);font-size:11.5px;margin-left:6px;}
+  /* sources */
+  .sources{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:8px 20px 18px;}
+  .sources ol{margin:0; padding-left:24px;}
+  .sources li{margin:9px 0; font-size:13px; color:var(--text);}
+  .sources li .feed{color:var(--muted); font-size:11.5px; display:inline-block;
+    background:var(--panel2); border:1px solid var(--border); border-radius:4px;
+    padding:0 6px; margin-right:7px;}
 
-  footer.end{
-    text-align:center;color:var(--text-dim);font-size:12px;margin-top:40px;
-    padding-top:22px;border-top:1px solid var(--border);
+  footer{margin-top:40px; text-align:center; color:var(--dim); font-size:12px;
+    border-top:1px dashed var(--border); padding-top:20px;}
+
+  @media (max-width:720px){
+    .tools{grid-template-columns:1fr;}
+    .hero{padding:22px 20px;}
+    .wrap{padding:0 14px 60px;}
   }
-  footer.end .prompt{color:var(--green);}
 </style>
 </head>
 <body>
+
+<div class="term">
+  <div class="term-bar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="term-title">~/tech-daily — developer_practice.html — 2026-11-24</span>
+  </div>
+  <div class="hero">
+    <h1><span class="accent">$</span> tech_daily <span style="color:var(--muted)">--role</span> developer_practice</h1>
+    <div class="sub">
+      数据窗口 <span class="k">2026-11-23 03:31 → 2026-11-24 03:31</span> ·
+      导出时间 <span class="k">2026-11-24 03:31</span> · mode <span class="k">parallel_compact</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>185</b>原始新闻</div>
+      <div class="stat"><b>424</b>信息来源</div>
+      <div class="stat"><b>7</b>热榜条目</div>
+      <div class="stat"><b>2</b>深度解读</div>
+      <div class="stat"><b>6</b>工具推荐</div>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
 
-  <header>
-    <div class="kicker">Tech Daily · developer_practice</div>
-    <h1><span class="prompt">$</span> 开发者实践版日报<span class="cursor">_</span></h1>
-    <div class="meta">
-      <span>📅 <b>2026-11-22</b></span>
-      <span>🗂 覆盖 <b>85</b> 条新闻 / <b>424</b> 个来源</span>
-      <span class="badge">一线开发者视角</span>
-    </div>
-  </header>
-
-  <!-- ============ 今日技术热榜 ============ -->
+  <!-- 01 热榜 -->
   <section>
-    <h2><span class="idx">01</span>今日技术热榜</h2>
+    <div class="sec-h"><span class="num">// 01</span><h2>今日技术热榜</h2></div>
 
-    <div class="card">
-      <h3><span class="tag t-db">DB</span>PostgreSQL 19 发布：在线重打包表 + 查询计划控制</h3>
-      <p>PostgreSQL 全球开发组正式发布 <b>PostgreSQL 19</b>，这次的重点是<strong>降低运维开销</strong>。最受关注的是可以在<strong>不停机</strong>的前提下对表做物理重打包（online table repacking），这对长期运行、膨胀（bloat）严重又无法轻易安排维护窗口的生产库意义很大。此外还引入了查询计划（query plan）控制能力、复制相关改进，以及若干应用开发层面的变化。对一线后端来说，这意味着重写大表、治理膨胀这类"停机才能干"的重活，终于可以在线完成。</p>
-      <p class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/postgresql-19-released/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ · PostgreSQL 19 Released with Online Table Repacking and Query Planning Controls</a></p>
+    <div class="news">
+      <span class="idx">01</span>
+      <h3>GLM-5.4 发布：首个 Loop Transformer，正式瞄准"泛 Coding"</h3>
+      <p>智谱发布 GLM-5.4，这是其第一代采用 <b>Loop Transformer</b> 架构的旗舰模型——一组权重共享的层循环执行，在参数量不变的前提下做更深度的推理，官方称智能水平达到 2-3T 级模型效果。定位从"会写代码"升级为<span class="hl">"泛 Coding"</span>：代码成为完成更广泛任务的基础能力，并新增视觉能力，已上线 ZCode、Trae、WorkBuddy、Qoder 等编码平台，API 待安全评估后开放、权重计划开源。Simon Willison 指出这是一周内第二个 looped transformer；实测（夕小瑶）用 Three.js 从零搭出 450㎡ 火锅店 3D 场景，并能靠截图自检修正穿模。</p>
+      <div class="src"><span class="tag">智谱</span><a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&amp;mid=2247494345&amp;idx=1&amp;sn=0ea26a769f134fefec42e33d59558c73" target="_blank" rel="noopener">原文</a> · <span class="tag">Simon Willison</span><a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">原文</a> · <span class="tag">夕小瑶科技说</span><a href="https://mp.weixin.qq.com/s?__biz=MjIwNzc2NTk0NQ==&amp;mid=2247623643&amp;idx=1&amp;sn=823a1a530eca4789c05138007017724b" target="_blank" rel="noopener">实测</a></div>
     </div>
 
-    <div class="card">
-      <h3><span class="tag t-fe">FE</span>React Flow v13 与 Next.js 年内 51 个安全公告</h3>
-      <p>React 中文周刊第 300 期带来两条前端硬消息。<b>React Flow v13</b> 是该库两年来的首个主版本，新增了 <code>useNode</code> 之类的钩子，专门用来削减大型节点式流程图里的无谓重渲染；同时 Vue Flow 也正式并入 xyflow 家族，和 Svelte Flow 并列。另一条更值得警惕：<b>Next.js 今年已发布 51 个安全公告</b>，团队解释<strong>约 70% 的漏洞都出自至少一年前就已存在的旧代码</strong>，而 AI 让这些旧 bug 更容易被挖出来——这既是提醒你尽快跟进安全版本，也是"AI 时代漏洞发现成本骤降"的一个真实样本。</p>
-      <p class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247550664&idx=1&sn=9d00f61295d6f3c7b6924eec38d0cd82" target="_blank" rel="noopener">印记中文 · React 中文周刊 #300</a></p>
+    <div class="news">
+      <span class="idx">02</span>
+      <h3>Ladybird 浏览器发布首个 alpha：从零实现的浏览器内核可以装了</h3>
+      <p>Ladybird 是一个 2026 年仍从零造轮子的浏览器项目：自带 HTML 解析、CSS 引擎、布局、JavaScript 甚至 WebAssembly 实现，只借用 HarfBuzz（文字整形）、Skia（2D 图形）、ffmpeg、SQLite 等少数外部组件，其余来自项目本身或其更激进的前身 SerenityOS。首个 alpha 意味着 macOS / Linux 用户<span class="hl">无需自行编译即可安装</span>。Simon Willison 实测评价"很快、UI 轻量直观"，对浏览器内核与前端渲染感兴趣的开发者值得围观。</p>
+      <div class="src"><span class="tag">Simon Willison's Weblog</span><a href="https://simonwillison.net/2026/Nov/23/ladybird/" target="_blank" rel="noopener">原文</a></div>
     </div>
 
-    <div class="card">
-      <h3><span class="tag t-tool">AI-DEV</span>Claude Code 推出实验性 Code Mode：把多步工具调用写成一段 JS</h3>
-      <p>Claude Code 上线实验性功能 <b>Code Mode</b>：可以把原本分几步的工具调用<strong>写成一段 JavaScript</strong>，再交给 Claude 执行。按 Addy Osmani 的介绍，这样命令可以<strong>并行执行</strong>，输出也能<strong>先过滤再进上下文</strong>——当某个工具返回一大段内容时，Claude 只需把筛出来的部分放进上下文。这是"用代码编排工具调用"这一 harness 思路在主流 Agent 工具里的落地，对关心 Agent 工程化的开发者值得关注。</p>
-      <p class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457454&idx=1&sn=e8803562104d18eddc2f77d2b6797ff2" target="_blank" rel="noopener">AINLP · Claude Code 推出实验性新功能 Code Mode</a></p>
+    <div class="news">
+      <span class="idx">03</span>
+      <h3>Claude Code 加入实验性 Code Mode：用 JavaScript 编排工具调用</h3>
+      <p>Anthropic 的实验性 <b>Code Mode</b> 让 Claude Code 直接编写 JavaScript，用来链式、并行、过滤 <code>Bash</code> / <code>Read</code> / <code>Edit</code> 等工具调用，同时调整了 auto 模式与 hooks 审查这些调用的方式。核心思路是把"多步工具往返"折叠成"一段可编程的编排脚本"，减少来回次数与中间态——这对构建长链路 agent 的开发者是一个值得关注的新范式。</p>
+      <div class="src"><span class="tag">InfoQ</span><a href="https://www.infoq.com/news/2026/11/claude-code-mode/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">原文</a></div>
     </div>
 
-    <div class="card">
-      <h3><span class="tag t-sec">SEC</span>Claude Code "Don't Ask Again" 功能被曝泄露密钥</h3>
-      <p>安全公司 <b>Apiiro</b> 发现 Claude Code 因其实现 "Don't Ask Again"（不再询问）的方式，会把密钥暴露在公开仓库中——它把密钥存进了开发者本地的 <code>claude/settings.local.json</code>。研究人员在 <code>settings.local.json</code> 文件里识别出 <b>1,122</b> 个密钥，另有 <b>1,160</b> 个散落在 git 历史、共享的 <code>settings.json</code> 以及仓库中保存的 Agent 聊天记录里。强烈建议检查你项目里的 <code>.gitignore</code> 是否覆盖了这些本地配置文件，并审计历史提交。</p>
-      <p class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/claude-code-leaking-secrets/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ · Claude Code Has Been Leaking Secrets through its "Don't Ask Again" Feature</a></p>
+    <div class="news">
+      <span class="idx">04</span>
+      <h3>OpenAI 开源 Shirudo：让 Agent 用 eBPF 动态防御 Linux</h3>
+      <p>OpenAI 与 Cisco 合作推出开源 Linux runtime <b>Shirudo</b>，允许 Agent 编写动态 <b>eBPF</b> 控制逻辑来屏蔽漏洞利用，在不中断服务的前提下为防御者争取测试和推送补丁的时间。这是"自防御基础设施"的第一步：目标是由人类与 AI agent 协同定位受影响系统、测试并共享防护规则、再在不打断工作负载的情况下部署。</p>
+      <div class="src"><span class="tag">OpenAI</span><a href="https://x.com/OpenAI/status/2124980590717911527" target="_blank" rel="noopener">原文</a></div>
     </div>
 
-    <div class="card">
-      <h3><span class="tag t-tool">CI/CD</span>GitHub Agentic Workflows 正式可用：单次默认预算 10 美元</h3>
-      <p>GitHub 宣布 <b>Agentic Workflows</b> 正式可用（GA），可在 GitHub Actions 里运行编码智能体，处理 Issue 分类、CI 故障分析等仓库任务，而且<strong>单次默认预算为 10 美元</strong>。设计上做了双重隔离：智能体启动时只拿到<strong>只读权限</strong>，它提出的任何更改都由<strong>独立作业</strong>执行，后者持有各自的写入令牌；智能体跑在被 <b>Agent Workflow Firewall</b> 保护的沙箱容器里，应用修改前会有威胁检测作业扫描变更。你用自然语言 Markdown 描述任务、YAML Front Matter 配置，项目会把它编译成标准 Actions 工作流。注意官方 FAQ 明确：这些保护不会自动覆盖你直接授予的写权限，也不适用于工作流作者自行添加的自定义作业——<strong>安全性取决于具体配置</strong>。</p>
-      <p class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297679&idx=3&sn=fe2ba84194f99d85b4e4a94b6cb08f2c" target="_blank" rel="noopener">InfoQ · GitHub 让 AI 接管工作流，单次默认预算 10 美元</a></p>
+    <div class="news">
+      <span class="idx">05</span>
+      <h3>JDK 28 集成 JEP 545：ZGC 把内存准备移出启动路径</h3>
+      <p>JEP 545 已并入 JDK 28：把堆内存准备移到并发 worker 线程，ZGC 随扩展预触碰内存，并在 Linux 6.1+ 将小页升级为大页。官方给出 <b>38% 启动</b>、<b>90% 预热</b>的提升，但该 JEP 的 2 MB 初始堆依赖 JEP 546 的自适应堆大小标志（默认关闭）。同周 Java 生态还有 Java4Shell RCE 漏洞、Oracle CSPU、Lazy Constants 进入 JDK 28、LangChain4j / Micrometer 等点版本发布。</p>
+      <div class="src"><span class="tag">InfoQ · JEP 545</span><a href="https://www.infoq.com/news/2026/11/jep-545-jdk-28/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">原文</a> · <span class="tag">InfoQ · Java 周报</span><a href="https://www.infoq.com/news/2026/11/java-news-roundup-nov16-2026/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">原文</a></div>
     </div>
 
-    <div class="card">
-      <h3><span class="tag t-infra">CLOUD</span>AWS Lambda 支持 GPU 推理：单 GPU 共享模型跑 48 路并发</h3>
-      <p>AWS Lambda 现在可以通过 <b>Lambda Managed Instances</b> 在 EC2 G 系列 GPU 实例上运行 Event Functions，<strong>单个 GPU 上的同一个模型最多支持 48 路并发调用</strong>。它提供 <b>vLLM 和 SGLang</b> 基础镜像，<strong>无需编写 handler 代码</strong>，异步超时最长可到 90 分钟。计费方式是实例价格外加 <b>9.75% 的费用</b>。首批实测报告称发布耗时约 8 分钟，且<strong>不支持响应流式输出</strong>——做实时对话类服务时要特别留意这一点。</p>
-      <p class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/aws-lambda-gpu-managed-instances/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ · AWS Lambda Now Runs GPU Inference with 48 Concurrent Invocations Sharing One Model per GPU</a></p>
+    <div class="news">
+      <span class="idx">06</span>
+      <h3>VS Code 1.148 (Insiders)：Agent 会话管理与编辑器标签改进</h3>
+      <p>最新 Insiders 构建带来 <b>agent session management</b>（agent 会话管理）与编辑器标签体验改进。这透露出 IDE 的一个方向：把"多个 agent 会话"当作一等公民来管理，而不是塞进单一聊天窗口——对日常在 IDE 内跑 coding agent 的开发者，值得提前关注交互变化。</p>
+      <div class="src"><span class="tag">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.148-(insiders)" target="_blank" rel="noopener">原文</a></div>
     </div>
 
-    <div class="card">
-      <h3><span class="tag t-infra">SANDBOX</span>Google 发布 Agent Compute Engine：微虚拟机 + 检查点，密钥不进沙箱</h3>
-      <p>Google 推出托管服务 <b>Agent Compute Engine</b>，专门用于安全地运行 AI 智能体。它在<strong>隔离的 microVM</strong> 中执行，并支持<strong>检查点（checkpointing）</strong>——可以挂起、恢复执行环境。安全设计上最关键的一点：<strong>凭证、API Key、OAuth refresh token 都放在智能体沙箱之外</strong>，由外部的 <b>Agent Gateway</b> 负责鉴权并注入所需密钥。这个"secret 永不进沙箱"的架构模式，是自建 Agent 平台时非常值得借鉴的隔离范式。</p>
-      <p class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/google-agent-compute-engine/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">InfoQ · Google Announces Agent Compute Engine for Secure AI Agent Execution</a></p>
-    </div>
-
-    <div class="card">
-      <h3><span class="tag t-tool">IDE</span>VS Code 1.148 Insiders：Agent 会话管理 + 编辑器标签改进</h3>
-      <p>Visual Studio Code 团队放出 <b>1.148 Insiders</b> 构建，本版亮点是 <strong>Agent 会话管理（agent session management）</strong>与<strong>编辑器标签（editor tab）</strong>的改进。对于已经在编辑器里把 AI Agent 当日常搭档的开发者，会话管理的增强能更好地组织、切换、追踪多轮 Agent 交互；标签改进则优化了多文件并行编辑时的体验。</p>
-      <p class="src">📎 来源：<a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.148-(insiders)" target="_blank" rel="noopener">Microsoft for Developers · Visual Studio Code 1.148 (Insiders)</a></p>
+    <div class="news">
+      <span class="idx">07</span>
+      <h3>rust-anything 开源不到 7 天破 7000 Star：用 AI 把老项目逐块迁到 Rust</h3>
+      <p>作者用 Claude Code 约 17 小时，把代码格式化工具 Prettier 分批迁到 Rust：同样逐个启动命令行程序格式化 2000+ 文件，从 ~2 分钟降到 ~7 秒（约 19 倍）。工具工作流是——先找出最慢的代码块 → 用一批测试输入记录原实现行为与报错 → 生成 Rust 版 → 逐字节比对约 1.7 万条用例（全部对上）。同样方法也把 Node.js 的 json-server 重写成可打包的独立 Rust 程序。这是"AI + 对拍测试"做渐进式重写的可复用范式。</p>
+      <div class="src"><span class="tag">逛逛GitHub</span><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247538733&amp;idx=1&amp;sn=c33f37cdf7fec28606ddd9bfd5c87997" target="_blank" rel="noopener">原文</a></div>
     </div>
   </section>
 
-  <!-- ============ 深度技术解读 ============ -->
+  <!-- 02 深度解读 -->
   <section>
-    <h2><span class="idx">02</span>深度技术解读</h2>
+    <div class="sec-h"><span class="num">// 02</span><h2>深度技术解读</h2></div>
 
     <div class="deep">
-      <h3><span class="h-num">▍</span>Code Mode 与 Agent Harness：为什么把工具调用写成代码？</h3>
-      <p>传统 Agent 的循环是"模型 → 一次工具调用 → 结果回灌 → 模型再决定下一步"，每一步都是一次往返（round-trip），工具返回的原始大块内容还会全量塞进上下文。Code Mode 换了个思路：<strong>让模型直接写一段程序去编排工具</strong>。这带来三个直接收益：</p>
-      <ul>
-        <li><b>并行</b>：一段 JS 里可以同时发起多个互不依赖的工具调用，而不是串行等一轮又一轮。</li>
-        <li><b>先过滤再入上下文</b>：在代码里先对工具输出做筛选，只把需要的部分返回给模型。工具吐出一大段内容时，context 只吃到筛过的结果，既省 token 又更聚焦。</li>
-        <li><b>确定性控制流</b>：循环、条件、聚合这些逻辑交给代码执行，而不是让模型用自然语言"想"出来，减少不确定性。</li>
-      </ul>
-      <pre><span class="c-com">// 概念示意：把多步工具调用写成一段并行 + 过滤的 JS</span>
-<span class="c-kw">const</span> [issues, ci] = <span class="c-kw">await</span> <span class="c-fn">Promise.all</span>([
-  tools.<span class="c-fn">fetchIssues</span>({ label: <span class="c-str">"bug"</span> }),
-  tools.<span class="c-fn">ciStatus</span>({ repo: <span class="c-str">"acme/api"</span> }),
-]);
+      <div class="dnum">DEEP DIVE · 01</div>
+      <h2>Loop Transformer：不堆参数，用"循环"换深度</h2>
+      <p>标准 Transformer 里，每一层在前向过程中只运行一次。而 <b>Loop Transformer</b> 让一组<b>权重共享</b>的层循环执行多次，每一轮在上一轮输出的 hidden state 上继续精炼。这样可以在<span class="hl">参数量不增加的前提下</span>获得更深的有效网络——本质上是用"每个 token 更多的串行计算"去换取"更少的参数与显存"。</p>
 
-<span class="c-com">// 只把关键字段放进上下文，而不是整个返回体</span>
-<span class="c-kw">return</span> issues
-  .<span class="c-fn">filter</span>(i =&gt; i.severity === <span class="c-str">"high"</span>)
-  .<span class="c-fn">map</span>(i =&gt; ({ id: i.id, title: i.title }))
-  .<span class="c-fn">concat</span>({ ci: ci.status });</pre>
-      <p>这与 Armin Ronacher（Earendil）在 AI Engineer 分享里的观察一脉相承：Pi 这个 coding agent <strong>一年前和现在用的是同一套核心工具</strong>，但"能做更多事"，因为模型变强了。他公布自己的会话数据——纠正次数变少、单个任务从 2.5 分钟跑到 14 分钟、开启过 141 个项目但只留下 10~15 个常驻。核心结论是：<strong>人类的注意力仍然是瓶颈</strong>，所以要先做一个能产出优秀软件的"工坊（workshop）"，再去建一个批量生产的"工厂（factory）"。Code Mode 这类让工具调用更高效、更省上下文的设计，本质就是在为这个"工坊"降噪。</p>
-      <p class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457454&idx=1&sn=e8803562104d18eddc2f77d2b6797ff2" target="_blank" rel="noopener">AINLP · Code Mode</a> ；<a href="https://www.youtube.com/watch?v=JNexz3Tbiu8" target="_blank" rel="noopener">AI Engineer · Build the Workshop Before the Software Factory — Armin Ronacher</a></p>
+      <pre><span class="c"># 概念示意（非真实实现）</span>
+<span class="kw">def</span> <span class="fn">forward</span>(x):
+    x = <span class="fn">embed</span>(x)
+    <span class="kw">for</span> layer <span class="kw">in</span> layers_before:        <span class="c"># 常规层，各跑一次</span>
+        x = layer(x)
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="n">range</span>(loop_iters):        <span class="c"># 同一组共享权重，跑 N 次</span>
+        x = shared_block(x)            <span class="c"># 每轮精炼 hidden state</span>
+    <span class="kw">for</span> layer <span class="kw">in</span> layers_after:
+        x = layer(x)
+    <span class="kw">return</span> <span class="fn">lm_head</span>(x)</pre>
+
+      <h4>一周内出现两个样本</h4>
+      <ul>
+        <li><b>GLM-5.4</b>（智谱 / Z.ai）：首个 Loop Transformer 旗舰，官方称智能水平对标 2-3T 级模型；实测中它会出现"雷霆大思考"式超长思考，但团队认为这种反思与自我修正恰是长程任务所需的能力。</li>
+        <li><b>Inkling 2 Mini</b>（Thinking Machines Lab，Mira Murati 创办）：总参数 <b>26.4B</b>，对每个 token 把中间层<b>跑三遍</b>；原生低精度权重约 20GB，官方称可在至少 32GB 内存的 Mac 上本地运行，能读图、写代码、搜索和调用工具。</li>
+      </ul>
+
+      <div class="callout">
+        <b>工程视角：</b>Loop 架构把"参数量 / 显存"和"推理算力"解耦开来。对端侧与本地部署尤其友好——Inkling 2 Mini 能塞进个人电脑就是例证；代价是每 token 的串行计算变多，延迟与算力开销上升。选型时先问：你是被<b>显存</b>卡住，还是被<b>吞吐/延迟</b>卡住？
+      </div>
+      <p class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&amp;mid=2247494345&amp;idx=1&amp;sn=0ea26a769f134fefec42e33d59558c73" target="_blank" rel="noopener">智谱</a> · <a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">Simon Willison</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650457504&amp;idx=1&amp;sn=4ef9019cd406bb4dc750db443f0ebf29" target="_blank" rel="noopener">AINLP（Inkling 2 Mini）</a></p>
     </div>
 
     <div class="deep">
-      <h3><span class="h-num">▍</span>Lean 形式化验证：1700 万行证明如何一天内被机器核验</h3>
-      <p>本周最热的"技术事件"其实是黎曼猜想的形式化证明获得 Lean 与 Mathlib 社区认证——但对开发者真正有价值的，是它背后的工程机制：<strong>一个 1700 万行的 Lean 库，是怎么在一天内被全球社区独立核验的？</strong></p>
-      <p><b>Lean 是什么？</b>可以把它理解成"一套写数学证明的语言 + 一个检查证明的工具"。数学家或 AI 把命题、条件和推理写进去，系统告诉你还差什么没证，最后检查这些步骤能否推出结论。<b>核心理念是"信任小内核"</b>：找证明可以用各种聪明办法，但负责最后检查的程序要尽量简单——否则一份复杂证明通过了复杂检查器，你又得去相信另一套同样复杂的程序。Lean 由 Leonardo de Moura 于 2013 年在微软研究院启动，2014 年 6 月发布 0.1，2023 年发布 Lean 4.0，Mathlib 也随之完成迁移。</p>
-      <p><b>验证是怎么做的？</b>社区并没有"相信作者"，而是用一组硬标准逐条核查：</p>
+      <div class="dnum">DEEP DIVE · 02</div>
+      <h2>Agent 沙箱的"数据恢复"瓶颈：腾讯 EROX 统一数据面</h2>
+      <p>AI Agent 是<b>有状态、长会话</b>的：装依赖、跑任务、等大模型返回，状态要跨会话、跨节点延续。计算资源可以随时重建，数据却必须"随用随到"。腾讯技术工程给出的具体场景很扎心——<span class="hl">4000 台 Agent 沙箱，每台挂一个 50GB 工作区</span>，任务结束还要跨节点继续。若每次启动都先把 50GB 从远端搬下来，启动等待就会从秒级拉长到分钟级。</p>
+
+      <h4>EROX 的做法：把数据面串成一条链</h4>
+      <p>EROX 用一套<b>统一数据面</b>，把内核直挂、按需拉取、P2P、增量快照与节点侧降本串起来，加速镜像启动与快照分发。结果是：<b>50GB 工作区 1 秒就绪</b>、冷启动缩减 50%+，核心价值被概括为"读取即启动、状态可复制"。</p>
+
+      <h4>配套的 CubeSandbox v0.8.0</h4>
       <ul>
-        <li>确认被证明的<strong>命题本身</strong>就是 Mathlib 里那条 <code>RiemannHypothesis</code>（经数论专家审校）；</li>
-        <li>库能<strong>无错误编译</strong>，数十人复现出同一份原始证明导出文件；</li>
-        <li>专门加一个只导入 Mathlib 的文件把命题隔离出来，用<strong>两个独立工具</strong>比对，确认"证的就是它"；</li>
-        <li>导出的证明再经 <strong>Lean 官方内核、con-leche、con-ron</strong> 以及多个第三方独立检查器核验；con-leche / con-ron 还附带了相对集合论的形式化证明，论证它们"不可能接受一个错误的证明"。</li>
+        <li>新增 <b>JuiceFS 存储后端</b>（预览）：模板跨节点共享，无需逐节点分发；元数据支持 Redis / MySQL / TiKV，对象存储支持 MinIO / 腾讯云 COS。</li>
+        <li><b>调度策略插件化</b>，可按业务定制装箱率与碎片率；运行状态统一采集（指标与日志不再散落各节点）。</li>
+        <li>异常恢复交还给沙箱自身（不再只靠上层心跳拉起），并增强沙箱间通信与 E2B 兼容性。</li>
+        <li>这一版共 128 个 PR、46 位贡献者、8 项核心特性。</li>
       </ul>
-      <div class="note"><b>给开发者的启示：</b>这不是"AI 单枪匹马证出来了"，而是一次典型的<strong>可复现、可独立核验</strong>的工程实践——多检查器交叉验证、命题隔离、导出文件可复现。形式化验证的这套"不信任作者、只信任内核 + 多方复核"的思路，和我们在代码世界里追求的<strong>可重复构建、独立审计、最小信任面</strong>完全是同一套工程哲学。</div>
-      <p class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457430&idx=1&sn=6467348827cca9593ffb316f9644c255" target="_blank" rel="noopener">AINLP · 黎曼猜想证明获确认，Lean 到底是个啥</a> ；<a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650542528&idx=1&sn=8b7f643249d68c9cbcf00364e994c926" target="_blank" rel="noopener">网易科技 · Lean 官方认证</a></p>
+
+      <div class="callout">
+        <b>可复用结论：</b>做 agent 沙箱 / 代码执行平台时，瓶颈往往不在"冷启动本身"，而在<b>工作区数据的搬运</b>。优先设计<b>增量快照 + 按需拉取 + P2P 分发</b>，而不是每次全量恢复镜像。
+      </div>
+      <p class="src">来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808258&amp;idx=1&amp;sn=4954a3eef1bc7617fc57abd0fafbd0c3" target="_blank" rel="noopener">腾讯技术工程 · EROX</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808258&amp;idx=2&amp;sn=5ac2a5154f7b50cbda4ca96997130515" target="_blank" rel="noopener">CubeSandbox v0.8.0</a></p>
     </div>
   </section>
 
-  <!-- ============ 工具推荐 ============ -->
+  <!-- 03 工具推荐 -->
   <section>
-    <h2><span class="idx">03</span>工具推荐</h2>
-    <div class="tool-grid">
+    <div class="sec-h"><span class="num">// 03</span><h2>工具推荐</h2></div>
+    <div class="tools">
 
       <div class="tool">
-        <h4><span class="dot"></span>Muru</h4>
-        <p>mod_wsgi 作者 <b>Graham Dumpleton</b>（20 年前写了 mod_wsgi）的新作——一个 <b>AI 辅助编写的 Rust 服务器</b>，目标是为 ASGI / WSGI 的 Python 应用在<strong>开发和生产</strong>环境都提供最好的运行工具。他把整个开发过程写成了极为详细的系列文章，包括"import once, fork many"的 worker 设计、开发期 HTTPS 等。想看一个资深工程师如何从零设计 Python 生产服务器，是很好的读物。</p>
-        <p class="src">📎 <a href="https://simonwillison.net/2026/Nov/21/muru/" target="_blank" rel="noopener">Simon Willison's Weblog · Muru</a></p>
+        <div class="tname">rust-anything</div>
+        <p>AI 辅助的渐进式 Rust 迁移工具。先 profile 找出最慢的代码块，用一批测试输入记录原实现行为，生成 Rust 版后逐字节对拍。Prettier 迁移案例提速约 19 倍。</p>
+        <div class="src"><span class="tag">逛逛GitHub</span><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247538733&amp;idx=1&amp;sn=c33f37cdf7fec28606ddd9bfd5c87997" target="_blank" rel="noopener">了解详情</a></div>
       </div>
 
       <div class="tool">
-        <h4><span class="dot"></span>Inkling 2 Mini</h4>
-        <p>Thinking Machines 推出的"本地 Opus"型编码模型：总计 <b>264 亿参数的循环 MoE</b>，中间层每 token 跑三遍，典型内存占用约 <b>20GB</b>，能在 <b>32GB 的 Mac</b> 上跑。<b>DeepSWE v1.1 得分 48.2%</b>。有实测把它用在打 Python 补丁、调用工具、修 SQLite 查询、写日志 CLI、做正则检查器等任务上，OpenRouter 上全套测试加重试约 <b>3 美分</b>。适合把它当"本地小助手"，高风险修复仍需复核。</p>
-        <p class="src">📎 <a href="https://www.youtube.com/watch?v=JFoMJ17MOOA" target="_blank" rel="noopener">AICodeKing · Inkling 2 Mini is "Local Opus"?</a> ；<a href="https://supertechfans.com/cn/post/2026-11-22-HackerNews/" target="_blank" rel="noopener">HackerNews 每日摘要</a></p>
+        <div class="tname">munger-skill</div>
+        <p>把芒格的多元思维模型做成可装载的 Agent Skill（v2.0.0，MIT）。可用于分析激励结构、检查"能力圈"、以及先推演一个计划会怎样失败，再给建议。非官方作品，输出非芒格原话。</p>
+        <div class="src"><span class="tag">山行AI</span><a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&amp;mid=2247491315&amp;idx=1&amp;sn=4f0d3a0b5b06e0e5f8cacce8a0866a9b" target="_blank" rel="noopener">了解详情</a></div>
       </div>
 
       <div class="tool">
-        <h4><span class="dot"></span>React Flow v13</h4>
-        <p>支撑了无数节点编辑器与工作流 UI 的库，时隔两年迎来首个主版本。新增 <code>useNode</code> 之类钩子大幅减少大型流程图的无谓重渲染。同家族里，<b>Vue Flow 正式加入 xyflow</b>，与 Svelte Flow 并列。已有用户可参考官方迁移指南升级。</p>
-        <p class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247550664&amp;idx=1&amp;sn=9d00f61295d6f3c7b6924eec38d0cd82" target="_blank" rel="noopener">印记中文 · React 中文周刊 #300</a></p>
+        <div class="tname">Vercel AI Gateway · Extraction</div>
+        <p>新增抽取模型（首个 ScaleDown <code>extract-1</code>）：从文本 / 图片 / PDF 中抽取字段并返回 0-1 置信度，便于标记不确定结果。通过 <code>ai@7.0.176+</code> 的 <code>experimental_extract</code> 调用，目前仅 AI SDK 可用。</p>
+        <div class="src"><span class="tag">Vercel</span><a href="https://vercel.com/changelog/ai-gateway-now-supports-extraction-models" target="_blank" rel="noopener">了解详情</a></div>
       </div>
 
       <div class="tool">
-        <h4><span class="dot"></span>GTA 6 PC 移植开源项目</h4>
-        <p>不靠主机串流、直接从 Xbox 版入手让 GTA 6 在 PC 上运行的项目，目前已 <b>6000+ Star</b>，是同类中热度最高的。原理是：Xbox 与 PC 能读懂同一套处理器指令，难点在于游戏调用的是 Xbox 的系统功能（读地图、画水面）。目前项目已能从特定版本中提取部分模型、贴图、音频，并把 <strong>26000+ 个着色器</strong>转成 PC 版本。想研究大型游戏逆向/移植工程，可去围观学习。</p>
-        <p class="src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247538720&idx=1&sn=6ea7087788cd169d016cc3c8f7d0cbc6" target="_blank" rel="noopener">逛逛GitHub · 很多人想把 GTA 6 移植到 PC 上，这 4 个 GitHub 项目在努力</a></p>
+        <div class="tname">Vercel Drives · CLI / SDK</div>
+        <p>Drives 新增 <code>vercel drives</code> 命令与独立 SDK（<code>@vercel/drives</code> / <code>vercel-drives</code>），并有 REST 接口 <code>/v1/drives</code> 与独立权限，管理不再依赖 Sandbox API。</p>
+        <div class="src"><span class="tag">Vercel</span><a href="https://vercel.com/changelog/vercel-drives-adds-cli-commands-and-standalone-sdks" target="_blank" rel="noopener">了解详情</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname">LangChain Content Studio</div>
+        <p>已开源的"设计 agent"：每张图形是 HTML 页面、每段视频是动画时间线，产物保持可编辑、符合品牌；已产出 3000+ 素材。运行在 Deep Agents + Managed Deep Agents 上，可部署到 Slack。</p>
+        <div class="src"><span class="tag">LangChain</span><a href="https://www.youtube.com/watch?v=emId9_O2sU8" target="_blank" rel="noopener">了解详情</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tname">Ladybird (alpha)</div>
+        <p>独立实现的浏览器内核，自带 HTML 解析、CSS、布局、JS、WASM。首个 alpha 提供 macOS / Linux 可安装包，免编译即可体验。</p>
+        <div class="src"><span class="tag">Simon Willison</span><a href="https://simonwillison.net/2026/Nov/23/ladybird/" target="_blank" rel="noopener">了解详情</a></div>
       </div>
 
     </div>
   </section>
 
-  <!-- ============ 实践指南 ============ -->
+  <!-- 04 实践指南 -->
   <section>
-    <h2><span class="idx">04</span>实践指南</h2>
+    <div class="sec-h"><span class="num">// 04</span><h2>实践指南</h2></div>
 
     <div class="practice">
-      <h3>① 写好代码的秘诀：先别犯低级错误</h3>
-      <p>Sean Goedecke 的观点很反直觉却很实用：<strong>写出好代码的秘诀是避免灾难性错误</strong>，而不是追求"天才洞见"。他用棋类和网球类比——如果你下棋从不随手送子，几乎能赢所有人；如果你只是很擅长把球回过去，即便从不打出制胜分也能赢大多数人。很多工程师误以为"写好代码"等于"发现漂亮的新抽象"，但这些是加分项，不是主线。</p>
-      <p class="takeaway">别为了炫技引入新抽象。把"不犯大错"刻进肌肉记忆：不乱改边界、不吞异常、不引入难以回滚的耦合。</p>
-      <p class="src">📎 来源：<a href="https://seangoedecke.com/to-code-well-avoid-blunders/" target="_blank" rel="noopener">seangoedecke.com · To code well, avoid blunders</a></p>
+      <h3><span class="pn">01</span>供应链安全：5400 个恶意 npm 包说明了什么</h3>
+      <p>Databricks 分析了 5400 个恶意 npm 包，系统梳理 2026 年的供应链威胁态势。配合 freeCodeCamp 的观点：企业 AI 流量难防护，是因为"安全相关信息藏在合法连接内部"——开发者把源码发给 coding assistant、内部应用把检索到的客户数据发给模型 API、agent 通过合规端点执行了业务从未意图的动作。评估 AI 网络防火墙时，要看它能否把一次 AI 交互绑定到足够上下文：<code>用户/负载身份</code>、<code>应用</code>、<code>模型</code>、<code>数据敏感度</code>、<code>目的地</code>、<code>提示意图</code>、<code>工具访问</code>、<code>下游动作</code>。</p>
+      <p class="src">来源：<a href="https://www.databricks.com/blog/what-5400-malicious-npm-packages-reveal-about-software-supply-chain-risk-2026" target="_blank" rel="noopener">Databricks</a> · <a href="https://www.freecodecamp.org/news/ai-network-firewalls-for-enterprise-security-architecture/" target="_blank" rel="noopener">freeCodeCamp</a></p>
     </div>
 
     <div class="practice">
-      <h3>② 验证被高估了：测试通过 ≠ 代码可靠</h3>
-      <p>InfoQ 报道了 Flask 作者、Pi 开发者 <b>Armin Ronacher</b> 讲的一个真实场景：系统崩了，一屋子工程师开会，没人说得清故障在哪一层、哪段代码出了问题，<strong>所有人都在向 Claude 提问</strong>。Pi 每天收到约 40~50 个新 Issue，Agent 已接手判断 Bug 是否存在、复现、写测试、生成修复、分配优先级，甚至在某些任务里"只要测试证明修复有效、工程师确认就直接合并"。但 Pi 创始人 Mario Zechner 反问得很直白："如果你什么都不需要理解了，那你还有什么用？公司为什么还需要你？"</p>
-      <p class="takeaway">让 AI 写测试、找 Bug 可以，但别把"理解系统"也外包出去。测试通过是必要条件，不是可靠性的充分证明——尤其当测试也是 AI 写的时候。</p>
-      <p class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297679&idx=1&sn=dd1f73bda6afad335919a3d693192da8" target="_blank" rel="noopener">InfoQ · Pi 创始人曝现代开发奇观：系统崩了，一屋子工程师都在问 Claude 怎么修</a></p>
+      <h3><span class="pn">02</span>防"意图劫持"：Semantic governance policies</h3>
+      <p>Google 的方案在每次工具调用执行前，用自然语言约束校验"这是否符合用户意图"，以拦截间接提示注入与意图劫持。在 AgentDojo 基准、Gemini 2.5 Flash agent 上，<b>攻击成功率从 48.7% 降到 0.9%</b>，同时保持较高任务可用性。开发者可在 Gemini 平台通过 Agent Gateway 预览使用。思路值得借鉴：<span class="hl">把"用户到底要什么"编码成可在运行时逐次校验的策略</span>，而不是只在输入端做过滤。</p>
+      <p class="src">来源：<a href="https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/" target="_blank" rel="noopener">Google Developers Blog</a></p>
     </div>
 
     <div class="practice">
-      <h3>③ REALCLI：任务成功 ≠ 协作合格</h3>
-      <p>北航、人大与 IQuest Research 的论文 REALCLI（arXiv:2610.22507）指出一个被现有 Benchmark 忽略的维度：<strong>当 Agent 在长任务执行中需要与人协作时，它表现如何？</strong>现实任务不是"接收完整需求 → 自主执行 → 交付"的线性流程，用户会中途补充信息、修改需求，高风险操作还需授权确认。REALCLI 用<strong>成对评测</strong>——同一任务在"自主执行模式（REALCLI-EXEC）"与"协作模式"两种条件下运行，共享目标、环境和验证器，从而同时考察任务效果与人机协作质量。</p>
-      <p class="takeaway">评估自己团队用的 CLI Agent 时，别只看它能不能把任务做完，也要看它中途如何追问、如何请求确认、如何响应需求变更——这才是生产环境里的真实分。</p>
-      <p class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457430&idx=2&sn=a0fa28a9316b8094eab01d0470cfa089" target="_blank" rel="noopener">AINLP · 你的 CLI Agent 真的靠谱吗？REALCLI 论文解读</a></p>
+      <h3><span class="pn">03</span>Git 性能：三个"看起来无害"的操作会拖垮仓库</h3>
+      <p>微软给出 Azure Repos 的优化建议，同样适用于任何 Git 仓库：<br>
+      ① <b>直接提交二进制</b>——二进制版本间差异大、delta 压缩失效，仓库增长更快；<br>
+      ② <b>生成内容顺序不稳定</b>——每次增删少量数据但顺序不一致，Git 会存下额外数据；<br>
+      ③ <b>默认 clone 拉全部数据</b>——<code>git clone &lt;url&gt;</code> 默认拉取所有分支，某个开发者分支上的大文件会拖慢所有人。应对：partial clone、sparse-checkout、避免二进制入库。</p>
+      <p class="src">来源：<a href="https://devblogs.microsoft.com/devops/new-guidance-to-optimize-git-performance-in-azure-repos" target="_blank" rel="noopener">Microsoft for Developers</a></p>
+    </div>
+
+    <div class="practice">
+      <h3><span class="pn">04</span>给 agent 写 API：REST 还是 RPC 没那么重要，文档才重要</h3>
+      <p>微软用 6 个模型、2 家厂商、<b>1356 次运行</b>做了对照：<b>在有文档时</b>，REST、POST-only、RPC 风格 API 的成功率、失败调用数和 token 成本几乎一样；<b>在无文档时</b>，REST 大幅领先——因为 agent 能从 HTTP 方法"猜"出意图（PATCH 改、DELETE 删），而 RPC 端点（<code>/updateBin</code>、<code>/deleteBin</code>）必须查文档。结论：想服务 agent，<span class="hl">先把文档喂好，再谈风格</span>。</p>
+      <p class="src">来源：<a href="https://devblogs.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis" target="_blank" rel="noopener">Microsoft for Developers</a></p>
+    </div>
+
+    <div class="practice">
+      <h3><span class="pn">05</span>为 coding agent 改造 SDLC：三个真实案例</h3>
+      <p><b>Netflix</b>：为人和 agent 写了 45 份架构决策记录（ADR），加了一个"只贴已验证阻塞项"的 review agent，并通过单一 MCP 工具提供按域的 GraphRAG 上下文。<br>
+      <b>Agoda</b>：用模块化单体（domain components、Data Mapper、typed builders、ArchUnit 边界测试）在不大重写的前提下降低耦合——框架化改动使代码评审中位时间<b>缩短 64%</b>、初次反馈快 34%。<br>
+      <b>Slop Code Bench</b>：最强模型仅约 16% 分，说明 agent 长期演进代码库仍很难——所以"评审仍然重要"不是保守，而是数据结论。</p>
+      <p class="src">来源：<a href="https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Netflix</a> · <a href="https://www.infoq.com/news/2026/11/agoda-modular-monolith-framework/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">InfoQ · Agoda</a> · <a href="https://www.youtube.com/watch?v=-NFMsM2y0Vk" target="_blank" rel="noopener">AI Engineer · Slop Bench</a></p>
+    </div>
+
+    <div class="practice">
+      <h3><span class="pn">06</span>CI 选型：GitHub Actions 的替代选项</h3>
+      <p>JetBrains 调研了 <b>838 个组织</b>实际在用哪些 CI/CD 工具、为什么。2026 年给团队换 CI 的理由变得具体：7 月 9 日托管 runner 故障超 9 小时、5 月 Megalodon 活动一下午把恶意 workflow 推进 5500+ 仓库、以及自托管 runner 收费风波（后因反弹推迟）。"替代"其实有四种含义——从"换一个执行器"到"整套迁移"，先想清楚你要解决哪一层问题。</p>
+      <p class="src">来源：<a href="https://blog.jetbrains.com/teamcity/2026/11/github-actions-alternatives/" target="_blank" rel="noopener">The JetBrains Blog</a></p>
     </div>
   </section>
 
-  <!-- ============ 参考链接汇总 ============ -->
-  <section class="sources">
-    <h2><span class="idx">05</span>参考链接汇总</h2>
-    <ol>
-      <li><a href="https://www.infoq.com/news/2026/11/postgresql-19-released/" target="_blank" rel="noopener">PostgreSQL 19 Released with Online Table Repacking and Query Planning Controls</a><span class="feed">InfoQ</span></li>
-      <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTkwMjM0OQ==&mid=2247550664&idx=1&sn=9d00f61295d6f3c7b6924eec38d0cd82" target="_blank" rel="noopener">React 中文周刊 #300 - React Flow v13 与 Next.js 的 51 个安全公告</a><span class="feed">印记中文</span></li>
-      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457454&idx=1&sn=e8803562104d18eddc2f77d2b6797ff2" target="_blank" rel="noopener">Claude Code 推出实验性新功能 Code Mode</a><span class="feed">AINLP</span></li>
-      <li><a href="https://www.infoq.com/news/2026/11/claude-code-leaking-secrets/" target="_blank" rel="noopener">Claude Code Has Been Leaking Secrets through its "Don't Ask Again" Feature</a><span class="feed">InfoQ</span></li>
-      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297679&idx=3&sn=fe2ba84194f99d85b4e4a94b6cb08f2c" target="_blank" rel="noopener">GitHub 让 AI 接管工作流，单次默认预算 10 美元：是不是太大方了？</a><span class="feed">InfoQ</span></li>
-      <li><a href="https://www.infoq.com/news/2026/11/aws-lambda-gpu-managed-instances/" target="_blank" rel="noopener">AWS Lambda Now Runs GPU Inference with 48 Concurrent Invocations Sharing One Model per GPU</a><span class="feed">InfoQ</span></li>
-      <li><a href="https://www.infoq.com/news/2026/11/google-agent-compute-engine/" target="_blank" rel="noopener">Google Announces Agent Compute Engine for Secure AI Agent Execution</a><span class="feed">InfoQ</span></li>
-      <li><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.148-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.148 (Insiders)</a><span class="feed">Microsoft for Developers</span></li>
-      <li><a href="https://www.youtube.com/watch?v=JNexz3Tbiu8" target="_blank" rel="noopener">Build the Workshop Before the Software Factory — Armin Ronacher, Earendil</a><span class="feed">AI Engineer</span></li>
-      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457430&idx=1&sn=6467348827cca9593ffb316f9644c255" target="_blank" rel="noopener">黎曼猜想证明获确认，Lean 到底是个啥</a><span class="feed">AINLP</span></li>
-      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650542528&idx=1&sn=8b7f643249d68c9cbcf00364e994c926" target="_blank" rel="noopener">Lean 官方认证、马斯克转发！Claude 参与的黎曼猜想证明机器验证通过</a><span class="feed">网易科技</span></li>
-      <li><a href="https://simonwillison.net/2026/Nov/21/muru/" target="_blank" rel="noopener">Muru</a><span class="feed">Simon Willison's Weblog</span></li>
-      <li><a href="https://www.youtube.com/watch?v=JFoMJ17MOOA" target="_blank" rel="noopener">Inkling 2 Mini is "Local Opus"?</a><span class="feed">AICodeKing</span></li>
-      <li><a href="https://supertechfans.com/cn/post/2026-11-22-HackerNews/" target="_blank" rel="noopener">2026-11-22 Hacker News Top Stories</a><span class="feed">HackerNews每日摘要 on SuperTechFans</span></li>
-      <li><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247538720&idx=1&sn=6ea7087788cd169d016cc3c8f7d0cbc6" target="_blank" rel="noopener">很多人想把《GTA 6》移植到 PC 上，这 4 个 GitHub 项目在努力</a><span class="feed">逛逛GitHub</span></li>
-      <li><a href="https://seangoedecke.com/to-code-well-avoid-blunders/" target="_blank" rel="noopener">To code well, avoid blunders</a><span class="feed">seangoedecke.com</span></li>
-      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297679&idx=1&sn=dd1f73bda6afad335919a3d693192da8" target="_blank" rel="noopener">Pi 创始人曝现代开发奇观：系统崩了，一屋子工程师都在问 Claude 怎么修</a><span class="feed">InfoQ</span></li>
-      <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457430&idx=2&sn=a0fa28a9316b8094eab01d0470cfa089" target="_blank" rel="noopener">你的 CLI Agent 真的靠谱吗？REALCLI 论文解读</a><span class="feed">AINLP</span></li>
-    </ol>
+  <!-- 05 参考链接 -->
+  <section>
+    <div class="sec-h"><span class="num">// 05</span><h2>参考链接汇总</h2></div>
+    <div class="sources">
+      <ol>
+        <li><span class="feed">智谱</span><a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&amp;mid=2247494345&amp;idx=1&amp;sn=0ea26a769f134fefec42e33d59558c73" target="_blank" rel="noopener">GLM-5.4：瞄向泛Coding，首个Loop Transformer带来的惊喜</a></li>
+        <li><span class="feed">Simon Willison's Weblog</span><a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">GLM-5.4: Toward Generalized Coding with Our First Loop Transformer</a></li>
+        <li><span class="feed">夕小瑶科技说</span><a href="https://mp.weixin.qq.com/s?__biz=MjIwNzc2NTk0NQ==&amp;mid=2247623643&amp;idx=1&amp;sn=823a1a530eca4789c05138007017724b" target="_blank" rel="noopener">上手实测GLM-5.4，国模出了个手感顶级的Coding旗舰</a></li>
+        <li><span class="feed">Simon Willison's Weblog</span><a href="https://simonwillison.net/2026/Nov/23/ladybird/" target="_blank" rel="noopener">Ladybird's first alpha release</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/claude-code-mode/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Claude Code Adds Experimental Code Mode to Orchestrate Tool Calls with JavaScript</a></li>
+        <li><span class="feed">OpenAI</span><a href="https://x.com/OpenAI/status/2124980590717911527" target="_blank" rel="noopener">Introducing Shirudo, an open-source Linux runtime for agent-driven defense</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/jep-545-jdk-28/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">JEP 545 Moves ZGC Memory Preparation off the Startup Path in JDK 28</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/java-news-roundup-nov16-2026/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Java News Roundup: Java4Shell, Oracle CSPUs, OpenJDK, Azul Payara, BellSoft, Helidon, LangChain4j</a></li>
+        <li><span class="feed">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/vscode-blog/visual-studio-code-1.148-(insiders)" target="_blank" rel="noopener">Visual Studio Code 1.148 (Insiders)</a></li>
+        <li><span class="feed">逛逛GitHub</span><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&amp;mid=2247538733&amp;idx=1&amp;sn=c33f37cdf7fec28606ddd9bfd5c87997" target="_blank" rel="noopener">GitHub 上开源不到 7 天拿下 7000 Star，让 AI 给旧项目性能提速</a></li>
+        <li><span class="feed">腾讯技术工程</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808258&amp;idx=1&amp;sn=4954a3eef1bc7617fc57abd0fafbd0c3" target="_blank" rel="noopener">50GB工作区秒级可访问，腾讯EROX破解Agent恢复难题</a></li>
+        <li><span class="feed">腾讯技术工程</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYwMjI2MA==&amp;mid=2649808258&amp;idx=2&amp;sn=5ac2a5154f7b50cbda4ca96997130515" target="_blank" rel="noopener">CubeSandbox v0.8.0 发布：跨机流动再进化，调度可定制，运行可观测</a></li>
+        <li><span class="feed">山行AI</span><a href="https://mp.weixin.qq.com/s?__biz=MzU2NzkxNDY0Ng==&amp;mid=2247491315&amp;idx=1&amp;sn=4f0d3a0b5b06e0e5f8cacce8a0866a9b" target="_blank" rel="noopener">有人把芒格的决策方法，做成了一个开源 Skill</a></li>
+        <li><span class="feed">Vercel News</span><a href="https://vercel.com/changelog/ai-gateway-now-supports-extraction-models" target="_blank" rel="noopener">AI Gateway now supports extraction models</a></li>
+        <li><span class="feed">Vercel News</span><a href="https://vercel.com/changelog/vercel-drives-adds-cli-commands-and-standalone-sdks" target="_blank" rel="noopener">Vercel Drives adds CLI commands and standalone SDKs</a></li>
+        <li><span class="feed">LangChain</span><a href="https://www.youtube.com/watch?v=emId9_O2sU8" target="_blank" rel="noopener">We Open Sourced Our Design Brain</a></li>
+        <li><span class="feed">Databricks</span><a href="https://www.databricks.com/blog/what-5400-malicious-npm-packages-reveal-about-software-supply-chain-risk-2026" target="_blank" rel="noopener">What 5,400 Malicious npm Packages Reveal about Software Supply Chain Risk in 2026</a></li>
+        <li><span class="feed">freeCodeCamp</span><a href="https://www.freecodecamp.org/news/ai-network-firewalls-for-enterprise-security-architecture/" target="_blank" rel="noopener">AI Network Firewalls for Enterprise Security Architecture</a></li>
+        <li><span class="feed">Google Developers Blog</span><a href="https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/" target="_blank" rel="noopener">Securing AI agents against intent hijacking with Semantic governance policies</a></li>
+        <li><span class="feed">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/devops/new-guidance-to-optimize-git-performance-in-azure-repos" target="_blank" rel="noopener">New guidance to optimize Git performance in Azure Repos</a></li>
+        <li><span class="feed">Microsoft for Developers</span><a href="https://devblogs.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis" target="_blank" rel="noopener">Do AI coding agents struggle with non-REST APIs?</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Netflix at QConSF 2026: Retrofitting the SDLC for AI Coding Agents</a></li>
+        <li><span class="feed">InfoQ</span><a href="https://www.infoq.com/news/2026/11/agoda-modular-monolith-framework/?utm_campaign=infoq_content&amp;utm_source=infoq&amp;utm_medium=feed&amp;utm_term=global" target="_blank" rel="noopener">Agoda Reduces API Code Review Time by 64% with Modular Architecture</a></li>
+        <li><span class="feed">AI Engineer</span><a href="https://www.youtube.com/watch?v=-NFMsM2y0Vk" target="_blank" rel="noopener">12 Rules for a Software Factory That Doesn't Ship Slop — Dex Horthy, Factory</a></li>
+        <li><span class="feed">AINLP</span><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&amp;mid=2650457504&amp;idx=1&amp;sn=4ef9019cd406bb4dc750db443f0ebf29" target="_blank" rel="noopener">前 OpenAI CTO 开源 Inkling 2 Mini，循环模型也能拿来干活了</a></li>
+        <li><span class="feed">The JetBrains Blog</span><a href="https://blog.jetbrains.com/teamcity/2026/11/github-actions-alternatives/" target="_blank" rel="noopener">Best GitHub Actions Alternatives in 2026: What 838 Organizations Actually Use</a></li>
+      </ol>
+    </div>
   </section>
 
-  <footer class="end">
-    <span class="prompt">$</span> tech-daily-generator --role developer_practice · 2026-11-22 · 面向一线开发者
+  <footer>
+    tech_daily · developer_practice · generated 2026-11-24 · 数据窗口 2026-11-23 03:31 → 2026-11-24 03:31 · 185 篇新闻 / 424 来源
   </footer>
 
 </div>

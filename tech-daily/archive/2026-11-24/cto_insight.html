@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · CTO洞察版 · 2026-11-24</title>
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --panel: #ffffff;
+    --ink: #1f2937;
+    --ink-soft: #4b5563;
+    --muted: #6b7280;
+    --line: #e2e8f0;
+    --navy: #1e3a5f;
+    --navy-2: #2c5282;
+    --accent: #3b6ea5;
+    --accent-soft: #eaf1f9;
+    --slate: #475569;
+    --warn: #b45309;
+    --warn-bg: #fff7ed;
+    --good: #166534;
+    --good-bg: #f0fdf4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 32px 20px 64px; }
+
+  /* Header */
+  header.masthead {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 60%, #3b6ea5 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 30px 34px;
+    box-shadow: 0 10px 30px rgba(30,58,95,.22);
+    position: relative;
+    overflow: hidden;
+  }
+  header.masthead::after {
+    content: "";
+    position: absolute; right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255,255,255,.16), transparent 70%);
+    border-radius: 50%;
+  }
+  .masthead .kicker {
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: #bcd3ee; font-weight: 600;
+  }
+  .masthead h1 { margin: 8px 0 6px; font-size: 27px; font-weight: 700; letter-spacing: .5px; }
+  .masthead .meta { font-size: 13px; color: #d6e4f5; display: flex; flex-wrap: wrap; gap: 16px; }
+  .masthead .meta span { display: inline-flex; align-items: center; gap: 5px; }
+
+  /* Section */
+  section { margin-top: 30px; }
+  .sec-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--line);
+  }
+  .sec-head .num {
+    width: 30px; height: 30px; flex: 0 0 30px;
+    background: var(--navy); color: #fff; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+  }
+  .sec-head h2 { margin: 0; font-size: 20px; color: var(--navy); font-weight: 700; }
+  .sec-head .sub { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+  /* Cards */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.04);
+  }
+  .card h3 {
+    margin: 0 0 10px; font-size: 16.5px; color: var(--navy);
+    line-height: 1.45;
+  }
+  .card p { margin: 0 0 10px; color: var(--ink-soft); }
+  .card p:last-child { margin-bottom: 0; }
+  .tag {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    padding: 2px 9px; border-radius: 20px; margin-right: 6px;
+    background: var(--accent-soft); color: var(--navy-2);
+    letter-spacing: .3px;
+  }
+  .tag.hot { background: #fdecec; color: #b91c1c; }
+  .tag.risk { background: var(--warn-bg); color: var(--warn); }
+  .tag.opp { background: var(--good-bg); color: var(--good); }
+
+  /* Key insights list */
+  .insights { counter-reset: ins; }
+  .insight {
+    background: var(--panel); border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 14px;
+    position: relative;
+  }
+  .insight h3 { margin: 0 0 6px; font-size: 16px; color: var(--navy); }
+  .insight p { margin: 0 0 8px; color: var(--ink-soft); }
+  .insight p:last-child { margin-bottom: 0; }
+
+  /* Deep dive */
+  .deep {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 24px 26px; margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(15,23,42,.04);
+  }
+  .deep h3 {
+    margin: 0 0 4px; font-size: 18px; color: var(--navy);
+  }
+  .deep .lede { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+  .deep p { color: var(--ink-soft); margin: 0 0 12px; }
+  .deep .callout {
+    background: var(--accent-soft); border-radius: 8px;
+    padding: 12px 16px; margin: 14px 0; font-size: 14px;
+    color: var(--navy-2); border-left: 3px solid var(--accent);
+  }
+  .deep ul { margin: 8px 0 12px; padding-left: 20px; color: var(--ink-soft); }
+  .deep li { margin-bottom: 6px; }
+
+  /* Trend radar grid */
+  .radar { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .radar { grid-template-columns: 1fr; } }
+  .radar .item {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .radar .item h4 { margin: 0 0 6px; font-size: 14.5px; color: var(--navy); }
+  .radar .item p { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+  .radar .signal { font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: .5px; }
+
+  /* Action list */
+  .actions { background: linear-gradient(135deg, #1e3a5f, #2c5282); border-radius: 12px; padding: 24px 28px; color: #eaf1f9; }
+  .actions h2 { color: #fff; margin: 0 0 16px; font-size: 20px; display:flex; align-items:center; gap:10px; }
+  .actions ol { margin: 0; padding-left: 22px; }
+  .actions li { margin-bottom: 14px; color: #dbe7f5; }
+  .actions li strong { color: #fff; display: block; margin-bottom: 3px; font-size: 15px; }
+  .actions li span { font-size: 14px; color: #c3d6ea; }
+
+  /* Sources */
+  .sources { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px; }
+  .sources h2 { margin: 0 0 14px; font-size: 18px; color: var(--navy); }
+  .sources ol { margin: 0; padding-left: 20px; }
+  .sources li { margin-bottom: 9px; font-size: 13.5px; color: var(--ink-soft); }
+  .sources a { color: var(--accent); text-decoration: none; }
+  .sources a:hover { text-decoration: underline; }
+  .src-name { color: var(--muted); font-size: 12px; }
+
+  footer.foot { text-align: center; color: var(--muted); font-size: 12px; margin-top: 34px; }
+
+  a { color: var(--accent); }
+  .inline-src { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .inline-src a { color: var(--accent); text-decoration: none; }
+  .inline-src a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="kicker">Tech Daily Briefing · For CTO / VP of Engineering</div>
+    <h1>科技日报 · CTO洞察版</h1>
+    <div class="meta">
+      <span>📅 2026年11月24日（星期二）</span>
+      <span>🗞 数据窗口：过去 24 小时</span>
+      <span>📊 覆盖 185 条新闻 · 424 个信源</span>
+    </div>
+  </header>
+
+  <!-- ============ 1. 今日要点 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">1</span>
+      <h2>今日要点</h2>
+      <span class="sub">5 条核心洞察</span>
+    </div>
+
+    <div class="insights">
+
+      <div class="insight">
+        <h3>① 黄仁勋 11 天内复职，英伟达股价单日暴涨 30%+ —— 治理风险成了新的技术风险</h3>
+        <p>英伟达董事会 11 月 23 日全票通过，恢复黄仁勋总裁、CEO 及董事职务，即刻生效；此前 CFO Colette Kress 临时接任、Harvey C. Jones 任董事长。消息公布后股价一度上涨超 30%，但截至 11 月 18 日其市值仅 3.75 万亿美元、较上月高点回落近 35%，独立调查并未因复职而终止。</p>
+        <p><strong>CTO 视角：</strong>对依赖英伟达算力栈的公司而言，这是一堂关于"关键人物/单点供应商"风险的现实课——公司治理动荡会在数小时内转化为供应链与资本市场的连锁反应。采购与架构决策应把"供应商治理稳定性"纳入风险评估。 <span class="inline-src">📎 <a href="https://www.ifanr.com/1691103" target="_blank" rel="noopener">[来源: 爱范儿]</a> · <a href="https://garymarcus.substack.com/p/breaking-jensen-is-back-and-the-market" target="_blank" rel="noopener">[来源: Marcus on AI]</a></span></p>
+      </div>
+
+      <div class="insight">
+        <h3>② AI 算力供应链从"加杠杆"急转"现款现货"，临交付加价 25%–45%</h3>
+        <p>据《金融时报》与法庭文件，戴尔、HPE、联想、超微在 AI 服务器合同临交付时普遍要求大幅加价，部分幅度达 25%–45%；XTX Markets 因戴尔在 5.49 亿美元固定价合同上临时加价 6200–7000 万美元而起诉。台积电同时收紧账期、要求现款，英伟达撤回部分融资支持。</p>
+        <p><strong>CTO 视角：</strong>算力预算的"固定价"假设正在失效。2027 年基础设施规划需预留价格波动缓冲，并重新评估自建 vs. 云租的成本模型。 <span class="inline-src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247669662&idx=1&sn=8aca9342eb2e8ac711b1b805a7414f3b" target="_blank" rel="noopener">[来源: AI前线]</a></span></p>
+      </div>
+
+      <div class="insight">
+        <h3>③ Token 消耗结构逆转：Agent 占 52%、AI Coding 占 40%，聊天搜索萎缩至 8%</h3>
+        <p>NBER 对 OpenRouter 2026 年 4 月数据的分析显示，Agent 应用已占全球 LLM Token 消耗的 52%，AI Coding 占 40%，传统对话式 Chatbot 与搜索仅剩约 8%。华为同期发布《智能世界 2035》并重构"Agent 时代 AI Infra"底座，直指超长上下文、高频工具调用带来的显存与算力账单压力。</p>
+        <p><strong>CTO 视角：</strong>"为聊天而建"的推理架构已过时。预算与容量规划应向长会话、高并发工具调用的 Agent 负载迁移。 <span class="inline-src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247838902&idx=1&sn=58490e4e9046a1e9b91dda7c3e1be0aa" target="_blank" rel="noopener">[来源: CSDN]</a></span></p>
+      </div>
+
+      <div class="insight">
+        <h3>④ AI 编码进入"工程化"阶段：Netflix、GitHub 已把 SDLC 与组织为 Agent 重构</h3>
+        <p>Netflix Commerce 团队为人和 Agent 共写了 45 份架构决策记录（ADR），上线"只报已验证阻塞项"的评审 Agent，并通过单一 MCP 工具提供按域的 GraphRAG 上下文。GitHub Universe 现场披露：5 名工程师每周交付 460 个 PR，Marks &amp; Spencer 一天修复 77 个 issue，Provation 在受监管医疗场景运行可审计的 AI Agent。</p>
+        <p><strong>CTO 视角：</strong>AI 编码的瓶颈已从"模型能力"转向"流程与治理"——评审、可审计、控制平面才是决定能否规模化的关键。 <span class="inline-src">📎 <a href="https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/" target="_blank" rel="noopener">[来源: InfoQ]</a> · <a href="https://www.youtube.com/watch?v=TYhsC-S-Fx0" target="_blank" rel="noopener">[来源: GitHub]</a></span></p>
+      </div>
+
+      <div class="insight">
+        <h3>⑤ 开源编码模型竞争白热化：GLM-5.4 用 Loop Transformer 逼近 2–3T 级智能</h3>
+        <p>智谱 GLM-5.4 采用首创的 Loop Transformer 架构（共享权重层循环执行、28 层中间层运行两遍、跨轮共享 KV），在参数量不增的情况下取得更深推理能力，定位"泛 Coding"，并计划以负责任方式开源权重。同期 Thinking Machines 的循环模型 Inkling 2 Mini 开源、可在 32GB Mac 本地运行。</p>
+        <p><strong>CTO 视角：</strong>编码大模型的选择面显著拓宽，开源自托管 + 本地化部署成为可行的成本与数据主权路径。 <span class="inline-src">📎 <a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">[来源: Simon Willison's Weblog]</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247494345&idx=1&sn=0ea26a769f134fefec42e33d59558c73" target="_blank" rel="noopener">[来源: 智谱]</a></span></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 2. 深度分析 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">2</span>
+      <h2>深度分析</h2>
+      <span class="sub">2 个关键议题</span>
+    </div>
+
+    <div class="deep">
+      <h3>议题一：算力供应链的"信任折价"——从技术叙事回归现金流现实</h3>
+      <p class="lede">关键人物退场只是导火索，真正被撕开的是万亿 AI 投资狂潮底下的"互相垫资"默契。</p>
+      <p>过去几年，黄仁勋不只是英伟达掌门人，更是全球 AI 供应链的"定海神针"——每当 AI 泡沫质疑四起，他总能用订单与信心稳住市场。他短暂离场的窗口期，最先崩的并非技术叙事或算力需求，而是上下游互相垫资、彼此兜底的底层默契。台积电收紧账期要现款、戴尔等服务器厂商临交付加价 25%–45%、英伟达撤回部分融资，整个链条正从"拼命加杠杆"切回"现款现货"。</p>
+      <div class="callout">⚠️ 对 CTO 的直接含义：算力采购的"固定价 + 账期"时代可能阶段性结束。过去以"未来订单"换来的议价空间正在收缩，现金与交付确定性成为新的谈判筹码。</div>
+      <p>值得注意的细节：XTX Markets 为"确保价格确定性"额外支付了 500 万美元，最终仍被要求追加 6200–7000 万美元——这说明在卖方强势周期，连溢价锁定都不再可靠。与此同时，英伟达 2027 财年 Q3 营收 1158 亿美元、同比 +103%，净利润近 652.9 亿美元、同比翻倍，基本面并未恶化，矛盾集中在"资本开支节奏"与"供应链现金流"的错配。</p>
+      <p><strong>战略建议：</strong>① 将算力预算从"固定资本开支"改为"含价格波动带的情景预算"；② 评估多云/自建混合的锁定策略，降低单一供应商临交付加价的风险敞口；③ 对长周期训练任务引入"算力期货"式的提前锁量谈判。 <span class="inline-src">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247669662&idx=1&sn=8aca9342eb2e8ac711b1b805a7414f3b" target="_blank" rel="noopener">[来源: AI前线]</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650897970&idx=1&sn=e495ba301b91ddd64af9ea55741bbaf6" target="_blank" rel="noopener">[来源: 创业邦]</a></span></p>
+    </div>
+
+    <div class="deep">
+      <h3>议题二：为 Agent 重构 SDLC 与 Git 协作——"代码不再是护城河，流程才是"</h3>
+      <p class="lede">当 Agent 以 10–100 倍速度生成、评审、迭代代码，传统 PR 流程正在失效。</p>
+      <p>两个信号指向同一结论。<strong>Netflix</strong> 的 Commerce 团队为人和 Agent 共写 45 份 ADR，并部署"只报告已验证阻塞项"的评审 Agent，用单一 MCP 工具按域提供 GraphRAG 上下文——本质是把"上下文与规范"沉淀成 Agent 可读的资产。<strong>GitHub Universe</strong> 上，5 名工程师每周交付 460 个 PR、Marks &amp; Spencer 一天修复 77 个 issue，Provation 在受监管医疗环境运行可审计 Agent，共同点是"中央控制平面 + 可审计治理"。</p>
+      <p>更具颠覆性的是基础设施层：前 GitHub CEO Thomas Dohmke 创办的 <strong>Entire</strong>，直指传统 PR 模式不适配 Agent 高速迭代——它用 "trails"（轨迹）替代 PR 时间线，以置信度评分判断是否可合并，分布式架构下代码推送速度最高达 GitHub 的 89 倍。Shopify CEO Tobi Lütke 则用"一个周末 + 2000 美元算力"重写了服务数千名工程师的源码托管系统，并断言"传统程序员职业已在 2026 年终结、形式化验证将成关键"。</p>
+      <div class="callout">📌 结论：AI 编码的规模化瓶颈不是模型，而是评审吞吐、可审计性与上下文供给。把 SDLC 改造成"人机共用"的流程，是 2027 年工程组织的主线任务。</div>
+      <p><strong>战略建议：</strong>① 立即启动"为 Agent 写 ADR/规范"的试点；② 评估评审环节的自动化与"可信阻塞项"机制；③ 跟踪 Entire 等 Agent-native 代码托管平台的成熟度，作为现有 Git 平台的替代预案。 <span class="inline-src">📎 <a href="https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/" target="_blank" rel="noopener">[来源: InfoQ · Netflix]</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297737&idx=3&sn=46241f8170807a184ab7378b10e0fce9" target="_blank" rel="noopener">[来源: InfoQ · Entire]</a> · <a href="https://mp.weixin.qq.com/s?__biz=Mzg4NDQwNTI0OQ==&mid=2247591150&idx=1&sn=6637de1e292f6a5fcc5613bc7619ef41" target="_blank" rel="noopener">[来源: AI科技大本营]</a></span></p>
+    </div>
+  </section>
+
+  <!-- ============ 3. 趋势雷达 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">3</span>
+      <h2>趋势雷达</h2>
+      <span class="sub">值得关注的早期信号</span>
+    </div>
+
+    <div class="radar">
+
+      <div class="item">
+        <div class="signal">🔒 安全 · 高优先</div>
+        <h4>Agent 安全从"事后检测"走向"意图治理"</h4>
+        <p>Google 提出语义治理策略，在每次工具调用前对照用户意图校验，AgentDojo 基准上攻击成功率从 48.7% 降至 0.9%；QCon 上 Google 将 Agent 定义为"机器速度的内部威胁"，强调身份、凭证与隔离模式。同期 OpenAI 与 Cisco 开源 Shirudo，让 Agent 用 eBPF 动态防御漏洞。</p>
+        <p class="inline-src" style="margin-top:8px;">📎 <a href="https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/" target="_blank" rel="noopener">[Google Developers Blog]</a> · <a href="https://www.infoq.com/news/2026/11/qcon-ai-agent-security/" target="_blank" rel="noopener">[InfoQ]</a></p>
+      </div>
+
+      <div class="item">
+        <div class="signal">🤖 组织 · 中期</div>
+        <h4>Personal Agent 集体落地，赛道估值狂飙</h4>
+        <p>Similarweb 数据显示 Muse 上线 2 个多月移动端 DAU 破 1000 万；Instinct 传以 300 亿美元估值融资（8 月仅 25 亿美元）。大厂与创业公司同时押注"个人 Agent"这一长坡厚雪赛道，工作 Agent 与生活 Agent 是否融合尚无共识。</p>
+        <p class="inline-src" style="margin-top:8px;">📎 <a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTY0MDk0NQ==&mid=2247527738&idx=1&sn=b9f8c10535999914ad022847adf93538" target="_blank" rel="noopener">[海外独角兽]</a></p>
+      </div>
+
+      <div class="item">
+        <div class="signal">⚠️ 战略风险 · 长期</div>
+        <h4>递归自我改进的"闭环"警告</h4>
+        <p>DeepMind CEO Hassabis 警告：AI 最危险的阶段，是进入"不再需要人类审查的闭环自我改进"。当前 AI 已让工程师提效 3–5 倍，但人类仍负责代码审查、架构与关键决策；一旦 AI 自主完成生成、验证与改进，可能触发无法理解的智能爆炸。Meta 的 Alexandr Wang 亦称"超级智能已经到来"。</p>
+        <p class="inline-src" style="margin-top:8px;">📎 <a href="https://mp.weixin.qq.com/s?__biz=MzA3ODk5OTEzOA==&mid=2962189224&idx=1&sn=465a138fe546d0f138034030e5c87663" target="_blank" rel="noopener">[经纬创投]</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651075779&idx=2&sn=db35c965e76c082820047067df9b866e" target="_blank" rel="noopener">[机器之心]</a></p>
+      </div>
+
+      <div class="item">
+        <div class="signal">🧱 架构 · 中期</div>
+        <h4>循环 Transformer 成为新架构方向</h4>
+        <p>一周内出现两次循环 Transformer 信号：智谱 GLM-5.4（28 层中间层运行两遍、跨轮共享 KV）与 Thinking Machines 的 Inkling 2 Mini（中间层每 token 运行三次）。核心价值是"参数不变、深度增强"，为算力受限下的模型效率提供新路径。</p>
+        <p class="inline-src" style="margin-top:8px;">📎 <a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">[Simon Willison's Weblog]</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457504&idx=1&sn=4ef9019cd406bb4dc750db443f0ebf29" target="_blank" rel="noopener">[AINLP]</a></p>
+      </div>
+
+      <div class="item">
+        <div class="signal">🧩 工程 · 可复制</div>
+        <h4>模块化单体回归：Agoda 评审提速 64%</h4>
+        <p>Agoda 在 post-booking API 引入模块化单体框架，用领域组件、Data Mapper、类型化构建器与 ArchUnit 测试强制边界，框架化变更的中位代码评审时长缩短 64%、初始反馈快 34%——"不重写也能降耦合"为存量系统现代化提供了样板。</p>
+        <p class="inline-src" style="margin-top:8px;">📎 <a href="https://www.infoq.com/news/2026/11/agoda-modular-monolith-framework/" target="_blank" rel="noopener">[InfoQ]</a></p>
+      </div>
+
+      <div class="item">
+        <div class="signal">📦 供应链 · 高优先</div>
+        <h4>npm 供应链攻击规模创纪录</h4>
+        <p>Databricks 报告称 2026 年已发现约 5400 个恶意 npm 包，另据 JetBrains 调查，"Megalodon"行动一下午向 5500+ 仓库推送恶意 workflow。软件供应链已从"合规议题"升级为"生产事故级风险"，依赖治理需前置到 CI。</p>
+        <p class="inline-src" style="margin-top:8px;">📎 <a href="https://www.databricks.com/blog/what-5400-malicious-npm-packages-reveal-about-software-supply-chain-risk-2026" target="_blank" rel="noopener">[Databricks]</a> · <a href="https://blog.jetbrains.com/teamcity/2026/11/github-actions-alternatives/" target="_blank" rel="noopener">[JetBrains]</a></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 4. CTO视角 ============ -->
+  <section class="actions">
+    <h2>🎯 CTO 视角 · 行动建议</h2>
+    <ol>
+      <li>
+        <strong>把"供应商治理与供应链现金流"纳入技术风险台账</strong>
+        <span>英伟达治理动荡 + 服务器临交付加价，说明关键供应商的单点风险会瞬时传导。为算力采购建立价格波动情景预算与多云备份方案。</span>
+      </li>
+      <li>
+        <strong>启动"为 Agent 重构 SDLC"的 90 天试点</strong>
+        <span>参照 Netflix 的"人机共用 ADR + 只报已验证阻塞项的评审 Agent"，先在 1–2 个团队验证吞吐与质量，再评估 Entire 类 Agent-native Git 平台。</span>
+      </li>
+      <li>
+        <strong>将 Agent 安全前置到设计阶段</strong>
+        <span>采用"意图治理"（每次工具调用校验用户意图）与最小权限隔离；对高敏场景引入可审计控制平面，参考 Google 语义治理与 QCon 的身份/凭证/隔离模式。</span>
+      </li>
+      <li>
+        <strong>按"Agent 负载"重估推理基础设施</strong>
+        <span>Token 消耗已向 Agent（52%）与 Coding（40%）倾斜，长会话、高频工具调用对显存与吞吐提出新要求；评估开源编码模型（GLM-5.4、Inkling 2 Mini）的本地化部署以优化成本与数据主权。</span>
+      </li>
+      <li>
+        <strong>把软件供应链安全升级为 CI 阻断项</strong>
+        <span>面对数千个恶意 npm 包与恶意 workflow 攻击，将依赖审计、来源校验与 workflow 权限治理做成自动化门禁，而非事后扫描。</span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ 5. 信息来源汇总 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="num">5</span>
+      <h2>信息来源汇总</h2>
+      <span class="sub">按引用顺序</span>
+    </div>
+    <div class="sources">
+      <ol>
+        <li><a href="https://www.ifanr.com/1691103" target="_blank" rel="noopener">刚刚，黄仁勋重返英伟达！董事会全票通过，盘前大涨 30%</a> <span class="src-name">— 爱范儿</span></li>
+        <li><a href="https://garymarcus.substack.com/p/breaking-jensen-is-back-and-the-market" target="_blank" rel="noopener">Breaking: Jensen is back. And the market is way up.</a> <span class="src-name">— Marcus on AI</span></li>
+        <li><a href="https://www.ifanr.com/1691096" target="_blank" rel="noopener">突发！黄仁勋恢复英伟达 CEO 职位，董事会全票通过</a> <span class="src-name">— 爱范儿</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU1NDA4NjU2MA==&mid=2247669662&idx=1&sn=8aca9342eb2e8ac711b1b805a7414f3b" target="_blank" rel="noopener">AI 服务器临交付暴涨 45%，台积电收紧账期要现款</a> <span class="src-name">— AI前线</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650897970&idx=1&sn=e495ba301b91ddd64af9ea55741bbaf6" target="_blank" rel="noopener">三个中国女人，抢滩英伟达</a> <span class="src-name">— 创业邦</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247838902&idx=1&sn=58490e4e9046a1e9b91dda7c3e1be0aa" target="_blank" rel="noopener">Token 消耗逆转之后：华为拆解智能世界 2035</a> <span class="src-name">— CSDN</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/netflix-sdlc-ai-coding-agents/" target="_blank" rel="noopener">Netflix at QConSF 2026: Retrofitting the SDLC for AI Coding Agents</a> <span class="src-name">— InfoQ</span></li>
+        <li><a href="https://www.youtube.com/watch?v=TYhsC-S-Fx0" target="_blank" rel="noopener">The factory mindset: Agentic workflows in production</a> <span class="src-name">— GitHub</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297737&idx=3&sn=46241f8170807a184ab7378b10e0fce9" target="_blank" rel="noopener">Entire Git Forge：面向编码智能体重构 Git 协作方式</a> <span class="src-name">— InfoQ</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg4NDQwNTI0OQ==&mid=2247591150&idx=1&sn=6637de1e292f6a5fcc5613bc7619ef41" target="_blank" rel="noopener">Shopify CEO 声援黄仁勋，大谈新时代：半年内人类手工代码全得重写</a> <span class="src-name">— AI科技大本营</span></li>
+        <li><a href="https://simonwillison.net/2026/Nov/23/glm-54/" target="_blank" rel="noopener">GLM-5.4: Toward Generalized Coding with Our First Loop Transformer</a> <span class="src-name">— Simon Willison's Weblog</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyMzI3NzQ0Mg==&mid=2247494345&idx=1&sn=0ea26a769f134fefec42e33d59558c73" target="_blank" rel="noopener">GLM-5.4：瞄向泛 Coding，首个 Loop Transformer 带来的惊喜</a> <span class="src-name">— 智谱</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650457504&idx=1&sn=4ef9019cd406bb4dc750db443f0ebf29" target="_blank" rel="noopener">前 OpenAI CTO 开源 Inkling 2 Mini，循环模型也能拿来干活了</a> <span class="src-name">— AINLP</span></li>
+        <li><a href="https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/" target="_blank" rel="noopener">Did the user ask for this? Securing AI agents against intent hijacking</a> <span class="src-name">— Google Developers Blog</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/qcon-ai-agent-security/" target="_blank" rel="noopener">QCon San Francisco 2026: Securing AI Agents in Production</a> <span class="src-name">— InfoQ</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTY0MDk0NQ==&mid=2247527738&idx=1&sn=b9f8c10535999914ad022847adf93538" target="_blank" rel="noopener">Personal Agent 闭门会的 48 条笔记</a> <span class="src-name">— 海外独角兽</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3ODk5OTEzOA==&mid=2962189224&idx=1&sn=465a138fe546d0f138034030e5c87663" target="_blank" rel="noopener">哈萨比斯：一场 AI 界的"石油泄漏事故"，可能正在逼近</a> <span class="src-name">— 经纬创投</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651075779&idx=2&sn=db35c965e76c082820047067df9b866e" target="_blank" rel="noopener">Meta 亚历山大王：超级智能即将到来，AI 将接管一切科学研究</a> <span class="src-name">— 机器之心</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/agoda-modular-monolith-framework/" target="_blank" rel="noopener">Agoda Reduces API Code Review Time by 64% with Modular Architecture</a> <span class="src-name">— InfoQ</span></li>
+        <li><a href="https://www.databricks.com/blog/what-5400-malicious-npm-packages-reveal-about-software-supply-chain-risk-2026" target="_blank" rel="noopener">What 5,400 Malicious npm Packages Reveal about Software Supply Chain Risk in 2026</a> <span class="src-name">— Databricks</span></li>
+        <li><a href="https://blog.jetbrains.com/teamcity/2026/11/github-actions-alternatives/" target="_blank" rel="noopener">Best GitHub Actions Alternatives in 2026: What 838 Organizations Actually Use</a> <span class="src-name">— JetBrains</span></li>
+        <li><a href="https://x.com/OpenAI/status/2124980590717911527" target="_blank" rel="noopener">Introducing Shirudo, an open-source Linux runtime for agents</a> <span class="src-name">— OpenAI (@OpenAI)</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650897933&amp;idx=1&amp;sn=7c965e1e2236616446bbc06e1c526b54" target="_blank" rel="noopener">姚顺雨，接手腾讯 AI 一年</a> <span class="src-name">— 创业邦</span></li>
+        <li><a href="https://www.xiaoyuzhoufm.com/episode/6b048a2901b0ab432edcf821" target="_blank" rel="noopener">Shopify 创始人 Tobi Lütke：黄仁勋、AI，以及为什么创始人不可替代</a> <span class="src-name">— 跨国串门儿计划</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer class="foot">
+    本日报由 tech-daily-generator 基于 2026-11-23 至 2026-11-24 的 185 条新闻自动筛选生成 · CTO 洞察视角<br>
+    信息以原文为准，投资与决策请自行研判 · 生成时间 2026-11-24
+  </footer>
+
+</div>
+</body>
+</html>
