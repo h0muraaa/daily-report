@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 开发者实践版 · 2026-11-26</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1c2128; --border:#30363d;
+    --text:#e6edf3; --muted:#8b949e; --green:#3fb950; --cyan:#56d4dd;
+    --blue:#58a6ff; --purple:#bc8cff; --orange:#f0883e; --red:#ff7b72;
+    --yellow:#e3b341; --pink:#ff7eb6;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,"Courier New",monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--mono); font-size:15px; line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:32px 20px 80px;}
+  /* header */
+  header{
+    border:1px solid var(--border); border-radius:10px;
+    background:linear-gradient(135deg,#161b22 0%,#1c2128 100%);
+    padding:28px 28px 24px; margin-bottom:28px;
+    box-shadow:0 0 0 1px rgba(88,166,255,.06), 0 8px 30px rgba(0,0,0,.4);
+  }
+  .prompt-line{color:var(--green); font-size:13px; letter-spacing:.5px;}
+  .prompt-line .user{color:var(--cyan);}
+  .prompt-line .path{color:var(--blue);}
+  h1{
+    font-size:26px; margin:14px 0 6px; font-weight:700; letter-spacing:.5px;
+    color:var(--text);
+  }
+  h1 .accent{color:var(--green);}
+  .subtitle{color:var(--muted); font-size:13px; margin:0;}
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;
+  }
+  .tag{
+    font-size:12px; padding:3px 10px; border-radius:20px;
+    border:1px solid var(--border); color:var(--muted); background:var(--panel);
+  }
+  .tag.green{color:var(--green); border-color:rgba(63,185,80,.4);}
+  .tag.blue{color:var(--blue); border-color:rgba(88,166,255,.4);}
+  .tag.purple{color:var(--purple); border-color:rgba(188,140,255,.4);}
+  /* section */
+  section{margin-bottom:36px;}
+  h2{
+    font-size:19px; margin:0 0 18px; padding-bottom:10px;
+    border-bottom:1px solid var(--border); font-weight:700;
+    display:flex; align-items:center; gap:10px;
+  }
+  h2 .num{
+    color:var(--bg); background:var(--green); font-size:13px;
+    width:26px; height:26px; border-radius:6px;
+    display:inline-flex; align-items:center; justify-content:center; font-weight:700;
+  }
+  /* news cards */
+  .card{
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:10px; padding:18px 20px; margin-bottom:14px;
+    transition:border-color .2s, transform .1s;
+  }
+  .card:hover{border-color:var(--blue);}
+  .card-head{display:flex; align-items:flex-start; gap:12px; margin-bottom:10px;}
+  .idx{
+    flex:0 0 auto; color:var(--cyan); font-weight:700; font-size:14px;
+    background:var(--panel-2); border:1px solid var(--border);
+    border-radius:6px; padding:1px 9px; margin-top:2px;
+  }
+  .card-title{font-size:16px; font-weight:700; color:var(--text); line-height:1.45; margin:0;}
+  .card-title a{color:var(--text); text-decoration:none;}
+  .card-title a:hover{color:var(--blue); text-decoration:underline;}
+  .card-body{color:#c9d1d9; font-size:14px; margin:0 0 12px;}
+  .card-body code{
+    background:#0d1117; color:var(--orange); border:1px solid var(--border);
+    padding:1px 6px; border-radius:5px; font-size:13px;
+  }
+  .src{
+    font-size:12.5px; color:var(--muted);
+    display:inline-flex; align-items:center; gap:6px;
+    padding-top:10px; border-top:1px dashed var(--border); width:100%;
+  }
+  .src a{color:var(--cyan); text-decoration:none;}
+  .src a:hover{text-decoration:underline;}
+  /* deep dive */
+  .deep{
+    background:var(--panel); border:1px solid var(--border);
+    border-left:3px solid var(--purple);
+    border-radius:10px; padding:22px 24px; margin-bottom:20px;
+  }
+  .deep h3{
+    font-size:17px; margin:0 0 6px; color:var(--purple); font-weight:700;
+  }
+  .deep .lead{color:var(--muted); font-size:13px; margin:0 0 16px; font-style:italic;}
+  .deep p{font-size:14px; color:#c9d1d9; margin:0 0 12px;}
+  .deep p code{
+    background:#0d1117; color:var(--orange); border:1px solid var(--border);
+    padding:1px 6px; border-radius:5px; font-size:13px;
+  }
+  .deep ul{margin:0 0 14px; padding-left:22px; color:#c9d1d9; font-size:14px;}
+  .deep li{margin-bottom:7px;}
+  .deep strong{color:var(--text);}
+  .deep .hl{color:var(--yellow); font-weight:700;}
+  .deep .src{border-top:1px dashed var(--border); margin-top:6px; padding-top:12px;}
+  /* tools grid */
+  .tools{display:grid; grid-template-columns:1fr; gap:14px;}
+  .tool{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:16px 20px;
+  }
+  .tool:hover{border-color:var(--green);}
+  .tool-head{display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap;}
+  .tool-name{font-size:15px; font-weight:700; color:var(--green);}
+  .tool-badge{font-size:11px; color:var(--bg); background:var(--cyan); border-radius:4px; padding:1px 7px; font-weight:700;}
+  .tool-body{font-size:14px; color:#c9d1d9; margin:0 0 10px;}
+  .tool-body code{background:#0d1117; color:var(--orange); border:1px solid var(--border); padding:1px 6px; border-radius:5px; font-size:13px;}
+  /* practice */
+  .practice{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px; margin-bottom:14px; border-left:3px solid var(--orange);
+  }
+  .practice h3{font-size:15.5px; margin:0 0 10px; color:var(--orange); font-weight:700;}
+  .practice p{font-size:14px; color:#c9d1d9; margin:0 0 10px;}
+  .practice code{background:#0d1117; color:var(--orange); border:1px solid var(--border); padding:1px 6px; border-radius:5px; font-size:13px;}
+  .practice ul{margin:0 0 10px; padding-left:22px; font-size:14px; color:#c9d1d9;}
+  .practice li{margin-bottom:6px;}
+  .practice .src{border-top:1px dashed var(--border); margin-top:4px; padding-top:10px;}
+  /* footer sources */
+  .sources{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px 24px;}
+  .sources ul{margin:0; padding-left:20px; columns:1;}
+  .sources li{font-size:13px; color:#c9d1d9; margin-bottom:10px; break-inside:avoid;}
+  .sources a{color:var(--cyan); text-decoration:none;}
+  .sources a:hover{text-decoration:underline;}
+  .sources .feed{color:var(--muted); font-size:12px;}
+  footer{text-align:center; color:var(--muted); font-size:12px; margin-top:40px; padding-top:20px; border-top:1px solid var(--border);}
+  footer .dot{color:var(--green);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="prompt-line">$ <span class="user">dev</span>@<span class="path">daily-report</span>:<span class="user">~/tech-daily</span> $ cat report.log</div>
+    <h1>科技日报 <span class="accent">//</span> 开发者实践版</h1>
+    <p class="subtitle">一线工程师视角 · 工具更新 · 架构解析 · 踩坑经验 · 最佳实践</p>
+    <div class="meta-row">
+      <span class="tag green">2026-11-26</span>
+      <span class="tag blue">role: developer_practice</span>
+      <span class="tag purple">窗口: 24h / 175 条</span>
+      <span class="tag">聚焦: 语言 / 工具 / 架构 / DevOps</span>
+    </div>
+  </header>
+
+  <!-- ============ 1. 今日技术热榜 ============ -->
+  <section>
+    <h2><span class="num">1</span>今日技术热榜</h2>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="idx">01</span>
+        <h3 class="card-title"><a href="https://www.infoq.com/news/2026/11/rust-1-100-never-types/" target="_blank" rel="noopener">Rust 1.100 稳定 never 类型：十年磨一剑，Infallible 成为其别名</a></h3>
+      </div>
+      <p class="card-body">
+        11 月 12 日发布的 Rust 1.100.0 终于稳定了讨论十年的 <code>never type</code>（即 <code>!</code>），并把标准库里的 <code>Infallible</code> 正式设为它的别名，这意味着 <code>!</code> 与 <code>Infallible</code> 可以在类型系统里互换使用，大幅简化了"永不返回"函数的类型推导。<code>never type</code> 此前经历了五次失败尝试才走到稳定，是 Rust 类型系统里最曲折的落地之一。该版本还稳定了 allocator API 的核心部分、新增 <code>DropGuard</code>，并给 Cargo 增加了可选的依赖冷却（dependency cooldown）设置，用来缓解上游 crate 刚发布即被引入的供应链风险。不过也有批评者指出，allocator 设计仍缺乏 inline storage 支持，对嵌入式等场景还不够友好。
+      </p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/rust-1-100-never-types/" target="_blank" rel="noopener">[InfoQ] Rust 1.100 Ships the Never Type After Ten Years and Five Failed Attempts</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="idx">02</span>
+        <h3 class="card-title"><a href="https://www.infoq.com/news/2026/11/github-css-migration/" target="_blank" rel="noopener">GitHub 弃用 CSS-in-JS 迁向 CSS Modules：SSR 快了 55%，组件初始化快 25%</a></h3>
+      </div>
+      <p class="card-body">
+        GitHub 用三年时间把 github.com 从 styled-components 迁移到 CSS Modules，最终报告服务端渲染（SSR）时间下降 <strong>55%</strong>、组件初始化快 <strong>25%</strong>。迁移策略非常值得借鉴：Primer 设计系统组件先在 feature flag 后面分批转换，约 <strong>7,760 处</strong> <code>sx</code> prop 用法通过 codemod 加 Copilot agent 批量改写完成。这是"大仓库渐进式重构"的典型案例——用开关隔离风险、用代码生成工具摊平人力成本。不过评论区也对用户侧的实际收益与哈希类名的可读性提出质疑，提醒大家性能指标之外还要评估维护成本。
+      </p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/github-css-migration/" target="_blank" rel="noopener">[InfoQ] GitHub Ditches CSS-in-JS for CSS Modules, Reports 55% Faster SSR</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="idx">03</span>
+        <h3 class="card-title"><a href="https://www.infoq.com/news/2026/11/aws-lambda-30-minute-timeout/" target="_blank" rel="noopener">AWS Lambda 超时上限从 15 分钟翻倍到 30 分钟（无额外定价）</a></h3>
+      </div>
+      <p class="card-body">
+        AWS 把按需 Lambda 事件函数的最大超时从 15 分钟提高到 30 分钟，覆盖所有商业区域，<strong>无需 opt-in、也无新增计费</strong>——这个 15 分钟的限制自 2018 年起就没动过。官方博客同时列出了需要留意的连带影响：相同请求速率下并发量会翻倍、SQS 可见性超时需要相应拉到 3 小时、部分 Kafka 映射需要重建。从业者普遍欢迎这次放宽，但也提醒"能跑 30 分钟"不等于"应该跑 30 分钟"，长任务究竟属于 Lambda 还是该迁到别处，仍要按场景判断。
+      </p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/aws-lambda-30-minute-timeout/" target="_blank" rel="noopener">[InfoQ] AWS Lambda Doubles Its Timeout to 30 Minutes After Eight Years at 15</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="idx">04</span>
+        <h3 class="card-title"><a href="https://www.jeffgeerling.com/blog/2026/ansible-fails-become-ubuntu2604/" target="_blank" rel="noopener">Ubuntu 26 换上 Rust 版 sudo-rs，Ansible 提权直接超时踩坑</a></h3>
+      </div>
+      <p class="card-body">
+        Jeff Geerling 在把服务器从 Ubuntu 22 / 24 升级到 26 时发现：只要 sudo 配了密码保护，Ansible 就会报 <code>Timeout (12s) waiting for privilege escalation prompt</code> 而失败。根因是 Ubuntu 正在用 Rust 重写系统工具，26.04 自带的 <code>sudo-rs</code> 与他用了 20 多年的 sudo 在提权交互行为上存在不兼容。这是一条典型的"发行版升级悄悄改地基"的坑，提醒所有依赖交互式提权的自动化流程都要在升级前做回归测试。
+      </p>
+      <div class="src">📎 来源：<a href="https://www.jeffgeerling.com/blog/2026/ansible-fails-become-ubuntu2604/" target="_blank" rel="noopener">[Jeff Geerling] Ansible Fails waiting for privilege escalation on Ubuntu 26</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="idx">05</span>
+        <h3 class="card-title"><a href="https://www.freecodecamp.org/news/how-to-deploy-to-amazon-s3-using-gitlab-ci-cd-and-aws-oidc-without-aws-access-keys/" target="_blank" rel="noopener">用 GitLab CI/CD + AWS OIDC 部署 S3，彻底告别长期 Access Key</a></h3>
+      </div>
+      <p class="card-body">
+        这篇 freeCodeCamp 教程演示如何自动化地把文件部署到 S3 桶，并用 OpenID Connect（OIDC）在 GitLab 与 AWS 之间建立短期、可信的联邦身份，从而<strong>不在 CI/CD 里长期保存 AWS 访问密钥</strong>。对还在用 <code>AWS_ACCESS_KEY_ID/SECRET</code> 硬编码进 CI 变量的团队来说，这是迁移到"无密钥部署"的标准范式：CI 任务运行时临时换取 STS 凭证，泄露面小、可审计、可轮换。
+      </p>
+      <div class="src">📎 来源：<a href="https://www.freecodecamp.org/news/how-to-deploy-to-amazon-s3-using-gitlab-ci-cd-and-aws-oidc-without-aws-access-keys/" target="_blank" rel="noopener">[freeCodeCamp] How to Deploy to Amazon S3 Using GitLab CI/CD and AWS OIDC</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="idx">06</span>
+        <h3 class="card-title"><a href="https://www.infoq.com/news/2026/11/doordash-dispatch-redesign/" target="_blank" rel="noopener">DoorDash 重写实时调度：吞吐 10 倍、峰值可用性 >99.99%</a></h3>
+      </div>
+      <p class="card-body">
+        DoorDash 重构其实时调度平台，把原来的单体优化引擎换成<strong>把"协调"与"计算"分离</strong>的分布式架构，新系统带来 10 倍吞吐提升和超过 99.99% 的峰值可用性。它还支持混合 ML 推理与多智能体强化学习，用于动态优化配送指派。这是分布式系统设计的经典取舍：将全局协调（谁来做、何时做）与局部最优化计算解耦，让两者可以独立扩展。
+      </p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/doordash-dispatch-redesign/" target="_blank" rel="noopener">[InfoQ] DoorDash Scales Dispatch 10x While Maintaining 99.99% Peak Availability</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="idx">07</span>
+        <h3 class="card-title"><a href="https://blog.jetbrains.com/go/2026/11/25/go-by-goland-public-preview/" target="_blank" rel="noopener">GoLand 语言智能正式跨出 IDE：Go by GoLand LSP 进驻 Cursor / VS Code</a></h3>
+      </div>
+      <p class="card-body">
+        JetBrains 发布 <strong>Go by GoLand LSP</strong> 公开预览版：一个面向 VS Code 系编辑器（含 Cursor）的扩展，基于 LSP（语言服务器协议）与 DAP（调试适配器协议）把 GoLand 的语言理解能力带出 IntelliJ 平台。这意味着坚持 VS Code / Cursor 工作流的 Go 开发者也能用上 GoLand 级别的补全、诊断与调试，同时因为这些是开放协议，编码智能体也能复用同样的语言能力。
+      </p>
+      <div class="src">📎 来源：<a href="https://blog.jetbrains.com/go/2026/11/25/go-by-goland-public-preview/" target="_blank" rel="noopener">[The JetBrains Blog] GoLand Intelligence Now Available in Cursor and VS Code</a></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="idx">08</span>
+        <h3 class="card-title"><a href="https://x.com/AnthropicAI/status/2125627317263466739" target="_blank" rel="noopener">Anthropic 把 Messages API 从 Python 迁到 Rust，用 Claude 智能体团队"对拍"验证</a></h3>
+      </div>
+      <p class="card-body">
+        Anthropic 官方披露最近把承载所有 Claude token 流量的 Messages API 从 Python 迁移到了 Rust。最值得学习的是他们的验证方式：<strong>保留旧服务作为"真值对照"，用成队的 Claude agent 去追踪并修复新旧两版之间的行为差异</strong>。这是一套可复用的"重写大型服务"方法论——不是写完备测试就上线，而是用现有系统做在线差分，把不一致点逐个收敛（详见下方深度解读）。
+      </p>
+      <div class="src">📎 来源：<a href="https://x.com/AnthropicAI/status/2125627317263466739" target="_blank" rel="noopener">[Anthropic] We recently migrated our Messages API from Python to Rust</a></div>
+    </div>
+
+  </section>
+
+  <!-- ============ 2. 深度技术解读 ============ -->
+  <section>
+    <h2><span class="num">2</span>深度技术解读</h2>
+
+    <div class="deep">
+      <h3>① 重写一个扛生产流量的大服务，怎么证明"新的和旧的一样对"？</h3>
+      <p class="lead">以 Anthropic 把 Messages API 从 Python 迁到 Rust 为例：迁移的难点不在"重写"，而在"证明等价"。</p>
+      <p>
+        按 The Pragmatic Engineer 访谈里 Katelyn Lesse（Anthropic 平台工程负责人，曾供职 Stripe）的说法，她的团队负责 Claude API 以及 Claude Code、Claude Desktop 背后的基础设施，而这次改造的对象是"每一个 Claude token 都要经过"的 Messages API。Rust 带来的是更低的内存开销与更可预测的尾延迟，但把一个产生真实收入的在线服务整段重写，风险极高——任何一个边界行为的偏差都可能变成线上事故。
+      </p>
+      <p>他们的核心做法可以拆成三步，对任何"重写存量服务"的场景都适用：</p>
+      <ul>
+        <li><strong>旧服务当 oracle（真值对照）：</strong>新 Rust 服务上线过程中，用仍在运行的 Python 服务作为参照系，对相同输入比对两边的输出。<span class="hl">等价性不是靠"我觉得写对了"，而是靠差分对比验证。</span></li>
+        <li><strong>用智能体团队做差异收敛：</strong>成队的 Claude agent 专门负责追踪新旧两版之间的差异，定位后逐条修复。把"海量、琐碎、需要读懂两套代码"的对拍工作交给 agent，人则把精力放在判断"这个差异该不该修"。</li>
+        <li><strong>先隔离、再切流：</strong>旧服务继续接新请求、处理完在途请求后安全退出，新实例经过预热验证才承接流量——这套"蓝绿 + 在途请求收敛"的发布哲学，也正是下文 vivo 推理服务不停服升级所强调的。</li>
+      </ul>
+      <p>
+        <strong>实践启示：</strong>当你面对一次高风险重写，与其追求"一次写对"，不如搭一套<strong>可以在线并跑、逐字段/逐请求 diff 的对照机制</strong>。LLM / 大模型服务尤其适合这种"shadow traffic + 差异回放"的验证，因为输出是结构化的、可比对的，且异常样本可以自动收集成回归用例。
+      </p>
+      <div class="src">📎 来源：<a href="https://www.youtube.com/watch?v=9oNvKMd7xJo" target="_blank" rel="noopener">[The Pragmatic Engineer] How Anthropic builds software in 2026 with Katelyn Lesse</a> · <a href="https://x.com/AnthropicAI/status/2125627317263466739" target="_blank" rel="noopener">[Anthropic] Messages API Python→Rust</a></div>
+    </div>
+
+    <div class="deep">
+      <h3>② 让 AI 写代码不难，难的是给"自我改进 Agent"装上刹车</h3>
+      <p class="lead">三个一线案例（百度 Loopy、Gas Town 作者、大淘宝需求 Agent）指向同一结论：全自动不可信，护栏才是工程重点。</p>
+      <p>
+        百度在 AIGC 视频产线上做了一个反直觉的消融实验：让 Agent 不受约束地递归改进自己的 Harness，它在"演化用的那批题"上拿到所有版本最高分 <span class="hl">92.8</span>，可换一批题，平均分就从 <strong>43.6 掉到 40.3</strong>，每次试验的 Token 还多花一半以上。结论很尖锐——<strong>不加约束的自我改进，学会的只是"在这场考试里拿分"</strong>，而非真正变强。
+      </p>
+      <p>于是他们做了 <strong>Loopy</strong>，把产线和裁判拆成两条"双螺旋"：</p>
+      <ul>
+        <li><strong>效果螺旋：</strong>在<strong>冻结的标准</strong>下修复产线，负责"把事做好"。</li>
+        <li><strong>标准螺旋：</strong>从真实的 Good Case / Bad Case 中长出下一版标准，负责"把评判尺子做好"。</li>
+        <li><strong>关键约束：</strong>两条螺旋共享证据，但<strong>不共享写权限</strong>；标准可以跨轮成长，<strong>但单轮之内一字不改</strong>——这就堵死了"修复 Agent 去放宽标准"这条最省事的作弊路径。效果是可量化的：早期 Demo 综合视频可用率从 92% 提升到 100%。</li>
+      </ul>
+      <p>
+        这和 Gas Town / Beads 作者 Steve Yegge 的踩坑经历互为印证：他反复遇到"模型先做出很棒的东西，后来整个系统却变成一座垃圾山"，不得不推倒重来好几次——因为每句话都被记录、但只往里加没人清理，历史决策越堆越多；而且部署的 Agent 越多，需要的人（管理员、会计、律师）反而越多，他自己成了瓶颈。
+      </p>
+      <p>
+        大淘宝的"端到端业务需求专家 Agent"则给出了正向解法：四层架构（上下文输入 → 业务专家编排 → 工具执行 → 反馈学习），设置<strong>三道质量门禁</strong>（需求澄清、技术方案、内部质量），用 TDD 驱动实现、强制反馈留痕、真实环境验收，并在结项时把过程经验蒸馏成长期知识。<strong>人在关键节点确认，而不是全自动。</strong>
+      </p>
+      <p>
+        <strong>实践启示：</strong>搭 agent 工作流时，把"干活"和"评判"拆成两个权限隔离的回路；标准要能演化但单轮冻结；反馈要留痕并能沉淀成下次的上下文。别把"能全自动跑"当成终点，<strong>能可控地停下、可回滚、可解释</strong>才是。
+      </p>
+      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247607882&idx=1&sn=29dc274865dbd06fd48a35d98aff7593" target="_blank" rel="noopener">[百度Geek说] AIGC原生视频的双螺旋 Loop Engineering 实践</a> · <a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&mid=2655943844&idx=1&sn=90bad1325c95a343639b7fa7db3486ec" target="_blank" rel="noopener">[51CTO技术栈] Gas Town 作者：软件工厂先惊艳、后变"垃圾山"</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&mid=2650547174&idx=1&sn=b171682af05838ea8214918446403e69" target="_blank" rel="noopener">[大淘宝技术] 如何搭建一个端到端业务需求专家 Agent</a></div>
+    </div>
+
+  </section>
+
+  <!-- ============ 3. 工具推荐 ============ -->
+  <section>
+    <h2><span class="num">3</span>工具推荐</h2>
+    <div class="tools">
+
+      <div class="tool">
+        <div class="tool-head">
+          <span class="tool-name">Milletcode</span>
+          <span class="tool-badge">自托管 · 多 Agent 工作台</span>
+        </div>
+        <p class="tool-body">
+          团队高频用 AI 编程后，Agent 散落在不同终端、本地与远程项目分开管、任务跑到一半不知道是在等审批还是挂了——Milletcode 用<strong>一个自托管 Web 工作台</strong>把 Claude Code、SmartCode 等智能体和本地 / 远程项目统一接入浏览器，覆盖项目发现、任务下达、实时输出、人工审批、文件管理与结果验收。当前版本 v0.11.0，适合把"分派任务—观察过程—控制风险—验收结果"这套研发流程真正产品化。
+          <br>🔗 GitHub：<code>github.com/milletcode/milletcode</code>
+        </p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297979&idx=2&sn=68388033f47d87a3f7a2dfae3c39bc59" target="_blank" rel="noopener">[InfoQ] 把 AI 编程智能体装进同一个工作台：开源多 Agent 调度平台 Milletcode 实践</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tool-head">
+          <span class="tool-name">Go by GoLand LSP</span>
+          <span class="tool-badge">VS Code / Cursor</span>
+        </div>
+        <p class="tool-body">
+          想让 Cursor 或 VS Code 拥有 GoLand 级别的 Go 语言智能？这个公开预览扩展基于 LSP + DAP，把 GoLand 的补全、诊断、调试能力带到 VS Code 系编辑器。因为是标准协议，编辑器与编码智能体都能直接复用同一套语言服务——对坚持轻编辑器工作流的 Go 开发者是实打实的体验升级。
+          <br>🔗 <code>blog.jetbrains.com/go/2026/11/25/go-by-goland-public-preview/</code>
+        </p>
+        <div class="src">📎 来源：<a href="https://blog.jetbrains.com/go/2026/11/25/go-by-goland-public-preview/" target="_blank" rel="noopener">[The JetBrains Blog] Go by GoLand Public Preview</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tool-head">
+          <span class="tool-name">Agnes Harness</span>
+          <span class="tool-badge">开源 · FDE 基础设施</span>
+        </div>
+        <p class="tool-body">
+          企业 AI 落地最累的是 FDE（前线部署工程师）：客户系统老旧、规则满是例外、设备型号五花八门，通用大模型到了现场就翻车。Agnes AI 开源的 Agnes Harness 是<strong>专为 FDE 打造的企业级 Agent 运行与扩展框架</strong>，用统一运行架构把模型、工具、Skills 和业务系统连起来，让企业自己掌控"选哪个模型、工作流怎么走、敏感数据如何隔离、哪些步骤必须人工审批"。适合做私有化、现场化的交付底座。
+          <br>🔗 GitHub：<code>github.com/AgnesAI-Labs/agnes-harness</code>
+        </p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=Mzg3MTkxMjYzOA==&mid=2247520485&idx=1&sn=7803b9133a59d9e80752f6a6324c35be" target="_blank" rel="noopener">[AI寒武纪] Agnes 推出开源 Agent 神器 Agnes Harness</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tool-head">
+          <span class="tool-name">Dalibre</span>
+          <span class="tool-badge">MCP · 电子书管理</span>
+        </div>
+        <p class="tool-body">
+          兼容 Calibre 书库的轻量级电子书管理器（mac 安装包约 10MB），最大亮点是内置 <strong>MCP 服务</strong>：把本地书库连到 Claude Desktop / Claude Code / Cursor 后，AI Agent 就能调用工具做书籍搜索、添加、元数据修改和书库整理——比如"找出所有缺封面的书并补全作者信息"这类原本要逐本点开的手工活，一句指令批量完成。是体验 MCP 落地的好样本。
+          <br>🔗 少数派软件推荐（Mac/Win/Linux 跨平台）
+        </p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&mid=2247640891&idx=1&sn=8fd2a8bda6db3c83e6bae3fd5146350f" target="_blank" rel="noopener">[少数派] Dalibre：让 AI Agent 帮你管理电子书</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="tool-head">
+          <span class="tool-name">Cloudflare Search for Agents</span>
+          <span class="tool-badge">托管 · AI 检索</span>
+        </div>
+        <p class="tool-body">
+          给自己的站点加"可被 Agent 检索"的能力，过去要手动建 AI Search 实例、做集成、还要让智能体知道索引在哪。现在在 Cloudflare 控制台里对一个 zone <strong>打开开关</strong>，服务就会自动创建 AI Search 实例、抓取并索引内容，让 agent 能发现并使用你的检索端点，省掉一整条 retrieval 基础设施的搭建。
+          <br>🔗 <code>blog.cloudflare.com/search-for-agents/</code>
+        </p>
+        <div class="src">📎 来源：<a href="https://blog.cloudflare.com/search-for-agents/" target="_blank" rel="noopener">[The Cloudflare Blog] Introducing Search for Agents</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 4. 实践指南 ============ -->
+  <section>
+    <h2><span class="num">4</span>实践指南</h2>
+
+    <div class="practice">
+      <h3>▸ 升级到 Ubuntu 26 前，先回归测试交互式提权（sudo-rs）</h3>
+      <p>
+        Ubuntu 用 Rust 重写了包括 sudo 在内的一批系统工具，26.04 的 <code>sudo-rs</code> 与旧 sudo 在提权提示（privilege escalation prompt）的交互上存在差异。如果你的 Ansible / 自动化脚本依赖"密码提权"，升级后会遇到 <code>Timeout (12s) waiting for privilege escalation prompt</code>。
+      </p>
+      <ul>
+        <li>升级前在预发环境跑一遍所有 <code>become: true</code> 的 playbook；</li>
+        <li>优先切换到免密 sudo（sudoers NOPASSWD）或基于密钥的提权，减少对交互提示的依赖；</li>
+        <li>对关键自动化加超时与重试，并监控提权失败告警。</li>
+      </ul>
+      <div class="src">📎 来源：<a href="https://www.jeffgeerling.com/blog/2026/ansible-fails-become-ubuntu2604/" target="_blank" rel="noopener">[Jeff Geerling] Ansible Fails waiting for privilege escalation on Ubuntu 26</a></div>
+    </div>
+
+    <div class="practice">
+      <h3>▸ CI/CD 去密钥化：用 OIDC 换短期凭证替代长期 Access Key</h3>
+      <p>
+        在流水线里长期存放 <code>AWS_ACCESS_KEY_ID/SECRET</code> 是常见的高危面。标准做法是让 GitLab（或 GitHub Actions）通过 OIDC 与 AWS 建立联邦身份，任务运行时临时换取 STS 凭证。
+      </p>
+      <ul>
+        <li>AWS 侧建 IAM OIDC Identity Provider，信任你的 CI 平台；</li>
+        <li>角色信任策略里用 <code>sub</code> 条件限定到具体仓库 / 分支，防止被别的仓借道；</li>
+        <li>权限按最小化授予（如只允许目标 S3 前缀的 <code>s3:PutObject</code>）；</li>
+        <li>删除旧的长期密钥，审计历史泄露面。</li>
+      </ul>
+      <div class="src">📎 来源：<a href="https://www.freecodecamp.org/news/how-to-deploy-to-amazon-s3-using-gitlab-ci-cd-and-aws-oidc-without-aws-access-keys/" target="_blank" rel="noopener">[freeCodeCamp] Deploy to S3 with GitLab CI/CD and AWS OIDC</a></div>
+    </div>
+
+    <div class="practice">
+      <h3>▸ Lambda 超时翻倍到 30 分钟后，要连带调整的三处配置</h3>
+      <p>
+        函数最长可跑 30 分钟（无需 opt-in、无新增计费），但放宽上限会牵动周边组件，务必同步检查：
+      </p>
+      <ul>
+        <li><strong>并发：</strong>相同请求速率下，长任务会让并发量翻倍，核算预留并发与下游承载；</li>
+        <li><strong>SQS 可见性超时：</strong>需拉到 3 小时量级，避免消息在函数跑完前被重复投递；</li>
+        <li><strong>Kafka 映射：</strong>部分事件源映射需要重建才能匹配新上限。</li>
+      </ul>
+      <p>同时反问："这任务真的该进 Lambda 吗？"长时任务迁往 Step Functions / 容器往往更省钱可控。</p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/aws-lambda-30-minute-timeout/" target="_blank" rel="noopener">[InfoQ] AWS Lambda Doubles Its Timeout to 30 Minutes</a></div>
+    </div>
+
+    <div class="practice">
+      <h3>▸ Rust 1.100 never type（!）怎么用：表达"永不返回"与更干净的泛型</h3>
+      <p>
+        <code>never type</code>（<code>!</code>）稳定后，<code>Infallible</code> 成为它的别名，二者可互换。典型收益：
+      </p>
+      <ul>
+        <li><code>panic!</code>、<code>loop {}</code>、<code>process::exit()</code> 这类"永不正常返回"的表达式，类型上就是 <code>!</code>，能自动强制转换为任意类型，让你在 <code>match</code> 分支里少写 <code>unreachable!()</code> 之类的占位；</li>
+        <li><code>Result&lt;T, !&gt;</code> 与 <code>Result&lt;T, Infallible&gt;</code> 等价，方便在无需处理错误的 API 里统一签名；</li>
+        <li>顺带关注 <code>DropGuard</code> 与 Cargo 的依赖冷却设置（缓解上游供应链风险）。</li>
+      </ul>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/rust-1-100-never-types/" target="_blank" rel="noopener">[InfoQ] Rust 1.100 Ships the Never Type</a></div>
+    </div>
+
+    <div class="practice">
+      <h3>▸ 大模型推理服务"不停服升级"：蓝绿 + 在途请求收敛</h3>
+      <p>
+        vivo 在 KCD 杭州分享的实践值得参考：在 Kubernetes 上用 SGLang 的 P/D（prefill/decode）分离架构，配合 RBG（RoleBasedGroup）生命周期钩子与推理网关，实现平滑升级。
+      </p>
+      <ul>
+        <li><strong>旧实例：</strong>先停止接收新请求 → 处理完在途请求 → 完成 KV 传输后安全退出；</li>
+        <li><strong>新实例：</strong>预热验证通过后再承接流量；</li>
+        <li><strong>灰度策略：</strong>区分蓝绿与灰度升级的适用条件，准备好"旧请求超时 / 新实例启动失败 / 接流后性能异常"三类暂停与回滚预案；</li>
+        <li><strong>验收指标：</strong>请求成功率、首 Token 延迟、流式输出停顿。</li>
+      </ul>
+      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzI4NjY4MTU5Nw==&mid=2247507216&idx=2&sn=88d961db086cd64050e7cb3c08d93753" target="_blank" rel="noopener">[vivo互联网技术] 大模型推理服务不停服升级探索 | KCD 杭州站</a></div>
+    </div>
+
+  </section>
+
+  <!-- ============ 5. 参考链接汇总 ============ -->
+  <section>
+    <h2><span class="num">5</span>参考链接汇总</h2>
+    <div class="sources">
+      <ul>
+        <li><a href="https://www.infoq.com/news/2026/11/rust-1-100-never-types/" target="_blank" rel="noopener">Rust 1.100 Ships the Never Type After Ten Years and Five Failed Attempts</a> <span class="feed">— InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/github-css-migration/" target="_blank" rel="noopener">GitHub Ditches CSS-in-JS for CSS Modules, Reports 55% Faster SSR</a> <span class="feed">— InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/aws-lambda-30-minute-timeout/" target="_blank" rel="noopener">AWS Lambda Doubles Its Timeout to 30 Minutes After Eight Years at 15</a> <span class="feed">— InfoQ</span></li>
+        <li><a href="https://www.jeffgeerling.com/blog/2026/ansible-fails-become-ubuntu2604/" target="_blank" rel="noopener">Ansible Fails waiting for privilege escalation on Ubuntu 26</a> <span class="feed">— Jeff Geerling</span></li>
+        <li><a href="https://www.freecodecamp.org/news/how-to-deploy-to-amazon-s3-using-gitlab-ci-cd-and-aws-oidc-without-aws-access-keys/" target="_blank" rel="noopener">How to Deploy to Amazon S3 Using GitLab CI/CD and AWS OIDC</a> <span class="feed">— freeCodeCamp</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/doordash-dispatch-redesign/" target="_blank" rel="noopener">DoorDash Scales Dispatch 10x While Maintaining 99.99% Peak Availability</a> <span class="feed">— InfoQ</span></li>
+        <li><a href="https://blog.jetbrains.com/go/2026/11/25/go-by-goland-public-preview/" target="_blank" rel="noopener">GoLand Intelligence Now Available in Cursor and VS Code</a> <span class="feed">— The JetBrains Blog</span></li>
+        <li><a href="https://x.com/AnthropicAI/status/2125627317263466739" target="_blank" rel="noopener">We recently migrated our Messages API from Python to Rust</a> <span class="feed">— Anthropic (@AnthropicAI)</span></li>
+        <li><a href="https://www.youtube.com/watch?v=9oNvKMd7xJo" target="_blank" rel="noopener">How Anthropic builds software in 2026 with Katelyn Lesse</a> <span class="feed">— The Pragmatic Engineer</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg5MjU0NTI5OQ==&mid=2247607882&idx=1&sn=29dc274865dbd06fd48a35d98aff7593" target="_blank" rel="noopener">AIGC原生视频的双螺旋 Loop Engineering 实践</a> <span class="feed">— 百度Geek说</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&mid=2655943844&idx=1&sn=90bad1325c95a343639b7fa7db3486ec" target="_blank" rel="noopener">程序员别急着复制"全自动开发"！Gas Town 作者谈"垃圾山"</a> <span class="feed">— 51CTO技术栈</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzAxNDEwNjk5OQ==&mid=2650547174&idx=1&sn=b171682af05838ea8214918446403e69" target="_blank" rel="noopener">如何搭建一个端到端业务需求专家 Agent</a> <span class="feed">— 大淘宝技术</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5MDE0Mjc4MA==&mid=2651297979&idx=2&sn=68388033f47d87a3f7a2dfae3c39bc59" target="_blank" rel="noopener">把 AI 编程智能体装进同一个工作台：开源多 Agent 调度平台 Milletcode 实践</a> <span class="feed">— InfoQ</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3MTkxMjYzOA==&mid=2247520485&idx=1&sn=7803b9133a59d9e80752f6a6324c35be" target="_blank" rel="noopener">Agnes 推出开源 Agent 神器 Agnes Harness</a> <span class="feed">— AI寒武纪</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&mid=2247640891&idx=1&sn=8fd2a8bda6db3c83e6bae3fd5146350f" target="_blank" rel="noopener">Dalibre：让 AI Agent 帮你管理电子书</a> <span class="feed">— 少数派</span></li>
+        <li><a href="https://blog.cloudflare.com/search-for-agents/" target="_blank" rel="noopener">Introducing Search for Agents</a> <span class="feed">— The Cloudflare Blog</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzI4NjY4MTU5Nw==&mid=2247507216&idx=2&sn=88d961db086cd64050e7cb3c08d93753" target="_blank" rel="noopener">大模型推理服务不停服升级探索 | vivo 与您相约 KCD 杭州站</a> <span class="feed">— vivo互联网技术</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span class="dot">●</span> 科技日报 · 开发者实践版 · 由 tech-daily-generator 生成 · 数据窗口 2026-11-25 ~ 2026-11-26
+  </footer>
+
+</div>
+</body>
+</html>
