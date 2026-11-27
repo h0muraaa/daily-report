@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发者实践版 · 科技日报 2026-11-27</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1c2128; --border:#30363d;
+    --text:#c9d1d9; --muted:#8b949e; --green:#3fb950; --cyan:#39d0d8;
+    --blue:#58a6ff; --purple:#bc8cff; --orange:#f0883e; --yellow:#d29922; --pink:#ff7b9c;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family: var(--mono); font-size:15px; line-height:1.75;
+    background-image: radial-gradient(circle at 1px 1px, rgba(48,54,61,.35) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+  .wrap{max-width:960px; margin:0 auto; padding:0 20px 80px;}
+  /* terminal window header */
+  .term{
+    margin-top:36px; background:var(--panel); border:1px solid var(--border);
+    border-radius:10px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.45);
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px; padding:10px 14px;
+    background:var(--panel-2); border-bottom:1px solid var(--border);
+  }
+  .dot{width:12px; height:12px; border-radius:50%;}
+  .dot.r{background:#ff5f56;} .dot.y{background:#ffbd2e;} .dot.g{background:#27c93f;}
+  .term-title{margin-left:10px; color:var(--muted); font-size:13px;}
+  .term-body{padding:26px 28px 30px;}
+  h1{
+    font-size:24px; margin:0 0 6px; color:#fff; letter-spacing:.5px;
+    font-weight:700;
+  }
+  h1 .prompt{color:var(--green);}
+  h1 .cursor{
+    display:inline-block; width:9px; height:22px; background:var(--cyan);
+    margin-left:4px; vertical-align:-3px; animation:blink 1.05s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+  .subtitle{color:var(--muted); font-size:13px; margin-bottom:18px;}
+  .meta-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:10px; margin-top:14px;
+  }
+  .meta-cell{
+    background:var(--bg); border:1px solid var(--border); border-radius:8px;
+    padding:10px 12px;
+  }
+  .meta-cell .k{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.6px;}
+  .meta-cell .v{color:var(--cyan); font-size:15px; font-weight:600; margin-top:2px;}
+  .tag{
+    display:inline-block; font-size:11px; padding:1px 8px; border-radius:999px;
+    border:1px solid var(--border); color:var(--muted); margin-right:6px;
+  }
+
+  section{margin-top:44px;}
+  h2{
+    font-size:19px; color:#fff; margin:0 0 4px; display:flex; align-items:center; gap:10px;
+  }
+  h2 .idx{color:var(--green); font-size:15px;}
+  h2::after{content:""; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent);}
+  .sec-desc{color:var(--muted); font-size:13px; margin:0 0 18px;}
+
+  /* hot list cards */
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--cyan);
+    border-radius:8px; padding:16px 18px; margin-bottom:14px;
+    transition:border-color .2s, transform .2s;
+  }
+  .card:hover{border-left-color:var(--green); transform:translateX(2px);}
+  .card h3{
+    font-size:15.5px; color:#fff; margin:0 0 8px; line-height:1.5; font-weight:600;
+  }
+  .card p{margin:0 0 10px; color:var(--text); font-size:14px;}
+  .card .src{font-size:12px; color:var(--muted);}
+  .badge{
+    font-size:10.5px; padding:1px 7px; border-radius:5px; margin-right:8px;
+    font-weight:600; letter-spacing:.3px; vertical-align:1px;
+  }
+  .b-new{background:rgba(63,185,80,.15); color:var(--green); border:1px solid rgba(63,185,80,.4);}
+  .b-upd{background:rgba(88,166,255,.15); color:var(--blue); border:1px solid rgba(88,166,255,.4);}
+  .b-warn{background:rgba(240,136,62,.15); color:var(--orange); border:1px solid rgba(240,136,62,.4);}
+  .b-oss{background:rgba(188,140,255,.15); color:var(--purple); border:1px solid rgba(188,140,255,.4);}
+
+  /* deep dive */
+  .deep{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:22px 24px; margin-bottom:20px;
+  }
+  .deep h3{font-size:17px; color:var(--cyan); margin:0 0 12px; font-weight:600;}
+  .deep h4{font-size:14px; color:var(--yellow); margin:18px 0 6px;}
+  .deep p{margin:0 0 12px; font-size:14px;}
+  .deep ul{margin:0 0 14px; padding-left:20px;}
+  .deep li{margin-bottom:6px; font-size:14px;}
+  code{
+    background:var(--bg); border:1px solid var(--border); border-radius:4px;
+    padding:1px 6px; font-size:13px; color:var(--pink);
+  }
+  pre{
+    background:var(--bg); border:1px solid var(--border); border-radius:8px;
+    padding:14px 16px; overflow-x:auto; font-size:13px; line-height:1.6; margin:0 0 14px;
+  }
+  pre .c{color:var(--muted);}
+  pre .kw{color:var(--purple);} pre .fn{color:var(--blue);} pre .st{color:var(--green);}
+
+  /* tool grid */
+  .tools{display:grid; grid-template-columns:1fr; gap:14px;}
+  .tool{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:16px 18px;
+    border-top:3px solid var(--purple);
+  }
+  .tool .name{color:#fff; font-size:15px; font-weight:700;}
+  .tool .name .star{color:var(--yellow);}
+  .tool p{margin:8px 0 10px; font-size:14px;}
+
+  /* practice list */
+  .practice{
+    background:var(--panel); border:1px solid var(--border); border-radius:8px;
+    padding:16px 18px; margin-bottom:14px; border-left:3px solid var(--yellow);
+  }
+  .practice h3{font-size:15px; color:#fff; margin:0 0 8px; font-weight:600;}
+  .practice p{margin:0 0 10px; font-size:14px;}
+
+  a{color:var(--blue); text-decoration:none; border-bottom:1px dotted rgba(88,166,255,.4);}
+  a:hover{color:var(--cyan); border-bottom-color:var(--cyan);}
+
+  /* sources */
+  .sources{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:22px 24px;
+  }
+  .sources ol{margin:0; padding-left:22px;}
+  .sources li{margin-bottom:9px; font-size:13px; color:var(--muted);}
+  .sources li a{color:var(--text);}
+  .sources .srcname{color:var(--green);}
+
+  footer{
+    margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+    color:var(--muted); font-size:12px; text-align:center;
+  }
+  @media(max-width:600px){
+    .term-body{padding:20px 16px;}
+    h1{font-size:19px;}
+    .wrap{padding:0 12px 60px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== Terminal Header ===== -->
+  <div class="term">
+    <div class="term-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="term-title">~/tech-daily — developer_practice — 2026-11-27</span>
+    </div>
+    <div class="term-body">
+      <h1><span class="prompt">$&gt;</span> 开发者实践日报<span class="cursor"></span></h1>
+      <p class="subtitle">// 一线开发者视角 · 技术细节 · 工具更新 · 最佳实践</p>
+      <div>
+        <span class="tag">#技术热榜</span>
+        <span class="tag">#深度解读</span>
+        <span class="tag">#工具推荐</span>
+        <span class="tag">#实践指南</span>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-cell"><div class="k">数据窗口</div><div class="v">24h</div></div>
+        <div class="meta-cell"><div class="k">抓取条目</div><div class="v">168 条</div></div>
+        <div class="meta-cell"><div class="k">来源数</div><div class="v">424</div></div>
+        <div class="meta-cell"><div class="k">覆盖时段</div><div class="v">11-26 → 11-27</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 今日技术热榜 ===== -->
+  <section>
+    <h2><span class="idx">01</span> 今日技术热榜</h2>
+    <p class="sec-desc">从 168 条新闻中筛出对一线工程师最有价值的技术动态，聚焦工具链、框架与运行时。</p>
+
+    <div class="card">
+      <h3><span class="badge b-new">New</span>Node.js 27 进入 alpha 通道（v27.0.0-alpha.0.2.0）</h3>
+      <p>Node.js 官方博客发布了 v27 线的第二个 alpha 版本 <code>27.0.0-alpha.0.2.0</code>。这是 v27 主版本的早期预发布，面向愿意尝鲜和帮助验证的开发者。alpha 阶段的构建不保证 API 稳定，建议在与生产隔离的环境中使用 <code>nvm</code>/<code>fnm</code> 单独切一个 27 的运行时来做兼容性回归，尤其关注原生插件（N-API）与 ESM 加载路径在升级后的表现。生产环境请继续停留在当前 LTS 线。</p>
+      <div class="src">📎 来源：<a href="https://nodejs.org/en/blog/release/v27.0.0-alpha.0.2.0" target="_blank" rel="noopener">[Node.js Blog]</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-upd">Update</span>.NET MAUI 11：CoreCLR 成为默认运行时，XAML 支持增量热重载</h3>
+      <p>随 .NET 11 一同发布的 .NET MAUI 更新主打“质量”而非新特性。最大变化是 <strong>CoreCLR 在所有平台上成为默认运行时</strong>，替代此前的 Mono，意味着更一致的运行时行为与更好的性能基线；XAML 侧新增<strong>增量热重载</strong>、隐式命名空间和更快的资源字典加载。此外还加入设备测试模板、passkey 支持，并抬高了 Android 与 Apple 平台的最低版本要求。跨平台移动开发者升级前需先核对最低 OS 版本与依赖链。</p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/dotnet-maui-11-coreclr-hotreload/" target="_blank" rel="noopener">[InfoQ]</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-new">v3.0</span>Mock Service Worker 3.0：纯 ESM、Socket 级拦截、GraphQL 订阅</h3>
+      <p>MSW 发布 3.0：全面转向 <strong>ESM-only</strong>，最低要求 Node.js 22，包体积从 416KB 降到 234KB。新增 GraphQL subscription 支持、按协议拆分的专用入口，以及实验性的 <code>defineNetwork</code> API；Node.js 端的拦截下沉到 <strong>TCP 与 TLS 层</strong>，能拦到更底层的请求。需要留意：有用户反馈新加入的 <code>OPTIONS</code> 预检请求拦截会导致既有测试用例失败——升级时要检查测试里的 CORS/预检 mock。</p>
+      <div class="src">📎 来源：<a href="https://www.infoq.com/news/2026/11/mock-service-worker-v3/" target="_blank" rel="noopener">[InfoQ]</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-warn">Deprecation</span>uni-app 官宣：传统 App 端与 uni-app x VDOM 模式将于 2027 年初停止维护</h3>
+      <p>DCloud 在文档中明确：传统 uni-app 的 <strong>App 端（Vue2/Vue3）</strong> 与 uni-app x 的 <strong>VDOM 模式</strong>均将于 <strong>2027 年初停止维护</strong>，官方将转向 uni-app x 的蒸汽模式（Vapor Mode）。注意范围：<em>小程序端与 Web 端并未停止维护</em>，HTML5+ 与 nvue 早在 2024 年已停维。停止维护不等于下线——已上线 App 仍可运行，但原则上不再提供更新。重度依赖 uni-app 做 App 的团队应尽早规划向 Vapor Mode 迁移的评估。</p>
+      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzU2MTIyNDUwMA==&mid=2247537213&idx=1&sn=ea14648d893e015186255bef5ea503fb" target="_blank" rel="noopener">[前端充电宝]</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-oss">OSS</span>腾讯混元开源 DFly2 草稿模型：Hy4 flash 吐字最高提速 4.2×</h3>
+      <p>混元开源新一代投机采样草稿模型 <strong>DFly2</strong>，专为 DSA 类稀疏注意力大模型与长上下文、Agent 场景设计。它不替换主模型，而是作为旁挂加速组件，在<strong>保持权重和输出不变</strong>的前提下提升生成速度：19 个公开评测集上平均加速比分别高于 DFlash、DSpark 约 12% 与 30%，单项最高 4.2×。亮点是极致复用——每个 draft 层直接共享目标模型对应稀疏注意力层的 KV cache（KV Share）与 indexer。Hy4 flash 权重与完整训练代码同步开源，适合本地/私有化推理栈降本。</p>
+      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkwODU2OTQyNQ==&mid=2247499116&idx=1&sn=5e8af49c48d4b3c1d7e06b98d6114160" target="_blank" rel="noopener">[腾讯混元]</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-oss">OSS</span>Lucebox 开源 Inkling 2 Mini Fast：生成 Token 减半，130 题准确率升至 87.7%</h3>
+      <p>Lucebox 基于 Thinking Machines Lab 的 Inkling 2 Mini（26.4B 循环式 MoE）做权重调优与量化，推出 <strong>Inkling 2 Mini Fast</strong> 的 GGUF 版本，提供动态 Q8、4/8 位混合量化和面向 16GB 显卡的 4 位量化三种规格。通过让模型在默认推理强度下用更少 token 作答，在 MATH-500/HumanEval/MMLU-Pro 共 130 题上，单张 AMD Radeon AI PRO R9700 端到端总耗时接近减半，正确率从 83.8% 提升到 87.7%，并提供 ROCm 推理优化。想在本地 16GB 卡跑 MoE 的开发者值得一试（注意文件约 14GiB，需为缓存留余量）。</p>
+      <div class="src">📎 来源：<a href="https://www.modelscope.cn/models/Lucebox/Inkling-2-Mini-Fast-GGUF" target="_blank" rel="noopener">[魔搭 ModelScope]</a> · <a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&mid=2247504201&idx=1&sn=e41de2641a10e2a462cd37f522165e0d" target="_blank" rel="noopener">[机器之心]</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-warn">争议</span>4.1 万行 AI 代码塞进 Linux 内核，Linus 发火：“让 AI 助手先把自己的事做好”</h3>
+      <p>EXT4 维护者 Theodore Ts'o 在 Linux 7.4-rc5 阶段提交了一份新增 <strong>41,197 行</strong>的补丁，包含大量 AI 生成的 EXT4 Bug 修复以及为验证 AI 补丁新增的 KUnit 测试用例。代码最终被合并，但 Linus 在内核邮件列表中明确表达不满——核心争议不在“AI 写代码”本身，而在<strong>提交时机</strong>与工程规范：RC 阶段不应塞入如此体量的变更，且 AI 生成代码的验证责任仍在提交者。对开发者的教训：AI 加速产出不能替代对变更粒度、评审时机和质量把关的判断。</p>
+      <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247839084&idx=1&sn=d20826eef137bd9ba82223091c335c04" target="_blank" rel="noopener">[CSDN]</a></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge b-upd">更新</span>llama.cpp 推出面向 AMD Ryzen 与 Radeon 的基准测试看板</h3>
+      <p>Hugging Face 上 ggml-org 发布了 llama.cpp 的 <strong>benchmark dashboard</strong>，专门覆盖 AMD Ryzen CPU 与 Radeon GPU 平台。对于在 AMD 硬件上跑本地大模型的开发者，这提供了一个统一的性能对照入口，可用于选型（不同量化格式、不同显卡的吞吐差异）和回归验证。结合上面 DFly2、Inkling 2 Mini Fast 的本地化趋势，AMD 生态的本地推理工具链正在补齐。</p>
+      <div class="src">📎 来源：<a href="https://huggingface.co/blog/ggml-org/llamacpp-amd-bench" target="_blank" rel="noopener">[Hugging Face Blog]</a></div>
+    </div>
+  </section>
+
+  <!-- ===== 深度技术解读 ===== -->
+  <section>
+    <h2><span class="idx">02</span> 深度技术解读</h2>
+    <p class="sec-desc">挑两个值得工程师认真读一读的话题，拆开讲清楚其中的设计思想与可落地之处。</p>
+
+    <div class="deep">
+      <h3>① “杀死代码评审”：当 75% 的 PR 不经人工评审就合并</h3>
+      <p>Aviator 的 Ankit Jain 在 QCon San Francisco 2026 提出了一个颇具冲击力的判断：<strong>逐行代码评审（line-by-line code review）正在消亡</strong>。他的依据是一个常被忽视的事实——绝大多数评审评论其实是在做“知识分享”，而非发现缺陷；在他的团队里，超过 <strong>75% 的 PR 未经人工评审就直接合入</strong>。</p>
+      <h4>把评审拆成六层</h4>
+      <ul>
+        <li><code>argue</code> — 先就“要不要做、做成什么样”达成一致；</li>
+        <li><code>capture</code> — 把决策与约束沉淀成可追溯的记录；</li>
+        <li><code>codify</code> — 将约定固化为自动化规则/检查；</li>
+        <li><code>prove</code> — 用测试和验证“证明”变更正确，而非靠人眼看；</li>
+        <li><code>debate</code> — 只在真正有分歧处发起讨论；</li>
+        <li><code>own</code> — 明确责任归属。</li>
+      </ul>
+      <p>Jain 团队报告的结果值得参考：在引入这套分层机制后，<strong>合并 PR 数量提升到 4 倍，回滚（revert）反而减少约 40%</strong>。</p>
+      <h4>为什么值得开发者关注</h4>
+      <p>这套思路的本质，是把“评审”从依赖个人精力的瓶颈，转为依赖 <strong>自动化验证 + 决策记录</strong> 的工程能力。它与当下 AI 生成代码大量涌入的现实高度契合：当代码产量暴增，靠人逐行看既不可能也不经济，真正的质量保障要前移到“可验证的断言”和“可追溯的决策”上。对团队的启发是：不必粗暴地取消评审，而是问清楚——<em>我们每次评审，究竟是在找 bug，还是在做知识传递？如果是后者，能否用文档、规则和测试把它自动化掉？</em></p>
+      <div class="src" style="color:var(--muted);font-size:12px;">📎 来源：<a href="https://www.infoq.com/news/2026/11/qcon-sf-26-kill-code-review/" target="_blank" rel="noopener">[InfoQ · QCon SF 2026]</a></div>
+    </div>
+
+    <div class="deep">
+      <h3>② mini-agent 演进到 v3：Agent 的“手”与“know-how”是怎么设计的</h3>
+      <p>架构师之路的沈剑把自研 mini-agent 从 v1 讲到 v3，v2 已经具备“双层循环 + 全量记忆 + 超阈值压缩 + 阶段闸门”。但真正让它从“只能聊天”跨到“能执行任务”的，是 v3 补上的两样东西：<strong>执行能力（工具/一双手）</strong>与 <strong>方法论（know-how）</strong>。</p>
+      <h4>工具不是 API 的包装</h4>
+      <p>这是全文最值得记住的一句话。引述 Anthropic 的经典对比：</p>
+      <pre><span class="c">// bad case：把已有 API 原样包装</span>
+<span class="fn">list_contacts</span>()            <span class="c">// 一次返回一千条，让 Agent 自己翻</span>
+
+<span class="c">// good case：按 Agent 干活的方式重新设计</span>
+<span class="fn">search_contacts</span>(<span class="st">"张三"</span>)    <span class="c">// 按名字搜，只返回匹配的那几条</span></pre>
+      <p>沈剑转述的关键观点是：<em>“工具是确定性系统与非确定性 Agent 之间的契约。”</em> 一个极简的通用 Agent（如 PI agent）默认只有 <code>read / write / edit / bash</code> 四个工具，外加内置的 <code>grep / find / ls</code>，总共 7 个，就能读代码、改代码、跑命令，胜过许多花哨框架。</p>
+      <h4>工具设计的四条原则（摘要）</h4>
+      <ul>
+        <li><strong>按工作流合并，不按 API 拆分</strong>——一个工具完成一个有意义的任务，而非暴露一堆底层原子操作；</li>
+        <li><strong>让返回值“可决策”</strong>——返回匹配结果而非全量数据，减少 Agent 的无效推理；</li>
+        <li><strong>契约清晰</strong>——输入输出语义明确，降低非确定性调用出错概率；</li>
+        <li><strong>数量克制</strong>——工具不是越多越好，越少越聚焦，Agent 越不容易选错。</li>
+      </ul>
+      <p>对正在自建 Agent 的开发者，v3 的启示很直接：<strong>先把工具当成“给同事设计的 CLI”来设计，再谈 prompt 与编排</strong>。工具接口决定了 Agent 能力的天花板，而太多项目把精力花在了框架选型上，却在最关键的“工具契约”上偷懒。</p>
+      <div class="src" style="color:var(--muted);font-size:12px;">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651982075&idx=1&sn=9764455d8ca358d288c0c34f5e880c20" target="_blank" rel="noopener">[架构师之路]</a></div>
+    </div>
+  </section>
+
+  <!-- ===== 工具推荐 ===== -->
+  <section>
+    <h2><span class="idx">03</span> 工具推荐</h2>
+    <p class="sec-desc">今天值得加入工具箱的几个项目，都是能直接上手用的。</p>
+    <div class="tools">
+
+      <div class="tool">
+        <div class="name">sqlite3_rsync <span class="star">★ 被低估</span></div>
+        <p>SQLite 官方自带的远程快照复制工具（3.47.0 起实验性引入，3.50.0 增强），Simon Willison 今天才点出它最大的价值：<strong>无需在本地先复制一份完整数据库</strong>，就能通过 SSH 把数据库快照同步到另一台机器。传统做法用 <code>backup API</code> 或 <code>VACUUM INTO</code> 都要先占一份等量磁盘，磁盘用超一半的小实例直接“无解”；<code>sqlite3_rsync</code> 正好绕开这个限制，也适合做异地备份与只读副本分发。</p>
+        <div class="src">📎 来源：<a href="https://simonwillison.net/2026/Nov/26/sqlite3-rsync/" target="_blank" rel="noopener">[Simon Willison's Weblog]</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="name">OpenMotion <span class="star">★ 1.6 万 Star</span></div>
+        <p>OpenDesign 团队开源的视频创作工作台，定位为 Claude Motion 的开源替代。核心玩法：上传一段参考视频 → Agent（Codex / Claude Code 等）理解需求、分析参考片并修改工程 → 在可视化 Studio 中调时间轴、预览、导出，成片还能继续在对话里迭代。内置 300+ 份 <code>Motion.md</code> 动效指南（含参考视频与制作说明），适合做产品宣传片、功能演示、动效讲解。对想研究“Agent + 可视化编辑器”协作模式的开发者也是很好的参考样本。</p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247538735&idx=1&sn=6a0f6a23ca5f9f9b466aff684ec31b3f" target="_blank" rel="noopener">[逛逛GitHub]</a></div>
+      </div>
+
+      <div class="tool">
+        <div class="name">MAGI-2 <span class="star">★ 开源在途</span></div>
+        <p>Sand.ai 新一代视频生成模型（480B 总参 / 每次激活约 28B），单次可生成 4–30 秒 1080P 有声视频，支持最多 20 份参考素材分别指定人物/商品/场景/声音。在 Higgsfield 的对比里拿到 1146 分，仅次于 Seedance 2.5，但价格约为其六分之一（1080P 每秒 0.5 元）。官方已宣布将分阶段开源，对需要低成本、可二次开发的视频生成能力的团队是重要选项。</p>
+        <div class="src">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247635863&idx=1&sn=e7667a38d034a10072a64cdacc7df4da" target="_blank" rel="noopener">[硅星人Pro]</a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== 实践指南 ===== -->
+  <section>
+    <h2><span class="idx">04</span> 实践指南</h2>
+    <p class="sec-desc">可直接落地的方法论与踩坑经验。</p>
+
+    <div class="practice">
+      <h3>命令式 vs 函数式 vs λ 编码：哪种代码对 AI 更“友好”？</h3>
+      <p>阿里云开发者的一篇长文回答了一个很实际的问题：当 AI 参与代码理解、需求修改、缺陷定位和测试生成时，不同代码风格会不会影响协作成本？结论不是给范式排个高低，而是：<strong>显式依赖、局部推理、适度抽象、低成本验证</strong>这四点的作用，比“命令式还是函数式”的标签更直接。工程化的函数式（纯函数、明确输入输出、适当不可变）有助于隔离状态与副作用，而<strong>清晰的命令式代码同样能做到</strong>；反而是极端的 λ 编码（把数字、布尔、列表全用函数表示）会显著增加数据表示和求值策略的理解负担。给 AI 写代码（或让 AI 改你的代码）时，先问“这段逻辑能否只靠局部上下文读懂”，比纠结风格更有用。</p>
+      <div class="src" style="color:var(--muted);font-size:12px;">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&mid=2247562826&idx=1&sn=f5f8266a4acd4f29b2980674c0418a08" target="_blank" rel="noopener">[阿里云开发者]</a></div>
+    </div>
+
+    <div class="practice">
+      <h3>让开源项目“AI 友好”：AntV 的文档升级实践（llms.txt / 内容协商）</h3>
+      <p>AntV 观察到文档多了一类使用者——替开发者查资料、写代码、调用工具的 Agent，于是从几个层面做了 AI 友好升级：借鉴 Vercel 的 <strong>HTTP 内容协商</strong>（浏览器给 HTML，Agent 给 Markdown，剥掉导航/样式/脚本噪音）、用 <strong><code>llms.txt</code></strong> 提供内容索引让 Agent 知道“有哪些资料、去哪读”，并以真实任务做评测验证效果。如果你在维护组件库或开源工具，这套“人看网页、Agent 读结构化内容”的双通道设计，是当下提升 AI 编码工具使用体验的实用范式。</p>
+      <div class="src" style="color:var(--muted);font-size:12px;">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=Mzg3NTU4OTc3OA==&mid=2247501687&idx=1&sn=a4fab31ee65a4fa56c78baf14178ae4f" target="_blank" rel="noopener">[数据可视化 AntV]</a></div>
+    </div>
+
+    <div class="practice">
+      <h3>为自己造工具：GitHub Copilot 工程师的逆向思路</h3>
+      <p>Blazor 创建者、现 GitHub Copilot 团队的 Steve Sanderson 提出一个反直觉观点：过去很少给自己造整套开发工具，因为“要服务整个市场才算得过来账”；但有了 AI 辅助编程，<strong>只为自己做一个贴合个人偏好的工具，也已经划算了</strong>。他建议开发者别只用 AI 赶工，而是用它“造饭碗”——改造自己的工具链、形成别人没有的工作方式。关于 Agent，他强调：核心确实是工具调用循环，但要做成先进系统还有很多复杂问题，不必全部自研，优先用成熟 SDK。</p>
+      <div class="src" style="color:var(--muted);font-size:12px;">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&mid=2655943858&idx=1&sn=f73305c621bb812d0404404ab3e95b8b" target="_blank" rel="noopener">[51CTO 技术栈]</a></div>
+    </div>
+
+    <div class="practice">
+      <h3>把踩过的坑写进 Git：得物 Akashic 知识工程</h3>
+      <p>得物技术分享了 Akashic 知识工程实践：AI 研发团队的知识散落在代码、文档、聊天记录里，换人接手就得重新补课。他们的做法是把知识存进 <strong>Git</strong>，设计 <code>L1 路由 / L2 文档·Skill / L3 源码注释</code> 三层，Agent 逐层下读；提交时用脚本定位受影响的文档，会话归档后由双 Agent 提炼回写，把个人踩坑沉淀为团队上下文。对想给 Agent 建立“项目记忆”的团队，这是一个可落地的组织级方案。</p>
+      <div class="src" style="color:var(--muted);font-size:12px;">📎 来源：<a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&mid=2247547863&amp;idx=1&amp;sn=8f307143d06ad3b67031f45c41894ff0" target="_blank" rel="noopener">[得物技术]</a></div>
+    </div>
+  </section>
+
+  <!-- ===== 参考链接汇总 ===== -->
+  <section>
+    <h2><span class="idx">05</span> 参考链接汇总</h2>
+    <div class="sources">
+      <ol>
+        <li><a href="https://nodejs.org/en/blog/release/v27.0.0-alpha.0.2.0" target="_blank" rel="noopener">Node.js 27.0.0-alpha.0.2.0 (Alpha)</a> — <span class="srcname">Node.js Blog</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/dotnet-maui-11-coreclr-hotreload/" target="_blank" rel="noopener">.NET MAUI 11 Makes CoreCLR the Default Runtime and Adds Incremental XAML Hot Reload</a> — <span class="srcname">InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/mock-service-worker-v3/" target="_blank" rel="noopener">Mock Service Worker Releases v3.0 with ESM-Only Build, Socket-Based Interception and GraphQL Subscriptions</a> — <span class="srcname">InfoQ</span></li>
+        <li><a href="https://www.infoq.com/news/2026/11/qcon-sf-26-kill-code-review/" target="_blank" rel="noopener">QCon San Francisco 2026: How to Kill the Code Review</a> — <span class="srcname">InfoQ</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzU2MTIyNDUwMA==&mid=2247537213&idx=1&sn=ea14648d893e015186255bef5ea503fb" target="_blank" rel="noopener">uni-app 官宣：即将停止 App 端维护！</a> — <span class="srcname">前端充电宝</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkwODU2OTQyNQ==&mid=2247499116&idx=1&sn=5e8af49c48d4b3c1d7e06b98d6114160" target="_blank" rel="noopener">让 Hy4 flash 吐字提速 4.2 倍，混元 DFly2 开源</a> — <span class="srcname">腾讯混元</span></li>
+        <li><a href="https://www.modelscope.cn/models/Lucebox/Inkling-2-Mini-Fast-GGUF" target="_blank" rel="noopener">Lucebox 开源 Inkling 2 Mini Fast（ModelScope）</a> — <span class="srcname">魔搭 ModelScope</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyMzcwMDIyMQ==&mid=2247504201&idx=1&sn=e41de2641a10e2a462cd37f522165e0d" target="_blank" rel="noopener">Lucebox 发布 Inkling 2 Mini Fast 量化版本，CompilerKV 开源长上下文 KV 缓存压缩</a> — <span class="srcname">机器之心 SOTA 模型</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkzMDY1NDgyOQ==&mid=2247839084&idx=1&sn=d20826eef137bd9ba82223091c335c04" target="_blank" rel="noopener">4.1 万行 AI 代码塞进 Linux 内核，Linus 一顿怒斥</a> — <span class="srcname">CSDN</span></li>
+        <li><a href="https://huggingface.co/blog/ggml-org/llamacpp-amd-bench" target="_blank" rel="noopener">Introducing the llama.cpp benchmark dashboard for AMD Ryzen and Radeon</a> — <span class="srcname">Hugging Face Blog</span></li>
+        <li><a href="https://simonwillison.net/2026/Nov/26/sqlite3-rsync/" target="_blank" rel="noopener">sqlite3_rsync: Database Remote-Copy Tool For SQLite</a> — <span class="srcname">Simon Willison's Weblog</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzUxNjg4NDEzNA==&mid=2247538735&idx=1&sn=6a0f6a23ca5f9f9b466aff684ec31b3f" target="_blank" rel="noopener">GitHub 上 1.6 万 Star！这个项目让 AI 帮你复刻视频（OpenMotion）</a> — <span class="srcname">逛逛GitHub</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkyNjU2ODM2NQ==&mid=2247635863&idx=1&sn=e7667a38d034a10072a64cdacc7df4da" target="_blank" rel="noopener">媲美 Seedance 2.5 的 MAGI-2 宣布开源，价格只要十分之一</a> — <span class="srcname">硅星人Pro</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&mid=2651982075&idx=1&sn=9764455d8ca358d288c0c34f5e880c20" target="_blank" rel="noopener">mini-agent 已经从 v1，v2 演进到了 v3</a> — <span class="srcname">架构师之路</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&mid=2247562826&idx=1&sn=f5f8266a4acd4f29b2980674c0418a08" target="_blank" rel="noopener">命令式、函数式与 λ 编码：不同代码表达对 AI 协作成本的影响</a> — <span class="srcname">阿里云开发者</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3NTU4OTc3OA==&mid=2247501687&idx=1&sn=a4fab31ee65a4fa56c78baf14178ae4f" target="_blank" rel="noopener">AntV 的 AI 友好升级实践</a> — <span class="srcname">数据可视化 AntV</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODI5Njc2MA==&mid=2655943858&idx=1&sn=f73305c621bb812d0404404ab3e95b8b" target="_blank" rel="noopener">开发者别用 AI 赶工，而是用它造“饭碗”（GitHub Copilot 工程师）</a> — <span class="srcname">51CTO 技术栈</span></li>
+        <li><a href="https://mp.weixin.qq.com/s?__biz=MzkxNTE3ODU0NA==&mid=2247547863&amp;idx=1&amp;sn=8f307143d06ad3b67031f45c41894ff0" target="_blank" rel="noopener">Akashic 知识工程实践</a> — <span class="srcname">得物技术</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    developer_practice · generated 2026-11-27 · 数据窗口 2026-11-26 01:13 → 2026-11-27 01:13<br>
+    共 168 条新闻 / 424 个来源 · 本期精选 18 条
+  </footer>
+
+</div>
+</body>
+</html>
