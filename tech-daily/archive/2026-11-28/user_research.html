@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科技日报 · 用户研究版 · 2026-11-28</title>
+<style>
+  :root{
+    --orange:#ff7a45;
+    --orange-soft:#ffb08a;
+    --purple:#7c5cff;
+    --purple-soft:#b9a8ff;
+    --ink:#2b2430;
+    --ink-soft:#5c5468;
+    --muted:#8a8296;
+    --bg:#fdf9f6;
+    --card:#ffffff;
+    --line:#ece5df;
+    --grad:linear-gradient(135deg,#ff8a5b 0%,#ff6b9d 45%,#8a6bff 100%);
+    --grad-soft:linear-gradient(135deg,#fff1ea 0%,#f6eeff 100%);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px 80px;}
+
+  /* ---------- Header ---------- */
+  header{
+    background:var(--grad);
+    color:#fff;
+    border-radius:0 0 32px 32px;
+    padding:56px 32px 48px;
+    margin-bottom:40px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 18px 40px -18px rgba(124,92,255,.55);
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    width:300px;height:300px;
+    background:radial-gradient(circle,rgba(255,255,255,.35),transparent 70%);
+    top:-120px;right:-80px;
+    border-radius:50%;
+  }
+  header .kicker{
+    font-size:13px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    opacity:.9;
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  header h1{
+    font-size:34px;
+    font-weight:800;
+    letter-spacing:.5px;
+    margin-bottom:12px;
+    position:relative;z-index:2;
+  }
+  header .sub{
+    font-size:15px;
+    opacity:.95;
+    max-width:560px;
+    position:relative;z-index:2;
+  }
+  header .meta{
+    margin-top:22px;
+    display:flex;flex-wrap:wrap;gap:10px;
+    position:relative;z-index:2;
+  }
+  header .meta span{
+    background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.35);
+    padding:5px 14px;
+    border-radius:999px;
+    font-size:13px;
+    backdrop-filter:blur(4px);
+  }
+
+  /* ---------- Section ---------- */
+  section{margin-bottom:48px;}
+  .sec-head{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:22px;
+  }
+  .sec-head .num{
+    flex:none;
+    width:42px;height:42px;border-radius:14px;
+    background:var(--grad);
+    color:#fff;font-weight:800;font-size:18px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 18px -8px rgba(255,107,157,.7);
+  }
+  .sec-head h2{
+    font-size:23px;font-weight:800;letter-spacing:.3px;
+  }
+  .sec-head .en{
+    font-size:12px;color:var(--muted);font-weight:600;
+    letter-spacing:1px;text-transform:uppercase;
+    margin-left:2px;
+  }
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:24px 26px;
+    margin-bottom:18px;
+    box-shadow:0 10px 30px -22px rgba(43,36,48,.35);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 16px 38px -22px rgba(124,92,255,.45);
+  }
+  .card h3{
+    font-size:18px;font-weight:800;
+    line-height:1.5;margin-bottom:10px;
+    color:var(--ink);
+  }
+  .card h3 .idx{
+    color:var(--orange);
+    font-weight:900;
+    margin-right:8px;
+  }
+  .card p{
+    font-size:15px;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+  }
+  .card p:last-of-type{margin-bottom:14px;}
+  .card .tag{
+    display:inline-block;
+    font-size:12px;font-weight:700;
+    color:var(--purple);
+    background:var(--grad-soft);
+    border:1px solid #efe4ff;
+    padding:3px 11px;
+    border-radius:999px;
+    margin-bottom:12px;
+    margin-right:6px;
+  }
+  .card .hl{
+    color:var(--orange);
+    font-weight:700;
+  }
+  .card strong{color:var(--ink);font-weight:700;}
+
+  /* insight number list */
+  .insight-card{display:flex;gap:18px;}
+  .insight-card .big-num{
+    flex:none;
+    font-size:30px;font-weight:900;
+    background:var(--grad);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    line-height:1;
+    padding-top:4px;
+  }
+  .insight-body{flex:1;}
+
+  /* deep-dive block */
+  .dive{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:28px;
+    margin-bottom:20px;
+    box-shadow:0 12px 34px -26px rgba(43,36,48,.5);
+    border-left:5px solid transparent;
+    border-image:var(--grad) 1;
+  }
+  .dive h3{
+    font-size:20px;font-weight:800;margin-bottom:14px;
+  }
+  .dive .lead{
+    font-size:15px;color:var(--ink-soft);margin-bottom:16px;
+  }
+  .dive ul{list-style:none;margin:14px 0;}
+  .dive li{
+    position:relative;
+    padding-left:24px;
+    margin-bottom:12px;
+    font-size:15px;
+    color:var(--ink-soft);
+  }
+  .dive li::before{
+    content:"◆";
+    position:absolute;left:0;top:1px;
+    color:var(--orange-soft);font-size:12px;
+  }
+  .dive li b{color:var(--ink);}
+
+  /* source link */
+  .src{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:13px;
+    color:var(--muted);
+    text-decoration:none;
+    border-top:1px dashed var(--line);
+    padding-top:12px;
+    margin-top:4px;
+    transition:color .15s;
+  }
+  .src:hover{color:var(--purple);}
+  .src .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--grad);
+    flex:none;
+  }
+  .card .src, .dive .src, .radar .src{width:100%;}
+
+  /* radar grid */
+  .radar-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.radar-grid{grid-template-columns:1fr;}}
+  .radar{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 8px 24px -20px rgba(43,36,48,.4);
+  }
+  .radar .sig{
+    display:inline-block;font-size:11px;font-weight:800;
+    letter-spacing:1px;text-transform:uppercase;
+    color:#fff;background:var(--grad);
+    padding:3px 10px;border-radius:8px;
+    margin-bottom:12px;
+  }
+  .radar h4{font-size:16px;font-weight:800;margin-bottom:8px;line-height:1.5;}
+  .radar p{font-size:14px;color:var(--ink-soft);margin-bottom:12px;}
+
+  /* source summary */
+  .source-block{
+    background:var(--grad-soft);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:28px 30px;
+  }
+  .source-block h2{
+    font-size:20px;font-weight:800;margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .source-block ol{
+    list-style:none;counter-reset:s;
+  }
+  .source-block li{
+    counter-increment:s;
+    position:relative;
+    padding-left:30px;
+    margin-bottom:11px;
+    font-size:14px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  .source-block li::before{
+    content:counter(s);
+    position:absolute;left:0;top:1px;
+    width:20px;height:20px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:6px;
+    font-size:11px;font-weight:800;color:var(--purple);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .source-block a{
+    color:var(--purple);text-decoration:none;font-weight:600;
+    word-break:break-all;
+  }
+  .source-block a:hover{text-decoration:underline;}
+
+  footer{
+    text-align:center;
+    margin-top:56px;
+    padding-top:28px;
+    border-top:1px solid var(--line);
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.9;
+  }
+  footer .brand{
+    font-weight:800;
+    background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-size:15px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap" style="padding:0;">
+    <div class="kicker">Tech Daily · User Research Edition</div>
+    <h1>科技日报 · 用户研究版</h1>
+    <p class="sub">以用户为中心的每日洞察：交互范式、产品体验、研究方法与设计信号。写给 UX 设计师、产品经理与用户研究员。</p>
+    <div class="meta">
+      <span>📅 2026年11月28日</span>
+      <span>🗂 覆盖 162 条资讯</span>
+      <span>🎯 精选 15 条</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ 1. 今日要点 ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="num">1</div>
+      <div>
+        <h2>今日要点 <span class="en">Key Insights</span></h2>
+      </div>
+    </div>
+
+    <div class="card insight-card">
+      <div class="big-num">01</div>
+      <div class="insight-body">
+        <h3>豆包工作 × 剪映：视频剪辑从"动手"变成"动嘴"</h3>
+        <p>豆包工作接入剪映官方插件后，用户不必先研究密密麻麻的轨道，只要用大白话说需求——"剪成 60 秒，保留主要观点，删掉停顿和重复，加简洁字幕，留一份可继续修改的草稿"——AI 就能完成<span class="hl">口播去水词、智能包装、按稿粗剪、字幕改误、批量切片与多版本剪辑</span>，还能调用 Seedance 2.5 生成素材，覆盖口播、知识讲解、商品种草、短剧等场景。</p>
+        <p>对 UX 的意义在于，它把专业工具里最"劝退"的时间线操作，转译成自然语言意图，并明确了一种新分工：<strong>人负责张嘴提需求与最终把关，AI 负责上手干粗活</strong>。<span class="hl">自然语言正成为专业工具的"第二入口"</span>——不是取代轨道，而是让不会用工具的人也能表达意图；而"成片最终仍需人的审美判断"这句提醒，点出了信心与掌控设计的重要性。</p>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650542812&idx=1&sn=d6dedde37181881d6a3d87dcd3e37af0" target="_blank" rel="noopener"><span class="dot"></span>来源：网易科技 · 一手实测豆包工作×剪映：视频剪辑要从"动手"变成"动嘴"了</a>
+      </div>
+    </div>
+
+    <div class="card insight-card">
+      <div class="big-num">02</div>
+      <div class="insight-body">
+        <h3>"烦人指数"：够聪明不等于好用，情绪摩擦是新的体验指标</h3>
+        <p>"How I AI" 的主播用一套自创的 <strong>annoyance bench</strong> 追踪自己使用 AI 时的真实感受——有多少次感到沮丧、把活退回去重做、或只能说"继续"。结果很直白：<span class="hl">GPT-6.2 Sol 每 100 条消息里让她烦躁 12.8 次，而 Opus 5.5 让她觉得"愉悦"</span>。她的结论只有一句——"如果每天用起来都痛苦，聪明是不够的"。</p>
+        <p>对研究员与设计师，这提供了一个被主流跑分长期忽略的体验维度：<strong>情绪摩擦、返工率、协作顺畅度</strong>，比参数更贴近真实日常使用。值得把"烦人/返工/需要反复纠正"纳入 AI 产品的体验度量——一个能一次做对的"够用"模型，往往比一个偶尔惊艳却天天让人上火的"更强"模型更值得留存。</p>
+        <a class="src" href="https://www.youtube.com/shorts/vos1iR86YAM" target="_blank" rel="noopener"><span class="dot"></span>来源：How I AI · GPT-6.2 Sol annoyed me the most of any AI model</a>
+      </div>
+    </div>
+
+    <div class="card insight-card">
+      <div class="big-num">03</div>
+      <div class="insight-body">
+        <h3>Pinky：把高危操作"写死"在隔离层，让手机 Agent 真正可控</h3>
+        <p>RSSHub 开发者 DIYgod 上线移动端 Agent <strong>Pinky</strong>，核心思路是在<span class="hl">硬编码层面隔离掉高危操作</span>，把控制权交还用户。它有两种用法：在客户端填模型 API 直接对话操作，或跨端用 MCP 连接 Claude、Codex 等服务来操控手机；后者还能创建一个<strong>"虚拟副屏"</strong>执行任务——你可以继续用手机聊天刷视频，发现 AI 走歪了一键投屏暂停、手动处理后再交还。</p>
+        <p>它更安全的原因很关键：多数手机端 harness 沿用桌面那套思路（管文件、管网址访问），只能寄希望于系统提示词让模型"自己找出需要确认的操作"；而 Pinky 在代码层直接阻断危险动作。对 UX 而言，这是"<strong>human-in-the-loop 安全设计</strong>"的绝佳样本——可控、可中断、可接管，才是让用户敢把手机交给 AI 的前提。</p>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&mid=2247641027&idx=1&sn=1bed316f42e8298c08b9761e46070b06" target="_blank" rel="noopener"><span class="dot"></span>来源：少数派 · Pinky：让 Agent 更安全地操控手机</a>
+      </div>
+    </div>
+
+    <div class="card insight-card">
+      <div class="big-num">04</div>
+      <div class="insight-body">
+        <h3>中国百姓如何用 AI：从农村葬礼到田间地头的 21 个切片</h3>
+        <p>十字路口整理了 21 个真实场景：乡村丧葬现场，灵车车顶 LED 循环播放"老人抚摸仙鹤、骑鹤飞入云端"的 AI 影像；浙江义乌的袜业老板娘对着手机念一句"12345"，录入基础口型与形象，AI 就能生成数十种语言的带货短视频；菜市场的小吃摊主则通过买课自学，用 AI 做自家小吃的宣传片。</p>
+        <p>文章的核心判断是——<span class="hl">中国可能是全世界接受 AI 最彻底、最快的国家</span>，AI 已绕过概念普及阶段，落进普通人的红白喜事与柴米油盐。对研究员，这是一份难得的"在地化"一手素材：它提醒我们，<strong>真实用户会用自己的方式"挪用"技术</strong>，其用法往往远远超出产品设计者的设想，而这正是发现长尾需求与在地化机会的富矿。</p>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzAxMDMxOTI2NA==&mid=2649113365&idx=1&sn=91aa4efcf16ecffc482acdc5476ff95f" target="_blank" rel="noopener"><span class="dot"></span>来源：十字路口Crossing · 中国百姓如何用 AI：从农村葬礼到田间地头的 21 个切片</a>
+      </div>
+    </div>
+
+    <div class="card insight-card">
+      <div class="big-num">05</div>
+      <div class="insight-body">
+        <h3>鸿蒙跨过生态临界点，开发者从"有没有"转向"好不好"</h3>
+        <p>华为宣布搭载 HarmonyOS 5/6/7 的手机、平板与电脑设备已破一亿，生态应用超 46 万、注册开发者破 1200 万。更值得关注的是重心的转移：开发者已从早期解决"有没有"，转向依托鸿蒙开放能力做交互创新——<span class="hl">伙伴贡献创新功能超 160 项、被 1600 余款应用集成，一年内相关调用量增长 90 倍</span>，接入"碰一碰""实况窗"等 120 余项能力的伙伴超过 5.8 万个。</p>
+        <p>以《Notein 一笔记》为例，它接入鸿蒙 PenKit，通过高精度压感与"报点预测算法"让快速书写时墨迹几乎紧贴笔尖"流出"，配合工具切换的微振反馈还原纸笔手感，并支持文献分屏摘录与自动延展的"无界笔记"。对 UX 的启示：当平台把跨端协同、硬件感知、端侧 AI 向第三方敞开，<strong>体验差异化正从"能不能做"转向"如何用系统级能力做出别人做不出的手感"</strong>。</p>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&mid=2247641091&idx=1&sn=e47ff625ca7f88172ae390ab80ba0c12" target="_blank" rel="noopener"><span class="dot"></span>来源：少数派 · 告别「基础适配」之后：这一批鸿蒙 App 已经开始「不按常理出牌」了</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. 设计趋势洞察 ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="num">2</div>
+      <div>
+        <h2>设计趋势洞察 <span class="en">Design Trends</span></h2>
+      </div>
+    </div>
+
+    <div class="dive">
+      <h3>趋势一：从"对话"到"行动"——Agentic UX 正在重塑"任务入口"</h3>
+      <p class="lead">今天多条资讯跨平台地指向同一次交互范式转变：AI 不再满足于"听懂并回答"，而是要"跨过车窗把事情办妥"——入口正从聊天框，转向"把事做完"。</p>
+      <ul>
+        <li><b>支付宝车载助手 3.0（开口办事）：</b>发布 AI 原生车载智能体，联合特斯拉、比亚迪、极氪、理想等车企推进座舱"办事"，并发起 A.I. Car 生态联盟。它点出了老问题——过去驶出地库或进高速前点杯咖啡，还得停车掏手机扫码；如今座舱 AI 直接办事。<b>分水岭从"能不能聊"变成"能不能跨 App 把事办妥"。</b></li>
+        <li><b>豆包 × 剪映（动嘴剪辑）：</b>自然语言替代时间线操作，"人类提需求、AI 干粗活、人类再把关"的分工开始成形（详见今日要点 01）。</li>
+        <li><b>WorkBuddy Computer Use（跨软件操作）：</b>腾讯 WorkBuddy 日活破 1000 万后才上线 Computer Use，让 AI 像人一样操作电脑——能打开 Photoshop 改 PSD，也能对付餐饮店里用 C++ 写的老式收银软件。文章判断，真正对 Computer Use 有强需求的，恰恰是互联网之外的传统行业从业者。</li>
+      </ul>
+      <p class="lead" style="margin-top:16px;">对设计师的启示：任务入口正从"应用图标 / 聊天框"迁移到"<strong>意图 + 执行</strong>"。核心问题不再是"再做一个聊天界面"，而是如何设计<strong>可委派、可监督、可回退</strong>的任务流——把"AI 替我做"这件事，做得让用户看得见、管得住、敢放手。</p>
+      <a class="src" href="https://www.ifanr.com/1695888?utm_source=rss&utm_medium=rss&utm_campaign" target="_blank" rel="noopener"><span class="dot"></span>来源：爱范儿（支付宝座舱）· 网易科技（豆包×剪映）· AI产品阿颖（WorkBuddy Computer Use）</a>
+    </div>
+
+    <div class="dive">
+      <h3>趋势二：智能体的"信任设计"进入硬约束阶段</h3>
+      <p class="lead">当 AI 开始替人操作设备、发声、办事，"让用户敢用"比"让 AI 更强"更关键。今天两条信号从不同侧面给出答案：安全要落到机制而非提示词，选择权与透明要交给用户。</p>
+      <ul>
+        <li><b>Pinky（机制层安全）：</b>把高危操作在硬编码层隔离，而不是靠系统提示词要求模型"自律"；任务可一键暂停、可手动接管、可再交还。<b>安全从"祈祷模型不犯错"变成"结构上不让它做错"。</b></li>
+        <li><b>Mozilla × Mistral：Firefox Smart Window（用户选择 + 零留存）：</b>Firefox 内测的 AI 助手引入 Mistral Small 4 开源模型，<b>让用户在多个模型间自选</b>，且 Mistral 承诺<b>零数据留存</b>，现向法、美、加用户推荐。但 beta 反馈"褒贬不一"——说明隐私承诺是入场券，"体验好不好"才决定留存。</li>
+      </ul>
+      <p class="lead" style="margin-top:16px;">对研究员的启示：信任设计正从"事后免责"走向"全程可控"。<strong>权限边界、可中断性、数据去向、身份披露</strong>，都应成为 UX 显式设计的对象，而不是埋在协议条款里。做智能体产品评审时，可以把这四项当作新的"信任可用性清单"逐条过。</p>
+      <a class="src" href="https://www.infoq.com/news/2026/11/mozilla-mistral-ai-smart-window/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener"><span class="dot"></span>来源：少数派（Pinky）· InfoQ（Mozilla × Mistral Firefox Smart Window）</a>
+    </div>
+  </section>
+
+  <!-- ============ 3. 产品体验点评 ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="num">3</div>
+      <div>
+        <h2>产品体验点评 <span class="en">Product UX Review</span></h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag">案例一 · 硬件交互</span>
+      <h3>华为 Mate X8 的"终局之战"：宽度上的一小步，解决七年的结构性矛盾</h3>
+      <p>经过七年迭代，Mate X8 把外屏比例从上一代的 20.4:9 调整为 19.4:9，并配以四曲面玻璃与圆润边框——<span class="hl">合起来的手感"与普通直板机一般无二"</span>。正是这看似不起眼的比例调整，解决了大折叠手机"内屏不方便、外屏不实用"的历史性矛盾，让作者敢用"终局之战"来形容。</p>
+      <p>点评：这是"<strong>以极小改动解决结构性矛盾</strong>"的经典范例——真正的体验突破常常不是堆参数，而是找到一个让形态"归位"的关键变量（这里是宽度 / 比例）。对做折叠屏、多端产品的团队，值得反复追问一个问题：<strong>哪个微小变量一旦对齐，用户就能无感迁移、不再觉得"在两块屏之间来回妥协"？</strong>找到它，往往比再加一个功能更能改变体验。</p>
+      <a class="src" href="https://www.ifanr.com/1695642?utm_source=rss&utm_medium=rss&utm_campaign" target="_blank" rel="noopener"><span class="dot"></span>来源：爱范儿 · 华为 Mate X8 评测：终局之战</a>
+    </div>
+
+    <div class="card">
+      <span class="tag">案例二 · 设计哲学</span>
+      <h3>iPhone 相机掌门人退休："简单"，才是最难复制的护城河</h3>
+      <p>执掌 iPhone 相机与照片软件八年的 Jon McCormack 于 10 月底退休。文章从他"先天色盲的澳大利亚男孩、接过祖父 1949 年美能达胶片机"的起点讲起，回到一个被反复验证的结论——<span class="hl">iPhone 相机好用的秘密是"简单"</span>。他把克制与偏执，留在了亿万人的相册里。</p>
+      <p>点评：在参数军备竞赛的影像赛道，"简单"反而是最稀缺的能力——它意味着<span class="hl">把复杂的计算藏在快门之后，让用户只需按一下</span>。这恰恰是消费级产品体验的长期主义：把复杂度留给自己，把确定性交给用户。对设计师的提醒是，当同行都在比"能拍多远、多清、多亮"，不妨先问一句"用户此刻真正想做的，是不是只是按下快门、然后放心"。继任者能否延续这条主线，值得后续观察。</p>
+      <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650898342&idx=4&sn=f979b74d8a8292efd9d0eaf95acf727c" target="_blank" rel="noopener"><span class="dot"></span>来源：创业邦 · iPhone 相机掌门人退休：他把「果味」做成标杆，也制造了争议</a>
+    </div>
+  </section>
+
+  <!-- ============ 4. 研究方法论 ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="num">4</div>
+      <div>
+        <h2>研究方法论 <span class="en">Research Methodology</span></h2>
+      </div>
+    </div>
+
+    <div class="dive">
+      <h3>方法一：民族志式"生活切片"采集——把技术放回真实生活场景里看</h3>
+      <p class="lead">十字路口的《中国百姓如何用 AI》用 21 个"切片"展示了极低成本、高信息密度的定性方法，对做田野 / 情境研究的团队颇具借鉴价值。</p>
+      <ul>
+        <li><b>以"极端但真实"的场景切入：</b>农村葬礼上的 AI 驾鹤视频，比任何概念访谈都更能说明"技术如何被挪用"。选场景时，优先那些"超出产品设想"的真实用法，而不是验证已知假设。</li>
+        <li><b>切片式而非问卷式：</b>每个切片都包含"谁、在什么生计 / 仪式场景、用什么工具、达成什么"。碎片化但可拼图，特别适合发现长尾需求与在地化用法。</li>
+        <li><b>关注"挪用"与"再创造"：</b>义乌老板娘克隆音色做多语种带货、菜场摊主自学做宣传片——用户不是被动接受功能，而是在用自己的方式改造工具。研究问题应从"他们会不会用"转向"<b>他们究竟拿它做了什么</b>"。</li>
+      </ul>
+      <p class="lead" style="margin-top:16px;">实践建议：把"生活切片采集"作为轻量田野方法——固定周期收集 N 个真实使用片段并聚合成用户行为地图，往往比一次大样本问卷更早暴露机会点，也更容易让跨职能团队"看见"用户。</p>
+      <a class="src" href="https://mp.weixin.qq.com/s?__biz=MzAxMDMxOTI2NA==&mid=2649113365&idx=1&sn=91aa4efcf16ecffc482acdc5476ff95f" target="_blank" rel="noopener"><span class="dot"></span>来源：十字路口Crossing · 中国百姓如何用 AI：21 个生活切片</a>
+    </div>
+
+    <div class="dive">
+      <h3>方法二：情感化与包容性研究——把"人与 AI 的关系"当作研究对象</h3>
+      <p class="lead">腾讯研究院 × 故事 FM 的"我和 AI，有些私事"把镜头对准四个真实的人，提示我们：AI 产品的用户研究，正从"任务效率"扩展到"情感关系与可及性"。</p>
+      <ul>
+        <li><b>把"关系"作为分析单元：</b>74 岁老人用 AI 把写了 57 年的日记整理成自传、有人与 GPT-4o 谈了两年"恋爱"并办了只有两人的电子婚礼——用户与 AI 之间形成了准社会关系，这直接影响信任、留存与伦理设计，值得当成一个独立的研究对象。</li>
+        <li><b>无障碍视角不可缺席：</b>视障父亲"猫爷"在孩子被诊断 GDD（全面发育迟缓）后，靠 AI 做研究、查干预方法、与窗口期赛跑——对边缘用户，AI 常常是真实的"<b>能力放大器</b>"，其价值远超主流场景。</li>
+        <li><b>"情绪 + 具体事件"是质性金矿：</b>带具体场景的情绪叙事，比抽象满意度评分更有说服力，也最容易成为推动决策的那张"证据卡"。</li>
+      </ul>
+      <p class="lead" style="margin-top:16px;">实践建议：在用户旅程里增设"情感与可及性"维度，主动招募视障、老年、特殊照护等边缘用户。他们的"刚需"往往预告了主流用户迟早会遇到的"真问题"——这是包容性设计反哺通用体验的常见路径。</p>
+      <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5OTE0ODA2MQ==&mid=2650999859&idx=1&sn=c0aafda014d123f33a078c6289c411e1" target="_blank" rel="noopener"><span class="dot"></span>来源：腾讯研究院 · 我和 AI，有些私事丨故事纯享版</a>
+    </div>
+  </section>
+
+  <!-- ============ 5. UX 雷达 ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="num">5</div>
+      <div>
+        <h2>UX 雷达 <span class="en">Design Signals</span></h2>
+      </div>
+    </div>
+
+    <div class="radar-grid">
+      <div class="radar">
+        <span class="sig">研究工具</span>
+        <h4>GPT-Vis 1.0：把 AI 的洞察直接"画"出来</h4>
+        <p>AntV 的 GPT-Vis 1.0 把大模型输出的一行行数据变成直观看懂的图表：<b>渲染接口与前端框架解耦</b>（原生 JS / React / Vue 通用），支持 JSON 与类 Markdown 的 Syntax 输入，并能在<b>流式场景"数据到哪画到哪"</b>，大幅减少白屏；新增主题定制、Agent Skill 与分析标注，可把报告里的增长、回落与异常直接标在图上。含义：对研究员，这是"研究洞察自动化呈现"的关键拼图——从数据到"可讲述的可视化"，正在被 AI 打通。</p>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=Mzg3NTU4OTc3OA==&mid=2247501710&idx=1&sn=8f839774233e7e8dd70ee9d173a161cf" target="_blank" rel="noopener"><span class="dot"></span>来源：数据可视化 AntV · GPT-Vis：让 AI 的洞察跃然图上</a>
+      </div>
+
+      <div class="radar">
+        <span class="sig">产品范式</span>
+        <h4>Personal Agent：关键词不是 Personal，而是 Proactive</h4>
+        <p>字节"小豆"上线即求码，腾讯、阿里团队跟进，海外 Grok Bot、Meta Muse（霸榜 App Store 一个月）、OpenAI Dots、Claude Duet 密集出现。文章点破关键在<b>"主动干活 / 非托管任务"</b>：安装注册后它自己探索可见上下文、建立触发事件、等待触发、决策是否作业，而不是等人去安排定时任务。含义：主动式 Agent 给 UX 出了新命题——如何设计"它自己找活干"的<b>边界、打扰频率与可解释性</b>。</p>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651935243&idx=2&sn=e699c4d89323d1477769df99fc86271a" target="_blank" rel="noopener"><span class="dot"></span>来源：人人都是产品经理 · Personal Agent 大火，产品经理如何构建？</a>
+      </div>
+
+      <div class="radar">
+        <span class="sig">设计系统</span>
+        <h4>Grafana 启动 v7 以来最大 UI 刷新</h4>
+        <p>Grafana Labs 推出自 Grafana 7 以来规模最大的一次视觉刷新（第一阶段）：更新主题、<b>更一致的界面组件、改进的视觉层级</b>，应用于其可观测性平台。含义：对做设计系统的团队，这是"<b>成熟产品如何在不破坏用户肌肉记忆的前提下刷新视觉</b>"的观察样本——一致性组件与视觉层级，本身就是可量化的体验资产；大改版的分阶段推进节奏，也值得借鉴。</p>
+        <a class="src" href="https://www.infoq.com/news/2026/11/grfana-ui-refresh/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener"><span class="dot"></span>来源：InfoQ · Grafana Begins Its Biggest UI Refresh Since Version 7</a>
+      </div>
+
+      <div class="radar">
+        <span class="sig">场景下沉</span>
+        <h4>美团"妙手"：AI 经营普惠到街边小店</h4>
+        <p>美团推出"妙手"瞄准本地生活商家，帮小老板补齐选址、选品、获客这些基础经营能力。背景是餐饮已从跑马圈地换挡到<b>存量精耕、容错率极低</b>的阶段（2026 上半年全国餐饮收入超 2.8 万亿元、同比 +2.8%），当个人经验开始失灵，用 AI 低成本补齐"专业化精细运营"成了真实刚需。含义：AI 产品的下一波用户，是<b>非专业、非互联网的小微经营者</b>——他们的数字素养、任务颗粒度与容错预期与主流用户截然不同，是用户研究的新蓝海。</p>
+        <a class="src" href="https://mp.weixin.qq.com/s?__biz=MjM5NzY2OTE2MQ==&mid=2652256694&idx=1&sn=c7c97d992f87dd8e5195d1c4afaa0047" target="_blank" rel="noopener"><span class="dot"></span>来源：阑夕 · 本地生活商家，用 AI 拿到结果了</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. 参考来源 ============ -->
+  <section>
+    <div class="source-block">
+      <h2>📚 参考来源</h2>
+      <ol>
+        <li>网易科技 — <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTgyNTA0MQ==&mid=2650542812&idx=1&sn=d6dedde37181881d6a3d87dcd3e37af0" target="_blank" rel="noopener">一手实测豆包工作×剪映：视频剪辑要从"动手"变成"动嘴"了</a></li>
+        <li>How I AI — <a href="https://www.youtube.com/shorts/vos1iR86YAM" target="_blank" rel="noopener">GPT-6.2 Sol annoyed me the most of any AI model</a></li>
+        <li>少数派 — <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&mid=2247641027&idx=1&sn=1bed316f42e8298c08b9761e46070b06" target="_blank" rel="noopener">Pinky：让 Agent 更安全地操控手机</a></li>
+        <li>十字路口Crossing — <a href="https://mp.weixin.qq.com/s?__biz=MzAxMDMxOTI2NA==&mid=2649113365&idx=1&sn=91aa4efcf16ecffc482acdc5476ff95f" target="_blank" rel="noopener">中国百姓如何用 AI：从农村葬礼到田间地头的 21 个切片</a></li>
+        <li>少数派 — <a href="https://mp.weixin.qq.com/s?__biz=MzU4Mjg3MDAyMQ==&mid=2247641091&idx=1&sn=e47ff625ca7f88172ae390ab80ba0c12" target="_blank" rel="noopener">告别「基础适配」之后：这一批鸿蒙 App 已经开始「不按常理出牌」了</a></li>
+        <li>爱范儿 — <a href="https://www.ifanr.com/1695888?utm_source=rss&utm_medium=rss&utm_campaign" target="_blank" rel="noopener">Agent 上车元年，支付宝造了一个行动座舱</a></li>
+        <li>AI产品阿颖 — <a href="https://mp.weixin.qq.com/s?__biz=Mzg5Mjc3MjIyMA==&mid=2247588930&idx=1&sn=30682bae84344d915deff9ac760f73c7" target="_blank" rel="noopener">腾讯的产品节奏真好，WorkBuddy 开始打通传统软件了</a></li>
+        <li>InfoQ — <a href="https://www.infoq.com/news/2026/11/mozilla-mistral-ai-smart-window/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">Mozilla Partners with Mistral to Bring Open-Weight AI Models to Firefox Smart Window</a></li>
+        <li>爱范儿 — <a href="https://www.ifanr.com/1695642?utm_source=rss&utm_medium=rss&utm_campaign" target="_blank" rel="noopener">华为 Mate X8 评测：终局之战</a></li>
+        <li>创业邦 — <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTAzMjc4MA==&mid=2650898342&idx=4&sn=f979b74d8a8292efd9d0eaf95acf727c" target="_blank" rel="noopener">iPhone 相机掌门人退休：他把「果味」做成标杆，也制造了争议</a></li>
+        <li>腾讯研究院 — <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTE0ODA2MQ==&mid=2650999859&idx=1&sn=c0aafda014d123f33a078c6289c411e1" target="_blank" rel="noopener">我和 AI，有些私事丨故事纯享版</a></li>
+        <li>数据可视化 AntV — <a href="https://mp.weixin.qq.com/s?__biz=Mzg3NTU4OTc3OA==&mid=2247501710&idx=1&sn=8f839774233e7e8dd70ee9d173a161cf" target="_blank" rel="noopener">GPT-Vis：让 AI 的洞察跃然图上</a></li>
+        <li>人人都是产品经理 — <a href="https://mp.weixin.qq.com/s?__biz=MjM5OTEwNjI2MA==&mid=2651935243&idx=2&sn=e699c4d89323d1477769df99fc86271a" target="_blank" rel="noopener">Personal Agent 大火，产品经理如何构建？</a></li>
+        <li>InfoQ — <a href="https://www.infoq.com/news/2026/11/grfana-ui-refresh/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global" target="_blank" rel="noopener">Grafana Begins Its Biggest UI Refresh Since Version 7</a></li>
+        <li>阑夕 — <a href="https://mp.weixin.qq.com/s?__biz=MjM5NzY2OTE2MQ==&mid=2652256694&idx=1&sn=c7c97d992f87dd8e5195d1c4afaa0047" target="_blank" rel="noopener">本地生活商家，用 AI 拿到结果了</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <div class="brand">科技日报 · 用户研究版</div>
+    <p>面向 UX 设计师 · 产品经理 · 用户研究员<br>
+    由 tech-daily-generator 自动生成 · 数据时间窗 2026-11-27 至 2026-11-28</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
